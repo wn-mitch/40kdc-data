@@ -137,6 +137,13 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		views[i] = resolveUnit(u.unitID)
 	}
 
+	presentUnitIDs := map[string]struct{}{}
+	for _, su := range spec.units {
+		if su.unitID != "" {
+			presentUnitIDs[su.unitID] = struct{}{}
+		}
+	}
+
 	// --- Per-unit loadout (reuse the tier/bounds checker). --------------------
 	var units []unitLoadoutResult
 	for idx, su := range spec.units {
@@ -242,7 +249,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			continue
 		}
 		if su.leaderBodyguardID != "" {
-			eligible := bodyguardEligibleIDs(ds, view.ID())
+			eligible := bodyguardEligibleIDs(ds, view.ID(), presentUnitIDs)
 			if su.enhancementID != "" {
 				if enhancementAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
 					for _, bodyguardID := range getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids") {
@@ -253,7 +260,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			if _, ok := eligible[su.leaderBodyguardID]; !ok {
 				errV("leader-attachment-illegal", view.ID(), idx)
 			}
-		} else if getStr(view.Raw, "attachment_role") == "support" &&
+		} else if ds.attachmentRole(view.ID(), getStr(view.Raw, "attachment_role"), presentUnitIDs) == "support" &&
 			(isCharacter(view) || contains(su.keywordOverrides, "Character")) {
 			errV("leader-must-attach", view.ID(), idx)
 		}
@@ -429,19 +436,31 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 }
 
 // bodyguardEligibleIDs is the set of body-unit ids the given leader can attach
-// to — its leader-attachment `eligible_bodyguard_ids` that resolve to a known
-// unit. Mirror of Dataset.bodyguardsAttachableFrom (membership only).
-func bodyguardEligibleIDs(ds *Dataset, leaderUnitID string) map[string]struct{} {
+// to in the supplied roster. It includes unconditional eligibility and only
+// conditional groups whose roster requirements are met.
+func bodyguardEligibleIDs(ds *Dataset, leaderUnitID string, presentUnitIDs map[string]struct{}) map[string]struct{} {
 	out := map[string]struct{}{}
+	addBodyguard := func(id string) {
+		// Faction-agnostic attachment data — GetAny.
+		if _, ok := ds.Units.GetAny(id); ok {
+			out[id] = struct{}{}
+		}
+	}
 	for _, laAny := range ds.LeaderAttachments {
 		la, _ := asMap(laAny)
 		if getStr(la, "leader_id") != leaderUnitID {
 			continue
 		}
-		for _, bid := range getStrList(la, "eligible_bodyguard_ids") {
-			// Faction-agnostic attachment data — GetAny.
-			if _, ok := ds.Units.GetAny(bid); ok {
-				out[bid] = struct{}{}
+		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
+			addBodyguard(id)
+		}
+		for _, groupAny := range getList(la, "conditional_groups") {
+			group, ok := asMap(groupAny)
+			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+				continue
+			}
+			for _, id := range getStrList(group, "eligible_bodyguard_ids") {
+				addBodyguard(id)
 			}
 		}
 	}

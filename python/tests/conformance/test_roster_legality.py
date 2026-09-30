@@ -143,3 +143,189 @@ def test_enhancement_grants_an_additional_legal_bodyguard() -> None:
         Dataset(raw),
     )
     assert "leader-attachment-illegal" not in [v["code"] for v in result["army"]]
+
+
+def _conditional_attachment_dataset() -> Dataset:
+    raw = empty_raw_data()
+    raw["factions"] = [{"id": "fabricated", "name": "Fabricated Faction"}]
+    raw["units"] = [
+        {
+            "id": "conditional-character",
+            "name": "Conditional Character",
+            "role": "character",
+            "attachment_role": "leader",
+        },
+        {"id": "required-character", "name": "Required Character", "role": "character"},
+        {"id": "leader-bodyguard", "name": "Leader Bodyguard"},
+        {"id": "support-bodyguard", "name": "Support Bodyguard"},
+    ]
+    for unit in raw["units"]:
+        unit["faction_id"] = "fabricated"
+    raw["leader_attachments"] = [
+        {
+            "leader_id": "conditional-character",
+            "eligible_bodyguard_ids": [],
+            "conditional_groups": [
+                {
+                    "role": "leader",
+                    "eligible_bodyguard_ids": ["leader-bodyguard"],
+                    "excluded_roster_unit_ids": ["required-character"],
+                },
+                {
+                    "role": "support",
+                    "eligible_bodyguard_ids": ["support-bodyguard"],
+                    "required_roster_unit_ids": ["required-character"],
+                },
+            ],
+        }
+    ]
+    return Dataset(raw)
+
+
+def test_allied_support_role_falls_back_to_the_unit_without_conditional_groups() -> None:
+    raw = empty_raw_data()
+    raw["units"] = [
+        {
+            "id": "example-support",
+            "name": "Example Support",
+            "faction_id": "allied",
+            "attachment_role": "support",
+        }
+    ]
+    dataset = Dataset(raw)
+    assert dataset.effective_attachment_role("example-support", set(), "host") == "support"
+
+
+def test_conditional_attachment_browse_filters_by_roster_context() -> None:
+    dataset = _conditional_attachment_dataset()
+
+    assert [u.id for u in dataset.bodyguards_attachable_from("conditional-character")] == [
+        "leader-bodyguard",
+        "support-bodyguard",
+    ]
+    assert [u.id for u in dataset.bodyguards_attachable_from("conditional-character", set())] == [
+        "leader-bodyguard"
+    ]
+    assert [
+        u.id
+        for u in dataset.bodyguards_attachable_from(
+            "conditional-character", {"required-character"}
+        )
+    ] == ["support-bodyguard"]
+    assert [
+        u.id for u in dataset.leaders_attachable_to("support-bodyguard", {"required-character"})
+    ] == ["conditional-character"]
+
+
+def test_overlapping_conditional_roles_keep_solo_capability() -> None:
+    dataset = _conditional_attachment_dataset()
+    roster = {"required-character"}
+    assert dataset.effective_attachment_role("conditional-character", roster) == "support"
+    dataset.leader_attachments[0]["conditional_groups"].append(
+        {
+            "role": "leader",
+            "eligible_bodyguard_ids": ["support-bodyguard"],
+            "required_roster_unit_ids": ["required-character"],
+        }
+    )
+    assert dataset.effective_attachment_role("conditional-character", roster) == "leader"
+
+
+def test_conditional_attachment_role_controls_legality() -> None:
+    dataset = _conditional_attachment_dataset()
+
+    leader_only = validate_roster_core(
+        {
+            "units": [
+                {
+                    "unit_id": "conditional-character",
+                    "model_count": 1,
+                    "is_warlord": True,
+                    "counts": {},
+                }
+            ]
+        },
+        dataset,
+    )
+    assert "leader-must-attach" not in [v["code"] for v in leader_only["army"]]
+
+    unattached_support = validate_roster_core(
+        {
+            "units": [
+                {
+                    "unit_id": "conditional-character",
+                    "model_count": 1,
+                    "is_warlord": True,
+                    "counts": {},
+                },
+                {
+                    "unit_id": "required-character",
+                    "model_count": 1,
+                    "is_warlord": False,
+                    "counts": {},
+                },
+            ]
+        },
+        dataset,
+    )
+    assert "leader-must-attach" in [v["code"] for v in unattached_support["army"]]
+
+    illegal_bodyguard = validate_roster_core(
+        {
+            "units": [
+                {
+                    "unit_id": "conditional-character",
+                    "model_count": 1,
+                    "is_warlord": True,
+                    "leader_bodyguard_id": "leader-bodyguard",
+                    "counts": {},
+                },
+                {
+                    "unit_id": "required-character",
+                    "model_count": 1,
+                    "is_warlord": False,
+                    "counts": {},
+                },
+                {
+                    "unit_id": "leader-bodyguard",
+                    "model_count": 1,
+                    "is_warlord": False,
+                    "counts": {},
+                },
+            ]
+        },
+        dataset,
+    )
+    assert "leader-attachment-illegal" in [v["code"] for v in illegal_bodyguard["army"]]
+
+    legal_bodyguard = validate_roster_core(
+        {
+            "units": [
+                {
+                    "unit_id": "conditional-character",
+                    "model_count": 1,
+                    "is_warlord": True,
+                    "leader_bodyguard_id": "support-bodyguard",
+                    "counts": {},
+                },
+                {
+                    "unit_id": "required-character",
+                    "model_count": 1,
+                    "is_warlord": False,
+                    "counts": {},
+                },
+                {
+                    "unit_id": "support-bodyguard",
+                    "model_count": 1,
+                    "is_warlord": False,
+                    "counts": {},
+                },
+            ]
+        },
+        dataset,
+    )
+    assert not {
+        violation["code"]
+        for violation in legal_bodyguard["army"]
+        if violation["code"] in {"leader-attachment-illegal", "leader-must-attach"}
+    }

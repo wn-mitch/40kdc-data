@@ -11499,12 +11499,55 @@ impl ::std::convert::From<Vec<Keyword>> for KeywordList {
 ///    "leader_id"
 ///  ],
 ///  "properties": {
+///    "conditional_groups": {
+///      "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "minProperties": 3,
+///        "required": [
+///          "eligible_bodyguard_ids",
+///          "role"
+///        ],
+///        "properties": {
+///          "eligible_bodyguard_ids": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            },
+///            "minItems": 1
+///          },
+///          "excluded_roster_unit_ids": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            },
+///            "minItems": 1
+///          },
+///          "required_roster_unit_ids": {
+///            "type": "array",
+///            "items": {
+///              "$ref": "#/$defs/entity-id"
+///            },
+///            "minItems": 1
+///          },
+///          "role": {
+///            "type": "string",
+///            "enum": [
+///              "leader",
+///              "support"
+///            ]
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
 ///    "eligible_bodyguard_ids": {
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
-///      },
-///      "minItems": 1
+///      }
 ///    },
 ///    "eligible_bodyguard_keywords": {
 ///      "description": "Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.",
@@ -11529,6 +11572,9 @@ impl ::std::convert::From<Vec<Keyword>> for KeywordList {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct LeaderAttachment {
+    ///Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub conditional_groups: ::std::vec::Vec<LeaderAttachmentConditionalGroupsItem>,
     pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
     ///Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -11537,6 +11583,140 @@ pub struct LeaderAttachment {
     >,
     pub game_version: GameVersionRef,
     pub leader_id: EntityId,
+}
+///`LeaderAttachmentConditionalGroupsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "minProperties": 3,
+///  "required": [
+///    "eligible_bodyguard_ids",
+///    "role"
+///  ],
+///  "properties": {
+///    "eligible_bodyguard_ids": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1
+///    },
+///    "excluded_roster_unit_ids": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1
+///    },
+///    "required_roster_unit_ids": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1
+///    },
+///    "role": {
+///      "type": "string",
+///      "enum": [
+///        "leader",
+///        "support"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct LeaderAttachmentConditionalGroupsItem {
+    pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub excluded_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub required_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    pub role: LeaderAttachmentConditionalGroupsItemRole,
+}
+///`LeaderAttachmentConditionalGroupsItemRole`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "leader",
+///    "support"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum LeaderAttachmentConditionalGroupsItemRole {
+    #[serde(rename = "leader")]
+    Leader,
+    #[serde(rename = "support")]
+    Support,
+}
+impl ::std::fmt::Display for LeaderAttachmentConditionalGroupsItemRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Leader => f.write_str("leader"),
+            Self::Support => f.write_str("support"),
+        }
+    }
+}
+impl ::std::str::FromStr for LeaderAttachmentConditionalGroupsItemRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "leader" => Ok(Self::Leader),
+            "support" => Ok(Self::Support),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for LeaderAttachmentConditionalGroupsItemRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for LeaderAttachmentConditionalGroupsItemRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for LeaderAttachmentConditionalGroupsItemRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`LeaderAttachmentEligibleBodyguardKeywordsItem`
 ///

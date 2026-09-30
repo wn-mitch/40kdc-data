@@ -356,24 +356,104 @@ func matchesBodyguardKeywords(la, unit map[string]any) bool {
 	return allIn(have, lowerAll(req))
 }
 
-// leadersAttachableTo returns the leaders whose leader-attachment data lists
-// bodyguardUnitID among its eligible bodyguards — by explicit id or by keyword
-// eligibility (e.g. an Inquisitor leading any Imperium Battleline Infantry
-// unit) — sorted by name. Faction-agnostic (GetAny). Go mirror of TS
-// Dataset.leadersAttachableTo.
+// conditionalAttachmentGroupApplies reports whether a conditional attachment
+// group applies to the supplied roster. A nil present-unit set means no roster
+// context was provided, so every group remains a possible option.
+func conditionalAttachmentGroupApplies(group map[string]any, presentUnitIDs map[string]struct{}) bool {
+	if presentUnitIDs == nil {
+		return true
+	}
+	for _, id := range getStrList(group, "required_roster_unit_ids") {
+		if _, present := presentUnitIDs[id]; !present {
+			return false
+		}
+	}
+	for _, id := range getStrList(group, "excluded_roster_unit_ids") {
+		if _, present := presentUnitIDs[id]; present {
+			return false
+		}
+	}
+	return true
+}
+
+// firstPresentEligibleBodyguardID returns the first roster bodyguard allowed
+// by an attachment, preserving the authored order across flat and conditional
+// eligibility. candidateIDs is the importer's non-character bodyguard set.
+func firstPresentEligibleBodyguardID(attachment map[string]any, presentUnitIDs map[string]struct{}, candidateIDs map[string]bool) string {
+	for _, id := range getStrList(attachment, "eligible_bodyguard_ids") {
+		if candidateIDs[id] {
+			return id
+		}
+	}
+	for _, groupAny := range getList(attachment, "conditional_groups") {
+		group, ok := asMap(groupAny)
+		if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+			continue
+		}
+		for _, id := range getStrList(group, "eligible_bodyguard_ids") {
+			if candidateIDs[id] {
+				return id
+			}
+		}
+	}
+	return ""
+}
+
+// attachmentRole uses conditional groups when their roster predicates apply.
+// If more than one applies, leader wins so a solo-capable unit is not forced
+// to attach; otherwise the unit's flat attachment_role remains authoritative.
+func (ds *Dataset) attachmentRole(leaderUnitID, defaultRole string, presentUnitIDs map[string]struct{}) string {
+	conditionalRole := ""
+	for _, attachmentAny := range ds.LeaderAttachments {
+		attachment, _ := asMap(attachmentAny)
+		if getStr(attachment, "leader_id") != leaderUnitID {
+			continue
+		}
+		for _, groupAny := range getList(attachment, "conditional_groups") {
+			group, ok := asMap(groupAny)
+			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+				continue
+			}
+			switch getStr(group, "role") {
+			case "leader":
+				return "leader"
+			case "support":
+				conditionalRole = "support"
+			}
+		}
+	}
+	if conditionalRole != "" {
+		return conditionalRole
+	}
+	return defaultRole
+}
+
+// leadersAttachableTo returns every leader that could attach to bodyguardUnitID
+// without roster context. Conditional groups therefore contribute their union
+// of possible bodyguards.
 func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
+	return ds.leadersAttachableToInRoster(bodyguardUnitID, nil)
+}
+
+// leadersAttachableToInRoster returns leaders that can attach to
+// bodyguardUnitID in the supplied roster context.
+func (ds *Dataset) leadersAttachableToInRoster(bodyguardUnitID string, presentUnitIDs map[string]struct{}) []*UnitView {
 	var bodyguard map[string]any
 	if bg, ok := ds.Units.GetAny(bodyguardUnitID); ok {
 		bodyguard = bg.Raw
 	}
 	var out []*UnitView
 	for _, laAny := range ds.LeaderAttachments {
-		la := laAny.(map[string]any)
-		eligible := false
-		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
-			if id == bodyguardUnitID {
-				eligible = true
-				break
+		la, _ := asMap(laAny)
+		eligible := contains(getStrList(la, "eligible_bodyguard_ids"), bodyguardUnitID)
+		if !eligible {
+			for _, groupAny := range getList(la, "conditional_groups") {
+				group, ok := asMap(groupAny)
+				if ok && conditionalAttachmentGroupApplies(group, presentUnitIDs) &&
+					contains(getStrList(group, "eligible_bodyguard_ids"), bodyguardUnitID) {
+					eligible = true
+					break
+				}
 			}
 		}
 		if !eligible && bodyguard != nil {
@@ -390,11 +470,13 @@ func (ds *Dataset) leadersAttachableTo(bodyguardUnitID string) []*UnitView {
 	return out
 }
 
-// bodyguardsAttachableFrom is the inverse of leadersAttachableTo: the body units
-// the given leader can attach to — by explicit id or keyword eligibility —
-// deduped by id and sorted by name. Go mirror of TS
-// Dataset.bodyguardsAttachableFrom.
+// bodyguardsAttachableFrom lists every possible bodyguard when no roster
+// context is supplied. Conditional groups then contribute their union.
 func (ds *Dataset) bodyguardsAttachableFrom(leaderUnitID string) []*UnitView {
+	return ds.bodyguardsAttachableFromInRoster(leaderUnitID, nil)
+}
+
+func (ds *Dataset) bodyguardsAttachableFromInRoster(leaderUnitID string, presentUnitIDs map[string]struct{}) []*UnitView {
 	seen := map[string]struct{}{}
 	var out []*UnitView
 	add := func(u *UnitView) {
@@ -405,13 +487,24 @@ func (ds *Dataset) bodyguardsAttachableFrom(leaderUnitID string) []*UnitView {
 		out = append(out, u)
 	}
 	for _, laAny := range ds.LeaderAttachments {
-		la := laAny.(map[string]any)
+		la, _ := asMap(laAny)
 		if getStr(la, "leader_id") != leaderUnitID {
 			continue
 		}
 		for _, id := range getStrList(la, "eligible_bodyguard_ids") {
 			if u, ok := ds.Units.GetAny(id); ok {
 				add(u)
+			}
+		}
+		for _, groupAny := range getList(la, "conditional_groups") {
+			group, ok := asMap(groupAny)
+			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+				continue
+			}
+			for _, id := range getStrList(group, "eligible_bodyguard_ids") {
+				if u, ok := ds.Units.GetAny(id); ok {
+					add(u)
+				}
 			}
 		}
 		if len(getStrList(la, "eligible_bodyguard_keywords")) > 0 {

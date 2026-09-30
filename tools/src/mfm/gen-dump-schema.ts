@@ -367,23 +367,27 @@ function catalogErrors(dump: unknown, catalog: DumpCatalog): string[] {
     if (table.row_shape !== observedShape) {
       errors.push(`Catalog table "${tableName}" row_shape is "${table.row_shape}" but the dump is "${observedShape}"`);
     }
-    const observedPaths = canonicalPaths(rows);
-    for (const field of observedPaths.filter((name) => !table.fields[name])) errors.push(`Catalog field "${tableName}.${field}" is missing`);
-    for (const field of Object.keys(table.fields).filter((name) => !observedPaths.includes(name))) {
-      errors.push(`Catalog field "${tableName}.${field}" is not present in the dump`);
-    }
-    for (const [field, annotation] of Object.entries(table.fields)) {
-      const values = valuesAtPath(rows, field);
-      const expected = values.length > 0 && values.every((value) => value === null) ? "null-only" : "observed";
-      if (annotation.shape_review !== expected) {
-        errors.push(`Catalog field "${tableName}.${field}" shape_review is "${annotation.shape_review}" but observed shape is "${expected}"`);
+    // Empty tables have no observable paths or field values. Keep reviewed field
+    // semantics so a future populated snapshot must match them when it returns.
+    if (rows.length > 0) {
+      const observedPaths = canonicalPaths(rows);
+      for (const field of observedPaths.filter((name) => !table.fields[name])) errors.push(`Catalog field "${tableName}.${field}" is missing`);
+      for (const field of Object.keys(table.fields).filter((name) => !observedPaths.includes(name))) {
+        errors.push(`Catalog field "${tableName}.${field}" is not present in the dump`);
       }
-      if (!field.includes(".") && field !== "id" && field.endsWith("Id")) {
-        const relationKey = `${tableName}.${field}`;
-        if (annotation.relation !== relationKey) errors.push(`Catalog field "${relationKey}" must declare relation "${relationKey}"`);
-      }
-      if (annotation.relation && !catalog.relations[annotation.relation]) {
-        errors.push(`Catalog field "${tableName}.${field}" references unknown relation "${annotation.relation}"`);
+      for (const [field, annotation] of Object.entries(table.fields)) {
+        const values = valuesAtPath(rows, field);
+        const expected = values.length > 0 && values.every((value) => value === null) ? "null-only" : "observed";
+        if (annotation.shape_review !== expected) {
+          errors.push(`Catalog field "${tableName}.${field}" shape_review is "${annotation.shape_review}" but observed shape is "${expected}"`);
+        }
+        if (!field.includes(".") && field !== "id" && field.endsWith("Id")) {
+          const relationKey = `${tableName}.${field}`;
+          if (annotation.relation !== relationKey) errors.push(`Catalog field "${relationKey}" must declare relation "${relationKey}"`);
+        }
+        if (annotation.relation && !catalog.relations[annotation.relation]) {
+          errors.push(`Catalog field "${tableName}.${field}" references unknown relation "${annotation.relation}"`);
+        }
       }
     }
 

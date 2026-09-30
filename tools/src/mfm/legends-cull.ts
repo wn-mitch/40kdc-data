@@ -20,9 +20,11 @@
  *   units.json               — remove the unit
  *   wargear-options.json     — remove entries whose unit_id was dropped
  *   unit-compositions.json   — remove entries whose unit_id was dropped
- *   leader-attachments.json  — remove entries whose leader_id was dropped; strip
- *                              dropped ids from eligible_bodyguard_ids (drop the
- *                              whole entry if it empties — schema minItems 1)
+ *   leader-attachments.json  — remove dropped leaders and bodyguards; drop
+ *                              conditional groups requiring a dropped unit,
+ *                              but keep groups excluding one (that exclusion
+ *                              is always satisfied while the unit is absent).
+ *                              Drop entries with no eligible bodyguards left.
  *   weapons.json / wargear.json — remove items referenced by zero SURVIVING
  *                              unit.weapon_ids / wargear-option refs /
  *                              unit-composition models[].default_weapon_ids
@@ -69,6 +71,12 @@ interface UnitComposition {
 interface LeaderAttachment {
   leader_id: string;
   eligible_bodyguard_ids: string[];
+  conditional_groups?: Array<{
+    role: "leader" | "support";
+    eligible_bodyguard_ids: string[];
+    required_roster_unit_ids?: string[];
+    excluded_roster_unit_ids?: string[];
+  }>;
   [k: string]: unknown;
 }
 interface IdItem {
@@ -225,15 +233,30 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
         res.leaderEntriesRemoved++;
         continue;
       }
-      const kept = la.eligible_bodyguard_ids.filter((b) => !droppedIds.has(b));
-      const stripped = la.eligible_bodyguard_ids.length - kept.length;
-      res.bodyguardRefsStripped += stripped;
-      if (kept.length === 0) {
-        // every eligible bodyguard was a dropped unit — the attachment is dead
+      const original = la.eligible_bodyguard_ids;
+      const kept = original.filter((b) => !droppedIds.has(b));
+      res.bodyguardRefsStripped += original.length - kept.length;
+      const groups = (la.conditional_groups ?? []).flatMap((group) => {
+        const survivingBodyguards = group.eligible_bodyguard_ids.filter((id) => !droppedIds.has(id));
+        res.bodyguardRefsStripped += group.eligible_bodyguard_ids.length - survivingBodyguards.length;
+        // A dropped excluded unit can no longer appear in a roster, so its
+        // exclusion is always satisfied. Keep the group and its role.
+        if (
+          !survivingBodyguards.length ||
+          group.required_roster_unit_ids?.some((id) => droppedIds.has(id))
+        ) return [];
+        return [{ ...group, eligible_bodyguard_ids: survivingBodyguards }];
+      });
+      if (!kept.length && !groups.length) {
         res.leaderEntriesRemoved++;
         continue;
       }
-      survivingLeaders.push(stripped ? { ...la, eligible_bodyguard_ids: kept } : la);
+      const { eligible_bodyguard_ids: _oldEligible, conditional_groups: _oldGroups, ...base } = la;
+      survivingLeaders.push({
+        ...base,
+        eligible_bodyguard_ids: kept,
+        ...(groups.length ? { conditional_groups: groups } : {}),
+      });
     }
 
     // orphan weapons/wargear: referenced by zero surviving entity ANYWHERE (global)

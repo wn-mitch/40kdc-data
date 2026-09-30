@@ -1185,13 +1185,18 @@ func applyLeaderAttachments(parsedUnits []any, units []any, ds *Dataset, faction
 	}
 
 	// --- Pass 2: inference for characters without an explicit attachment. -----
+	// Bodyguard candidates exclude other parsed characters, but conditional
+	// groups inspect every resolved unit in the roster (including characters).
 	bodyguardIDs := map[string]bool{}
+	presentUnitIDs := map[string]struct{}{}
 	for i, uAny := range units {
 		u := uAny.(map[string]any)
 		ref := u["ref"].(map[string]any)
-		pu := parsedUnits[i].(map[string]any)
-		if id, ok := ref["id"].(string); ok && id != "" && pu["is_character"] != true {
-			bodyguardIDs[id] = true
+		if id, ok := ref["id"].(string); ok && id != "" {
+			presentUnitIDs[id] = struct{}{}
+			if parsedUnits[i].(map[string]any)["is_character"] != true {
+				bodyguardIDs[id] = true
+			}
 		}
 	}
 	for i, uAny := range units {
@@ -1221,24 +1226,18 @@ func applyLeaderAttachments(parsedUnits []any, units []any, ds *Dataset, faction
 				resolvedUnit = uv
 			}
 		}
-		if resolvedUnit == nil || getStr(resolvedUnit.Raw, "attachment_role") != "support" {
-			continue
-		}
-		var attachment map[string]any
-		for _, laAny := range ds.LeaderAttachments {
-			la := laAny.(map[string]any)
-			if getStr(la, "leader_id") == leaderID {
-				attachment = la
-				break
-			}
-		}
-		if attachment == nil {
+		if resolvedUnit == nil ||
+			ds.attachmentRole(leaderID, getStr(resolvedUnit.Raw, "attachment_role"), presentUnitIDs) != "support" {
 			continue
 		}
 		var bodyguardID string
-		for _, idAny := range getStrList(attachment, "eligible_bodyguard_ids") {
-			if bodyguardIDs[idAny] {
-				bodyguardID = idAny
+		for _, attachmentAny := range ds.LeaderAttachments {
+			attachment, _ := asMap(attachmentAny)
+			if getStr(attachment, "leader_id") != leaderID {
+				continue
+			}
+			bodyguardID = firstPresentEligibleBodyguardID(attachment, presentUnitIDs, bodyguardIDs)
+			if bodyguardID != "" {
 				break
 			}
 		}

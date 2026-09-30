@@ -2,8 +2,10 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { Dataset } from "../../src/data/dataset.js";
+import { emptyRawData } from "../../src/data/types.js";
 import { importRoster } from "../../src/import/import-roster.js";
-import type { Roster } from "../../src/import/types.js";
+import { resolve } from "../../src/import/resolve.js";
+import type { ParsedRoster, Roster } from "../../src/import/types.js";
 
 const ds = Dataset.embedded();
 
@@ -302,5 +304,55 @@ describe("enhancement RAW-name resolution (import-correctness)", () => {
       expect(e.id).toContain(`-${tag}-`);
       expect(ds.enhancements.find(e.name!)?.id).toBe(e.id);
     }
+  });
+});
+
+describe("roster-conditional support inference", () => {
+  it("chooses authored bodyguard order across repeated leader records", () => {
+    const template = ds.units.getInFaction("palatine", "adepta-sororitas")!.raw;
+    const raw = emptyRawData();
+    raw.units = [
+      { ...template, id: "example-support", name: "Example Support", attachment_role: "support" },
+      { ...template, id: "example-bodyguard-a", name: "A Bodyguard" },
+      { ...template, id: "example-bodyguard-z", name: "Z Bodyguard" },
+      { ...template, id: "example-gate", name: "Example Gate" },
+    ];
+    raw.leaderAttachments = [{
+      leader_id: "example-support",
+      eligible_bodyguard_ids: [],
+      conditional_groups: [{
+        role: "leader",
+        eligible_bodyguard_ids: ["example-bodyguard-a"],
+        excluded_roster_unit_ids: ["example-gate"],
+      }],
+      game_version: template.game_version,
+    }, {
+      leader_id: "example-support",
+      eligible_bodyguard_ids: [],
+      conditional_groups: [{
+        role: "support",
+        eligible_bodyguard_ids: ["example-bodyguard-z", "example-bodyguard-a"],
+        required_roster_unit_ids: ["example-gate"],
+      }],
+      game_version: template.game_version,
+    }];
+    const parsedUnit = (raw_name: string, is_character: boolean) => ({
+      raw_name, is_character, model_count: 1, points: 0, is_warlord: false,
+      enhancement_raw_name: null, enhancement_points: null, wargear: [],
+    });
+    const parsed: ParsedRoster = {
+      name: "Example", generated_by: null, faction_raw_name: null,
+      detachment_raw_names: [], battle_size_raw: null,
+      declared_limit: null, total_reported: 0, total_computed: 0, multi_force: false,
+      units: [
+        parsedUnit("Example Support", true),
+        parsedUnit("A Bodyguard", false),
+        parsedUnit("Z Bodyguard", false),
+        parsedUnit("Example Gate", true),
+      ],
+    };
+    const roster = resolve(parsed, new Dataset(raw));
+    expect(unitById(roster, "example-support")?.leader_attachment?.bodyguard_ref.id)
+      .toBe("example-bodyguard-z");
   });
 });

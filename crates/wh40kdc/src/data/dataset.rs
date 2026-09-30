@@ -14,9 +14,10 @@ use std::sync::OnceLock;
 use crate::generated::{
     Ability, AbilityTrigger, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction,
     ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordList, LeaderAttachment,
-    Mission, MissionMatchup, Phase, PhaseMapping, ResourcePool, SecondaryCard, Stratagem,
-    TargetProfile, TerrainLayout, TerrainTemplate, Trigger, Unit, UnitComposition, UnitKeyword,
-    Wargear, WargearOption, Weapon, WeaponKeyword,
+    LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase, PhaseMapping,
+    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate, Trigger,
+    Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear, WargearOption, Weapon,
+    WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -808,20 +809,26 @@ impl Dataset {
         out
     }
 
-    /// Leaders whose leader-attachment data lists `bodyguard_unit_id` among its
-    /// eligible body units, sorted by name. The attachment is stored on the
-    /// leader pointing down to its bodyguards, so answering "which leaders can
-    /// attach to this unit?" means scanning the attachment list. Returns an
-    /// empty vec for a unit nothing attaches to (including leader units).
+    /// Leaders whose attachment data can include `bodyguard_unit_id`, sorted by
+    /// name. Conditional groups are included as possible attachments because
+    /// this browse API has no roster context.
     pub fn leaders_attachable_to(&self, bodyguard_unit_id: &str) -> Vec<&Unit> {
+        self.leaders_attachable_to_in_roster(bodyguard_unit_id, None)
+    }
+
+    /// Leaders eligible for `bodyguard_unit_id` in an optional roster context.
+    /// Without context conditional groups contribute every possible leader.
+    pub fn leaders_attachable_to_in_roster(
+        &self,
+        bodyguard_unit_id: &str,
+        roster_unit_ids: Option<&HashSet<String>>,
+    ) -> Vec<&Unit> {
         let bodyguard = self.units.get_any(bodyguard_unit_id);
         let mut out: Vec<&Unit> = self
             .leader_attachments
             .iter()
             .filter(|la| {
-                la.eligible_bodyguard_ids
-                    .iter()
-                    .any(|id| id.as_str() == bodyguard_unit_id)
+                attachment_bodyguard_ids(la, roster_unit_ids).any(|id| id == bodyguard_unit_id)
                     // Keyword eligibility (e.g. an Inquisitor leading any
                     // Imperium Battleline Infantry unit): match the bodyguard's
                     // keyword set.
@@ -836,20 +843,31 @@ impl Dataset {
     }
 
     /// The inverse of [`leaders_attachable_to`](Self::leaders_attachable_to):
-    /// the body units the given leader can attach to, sorted by name. Scans the
-    /// same data from the leader's side (`leader_id` matches; resolve each
-    /// `eligible_bodyguard_ids` entry), deduped by id. Empty for a non-leader
-    /// unit. The two together give the bidirectional attachment graph.
+    /// every body unit the given leader could attach to, sorted by name.
+    /// Conditional groups are included as possible attachments because this
+    /// browse API has no roster context.
     pub fn bodyguards_attachable_from(&self, leader_unit_id: &str) -> Vec<&Unit> {
-        let mut seen = std::collections::HashSet::new();
-        let mut out: Vec<&Unit> = Vec::new();
+        self.bodyguards_attachable_from_in_roster(leader_unit_id, None)
+    }
+
+    /// The body units the given leader can attach to in an optional roster
+    /// context. Without a context this returns the union of every possible
+    /// attachment; with one, conditional groups must satisfy their roster
+    /// requirements.
+    pub fn bodyguards_attachable_from_in_roster(
+        &self,
+        leader_unit_id: &str,
+        roster_unit_ids: Option<&HashSet<String>>,
+    ) -> Vec<&Unit> {
+        let mut seen = HashSet::new();
+        let mut out = Vec::new();
         for la in &self.leader_attachments {
             if la.leader_id.as_str() != leader_unit_id {
                 continue;
             }
-            for bodyguard_id in &la.eligible_bodyguard_ids {
+            for bodyguard_id in attachment_bodyguard_ids(la, roster_unit_ids) {
                 // Faction-agnostic attachment data — get_any, as above.
-                if let Some(unit) = self.units.get_any(bodyguard_id.as_str()) {
+                if let Some(unit) = self.units.get_any(bodyguard_id) {
                     if seen.insert(unit.id.as_str()) {
                         out.push(unit);
                     }
@@ -868,6 +886,49 @@ impl Dataset {
         }
         out.sort_by(|a, b| a.name.cmp(&b.name));
         out
+    }
+
+    /// Explicit bodyguard IDs in authored order, filtered by roster conditions.
+    /// Importers use this order when choosing a provisional support attachment.
+    pub fn bodyguard_ids_attachable_from_in_roster<'a>(
+        &'a self,
+        leader_unit_id: &'a str,
+        roster_unit_ids: &'a HashSet<String>,
+    ) -> impl Iterator<Item = &'a str> {
+        self.leader_attachments
+            .iter()
+            .filter(move |la| la.leader_id.as_str() == leader_unit_id)
+            .flat_map(move |la| attachment_bodyguard_ids(la, Some(roster_unit_ids)))
+    }
+
+    /// Resolve a leader's attachment role in a roster. Applicable conditional
+    /// groups override the flat role; leader wins if multiple groups apply.
+    pub fn effective_attachment_role(
+        &self,
+        leader_unit_id: &str,
+        default_role: Option<UnitAttachmentRole>,
+        roster_unit_ids: &HashSet<String>,
+    ) -> Option<UnitAttachmentRole> {
+        let mut support_applies = false;
+        for group in self
+            .leader_attachments
+            .iter()
+            .filter(|la| la.leader_id.as_str() == leader_unit_id)
+            .flat_map(|la| la.conditional_groups.iter())
+            .filter(|group| conditional_group_applies(group, roster_unit_ids))
+        {
+            match group.role {
+                LeaderAttachmentConditionalGroupsItemRole::Leader => {
+                    return Some(UnitAttachmentRole::Leader);
+                }
+                LeaderAttachmentConditionalGroupsItemRole::Support => support_applies = true,
+            }
+        }
+        if support_applies {
+            Some(UnitAttachmentRole::Support)
+        } else {
+            default_role
+        }
     }
 
     /// Faction-scoped abilities (abilities whose `faction_id` is this faction).
@@ -889,7 +950,6 @@ impl Dataset {
         out
     }
 }
-
 /// Build a passthrough collection keyed on id (no faction scoping). The id also
 /// serves as the dedupe key.
 fn id_name_collection<T>(
@@ -982,4 +1042,38 @@ fn build_reverse_indexes(
         }
     }
     (by_ability, by_weapon, by_keyword)
+}
+/// The explicit ids a leader can use in a roster context. An absent context is
+/// intentionally permissive for browsing: it returns the union of all groups.
+fn attachment_bodyguard_ids<'a>(
+    attachment: &'a LeaderAttachment,
+    roster_unit_ids: Option<&'a HashSet<String>>,
+) -> impl Iterator<Item = &'a str> {
+    attachment
+        .eligible_bodyguard_ids
+        .iter()
+        .map(|id| id.as_str())
+        .chain(
+            attachment
+                .conditional_groups
+                .iter()
+                .filter(move |group| {
+                    roster_unit_ids.map_or(true, |ids| conditional_group_applies(group, ids))
+                })
+                .flat_map(|group| group.eligible_bodyguard_ids.iter().map(|id| id.as_str())),
+        )
+}
+
+fn conditional_group_applies(
+    group: &crate::generated::LeaderAttachmentConditionalGroupsItem,
+    roster_unit_ids: &HashSet<String>,
+) -> bool {
+    group
+        .required_roster_unit_ids
+        .iter()
+        .all(|id| roster_unit_ids.contains(id.as_str()))
+        && group
+            .excluded_roster_unit_ids
+            .iter()
+            .all(|id| !roster_unit_ids.contains(id.as_str()))
 }

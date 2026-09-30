@@ -338,17 +338,18 @@ export function validateRosterCore(spec: NormRoster, dataset: Dataset): RosterLe
   }
 
   // --- Leader attachment. ----------------------------------------------------
+  const rosterUnitIds = new Set(views.filter((v): v is UnitView => v !== undefined).map((v) => v.id));
   spec.units.forEach((su, idx) => {
     const view = views[idx];
     if (!view) return;
     if (su.leaderBodyguardId) {
-      const eligible = new Set(dataset.bodyguardsAttachableFrom(view.id).map((v) => v.id));
+      const eligible = new Set(dataset.bodyguardsAttachableFrom(view.id, spec.factionId ?? undefined, rosterUnitIds).map((v) => v.id));
       const enhancement = su.enhancementId ? dataset.enhancements.get(su.enhancementId) : undefined;
       for (const bodyguardId of enhancement?.attachment_bodyguard_ids ?? []) eligible.add(bodyguardId);
       if (!eligible.has(su.leaderBodyguardId))
         err("leader-attachment-illegal", view.id, `${view.id} cannot attach to ${su.leaderBodyguardId}`, idx);
     } else if (
-      view.raw.attachment_role === "support" &&
+      (dataset.conditionalAttachmentRole(view.id, rosterUnitIds) ?? view.raw.attachment_role) === "support" &&
       (isCharacter(view) || su.keywordOverrides?.includes("Character") === true)
     ) {
       err("leader-must-attach", view.id, `${view.id} is a Support character and must attach to a unit`, idx);

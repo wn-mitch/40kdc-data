@@ -1084,7 +1084,7 @@
         "detachmentRuleId": {
           "description": "References the detachment-rule record associated with this ability.",
           "ip_class": "identifier",
-          "shape_review": "observed",
+          "shape_review": "null-only",
           "relation": "datasheet_ability.detachmentRuleId"
         },
         "id": {
@@ -1221,6 +1221,31 @@
         }
       }
     },
+    "datasheet_bodyguard_group_excluded_roster_datasheet": {
+      "description": "Excludes a bodyguard group when the referenced datasheet is present in the roster.",
+      "row_shape": "observed",
+      "identity": {
+        "fields": [
+          "datasheetBodyguardGroupId",
+          "datasheetId"
+        ],
+        "status": "verified"
+      },
+      "fields": {
+        "datasheetBodyguardGroupId": {
+          "description": "Identifies the bodyguard group subject to the roster exclusion.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId"
+        },
+        "datasheetId": {
+          "description": "Identifies a datasheet whose roster presence excludes the group.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId"
+        }
+      }
+    },
     "datasheet_bodyguard_group_keyword": {
       "description": "Connects a bodyguard eligibility group to a required keyword.",
       "row_shape": "observed",
@@ -1243,6 +1268,31 @@
           "ip_class": "identifier",
           "shape_review": "observed",
           "relation": "datasheet_bodyguard_group_keyword.keywordId"
+        }
+      }
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet": {
+      "description": "Requires a referenced datasheet in the roster for a bodyguard group to apply.",
+      "row_shape": "observed",
+      "identity": {
+        "fields": [
+          "datasheetBodyguardGroupId",
+          "datasheetId"
+        ],
+        "status": "verified"
+      },
+      "fields": {
+        "datasheetBodyguardGroupId": {
+          "description": "Identifies the bodyguard group subject to the roster requirement.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId"
+        },
+        "datasheetId": {
+          "description": "Identifies a datasheet whose roster presence is required for the group.",
+          "ip_class": "identifier",
+          "shape_review": "observed",
+          "relation": "datasheet_bodyguard_group_required_roster_datasheet.datasheetId"
         }
       }
     },
@@ -1444,7 +1494,7 @@
         "image": {
           "description": "Optionally references artwork associated with the rule.",
           "ip_class": "artwork-reference",
-          "shape_review": "observed"
+          "shape_review": "null-only"
         },
         "localisations": {
           "description": "Maps locale codes to rule presentation payloads.",
@@ -1699,7 +1749,7 @@
     },
     "detachment_faction_detachment_points_cost": {
       "description": "Associates a faction context with an overriding detachment point cost.",
-      "row_shape": "observed",
+      "row_shape": "unobserved",
       "identity": {
         "fields": [],
         "status": "none"
@@ -2659,7 +2709,7 @@
         "miniatureId": {
           "description": "Optionally identifies the model profile receiving this invulnerable save.",
           "ip_class": "identifier",
-          "shape_review": "null-only",
+          "shape_review": "observed",
           "relation": "invulnerable_save.miniatureId"
         },
         "rangedSave": {
@@ -5582,6 +5632,28 @@
       "meaning": "eligibility",
       "edge_peer": "datasheet_bodyguard_group_datasheet.datasheetBodyguardGroupId"
     },
+    "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId": {
+      "source_table": "datasheet_bodyguard_group_excluded_roster_datasheet",
+      "source_field": "datasheetBodyguardGroupId",
+      "target_table": "datasheet_bodyguard_group",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId"
+    },
+    "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetId": {
+      "source_table": "datasheet_bodyguard_group_excluded_roster_datasheet",
+      "source_field": "datasheetId",
+      "target_table": "datasheet",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_excluded_roster_datasheet.datasheetBodyguardGroupId"
+    },
     "datasheet_bodyguard_group_keyword.datasheetBodyguardGroupId": {
       "source_table": "datasheet_bodyguard_group_keyword",
       "source_field": "datasheetBodyguardGroupId",
@@ -5603,6 +5675,28 @@
       "status": "verified",
       "meaning": "eligibility",
       "edge_peer": "datasheet_bodyguard_group_keyword.datasheetBodyguardGroupId"
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId": {
+      "source_table": "datasheet_bodyguard_group_required_roster_datasheet",
+      "source_field": "datasheetBodyguardGroupId",
+      "target_table": "datasheet_bodyguard_group",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_required_roster_datasheet.datasheetId"
+    },
+    "datasheet_bodyguard_group_required_roster_datasheet.datasheetId": {
+      "source_table": "datasheet_bodyguard_group_required_roster_datasheet",
+      "source_field": "datasheetId",
+      "target_table": "datasheet",
+      "target_field": "id",
+      "cardinality": "many-to-many-edge",
+      "nullable": false,
+      "status": "verified",
+      "meaning": "eligibility",
+      "edge_peer": "datasheet_bodyguard_group_required_roster_datasheet.datasheetBodyguardGroupId"
     },
     "datasheet_damage.datasheetId": {
       "source_table": "datasheet_damage",
