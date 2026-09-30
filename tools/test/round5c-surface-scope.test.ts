@@ -51,6 +51,7 @@ describe("Round 5C surface scope", () => {
     const after = parseScope({ preceded_by: ["select one enemy unit"] })!;
     expect(inScope(after, { fragment: "EFFECT", source_type: "stratagem", before: "Then **select one enemy unit** ", after: "" })).toBe(true);
     expect(inScope(after, { fragment: "EFFECT", source_type: "stratagem", before: "Then reselect one enemy unit ", after: "" })).toBe(false);
+    expect(inScope(after, { fragment: "EFFECT", source_type: "stratagem", before: "Then select one enemy unit (", after: ")" })).toBe(true);
     expect(inScope(after, { fragment: "EFFECT", source_type: "stratagem", before: "Select one enemy unit. Each friendly unit ", after: "" })).toBe(false);
     expect(() => parseScope({ nearby: ["x"] })).toThrow(/no field nearby/u);
   });

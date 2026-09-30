@@ -92,7 +92,8 @@ export function inScope(scope: SurfaceScope | null, context: OccurrenceContext):
     if (!scope.clause_prefix.includes(words(clause))) return false;
   }
   if (scope.preceded_by) {
-    const clause = words(context.before.split(/[.:]/u).at(-1) ?? "");
+    // An opening bracket or quote the occurrence sits inside ("… unit (excluding …") is not a word.
+    const clause = words(context.before.split(/[.:]/u).at(-1) ?? "").replace(/[\s(["'“‘]+$/u, "");
     // Whole words only: "select one enemy unit" ends "… select one enemy unit", not "… reselect one enemy unit".
     if (!scope.preceded_by.some((phrase) => clause === phrase || (clause.endsWith(phrase) && !/[\p{L}\p{N}]/u.test(clause[clause.length - phrase.length - 1]!)))) return false;
   }
