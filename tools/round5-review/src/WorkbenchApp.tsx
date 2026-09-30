@@ -27,7 +27,9 @@ type Annotation = Span & {
   authority_kind: "human" | "derived" | "machine";
   rule_authorized_by: string | null;
 };
-type Proposal = Span & { reason: unknown; score: number | null; status: string };
+/** Jev's best meaning for a proposal that has none yet, used only to prefill the editor. */
+type Suggestion = { role: string; family_id: string; family_version: number; parameters: Record<string, unknown>; probability: number };
+type Proposal = Span & { reason: unknown; score: number | null; status: string; suggestion?: Suggestion | null };
 type Ability = {
   id: number; current: boolean; faction_id: string; ability_id: string; source_hash: string; review_evidence_hash: string; pilot_reviewed: boolean; source_text: string;
   source_type: string | null; source_kind: string | null; name: string | null;
@@ -132,6 +134,16 @@ function sourceSlice(ability: Ability, fragment: string, start: number, end: num
 }
 
 function spanDraft(ability: Ability, span: Span, kind: Draft["kind"]): Draft {
+  // An unlabelled proposal opens with Jev's suggestion filled in; confirming it is a correction.
+  const suggestion = kind === "proposal" && !span.family_id ? (span as Proposal).suggestion : null;
+  if (suggestion) {
+    return {
+      ability_id: ability.id, source_hash: ability.source_hash, fragment: span.fragment,
+      start: String(span.start_byte), end: String(span.end_byte), role: suggestion.role,
+      family: suggestion.family_id, version: String(suggestion.family_version),
+      parameters: JSON.stringify(suggestion.parameters, null, 2), overlap: false, span, kind,
+    };
+  }
   return {
     ability_id: ability.id, source_hash: ability.source_hash, fragment: span.fragment,
     start: String(span.start_byte), end: String(span.end_byte), role: span.role,
@@ -853,6 +865,8 @@ export default function WorkbenchApp() {
                 {alphabetical(families.filter((item) => item.role === draft.role), (item) => item.label).map((item) => <option key={`${item.id}@${item.version}`} value={item.id}>{item.label}</option>)}
               </select></label>
                 {selectedFamily && <p className="wb-help">{selectedFamily.description} <code>{selectedFamily.id}@{selectedFamily.version}</code></p>}
+                {draft.kind === "proposal" && !draft.span?.family_id && (draft.span as Proposal | undefined)?.suggestion?.family_id === draft.family
+                  && <p className="wb-help">Prefilled from Jev's suggestion ({Math.round(((draft.span as Proposal).suggestion?.probability ?? 0) * 100)}%). The labeller gave no usable meaning here; check every field before applying.</p>}
                 {draft.role === "CONDITION" && <p className="wb-help">Mark the condition separately from its effect. A reviewed condition family must express the entire condition, including named-model qualifiers; otherwise record Novel or Ambiguous.</p>}
                 {draft.family === "critical-hit-threshold" && <p className="wb-help">Critical hits are not the same as hits scored. If this text only changes which unmodified Hit rolls score hits, do not confirm it as a critical-hit threshold.</p>}
                 {draft.family === "characteristic-set" && <><div className="wb-editor-grid">

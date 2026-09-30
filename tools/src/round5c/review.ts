@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 
-import { currentFamilyVersion, familyRole, LEAF_ROLES, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, familyRole, LEAF_ROLES, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
 import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
@@ -63,7 +63,31 @@ export type ProposalView = {
   reason: Record<string, unknown>;
   score: number | null;
   status: string;
+  /**
+   * For a proposal with no meaning yet (unresolved, novel, or a label import rejected): Jev's top
+   * family for the span and its parameter answers, to prefill the editor. A suggestion only.
+   */
+  suggestion: { role: string; family_id: string; family_version: number; parameters: Record<string, unknown>; probability: number } | null;
 };
+
+/** Jev's best meaning for each span, when it named a current family. */
+function jevSuggestions(db: DatabaseSync, spanIds: readonly number[]): Map<number, NonNullable<ProposalView["suggestion"]>> {
+  const result = new Map<number, NonNullable<ProposalView["suggestion"]>>();
+  if (spanIds.length === 0) return result;
+  const rows = db.prepare(`
+    SELECT family.span_id, family.family_id, family.score, parameters.payload_json
+    FROM span_signals AS family
+    LEFT JOIN span_signals AS parameters ON parameters.span_id = family.span_id AND parameters.source = 'jev-parameters' AND parameters.family_id = family.family_id
+    WHERE family.source = 'jev-family' AND family.rank = 1 AND family.span_id IN (${spanIds.map(Number).join(",")})
+  `).all() as Array<{ span_id: number; family_id: string; score: number | null; payload_json: string | null }>;
+  for (const row of rows) {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === row.family_id && !item.deprecated);
+    if (!family) continue;
+    const answered = row.payload_json ? (JSON.parse(row.payload_json) as { parameters: Record<string, unknown> | null }).parameters : null;
+    result.set(row.span_id, { role: family.role, family_id: family.id, family_version: family.version, parameters: answered ?? {}, probability: row.score ?? 0 });
+  }
+  return result;
+}
 
 /** One complete source version returned to the local review client. */
 export type AbilityView = {
@@ -732,7 +756,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(ability.id) as unknown as Array<AnnotationView & { parameters_json: string }>;
   const proposals = db.prepare(`
-    SELECT proposals.id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text,
+    SELECT proposals.id, source_spans.id AS span_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text,
       proposals.role, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json,
       proposals.origin, proposals.reason_json, proposals.score, proposals.status
     FROM proposals
@@ -742,7 +766,8 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
       AND proposals.status IN ('pending', 'unresolved')
       AND NOT ${RESTATES_ACTIVE_ANNOTATION}
     ORDER BY source_spans.start_byte, source_spans.end_byte, proposals.id
-  `).all(ability.id) as unknown as Array<ProposalView & { parameters_json: string | null; reason_json: string }>;
+  `).all(ability.id) as unknown as Array<ProposalView & { span_id: number; parameters_json: string | null; reason_json: string }>;
+  const suggestions = jevSuggestions(db, proposals.filter((proposal) => !proposal.family_id).map((proposal) => proposal.span_id));
   const review = db.prepare(`
     SELECT whole_context_checked, source_shape, cues_json, reviewed_by
     FROM ability_reviews WHERE ability_version_id = ?
@@ -770,8 +795,9 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     name: ability.name,
     fragments: parseStoredFragments(ability.fragments_json),
     annotations: annotationViews,
-    proposals: proposals.map(({ parameters_json, reason_json, ...proposal }) => ({
+    proposals: proposals.map(({ parameters_json, reason_json, span_id, ...proposal }) => ({
       ...proposal,
+      suggestion: proposal.family_id ? null : suggestions.get(span_id) ?? null,
       family_id: proposal.family_id ?? null,
       family_version: proposal.family_version ?? null,
       parameters: parameters_json === null ? null : parseJsonObject(parameters_json, "proposal parameters"),
