@@ -62,7 +62,6 @@ _FACTION_SUFFIXES: tuple[str, ...] = (
     "astra-militarum",
     "black-templars",
     "imperial-fists",
-    "crimson-fists",
     "chaos-knights",
     "thousand-sons",
     "chaos-daemons",

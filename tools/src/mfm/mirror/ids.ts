@@ -14,6 +14,8 @@ export interface MirrorIds {
    * several factions has one id per faction: pass the faction to pick, else the row must have one.
    */
   idOf(table: string, rowId: string, faction?: string): string | undefined;
+  /** Every id the mirror gives a dump row of this kind (not its sections or options), across the factions that print it. */
+  idsOf(table: string, rowId: string, kind: string): string[];
 }
 
 const cache = new WeakMap<MfmDump, MirrorIds>();
@@ -23,6 +25,11 @@ export function mirrorIds(dump: MfmDump): MirrorIds {
   if (hit) return hit;
   const ids = buildIdentities(enumerateAbilityRows(dump));
   const out: MirrorIds = {
+    idsOf(table, rowId, kind) {
+      return (ids.byDumpRow.get(`${table}#${rowId}`) ?? []).filter((id) =>
+        ids.byId.get(id)?.rows.some((r) => r.table === table && r.rowId === rowId && r.kind === kind),
+      );
+    },
     idOf(table, rowId, faction) {
       const all = ids.byDumpRow.get(`${table}#${rowId}`) ?? [];
       const pick = faction ? all.filter((id) => ids.byId.get(id)?.faction === faction) : all;

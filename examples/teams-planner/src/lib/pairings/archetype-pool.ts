@@ -191,6 +191,5 @@ export const ARCHETYPE_POOL: Archetype[] = [
   { id: "salamanders-flamers", name: "Salamanders Flame Aggressors", factionId: "salamanders", detachmentId: "firestorm-assault-force" },
   { id: "fists-castle", name: "Fists Castle Gunline", factionId: "imperial-fists", detachmentId: "emperors-shield" },
   { id: "raven-guard-phobos", name: "Raven Guard Phobos Skew", factionId: "raven-guard", detachmentId: "shadowmark-talon" },
-  { id: "crimson-fists-bastion", name: "Crimson Fists Bastion", factionId: "crimson-fists", detachmentId: "bastion-task-force" },
   { id: "deathwatch-kill-teams", name: "Deathwatch Kill Teams", factionId: "deathwatch", detachmentId: "black-spear-task-force" },
 ];

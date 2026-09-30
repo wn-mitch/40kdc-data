@@ -13,6 +13,7 @@ import { createMatcher, familyOf, indexRepo, type MatchResult, recKey, recordDir
 import { abilityRefId } from "../../data/ability-refs.js";
 import { isRatingValue, ratingRewrites } from "./project.js";
 import { findRefs } from "./refs.js";
+import { buildRuleLinks, type RuleLinks } from "./rule-links.js";
 import { repoDirForFactionName, SHARED_ROSTERS } from "../faction-map.js";
 import { type AbilityRecord, type EntityRecord, mfmIds, type RepoSnapshot } from "./repo.js";
 import { indexByDatasheet, isStructural, projectUnit, type UnitProjection } from "./units.js";
@@ -69,6 +70,10 @@ export interface MirrorPlan {
   /** Identity id → unit ids (projected) that print it. */
   unitsOf: Map<string, string[]>;
   hasRecord: (id: string) => boolean;
+  /** The army and detachment rules the dump prints, as ability ids. */
+  ruleLinks: RuleLinks;
+  /** The kept stratagem/enhancement entity id for a dump row, if one carries its ref. */
+  entityOfRow: (kind: "stratagem" | "enhancement", rowId: string) => string | undefined;
   /** An ability id as referenced from `dir`: new id, null when removed, undefined when unknown. */
   resolve: (dir: string, id: string) => string | null | undefined;
   /** A stratagem/enhancement entity id as referenced from `dir`. */
@@ -115,7 +120,10 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
     f.records.forEach((record, index) => {
       const m: MatchResult = matcher.match({ dir: f.dir, file: f.rel, index, record });
       const base = { dir: f.dir, file: f.rel, index, oldId: record.ability_id, record, survivor: false };
-      if (m.kind === "match") decisions.push({ ...base, newId: m.id, via: m.via, ...(m.note ? { note: m.note } : {}) });
+      // Only a Legends book prints it, and the Legends cull removed every unit that could carry it.
+      if (m.kind === "match" && ids.byId.get(m.id)?.rows.every((r) => r.legends || r.publication?.legends))
+        decisions.push({ ...base, newId: null, reason: "legends-only" });
+      else if (m.kind === "match") decisions.push({ ...base, newId: m.id, via: m.via, ...(m.note ? { note: m.note } : {}) });
       else decisions.push({ ...base, newId: null, reason: m.reason, ...(m.detail ? { detail: m.detail } : {}) });
     });
   }
@@ -201,7 +209,9 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
           return false;
       }
     });
-  const stubs = ids.identities.filter((i) => !survivors.has(i.id) && i.seeds && ownerInRepo(i));
+  const stubs = ids.identities.filter(
+    (i) => !survivors.has(i.id) && i.seeds && ownerInRepo(i) && i.rows.some((r) => !r.legends && !r.publication?.legends),
+  );
   const recordIds = new Set([...survivors.keys(), ...stubs.map((s) => s.id)]);
   const hasRecord = (id: string): boolean => recordIds.has(id);
 
@@ -235,6 +245,8 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
   const entities: EntityDecision[] = [];
   const entityMap = new Map<string, string | null>();
   const entityByOld = new Map<string, Set<string | null>>();
+  // `kind#dumpRowId` → the entity id a kept entity carrying that dump ref becomes.
+  const entityOfRow = new Map<string, string>();
   for (const kind of ["stratagem", "enhancement"] as const) {
     const files = kind === "stratagem" ? snap.stratagems : snap.enhancements;
     // Old entity id → the identity it mirrors; `byRef` when a dump ref (not the ability name) says so.
@@ -293,11 +305,13 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
           dec.reason = `replica of ${dec.newId}, which a dump-ref'd entity in ${carrier} carries`;
         }
         entities.push(dec);
+        if (dec.newId && !dec.replica) for (const m of mfmIds(e)) if (!entityOfRow.has(`${kind}#${m}`)) entityOfRow.set(`${kind}#${m}`, dec.newId);
         entityMap.set(`${kind}\u0000${recKey(f.dir, e.id)}`, dec.newId);
         entityByOld.set(`${kind}\u0000${e.id}`, (entityByOld.get(`${kind}\u0000${e.id}`) ?? new Set()).add(dec.newId));
       });
     }
   }
+  const keptEntityIds = new Set(entities.filter((e) => e.newId && !e.replica).map((e) => `${e.kind}#${e.newId}`));
   const detachmentReplica = new Set<string>();
   for (const f of snap.detachments) for (const d of f.records) if (mfmIds(d).some((m) => dumpDetachments.has(m))) detachmentReplica.add(d.id);
   for (const f of snap.detachments) {
@@ -387,6 +401,11 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
     roleChanges,
     unitsOf,
     hasRecord,
+    ruleLinks: buildRuleLinks(dump, ids, hasRecord),
+    // A row folded into a shared identity (one Armour of Contempt for many detachments) has no
+    // entity carrying its own ref; the kept entity of its identity stands for it.
+    entityOfRow: (kind, rowId) =>
+      entityOfRow.get(`${kind}#${rowId}`) ?? (ids.byDumpRow.get(`${kind}#${rowId}`) ?? []).find((id) => keptEntityIds.has(`${kind}#${id}`)),
     resolve,
     resolveEntity,
     resolveGlobal,

@@ -110,11 +110,12 @@ describe("MFM sync", () => {
     expect(log).toHaveBeenLastCalledWith("MFM_SYNC_OK data_version=867");
     log.mockRestore();
     expect(calls.map((call) => call.command)).toEqual(MFM_SYNC_COMMANDS);
-    expect(calls).toHaveLength(27);
+    expect(calls).toHaveLength(28);
     // Reissued refs move before any pass joins on them. A mirror precedes every reconciler keyed
     // on mirrored ids, and a closing mirror follows every pass that seeds entities it must see.
     const order = calls.map((call) => call.command);
     expect(order[0]).toBe("reissued-refs");
+    expect(order.indexOf("external-refs")).toBeLessThan(order.indexOf("mirror"));
     for (const keyed of ["detachment-fields", "enhancements", "stratagems"] as const)
       expect(order.indexOf("mirror")).toBeLessThan(order.indexOf(keyed));
     for (const seeding of ["seed-units", "seed-detachments", "seed-stratagems", "attachment-role"] as const)

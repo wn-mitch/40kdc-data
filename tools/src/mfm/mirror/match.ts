@@ -17,7 +17,7 @@ export type MatchResult =
   | { kind: "match"; id: string; via: string; tier?: Tier; note?: string }
   | { kind: "remove"; reason: RemovalReason; detail?: string };
 
-export type RemovalReason = "foreign-faction-only" | "not-in-dump" | "unowned-dump-row" | "no-owner-in-dump";
+export type RemovalReason = "foreign-faction-only" | "not-in-dump" | "unowned-dump-row" | "no-owner-in-dump" | "legends-only";
 
 export interface RecordRef {
   dir: string;

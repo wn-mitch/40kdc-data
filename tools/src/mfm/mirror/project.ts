@@ -284,7 +284,15 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
         return;
       }
       const reps: Replacement[] = [];
-      if (typeof d.detachment_rule_id === "string") {
+      // The rules the dump prints for this detachment replace whatever links it carried.
+      const printed = plan.ruleLinks.detachmentRules(mfmIds(d));
+      if (printed.length) {
+        if (!sameList(d.detachment_rule_ids, printed)) {
+          reps.push({ path: ["detachment_rule_ids"], value: printed });
+          log.push({ file: f.rel, where: d.id, from: JSON.stringify(d.detachment_rule_ids ?? null), to: JSON.stringify(printed), kind: "detachment-rule-ids" });
+        }
+        if ("detachment_rule_id" in d && d.detachment_rule_id !== printed[0]) reps.push({ path: ["detachment_rule_id"], value: printed[0] });
+      } else if (typeof d.detachment_rule_id === "string") {
         const to = plan.resolve(f.dir, d.detachment_rule_id);
         if (to && to !== d.detachment_rule_id) {
           reps.push({ path: ["detachment_rule_id"], value: to });
@@ -292,13 +300,30 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
         } else if (!to) undecided.push({ kind: to === null ? "dangling-ref" : "unresolved-ref", where: `${f.rel}#${d.id}/detachment_rule_id`, detail: `"${d.detachment_rule_id}"` });
       }
       for (const [key, fn] of [
-        ["detachment_rule_ids", (v: string) => plan.resolve(f.dir, v)],
-        ["stratagem_ids", (v: string) => plan.resolveEntity("stratagem", f.dir, v)],
-        ["enhancement_ids", (v: string) => plan.resolveEntity("enhancement", f.dir, v)],
+        ...(printed.length ? [] : [["detachment_rule_ids", (v: string) => plan.resolve(f.dir, v)] as const]),
+        ...(["stratagem", "enhancement"] as const)
+          .filter((kind) => !plan.ruleLinks.detachmentRows(kind, mfmIds(d)).length)
+          .map((kind) => [`${kind}_ids`, (v: string) => plan.resolveEntity(kind, f.dir, v)] as const),
       ] as const) {
         if (!Array.isArray(d[key])) continue;
         const next = listRewrite(f.rel, `${d.id}/${key}`, d[key] as string[], fn, key);
         if (next) reps.push({ path: [key], value: next });
+      }
+      // The stratagems and enhancements the dump prints for this detachment replace the lists.
+      for (const kind of ["stratagem", "enhancement"] as const) {
+        const rows = plan.ruleLinks.detachmentRows(kind, mfmIds(d));
+        if (!rows.length) continue;
+        const want: string[] = [];
+        for (const row of rows) {
+          const id = plan.entityOfRow(kind, row);
+          if (!id) undecided.push({ kind: `detachment-${kind}-without-entity`, where: `${f.rel}#${d.id}`, detail: `dump ${kind} ${row} has no repo entity` });
+          else if (!want.includes(id)) want.push(id);
+        }
+        const key = `${kind}_ids`;
+        if (!sameList(d[key], want)) {
+          reps.push({ path: [key], value: want });
+          log.push({ file: f.rel, where: d.id, from: JSON.stringify(d[key] ?? null), to: JSON.stringify(want), kind: `detachment-${kind}-ids` });
+        }
       }
       if (reps.length) replace.set(i, reps);
     });
@@ -310,6 +335,15 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
     const replace = new Map<number, Replacement[]>();
     f.records.forEach((fac, i) => {
       if (!Array.isArray(fac.faction_rule_ids)) return;
+      // The army rules the faction's own books print (or its parent roster's) replace the list.
+      const printed = plan.ruleLinks.armyRules(f.dir);
+      if (printed) {
+        if (!sameList(fac.faction_rule_ids, printed)) {
+          replace.set(i, [{ path: ["faction_rule_ids"], value: printed }]);
+          log.push({ file: f.rel, where: String(fac.id), from: JSON.stringify(fac.faction_rule_ids), to: JSON.stringify(printed), kind: "faction-rule-ids" });
+        }
+        return;
+      }
       const next = listRewrite(f.rel, `${fac.id}/faction_rule_ids`, fac.faction_rule_ids as string[], (v) => plan.resolve(f.dir, v), "faction_rule_ids");
       if (next) replace.set(i, [{ path: ["faction_rule_ids"], value: next }]);
     });
@@ -318,6 +352,8 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
 
   return { files: files.sort((a, b) => cmp(a.rel, b.rel)), log, undecided };
 }
+
+const sameList = (a: unknown, b: readonly string[]): boolean => Array.isArray(a) && a.length === b.length && a.every((x, i) => x === b[i]);
 
 export const isRatingValue = (v: unknown): boolean => v !== null && typeof v === "object" && (v as { rating?: unknown }).rating === true;
 

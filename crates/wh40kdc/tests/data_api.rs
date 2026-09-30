@@ -476,7 +476,7 @@ fn skips_dangling_link_ids_rather_than_panicking() {
 fn exposes_the_embedded_data() {
     let ds = Dataset::embedded();
     assert!(ds.units.len() > 900, "units = {}", ds.units.len());
-    assert_eq!(ds.factions.len(), 35);
+    assert_eq!(ds.factions.len(), 34);
     assert!(!ds.weapons.is_empty());
     assert!(!ds.abilities.is_empty());
 }

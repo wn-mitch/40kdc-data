@@ -34,7 +34,7 @@ export function titleCase(s: string): string {
  * Faction dir slugs an ability or Stratagem id ends with (`<name>-<faction>`), longest first. The
  * suffix is identity, not name, so it never reaches the English.
  */
-const FACTION_SUFFIXES: readonly string[] = ["agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children", "genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars", "imperial-fists", "crimson-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves", "grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire", "deathwatch", "drukhari", "tyranids", "aeldari", "necrons", "orks"];
+const FACTION_SUFFIXES: readonly string[] = ["agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children", "genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars", "imperial-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves", "grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire", "deathwatch", "drukhari", "tyranids", "aeldari", "necrons", "orks"];
 
 /** An ability or Stratagem id without its faction suffix ("acts-of-faith-adepta-sororitas" → "acts-of-faith"). */
 export function withoutFactionSuffix(id: string): string {

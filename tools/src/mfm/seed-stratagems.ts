@@ -77,7 +77,8 @@ export interface StratSeedReport {
   skippedCoreless: string[];
 }
 
-type DetachmentRoster = Map<string, Set<string>>;
+/** A repo detachment's stratagem roster, and the dump detachments its `mfm` refs link. */
+type DetachmentRoster = Map<string, { stratagems: Set<string>; dumpIds: Set<string> }>;
 
 function readDetachmentRosters(dir: string): DetachmentRoster {
   const detachmentPath = path.join(CORE_DIR, dir, "detachments.json");
@@ -87,9 +88,11 @@ function readDetachmentRosters(dir: string): DetachmentRoster {
   for (const detachment of readJsonArray<{
     id: string;
     stratagem_ids?: string[];
+    external_refs?: { namespace?: string; id?: string }[];
   }>(detachmentPath)) {
     if (detachment.stratagem_ids) {
-      rosters.set(detachment.id, new Set(detachment.stratagem_ids));
+      const dumpIds = new Set((detachment.external_refs ?? []).filter((r) => r.namespace === "mfm" && r.id).map((r) => r.id!));
+      rosters.set(detachment.id, { stratagems: new Set(detachment.stratagem_ids), dumpIds });
     }
   }
   return rosters;
@@ -99,7 +102,7 @@ function rosterFor(
   rostersByDirectory: Map<string, DetachmentRoster>,
   dir: string,
   detachmentId: string,
-): Set<string> | undefined {
+): { stratagems: Set<string>; dumpIds: Set<string> } | undefined {
   let rosters = rostersByDirectory.get(dir);
   if (!rosters) {
     rosters = readDetachmentRosters(dir);
@@ -181,14 +184,21 @@ export function seedStratagems(
       dirLabel = dir;
       const dn = dump.enName(detById.get(s.detachmentId));
       detachment_id = dn ? nameToId(dn) : undefined;
-      let acceptedStratagems = acceptedStratagemsByDirectory.get(dir);
-      if (!acceptedStratagems) {
-        acceptedStratagems = acceptedGapIds("stratagems", dir);
-        acceptedStratagemsByDirectory.set(dir, acceptedStratagems);
-      }
-      if (acceptedStratagems.has(id)) {
-        report.skippedOutsideRoster.push(id);
-        continue;
+      // A detachment authored ahead of the dump (a codex snapshot) owns its roster, and its reviewed
+      // gaps stay out. Once the repo detachment links this dump detachment, the dump's roster is the
+      // live one: the gap list is an audit of what is missing, not a decision to keep it missing.
+      const roster = detachment_id ? rosterFor(rostersByDirectory, dir, detachment_id) : undefined;
+      const linked = roster?.dumpIds.has(s.detachmentId) ?? false;
+      if (!linked) {
+        let acceptedStratagems = acceptedStratagemsByDirectory.get(dir);
+        if (!acceptedStratagems) {
+          acceptedStratagems = acceptedGapIds("stratagems", dir);
+          acceptedStratagemsByDirectory.set(dir, acceptedStratagems);
+        }
+        if (acceptedStratagems.has(id)) {
+          report.skippedOutsideRoster.push(id);
+          continue;
+        }
       }
       if (
         !opts.includeCombatPatrol &&
@@ -197,10 +207,7 @@ export function seedStratagems(
         report.heldBackCombatPatrol.push(id);
         continue;
       }
-      if (
-        detachment_id &&
-        rosterFor(rostersByDirectory, dir, detachment_id)?.has(id) === false
-      ) {
+      if (!linked && roster && !roster.stratagems.has(id)) {
         report.skippedOutsideRoster.push(id);
         continue;
       }

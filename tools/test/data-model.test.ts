@@ -679,16 +679,17 @@ describe("edge cases", () => {
 describe("collection integrity", () => {
   it("exposes the embedded data", () => {
     expect(units.size).toBeGreaterThan(900);
-    expect(factions.size).toBe(35);
+    expect(factions.size).toBe(34);
     expect(weapons.size).toBeGreaterThan(0);
     expect(abilities.size).toBeGreaterThan(0);
   });
 
   it("links every declared Tyranids faction rule to a faction ability", () => {
     const tyranids = factions.get("tyranids");
+    // In the order the dump prints them.
     expect(tyranids?.raw.faction_rule_ids).toEqual([
-      "shadow-in-the-warp-tyranids",
       "synapse-tyranids",
+      "shadow-in-the-warp-tyranids",
     ]);
 
     for (const ruleId of tyranids!.raw.faction_rule_ids) {

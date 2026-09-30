@@ -37,7 +37,8 @@ import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump, type DatasheetRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
-import { repoDirs } from "./faction-map.js";
+import { repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { effectiveDir } from "./seed-units.js";
 import type { StagedWrite } from "./apply.js";
 import { pruneAbilities, type AbilityPrune } from "./ability-prune.js";
 
@@ -99,10 +100,15 @@ export interface CullReport {
   staged: StagedWrite[];
 }
 
-/** Build the global live + Legends datasheet name-slug sets from the dump. */
-function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string> } {
+/** Build the global live + Legends datasheet name-slug sets from the dump, the live slugs routed
+ *  to each repo dir (a supplement's datasheets file under its parent roster's dir), and the live
+ *  datasheet ids. */
+export function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string>; liveByDir: Map<string, Set<string>>; liveIds: Set<string> } {
   const live = new Set<string>();
   const legends = new Set<string>();
+  const liveByDir = new Map<string, Set<string>>();
+  const liveIds = new Set<string>();
+  const fkNames = dump.byId("faction_keyword");
   for (const ds of dump.table("datasheet")) {
     const n = dump.enName(ds);
     if (!n) continue;
@@ -113,8 +119,14 @@ function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<string> 
       continue;
     }
     (ds.isLegends ? legends : live).add(id);
+    if (ds.isLegends) continue;
+    liveIds.add(ds.id);
+    const fk = dump.factionKeywordOfDatasheet(ds.id);
+    const routed = fk ? repoDirForFactionName(dump.enName(fkNames.get(fk))) : null;
+    const dir = routed ? (effectiveDir(routed) ?? routed) : null;
+    if (dir) (liveByDir.get(dir) ?? liveByDir.set(dir, new Set()).get(dir)!).add(id);
   }
-  return { live, legends };
+  return { live, legends, liveByDir, liveIds };
 }
 
 /** Advisory: a culled slug that is a prefix of (or shares a prefix with) a live
@@ -131,8 +143,22 @@ function nearLiveSlug(droppedId: string, live: Set<string>, repoUnitIds: Set<str
   return undefined;
 }
 
+/**
+ * Live in THIS dir: the unit links a live datasheet, or a live datasheet its dir's books print has
+ * its name. A same-named datasheet in another faction's book (the Grey Knights Razorback) does not
+ * keep a Space Marine copy that only Legends still prints.
+ */
+export function liveInDir(
+  unit: { id: string; external_refs?: { namespace?: string; id?: string }[] },
+  dir: string,
+  sets: { liveByDir: Map<string, Set<string>>; liveIds: Set<string> },
+): boolean {
+  const refs = (unit.external_refs ?? []).filter((r) => r.namespace === "mfm" && r.id).map((r) => r.id!);
+  return refs.some((m) => sets.liveIds.has(m)) || (sets.liveByDir.get(dir)?.has(unit.id) ?? false);
+}
+
 export function runCull(dump: MfmDump, write: boolean): CullReport {
-  const { live, legends } = dumpSlugSets(dump);
+  const { live, legends, liveByDir, liveIds } = dumpSlugSets(dump);
 
   // First pass (read-only): compute drops per dir and the grand total, so the
   // sanity tripwire can refuse a write BEFORE any file is touched.
@@ -157,7 +183,7 @@ export function runCull(dump: MfmDump, write: boolean): CullReport {
     const units = readJsonArray<Unit>(path.join(CORE_DIR, dir, "units.json"));
     if (!units.length) continue;
     for (const u of units) allRepoUnitIds.add(u.id);
-    const dropList = units.filter((u) => !live.has(u.id));
+    const dropList = units.filter((u) => !liveInDir(u, dir, { liveByDir, liveIds }));
     const droppedIds = new Set(dropList.map((u) => u.id));
     const options = readJsonArray<WargearOption>(path.join(CORE_DIR, dir, "wargear-options.json"));
     const comps = readJsonArray<UnitComposition>(path.join(CORE_DIR, dir, "unit-compositions.json"));

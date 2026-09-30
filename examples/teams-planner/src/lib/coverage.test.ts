@@ -317,7 +317,7 @@ describe("fdAssignmentIssues", () => {
 
 describe("factionKeywordIdentity / teamLegalityIssues", () => {
   it("collapses sub-factions onto the parent faction keyword", () => {
-    expect(factionKeywordIdentity("crimson-fists")).toBe("adeptus-astartes");
+    expect(factionKeywordIdentity("ultramarines")).toBe("adeptus-astartes");
     expect(factionKeywordIdentity("adeptus-astartes")).toBe("adeptus-astartes");
     expect(factionKeywordIdentity("world-eaters")).toBe("world-eaters");
   });
@@ -327,7 +327,7 @@ describe("factionKeywordIdentity / teamLegalityIssues", () => {
       teamName: "T",
       size: 5,
       players: [
-        player({ id: "a", name: "Ann", factionIds: ["crimson-fists"] }),
+        player({ id: "a", name: "Ann", factionIds: ["ultramarines"] }),
         player({ id: "b", name: "Bob", factionIds: ["adeptus-astartes"] }),
         player({ id: "c", name: "Cid", factionIds: ["world-eaters"] }),
       ],
@@ -344,7 +344,7 @@ describe("factionKeywordIdentity / teamLegalityIssues", () => {
       teamName: "T",
       size: 5,
       players: [
-        player({ id: "a", name: "Ann", factionIds: ["crimson-fists", "world-eaters"] }),
+        player({ id: "a", name: "Ann", factionIds: ["ultramarines", "world-eaters"] }),
         player({ id: "b", name: "Bob", factionIds: ["adeptus-astartes"] }),
       ],
     };

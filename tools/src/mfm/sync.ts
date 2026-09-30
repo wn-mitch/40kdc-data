@@ -18,6 +18,8 @@ export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
   "cull-legends",
   "seed-units",
   "seed-detachments",
+  // The mirror and every reconciler join on `mfm` refs; entities authored outside the dump carry none.
+  "external-refs",
   // Reconcilers below key on mirrored ids; the closing mirror picks up entities seeded after it.
   "mirror",
   "base-sizes",

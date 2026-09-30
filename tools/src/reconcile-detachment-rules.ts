@@ -50,7 +50,7 @@ const FACTION_FILES: Record<string, string[]> = {
   tyranids: ["tyranids"], "world-eaters": ["worldeaters"],
   "black-templars": ["blacktemplar", "space_marines"], "blood-angels": ["bloodangels", "space_marines"],
   "dark-angels": ["darkangels", "space_marines"], deathwatch: ["deathwatch", "space_marines"],
-  "space-wolves": ["spacewolves", "space_marines"], "crimson-fists": ["space_marines"], "imperial-fists": ["space_marines"],
+  "space-wolves": ["spacewolves", "space_marines"], "imperial-fists": ["space_marines"],
   "iron-hands": ["space_marines"], "raven-guard": ["space_marines"], salamanders: ["space_marines"],
   ultramarines: ["space_marines"], "white-scars": ["space_marines"],
 };

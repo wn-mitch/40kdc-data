@@ -159,6 +159,16 @@ export function ruleIdsForDetachment(dump: MfmDump, detId: string): string[] {
     const id = mirror.idOf("detachment_rule", r.id);
     if (id) ids.add(id);
   }
+  // A Combat Patrol's army rules apply only when that patrol is played, so they ride its detachment
+  // (the same links `mfm:mirror` writes; see mirror/rule-links.ts).
+  const pubId = dump.byId("detachment").get(detId)?.publicationId;
+  const publication = pubId ? dump.byId("publication").get(pubId) : undefined;
+  if (publication?.isCombatPatrol && dump.tables.army_rule) {
+    for (const r of dump.table("army_rule")) {
+      if (r.publicationId !== pubId) continue;
+      for (const id of mirror.idsOf("army_rule", r.id, "army-rule")) ids.add(id);
+    }
+  }
   return [...ids].sort((a, b) => a.localeCompare(b));
 }
 

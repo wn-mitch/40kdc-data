@@ -46,7 +46,6 @@ export const SHARED_ROSTERS: Record<string, string[]> = {
   "dark-angels": ["adeptus-astartes"],
   deathwatch: ["adeptus-astartes"],
   "space-wolves": ["adeptus-astartes"],
-  "crimson-fists": ["adeptus-astartes"],
   "imperial-fists": ["adeptus-astartes"],
   "iron-hands": ["adeptus-astartes"],
   "raven-guard": ["adeptus-astartes"],
@@ -65,7 +64,6 @@ export const SHARED_ROSTERS: Record<string, string[]> = {
  * Wolves, Black Templars, Deathwatch). A detachment a codex chapter owns is locked to it.
  */
 export const CODEX_CHAPTERS: ReadonlySet<string> = new Set([
-  "crimson-fists",
   "imperial-fists",
   "iron-hands",
   "raven-guard",

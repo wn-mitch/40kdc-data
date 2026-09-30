@@ -172,8 +172,8 @@ describe('teamViolations', () => {
 describe('forceKind', () => {
 	it('same faction and Astartes chapters are unified; cross-faction is convenience', () => {
 		expect(forceKind('adeptus-astartes', 'adeptus-astartes')).toBe('unified');
-		expect(forceKind('crimson-fists', 'imperial-fists')).toBe('unified');
-		expect(forceKind('crimson-fists', 'adeptus-astartes')).toBe('unified');
+		expect(forceKind('ultramarines', 'imperial-fists')).toBe('unified');
+		expect(forceKind('ultramarines', 'adeptus-astartes')).toBe('unified');
 		expect(forceKind('adeptus-astartes', 'tyranids')).toBe('convenience');
 		expect(forceKind('world-eaters', 'chaos-daemons')).toBe('convenience');
 		expect(forceKind(null, 'tyranids')).toBeNull();

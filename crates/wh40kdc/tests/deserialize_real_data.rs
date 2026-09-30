@@ -64,9 +64,9 @@ fn core_data_deserializes_into_generated_types() {
     let leader_attachments = load_all::<LeaderAttachment>(&core, "leader-attachments.json");
     let unit_compositions = load_all::<UnitComposition>(&core, "unit-compositions.json");
 
-    // The ported dataset has all 35 factions; assert we actually exercised data
+    // The dataset has 34 factions; assert we actually exercised data
     // rather than silently passing on an empty tree.
-    assert!(factions >= 35, "expected >=35 factions, got {factions}");
+    assert!(factions >= 34, "expected >=34 factions, got {factions}");
     assert!(units > 0, "no units deserialized");
     assert!(weapons > 0, "no weapons deserialized");
 

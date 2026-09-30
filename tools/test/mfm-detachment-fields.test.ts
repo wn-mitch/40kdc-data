@@ -190,25 +190,15 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("detachment-fields over the r
     expect(sum((d) => d.ruleFilled.length)).toBe(0);
   });
 
-  it("surfaces authored rule links the dump disagrees with, never overwriting them", () => {
-    const reviews = report.dirs.flatMap((d) => d.ruleReview);
-    // Armoured Infantry: the dump lists a second rule (order) the repo has not linked.
-    const armoured = reviews.find((r) => r.id === "armoured-infantry");
-    expect(armoured?.derived).toEqual(["order-astra-militarum", "squadron-command-astra-militarum"]);
-    expect(armoured?.authored).toEqual(["squadron-command-astra-militarum"]);
-    // The authored value on disk is untouched (surfaced, not overwritten).
+  it("finds every stored rule link matching the dump once the mirror has run", () => {
+    // `mfm:mirror` writes the rules the dump prints (a Combat Patrol's army rules ride its
+    // detachment); this pass derives the same set, so nothing is left to review.
+    expect(report.dirs.flatMap((d) => d.ruleReview)).toEqual([]);
+    // Armoured Infantry prints a second rule (an order) beside Squadron Command: both are linked.
     const rec = JSON.parse(
       fs.readFileSync(path.join(CORE_DIR, "astra-militarum", "detachments.json"), "utf8"),
-    ).find((d: { id: string }) => d.id === "armoured-infantry") as {
-      detachment_rule_id?: string;
-      detachment_rule_ids?: string[];
-    };
-    expect(rec.detachment_rule_id ?? rec.detachment_rule_ids?.join()).not.toContain("order-astra-militarum");
-    // Ids come from one rule now, so a scoped-vs-bare id-form drift no longer surfaces; a
-    // record that mirrors a different dump variant of the rule does.
-    expect(reviews.some((r) => r.id === "murdertalon-raiders")).toBe(false);
-    expect(reviews.find((r) => r.id === "ghosts-of-the-webway")?.derived).toEqual(["acrobatic-onslaught-ghosts-of-the-webway-aeldari"]);
-    expect(reviews.some((r) => r.id === "more-dakka-orks")).toBe(false);
+    ).find((d: { id: string }) => d.id === "armoured-infantry") as { detachment_rule_ids?: string[] };
+    expect(rec.detachment_rule_ids).toEqual(["squadron-command-astra-militarum", "order-astra-militarum"]);
   });
 
   it("leaves no detachment whose dump rule lacks an ability record", () => {

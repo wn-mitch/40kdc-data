@@ -181,6 +181,13 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("seedStratagems over the real
     expect(seedStratagems(dump, { includeCombatPatrol: true }).seeded).toEqual([]);
   });
 
+  it("seeds a reprinted detachment's new stratagems despite its stale roster and gap list", () => {
+    // Gladius was reissued in 963 with new stratagems; neither the old repo roster nor the gap
+    // list recorded from an earlier pass may keep them out once the detachment links the dump.
+    const aa = JSON.parse(fs.readFileSync(path.join(CORE_DIR, "adeptus-astartes", "stratagems.json"), "utf8")) as { id: string }[];
+    expect(aa.map((s) => s.id)).toContain("a-worthy-death-gladius-task-force-adeptus-astartes");
+  });
+
   it("does not re-seed entries excluded by current Codex rosters", () => {
     expect(report.skippedOutsideRoster).toContain("krump-em-ardmob-orks");
   });
