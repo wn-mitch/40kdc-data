@@ -760,6 +760,7 @@ export function initializeWorkbench(db: DatabaseSync): void {
   // After the stamp retirement and version migrations above, which still write the old shape.
   upgradeAuthority(db);
   upgradeDuplicateCopyLink(db);
+  upgradeSurfaceScope(db);
   db.exec(AUTHORITY_INDEXES);
   withTransaction(db, () => upgradeDataEpoch(db));
   initialized.add(db);
@@ -772,6 +773,12 @@ function upgradeDuplicateCopyLink(db: DatabaseSync): void {
     db.exec("ALTER TABLE annotations ADD COLUMN derived_from_annotation_id INTEGER REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT");
   }
   db.exec("CREATE INDEX IF NOT EXISTS annotations_derived_from_annotation ON annotations(derived_from_annotation_id) WHERE derived_from_annotation_id IS NOT NULL");
+}
+
+/** A surface's stored scope; nullable (an unscoped surface), so `ADD COLUMN` suffices. */
+function upgradeSurfaceScope(db: DatabaseSync): void {
+  const columns = new Set((db.prepare("PRAGMA table_info(leaf_surfaces)").all() as Array<{ name: string }>).map((column) => column.name));
+  if (!columns.has("scope_json")) db.exec("ALTER TABLE leaf_surfaces ADD COLUMN scope_json TEXT CHECK(scope_json IS NULL OR json_valid(scope_json))");
 }
 
 /**

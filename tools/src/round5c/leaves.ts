@@ -10,6 +10,7 @@ import { leafSurfaceKey, normalizedProjection } from "./matching.js";
 import { candidateChunks, ftsQuery, matchesAt } from "./retrieval.js";
 import { describerGaps } from "./leaf-describer-audit.js";
 import { surfaceWarnings } from "./surface-lint.js";
+import { inScope, parseScope, ScopeError, scopeJson, type OccurrenceContext } from "./surface-scope.js";
 
 /**
  * Leaf surfaces: one decision per spelling. A row says "this normalized source wording means
@@ -76,9 +77,10 @@ export function untiledRuns(coverage: AbilityCoverage): UncoveredInterval[] {
   });
 }
 
-export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_id: string; status: string; batch_id: string; authority_kind: "human" | "machine" };
+/** `scope_json` is the stored context the surface applies in (surface-scope.ts); NULL applies everywhere. */
+export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_id: string; status: string; batch_id: string; authority_kind: "human" | "machine"; scope_json: string | null };
 
-const SURFACE_COLUMNS = "id, normalized_surface, fingerprint_id, status, batch_id, authority_kind";
+const SURFACE_COLUMNS = "id, normalized_surface, fingerprint_id, status, batch_id, authority_kind, scope_json";
 
 type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
 
@@ -88,7 +90,23 @@ export type ApplyReport = {
   blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" }>;
   /** Machine rows at the same bytes and meaning that a trusted surface row replaced. */
   promoted?: number;
+  /** Occurrences of the wording outside the surface's stored scope, left alone. */
+  out_of_scope?: number;
 };
+
+type AbilityContext = { source_text: string; source_type: string | null; fragments_json: string };
+
+/** An occurrence's own fragment, and the fragment text on either side of it, for scope checks. */
+function occurrenceContext(ability: AbilityContext, occurrence: { fragment: string; start_byte: number; end_byte: number }): OccurrenceContext {
+  const fragment = (JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>)
+    .find((item) => item.fragment === occurrence.fragment && item.start_byte <= occurrence.start_byte && occurrence.end_byte <= item.end_byte);
+  const bytes = Buffer.from(ability.source_text, "utf8");
+  return {
+    fragment: occurrence.fragment, source_type: ability.source_type,
+    before: bytes.subarray(fragment?.start_byte ?? 0, occurrence.start_byte).toString("utf8"),
+    after: bytes.subarray(occurrence.end_byte, fragment?.end_byte ?? bytes.length).toString("utf8"),
+  };
+}
 
 function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
   const row = db.prepare(`
@@ -181,7 +199,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
   const fingerprint = fingerprintRow(db, surface.fingerprint_id);
   const authority = propagatedAuthority(surface.authority_kind);
   const trusted = authority !== "machine";
-  const report: ApplyReport & { touched: Set<number> } = { applied: 0, already: 0, blocked: [], promoted: 0, touched: new Set() };
+  const report: ApplyReport & { touched: Set<number> } = { applied: 0, already: 0, blocked: [], promoted: 0, out_of_scope: 0, touched: new Set() };
   const overlapping = db.prepare(`
     SELECT annotations.id, annotations.origin, annotations.fingerprint_id, annotations.authority_kind, source_spans.start_byte, source_spans.end_byte
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
@@ -203,9 +221,15 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
     INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
     VALUES (?, ?, 'active', 'leaf-surface', ?, ?, ?, ?, ?, ?)
   `);
-  const sourceText = db.prepare("SELECT source_text FROM abilities WHERE id = ?");
+  const sourceText = db.prepare("SELECT source_text, source_type, fragments_json FROM abilities WHERE id = ?");
+  const scope = parseScope(surface.scope_json === null ? null : JSON.parse(surface.scope_json));
   const now = new Date().toISOString();
   for (const occurrence of surfaceOccurrences(db, surface.normalized_surface, abilityVersionIds)) {
+    // Every application checks the stored scope, occurrence by occurrence.
+    if (!inScope(scope, occurrenceContext(sourceText.get(occurrence.ability_version_id) as AbilityContext, occurrence))) {
+      report.out_of_scope! += 1;
+      continue;
+    }
     const args = [occurrence.ability_version_id, occurrence.fragment, occurrence.end_byte, occurrence.start_byte] as const;
     const all = overlapping.all(...args) as Array<{ id: number; origin: string; fingerprint_id: string; authority_kind: Authority; start_byte: number; end_byte: number }>;
     const exact = (other: { fingerprint_id: string; start_byte: number; end_byte: number }) => other.fingerprint_id === fingerprint.id
@@ -262,11 +286,11 @@ function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefine
   return db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'`).get(surface) as SurfaceRow | undefined;
 }
 
-function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null): SurfaceRow {
-  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at) VALUES (?, ?, 'active', ?, ?, ?, ?)")
-    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString());
+function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null, scope: string | null = null): SurfaceRow {
+  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at, scope_json) VALUES (?, ?, 'active', ?, ?, ?, ?, ?)")
+    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString(), scope);
   addMember(db, batchId, "leaf-surface-created", Number(inserted.lastInsertRowid));
-  return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId, authority_kind: authority };
+  return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId, authority_kind: authority, scope_json: scope };
 }
 
 function finish(db: DatabaseSync, touched: Iterable<number>): void {
@@ -289,6 +313,16 @@ function scopeOf(input: Record<string, unknown>): ReadonlySet<number> | undefine
   if (input.ability_version_ids === undefined) return undefined;
   if (!Array.isArray(input.ability_version_ids)) throw new LeafError(422, "ability_version_ids must be an array.");
   return new Set(input.ability_version_ids.map(Number));
+}
+
+/** A decision's scope in its stored form; a malformed scope is refused, never dropped. */
+function decidedScope(value: unknown): string | null {
+  try {
+    return scopeJson(parseScope(value));
+  } catch (error) {
+    if (error instanceof ScopeError) throw new LeafError(422, error.message);
+    throw error;
+  }
 }
 
 function meaning(db: DatabaseSync, input: Record<string, unknown>, exactText: string): Fingerprint {
@@ -316,18 +350,23 @@ export function confirmSurface(db: DatabaseSync, value: unknown, actor: Actor): 
   if (!surface || GLUE.has(surface)) throw new LeafError(422, "A leaf needs wording beyond punctuation and joining words.");
   return withTransaction(db, () => {
     const fingerprint = meaning(db, input, exactText.replace(EDGE_PUNCTUATION, ""));
+    const scope = decidedScope(input.scope);
     const existing = activeSurface(db, surface);
     if (existing && existing.fingerprint_id !== fingerprint.id) {
       const current = fingerprintRow(db, existing.fingerprint_id);
       throw new LeafError(409, `"${surface}" already means ${current.family_id} ${JSON.stringify(current.parameters)}; move it to change its meaning.`);
     }
-    const batchId = newBatch(db, reviewer, { action: "confirm-surface", surface });
-    let row = existing ?? insertSurface(db, surface, fingerprint.id, batchId, actor.authority);
+    // The scope is part of the decision: the same wording under another scope is a different one.
+    if (existing && existing.scope_json !== scope) {
+      throw new LeafError(409, `"${surface}" is already decided ${existing.scope_json === null ? "everywhere" : `within ${existing.scope_json}`}; retire it to decide it ${scope === null ? "everywhere" : `within ${scope}`}.`);
+    }
+    const batchId = newBatch(db, reviewer, { action: "confirm-surface", surface, fingerprint_id: fingerprint.id, scope: scope === null ? null : JSON.parse(scope) });
+    let row = existing ?? insertSurface(db, surface, fingerprint.id, batchId, actor.authority, null, scope);
     // A human confirming a machine-founded surface re-founds it as human; its later applications
     // are then derived. The machine rows it wrote stay machine until this application promotes them.
     if (existing && existing.authority_kind === "machine" && actor.authority === "human") {
       retire(db, batchId, existing);
-      row = insertSurface(db, surface, fingerprint.id, batchId, "human");
+      row = insertSurface(db, surface, fingerprint.id, batchId, "human", null, existing.scope_json);
     }
     const report = applySurface(db, row, reviewer, batchId, scopeOf(input));
     finish(db, report.touched);
@@ -344,7 +383,7 @@ export function applyLeafSurfaces(db: DatabaseSync, value: unknown): ApplyReport
   const scope = scopeOf(input);
   return withTransaction(db, () => {
     const batchId = newBatch(db, reviewer, { action: "apply-surfaces", ...(scope ? { ability_version_ids: [...scope] } : {}) });
-    const total: ApplyReport = { applied: 0, already: 0, blocked: [], promoted: 0 };
+    const total: ApplyReport = { applied: 0, already: 0, blocked: [], promoted: 0, out_of_scope: 0 };
     const touched = new Set<number>();
     const rows = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE status = 'active' ORDER BY id`).all() as SurfaceRow[];
     for (const row of rows) {
@@ -353,6 +392,7 @@ export function applyLeafSurfaces(db: DatabaseSync, value: unknown): ApplyReport
       total.applied += report.applied;
       total.already += report.already;
       total.promoted! += report.promoted ?? 0;
+      total.out_of_scope! += report.out_of_scope ?? 0;
       total.blocked.push(...report.blocked);
       for (const id of report.touched) touched.add(id);
     }
@@ -371,7 +411,7 @@ export function reapplyLeafSurfaces(db: DatabaseSync, abilityVersionIds?: Readon
   if (!db.prepare("SELECT 1 FROM batch_members WHERE batch_id = ? LIMIT 1").get(report.batch_id)) {
     db.prepare("DELETE FROM annotation_batches WHERE id = ?").run(report.batch_id);
   }
-  return { applied: report.applied, already: report.already, blocked: report.blocked, promoted: report.promoted };
+  return { applied: report.applied, already: report.already, blocked: report.blocked, promoted: report.promoted, out_of_scope: report.out_of_scope };
 }
 
 /**
@@ -427,7 +467,7 @@ export function moveSurface(db: DatabaseSync, value: unknown, actor: Actor): App
     if (target.role !== fingerprintRow(db, row.fingerprint_id).role) throw new LeafError(422, "Moving a surface cannot change its role; retire it and confirm it again instead.");
     const batchId = newBatch(db, reviewer, { action: "move-surface", surface: row.normalized_surface });
     retire(db, batchId, row);
-    const created = insertSurface(db, row.normalized_surface, target.id, batchId, "human");
+    const created = insertSurface(db, row.normalized_surface, target.id, batchId, "human", null, row.scope_json);
     const touched = repoint(db, batchId, reviewer, row.fingerprint_id, target.id, row.normalized_surface, created.id);
     const report = applySurface(db, created, reviewer, batchId);
     for (const id of report.touched) touched.add(id);
@@ -452,7 +492,7 @@ export function mergeFingerprints(db: DatabaseSync, value: unknown, actor: Actor
     const surfaces = db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE fingerprint_id = ? AND status = 'active'`).all(from.id) as SurfaceRow[];
     for (const row of surfaces) {
       retire(db, batchId, row);
-      insertSurface(db, row.normalized_surface, to.id, batchId, row.authority_kind);
+      insertSurface(db, row.normalized_surface, to.id, batchId, row.authority_kind, null, row.scope_json);
     }
     const touched = repoint(db, batchId, reviewer, from.id, to.id);
     for (const proposal of db.prepare("SELECT id FROM proposals WHERE fingerprint_id = ? AND status IN ('pending', 'unresolved')").all(from.id) as Array<{ id: number }>) {

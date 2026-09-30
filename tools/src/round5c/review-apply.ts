@@ -33,6 +33,8 @@ export type ChatDecision = {
   parameters?: Record<string, unknown>;
   /** New wording for a correction, located inside the proposal's fragment. */
   exact_text?: string;
+  /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere. */
+  scope?: Record<string, unknown>;
 };
 
 export type ChatReview = { reviewer: string; decisions: ChatDecision[]; pilot_reviewed?: number[] };
@@ -144,8 +146,11 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
     try {
       if (item.action === "surface") {
         // One wording, one meaning, everywhere it occurs (a human surface; its copies are derived).
-        const report = confirmSurface(db, { reviewer: actor.reviewer, exact_text: item.exact_text, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}), parameters: item.parameters ?? {} }, actor);
-        applied.push({ batch_id: report.batch_id, surface: { applied: report.applied, already: report.already, blocked: report.blocked.length } } as never);
+        const report = confirmSurface(db, {
+          reviewer: actor.reviewer, exact_text: item.exact_text, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}),
+          parameters: item.parameters ?? {}, ...(item.scope ? { scope: item.scope } : {}),
+        }, actor);
+        applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, promoted: report.promoted, out_of_scope: report.out_of_scope, blocked: report.blocked.length } } as never);
         continue;
       }
       if (item.action === "gap") {

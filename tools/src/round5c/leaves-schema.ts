@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS leaf_surfaces (
   authorizing_annotation_id INTEGER,
   batch_id TEXT NOT NULL,
   created_at TEXT NOT NULL,
+  -- Where the decision holds (surface-scope.ts); NULL: an unscoped surface, applied everywhere.
+  scope_json TEXT CHECK(scope_json IS NULL OR json_valid(scope_json)),
   FOREIGN KEY(fingerprint_id) REFERENCES fingerprints(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(authorizing_annotation_id) REFERENCES annotations(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
   FOREIGN KEY(batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT
