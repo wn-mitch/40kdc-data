@@ -58,6 +58,8 @@ function dump(): MfmDump {
           localisations: { en: { name: "Synthetic Patrol Relic" } },
         },
       ],
+      keyword: [{ id: "k-fly", localisations: { en: { name: "Fly" } } }],
+      enhancement_excluded_keyword: [{ enhancementId: "e3", keywordId: "k-fly" }],
     },
   });
 }
@@ -234,8 +236,12 @@ describe("runEnhancements matched-play seeding", () => {
     });
     const enhancements = report.staged
       .find((entry) => entry.path.endsWith("adeptus-custodes/enhancements.json"))
-      ?.value as { id: string }[];
-    expect(enhancements.some((entry) => entry.id === id)).toBe(true);
+      ?.value as { id: string; external_refs?: unknown }[];
+    // The seed names its dump row, so the mirror keeps it instead of retiring it as unprinted.
+    const seed = enhancements.find((entry) => entry.id === id) as { external_refs?: unknown; exclusion_keywords?: unknown } | undefined;
+    expect(seed?.external_refs).toEqual([{ namespace: "mfm", id: "e3" }]);
+    // Exclusions land with the seed, not on the next pass's reconcile.
+    expect(seed?.exclusion_keywords).toEqual(["Fly"]);
     const detachments = report.staged
       .find((entry) => entry.path.endsWith("adeptus-custodes/detachments.json"))
       ?.value as { id: string; enhancement_ids?: string[] }[];

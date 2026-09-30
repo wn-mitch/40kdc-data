@@ -13,10 +13,13 @@ export type MfmSyncDependencies = {
 };
 
 export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
+  "reissued-refs",
   "normalize-enhancements",
   "cull-legends",
   "seed-units",
   "seed-detachments",
+  // Reconcilers below key on mirrored ids; the closing mirror picks up entities seeded after it.
+  "mirror",
   "base-sizes",
   "wargear",
   "wargear-budgets",
@@ -35,6 +38,7 @@ export const MFM_SYNC_COMMANDS: readonly IngestMfmCommand[] = [
   "missions",
   "mission-matchups",
   "allies",
+  "mirror",
   "coverage",
   "golden",
 ];

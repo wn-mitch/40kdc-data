@@ -635,6 +635,8 @@ export function runEnhancements(
     }
     const record: EnhRecord = {
       id,
+      // The dump ref ties the seed to its row; without it `mfm:mirror` retires the seed as unprinted.
+      external_refs: [{ namespace: "mfm", id: source.id }],
       name,
       detachment_id: detachmentId,
       cost: source.basePointsCost,
@@ -651,6 +653,9 @@ export function runEnhancements(
     }
     if (eligibility.keyword_restriction_groups) {
       record.keyword_restriction_groups = eligibility.keyword_restriction_groups;
+    }
+    if (fields.exclusion_keywords) {
+      record.exclusion_keywords = fields.exclusion_keywords;
     }
     if (fields.attachment_bodyguard_ids) {
       record.attachment_bodyguard_ids = fields.attachment_bodyguard_ids;

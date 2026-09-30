@@ -11,6 +11,7 @@
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { DEFAULT_DUMP_PATH, loadDump } from "../loader.js";
 import { REPO_ROOT } from "../repo-files.js";
 import { runMirror, writeMirror } from "./mirror.js";
@@ -32,11 +33,19 @@ export function mergeHistory(a: IdHistory, b: IdHistory): IdHistory {
   return out;
 }
 
-async function main(): Promise<void> {
-  const write = process.argv.includes("--write");
-  const dumpPath = arg("--dump") ?? DEFAULT_DUMP_PATH;
-  const out = path.resolve(REPO_ROOT, arg("--out") ?? "_private/phase4/mirror-dryrun");
-  const skipDirs = (arg("--skip-dirs") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+export interface MirrorCommandOptions {
+  dumpPath: string;
+  write: boolean;
+  /** Report dir, relative to the repo root. */
+  out?: string;
+  skipDirs?: string[];
+}
+
+/** Compute the mirror, write its report, and apply it on `write` (only when the projection validates). */
+export async function runMirrorCommand(opts: MirrorCommandOptions): Promise<void> {
+  const { write, dumpPath } = opts;
+  const out = path.resolve(REPO_ROOT, opts.out ?? "_private/phase4/mirror-dryrun");
+  const skipDirs = opts.skipDirs ?? [];
   const history: IdHistory = existsSync(HISTORY) ? (JSON.parse(readFileSync(HISTORY, "utf8")) as IdHistory) : {};
   const result = await runMirror(loadDump(dumpPath), { attachmentRoles: true, validate: true, outside: true, skipDirs, history });
   const s = writeReport(result, out);
@@ -56,7 +65,14 @@ async function main(): Promise<void> {
   console.log(`mfm:mirror: wrote ${result.files.length} files; ${result.pending.length} rewrites pending in ${skipDirs.join(", ") || "(none)"}.`);
 }
 
-main().catch((e: unknown) => {
-  console.error(e instanceof Error ? e.message : e);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  runMirrorCommand({
+    dumpPath: arg("--dump") ?? DEFAULT_DUMP_PATH,
+    write: process.argv.includes("--write"),
+    out: arg("--out"),
+    skipDirs: (arg("--skip-dirs") ?? "").split(",").map((s) => s.trim()).filter(Boolean),
+  }).catch((e: unknown) => {
+    console.error(e instanceof Error ? e.message : e);
+    process.exit(1);
+  });
+}

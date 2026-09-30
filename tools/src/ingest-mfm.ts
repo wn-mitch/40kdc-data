@@ -22,6 +22,8 @@
  *                 twins to generic faction_keywords (#36) + stamp
  *                 excluded_faction_keywords for genuine chapter bars (e.g. Librarians)
  *   cull-legends  Drop dump-absent Legends/Forge-World units + prune refs
+ *   reissued-refs Move dead detachment/stratagem/enhancement refs to a reissued row
+ *   mirror        Ability identity from the dump (`mfm:mirror`): stubs, unit ability_ids, retirement
  *   attachment-role  Dump-authoritative leader/support role + leader-attachments
  *                    (supersedes the 10e known-support-10e.ts scrape)
  *   seed-units    Create skeleton units for dump datasheets with no repo entity
@@ -72,6 +74,8 @@ import {
 } from "./mfm/detachment-fields.js";
 import { runPoints, buildPointsReport } from "./mfm/points.js";
 import { runCull, buildCullReport } from "./mfm/legends-cull.js";
+import { runReissue, buildReissueReport } from "./mfm/reissue.js";
+import { runMirrorCommand } from "./mfm/mirror/cli.js";
 import { runStratagems, buildStratReport } from "./mfm/stratagems.js";
 import { runMissions, buildMissionsReport } from "./mfm/missions.js";
 import {
@@ -985,6 +989,21 @@ async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+async function runReissueCmd(dump: MfmDump, write: boolean): Promise<void> {
+  const report = runReissue(dump);
+  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = path.join(REPORT_DIR, "mfm-reissued-refs.md");
+  fs.writeFileSync(reportPath, buildReissueReport(report, write));
+  console.log(`Reissued-refs report → ${path.relative(REPO_ROOT, reportPath)}`);
+  console.log(
+    `Moved ${report.moved.length} dead mfm refs to reissued rows; ${report.ambiguous.length} ambiguous; ` +
+      `${report.retired.length} retired.`,
+  );
+  await applyWrites(report.staged, { write, label: "reissued-refs" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 async function runStratagemsCmd(dump: MfmDump, write: boolean): Promise<void> {
   const report = runStratagems(dump, write);
   fs.mkdirSync(REPORT_DIR, { recursive: true });
@@ -1532,6 +1551,8 @@ export const INGEST_MFM_COMMANDS = [
   "points",
   "points-and-composition-tiers",
   "cull-legends",
+  "reissued-refs",
+  "mirror",
   "stratagems",
   "seed-stratagems",
   "missions",
@@ -1584,6 +1605,9 @@ export async function runIngestMfmCommand(
     await runExternalRefsCmd(dump, options.write, options.onlyDir);
   else if (command === "points") await runPointsCmd(dump, options.write);
   else if (command === "cull-legends") await runCullCmd(dump, options.write);
+  else if (command === "reissued-refs") await runReissueCmd(dump, options.write);
+  else if (command === "mirror")
+    await runMirrorCommand({ dumpPath: options.dumpPath, write: options.write, out: "_private/phase4/mirror-sync" });
   else if (command === "seed-stratagems")
     await runSeedStratagemsCmd(
       dump,

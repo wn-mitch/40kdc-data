@@ -202,8 +202,11 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
 
   // ── context-free JSON ───────────────────────────────────────────────────────────────────
   const jsonRoots = ["conformance", "tools/test/fixtures", "crates/wh40kdc/tests/fixtures", "python/tests", "go/testdata", "examples"];
+  // Recorded TS outputs (inputs + results): rewriting an input id leaves the ids the result derives
+  // from it ("<ability>#<option>") stale. They are re-recorded from their TS source, never rewritten.
+  const RECORDED = /(^|\/)phase4[-_](cruncher|shapes)\.json$/;
   for (const r of jsonRoots) {
-    for (const abs of walkFiles(path.join(root, r), [".json"], (x) => SKIP_DIRS.test(x) || GENERATED.test(x) || /package(-lock)?\.json$|tsconfig|wrangler/.test(x))) {
+    for (const abs of walkFiles(path.join(root, r), [".json"], (x) => SKIP_DIRS.test(x) || GENERATED.test(x) || RECORDED.test(x) || /package(-lock)?\.json$|tsconfig|wrangler/.test(x))) {
       const text = readFileSync(abs, "utf8");
       let parsed: unknown;
       try {
@@ -248,6 +251,7 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
   }
 
   // ── code literals ───────────────────────────────────────────────────────────────────────
+  const KEEP_MARKER = "mfm:mirror keep";
   const stop = stoplist(root, opts.projected);
   const codeRoots: [string, string[]][] = [
     ["tools/src", [".ts"]],
@@ -266,6 +270,8 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
       let changed = false;
       const lines = text.split("\n");
       lines.forEach((line, n) => {
+        // A fixture id that only looks like a repo id (a synthetic dump's) opts out per line.
+        if (line.includes(KEEP_MARKER)) return;
         lines[n] = line.replace(literal, (whole, q: string, id: string) => {
           if (!id.includes("-")) return whole;
           let v: Verdict = null;

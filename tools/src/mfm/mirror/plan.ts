@@ -11,7 +11,9 @@ import type { MfmDump } from "../loader.js";
 import { buildIdentities, type Identity, type IdentitySet, SEEDING_KINDS, suffixed } from "./identity.js";
 import { createMatcher, familyOf, indexRepo, type MatchResult, recKey, recordDirFor, type RemovalReason, type RepoIndex } from "./match.js";
 import { abilityRefId } from "../../data/ability-refs.js";
+import { isRatingValue, ratingRewrites } from "./project.js";
 import { findRefs } from "./refs.js";
+import { repoDirForFactionName, SHARED_ROSTERS } from "../faction-map.js";
 import { type AbilityRecord, type EntityRecord, mfmIds, type RepoSnapshot } from "./repo.js";
 import { indexByDatasheet, isStructural, projectUnit, type UnitProjection } from "./units.js";
 
@@ -42,6 +44,9 @@ export interface EntityDecision {
   /** The entity's `ability_id` after the mirror (stratagems/enhancements). */
   abilityId?: string | null;
   reason?: string;
+  /** Kept only as a reference target: a dump-ref'd entity in another dir carries `newId`, so this
+   *  name-followed copy is removed rather than kept as a divergent replica. */
+  replica?: boolean;
 }
 
 export interface Undecided {
@@ -135,11 +140,17 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
   const byIdentity = new Map<string, (RecordDecision & { record: AbilityRecord })[]>();
   for (const d of decisions) if (d.newId) byIdentity.set(d.newId, [...(byIdentity.get(d.newId) ?? []), d]);
   const survivors = new Map<string, RecordDecision>();
+  // Identity → its surviving record reads the unit's printed rating (`{rating: true}` in its DSL).
+  const readsRating = new Set<string>();
   for (const [id, group] of byIdentity) {
     const identity = ids.byId.get(id)!;
     group.sort((a, b) => survivorOrder(identity, a, b));
     group[0]!.survivor = true;
     survivors.set(id, group[0]!);
+    // Read after the mirror: a folded copy's hard-coded rating is rewritten to `{rating: true}`.
+    const kept = group[0]!.record as AbilityRecord & { stub?: boolean };
+    const rewritten = ratingRewrites(identity, group[0]!.oldId, kept as never).some((r) => isRatingValue(r.value));
+    if (kept.stub === true || rewritten || /"rating":\s*true/u.test(JSON.stringify(kept.effect ?? null))) readsRating.add(id);
     for (const d of group.slice(1)) {
       d.reason = "merged";
       d.detail = `folded into ${id} (kept ${group[0]!.dir}/${group[0]!.oldId})`;
@@ -194,6 +205,32 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
   const recordIds = new Set([...survivors.keys(), ...stubs.map((s) => s.id)]);
   const hasRecord = (id: string): boolean => recordIds.has(id);
 
+  // A detachment copy stays only in a dir the dump offers it to: its owner's, one its applicability
+  // list names, or a supplement dir replicating one of those rosters. A chapter-supplement detachment
+  // (Ceramite Sentinels) is not a codex detachment, so the other chapters' copies go, with its
+  // stratagems and enhancements there.
+  const offeredDirs = (detId: string): Set<string> | null => {
+    const label = (fk: string | null | undefined) => (fk ? repoDirForFactionName(dump.enName(dump.byId("faction_keyword").get(fk) as never)) : null);
+    const owner = label(dump.factionKeywordOfDetachment(detId));
+    if (!owner) return null;
+    const dirs = new Set([owner]);
+    const applicability = dump.tables.detachment_faction_keyword ? dump.children("detachment_faction_keyword.detachmentId", detId) : [];
+    for (const e of applicability) {
+      const d = label(e.factionKeywordId);
+      if (d) dirs.add(d);
+    }
+    return dirs;
+  };
+  const unoffered = new Set<string>();
+  for (const f of snap.detachments) for (const d of f.records) {
+    const live = mfmIds(d).filter((m) => dumpDetachments.has(m));
+    if (!live.length) continue;
+    const offered = live.map(offeredDirs);
+    if (offered.some((o) => o === null)) continue;
+    const ok = offered.some((o) => o!.has(f.dir) || (SHARED_ROSTERS[f.dir] ?? []).some((p) => o!.has(p)));
+    if (!ok) unoffered.add(recKey(f.dir, d.id));
+  }
+
   // 4. Entities follow their ability (D6); no dump row → removed unless a replica of one that has it.
   const entities: EntityDecision[] = [];
   const entityMap = new Map<string, string | null>();
@@ -217,6 +254,12 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
         if (via && ids.byId.get(via)?.kinds.includes(kind)) derived.set(e.id, { id: via, byRef: false });
       }
     }
+    // Identity → the first dir holding a dump-ref'd entity for it; replicas of such an entity must match it.
+    const refCarriers = new Map<string, string>();
+    for (const f of files) for (const e of f.records) {
+      const d = derived.get(e.id);
+      if (d?.byRef && mfmIds(e).length && !refCarriers.has(d.id)) refCarriers.set(d.id, f.dir);
+    }
     for (const f of files) {
       // One entity per identity in a file: a dump-ref'd entity wins over a name-followed one.
       const claimed = new Map<string, string>();
@@ -226,6 +269,10 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
         const d = derived.get(e.id);
         let newId = d?.id ?? null;
         let reason = newId ? undefined : "no dump row (nor a replica of one)";
+        if (newId && typeof e.detachment_id === "string" && unoffered.has(recKey(f.dir, e.detachment_id))) {
+          reason = `its detachment ${e.detachment_id} is not offered to ${f.dir}`;
+          newId = null;
+        }
         if (newId && claimed.has(newId) && claimed.get(newId) !== e.id) {
           reason = `duplicate of ${claimed.get(newId)} (both mirror ${newId})`;
           newId = null;
@@ -239,6 +286,12 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
       }
       f.records.forEach((e: EntityRecord, index) => {
         const dec = decided.get(index)!;
+        const follower = dec.newId && !derived.get(e.id)?.byRef;
+        const carrier = follower ? refCarriers.get(dec.newId!) : undefined;
+        if (carrier && carrier !== f.dir) {
+          dec.replica = true;
+          dec.reason = `replica of ${dec.newId}, which a dump-ref'd entity in ${carrier} carries`;
+        }
         entities.push(dec);
         entityMap.set(`${kind}\u0000${recKey(f.dir, e.id)}`, dec.newId);
         entityByOld.set(`${kind}\u0000${e.id}`, (entityByOld.get(`${kind}\u0000${e.id}`) ?? new Set()).add(dec.newId));
@@ -249,8 +302,10 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
   for (const f of snap.detachments) for (const d of f.records) if (mfmIds(d).some((m) => dumpDetachments.has(m))) detachmentReplica.add(d.id);
   for (const f of snap.detachments) {
     f.records.forEach((d, index) => {
-      const keep = detachmentReplica.has(d.id);
-      entities.push({ kind: "detachment", dir: f.dir, file: f.rel, index, oldId: d.id, newId: keep ? d.id : null, ...(keep ? {} : { reason: "no dump row (nor a replica of one)" }) });
+      const notOffered = unoffered.has(recKey(f.dir, d.id));
+      const keep = detachmentReplica.has(d.id) && !notOffered;
+      const reason = notOffered ? `the dump does not offer it to ${f.dir}` : "no dump row (nor a replica of one)";
+      entities.push({ kind: "detachment", dir: f.dir, file: f.rel, index, oldId: d.id, newId: keep ? d.id : null, ...(keep ? {} : { reason }) });
     });
   }
   const resolveEntity = (kind: "stratagem" | "enhancement", dir: string, id: string): string | null | undefined => {
@@ -313,9 +368,11 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
   const units: UnitProjection[] = [];
   for (const f of snap.units) {
     for (const u of f.records) {
-      units.push(projectUnit({ set, ids, resolve, hasRecord, wargearOf: (row) => wargearByRow.get(row) ?? [], roleOf: (dir, id) => roles.get(recKey(dir, id)) }, byDatasheet, f.dir, u));
+      units.push(projectUnit({ set, ids, resolve, hasRecord, wargearOf: (row) => wargearByRow.get(row) ?? [], roleOf: (dir, id) => roles.get(recKey(dir, id)), readsRating: (id) => readsRating.has(id) || !survivors.has(id) }, byDatasheet, f.dir, u));
     }
   }
+  for (const u of units) for (const [id, rating] of Object.entries(u.unreadRatings ?? {}))
+    undecided.push({ kind: "rating-unread", where: `${u.dir}/${u.unitId}`, detail: `datasheet prints ${id} ${rating}, but its record reads no rating; listed unrated` });
   for (const u of units) if (u.note) undecided.push({ kind: u.datasheets.length ? "multi-publication-unit" : "unit-without-datasheet", where: `${u.dir}/${u.unitId}`, detail: u.note });
   const unitsOf = new Map<string, string[]>();
   for (const u of units) for (const id of u.after.map(abilityRefId)) unitsOf.set(id, [...new Set([...(unitsOf.get(id) ?? []), u.unitId])].sort(cmp));

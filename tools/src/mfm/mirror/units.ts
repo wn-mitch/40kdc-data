@@ -39,6 +39,8 @@ export interface UnitProjection {
   dropped: { id: string; reason: string }[];
   /** Printed rated core abilities (the rating a grant would carry). */
   ratings: Record<string, string>;
+  /** Printed ratings the ability's record cannot read (no `{rating: true}` in its DSL): listed unrated. */
+  unreadRatings?: Record<string, string>;
   datasheets: string[];
   note?: string;
 }
@@ -54,6 +56,8 @@ export interface UnitContext {
   wargearOf: (dumpRowId: string) => string[];
   /** Attachment role after the attachment-role ingest. */
   roleOf: (dir: string, unitId: string) => "leader" | "support" | null | undefined;
+  /** The ability's record after the mirror reads the unit's rating (true for a stub, which reads nothing yet). */
+  readsRating: (id: string) => boolean;
 }
 
 const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
@@ -126,7 +130,8 @@ export function projectUnit(ctx: UnitContext, byDatasheet: Map<string, AbilityRo
       const identity = ctx.ids.byId.get(id);
       for (const d of datasheets) {
         const rating = identity?.ratings?.[d];
-        if (rating) proj.ratings[id] = rating;
+        if (rating && ctx.readsRating(id)) proj.ratings[id] = rating;
+        else if (rating) proj.unreadRatings = { ...proj.unreadRatings, [id]: rating };
       }
     }
   }

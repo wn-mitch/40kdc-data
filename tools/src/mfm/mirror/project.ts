@@ -223,9 +223,9 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
     const replace = new Map<number, Replacement[]>();
     f.records.forEach((e, i) => {
       const d = entityDecision.get(`${kind}\u0000${f.rel}\u0000${i}`)!;
-      if (!d.newId) {
+      if (!d.newId || d.replica) {
         remove.add(i);
-        log.push({ file: f.rel, where: e.id, from: e.id, to: null, kind: `${kind}-removed` });
+        log.push({ file: f.rel, where: e.id, from: e.id, to: d.replica ? d.newId : null, kind: d.replica ? `${kind}-removed-replica` : `${kind}-removed` });
         return;
       }
       const reps: Replacement[] = [];
@@ -310,14 +310,14 @@ export function projectData(plan: MirrorPlan, snap: RepoSnapshot): Projection {
   return { files: files.sort((a, b) => cmp(a.rel, b.rel)), log, undecided };
 }
 
-const isRatingValue = (v: unknown): boolean => v !== null && typeof v === "object" && (v as { rating?: unknown }).rating === true;
+export const isRatingValue = (v: unknown): boolean => v !== null && typeof v === "object" && (v as { rating?: unknown }).rating === true;
 
 /**
  * A rated core record folded from one faction's copy ("feel-no-pain-5") hard-codes that copy's
  * rating. Every rating slot (a Feel No Pain threshold, a grant value, a count) holding exactly
  * that rating reads the unit's printed rating instead.
  */
-function ratingRewrites(identity: Identity, oldId: string, record: Json): Replacement[] {
+export function ratingRewrites(identity: Identity, oldId: string, record: Json): Replacement[] {
   if (!identity.ratings || !oldId.startsWith(`${identity.id}-`)) return [];
   const rating = ratingFromTail(oldId.slice(identity.id.length + 1));
   if (rating === null) return [];
