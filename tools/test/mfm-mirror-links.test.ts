@@ -26,7 +26,11 @@ function dump(): MfmDump {
     data: {
       faction_keyword: [{ id: "fk-nec", parentFactionKeywordId: null, ...loc({ name: "Necrons" }) }],
       publication: [pub("Codex Nec", "fk-nec"), pub("Patrol Nec", "fk-nec", { isCombatPatrol: true }), pub("Legends Nec", "fk-nec", { isLegends: true })],
-      datasheet: [{ id: "ds-old", publicationId: "Legends Nec", isLegends: true, allegianceAbilityGroupId: null, ...loc({ name: "Old Walker" }) }],
+      datasheet: [
+        { id: "ds-old", publicationId: "Legends Nec", isLegends: true, allegianceAbilityGroupId: null, ...loc({ name: "Old Walker" }) },
+        // A patrol datasheet the dump carries that prints no ability at all.
+        { id: "ds-bare", publicationId: "Patrol Nec", isLegends: false, allegianceAbilityGroupId: null, ...loc({ name: "Bare Walker" }) },
+      ],
       datasheet_ability: [{ id: "ab-old", abilityType: "datasheet", armyRuleId: null, detachmentRuleId: null, ...loc({ name: "Old Gears", rules: "Legends text." }) }],
       datasheet_datasheet_ability: [{ id: "l1", datasheetId: "ds-old", datasheetAbilityId: "ab-old", ...loc({}) }],
       army_rule: [
@@ -70,6 +74,10 @@ function repo(): string {
     mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
     writeFileSync(path.join(root, rel), `${JSON.stringify(v, null, 2)}\n`);
   };
+  put("data/core/necrons/units.json", [
+    { id: "bare-walker", name: "Bare Walker", ability_ids: ["host-rule-necrons"], external_refs: mfm("ds-bare") },
+    { id: "lost-walker", name: "Lost Walker", ability_ids: ["host-rule-necrons"], external_refs: mfm("ds-gone") },
+  ]);
   put("data/core/necrons/factions.json", [{ id: "necrons", name: "Necrons", faction_rule_ids: ["stale-law"] }]);
   put("data/core/necrons/detachments.json", [
     // A stale single link and a roster missing a printed stratagem.
@@ -107,6 +115,12 @@ describe("mfm:mirror links rules and rosters to what the dump prints", () => {
     });
     // A Combat Patrol's army rules apply only when that patrol is played: they ride its detachment.
     expect(patrol.detachment_rule_ids).toEqual(["patrol-rule-necrons", "patrol-law-necrons"]);
+  });
+
+  it("empties a unit whose dump datasheet prints nothing, and keeps a unit with no dump datasheet", async () => {
+    const { plan } = await runMirror(dump(), { root: repo(), validate: false, outside: false });
+    expect(plan.units.find((u) => u.unitId === "bare-walker")?.after).toEqual([]);
+    expect(plan.units.find((u) => u.unitId === "lost-walker")?.after).toEqual(["host-rule-necrons"]);
   });
 
   it("removes a record only a Legends book prints, and does not stub it back", async () => {

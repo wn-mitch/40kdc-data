@@ -425,7 +425,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "wounds condition",
-          "description": "[composition] lost: the subject has lost wounds. remaining_max: it has at most this many left. damaged: it is in its datasheet's Damaged bracket.",
+          "description": "[composition] lost: the subject has lost wounds. remaining_max: it has at most this many left ({rating: true}: the unit's printed rating, as core Damaged X reads it). damaged: it is in its datasheet's Damaged bracket.",
           "required": [
             "type",
             "parameters"
@@ -445,8 +445,15 @@
                   "const": true
                 },
                 "remaining_max": {
-                  "type": "integer",
-                  "minimum": 0
+                  "oneOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/unit-rating"
+                    }
+                  ]
                 },
                 "damaged": {
                   "const": true

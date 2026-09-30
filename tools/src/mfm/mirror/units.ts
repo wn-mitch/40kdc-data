@@ -58,6 +58,8 @@ export interface UnitContext {
   roleOf: (dir: string, unitId: string) => "leader" | "support" | null | undefined;
   /** The ability's record after the mirror reads the unit's rating (true for a stub, which reads nothing yet). */
   readsRating: (id: string) => boolean;
+  /** Every datasheet the dump carries, including ones that print no ability. */
+  dumpDatasheets: ReadonlySet<string>;
 }
 
 const cmp = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
@@ -78,7 +80,9 @@ export function indexByDatasheet(set: AbilityRowSet): Map<string, AbilityRow[]> 
 
 export function projectUnit(ctx: UnitContext, byDatasheet: Map<string, AbilityRow[]>, dir: string, unit: EntityRecord): UnitProjection {
   const before = [...((unit.ability_ids as UnitAbilityRef[] | undefined) ?? [])];
-  const all = mfmIds(unit).filter((d) => byDatasheet.has(d));
+  // A datasheet the dump carries but that prints no ability (some Combat Patrol datasheets) still
+  // decides the unit's abilities: it prints none. Only a unit with no dump datasheet keeps its refs.
+  const all = mfmIds(unit).filter((d) => byDatasheet.has(d) || ctx.dumpDatasheets.has(d));
   const rowsOf = (d: string): AbilityRow[] => byDatasheet.get(d) ?? [];
   const isSecondary = (d: string): boolean => {
     const own = rowsOf(d).filter((r) => r.owner.kind === "datasheet");

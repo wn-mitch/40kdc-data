@@ -220,7 +220,9 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["lost"] == true {
 			parts = append(parts, "has lost wounds")
 		}
-		if p["remaining_max"] != nil {
+		if _, rated := p["remaining_max"].(map[string]any); rated {
+			parts = append(parts, "has X or fewer wounds remaining, X being its rating")
+		} else if p["remaining_max"] != nil {
 			_, s := jsNumberStr(p["remaining_max"])
 			parts = append(parts, "has "+s+" or fewer wounds remaining")
 		}

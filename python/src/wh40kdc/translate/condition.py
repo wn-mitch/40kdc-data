@@ -249,7 +249,9 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         parts: list[str] = []
         if p.get("lost") is True:
             parts.append("has lost wounds")
-        if p.get("remaining_max") is not None:
+        if isinstance(p.get("remaining_max"), dict):
+            parts.append("has X or fewer wounds remaining, X being its rating")
+        elif p.get("remaining_max") is not None:
             parts.append(f"has {_str(_round_number(p['remaining_max']))} or fewer wounds remaining")
         if p.get("damaged") is True:
             parts.append("is Damaged")

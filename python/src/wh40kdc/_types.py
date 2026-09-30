@@ -2844,21 +2844,21 @@ class SimpleCondition12(TypedDict):
 class Parameters16(TypedDict):
     subject: NotRequired[UnitRef]
     lost: Literal[True]
-    remaining_max: NotRequired[int]
+    remaining_max: NotRequired[int | UnitRating]
     damaged: NotRequired[Literal[True]]
 
 
 class Parameters17(TypedDict):
     subject: NotRequired[UnitRef]
     lost: NotRequired[Literal[True]]
-    remaining_max: int
+    remaining_max: int | UnitRating
     damaged: NotRequired[Literal[True]]
 
 
 class Parameters18(TypedDict):
     subject: NotRequired[UnitRef]
     lost: NotRequired[Literal[True]]
-    remaining_max: NotRequired[int]
+    remaining_max: NotRequired[int | UnitRating]
     damaged: Literal[True]
 
 

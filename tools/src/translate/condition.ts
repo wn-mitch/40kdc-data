@@ -112,7 +112,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const who = p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p);
       const parts: string[] = [];
       if (p.lost === true) parts.push("has lost wounds");
-      if (p.remaining_max != null) parts.push(`has ${Number(p.remaining_max)} or fewer wounds remaining`);
+      const rated = typeof p.remaining_max === "object" && p.remaining_max !== null;
+      if (p.remaining_max != null) parts.push(`has ${rated ? "X" : Number(p.remaining_max)} or fewer wounds remaining${rated ? ", X being its rating" : ""}`);
       if (p.damaged === true) parts.push("is Damaged");
       return `${neg}${who} ${andList(parts)}`;
     }

@@ -377,12 +377,13 @@ export function buildPlan(dump: MfmDump, set: AbilityRowSet, snap: RepoSnapshot,
     if (roles.has(k)) roles.set(k, role);
   }
   const byDatasheet = indexByDatasheet(set);
+  const dumpDatasheets = new Set(dump.tables.datasheet ? dump.table("datasheet").map((d) => d.id) : []);
   const wargearByRow = new Map<string, string[]>();
   for (const f of snap.wargear) for (const w of f.records) for (const m of mfmIds(w)) wargearByRow.set(m, [...new Set([...(wargearByRow.get(m) ?? []), w.id])].sort(cmp));
   const units: UnitProjection[] = [];
   for (const f of snap.units) {
     for (const u of f.records) {
-      units.push(projectUnit({ set, ids, resolve, hasRecord, wargearOf: (row) => wargearByRow.get(row) ?? [], roleOf: (dir, id) => roles.get(recKey(dir, id)), readsRating: (id) => readsRating.has(id) || !survivors.has(id) }, byDatasheet, f.dir, u));
+      units.push(projectUnit({ set, ids, resolve, hasRecord, wargearOf: (row) => wargearByRow.get(row) ?? [], roleOf: (dir, id) => roles.get(recKey(dir, id)), readsRating: (id) => readsRating.has(id) || !survivors.has(id), dumpDatasheets }, byDatasheet, f.dir, u));
     }
   }
   for (const u of units) for (const [id, rating] of Object.entries(u.unreadRatings ?? {}))

@@ -12,6 +12,7 @@
  * Out of scope, by design: weapon abilities (`wargear_ability`, the weapon keywords in
  * `weapon-keywords.json`), and nameless rows (`wargear_rule`, `invulnerable_save`).
  */
+import { readDamaged } from "./damaged.js";
 import { nameToId } from "../converters/id-generator.js";
 import { FACTION_ALIASES } from "./faction-map.js";
 import type { MfmDump, MfmRow, MfmTableName } from "./loader.js";
@@ -367,6 +368,7 @@ export function enumerateAbilityRows(dump: MfmDump): AbilityRowSet {
     const text = plainBlock(en(r).rules);
     emit({ kind: "datasheet-rule", table: "datasheet_rule", rowId: r.id, name, ...(text ? { text } : {}) }, [datasheetPlacement(r.datasheetId)]);
   }
+  const corePlacement: Placement = { faction: CORE_FACTION, publication: null, owner: { kind: "core" }, legends: false };
   for (const r of rowsOf(dump, "datasheet_damage")) {
     const name = nameOf(r);
     if (!name) {
@@ -374,6 +376,16 @@ export function enumerateAbilityRows(dump: MfmDump): AbilityRowSet {
       continue;
     }
     const text = plainBlock(en(r).rules);
+    // A block that restates core Damaged X is that core rule, rated X for this datasheet; an extra
+    // Objective Control penalty is the core `Damaged Objective Control` rule, rated by the penalty.
+    const reading = readDamaged(name, en(r).rules, (r as { damagedAt?: number | null }).damagedAt);
+    if (reading.kind !== "other") {
+      const datasheetIds = [r.datasheetId];
+      emit({ kind: "core-ability", table: "datasheet_damage", rowId: r.id, name: `Damaged ${reading.threshold}`, datasheetIds }, [corePlacement]);
+      if (reading.kind === "core+oc")
+        emit({ kind: "core-ability", table: "datasheet_damage", rowId: r.id, name: `Damaged Objective Control ${reading.oc}`, datasheetIds }, [corePlacement], "#oc");
+      continue;
+    }
     emit({ kind: "damaged", table: "datasheet_damage", rowId: r.id, name, ...(text ? { text } : {}) }, [datasheetPlacement(r.datasheetId)]);
   }
 

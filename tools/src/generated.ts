@@ -2566,7 +2566,7 @@ export interface ModelProfileCondition {
   };
 }
 /**
- * [composition] lost: the subject has lost wounds. remaining_max: it has at most this many left. damaged: it is in its datasheet's Damaged bracket.
+ * [composition] lost: the subject has lost wounds. remaining_max: it has at most this many left ({rating: true}: the unit's printed rating, as core Damaged X reads it). damaged: it is in its datasheet's Damaged bracket.
  */
 export interface WoundsCondition {
   type: "wounds";

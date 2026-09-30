@@ -243,7 +243,11 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 parts.push("has lost wounds".to_string());
             }
             if let Some(r) = nn(p, "remaining_max") {
-                parts.push(format!("has {} or fewer wounds remaining", st(Some(r))));
+                if r.is_object() {
+                    parts.push("has X or fewer wounds remaining, X being its rating".to_string());
+                } else {
+                    parts.push(format!("has {} or fewer wounds remaining", st(Some(r))));
+                }
             }
             if p.get("damaged") == Some(&Value::Bool(true)) {
                 parts.push("is Damaged".to_string());
