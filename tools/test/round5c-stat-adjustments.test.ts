@@ -62,6 +62,17 @@ describe("signed stat adjustments", () => {
     } });
   });
 
+  it("reads an explicit attack-property recipient and scope without guessing missing qualifiers", () => {
+    const scopeFamily = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "weapon-property-scope")!;
+    const parameters = prefillFromSource(scopeFamily, "This unit’s ranged attacks have");
+    expect(normalizeFingerprintParameters(scopeFamily.id, parameters, scopeFamily.version)).toEqual({
+      subject: "this-unit", weapon_type: "ranged",
+    });
+    expect(prefillFromSource(scopeFamily, "Ranged attacks have")).toEqual({});
+    expect(prefillFromSource(scopeFamily, "This unit has")).toEqual({});
+    expect(() => normalizeFingerprintParameters(scopeFamily.id, { subject: "this-unit" }, scopeFamily.version)).toThrow();
+  });
+
   it.each(["-2 A", "–2 A", "−2 A"])("keeps the sign of %s distinct from positive and unsigned values", (negative) => {
     const source = `+2 A; ${negative}; 2 A; D3${negative}`;
     const matches = matchesAt(normalizedProjection(source), leafSurfaceKey(negative));

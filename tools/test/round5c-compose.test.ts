@@ -229,6 +229,61 @@ describe("Round 5C composition rules", () => {
     });
   });
 
+  describe("neutral attack-property scopes", () => {
+    const scope = (phrase: string, weapon_type: string, subject = "this-unit"): Piece =>
+      [phrase, "CONDITION", "weapon-property-scope", { subject, weapon_type }];
+    const stat = (phrase: string, characteristic: string, value: number, bindings = {}): Piece =>
+      [phrase, "EFFECT", "characteristic-modifier", { characteristics: [characteristic], operation: "improve", value, ...bindings }];
+    const keyword: Piece = ["[Lethal Hits]", "EFFECT", "weapon-ability-keyword", { keyword: "Lethal Hits" }];
+
+    it.each(["all", "melee", "ranged"])("binds a separate AP operand to the explicit %s scope", (weaponType) => {
+      const text = "Scoped properties: +2 AP.";
+      expect(compiled(text, [scope("Scoped properties", weaponType), stat("+2 AP", "AP", 2)]).mechanics.effect).toEqual({
+        type: "stat-modifier", target: "this-unit",
+        modifier: { stat: "AP", operation: "improve", value: 2, ...(weaponType === "all" ? {} : { weapon_type: weaponType }) },
+      });
+    });
+
+    it("binds a keyword and stat operand without changing their recipient or source order", () => {
+      const text = "Scoped properties: +2 AP and [Lethal Hits].";
+      expect(compiled(text, [scope("Scoped properties", "ranged", "this-model"), stat("+2 AP", "AP", 2), keyword]).mechanics.effect).toEqual({
+        type: "sequence", steps: [
+          { type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapon_type: "ranged" } },
+          { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "ranged" } },
+        ],
+      });
+    });
+
+    it("retains keyword choices across sentence boundaries", () => {
+      const text = "Scoped properties: [Lethal Hits]. Or [Sustained Hits 1].";
+      expect(compiled(text, [
+        scope("Scoped properties", "melee"), keyword,
+        ["[Sustained Hits 1]", "EFFECT", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+      ]).mechanics.effect).toEqual({ type: "choice", options: [
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"], weapon_type: "melee" } },
+      ] });
+    });
+
+    it("does not carry stat scope into a different sentence or silently replace reviewed bindings", () => {
+      expect(failures("Scoped properties. +2 AP.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2)]))
+        .toContain("An attack-property scope needs a following weapon property in its clause.");
+      for (const bindings of [{ subject: "this-model" }, { weapon_type: "melee" }]) {
+        expect(failures("Scoped properties: +2 AP.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2, bindings)])[0])
+          .toMatch(/conflicts with its reviewed attack-property scope/u);
+      }
+    });
+
+    it("does not turn an attack scope into a model characteristic buff or an implicit mixed choice", () => {
+      expect(failures("Scoped properties: +2 T.", [scope("Scoped properties", "ranged"), stat("+2 T", "T", 2)]))
+        .toContain("An attack-property scope cannot modify a model characteristic.");
+      expect(failures("Scoped properties: +2 AP or [Lethal Hits].", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2), keyword]))
+        .toContain("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+      expect(failures("Scoped properties: +2 AP or +3 A.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2), stat("+3 A", "A", 3)]))
+        .toContain("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+    });
+  });
+
   describe("unit-filter leaves naming who an aura reaches or a selection may pick", () => {
     const filter = (phrase: string, parameters: Record<string, unknown>): Piece => [phrase, "CONDITION", "unit-filter", parameters];
     const wound: Piece = ["that unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }];

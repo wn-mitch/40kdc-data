@@ -265,6 +265,13 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText)
           : NEW_PREDICATES.has(family.id) ? predicateConditionPrefill(family.id, exactText) : containerPrefill(family.id, exactText);
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
+  if (family.id === "weapon-property-scope") {
+    const frame = /^(this unit|this model|that unit)'s (?:(melee|ranged) )?attacks have(?: the)?$/iu.exec(exactText.replace(/\*/gu, "").trim());
+    if (frame) {
+      prefill.subject = frame[1]!.toLowerCase() === "that unit" ? "selected-unit" : frame[1]!.toLowerCase().replace(" ", "-");
+      prefill.weapon_type = frame[2]?.toLowerCase() ?? "all";
+    }
+  }
   if (family.id === "no-advance-roll") {
     if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);

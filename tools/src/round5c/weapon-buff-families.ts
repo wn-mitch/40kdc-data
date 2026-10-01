@@ -113,11 +113,28 @@ export const WEAPON_BUFF_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    id: "weapon-property-scope",
+    version: 1,
+    role: "CONDITION",
+    label: "Whose attacks and which weapons",
+    description: "A property prefix identifies the recipient and weapon scope without granting anything itself. The following weapon-ability name or characteristic adjustment supplies the property.",
+    starter: { subject: "", weapon_type: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "weapon_type"],
+      properties: {
+        subject: { enum: ["this-unit", "this-model", "selected-unit"] },
+        weapon_type: { enum: WEAPON_TYPES },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "weapon-ability-keyword",
     version: 1,
     role: "EFFECT",
     label: "A weapon ability",
-    description: "One bracketed weapon ability (\"[Sustained Hits 1]\") that a keyword-less weapon-ability-grant frame grants, alone, with others, or as one option of a menu.",
+    description: "One named weapon ability (\"Sustained Hits 1\") whose recipient and weapons come from a property-scope or weapon-grant frame. A colon-qualified target restriction is a separate condition.",
     starter: { keyword: "" },
     parameterSchema: {
       type: "object",
@@ -136,12 +153,19 @@ function validKeyword(keyword: unknown): string {
   return keyword;
 }
 
-/** Validate and canonicalise parameters for weapon-ability-grant, or null when the family is not it. */
+/** Validate and canonicalise weapon scopes and ability grants, or null for another family. */
 export function normalizeWeaponBuffParameters(
   family: string,
   input: Record<string, unknown>,
   version: number,
 ): Record<string, unknown> | null {
+  if (family === "weapon-property-scope") {
+    exactKeys(input, ["subject", "weapon_type"], family);
+    return {
+      subject: enumValue(input.subject, ["this-unit", "this-model", "selected-unit"], "weapon-property-scope.subject"),
+      weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "weapon-property-scope.weapon_type"),
+    };
+  }
   if (family === "weapon-ability-keyword") {
     exactKeys(input, ["keyword"], family);
     return { keyword: validKeyword(input.keyword) };

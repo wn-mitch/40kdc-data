@@ -10,6 +10,7 @@ import {
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
+import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -146,7 +147,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
   if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
   if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
-  if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: the weapon-ability-grant frame it belongs to grants ${String(leaf.parameters.keyword)}.` };
+  if (leaf.family_id === "weapon-property-scope") return { kind: "implicit", note: "No separate text: identifies the recipient and weapon scope of the following property; grants nothing by itself." };
+  if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: its reviewed weapon scope or ability-grant frame grants ${String(leaf.parameters.keyword)}.` };
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
     return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
   }
@@ -219,7 +221,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldUnitFilters(foldWeaponKeywords(ordered(leaves), sourceText));
+    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(ordered(leaves), sourceText), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
