@@ -54,6 +54,30 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "stratagem-target",
+    version: 2,
+    role: "RESTRICTION",
+    kinds: ["stratagem"],
+    label: "Stratagem target",
+    description: "As version 1, but side, keywords, match and excluded_keywords can all be left out: then the leaf is only the count and unit-or-model (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A stratagem's TARGET: how many, whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
+    starter: { count: "", selects: "unit" },
+    parameterSchema: {
+      type: "object",
+      required: ["count", "selects"],
+      properties: {
+        count: { enum: TARGET_COUNTS },
+        count_max: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["up-to"] } },
+        side: { enum: TARGET_SIDES },
+        selects: { enum: TARGET_SELECTS },
+        keywords: keywordList,
+        match: { enum: KEYWORD_MATCH },
+        excluded_keywords: keywordList,
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "target-binding",
@@ -228,6 +252,15 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
   switch (family) {
     case "stratagem-target": {
       const count = enumValue(input.count, TARGET_COUNTS, "stratagem-target.count");
+      // Version 2: count and unit-or-model alone, the unit-filter after it naming the rest.
+      if (version >= 2 && !("side" in input)) {
+        exactKeys(input, count === "up-to" ? ["count", "count_max", "selects"] : ["count", "selects"], family);
+        return {
+          count,
+          ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 2, 10, "stratagem-target.count_max") } : {}),
+          selects: enumValue(input.selects, TARGET_SELECTS, "stratagem-target.selects"),
+        };
+      }
       exactKeys(input, count === "up-to" ? ["count", "count_max", "side", "selects", "keywords", "match", "excluded_keywords"] : ["count", "side", "selects", "keywords", "match", "excluded_keywords"], family);
       return {
         count,

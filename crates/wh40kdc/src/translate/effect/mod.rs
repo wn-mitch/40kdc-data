@@ -147,10 +147,16 @@ fn aura_eligible_subject(who: &str, eligible: Option<&Value>) -> String {
     };
     let required = map_arr(e, "required_keywords", jv).unwrap_or_default();
     let excluded = map_arr(e, "excluded_keywords", jv).unwrap_or_default();
-    let base = if required.is_empty() {
+    // States, then keywords all of which it has, then keywords one of which it has.
+    let mut words = map_arr(e, "states", jv).unwrap_or_default();
+    words.extend(required);
+    if let Some(any_of) = map_arr(e, "any_keywords", jv) {
+        words.push(any_of.join(" or "));
+    }
+    let base = if words.is_empty() {
         who.to_string()
     } else {
-        format!("{}{} unit", &who[..who.len() - 4], required.join(" "))
+        format!("{}{} unit", &who[..who.len() - 4], words.join(" "))
     };
     if excluded.is_empty() {
         base
@@ -213,7 +219,8 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     let capped = nn(m, "range_cap")
         .map(|c| format!(" (to a maximum of {}\", extensions included)", jv(c)))
         .unwrap_or_default();
-    format!("while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}")
+    let wholly = if is_true(m, "wholly") { "wholly " } else { "" };
+    format!("while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}")
 }
 
 /// "select one", "select two", "select up to two" — how many menu options are picked.

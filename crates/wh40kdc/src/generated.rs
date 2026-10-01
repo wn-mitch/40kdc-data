@@ -6584,6 +6584,16 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///          "type": "object",
 ///          "minProperties": 1,
 ///          "properties": {
+///            "any_keywords": {
+///              "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///              "type": "array",
+///              "items": {
+///                "type": "string",
+///                "minLength": 1
+///              },
+///              "minItems": 2,
+///              "uniqueItems": true
+///            },
 ///            "excluded_keywords": {
 ///              "type": "array",
 ///              "items": {
@@ -6599,6 +6609,18 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///                "minLength": 1
 ///              },
 ///              "minItems": 1
+///            },
+///            "states": {
+///              "description": "The unit is in each of these states.",
+///              "type": "array",
+///              "items": {
+///                "enum": [
+///                  "battle-shocked",
+///                  "unengaged"
+///                ]
+///              },
+///              "minItems": 1,
+///              "uniqueItems": true
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -6635,6 +6657,10 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///        },
 ///        "recipient_filter": {
 ///          "$ref": "#/$defs/keyword-filter"
+///        },
+///        "wholly": {
+///          "description": "The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).",
+///          "const": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -6681,6 +6707,16 @@ pub struct AuraEffect {
 ///      "type": "object",
 ///      "minProperties": 1,
 ///      "properties": {
+///        "any_keywords": {
+///          "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///          "type": "array",
+///          "items": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        },
 ///        "excluded_keywords": {
 ///          "type": "array",
 ///          "items": {
@@ -6696,6 +6732,18 @@ pub struct AuraEffect {
 ///            "minLength": 1
 ///          },
 ///          "minItems": 1
+///        },
+///        "states": {
+///          "description": "The unit is in each of these states.",
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "battle-shocked",
+///              "unengaged"
+///            ]
+///          },
+///          "minItems": 1,
+///          "uniqueItems": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -6732,6 +6780,10 @@ pub struct AuraEffect {
 ///    },
 ///    "recipient_filter": {
 ///      "$ref": "#/$defs/keyword-filter"
+///    },
+///    "wholly": {
+///      "description": "The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).",
+///      "const": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -6758,6 +6810,9 @@ pub struct AuraEffectModifier {
     pub range_cap: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient_filter: ::std::option::Option<KeywordFilter>,
+    ///The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wholly: ::std::option::Option<::serde_json::Value>,
 }
 impl ::std::default::Default for AuraEffectModifier {
     fn default() -> Self {
@@ -6770,6 +6825,7 @@ impl ::std::default::Default for AuraEffectModifier {
             range_bonus: Default::default(),
             range_cap: Default::default(),
             recipient_filter: Default::default(),
+            wholly: Default::default(),
         }
     }
 }
@@ -6782,6 +6838,16 @@ impl ::std::default::Default for AuraEffectModifier {
 ///  "type": "object",
 ///  "minProperties": 1,
 ///  "properties": {
+///    "any_keywords": {
+///      "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    },
 ///    "excluded_keywords": {
 ///      "type": "array",
 ///      "items": {
@@ -6797,6 +6863,18 @@ impl ::std::default::Default for AuraEffectModifier {
 ///        "minLength": 1
 ///      },
 ///      "minItems": 1
+///    },
+///    "states": {
+///      "description": "The unit is in each of these states.",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "battle-shocked",
+///          "unengaged"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -6806,6 +6884,11 @@ impl ::std::default::Default for AuraEffectModifier {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AuraEffectModifierEligible {
+    ///The unit has at least one of these keywords ("a friendly SKITARII or THULIA GHULD unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub any_keywords: ::std::option::Option<
+        Vec<AuraEffectModifierEligibleAnyKeywordsItem>,
+    >,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub excluded_keywords: ::std::vec::Vec<
         AuraEffectModifierEligibleExcludedKeywordsItem,
@@ -6814,13 +6897,93 @@ pub struct AuraEffectModifierEligible {
     pub required_keywords: ::std::vec::Vec<
         AuraEffectModifierEligibleRequiredKeywordsItem,
     >,
+    ///The unit is in each of these states.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub states: ::std::option::Option<Vec<AuraEffectModifierEligibleStatesItem>>,
 }
 impl ::std::default::Default for AuraEffectModifierEligible {
     fn default() -> Self {
         Self {
+            any_keywords: Default::default(),
             excluded_keywords: Default::default(),
             required_keywords: Default::default(),
+            states: Default::default(),
         }
+    }
+}
+///`AuraEffectModifierEligibleAnyKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AuraEffectModifierEligibleAnyKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AuraEffectModifierEligibleAnyKeywordsItem>
+for ::std::string::String {
+    fn from(value: AuraEffectModifierEligibleAnyKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AuraEffectModifierEligibleAnyKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`AuraEffectModifierEligibleExcludedKeywordsItem`
@@ -6971,6 +7134,83 @@ impl<'de> ::serde::Deserialize<'de> for AuraEffectModifierEligibleRequiredKeywor
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`AuraEffectModifierEligibleStatesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "battle-shocked",
+///    "unengaged"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AuraEffectModifierEligibleStatesItem {
+    #[serde(rename = "battle-shocked")]
+    BattleShocked,
+    #[serde(rename = "unengaged")]
+    Unengaged,
+}
+impl ::std::fmt::Display for AuraEffectModifierEligibleStatesItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BattleShocked => f.write_str("battle-shocked"),
+            Self::Unengaged => f.write_str("unengaged"),
+        }
+    }
+}
+impl ::std::str::FromStr for AuraEffectModifierEligibleStatesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "battle-shocked" => Ok(Self::BattleShocked),
+            "unengaged" => Ok(Self::Unengaged),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`AuraEffectModifierRange`

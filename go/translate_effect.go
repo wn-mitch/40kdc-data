@@ -67,9 +67,14 @@ func auraEligibleSubject(who string, eligible any) string {
 	}
 	required := jstrList(e["required_keywords"])
 	excluded := jstrList(e["excluded_keywords"])
+	// States, then keywords all of which it has, then keywords one of which it has.
+	words := append(append([]string{}, jstrList(e["states"])...), required...)
+	if anyOf := jstrList(e["any_keywords"]); len(anyOf) > 0 {
+		words = append(words, strings.Join(anyOf, " or "))
+	}
 	base := who
-	if len(required) > 0 {
-		base = who[:len(who)-4] + strings.Join(required, " ") + " unit"
+	if len(words) > 0 {
+		base = who[:len(who)-4] + strings.Join(words, " ") + " unit"
 	}
 	if len(excluded) > 0 {
 		base += " (excluding " + strings.Join(excluded, " ") + " units)"
@@ -142,7 +147,11 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	if m["range_cap"] != nil {
 		capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\", extensions included)"
 	}
-	return "while " + recipient + " is within " + rangeText + capped + " of " + emitter + ", " + effectText
+	wholly := ""
+	if m["wholly"] == true {
+		wholly = "wholly "
+	}
+	return "while " + recipient + " is " + wholly + "within " + rangeText + capped + " of " + emitter + ", " + effectText
 }
 
 // describeEffectInline renders a single-clause translation (lowercase-initial,

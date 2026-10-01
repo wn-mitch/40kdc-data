@@ -125,6 +125,34 @@ describe("Round 5C restrictions", () => {
     expect(attacked.core?.target_restrictions).toEqual({ count: "one", side: "your-army", selects: "unit", required_keywords_any: ["WARDENS", "ORACLES"], bound_to: "attacked-unit" });
   });
 
+  it("reads a TARGET, a trigger's subject and an attack's target from one unit-filter leaf", () => {
+    const filter = (parameters: Record<string, unknown>) => leaf("CONDITION", "unit-filter", parameters);
+    const target = compiled([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", selects: "unit" }), fragment: "TARGET" },
+      { ...filter({ side: "friendly", keywords: ["INFANTRY"], any_keywords: ["ORACLES", "WARDENS"], states: ["unengaged"] }), fragment: "TARGET" },
+      { ...grant(), fragment: "EFFECT" },
+    ]);
+    expect(target.core).toEqual({ target_restrictions: {
+      count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY"],
+      eligibility: { operator: "and", operands: [
+        { type: "has-keyword", parameters: { any_of: ["ORACLES", "WARDENS"] } },
+        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+      ] },
+    } });
+    // "each time a friendly WARDENS unit" + an event with no owner: the trigger's subject.
+    expect(compiled([filter({ side: "friendly", keywords: ["WARDENS"] }), leaf("EVENT", "event", { kind: "enemy-has-shot" }), grant()]).mechanics.trigger)
+      .toMatchObject({ event: "attacks-resolved", subject: { owner: "friendly", all_of: ["WARDENS"] } });
+    // After an attack, the attack's target: a gate on the defender.
+    const attack = compiled([
+      leaf("EVENT", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }),
+      filter({ side: "enemy", keywords: ["VEHICLE"] }),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    expect(attack.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } } });
+    // A side-less TARGET leaf needs its unit-filter.
+    expect(compileLeaves([{ ...leaf("RESTRICTION", "stratagem-target", { count: "one", selects: "unit" }), fragment: "TARGET" }, grant()]).ok).toBe(false);
+  });
+
   it("refuses a TARGET without exactly one target leaf", () => {
     const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
     expect(result.ok ? [] : result.errors).toEqual(["A stratagem TARGET needs exactly one target leaf; found 0."]);

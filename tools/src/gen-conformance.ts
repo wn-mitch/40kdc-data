@@ -3617,6 +3617,17 @@ function genEffectTranslation(): void {
       },
       effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
     } },
+    // An aura reaching only units wholly within it, in a state, with one of several keywords.
+    { caseId: "fidelity/aura-wholly-states-any-keywords", effect: {
+      type: "aura",
+      target: "friendly-within-aura",
+      modifier: {
+        range: 6,
+        wholly: true,
+        eligible: { states: ["battle-shocked"], required_keywords: ["NECRONS"], any_keywords: ["MOUNTED", "VEHICLE"] },
+        effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+      },
+    } },
     // A Stratagem that can still target a unit just destroyed ("even though it was just destroyed").
     { caseId: "fidelity/permission-despite-destroyed", effect: {
       type: "permission",

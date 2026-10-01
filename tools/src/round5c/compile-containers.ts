@@ -41,15 +41,20 @@ export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
 // how `compile.ts` calls them; a real ability is expected to use at most one of these at once.
 // ---------------------------------------------------------------------------------------------
 
+/** A folded unit-filter's fields (compile-unit-filters.ts), as selectUnit and wrapAura read them. */
+type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean };
+
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   const modifier: Node = { range: closed(leaf, "inches"), effect: body };
   // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
-  const filter = (leaf.parameters.filter ?? {}) as { keywords?: string[]; match?: string; excluded_keywords?: string[] };
-  if (filter.match === "any") throw new CompileError("An aura reaching units with any one of several keywords has no DSL shape; its eligible keywords must all match.");
-  if (leaf.parameters.wholly === true) throw new CompileError("An aura reaching only units wholly within its range has no DSL shape yet.");
+  const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
+  if (filter.other === true) throw new CompileError("An aura reaching only other units has no DSL shape yet.");
+  if (leaf.parameters.wholly === true) modifier.wholly = true;
   const keywords = (leaf.parameters.keywords ?? filter.keywords) as string[] | undefined;
   const eligible: Node = {};
+  if (filter.states?.length) eligible.states = filter.states;
   if (keywords?.length) eligible.required_keywords = keywords;
+  if (filter.any_keywords?.length) eligible.any_keywords = filter.any_keywords;
   if (filter.excluded_keywords?.length) eligible.excluded_keywords = filter.excluded_keywords;
   if (Object.keys(eligible).length) modifier.eligible = eligible;
   // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
@@ -118,16 +123,24 @@ export function wrapRulesBundle(body: Node): Node {
 export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null } = {}): Node {
   // select-unit v2 with a folded unit-filter (compile-unit-filters.ts): keywords all of which the
   // unit has, or (match any) one of which it has, which only an eligibility condition can say.
-  const filter = (selection.parameters.filter ?? {}) as { keywords?: string[]; match?: string; excluded_keywords?: string[] };
-  const anyOf = filter.match === "any" ? { type: "has-keyword", parameters: { any_of: filter.keywords } } : null;
-  const eligibility = anyOf && extra.eligibility ? { operator: "and", operands: [anyOf, extra.eligibility] } : anyOf ?? extra.eligibility;
+  const filter = (selection.parameters.filter ?? {}) as UnitFilter;
+  // In an eligibility filter the default subject is the candidate; ability-unit is the ability's own unit.
+  const checks: Node[] = [
+    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    ...(filter.states ?? []).map((state) => state === "unengaged"
+      ? { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] }
+      : { type: "unit-state", parameters: { state } }),
+    ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
+    ...(extra.eligibility ? [extra.eligibility] : []),
+  ];
+  const eligibility = checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
   return {
     type: "select-units",
     selector: {
       owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
       // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
       ...(extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }),
-      ...(filter.keywords?.length && filter.match !== "any" ? { keywords: filter.keywords } : {}),
+      ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
       ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
       ...(eligibility ? { eligibility } : {}),
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),

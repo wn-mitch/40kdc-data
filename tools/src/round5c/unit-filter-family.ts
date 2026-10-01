@@ -1,5 +1,5 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
-import { booleanValue, boundedInteger, enumValue, exactKeys } from "./family-validation.js";
+import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
 import { UNIT_KEYWORD } from "./buff-families.js";
 
 /**
@@ -14,7 +14,7 @@ import { UNIT_KEYWORD } from "./buff-families.js";
  */
 
 const FILTER_SIDES = ["friendly", "enemy", "any"] as const;
-const KEYWORD_MATCH = ["all", "any"] as const;
+const FILTER_STATES = ["unengaged", "battle-shocked"] as const;
 const AURA_SIDES = ["friendly", "enemy"] as const;
 const SELECT_SCOPES = ["enemy", "friendly"] as const;
 const SELECT_DISTANCES = ["any", "within"] as const;
@@ -26,7 +26,7 @@ export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "CONDITION",
     label: "Which units",
-    description: "The units an aura reaches or a selection may pick: friendly, enemy or any, optionally with unit keywords (all of them, or any one with match any), keywords they must not have, and that they must be visible. It names no range or count: the aura-range after it or the select-unit before it does.",
+    description: "The units an aura reaches or a selection may pick: friendly or enemy (a phrase naming no side means friendly), optionally with unit keywords they all have, keywords one of which they have (\"NECRONS VEHICLE or NECRONS MOUNTED\": NECRONS, and VEHICLE or MOUNTED), keywords they must not have, states they are in, other than this unit, and visible. It names no range or count: the aura-range after it or the select-unit before it does.",
     starter: { side: "" },
     parameterSchema: {
       type: "object",
@@ -34,8 +34,10 @@ export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: {
         side: { enum: FILTER_SIDES },
         keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
-        match: { enum: KEYWORD_MATCH },
+        any_keywords: { type: "array", minItems: 2, uniqueItems: true, items: { type: "string", minLength: 1 } },
         excluded_keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } },
+        states: { type: "array", minItems: 1, uniqueItems: true, items: { enum: FILTER_STATES } },
+        other: { const: true },
         visible: { const: true },
       },
       additionalProperties: false,
@@ -58,17 +60,19 @@ function keywords(value: unknown, label: string): string[] {
 
 export function normalizeUnitFilterParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   if (family !== "unit-filter") return null;
-  exactKeys(input, ["side", ...["keywords", "match", "excluded_keywords", "visible"].filter((key) => key in input)], family);
+  exactKeys(input, ["side", ...["keywords", "any_keywords", "excluded_keywords", "states", "other", "visible"].filter((key) => key in input)], family);
   const result: Record<string, unknown> = { side: enumValue(input.side, FILTER_SIDES, "unit-filter.side") };
   if ("keywords" in input) result.keywords = keywords(input.keywords, "unit-filter.keywords");
-  if ("match" in input) {
-    if (((result.keywords as string[] | undefined) ?? []).length < 2) throw new TypeError("unit-filter.match only chooses between two or more keywords.");
-    result.match = enumValue(input.match, KEYWORD_MATCH, "unit-filter.match");
+  if ("any_keywords" in input) {
+    result.any_keywords = keywords(input.any_keywords, "unit-filter.any_keywords");
+    if ((result.any_keywords as string[]).length < 2) throw new TypeError("unit-filter.any_keywords names two or more keywords; one is a plain keyword.");
   }
   if ("excluded_keywords" in input) result.excluded_keywords = keywords(input.excluded_keywords, "unit-filter.excluded_keywords");
-  if ("visible" in input) {
-    if (!booleanValue(input.visible, "unit-filter.visible")) throw new TypeError("unit-filter.visible is true or absent.");
-    result.visible = true;
+  if ("states" in input) result.states = enumSet(input.states, FILTER_STATES, "unit-filter.states");
+  for (const flag of ["other", "visible"] as const) {
+    if (!(flag in input)) continue;
+    if (!booleanValue(input[flag], `unit-filter.${flag}`)) throw new TypeError(`unit-filter.${flag} is true or absent.`);
+    result[flag] = true;
   }
   return result;
 }

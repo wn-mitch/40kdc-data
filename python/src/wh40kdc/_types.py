@@ -1816,9 +1816,14 @@ RangeItem: TypeAlias = int
 RequiredKeyword: TypeAlias = str
 
 
+AnyKeyword: TypeAlias = str
+
+
 class Eligible(TypedDict):
     required_keywords: NotRequired[list[RequiredKeyword]]
     excluded_keywords: NotRequired[list[ExcludedKeyword]]
+    any_keywords: NotRequired[list[AnyKeyword]]
+    states: NotRequired[list[Literal["battle-shocked", "unengaged"]]]
 
 
 class SelectionLimit2(TypedDict):
@@ -4167,6 +4172,7 @@ class Modifier57(TypedDict):
     emitter_filter: NotRequired[KeywordFilter]
     recipient_filter: NotRequired[KeywordFilter]
     range_cap: NotRequired[int]
+    wholly: NotRequired[Literal[True]]
 
 
 class AuraEffect(TypedDict):

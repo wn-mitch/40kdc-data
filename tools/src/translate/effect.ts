@@ -683,7 +683,11 @@ function auraEligibleSubject(who: string, eligible: unknown): string {
   const e = eligible as Record<string, unknown>;
   const required = Array.isArray(e.required_keywords) ? e.required_keywords.map(jstr) : [];
   const excluded = Array.isArray(e.excluded_keywords) ? e.excluded_keywords.map(jstr) : [];
-  const base = required.length ? `${who.slice(0, -4)}${required.join(" ")} unit` : who;
+  // States, then keywords all of which it has, then keywords one of which it has.
+  const states = Array.isArray(e.states) ? e.states.map(jstr) : [];
+  const anyOf = Array.isArray(e.any_keywords) ? [e.any_keywords.map(jstr).join(" or ")] : [];
+  const words = [...states, ...required, ...anyOf];
+  const base = words.length ? `${who.slice(0, -4)}${words.join(" ")} unit` : who;
   return `${base}${excluded.length ? ` (excluding ${excluded.join(" ")} units)` : ""}`;
 }
 
@@ -719,7 +723,7 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   const recipient = m.recipient_filter != null ? keywordFilterClause(m.recipient_filter, eligibleWho) : eligibleWho;
   const emitter = m.emitter_filter != null ? keywordFilterClause(m.emitter_filter, "this model") : "this model";
   const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
-  return `while ${recipient} is within ${rangeText}${capped} of ${emitter}, ${effectText}`;
+  return `while ${recipient} is ${m.wholly === true ? "wholly " : ""}within ${rangeText}${capped} of ${emitter}, ${effectText}`;
 }
 
 /**

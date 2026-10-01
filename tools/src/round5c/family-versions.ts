@@ -144,6 +144,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // aura-range 3 and select-unit 2 only make side/scope optional (a unit-filter can carry them).
   { family: "aura-range", from: 2, to: 3, map: (parameters) => parameters },
   { family: "select-unit", from: 1, to: 2, map: (parameters) => parameters },
+  // stratagem-target 2 only makes side and keywords optional (a unit-filter can carry them).
+  { family: "stratagem-target", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds riled up; a version 1 mark still fits.
   { family: "unit-mark", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds being just destroyed to despite.

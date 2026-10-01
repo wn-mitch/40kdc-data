@@ -21593,6 +21593,44 @@
     }
   },
   {
+    "caseId": "fidelity/aura-wholly-states-any-keywords",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": 6,
+        "wholly": true,
+        "eligible": {
+          "states": [
+            "battle-shocked"
+          ],
+          "required_keywords": [
+            "NECRONS"
+          ],
+          "any_keywords": [
+            "MOUNTED",
+            "VEHICLE"
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, while a friendly battle-shocked NECRONS MOUNTED or VEHICLE unit is wholly within 6\" of this model, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
     "caseId": "fidelity/permission-despite-destroyed",
     "effect": {
       "type": "permission",

@@ -11608,6 +11608,28 @@
                     "type": "string",
                     "minLength": 1
                   }
+                },
+                "any_keywords": {
+                  "type": "array",
+                  "minItems": 2,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\")."
+                },
+                "states": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "battle-shocked",
+                      "unengaged"
+                    ]
+                  },
+                  "description": "The unit is in each of these states."
                 }
               },
               "minProperties": 1
@@ -11622,6 +11644,10 @@
               "type": "integer",
               "minimum": 1,
               "description": "The aura range, extensions included, never exceeds this."
+            },
+            "wholly": {
+              "const": true,
+              "description": "The unit must be wholly within the range (no part of it outside), not merely within it (any part inside)."
             }
           }
         }

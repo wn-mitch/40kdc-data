@@ -166,7 +166,12 @@ def _aura_eligible_subject(who: str, eligible: Any) -> str:
         return who
     required = _keywords_of(eligible, "required_keywords")
     excluded = _keywords_of(eligible, "excluded_keywords")
-    base = f"{who[:-4]}{' '.join(required)} unit" if required else who
+    # States, then keywords all of which it has, then keywords one of which it has.
+    states = _keywords_of(eligible, "states")
+    any_keywords = _keywords_of(eligible, "any_keywords")
+    any_of = [" or ".join(any_keywords)] if any_keywords else []
+    words = [*states, *required, *any_of]
+    base = f"{who[:-4]}{' '.join(words)} unit" if words else who
     exclusion = f" (excluding {' '.join(excluded)} units)" if excluded else ""
     return f"{base}{exclusion}"
 
@@ -219,7 +224,8 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         if m.get("effect") is not None
         else "that unit is affected"
     )
-    return f"while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}"
+    wholly = "wholly " if m.get("wholly") is True else ""
+    return f"while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}"
 
 
 def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:

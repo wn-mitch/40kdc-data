@@ -6,6 +6,7 @@
  */
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { dslUnitFilter } from "./compile-unit-filters.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 
@@ -142,6 +143,13 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
 }
 
 export function trigger(leaf: CompileLeaf): Node {
+  const node = eventTrigger(leaf);
+  // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
+  if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
+  return node;
+}
+
+function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
     if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind)) return ownedEventTrigger(leaf);
@@ -230,6 +238,20 @@ export function condition(leaf: CompileLeaf): Node {
       // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
       // attacks of the ability's moment ("after this model has shot"), during that moment.
       return { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success" }, window: "event" } };
+    case "unit-filter-target": {
+      // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
+      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true };
+      if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
+      const checks: Node[] = [
+        ...(filter.all_of ? [pred("has-keyword", { all_of: filter.all_of }, "defender")] : []),
+        ...(filter.any_of ? [pred("has-keyword", { any_of: filter.any_of }, "defender")] : []),
+        ...(filter.none_of ?? []).map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, "defender"))),
+        ...(filter.state ? [pred("unit-state", { state: filter.state }, "defender")] : []),
+        ...(filter.excluding ? [negate(pred("same-unit", { as: filter.excluding }, "defender"))] : []),
+      ];
+      if (checks.length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
+      return checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
+    }
     case "unit-mark":
       return polarity(leaf, pred("designated", { tag: MARK_TAGS[String(closed(leaf, "mark"))] }, who));
     case "unit-position": {
@@ -495,7 +517,15 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   };
   const bound = triggering ? "triggering-unit" : bindings[0]?.parameters.bound_to;
   if (bound) restrictions.bound_to = bound;
-  const eligibilityCondition = allOf([...eligibility]);
+  // A folded unit-filter's checks beyond all-of keywords (compile-unit-filters.ts) go to eligibility.
+  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean };
+  if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
+  const filtered: Node[] = [
+    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    ...(filter.states ?? []).map((state) => state === "unengaged" ? negate({ type: "unit-state", parameters: { state: "engaged" } }) : { type: "unit-state", parameters: { state } }),
+    ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
+  ];
+  const eligibilityCondition = allOf([...filtered, ...eligibility]);
   if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
   return restrictions;
 }

@@ -3719,6 +3719,18 @@ export interface AuraEffect {
        * @minItems 1
        */
       excluded_keywords?: [string, ...string[]];
+      /**
+       * The unit has at least one of these keywords ("a friendly SKITARII or THULIA GHULD unit").
+       *
+       * @minItems 2
+       */
+      any_keywords?: [string, string, ...string[]];
+      /**
+       * The unit is in each of these states.
+       *
+       * @minItems 1
+       */
+      states?: ["battle-shocked" | "unengaged", ...("battle-shocked" | "unengaged")[]];
     };
     emitter_filter?: KeywordFilter;
     recipient_filter?: KeywordFilter;
@@ -3726,6 +3738,10 @@ export interface AuraEffect {
      * The aura range, extensions included, never exceeds this.
      */
     range_cap?: number;
+    /**
+     * The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
+     */
+    wholly?: true;
   };
 }
 /**

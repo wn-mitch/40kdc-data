@@ -247,12 +247,21 @@ describe("Round 5C composition rules", () => {
       const text = "Select one friendly INFANTRY or VEHICLE unit: that unit takes 1 wound.";
       const result = compiled(text, [
         ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }],
-        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", keywords: ["INFANTRY", "VEHICLE"], match: "any" }), wound,
+        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", any_keywords: ["INFANTRY", "VEHICLE"] }), wound,
       ]);
       expect(result.mechanics.effect).toMatchObject({ type: "select-units", selector: {
         owner: "friendly", count: 1, eligibility: { type: "has-keyword", parameters: { any_of: ["INFANTRY", "VEHICLE"] } },
       } });
       expect((result.mechanics.effect as { selector: Record<string, unknown> }).selector.keywords).toBeUndefined();
+      // Other than this unit, and unengaged: both are checks on the candidate.
+      const other = compiled("Select one other friendly unengaged INFANTRY unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }],
+        filter("other friendly unengaged INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"], states: ["unengaged"], other: true }), wound,
+      ]);
+      expect(other.mechanics.effect).toMatchObject({ selector: { keywords: ["INFANTRY"], eligibility: { operator: "and", operands: [
+        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+        { operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] },
+      ] } } });
       const all = compiled("Select one enemy MONSTER unit: that unit takes 1 wound.", [
         ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }], filter("enemy MONSTER unit", { side: "enemy", keywords: ["MONSTER"] }), wound,
       ]);
@@ -265,14 +274,16 @@ describe("Round 5C composition rules", () => {
       expect(near.mechanics.effect).toMatchObject({ type: "select-units", selector: { owner: "enemy", keywords: ["MONSTER"], within_inches: 6 } });
     });
 
-    it("refuses a filter with nothing to name, and an aura it cannot express", () => {
+    it("refuses a filter with nothing to name, and reaches units wholly within, in a state, with any one keyword", () => {
       expect(failures("A friendly INFANTRY unit: that unit takes 1 wound.", [filter("friendly INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"] }), wound])[0])
-        .toMatch(/needs a select-unit right before it or an aura-range right after it/u);
-      expect(failures("While a friendly INFANTRY or VEHICLE unit is within 6\" of this unit, add 1 to the hit roll.", [
-        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", keywords: ["INFANTRY", "VEHICLE"], match: "any" }),
-        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }],
+        .toMatch(/needs a select-unit or attack right before it/u);
+      const aura = compiled("While a friendly battle-shocked INFANTRY or VEHICLE unit is wholly within 6\" of this unit, add 1 to the hit roll.", [
+        filter("friendly battle-shocked INFANTRY or VEHICLE unit", { side: "friendly", any_keywords: ["INFANTRY", "VEHICLE"], states: ["battle-shocked"] }),
+        ["wholly within 6\" of this unit", "CONDITION", "aura-range", { inches: 6, wholly: true }],
         ["add 1 to the hit roll", "EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
-      ])[0]).toMatch(/any one of several keywords has no DSL shape/u);
+      ]);
+      expect(aura.mechanics.effect).toMatchObject({ type: "aura", modifier: { wholly: true, eligible: { states: ["battle-shocked"], any_keywords: ["INFANTRY", "VEHICLE"] } } });
+      expect(aura.rendered).toMatch(/a friendly battle-shocked INFANTRY or VEHICLE unit is wholly within 6"/u);
     });
   });
 
