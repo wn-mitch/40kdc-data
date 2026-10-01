@@ -88,8 +88,10 @@ export interface StratagemCanon {
   cp_cost: number | null;
   /** Prose-derived phases — REVIEW ONLY (stratagem_phase is unreliable; see header). */
   phases_review: Phase[] | null;
-  /** From `stratagem.key` — APPLIED. */
+  /** From `stratagem.key` — APPLIED, unless the WHEN line names a phase in either turn. */
   player_turn: PlayerTurn | null;
+  /** The key's turn, when the WHEN line overrode it to either. */
+  turn_key_overridden?: PlayerTurn;
   /** From `stratagem.category` — FILL-ONLY (optional field). */
   type: StratType | null;
   /** From `detachmentId` presence — SET/confirm. */
@@ -133,17 +135,28 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
 
   const phases = phasesOf(t);
 
-  // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours;
-  // both present, or "any/either" → either; nothing decisive → null.
+  // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours; an unlabeled
+  // phase ("the Fight phase"), both, or "any/either" → either; nothing decisive → null.
   const hasOpponent = /opponent('|’)s\b|opponent's\b/.test(t) || /\bopponent(’|')?s? \w*\s*phase/.test(t);
   const hasYours = /\byour (?!opponent)/.test(t);
   let player_turn: PlayerTurn | null = null;
   if (/\b(any|either)\b/.test(t) && phases.length) player_turn = "either";
+  else if (namesEitherTurnPhase(t)) player_turn = "either";
   else if (hasOpponent && hasYours) player_turn = "either";
   else if (hasOpponent) player_turn = "opponent-turn";
   else if (hasYours) player_turn = "your-turn";
 
   return { phases: phases.length ? phases : null, player_turn };
+}
+
+/**
+ * Whether a WHEN line names a phase that is used in either player's turn. The rules label a phase
+ * "your" or "your opponent's"; an unlabeled one ("the Fight phase", "Start of the Command phase")
+ * is either player's. A key of yourTurn/opponentsTurn on such a Stratagem is coarser than its text.
+ */
+export function namesEitherTurnPhase(whenRulesRaw: string | undefined | null): boolean {
+  if (!whenRulesRaw) return false;
+  return new RegExp(`\\bthe ${PHASE_WORD} phase\\b`).test(stripTags(whenRulesRaw).toLowerCase());
 }
 
 /** Repo id for a dump stratagem: the id `mfm:mirror` gives the row (`<name>-<detachment>-<faction>`,
@@ -164,10 +177,14 @@ export function buildStratCanon(dump: MfmDump): Map<string, StratagemCanon> {
     const { phases } = deriveTrigger(when); // phases only — player_turn now from `key`
     const cp = s.cpCost != null ? parseInt(String(s.cpCost), 10) : null;
     const row = s as { key?: string; category?: string | null; detachmentId?: string | null };
+    const keyTurn = (row.key && KEY_TO_TURN[row.key]) || null;
+    // The text wins where it names a phase in either turn and the key says only one player's.
+    const overridden = keyTurn && keyTurn !== "either" && namesEitherTurnPhase(when) ? keyTurn : undefined;
     m.set(id, {
       cp_cost: Number.isFinite(cp as number) ? (cp as number) : null,
       phases_review: phases,
-      player_turn: (row.key && KEY_TO_TURN[row.key]) || null,
+      player_turn: overridden ? "either" : keyTurn,
+      ...(overridden ? { turn_key_overridden: overridden } : {}),
       type: (row.category && CATEGORY_TO_TYPE[row.category]) || null,
       category: row.detachmentId ? "detachment" : "core",
     });
@@ -201,6 +218,8 @@ export interface DirStratResult {
   cpChanged: { id: string; from: number; to: number }[];
   /** player_turn ← key: APPLIED. */
   turnApplied: { id: string; from?: PlayerTurn; to: PlayerTurn }[];
+  /** player_turn ← either although the key said one player: the WHEN line names a phase in either turn. */
+  turnKeyOverridden: { id: string; key: PlayerTurn }[];
   /** type ← category: FILLED (authored was unset). */
   typeFilled: { id: string; to: StratType }[];
   /** type ← category: both present and disagree — surfaced, NOT overwritten. */
@@ -240,6 +259,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       matched: 0,
       cpChanged: [],
       turnApplied: [],
+      turnKeyOverridden: [],
       typeFilled: [],
       typeConflict: [],
       categoryChanged: [],
@@ -263,6 +283,7 @@ export function runStratagems(dump: MfmDump, write: boolean): StratReport {
       }
 
       // player_turn ← stratagem.key (first-class, whenRules-corroborated): APPLIED.
+      if (c.turn_key_overridden) res.turnKeyOverridden.push({ id: s.id, key: c.turn_key_overridden });
       if (c.player_turn && s.player_turn !== c.player_turn) {
         res.turnApplied.push({ id: s.id, from: s.player_turn, to: c.player_turn });
         s.player_turn = c.player_turn;
@@ -331,6 +352,7 @@ export function buildStratReport(report: StratReport, write: boolean): string {
     if (
       !d.cpChanged.length &&
       !d.turnApplied.length &&
+      !d.turnKeyOverridden.length &&
       !d.typeFilled.length &&
       !d.typeConflict.length &&
       !d.categoryChanged.length &&
@@ -345,6 +367,10 @@ export function buildStratReport(report: StratReport, write: boolean): string {
     if (d.turnApplied.length) {
       L.push("", "**Player-turn ← key (applied):**");
       d.turnApplied.forEach((c) => L.push(`- ${c.id}: ${c.from ?? "—"} → ${c.to}`));
+    }
+    if (d.turnKeyOverridden.length) {
+      L.push("", "**Player-turn ← either over the key (the WHEN line names a phase in either turn):**");
+      d.turnKeyOverridden.forEach((c) => L.push(`- ${c.id}: key said ${c.key}`));
     }
     if (d.typeFilled.length) {
       L.push("", "**Type ← category (filled — was unset):**");
