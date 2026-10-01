@@ -71,6 +71,9 @@ unless it is needed to operate.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.
+- **Roll thresholds do not guess the die.** A minimum-result leaf records the lower bound
+  ("on a 2+" means at least 2); the dice leaf supplies its upper bound during compilation.
+  Explicit ranges and exact results retain both bounds.
 - **A placeholder is not a meaning.** A trusted leaf whose parameter still holds the import
   placeholder `"source"` does not count as resolved source (`placeholders.ts`), and no new
   decision may create one. A text holding such a leaf is not leaf-complete.

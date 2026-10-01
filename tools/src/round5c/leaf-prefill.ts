@@ -269,11 +269,11 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     if (dice) prefill.dice = dice;
   }
   if (family.id === "roll-result") {
-    // A D6 is assumed for "N+"; change "to" for a D3 or 2D6.
     const band = /\bon an? (\d+)(?:\+|-(\d+))?/iu.exec(exactText);
     if (band) {
       prefill.from = Number(band[1]);
-      prefill.to = band[2] ? Number(band[2]) : /\d\+/u.test(band[0]) ? 6 : Number(band[1]);
+      if (band[2]) prefill.to = Number(band[2]);
+      else if (!band[0].endsWith("+")) prefill.to = Number(band[1]);
     }
   }
   if (family.id === "mortal-wounds") {

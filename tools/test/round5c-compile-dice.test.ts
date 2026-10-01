@@ -147,6 +147,40 @@ describe("Round 5C dice-family compiler", () => {
   });
 });
 
+describe("Round 5C reusable minimum roll results", () => {
+  const resultLeaf = (text: string) => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "roll-result" && !item.deprecated)!;
+    const parameters = normalizeFingerprintParameters("roll-result", prefillFromSource(family, text), family.version);
+    return leaf("CONDITION", "roll-result", parameters, family.version);
+  };
+  const wound = () => leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" });
+
+  it.each(["D3", "D6", "2D6"])("uses the same minimum wording with %s without inventing an upper bound", (dice) => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "dice-gated", dice, threshold: 2, comparison: "gte",
+        on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
+  });
+
+  it("keeps the minimum for each die in a multi-die success roll", () => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: {
+        count: 1, per: "success", roll: { dice: 6, threshold: 2 },
+      } });
+  });
+
+  it("rejects a minimum the named die cannot reach", () => {
+    expect(compileLeaves([leaf("EVENT", "dice-roll", { dice: "D3" }, 4), resultLeaf("on a 4+"), wound()]).ok).toBe(false);
+  });
+
+  it("preserves explicit bands and exact results when upgrading existing leaves", () => {
+    for (const parameters of [{ from: 2, to: 5 }, { from: 6, to: 6 }]) {
+      expect(mapToLatest("roll-result", 1, parameters)).toEqual({ family: "roll-result", version: 2, parameters });
+    }
+    expect(normalizeFingerprintParameters("roll-result", { from: 2 }, 2)).toEqual({ from: 2 });
+    expect(() => normalizeFingerprintParameters("roll-result", { from: 4, to: 3 }, 2)).toThrow();
+  });
+});
+
 describe("Round 5C dice-family prefill", () => {
   const family = (id: string) => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === id && item.version === currentFamilyVersion(id)) as unknown as PrefillFamily;
   const prefill = (id: string, text: string) => prefillFromSource(family(id), text);

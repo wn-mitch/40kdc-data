@@ -17,7 +17,7 @@ export type Planned = { index: number; leaf: CompileLeaf; node: Node; gate: Node
 const ROLL = "__roll-result";
 
 export function rollMarker(leaf: CompileLeaf): Node {
-  return { type: ROLL, from: leaf.parameters.from, to: leaf.parameters.to };
+  return { type: ROLL, from: leaf.parameters.from, ...(leaf.parameters.to === undefined ? {} : { to: leaf.parameters.to }) };
 }
 
 export const isRollMarker = (node: Node): boolean => node.type === ROLL;
@@ -44,7 +44,8 @@ function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: 
     const markers = item.gate.filter(isRollMarker);
     if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
     const band = markers[0]!;
-    if (Number(band.to) !== 6) throw new CompileError("A per-die success band must reach 6 (\"for each 5+\").");
+    if (Number(band.from) > 6) throw new CompileError("A per-die success band starts beyond a D6.");
+    if (Number(band.to ?? 6) !== 6) throw new CompileError("A per-die success band must reach 6 (\"for each 5+\").");
     if (item.leaf.family_id !== "mortal-wounds") throw new CompileError(`Rolling several dice folds only into mortal wounds per success; ${item.leaf.family_id} has no per-die DSL shape.`);
     const modifier = item.node.modifier as Node;
     modifier.per = "success";
@@ -83,8 +84,11 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     if (markers.length > 1) throw new CompileError("One effect is gated by two result bands.");
     item.gate = item.gate.filter((node) => !isRollMarker(node));
     const band = markers[0]!;
-    if (Number(band.to) > faces) throw new CompileError(`A result band reaches ${String(band.to)}, beyond a ${dice}.`);
-    return { from: Number(band.from), to: Number(band.to) };
+    const from = Number(band.from);
+    const to = Number(band.to ?? faces);
+    if (from > faces) throw new CompileError(`A result band starts at ${from}, beyond a ${dice}.`);
+    if (to > faces) throw new CompileError(`A result band reaches ${to}, beyond a ${dice}.`);
+    return { from, to };
   };
 
   const table: Array<{ band: { from: number; to: number }; items: Planned[] }> = [];

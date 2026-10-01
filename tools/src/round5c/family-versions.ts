@@ -34,6 +34,8 @@ const EVENT_SOURCE_KINDS: Record<string, string> = {
 
 export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "leading-unit", from: 1, to: 2, map: (parameters) => ({ ...parameters, attachment: "leading" }) },
+  // Existing bands stay bounded; only newly authorized minimum leaves omit their upper bound.
+  { family: "roll-result", from: 1, to: 2, map: (parameters) => parameters },
   { family: "weapon-ability-grant", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
   {
     family: "event",

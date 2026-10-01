@@ -111,6 +111,21 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { from: { type: "integer", minimum: 1, maximum: 12 }, to: { type: "integer", minimum: 1, maximum: 12 } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "roll-result",
+    version: 2,
+    role: "CONDITION",
+    label: "On a roll of",
+    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to.",
+    starter: { from: null },
+    parameterSchema: {
+      type: "object",
+      required: ["from"],
+      properties: { from: { type: "integer", minimum: 1, maximum: 12 }, to: { type: "integer", minimum: 1, maximum: 12 } },
+      additionalProperties: false,
+    },
   },
   {
     id: "mortal-wounds",
@@ -255,10 +270,10 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
       return result;
     }
     case "roll-result": {
-      exactKeys(input, ["from", "to"], family);
+      const hasUpperBound = version === 1 || "to" in input;
+      exactKeys(input, hasUpperBound ? ["from", "to"] : ["from"], family);
       const from = boundedInteger(input.from, 1, 12, "roll-result.from");
-      const to = boundedInteger(input.to, from, 12, "roll-result.to");
-      return { from, to };
+      return hasUpperBound ? { from, to: boundedInteger(input.to, from, 12, "roll-result.to") } : { from };
     }
     case "mortal-wounds":
       exactKeys(input, ["recipient", "count"], family);

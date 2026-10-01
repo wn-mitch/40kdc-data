@@ -298,6 +298,22 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.effect).toEqual({ type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
   });
 
+  it.each(["D3", "D6"])("binds a minimum-only branch after an exact result on %s", (dice) => {
+    const text = `Roll one ${dice}: on a 1, this unit takes 1 wound; on a 2+, this unit takes 2 wounds.`;
+    const result = compiled(text, [
+      [`Roll one ${dice}`, "EVENT", "dice-roll", { dice }],
+      ["on a 1", "CONDITION", "roll-result", { from: 1, to: 1 }],
+      ["this unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
+      ["on a 2+", "CONDITION", "roll-result", { from: 2 }],
+      ["this unit takes 2 wounds", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "2" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "dice-table", dice, outcomes: [
+      { results: [1], effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } } },
+      { results: dice === "D3" ? [2, 3] : [2, 3, 4, 5, 6],
+        effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 2 } } },
+    ] });
+  });
+
   it("folds a per-model roll and a has-not-fought condition into fighting on death", () => {
     const text = "Whenever a model here falls, if that model has not fought this phase, roll one D6. On a 2+, leave it; it fights after the attackers finish.";
     const result = compiled(text, [
