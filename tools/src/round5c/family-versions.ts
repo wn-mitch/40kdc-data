@@ -98,6 +98,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "characteristic-modifier", from: 3, to: 4, map: (parameters) => parameters },
   // A bare adjustment no longer needs owner bindings; already reviewed bindings remain authoritative.
   { family: "characteristic-modifier", from: 4, to: 5, map: (parameters) => parameters },
+  // Wider integer amounts retain every previously reviewed adjustment.
+  { family: "characteristic-modifier", from: 5, to: 6, map: (parameters) => parameters },
   { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
   // Version 3 only adds psychic and recipient; version 2 parameters still fit.
   { family: "attack", from: 2, to: 3, map: (parameters) => parameters },

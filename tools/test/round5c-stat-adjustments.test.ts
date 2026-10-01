@@ -18,6 +18,7 @@ describe("signed stat adjustments", () => {
     ["−2BS", "BS", "worsen", 2], ["-2 BS", "BS", "worsen", 2], ["–3 **AP**", "AP", "worsen", 3],
     ["+2 WS", "WS", "improve", 2], ["+3 AP", "AP", "improve", 3], ["+2 **Ld.**", "Ld", "improve", 2],
     ["+3 SV", "Sv", "improve", 3], ["+2OC", "OC", "improve", 2],
+    ["+22 A", "A", "improve", 22],
   ])("reads %s without inventing a recipient or weapon scope", (text, stat, operation, value) => {
     const parameters = prefillFromSource(family, String(text));
     expect(normalizeFingerprintParameters(family.id, parameters, family.version)).toEqual({ characteristics: [stat], operation, value });
@@ -50,6 +51,15 @@ describe("signed stat adjustments", () => {
     expect(compileLeaves([adjustment(migrated.parameters)])).toMatchObject({ ok: true, mechanics: { effect: {
       type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapon_type: "melee" },
     } } });
+  });
+
+  it("previews a legacy singular-stat adjustment with its reviewed model", () => {
+    expect(leafFragment({
+      role: "EFFECT", family_id: family.id, family_version: 1, start_byte: 0,
+      parameters: { subject: "this-model", characteristic: "S", operation: "add", value: 2 },
+    })).toEqual({ kind: "effect", node: {
+      type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 2 },
+    } });
   });
 
   it.each(["-2 A", "–2 A", "−2 A"])("keeps the sign of %s distinct from positive and unsigned values", (negative) => {

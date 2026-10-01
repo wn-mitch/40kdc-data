@@ -192,6 +192,27 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 6,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf.",
+    starter: { characteristics: [], operation: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristics", "operation", "value"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER },
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "regain-wounds",
@@ -271,7 +292,7 @@ export function normalizeEffectParameters(family: string, input: Record<string, 
       }
       // An attack is already melee or ranged by its attack leaf; saying it here too would say it twice.
       if (subject === "attack" && weaponType !== undefined && weaponType !== "all") throw new TypeError("characteristic-modifier: the attack's own leaf says melee or ranged; use weapon type all.");
-      return { ...(hasSubject ? { subject } : {}), characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"), ...(hasWeaponType ? { weapon_type: weaponType } : {}) };
+      return { ...(hasSubject ? { subject } : {}), characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, version >= 6 ? Number.MAX_SAFE_INTEGER : 20, "characteristic-modifier.value"), ...(hasWeaponType ? { weapon_type: weaponType } : {}) };
     }
     case "regain-wounds": {
       if (version >= 3) {

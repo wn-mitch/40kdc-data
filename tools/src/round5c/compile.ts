@@ -150,7 +150,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
     return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
   }
-  if (leaf.family_id === "characteristic-modifier" && (leaf.parameters.subject === undefined
+  if (leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5 && (leaf.parameters.subject === undefined
     || leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat)))) {
     return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }
