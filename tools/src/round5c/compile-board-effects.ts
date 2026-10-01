@@ -115,6 +115,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
         if (wr !== "full") modifier.wounds_remaining = countValue(wr);
       }
       if (leaf.parameters.model_keyword !== undefined) modifier.model_keyword = closed(leaf, "model_keyword");
+      if (leaf.parameters.exclude_model_keyword !== undefined) modifier.exclude_model_keyword = closed(leaf, "exclude_model_keyword");
       if (leaf.parameters.bodyguard_only === true) modifier.bodyguard_only = true;
       return { type: "return-models", target: target(leaf.parameters.subject), modifier };
     }

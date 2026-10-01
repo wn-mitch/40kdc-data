@@ -48,7 +48,7 @@ export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
 ];
 
 /** Unit keywords as the rules print them: markdown dropped, upper case, each once. */
-function keywords(value: unknown, label: string): string[] {
+export function normalizeUnitKeywords(value: unknown, label: string): string[] {
   if (!Array.isArray(value) || value.length === 0) throw new TypeError(`${label} must list at least one keyword.`);
   const list = value.map((item) => {
     if (typeof item !== "string") throw new TypeError(`${label} must be strings.`);
@@ -64,12 +64,12 @@ export function normalizeUnitFilterParameters(family: string, input: Record<stri
   if (family !== "unit-filter") return null;
   exactKeys(input, ["side", ...["keywords", "any_keywords", "excluded_keywords", "states", "other", "visible", "level"].filter((key) => key in input)], family);
   const result: Record<string, unknown> = { side: enumValue(input.side, FILTER_SIDES, "unit-filter.side") };
-  if ("keywords" in input) result.keywords = keywords(input.keywords, "unit-filter.keywords");
+  if ("keywords" in input) result.keywords = normalizeUnitKeywords(input.keywords, "unit-filter.keywords");
   if ("any_keywords" in input) {
-    result.any_keywords = keywords(input.any_keywords, "unit-filter.any_keywords");
+    result.any_keywords = normalizeUnitKeywords(input.any_keywords, "unit-filter.any_keywords");
     if ((result.any_keywords as string[]).length < 2) throw new TypeError("unit-filter.any_keywords names two or more keywords; one is a plain keyword.");
   }
-  if ("excluded_keywords" in input) result.excluded_keywords = keywords(input.excluded_keywords, "unit-filter.excluded_keywords");
+  if ("excluded_keywords" in input) result.excluded_keywords = normalizeUnitKeywords(input.excluded_keywords, "unit-filter.excluded_keywords");
   if ("states" in input) result.states = enumSet(input.states, FILTER_STATES, "unit-filter.states");
   for (const flag of ["other", "visible"] as const) {
     if (!(flag in input)) continue;
@@ -108,7 +108,7 @@ export function normalizeAuraRangeV3(input: Record<string, unknown>): Record<str
   if ("keywords" in input && !("side" in input)) throw new TypeError("aura-range.keywords belong to the unit-filter when side is left out.");
   const result: Record<string, unknown> = { inches: boundedInteger(input.inches, 1, 24, "aura-range.inches") };
   if ("side" in input) result.side = enumValue(input.side, AURA_SIDES, "aura-range.side");
-  if ("keywords" in input) result.keywords = keywords(input.keywords, "aura-range.keywords");
+  if ("keywords" in input) result.keywords = normalizeUnitKeywords(input.keywords, "aura-range.keywords");
   if ("range_cap_inches" in input) result.range_cap_inches = boundedInteger(input.range_cap_inches, 1, 24, "aura-range.range_cap_inches");
   if ("of" in input) result.of = enumValue(input.of, AURA_OF, "aura-range.of");
   if ("wholly" in input) {

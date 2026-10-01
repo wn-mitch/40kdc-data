@@ -83,6 +83,11 @@ unless it is needed to operate.
   the recipient and melee, ranged or all-weapons scope. The following stat adjustment or
   weapon-ability name supplies the property. Lowering retains explicit bindings, rejects
   conflicting recipients or scopes, and does not carry a stat scope into another sentence.
+- **Returned-model exclusions filter models, not their unit.** A `returned-model-exclusion`
+  leaf excludes individual returned models with the named keywords, including within attached
+  units. Source-backed clause binding folds it into `return-models.modifier.exclude_model_keyword`;
+  count, wounds and placement remain separate. Compilation rejects orphaned or ambiguous
+  exclusions rather than applying a whole-unit keyword condition.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.

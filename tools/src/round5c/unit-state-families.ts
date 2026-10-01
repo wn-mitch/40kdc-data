@@ -1,5 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { booleanValue, boundedInteger, enumValue, exactKeys } from "./family-validation.js";
+import { normalizeUnitKeywords } from "./unit-filter-family.js";
 
 /**
  * Effects that change which models and units exist: returning destroyed models, destroying
@@ -46,6 +47,20 @@ export const UNIT_STATE_EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
         model_keyword: { type: "string", pattern: UNIT_KEYWORD.source },
         bodyguard_only: { type: "boolean" },
       },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "returned-model-exclusion",
+    version: 1,
+    role: "CONDITION",
+    label: "Models that cannot return",
+    description: "Exclude individual returned models with any listed keyword. This qualifies a return-models effect, never the whole unit or its attached group; count, wounds and placement remain separate.",
+    starter: { keywords: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["keywords"],
+      properties: { keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } } },
       additionalProperties: false,
     },
   },
@@ -130,6 +145,9 @@ function modelKeyword(value: unknown, label: string): string {
 
 export function normalizeUnitStateParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
+    case "returned-model-exclusion":
+      exactKeys(input, ["keywords"], family);
+      return { keywords: normalizeUnitKeywords(input.keywords, "returned-model-exclusion.keywords") };
     case "return-models": {
       const keys = ["subject", "count", ...(["wounds_remaining", "model_keyword", "bodyguard_only"] as const).filter((key) => key in input)];
       exactKeys(input, keys, family);
