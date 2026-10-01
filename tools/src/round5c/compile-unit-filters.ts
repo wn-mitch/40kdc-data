@@ -30,10 +30,12 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     ...(p.states?.includes("battle-shocked") ? { state: "battle-shocked" } : {}),
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
+    ...(filter.parameters.level === "model" ? { level: "model" } : {}),
   };
 }
 
 function side(filter: CompileLeaf, what: string): string {
+  if (filter.parameters.level === "model") throw new CompileError(`A unit-filter naming models has no DSL shape for ${what} yet.`);
   const value = String(filter.parameters.side);
   if (value === "any") throw new CompileError(`A unit-filter for ${what} must say friendly or enemy.`);
   return value;
@@ -41,7 +43,7 @@ function side(filter: CompileLeaf, what: string): string {
 
 /** The filter's keyword fields, as the folded leaf carries them. */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
-  const { side: _side, visible: _visible, ...rest } = filter.parameters;
+  const { side: _side, visible: _visible, level: _level, ...rest } = filter.parameters;
   return rest;
 }
 
@@ -85,7 +87,8 @@ export function foldUnitFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
       if (side === "any") throw new CompileError("A Stratagem TARGET's unit-filter must say friendly or enemy.");
       const { keywords, excluded_keywords: excluded, ...rest } = filterOf(next!) as { keywords?: string[]; excluded_keywords?: string[] } & Record<string, unknown>;
       out.push({ ...leaf, parameters: {
-        ...leaf.parameters, side: side === "friendly" ? "your-army" : "enemy", keywords: keywords ?? [], match: "all", excluded_keywords: excluded ?? [], filter: rest,
+        ...leaf.parameters, side: side === "friendly" ? "your-army" : "enemy", selects: next!.parameters.level ?? "unit",
+        keywords: keywords ?? [], match: "all", excluded_keywords: excluded ?? [], filter: rest,
       } });
       index += 1;
     } else if (isFilter(leaf) && ownerlessEvent(next)) {

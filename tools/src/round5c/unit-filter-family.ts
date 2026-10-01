@@ -26,7 +26,7 @@ export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "CONDITION",
     label: "Which units",
-    description: "The units an aura reaches or a selection may pick: friendly or enemy (a phrase naming no side means friendly), optionally with unit keywords they all have, keywords one of which they have (\"NECRONS VEHICLE or NECRONS MOUNTED\": NECRONS, and VEHICLE or MOUNTED), keywords they must not have, states they are in, other than this unit, and visible. It names no range or count: the aura-range after it or the select-unit before it does.",
+    description: "The units an aura reaches or a selection may pick: friendly or enemy (a phrase naming no side means friendly), optionally with unit keywords they all have, keywords one of which they have (\"NECRONS VEHICLE or NECRONS MOUNTED\": NECRONS, and VEHICLE or MOUNTED), keywords they must not have, states they are in, other than this unit, and visible; level model when it names models (\"One ADEPTUS CUSTODES model\"). It names no range or count: the aura-range after it or the select-unit before it does.",
     starter: { side: "" },
     parameterSchema: {
       type: "object",
@@ -39,6 +39,7 @@ export const UNIT_FILTER_FAMILIES: readonly SemanticFamilyDefinition[] = [
         states: { type: "array", minItems: 1, uniqueItems: true, items: { enum: FILTER_STATES } },
         other: { const: true },
         visible: { const: true },
+        level: { const: "model" },
       },
       additionalProperties: false,
     },
@@ -60,7 +61,7 @@ function keywords(value: unknown, label: string): string[] {
 
 export function normalizeUnitFilterParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   if (family !== "unit-filter") return null;
-  exactKeys(input, ["side", ...["keywords", "any_keywords", "excluded_keywords", "states", "other", "visible"].filter((key) => key in input)], family);
+  exactKeys(input, ["side", ...["keywords", "any_keywords", "excluded_keywords", "states", "other", "visible", "level"].filter((key) => key in input)], family);
   const result: Record<string, unknown> = { side: enumValue(input.side, FILTER_SIDES, "unit-filter.side") };
   if ("keywords" in input) result.keywords = keywords(input.keywords, "unit-filter.keywords");
   if ("any_keywords" in input) {
@@ -74,6 +75,7 @@ export function normalizeUnitFilterParameters(family: string, input: Record<stri
     if (!booleanValue(input[flag], `unit-filter.${flag}`)) throw new TypeError(`unit-filter.${flag} is true or absent.`);
     result[flag] = true;
   }
+  if ("level" in input) result.level = enumValue(input.level, ["model"], "unit-filter.level");
   return result;
 }
 

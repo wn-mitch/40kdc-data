@@ -128,7 +128,7 @@ describe("Round 5C restrictions", () => {
   it("reads a TARGET, a trigger's subject and an attack's target from one unit-filter leaf", () => {
     const filter = (parameters: Record<string, unknown>) => leaf("CONDITION", "unit-filter", parameters);
     const target = compiled([
-      { ...leaf("RESTRICTION", "stratagem-target", { count: "one", selects: "unit" }), fragment: "TARGET" },
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" },
       { ...filter({ side: "friendly", keywords: ["INFANTRY"], any_keywords: ["ORACLES", "WARDENS"], states: ["unengaged"] }), fragment: "TARGET" },
       { ...grant(), fragment: "EFFECT" },
     ]);
@@ -149,8 +149,14 @@ describe("Round 5C restrictions", () => {
       leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
     ]);
     expect(attack.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } } });
+    // "One ADEPTUS CUSTODES model": the who leaf's noun says model.
+    expect(compiled([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" },
+      { ...filter({ side: "friendly", keywords: ["CHARACTER"], level: "model" }), fragment: "TARGET" },
+      { ...grant(), fragment: "EFFECT" },
+    ]).core).toMatchObject({ target_restrictions: { selects: "model", required_keywords: ["CHARACTER"] } });
     // A side-less TARGET leaf needs its unit-filter.
-    expect(compileLeaves([{ ...leaf("RESTRICTION", "stratagem-target", { count: "one", selects: "unit" }), fragment: "TARGET" }, grant()]).ok).toBe(false);
+    expect(compileLeaves([{ ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" }, grant()]).ok).toBe(false);
   });
 
   it("refuses a TARGET without exactly one target leaf", () => {
