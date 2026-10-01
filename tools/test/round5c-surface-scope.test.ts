@@ -59,6 +59,10 @@ describe("Round 5C surface scope", () => {
     expect(inScope(bracketed, { fragment: "EFFECT", source_type: "stratagem", before: "Select the ", after: " doctrine." })).toBe(false);
     expect(inScope(bracketed, { fragment: "EFFECT", source_type: "stratagem", before: "attacks have [", after: " doctrine]" })).toBe(false);
     expect(() => parseScope({ bracketed: false })).toThrow(/only be true/u);
+    const leads = parseScope({ followed_by: ["friendly", "enemy"] })!;
+    expect(inScope(leads, { fragment: "RAW_TEXT", source_type: "unit", before: "you can select one", after: " **friendly** Orks unit" })).toBe(true);
+    expect(inScope(leads, { fragment: "RAW_TEXT", source_type: "unit", before: "you can select one", after: " of the following" })).toBe(false);
+    expect(inScope(leads, { fragment: "RAW_TEXT", source_type: "unit", before: "you can select one", after: " friendlyish unit" })).toBe(false);
     expect(() => parseScope({ nearby: ["x"] })).toThrow(/no field nearby/u);
   });
 
