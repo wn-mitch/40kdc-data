@@ -7,7 +7,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { canonicalize, hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
-import { familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
 import { dropUncoveredRegions, importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
 import { lunaStdinEnvelope } from "../src/round5c/luna-schema.js";
 import { getCurrentCoverage } from "../src/round5c/coverage.js";
@@ -548,8 +548,8 @@ describe("Round 5C characteristic-set family", () => {
           role: "RESTRICTION",
           status: "EXISTING",
           family_id: "usage-limit",
-          family_version: 2,
-          parameters: { frequency: "once-per-battle", per: "any" },
+          family_version: currentFamilyVersion("usage-limit"),
+          parameters: { frequency: "once-per-battle" },
         },
       ];
 

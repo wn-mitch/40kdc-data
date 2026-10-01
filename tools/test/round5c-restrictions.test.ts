@@ -4,8 +4,9 @@ import { join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { coreCheckErrors } from "../src/round5c/core-checks.js";
+import { prefillFromSource } from "../src/round5c/leaf-prefill.js";
 
 // Fabricated records and wording only.
 
@@ -44,6 +45,39 @@ describe("Round 5C restrictions", () => {
     expect("usage" in compiled([grant()]).mechanics).toBe(false);
     const two = compileLeaves([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-turn", per: "any" }), leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase", per: "any" }), grant()]);
     expect(two.ok ? [] : two.errors).toContain("More than one usage limit; the entry has one usage.");
+  });
+
+  it.each(["phase", "turn", "battle round", "battle"])("reuses the same once-per-%s qualifier across independently scoped allowances", (period) => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "usage-limit" && !item.deprecated)!;
+    const parameters = normalizeFingerprintParameters("usage-limit", prefillFromSource(family, `Once per ${period}`), family.version);
+    for (const per of ["army", "unit", "model"]) {
+      const result = compiled([
+        leaf("RESTRICTION", "usage-limit", parameters),
+        leaf("RESTRICTION", "usage-scope", { per }),
+        grant(),
+      ]);
+      expect(result.mechanics.usage).toEqual({
+        frequency: period === "battle" ? "n-per-battle" : `once-per-${period.replace(" ", "-")}`,
+        ...(period === "battle" ? { count: 1 } : {}),
+        per,
+      });
+    }
+  });
+
+  it("does not guess an allowance owner from a frequency qualifier alone", () => {
+    const result = compileLeaves([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase" }), grant()]);
+    expect(result.ok ? [] : result.errors).toContain("Usage frequency needs a reviewed usage scope.");
+  });
+
+  it("refuses an owner without a frequency and conflicting owner qualifications", () => {
+    const orphan = compileLeaves([leaf("RESTRICTION", "usage-scope", { per: "model" }), grant()]);
+    expect(orphan.ok ? [] : orphan.errors).toContain("Usage scope has no frequency.");
+    const conflict = compileLeaves([
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase", per: "model" }),
+      leaf("RESTRICTION", "usage-scope", { per: "army" }),
+      grant(),
+    ]);
+    expect(conflict.ok ? [] : conflict.errors).toContain("Conflicting usage scopes.");
   });
 
   it("turns a choice into an optional trigger, or an activated ability without one", () => {

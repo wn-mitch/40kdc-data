@@ -169,6 +169,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "event", from: 8, to: 9, map: (parameters) => parameters },
   { family: "duration", from: 2, to: 3, map: (parameters) => parameters },
   { family: "usage-limit", from: 1, to: 2, map: (parameters) => parameters },
+  // A bound limit keeps its approved ownership; only new frequency qualifiers omit it.
+  { family: "usage-limit", from: 2, to: 3, map: (parameters) => parameters },
   // Version 2/2 (batch 7a) only add an optional range_cap_inches/counts_as_move field.
   { family: "aura-range", from: 1, to: 2, map: (parameters) => parameters },
   { family: "make-move", from: 1, to: 2, map: (parameters) => parameters },

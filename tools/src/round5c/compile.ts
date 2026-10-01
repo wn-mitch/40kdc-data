@@ -154,17 +154,26 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
   }
   if (leaf.role === "RESTRICTION") {
-    return { kind: "implicit", note: leaf.family_id === "usage-limit"
-      ? `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.`
-      : leaf.family_id === "optional-use" ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
-        : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
-          : leaf.family_id === "activation-window" ? "No separate text: the whole ability applies only in the phases it names."
-            : leaf.family_id === "move-must-end" ? "No separate text: the conditions after it become where the move before it must end."
+    if (leaf.family_id === "usage-limit") {
+      return { kind: "implicit", note: leaf.parameters.per === undefined
+        ? `No separate text: frequency ${String(leaf.parameters.frequency)} needs a reviewed allowance scope.`
+        : `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.` };
+    }
+    if (leaf.family_id === "usage-scope") {
+      return { kind: "implicit", note: `No separate text: qualifies the usage allowance as per ${String(leaf.parameters.per)}.` };
+    }
+    return { kind: "implicit", note: leaf.family_id === "optional-use"
+      ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
+      : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
+        : leaf.family_id === "activation-window" ? "No separate text: the whole ability applies only in the phases it names."
+          : leaf.family_id === "move-must-end" ? "No separate text: the conditions after it become where the move before it must end."
             : "No separate text: checked against the core record, which already holds it." };
   }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
-  if (leaf.family_id === "roll-result") return { kind: "implicit", note: `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
+  if (leaf.family_id === "roll-result") return { kind: "implicit", note: leaf.parameters.to === undefined
+    ? `No separate text: the effects in its clause happen on at least ${String(leaf.parameters.from)}; the dice roll supplies the upper bound.`
+    : `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
   if (leaf.family_id === "unit-filter") return { kind: "implicit", note: "No separate text: says which units the selection before it may pick, or which units the aura after it reaches." };
   if (leaf.family_id === "aura-range" || leaf.family_id === "leader-target") {
     return { kind: "implicit", note: "No separate text: wraps the rest of the ability's effects, the same way select-unit does." };
@@ -262,6 +271,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const rolls: CompileLeaf[] = [];
   const combinators: number[] = [];
   const usages: Record<string, unknown>[] = [];
+  const usageScopes = new Set<string>();
   let optional = false;
   const checks: CoreCheck[] = [];
   const targetParts: CompileLeaf[] = [];
@@ -324,7 +334,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {
-        if (leaf.family_id === "usage-limit") usages.push(usageFor(leaf.parameters));
+        if (leaf.family_id === "usage-limit") {
+          usages.push(usageFor(leaf.parameters));
+          if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
+        } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
         else if (leaf.family_id === "optional-use") optional = true;
         else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
         else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) targetParts.push(leaf);
@@ -445,6 +458,13 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   }
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
+  if (usageScopes.size > 1) errors.push("Conflicting usage scopes.");
+  if (usages.length && usageScopes.size === 0) errors.push("Usage frequency needs a reviewed usage scope.");
+  if (!usages.length && usageScopes.size) errors.push("Usage scope has no frequency.");
+  if (usages.length === 1 && usageScopes.size === 1) {
+    const per = usageScopes.values().next().value!;
+    if (per !== "any") usages[0]!.per = per;
+  }
   const target = attempt(() => targetRestrictions(targetParts, targetEligibility));
   const selected = planned.filter((item) => item.selected);
   if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");

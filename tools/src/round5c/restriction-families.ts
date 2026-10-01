@@ -2,8 +2,9 @@ import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 
 /**
- * Restrictions: who may use an ability, in which phases, and how often. How often compiles to
- * the entry's `usage`. Which phases (a stratagem's WHEN) and which bearer (an enhancement's
+ * Restrictions: who may use an ability, in which phases, and how often. A frequency qualifier
+ * and its reviewed allowance ownership compose into the entry's `usage`. Which phases (a
+ * stratagem's WHEN) and which bearer (an enhancement's
  * "<KEYWORD> model only") are already recorded on the core stratagem and enhancement records
  * from the Munitorum dump, so those leaves compile to nothing and are checked against core
  * instead; a disagreement blocks approval rather than writing a second source of truth.
@@ -159,6 +160,35 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { frequency: { enum: USAGE_FREQUENCIES_V2 }, per: { enum: USAGE_PER } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "usage-limit",
+    version: 3,
+    role: "RESTRICTION",
+    label: "Usage frequency",
+    description: "A frequency qualifier, independent of army, unit or model ownership. The optional per field records a reviewed binding; otherwise a separate usage-scope leaf supplies it. Frequency alone does not choose an allowance owner.",
+    starter: { frequency: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["frequency"],
+      properties: { frequency: { enum: USAGE_FREQUENCIES_V2 }, per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "usage-scope",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Usage allowance ownership",
+    description: "Qualifies an ability's usage allowance as counted per army, unit or model; any explicitly leaves entity granularity unspecified. It supplies no frequency. A restriction on repeatedly selecting or affecting a target is not the ability's usage ownership.",
+    starter: { per: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["per"],
+      properties: { per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
   },
   {
     id: "use-window",
@@ -282,9 +312,17 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
     case "optional-use":
       exactKeys(input, ["who"], family);
       return { who: enumValue(input.who, version === 1 ? OPTIONAL_USERS_WITH_BEARER : OPTIONAL_USERS, "optional-use.who") };
-    case "usage-limit":
-      exactKeys(input, ["frequency", "per"], family);
-      return { frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
+    case "usage-limit": {
+      const hasScope = version < 3 || "per" in input;
+      exactKeys(input, hasScope ? ["frequency", "per"] : ["frequency"], family);
+      return {
+        frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"),
+        ...(hasScope ? { per: enumValue(input.per, USAGE_PER, "usage-limit.per") } : {}),
+      };
+    }
+    case "usage-scope":
+      exactKeys(input, ["per"], family);
+      return { per: enumValue(input.per, USAGE_PER, "usage-scope.per") };
     case "use-window":
     case "activation-window": {
       exactKeys(input, ["your_phases", "opponent_phases", "either_phases"], family);
@@ -309,10 +347,10 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
   }
 }
 
-/** The entry's usage for a usage-limit leaf, in the DSL's spelling. */
+/** A frequency in the DSL's spelling, with ownership only when the leaf explicitly records it. */
 export function usageFor(parameters: Record<string, unknown>): Record<string, unknown> {
   const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 } : { frequency: parameters.frequency };
-  return { ...frequency, ...(parameters.per !== "any" ? { per: parameters.per } : {}) };
+  return { ...frequency, ...(parameters.per !== undefined && parameters.per !== "any" ? { per: parameters.per } : {}) };
 }
 
 /** What core must say for a use-window: the same phases, and one turn when every phase has one owner. */

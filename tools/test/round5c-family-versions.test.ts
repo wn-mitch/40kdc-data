@@ -5,6 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
+import { compileLeaves } from "../src/round5c/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { FAMILY_VERSION_MAPPINGS, mapToLatest, upgradeFamilyVersions } from "../src/round5c/family-versions.js";
@@ -103,6 +104,27 @@ describe("Round 5C family version registry", () => {
 });
 
 describe("Round 5C family version upgrade", () => {
+  it("preserves reviewed ownership when a bound limit moves to the frequency-qualifier version", () => {
+    const db = fixture([{ ability_id: "sentry", raw_text: "Once per turn, this sentry holds position." }]);
+    try {
+      legacyLeaf(db, "sentry", "Once per turn", "usage-limit", 2, { frequency: "once-per-turn", per: "model" });
+      upgradeFamilyVersions(db);
+      const row = db.prepare(`
+        SELECT fingerprints.family_version, fingerprints.parameters_json FROM annotations
+        JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+        WHERE annotations.status = 'active' AND fingerprints.family_id = 'usage-limit'
+      `).get() as { family_version: number; parameters_json: string };
+      const result = compileLeaves([
+        { role: "RESTRICTION", family_id: "usage-limit", family_version: row.family_version, parameters: JSON.parse(row.parameters_json), start_byte: 0 },
+        { role: "EFFECT", family_id: "fights-first", family_version: 2, parameters: { subject: "this-unit" }, start_byte: 20 },
+      ]);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      expect(result.mechanics.usage).toEqual({ frequency: "once-per-turn", per: "model" });
+    } finally {
+      db.close();
+    }
+  });
+
   it("merges the bearer and this-model meanings of one span into one annotation and one decided surface", () => {
     const db = fixture([
       { ability_id: "ward", raw_text: `${TARGETED}, subtract 1 from the Hit roll.` },

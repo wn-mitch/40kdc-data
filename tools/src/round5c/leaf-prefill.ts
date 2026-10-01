@@ -332,8 +332,10 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();
     if (frequency) prefill.frequency = `once-per-${frequency.replace(" ", "-")}`;
     if (/your opponent's turn/iu.test(exactText)) prefill.frequency = "once-per-opponent-turn";
-    const per = /\bper (army|unit|model)\b|\bfor each (unit|model)\b/iu.exec(exactText);
-    prefill.per = per ? (per[1] ?? per[2])!.toLowerCase() : "any";
+  }
+  if (family.id === "usage-scope") {
+    const per = /\bper (army|unit|model)\b/iu.exec(exactText)?.[1];
+    if (per) prefill.per = per.toLowerCase();
   }
   if (family.id === "use-window") Object.assign(prefill, windowFromSource(exactText));
   if (family.id === "bearer-eligibility") {

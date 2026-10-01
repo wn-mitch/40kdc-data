@@ -68,6 +68,11 @@ unless it is needed to operate.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one selector; authoring
   does not absorb qualifiers into a broader leaf to raise completion counts.
+- **Frequency and ownership are separate qualifications.** A usage frequency records its cadence
+  without choosing army, unit or model ownership. A reviewed `usage-scope` leaf supplies the
+  allowance owner; an explicitly bound usage leaf can carry it directly. Compilation refuses an
+  unbound frequency rather than guessing an owner or turning a target-selection cap into a global
+  usage limit. Effects do not restrict reuse of the frequency wording.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.
