@@ -9,6 +9,7 @@ import { humanActor } from "../src/round5c/authority.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { confirmSurface, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { applyChatReview } from "../src/round5c/review-apply.js";
 import { inScope, parseScope } from "../src/round5c/surface-scope.js";
 
@@ -95,6 +96,25 @@ describe("Round 5C surface scope", () => {
       expect(result.failed).toEqual([]);
       expect(d6Rows(db)).toEqual(["a0", "a1"]);
       expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "retire-surface", exact_text: "Gain 1CP" }] }).failed[0]!.error).toMatch(/No active surface/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("accounts for a joining wording between leaves, never inside one, and undoes it with its batch", () => {
+    const db = fixture(["Roll one D6 and roll one D6.", "Roll one D6 and stand fast."]);
+    try {
+      confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL);
+      const id = (abilityId: string) => (db.prepare("SELECT id FROM abilities WHERE current = 1 AND ability_id = ?").get(abilityId) as { id: number }).id;
+      const unaccounted = (abilityId: string) => getAbilityCoverage(db, id(abilityId)).unaccounted.map((run) => run.text);
+      expect(unaccounted("a0")).toEqual(["and"]);
+      const result = applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "coexists-with" } as never] });
+      expect(result.failed).toEqual([]);
+      expect(unaccounted("a0")).toEqual([]);
+      // "and stand fast" is still unaccounted past the joiner; the joiner itself is not.
+      expect(unaccounted("a1").join(" ")).not.toMatch(/^and\b/u);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "not-a-relation" } as never] }).failed[0]!.error)
+        .toMatch(/not a known relation/u);
     } finally {
       db.close();
     }

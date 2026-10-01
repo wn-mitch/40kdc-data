@@ -19,7 +19,7 @@ import { RELATION_TYPES } from "../round4b/contracts.js";
 import { assertReviewer, MACHINE_REVIEWERS, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
 
 /** Relations a reviewer may record on a confirmed connective: Round 4B's set plus plain conjunction. */
-const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
+export const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
 
 /** An API-shaped failure. The local bridge returns `status` verbatim. */
 export class WorkbenchError extends Error {

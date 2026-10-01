@@ -95,10 +95,10 @@ export type ApplyReport = {
   out_of_scope?: number;
 };
 
-type AbilityContext = { source_text: string; source_type: string | null; fragments_json: string };
+export type AbilityContext = { source_text: string; source_type: string | null; fragments_json: string };
 
 /** An occurrence's own fragment, and the fragment text on either side of it, for scope checks. */
-function occurrenceContext(ability: AbilityContext, occurrence: { fragment: string; start_byte: number; end_byte: number }): OccurrenceContext {
+export function occurrenceContext(ability: AbilityContext, occurrence: { fragment: string; start_byte: number; end_byte: number }): OccurrenceContext {
   const fragment = (JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>)
     .find((item) => item.fragment === occurrence.fragment && item.start_byte <= occurrence.start_byte && occurrence.end_byte <= item.end_byte);
   const bytes = Buffer.from(ability.source_text, "utf8");
@@ -119,14 +119,14 @@ function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
   return { id: row.id, family_id: row.family_id, family_version: row.family_version, role: row.role, parameters: JSON.parse(row.parameters_json) as Record<string, unknown> };
 }
 
-function newBatch(db: DatabaseSync, reviewer: string, metadata: Record<string, unknown> = {}): string {
+export function newBatch(db: DatabaseSync, reviewer: string, metadata: Record<string, unknown> = {}): string {
   const id = `batch_${randomUUID()}`;
   db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'review', ?, ?, ?)")
     .run(id, reviewer, new Date().toISOString(), JSON.stringify(metadata));
   return id;
 }
 
-function addMember(db: DatabaseSync, batchId: string, kind: string, id: number | string): void {
+export function addMember(db: DatabaseSync, batchId: string, kind: string, id: number | string): void {
   db.prepare("INSERT OR IGNORE INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)").run(batchId, kind, String(id));
 }
 

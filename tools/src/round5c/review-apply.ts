@@ -4,6 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
 import { confirmSurface, leafSurface, retireSurface } from "./leaves.js";
+import { confirmConnectiveSurface } from "./connective-surfaces.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -26,7 +27,9 @@ export type ChatDecision = {
   description?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
-  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface";
+  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface";
+  /** For `connective-surface`: the composition relation the joiner expresses, if any. */
+  relation?: string;
   role?: string;
   family_id?: string;
   family_version?: number;
@@ -152,6 +155,12 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
           parameters: item.parameters ?? {}, ...(item.scope ? { scope: item.scope } : {}),
         }, actor);
         applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, promoted: report.promoted, out_of_scope: report.out_of_scope, blocked: report.blocked.length } } as never);
+        continue;
+      }
+      if (item.action === "connective-surface") {
+        // Joining words decided once: a connective wherever they occur between leaves, in scope.
+        const report = confirmConnectiveSurface(db, { reviewer: actor.reviewer, exact_text: String(item.exact_text ?? ""), scope: item.scope, relation: item.relation }, actor);
+        applied.push({ batch_id: report.batch_id, connective: report } as never);
         continue;
       }
       if (item.action === "retire-surface") {
