@@ -102,7 +102,7 @@ describe("Round 5C surface scope", () => {
   });
 
   it("accounts for a joining wording between leaves, never inside one, and undoes it with its batch", () => {
-    const db = fixture(["Roll one D6 and roll one D6.", "Roll one D6 and stand fast."]);
+    const db = fixture(["Roll one D6 and roll one D6.", "Roll one D6 and stand fast.", "Stand fast and hold, then roll one D6."]);
     try {
       confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL);
       const id = (abilityId: string) => (db.prepare("SELECT id FROM abilities WHERE current = 1 AND ability_id = ?").get(abilityId) as { id: number }).id;
@@ -111,6 +111,8 @@ describe("Round 5C surface scope", () => {
       const result = applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "coexists-with" } as never] });
       expect(result.failed).toEqual([]);
       expect(unaccounted("a0")).toEqual([]);
+      // A joiner touching no leaf ("stand fast and hold") is left for when its neighbours are decided.
+      expect((result.applied[0] as unknown as { connective: { applied: number; no_neighbour: number } }).connective).toMatchObject({ applied: 2, no_neighbour: 1 });
       // "and stand fast" is still unaccounted past the joiner; the joiner itself is not.
       expect(unaccounted("a1").join(" ")).not.toMatch(/^and\b/u);
       expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "not-a-relation" } as never] }).failed[0]!.error)
