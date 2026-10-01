@@ -1,6 +1,7 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
-import { UNIT_KEYWORD } from "./buff-families.js";
+/** A unit keyword as printed: upper case, any script's letters ("BRÔKHYR"), digits, apostrophes, spaces, hyphens. */
+const UNIT_KEYWORD = /^\p{Lu}[\p{Lu}\p{N}' -]*[\p{Lu}\p{N}]$/u;
 
 /**
  * The "who" of an aura or a selection, on its own leaf: "friendly **ADEPTUS CUSTODES** unit",

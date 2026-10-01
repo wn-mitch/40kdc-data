@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 // Fabricated wording only. The compiler reads nothing but the punctuation and joining words
@@ -284,6 +284,8 @@ describe("Round 5C composition rules", () => {
       ]);
       expect(aura.mechanics.effect).toMatchObject({ type: "aura", modifier: { wholly: true, eligible: { states: ["battle-shocked"], any_keywords: ["INFANTRY", "VEHICLE"] } } });
       expect(aura.rendered).toMatch(/a friendly battle-shocked INFANTRY or VEHICLE unit is wholly within 6"/u);
+      // Keywords keep accented capitals, as some factions print them.
+      expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", keywords: ["brôkhyr"] }, 1)).toEqual({ side: "friendly", keywords: ["BRÔKHYR"] });
     });
   });
 
