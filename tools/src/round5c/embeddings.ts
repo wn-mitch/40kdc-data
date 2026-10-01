@@ -58,12 +58,17 @@ export async function cachedEmbeddings(db: DatabaseSync, embedder: Embedder, tex
   if (missing.length) {
     const vectors = await embedder.embed(missing.map(([, text]) => text));
     if (vectors.length !== missing.length) throw new Error(`The embedder returned ${vectors.length} vectors for ${missing.length} texts.`);
-    const insert = db.prepare("INSERT OR REPLACE INTO text_embeddings (model, text_hash, vector) VALUES (?, ?, ?)");
-    withTransaction(db, () => missing.forEach(([hash], index) => {
-      const vector = vectors[index]!;
-      insert.run(embedder.model, hash, new Uint8Array(vector.buffer, vector.byteOffset, vector.byteLength));
-      found.set(hash, vector);
-    }));
+    missing.forEach(([hash], index) => found.set(hash, vectors[index]!));
+    // A read-only connection (a `read` command such as gates) still embeds; it just cannot keep them.
+    try {
+      const insert = db.prepare("INSERT OR REPLACE INTO text_embeddings (model, text_hash, vector) VALUES (?, ?, ?)");
+      withTransaction(db, () => missing.forEach(([hash], index) => {
+        const vector = vectors[index]!;
+        insert.run(embedder.model, hash, new Uint8Array(vector.buffer, vector.byteOffset, vector.byteLength));
+      }));
+    } catch (error) {
+      if (!/readonly/iu.test(String((error as Error).message))) throw error;
+    }
   }
   return { vectors: hashes.map((hash) => found.get(hash)!), embedded: missing.length };
 }
