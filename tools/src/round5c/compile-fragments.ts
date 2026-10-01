@@ -6,6 +6,7 @@
 import { boardEffect } from "./compile-board-effects.js";
 import { containerEffect } from "./compile-containers.js";
 import { testEffect } from "./compile-test-effects.js";
+import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 export type CompileLeaf = {
   role: string;
@@ -245,9 +246,13 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       if (leaf.family_version < 2) {
         return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }
+      if (leaf.parameters.subject === undefined) throw new CompileError("Stat adjustment needs a reviewed recipient.");
+      if (leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
+        throw new CompileError("Stat adjustment needs a reviewed weapon scope.");
+      }
       // The attack being made belongs to whoever attacks: the attacker when it targets this unit.
       const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
-      const weaponType = closed(leaf, "weapon_type");
+      const weaponType = closed(leaf, "weapon_type") ?? "all";
       const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
         type: "stat-modifier", target: owner,
         modifier: { stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}) },

@@ -13,6 +13,7 @@ import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
+import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -148,6 +149,10 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: the weapon-ability-grant frame it belongs to grants ${String(leaf.parameters.keyword)}.` };
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
     return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
+  }
+  if (leaf.family_id === "characteristic-modifier" && (leaf.parameters.subject === undefined
+    || leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat)))) {
+    return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {

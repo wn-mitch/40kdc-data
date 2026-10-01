@@ -172,6 +172,12 @@ const CHARACTERISTIC_ORDER = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", 
 
 function characteristicFromSource(text: string): Record<string, unknown> {
   const result: Record<string, unknown> = {};
+  const shorthand = /^([+\-−–])\s*(\d+)\s*(OC|Ld|AP|WS|BS|Sv|M|T|W|A|S|D)[.!]?$/iu.exec(text.replaceAll("*", "").trim());
+  if (shorthand) return {
+    characteristics: [CHARACTERISTIC_ORDER.find((stat) => stat.toLowerCase() === shorthand[3]!.toLowerCase())!],
+    operation: shorthand[1] === "+" ? "improve" : "worsen",
+    value: Number(shorthand[2]),
+  };
   const found = CHARACTERISTIC_WORDS.filter(([pattern]) => pattern.test(text)).map(([, stat]) => stat);
   if (found.length) result.characteristics = CHARACTERISTIC_ORDER.filter((stat) => found.includes(stat));
   const verb = /\b(add|subtract|improve|worsen)\b/iu.exec(text)?.[1]?.toLowerCase();

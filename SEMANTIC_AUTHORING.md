@@ -73,6 +73,12 @@ unless it is needed to operate.
   allowance owner; an explicitly bound usage leaf can carry it directly. Compilation refuses an
   unbound frequency rather than guessing an owner or turning a target-selection cap into a global
   usage limit. Effects do not restrict reuse of the frequency wording.
+- **Stat adjustments do not choose their recipient.** Signed number/stat terms accept spaced
+  and compact spellings. A bonus improves the named stat and a penalty worsens it, including
+  characteristics whose beneficial numerical direction is downward. Recipient and weapon scope
+  remain separate qualifications; explicitly reviewed bindings are retained. Compilation refuses
+  an adjustment lacking its recipient or a weapon adjustment lacking its weapon scope. Unsigned
+  stat values are not treated as bonuses.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.
