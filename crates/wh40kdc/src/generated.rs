@@ -33038,7 +33038,8 @@ for PairedUnitSelectorVariant1SelectionLimitPeriod {
 ///          "stratagem-used-this-phase",
 ///          "performing-action",
 ///          "advanced",
-///          "fell-back"
+///          "fell-back",
+///          "destroyed"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -33554,7 +33555,8 @@ for PermissionEffectModifierCountsAsMove {
 ///    "stratagem-used-this-phase",
 ///    "performing-action",
 ///    "advanced",
-///    "fell-back"
+///    "fell-back",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -33590,6 +33592,8 @@ pub enum PermissionEffectModifierDespiteItem {
     Advanced,
     #[serde(rename = "fell-back")]
     FellBack,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -33603,6 +33607,7 @@ impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
             Self::PerformingAction => f.write_str("performing-action"),
             Self::Advanced => f.write_str("advanced"),
             Self::FellBack => f.write_str("fell-back"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -33621,6 +33626,7 @@ impl ::std::str::FromStr for PermissionEffectModifierDespiteItem {
             "performing-action" => Ok(Self::PerformingAction),
             "advanced" => Ok(Self::Advanced),
             "fell-back" => Ok(Self::FellBack),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }
@@ -45024,6 +45030,10 @@ pub struct RollResultConditionParameters {
 ///    "roll"
 ///  ],
 ///  "properties": {
+///    "count": {
+///      "description": "Only one roll the player picks gets this result (\"change the result of one Hit roll to an unmodified 6\"); absent, every such roll does.",
+///      "const": 1
+///    },
 ///    "critical_on": {
 ///      "oneOf": [
 ///        {
@@ -45162,6 +45172,9 @@ pub struct RollResultConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RollResultEffectModifier {
+    ///Only one roll the player picks gets this result ("change the result of one Hit roll to an unmodified 6"); absent, every such roll does.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub critical_on: ::std::option::Option<RollResultEffectModifierCriticalOn>,
     ///An unmodified result of N or less always fails; higher results use the normal success rule.
@@ -53671,7 +53684,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "permission effect",
-///      "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
+///      "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -54673,7 +54686,7 @@ pub enum SingleEffect {
     },
     /**permission effect
 
-[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.*/
+[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.*/
     #[serde(rename = "permission")]
     Permission {
         modifier: PermissionEffectModifier,

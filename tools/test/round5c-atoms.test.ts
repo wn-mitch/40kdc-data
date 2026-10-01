@@ -196,7 +196,7 @@ describe("Round 5C structural source authority", () => {
     try {
       applyAnnotationBatch(value.db, { reviewer: REVIEWER, decisions: [
         { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("Lead-state active", source), role: "CONDITION", family_id: "leading-unit", family_version: 2, parameters: { subject: "this-model", attachment: "leading" } },
-        { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("repeat any Hit result", source), role: "EFFECT", family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "all", weapon_type: "all" } },
+        { action: "confirm", ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("repeat any Hit result", source), role: "EFFECT", family_id: "reroll", family_version: 3, parameters: { roll: "hit", subset: "all", weapon_type: "all" } },
       ] });
       const participant = proposeSourceAtom(value.db, { ability_version_id: value.id, source_hash: value.hash, fragment: "RAW_TEXT", ...bytes("squad models", source), kind: "participant", description: "who", reviewer: REVIEWER });
       accept(value, participant.proposal_id);
@@ -244,7 +244,7 @@ describe("Round 5C structural source authority", () => {
           source_hash: request.abilities[0]!.source_hash,
           spans: [
             { ...bytes("Lead-state active"), role: "CONDITION", status: "EXISTING", family_id: "leading-unit", family_version: 2, parameters: { subject: "this-model", attachment: "leading" } },
-            { ...clause, role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "all", weapon_type: "all" }, qualifier_spans: [bytes("squad modèls")] },
+            { ...clause, role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 3, parameters: { roll: "hit", subset: "all", weapon_type: "all" }, qualifier_spans: [bytes("squad modèls")] },
           ],
           structural_spans: [{ ...bytes("squad modèls"), kind: "participant", description: "who", parent_span_index: 1 }],
           connectives: [],

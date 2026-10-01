@@ -42,6 +42,12 @@ export function closed(leaf: CompileLeaf, name: string): unknown {
 /** Rolls the attacker makes; when an attack targets this unit, modifiers to them belong to the attacker. */
 const ATTACKER_ROLLS = new Set(["hit", "wound", "damage"]);
 
+/** "One Hit roll, one Wound roll or one Damage roll": the player picks one roll; each is an option with that roll alone. */
+function pickOne(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node {
+  const { rolls, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
+  return { type: "choice", options: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
+}
+
 /**
  * One effect. `subject` is who the ability's own subject resolves to: the unit when a leader
  * is attached, else the family's subject parameter. `incoming` marks an effect on attacks that
@@ -57,6 +63,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
   const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
     case "reroll": {
+      // Version 3: a pick of one from several rolls is a choice of one re-roll each.
+      if (Array.isArray(leaf.parameters.rolls)) return pickOne(leaf, context);
       const roll = closed(leaf, "roll");
       const subset = closed(leaf, "subset");
       const modifier: Node = subset === "ones" ? { roll, subset: "ones" } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
@@ -84,9 +92,11 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "ignore-modifiers", target: target(leaf.parameters.subject), modifier };
     }
     case "roll-auto-result": {
+      if (Array.isArray(leaf.parameters.rolls)) return pickOne(leaf, context);
       const roll = closed(leaf, "roll");
       const outcome = closed(leaf, "outcome");
       const modifier: Node = { roll };
+      if (leaf.parameters.count === 1) modifier.count = 1;
       if (outcome === "succeeds-on") modifier.succeeds_on = closed(leaf, "value");
       else if (outcome === "counts-as-6") modifier.result = 6;
       else modifier.result = "pass";

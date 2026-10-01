@@ -176,12 +176,12 @@ describe("Round 5C family version upgrade", () => {
       const retiredBefore = pieces(retired);
 
       const report = upgradeFamilyVersions(db);
-      // reroll also migrates now (its version 2 adds weapon_type, defaulting old leaves to "all").
+      // reroll also migrates now (2 adds weapon_type, defaulting old leaves to "all"; 3 adds the optional rolls list).
       expect(report).toMatchObject({ migrated_proposal_pieces: 3, unmapped_proposal_pieces: 1 });
       expect(pieces(open)).toEqual([
         piece("attack", 4, "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
         { text: "rest", family_id: null },
-        piece("reroll", 2, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
+        piece("reroll", 3, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);
       // weapon-ability-grant continues 3->4->5 too (4 adds optional filters/flags, 5 makes the keyword optional; identity maps).
       expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 5, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);

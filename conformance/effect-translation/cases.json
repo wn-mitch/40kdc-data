@@ -21593,6 +21593,45 @@
     }
   },
   {
+    "caseId": "fidelity/permission-despite-destroyed",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "use-stratagem",
+        "allow": true,
+        "despite": [
+          "destroyed"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to be targeted with Stratagems even if it has just been destroyed."
+    }
+  },
+  {
+    "caseId": "fidelity/roll-result-count-one",
+    "effect": {
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "count": 1,
+        "result": 6,
+        "unmodified": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, one of the unit's Hit rolls counts as an unmodified 6."
+    }
+  },
+  {
     "caseId": "fidelity/move-ends-when-either",
     "effect": {
       "type": "move",

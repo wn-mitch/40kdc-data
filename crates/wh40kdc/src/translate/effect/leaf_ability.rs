@@ -264,6 +264,7 @@ pub(super) fn despite_phrase(d: &str) -> Option<&'static str> {
         "performing-action" => "performing an Action",
         "advanced" => "Advanced this turn",
         "fell-back" => "Fell Back this turn",
+        "destroyed" => "has just been destroyed",
         _ => return None,
     })
 }

@@ -4385,7 +4385,7 @@ export interface AbilityActivateEffect {
   scaling?: Scaling;
 }
 /**
- * [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
+ * [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
  */
 export interface PermissionEffect {
   type: "permission";
@@ -4428,6 +4428,7 @@ export interface PermissionEffect {
         | "performing-action"
         | "advanced"
         | "fell-back"
+        | "destroyed"
       ),
       ...(
         | "engaged"
@@ -4439,6 +4440,7 @@ export interface PermissionEffect {
         | "performing-action"
         | "advanced"
         | "fell-back"
+        | "destroyed"
       )[]
     ];
     into?: UnitRef;

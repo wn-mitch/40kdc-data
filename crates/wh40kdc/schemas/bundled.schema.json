@@ -7186,6 +7186,10 @@
                 "unmodified": {
                   "const": true
                 },
+                "count": {
+                  "const": 1,
+                  "description": "Only one roll the player picks gets this result (\"change the result of one Hit roll to an unmodified 6\"); absent, every such roll does."
+                },
                 "fails_on": {
                   "type": "integer",
                   "minimum": 1,
@@ -7788,7 +7792,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "permission effect",
-          "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
+          "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
           "required": [
             "type",
             "target",
@@ -7854,7 +7858,8 @@
                       "stratagem-used-this-phase",
                       "performing-action",
                       "advanced",
-                      "fell-back"
+                      "fell-back",
+                      "destroyed"
                     ]
                   },
                   "minItems": 1,

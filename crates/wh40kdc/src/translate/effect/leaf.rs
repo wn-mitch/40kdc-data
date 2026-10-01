@@ -382,6 +382,26 @@ fn roll_result(m: &P, subj: &str) -> String {
             return format!("{subj} automatically {} {roll} tests", v(subj, "fails"));
         }
     }
+    // count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+    if !led && nn(m, "count").and_then(|c| c.as_f64()) == Some(1.0) {
+        let outcome = match result {
+            Some("pass") => "automatically succeeds".to_string(),
+            Some("fail") => "automatically fails".to_string(),
+            _ => format!(
+                "counts as {}{}",
+                if is_true(m, "unmodified") {
+                    "an unmodified "
+                } else {
+                    ""
+                },
+                jstr(m.get("result"))
+            ),
+        };
+        return format!(
+            "one of {}{scope} {outcome}",
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        );
+    }
     let whose = if led {
         format!("the {roll} roll for that attack")
     } else {

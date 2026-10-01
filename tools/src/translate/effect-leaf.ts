@@ -149,6 +149,12 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
     if (m.result === "pass") return `${subj} automatically ${v(subj, "passes")} ${roll} tests`;
     if (m.result === "fail") return `${subj} automatically ${v(subj, "fails")} ${roll} tests`;
   }
+  // count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+  if (m.count === 1 && !lead) {
+    const outcome = m.result === "pass" ? "automatically succeeds" : m.result === "fail" ? "automatically fails"
+      : `counts as ${m.unmodified === true ? "an unmodified " : ""}${jstr(m.result)}`;
+    return `one of ${ofOrPossessive(subj, `${roll} rolls`)}${weaponRollScope(m)} ${outcome}`;
+  }
   const whose = lead ? `the ${roll} roll for that attack` : ofOrPossessive(subj, `${roll} rolls`);
   const verb = lead ? { pass: "automatically succeeds", fail: "automatically fails" } : { pass: "automatically succeed", fail: "automatically fail" };
   if (m.result === "pass" || m.result === "fail") return `${lead}${whose}${lead ? "" : weaponRollScope(m)} ${verb[m.result]}`;
@@ -249,7 +255,7 @@ const DESPITE: Record<string, string> = {
   engaged: "within Engagement Range of enemy units", "battle-shocked": "Battle-shocked", "shot-this-phase": "has already shot this phase",
   "fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
   "stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
-  advanced: "Advanced this turn", "fell-back": "Fell Back this turn",
+  advanced: "Advanced this turn", "fell-back": "Fell Back this turn", destroyed: "has just been destroyed",
 };
 const IS_STATE = new Set(["engaged", "battle-shocked", "performing-action"]);
 const AS_IF: Record<string, string> = {

@@ -79,7 +79,7 @@ function rerollDecision(fixtureValue: Fixture, span: Span, action: "confirm" | "
     ...span,
     role: "EFFECT",
     family_id: "reroll",
-    family_version: 2,
+    family_version: 3,
     parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
@@ -102,7 +102,7 @@ function insertRetrievalProposal(fixtureValue: Fixture, span: Span): number {
     fixtureValue.db,
     "reroll",
     { roll: "hit", subset: "ones", weapon_type: "all" },
-    2,
+    3,
     span.exact_text,
   );
   const proposal = fixtureValue.db.prepare(`

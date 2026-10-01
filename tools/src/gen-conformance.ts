@@ -3617,6 +3617,18 @@ function genEffectTranslation(): void {
       },
       effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
     } },
+    // A Stratagem that can still target a unit just destroyed ("even though it was just destroyed").
+    { caseId: "fidelity/permission-despite-destroyed", effect: {
+      type: "permission",
+      target: "this-unit",
+      modifier: { activity: "use-stratagem", allow: true, despite: ["destroyed"] },
+    } },
+    // One roll the player picks gets the result ("change the result of one Hit roll to a 6").
+    { caseId: "fidelity/roll-result-count-one", effect: {
+      type: "roll-result",
+      target: "this-unit",
+      modifier: { roll: "hit", count: 1, result: 6, unmodified: true },
+    } },
     // A move that must end where a condition holds ("… either wholly within your deployment zone
     // or within range of an objective marker"): the move's ends_when.
     { caseId: "fidelity/move-ends-when-either", effect: {

@@ -61,6 +61,7 @@ _DESPITE = {
     "performing-action": "performing an Action",
     "advanced": "Advanced this turn",
     "fell-back": "Fell Back this turn",
+    "destroyed": "has just been destroyed",
 }
 _IS_STATE = frozenset({"engaged", "battle-shocked", "performing-action"})
 _AS_IF = {

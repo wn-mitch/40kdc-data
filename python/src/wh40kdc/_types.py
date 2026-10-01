@@ -1353,6 +1353,7 @@ class Modifier5(TypedDict):
     )
     result: Literal["pass", "fail"] | int
     unmodified: NotRequired[Literal[True]]
+    count: NotRequired[Literal[1]]
     fails_on: NotRequired[int]
     critical_on: NotRequired[int | Literal["success"]]
     succeeds_on: NotRequired[int]
@@ -1401,6 +1402,7 @@ class Modifier6(TypedDict):
     )
     result: NotRequired[Literal["pass", "fail"] | int]
     unmodified: NotRequired[Literal[True]]
+    count: NotRequired[Literal[1]]
     fails_on: NotRequired[int]
     critical_on: int | Literal["success"]
     succeeds_on: NotRequired[int]
@@ -1449,6 +1451,7 @@ class Modifier7(TypedDict):
     )
     result: NotRequired[Literal["pass", "fail"] | int]
     unmodified: NotRequired[Literal[True]]
+    count: NotRequired[Literal[1]]
     fails_on: NotRequired[int]
     critical_on: NotRequired[int | Literal["success"]]
     succeeds_on: int
@@ -1497,6 +1500,7 @@ class Modifier8(TypedDict):
     )
     result: NotRequired[Literal["pass", "fail"] | int]
     unmodified: NotRequired[Literal[True]]
+    count: NotRequired[Literal[1]]
     fails_on: int
     critical_on: NotRequired[int | Literal["success"]]
     succeeds_on: NotRequired[int]
@@ -3281,6 +3285,7 @@ class Modifier15(TypedDict):
                 "performing-action",
                 "advanced",
                 "fell-back",
+                "destroyed",
             ]
         ]
     ]

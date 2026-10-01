@@ -32,6 +32,8 @@ export const PERMISSION_DESPITE = [
   "engaged", "battle-shocked", "shot-this-phase", "fought-this-phase", "disembarked-this-turn",
   "stratagem-used-this-phase", "performing-action", "advanced", "fell-back",
 ] as const;
+/** Version 2 adds being just destroyed: "you can use this Stratagem on that unit even though it was just destroyed". */
+export const PERMISSION_DESPITE_V2 = [...PERMISSION_DESPITE, "destroyed"] as const;
 export const PERMISSION_AS_IF = ["shooting-phase", "snap-shooting", "fight-phase"] as const;
 /** targeting-restriction's subject: who the modifier applies to; enemy-units compiles to an owner filter. */
 export const TARGETING_RESTRICTION_SUBJECTS = ["this-unit", "this-model", "enemy-units"] as const;
@@ -168,6 +170,28 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "eligibility-permission",
+    version: 2,
+    role: "EFFECT",
+    label: "Allow or forbid an activity",
+    description: "As version 1, plus despite being just destroyed (a Stratagem can still target it). This unit or model is (or is not) eligible to shoot, charge, fight, embark, disembark, Fall Back, Advance, be targeted with Stratagems, issue Orders, attempt Rituals, use Enhancements, move, or act as an Observer, optionally even if something would normally block it, or as if in a different phase.",
+    starter: { subject: "", activity: "", allow: true },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "activity", "allow"],
+      properties: {
+        subject: { enum: SUBJECTS },
+        activity: { enum: PERMISSION_ACTIVITIES },
+        allow: { type: "boolean" },
+        despite: { type: "array", items: { enum: PERMISSION_DESPITE_V2 }, minItems: 1, uniqueItems: true },
+        as_if: { enum: PERMISSION_AS_IF },
+        stratagem: { type: "string", pattern: RULE_SLUG.source, "x-only-when": { despite: ["stratagem-used-this-phase"] } },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "targeting-restriction",
@@ -277,7 +301,7 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
         activity: enumValue(input.activity, PERMISSION_ACTIVITIES, "eligibility-permission.activity"),
         allow: booleanValue(input.allow, "eligibility-permission.allow"),
       };
-      if ("despite" in input) result.despite = enumSet(input.despite, PERMISSION_DESPITE, "eligibility-permission.despite");
+      if ("despite" in input) result.despite = enumSet(input.despite, version >= 2 ? PERMISSION_DESPITE_V2 : PERMISSION_DESPITE, "eligibility-permission.despite");
       if ("as_if" in input) result.as_if = enumValue(input.as_if, PERMISSION_AS_IF, "eligibility-permission.as_if");
       const despiteList = (result.despite as string[] | undefined) ?? [];
       const needsStratagem = despiteList.includes("stratagem-used-this-phase");

@@ -22,7 +22,7 @@ var permissionDespite = map[string]string{
 	"engaged": "within Engagement Range of enemy units", "battle-shocked": "Battle-shocked", "shot-this-phase": "has already shot this phase",
 	"fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
 	"stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
-	"advanced": "Advanced this turn", "fell-back": "Fell Back this turn",
+	"advanced": "Advanced this turn", "fell-back": "Fell Back this turn", "destroyed": "has just been destroyed",
 }
 var permissionIsState = map[string]bool{"engaged": true, "battle-shocked": true, "performing-action": true}
 var permissionAsIf = map[string]string{

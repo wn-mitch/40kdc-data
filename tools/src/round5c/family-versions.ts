@@ -138,6 +138,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "reroll", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
   // Version 4 only adds independent optional filters and flags; existing parameters still fit.
   { family: "weapon-ability-grant", from: 3, to: 4, map: (parameters) => parameters },
+  // Version 3 / 2 only add the optional rolls list (and roll-auto-result's count 1); a single roll still fits.
+  { family: "reroll", from: 2, to: 3, map: (parameters) => parameters },
+  { family: "roll-auto-result", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds being just destroyed to despite.
+  { family: "eligibility-permission", from: 1, to: 2, map: (parameters) => parameters },
   // Version 5 only makes the keyword optional; a version 4 leaf keeps its keyword.
   { family: "weapon-ability-grant", from: 4, to: 5, map: (parameters) => parameters },
   // Version 2 widens the aspect/operation enums and adds recipients/options/uses-only fields; a

@@ -300,6 +300,16 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
             return f"{subj} automatically {v(subj, 'passes')} {roll} tests"
         if m.get("result") == "fail":
             return f"{subj} automatically {v(subj, 'fails')} {roll} tests"
+    # count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+    if m.get("count") == 1 and not isinstance(m.get("count"), bool) and not lead:
+        if m.get("result") == "pass":
+            outcome = "automatically succeeds"
+        elif m.get("result") == "fail":
+            outcome = "automatically fails"
+        else:
+            unmod = "an unmodified " if m.get("unmodified") is True else ""
+            outcome = f"counts as {unmod}{jstr(m.get('result'))}"
+        return f"one of {of_or_possessive(subj, f'{roll} rolls')}{weapon_roll_scope(m)} {outcome}"
     whose = f"the {roll} roll for that attack" if lead else of_or_possessive(subj, f"{roll} rolls")
     verb = (
         {"pass": "automatically succeeds", "fail": "automatically fails"}

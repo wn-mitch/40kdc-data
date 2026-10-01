@@ -294,6 +294,17 @@ func rollResultLeaf(m map[string]any, subj string) string {
 			return subj + " automatically " + ev(subj, "fails") + " " + roll + " tests"
 		}
 	}
+	// count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+	if c, ok := m["count"].(float64); ok && c == 1 && lead == "" {
+		outcome := "counts as " + unmodifiedWord(m) + ejstr(m["result"])
+		switch m["result"] {
+		case "pass":
+			outcome = "automatically succeeds"
+		case "fail":
+			outcome = "automatically fails"
+		}
+		return "one of " + ofOrPossessive(subj, roll+" rolls") + weaponRollScope(m) + " " + outcome
+	}
 	if lead != "" {
 		whose := "the " + roll + " roll for that attack"
 		switch m["result"] {
