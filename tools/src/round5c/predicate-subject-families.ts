@@ -31,6 +31,8 @@ export const UNIT_STATES = [...UNIT_STATES_V2, "on-battlefield"] as const;
 /** unit-state version 3 subjects: "this model" is only for being on the battlefield. */
 export const STATE_SUBJECTS = ["this-model", ...PREDICATE_SUBJECTS] as const;
 export const UNIT_MARKS = ["oath-of-moment", "afflicted", "spotted", "hidden", "marked"] as const;
+/** Version 2 adds being riled up ("+1 to that roll if your unit is riled up"). */
+export const UNIT_MARKS_V2 = [...UNIT_MARKS, "riled-up"] as const;
 export const POSITION_KINDS = ["closest-eligible", "within", "beyond", "objective-range"] as const;
 const DISTANCE_KINDS = ["within", "beyond"] as const;
 export const OBJECTIVE_CONTROLLERS = ["any", "you", "opponent"] as const;
@@ -241,6 +243,21 @@ export const PREDICATE_SUBJECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { mark: { enum: UNIT_MARKS }, ...subjectAndNegation },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "unit-mark",
+    version: 2,
+    role: "CONDITION",
+    label: "Unit carries (or lacks) a mark",
+    description: "As version 1, plus riled up. This unit or the attack's target carries a named mark, such as the Oath of Moment target or Afflicted.",
+    starter: { mark: "", subject: "", negated: false },
+    parameterSchema: {
+      type: "object",
+      required: ["mark", "subject", "negated"],
+      properties: { mark: { enum: UNIT_MARKS_V2 }, ...subjectAndNegation },
+      additionalProperties: false,
+    },
   },
   {
     id: "unit-position",
@@ -401,7 +418,7 @@ export function normalizePredicateSubjectParameters(family: string, input: Recor
       return { activity: enumValue(input.activity, version >= 2 ? UNIT_ACTIVITIES : UNIT_ACTIVITIES_V1, "unit-activity.activity"), ...(version >= 3 ? wide(family) : legacy(family)) };
     case "unit-mark":
       exactKeys(input, ["mark", "subject", "negated"], family);
-      return { mark: enumValue(input.mark, UNIT_MARKS, "unit-mark.mark"), ...legacy(family) };
+      return { mark: enumValue(input.mark, version >= 2 ? UNIT_MARKS_V2 : UNIT_MARKS, "unit-mark.mark"), ...legacy(family) };
     case "unit-position": {
       const kind = enumValue(input.kind, POSITION_KINDS, "unit-position.kind");
       const common = version >= 2 ? wide(family) : legacy(family);

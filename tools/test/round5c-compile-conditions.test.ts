@@ -340,3 +340,11 @@ describe("Round 5C picked rolls and just-destroyed Stratagem targets", () => {
     expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, 1)).toThrow();
   });
 });
+
+describe("Round 5C unit-mark@2", () => {
+  it("tests for being riled up, which version 1 refused", () => {
+    const riled = compiled([leaf("CONDITION", "unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    expect(riled.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "designated", parameters: { tag: "riled-up" } } });
+    expect(() => normalizeFingerprintParameters("unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 1)).toThrow();
+  });
+});
