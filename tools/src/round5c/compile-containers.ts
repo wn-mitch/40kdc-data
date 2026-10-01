@@ -43,8 +43,15 @@ export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
 
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   const modifier: Node = { range: closed(leaf, "inches"), effect: body };
-  const keywords = leaf.parameters.keywords as string[] | undefined;
-  if (keywords?.length) modifier.eligible = { required_keywords: keywords };
+  // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
+  const filter = (leaf.parameters.filter ?? {}) as { keywords?: string[]; match?: string; excluded_keywords?: string[] };
+  if (filter.match === "any") throw new CompileError("An aura reaching units with any one of several keywords has no DSL shape; its eligible keywords must all match.");
+  if (leaf.parameters.wholly === true) throw new CompileError("An aura reaching only units wholly within its range has no DSL shape yet.");
+  const keywords = (leaf.parameters.keywords ?? filter.keywords) as string[] | undefined;
+  const eligible: Node = {};
+  if (keywords?.length) eligible.required_keywords = keywords;
+  if (filter.excluded_keywords?.length) eligible.excluded_keywords = filter.excluded_keywords;
+  if (Object.keys(eligible).length) modifier.eligible = eligible;
   // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
   if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
@@ -109,13 +116,20 @@ export function wrapRulesBundle(body: Node): Node {
  * `select-units` around the effects; one with an attack becomes a `designate-target`.
  */
 export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null } = {}): Node {
+  // select-unit v2 with a folded unit-filter (compile-unit-filters.ts): keywords all of which the
+  // unit has, or (match any) one of which it has, which only an eligibility condition can say.
+  const filter = (selection.parameters.filter ?? {}) as { keywords?: string[]; match?: string; excluded_keywords?: string[] };
+  const anyOf = filter.match === "any" ? { type: "has-keyword", parameters: { any_of: filter.keywords } } : null;
+  const eligibility = anyOf && extra.eligibility ? { operator: "and", operands: [anyOf, extra.eligibility] } : anyOf ?? extra.eligibility;
   return {
     type: "select-units",
     selector: {
       owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
       // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
       ...(extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }),
-      ...(extra.eligibility ? { eligibility: extra.eligibility } : {}),
+      ...(filter.keywords?.length && filter.match !== "any" ? { keywords: filter.keywords } : {}),
+      ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
+      ...(eligibility ? { eligibility } : {}),
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
     },
@@ -125,6 +139,9 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
 export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
+  if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
+    throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
+  }
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
   const own = attack.parameters.unit === "this-model";

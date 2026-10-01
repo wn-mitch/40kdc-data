@@ -141,6 +141,9 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Version 3 / 2 only add the optional rolls list (and roll-auto-result's count 1); a single roll still fits.
   { family: "reroll", from: 2, to: 3, map: (parameters) => parameters },
   { family: "roll-auto-result", from: 1, to: 2, map: (parameters) => parameters },
+  // aura-range 3 and select-unit 2 only make side/scope optional (a unit-filter can carry them).
+  { family: "aura-range", from: 2, to: 3, map: (parameters) => parameters },
+  { family: "select-unit", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds riled up; a version 1 mark still fits.
   { family: "unit-mark", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 only adds being just destroyed to despite.

@@ -21,6 +21,7 @@ import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from 
 import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
+import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -87,6 +88,9 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...TEST_FAMILIES,
   ...GAP_CONTAINER_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
+  ...UNIT_FILTER_FAMILIES,
+  AURA_RANGE_V3,
+  SELECT_UNIT_V2,
 ] as const;
 
 /** The version new fingerprints and model requests use for a family. */
@@ -139,7 +143,8 @@ export function normalizeFingerprintParameters(
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
     ?? normalizeAbilityModifierParameters(family, input, version)
-    ?? normalizeContainerParameters(family, input)
+    ?? normalizeContainerParameters(family, input, version)
+    ?? normalizeUnitFilterParameters(family, input)
     ?? normalizeNamedRegionParameters(family, input)
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)

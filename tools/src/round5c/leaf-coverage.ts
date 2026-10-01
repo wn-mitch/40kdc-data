@@ -158,6 +158,8 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
+  // aura-range v3's side is optional (a unit-filter can carry it); alone, only a sided aura compiles.
+  "aura-range": [{ side: "friendly", inches: 6 }, { side: "enemy", inches: 6, range_cap_inches: 9 }],
   "named-region-state": [
     {
       region_id: "flow-of-magic", owner_faction: "thousand-sons", behavior: "aura", membership_scope: "model",

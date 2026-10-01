@@ -1,4 +1,5 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
+import { normalizeSelectUnitV2 } from "./unit-filter-family.js";
 import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
 
 /**
@@ -140,6 +141,7 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
   },
   {
     id: "instead",
@@ -284,6 +286,7 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
       exactKeys(input, [], family);
       return {};
     case "select-unit": {
+      if (version >= 2) return normalizeSelectUnitV2(input);
       const distance = enumValue(input.distance, SELECT_DISTANCES, "select-unit.distance");
       exactKeys(input, distance === "within" ? ["scope", "distance", "inches", "visible"] : ["scope", "distance", "visible"], family);
       return {

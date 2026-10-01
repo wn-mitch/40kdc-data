@@ -8,6 +8,7 @@ import {
   designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
 } from "./compile-containers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
+import { foldUnitFilters } from "./compile-unit-filters.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -164,6 +165,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
   if (leaf.family_id === "roll-result") return { kind: "implicit", note: `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
+  if (leaf.family_id === "unit-filter") return { kind: "implicit", note: "No separate text: says which units the selection before it may pick, or which units the aura after it reaches." };
   if (leaf.family_id === "aura-range" || leaf.family_id === "leader-target") {
     return { kind: "implicit", note: "No separate text: wraps the rest of the ability's effects, the same way select-unit does." };
   }
@@ -203,7 +205,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldWeaponKeywords(ordered(leaves), sourceText);
+    list = foldUnitFilters(foldWeaponKeywords(ordered(leaves), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

@@ -229,6 +229,53 @@ describe("Round 5C composition rules", () => {
     });
   });
 
+  describe("unit-filter leaves naming who an aura reaches or a selection may pick", () => {
+    const filter = (phrase: string, parameters: Record<string, unknown>): Piece => [phrase, "CONDITION", "unit-filter", parameters];
+    const wound: Piece = ["that unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }];
+
+    it("gives a range-only aura its side and keywords", () => {
+      const text = "While a friendly INFANTRY unit is within 6\" of this unit, add 1 to the hit roll.";
+      const result = compiled(text, [
+        filter("friendly INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"] }),
+        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }],
+        ["add 1 to the hit roll", "EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ]);
+      expect(result.mechanics.effect).toMatchObject({ type: "aura", target: "friendly-within-aura", modifier: { range: 6, eligible: { required_keywords: ["INFANTRY"] } } });
+    });
+
+    it("lets a scope-less selection pick by keyword, any one of them through its eligibility", () => {
+      const text = "Select one friendly INFANTRY or VEHICLE unit: that unit takes 1 wound.";
+      const result = compiled(text, [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }],
+        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", keywords: ["INFANTRY", "VEHICLE"], match: "any" }), wound,
+      ]);
+      expect(result.mechanics.effect).toMatchObject({ type: "select-units", selector: {
+        owner: "friendly", count: 1, eligibility: { type: "has-keyword", parameters: { any_of: ["INFANTRY", "VEHICLE"] } },
+      } });
+      expect((result.mechanics.effect as { selector: Record<string, unknown> }).selector.keywords).toBeUndefined();
+      const all = compiled("Select one enemy MONSTER unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }], filter("enemy MONSTER unit", { side: "enemy", keywords: ["MONSTER"] }), wound,
+      ]);
+      expect(all.mechanics.effect).toMatchObject({ selector: { owner: "enemy", keywords: ["MONSTER"] } });
+      // The same range wording after a selection is its distance, not an aura.
+      const near = compiled("Select one enemy MONSTER unit within 6\" of this unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }], filter("enemy MONSTER unit", { side: "enemy", keywords: ["MONSTER"] }),
+        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }], wound,
+      ]);
+      expect(near.mechanics.effect).toMatchObject({ type: "select-units", selector: { owner: "enemy", keywords: ["MONSTER"], within_inches: 6 } });
+    });
+
+    it("refuses a filter with nothing to name, and an aura it cannot express", () => {
+      expect(failures("A friendly INFANTRY unit: that unit takes 1 wound.", [filter("friendly INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"] }), wound])[0])
+        .toMatch(/needs a select-unit right before it or an aura-range right after it/u);
+      expect(failures("While a friendly INFANTRY or VEHICLE unit is within 6\" of this unit, add 1 to the hit roll.", [
+        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", keywords: ["INFANTRY", "VEHICLE"], match: "any" }),
+        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }],
+        ["add 1 to the hit roll", "EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ])[0]).toMatch(/any one of several keywords has no DSL shape/u);
+    });
+  });
+
   it("gates one band that reaches the top face with dice-gated", () => {
     const result = compiled("Roll one D6: on a 4+, this unit takes 1 wound.", [
       ["Roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
