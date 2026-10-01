@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
-import { confirmSurface } from "./leaves.js";
+import { confirmSurface, leafSurface, retireSurface } from "./leaves.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -26,14 +26,15 @@ export type ChatDecision = {
   description?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
-  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface";
+  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface";
   role?: string;
   family_id?: string;
   family_version?: number;
   parameters?: Record<string, unknown>;
   /** New wording for a correction, located inside the proposal's fragment. */
   exact_text?: string;
-  /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere. */
+  /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere.
+   * `retire-surface` names the active surface to stop applying by its wording in `exact_text`. */
   scope?: Record<string, unknown>;
 };
 
@@ -151,6 +152,14 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
           parameters: item.parameters ?? {}, ...(item.scope ? { scope: item.scope } : {}),
         }, actor);
         applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, promoted: report.promoted, out_of_scope: report.out_of_scope, blocked: report.blocked.length } } as never);
+        continue;
+      }
+      if (item.action === "retire-surface") {
+        // Stop applying a decided wording, so it can be decided again (for example under a new scope).
+        const surface = leafSurface(String(item.exact_text ?? ""));
+        const row = db.prepare("SELECT id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as { id: number } | undefined;
+        if (!row) throw new Error(`No active surface "${surface}".`);
+        applied.push({ batch_id: retireSurface(db, { reviewer: actor.reviewer, surface_id: row.id }, actor).batch_id });
         continue;
       }
       if (item.action === "gap") {

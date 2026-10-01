@@ -229,7 +229,7 @@ const COMMANDS: Record<string, ControlCommand> = {
   },
   "review-apply": {
     effect: () => "human", usage: "review-apply <decisions.json>",
-    summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective; pilot-reviewed marks) as his own.",
+    summary: "Apply Will's decisions from a conversational review (confirm, correct, reject, novel, ambiguous, connective, add, gap, surface, retire-surface; pilot-reviewed marks) as his own.",
     run: (flags) => {
       const path = flags.positional[0];
       if (!path) throw Object.assign(new Error("review-apply needs a decisions file."), { code: "INVALID_ARGUMENT" });

@@ -9,6 +9,7 @@ import { humanActor } from "../src/round5c/authority.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { confirmSurface, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
+import { applyChatReview } from "../src/round5c/review-apply.js";
 import { inScope, parseScope } from "../src/round5c/surface-scope.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -68,6 +69,23 @@ describe("Round 5C surface scope", () => {
         .toEqual({ version: 1, not_followed_by: ["each time", "for"] });
       // The same wording under another scope is another decision, refused while this one stands.
       expect(() => confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL)).toThrow(/already decided within/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("lets a review retire a scoped surface and decide the same wording everywhere", () => {
+    const db = fixture(["Roll one D6: on a 4+, gain 1CP.", "Roll one D6 for each model in this unit."]);
+    try {
+      confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6, scope: { not_followed_by: ["for"] } }, WILL);
+      expect(d6Rows(db)).toEqual(["a0"]);
+      const result = applyChatReview(db, { reviewer: "will", decisions: [
+        { action: "retire-surface", exact_text: "Roll one D6" },
+        { action: "surface", exact_text: "Roll one D6", ...D6 },
+      ] });
+      expect(result.failed).toEqual([]);
+      expect(d6Rows(db)).toEqual(["a0", "a1"]);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "retire-surface", exact_text: "Gain 1CP" }] }).failed[0]!.error).toMatch(/No active surface/u);
     } finally {
       db.close();
     }
