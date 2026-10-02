@@ -2848,6 +2848,13 @@
         "namespace": "mfm",
         "id": "e95c1c74-6709-4575-b96c-fb2ad7133faa"
       }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 405,
+        "detachment_id": "pantheon-of-woe"
+      }
     ]
   },
   {
@@ -3616,6 +3623,13 @@
         "namespace": "mfm",
         "id": "bc0cfdf6-6607-447e-b1eb-94a4e23511ea"
       }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 380,
+        "detachment_id": "pantheon-of-woe"
+      }
     ]
   },
   {
@@ -3697,6 +3711,13 @@
       {
         "namespace": "mfm",
         "id": "65f56806-cf8c-47ef-8470-13e3ac1fc66e"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 375,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },
@@ -4103,6 +4124,22 @@
       {
         "namespace": "mfm",
         "id": "532d102e-9302-4ca0-afc0-ccc570b895d9"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 380,
+        "unit_count_min": 1,
+        "unit_count_max": 1,
+        "detachment_id": "pantheon-of-woe"
+      },
+      {
+        "models": 1,
+        "cost": 400,
+        "unit_count_min": 2,
+        "unit_count_max": null,
+        "detachment_id": "pantheon-of-woe"
       }
     ]
   },

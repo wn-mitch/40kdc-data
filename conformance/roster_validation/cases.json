@@ -186,7 +186,8 @@
       ]
     },
     "expected": [
-      "army|error|points-over-limit:roster"
+      "army|error|points-over-limit:roster",
+      "army|error|unit-limit-exceeded:daemon-prince-of-khorne"
     ]
   },
   {
@@ -571,7 +572,7 @@
   },
   {
     "name": "points-over-limit-from-wargear-costs",
-    "note": "5 Terminator Assault Squads at 10 models = 1870 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2020 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75).",
+    "note": "5 Terminator Assault Squads at 10 models = 1870 base (legal at 2000), but each squad's six storm shields (wargear_costs 5 pts each = 30/squad, +150) push the army to 2020 \u2014 over the limit. points-over-limit here is produced ONLY by charging wargear_costs over the loadout, so every port must sum them identically (issue 75). Five copies of one datasheet also exceed the strike-force unit limit of 3.",
     "args": {
       "factionId": "adeptus-astartes",
       "battleSize": "strike-force",
@@ -645,7 +646,8 @@
       ]
     },
     "expected": [
-      "army|error|points-over-limit:roster"
+      "army|error|points-over-limit:roster",
+      "army|error|unit-limit-exceeded:terminator-assault-squad"
     ]
   },
   {
@@ -762,7 +764,7 @@
   },
   {
     "name": "allied-pricing-legal-at-limit",
-    "note": "8 Vindicare Assassins in a Blood Angels host army price at their Imperium allied_points cost (125, native 110): exactly 1000 at incursion. Pins that host-army pricing selects the allied table for a foreign unit whose host_faction keyword the army's faction carries.",
+    "note": "Four Officio Assassinorum units in a Blood Angels host army price at their Imperium allied_points cost (125 + 110 + 100 + 85 = 420; native 395) beside 580 of Blood Angels units: exactly 1000 at incursion. Pins that host-army pricing selects the allied table for a foreign unit whose host_faction keyword the army's faction carries.",
     "args": {
       "factionId": "blood-angels",
       "battleSize": "incursion",
@@ -774,7 +776,7 @@
       ],
       "units": [
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "captain",
           "modelCount": 1,
           "isWarlord": true,
           "enhancementId": null,
@@ -782,7 +784,31 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "land-raider",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "infiltrator-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "incursor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "chaplain",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -798,7 +824,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "eversor-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -806,7 +832,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "callidus-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -814,23 +840,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {}
-        },
-        {
-          "unitId": "vindicare-assassin",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {}
-        },
-        {
-          "unitId": "vindicare-assassin",
+          "unitId": "culexus-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -843,7 +853,7 @@
   },
   {
     "name": "allied-pricing-points-over-limit",
-    "note": "The 9th Vindicare totals 1125 under allied pricing vs 990 native \u2014 points-over-limit fires ONLY when the Imperium allied_points entry is applied.",
+    "note": "Swapping the Chaplain (70) for a Librarian (75) totals 1005 under allied pricing vs 980 native: points-over-limit fires ONLY when the Imperium allied_points entries are applied.",
     "args": {
       "factionId": "blood-angels",
       "battleSize": "incursion",
@@ -855,7 +865,7 @@
       ],
       "units": [
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "captain",
           "modelCount": 1,
           "isWarlord": true,
           "enhancementId": null,
@@ -863,7 +873,31 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "land-raider",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "infiltrator-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "incursor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "librarian",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -879,7 +913,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "eversor-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -887,7 +921,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
+          "unitId": "callidus-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -895,31 +929,7 @@
           "counts": {}
         },
         {
-          "unitId": "vindicare-assassin",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {}
-        },
-        {
-          "unitId": "vindicare-assassin",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {}
-        },
-        {
-          "unitId": "vindicare-assassin",
-          "modelCount": 1,
-          "isWarlord": false,
-          "enhancementId": null,
-          "leaderBodyguardId": null,
-          "counts": {}
-        },
-        {
-          "unitId": "vindicare-assassin",
+          "unitId": "culexus-assassin",
           "modelCount": 1,
           "isWarlord": false,
           "enhancementId": null,
@@ -986,5 +996,1136 @@
     "expected": [
       "u0|error|enhancement-keyword-mismatch:predatory-instincts-biosanctic-broodsurge-genestealer-cults"
     ]
+  },
+  {
+    "name": "warlord-not-mandated",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "priority-assets",
+      "detachments": [
+        {
+          "id": "devoted-of-ynnead"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "yvraine",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|warlord-not-mandated:devoted-of-ynnead"
+    ]
+  },
+  {
+    "name": "legal-devoted-of-ynnead-yvraine-warlord",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "priority-assets",
+      "detachments": [
+        {
+          "id": "devoted-of-ynnead"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "yvraine",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "detachment-excluded-datasheet",
+    "args": {
+      "factionId": "chaos-daemons",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "shadow-legion"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "skarbrand",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|detachment-excluded-datasheet:skarbrand"
+    ]
+  },
+  {
+    "name": "detachment-pricing-points-over-limit",
+    "args": {
+      "factionId": "necrons",
+      "battleSize": "incursion",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "pantheon-of-woe"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "overlord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ctan-shard-of-the-deceiver",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ctan-shard-of-the-void-dragon",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "catacomb-command-barge",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "hexmark-destroyer",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|points-over-limit:roster"
+    ],
+    "note": "Native costs total 960 (legal at 1000); Pantheon of Woe's detachment_pricing raises the two C'tan Shards to 375 and 380, pushing the army to 1040. points-over-limit fires ONLY when detachment_pricing for a selected detachment replaces the native tiers."
+  },
+  {
+    "name": "legal-detachment-pricing-not-selected",
+    "args": {
+      "factionId": "necrons",
+      "battleSize": "incursion",
+      "forceDisposition": "priority-assets",
+      "detachments": [
+        {
+          "id": "cryptek-conclave"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "overlord",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ctan-shard-of-the-deceiver",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ctan-shard-of-the-void-dragon",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "catacomb-command-barge",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "hexmark-destroyer",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [],
+    "note": "The same list outside Pantheon of Woe prices from native points (960) and is legal."
+  },
+  {
+    "name": "ally-pool-not-offered",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|ally-pool-not-offered:bloodletters"
+    ]
+  },
+  {
+    "name": "legal-exclusive-pool-under-detachment",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "ally-points-over-limit",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "skarbrand",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodletters",
+          "modelCount": 10,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|ally-points-over-limit:world-eaters-khorne-daemons"
+    ],
+    "note": "Blood Legions units total 1045 (320 + 320 + 315 + 90) against the 1000 strike-force cap."
+  },
+  {
+    "name": "ally-cannot-be-warlord",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u0|error|ally-cannot-be-warlord:bloodthirster"
+    ]
+  },
+  {
+    "name": "legal-exclusive-pool-enhancement",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "khorne-daemonkin"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "bloodthirster",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "blood-forged-armour-khorne-daemonkin-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [],
+    "note": "The Blood Legions pool carries no enhancement lock: Khorne Daemonkin's Blood-Forged Armour targets BLOOD LEGIONS."
+  },
+  {
+    "name": "keyword-limit-exceeded",
+    "args": {
+      "factionId": "genestealer-cults",
+      "battleSize": "strike-force",
+      "forceDisposition": "take-and-hold",
+      "detachments": [
+        {
+          "id": "brood-brothers-auxilia"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "patriarch",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "patriarch",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|keyword-limit-exceeded:Patriarch"
+    ]
+  },
+  {
+    "name": "keyword-limit-exceeded-faction-cap",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "eldritch-raiders"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|keyword-limit-exceeded:Troupe Master"
+    ]
+  },
+  {
+    "name": "legal-keyword-limit-detachment-override",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "ghosts-of-the-webway"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Ghosts of the Webway's keyword_limit_overrides raise the Asuryani TROUPE MASTER cap from 1 to 3."
+  },
+  {
+    "name": "keyword-limit-exceeded-over-override",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "disruption",
+      "detachments": [
+        {
+          "id": "ghosts-of-the-webway"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "troupe-master",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|keyword-limit-exceeded:Troupe Master",
+      "army|error|unit-limit-exceeded:troupe-master"
+    ],
+    "note": "Four Troupe Masters exceed both Ghosts of the Webway's raised cap of 3 and the strike-force unit limit of 3."
+  },
+  {
+    "name": "ynnari-ally-pool-not-offered",
+    "args": {
+      "factionId": "aeldari",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "eldritch-raiders"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "farseer",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "yvraine",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|ally-pool-not-offered:yvraine"
+    ]
+  },
+  {
+    "name": "keyword-limit-alternatives-exceeded",
+    "args": {
+      "factionId": "tau-empire",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "retaliation-cadre"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "commander-farsight",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ethereal",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|keyword-limit-exceeded:Commander Farsight+Ethereal"
+    ],
+    "note": "An `alternatives` cap counts distinct keywords present: Farsight and an Ethereal are two of the group's alternatives against max 1. A `units` reading (units carrying every keyword) would never fire, since no unit is both."
+  },
+  {
+    "name": "legal-keyword-limit-alternatives-repeated",
+    "args": {
+      "factionId": "tau-empire",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "retaliation-cadre"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "ethereal",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ethereal",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [],
+    "note": "Two Ethereals are one alternative: an `alternatives` cap does not count units, so a units-with-any reading (which would reject this list) diverges here."
+  },
+  {
+    "name": "keyword-limit-alternatives-two-versions",
+    "args": {
+      "factionId": "astra-militarum",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "recon-element"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "commissar-graves",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "commissar-graves-on-foot",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|keyword-limit-exceeded:Commissar Graves+Commissar Graves on Foot"
+    ]
+  },
+  {
+    "name": "unit-limit-exceeded",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "incursion",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|unit-limit-exceeded:daemon-prince-of-khorne"
+    ],
+    "note": "Three copies of one datasheet against the incursion unit limit of 2 (strike force allows 3)."
+  },
+  {
+    "name": "legal-unit-limit-battleline-doubled",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [],
+    "note": "BATTLELINE doubles the strike-force unit limit from 3 to 6."
+  },
+  {
+    "name": "unit-limit-exceeded-battleline",
+    "args": {
+      "factionId": "blood-angels",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "wrath-of-the-doomed"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "captain",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "intercessor-squad",
+          "modelCount": 5,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|unit-limit-exceeded:intercessor-squad"
+    ]
+  },
+  {
+    "name": "unit-limit-exceeded-epic-hero",
+    "args": {
+      "factionId": "astra-militarum",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "recon-element"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "commissar-graves",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "commissar-graves",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|unit-limit-exceeded:commissar-graves"
+    ],
+    "note": "Every EPIC HERO has a unit limit of 1. Two copies of one Graves datasheet are one alternative to the Graves keyword cap, so only the unit limit fires."
+  },
+  {
+    "name": "enhancement-limit-exceeded",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "incursion",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "master-of-executions",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "lord-on-juggernaut",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "favoured-of-khorne-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "army|error|enhancement-limit-exceeded:roster"
+    ],
+    "note": "Three Enhancements against the incursion Enhancement limit of 2 (strike force allows 4)."
+  },
+  {
+    "name": "legal-enhancement-limit",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "incursion",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "master-of-executions",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "helm-of-brazen-ire-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "lord-on-juggernaut",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
+  },
+  {
+    "name": "enhancement-on-epic-hero",
+    "args": {
+      "factionId": "world-eaters",
+      "battleSize": "strike-force",
+      "forceDisposition": "purge-the-foe",
+      "detachments": [
+        {
+          "id": "berzerker-warband"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "daemon-prince-of-khorne",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "kharn-the-betrayer",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "berzerker-glaive-berzerker-warband-world-eaters",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|enhancement-on-epic-hero:berzerker-glaive-berzerker-warband-world-eaters"
+    ],
+    "note": "11e Select Enhancements: EPIC HERO models cannot be given Enhancements. Kh\u00e2rn is a World Eaters CHARACTER, so every other enhancement check passes."
+  },
+  {
+    "name": "enhancement-on-excluded-model",
+    "args": {
+      "factionId": "astra-militarum",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "recon-element"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "cadian-castellan",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ogryn-bodyguard",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": "survival-gear-recon-element-astra-militarum",
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": [
+      "u1|error|enhancement-on-excluded-model:survival-gear-recon-element-astra-militarum"
+    ],
+    "note": "The Ogryn Bodyguard is an ASTRA MILITARUM INFANTRY CHARACTER (every other Enhancement check passes), but its only model is excluded_from_enhancements."
+  },
+  {
+    "name": "legal-enhancement-beside-excluded-model",
+    "args": {
+      "factionId": "astra-militarum",
+      "battleSize": "strike-force",
+      "forceDisposition": "reconnaissance",
+      "detachments": [
+        {
+          "id": "recon-element"
+        }
+      ],
+      "units": [
+        {
+          "unitId": "cadian-castellan",
+          "modelCount": 1,
+          "isWarlord": true,
+          "enhancementId": "survival-gear-recon-element-astra-militarum",
+          "leaderBodyguardId": null,
+          "counts": {}
+        },
+        {
+          "unitId": "ogryn-bodyguard",
+          "modelCount": 1,
+          "isWarlord": false,
+          "enhancementId": null,
+          "leaderBodyguardId": null,
+          "counts": {}
+        }
+      ]
+    },
+    "expected": []
   }
 ]

@@ -120,5 +120,34 @@
         "id": "9e660f68-928e-43a7-8af4-915cb722ac9c"
       }
     ]
+  },
+  {
+    "id": "daemonic-icon",
+    "name": "Daemonic Icon",
+    "category": "icon",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "79b389ec-f1c4-42b1-833d-4e1b86817377"
+      }
+    ]
+  },
+  {
+    "id": "instrument-of-chaos",
+    "name": "Instrument of Chaos",
+    "game_version": {
+      "edition": "10th",
+      "dataslate": "2025-q3"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e77cb7d8-d6cd-472a-a771-91fee3e48bcd"
+      }
+    ]
   }
 ]

@@ -65,6 +65,19 @@ unless it is needed to operate.
   ability kind, the words opening the occurrence's clause, the words just before it, and the next
   words after it. It is stored with the surface and checked for every occurrence on every
   application. The same wording under a different scope is a different decision.
+- **Reuse follows approved meaning across scoped spellings.** Reapplying stored surfaces only
+  replays known wording; an uncovered alias of an approved operator needs its own scoped surface.
+  Numeric surface keys preserve positive and negative operators, including Unicode dash signs;
+  existing mathematical-minus keys retain their stored spelling.
+- **An operator decides a meaning once across its operand spellings.** A leaf operator
+  (`leaf-operators.ts`, `review-apply` action `operator`) is a worded template with typed slots
+  ("{subject} is eligible to {acts} in a turn in which it {moves}") whose every slot lists the
+  spellings it covers and the parameter value each supplies. Each occurrence's own words bind its
+  operands; a neighbouring example never does. The operator expands to scoped surfaces linked by
+  `leaf_surfaces.operator_id`, so matching, scope, blocking and undo are those of any surface. A
+  spelling whose wording another surface decides with a different meaning refuses the whole
+  operator; one decided with the same meaning stays as decided. Anaphoric spellings ("that unit",
+  "it") and spellings whose value a family's earlier decisions contradict are not slot spellings.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one selector; authoring
   does not absorb qualifiers into a broader leaf to raise completion counts.
@@ -73,12 +86,14 @@ unless it is needed to operate.
   allowance owner; an explicitly bound usage leaf can carry it directly. Compilation refuses an
   unbound frequency rather than guessing an owner or turning a target-selection cap into a global
   usage limit. Effects do not restrict reuse of the frequency wording.
-- **Stat adjustments do not choose their recipient.** Signed number/stat terms accept spaced
+- **Stat adjustments and setters do not choose their recipient.** Signed number/stat terms accept spaced
   and compact spellings. A bonus improves the named stat and a penalty worsens it, including
-  characteristics whose beneficial numerical direction is downward. Recipient and weapon scope
-  remain separate qualifications; explicitly reviewed bindings are retained. Compilation refuses
-  an adjustment lacking its recipient or a weapon adjustment lacking its weapon scope. Unsigned
-  stat values are not treated as bonuses.
+  characteristics whose beneficial numerical direction is downward. The unsigned
+  `characteristic-set@3` operand records a literal value and operation `set`; it may remain
+  unbound until a reviewed recipient (and, for weapon characteristics, weapon scope) is folded
+  in. Compilation refuses missing or conflicting bindings and never defaults a bare setter to a unit.
+  Recipient and weapon scope remain separate qualifications; explicitly reviewed bindings are retained.
+  Unsigned stat values are not treated as bonuses.
 - **Attack-property prefixes supply scope, not an effect.** A `weapon-property-scope` leaf names
   the recipient and melee, ranged or all-weapons scope. The following stat adjustment or
   weapon-ability name supplies the property. Lowering retains explicit bindings, rejects

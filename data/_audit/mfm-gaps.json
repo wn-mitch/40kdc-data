@@ -127,14 +127,6 @@
         "vengeful-brethren-hellblaster-squad",
         "vengeful-brethren-intercessor-squad"
       ],
-      "death-guard": [
-        "beasts-of-nurgle",
-        "great-unclean-one",
-        "nurglings",
-        "plague-drones",
-        "plaguebearers",
-        "rotigus"
-      ],
       "deathwatch": [
         "corvus-blackstar",
         "deathwatch-terminator-squad",
@@ -148,12 +140,7 @@
         "watch-master"
       ],
       "emperors-children": [
-        "daemonettes",
-        "defiler",
-        "fiends",
-        "keeper-of-secrets",
-        "seekers",
-        "shalaxi-helbane"
+        "defiler"
       ],
       "space-wolves": [
         "arjac-rockfist",
@@ -181,21 +168,6 @@
         "wulfen",
         "wulfen-dreadnought",
         "wulfen-with-storm-shields"
-      ],
-      "thousand-sons": [
-        "blue-horrors",
-        "flamers",
-        "kairos-fateweaver",
-        "lord-of-change",
-        "pink-horrors",
-        "screamers"
-      ],
-      "world-eaters": [
-        "bloodcrushers",
-        "bloodletters",
-        "bloodthirster",
-        "flesh-hounds",
-        "skarbrand"
       ]
     },
     "weapons": {
@@ -304,7 +276,9 @@
         "voice-eater"
       ],
       "death-guard": [
-        "icon-of-despair-aura"
+        "daemonic-icon",
+        "icon-of-despair-aura",
+        "instrument-of-chaos"
       ],
       "drukhari": [
         "cluster-caltrops",
@@ -317,7 +291,10 @@
         "stimm-needler"
       ],
       "emperors-children": [
-        "icon-of-excess"
+        "daemonic-icon",
+        "icon-of-excess",
+        "instrument-of-chaos",
+        "shining-aegis"
       ],
       "genestealer-cults": [
         "alchemicus-familiar",
@@ -384,11 +361,16 @@
       ],
       "thousand-sons": [
         "brayhorn",
+        "daemonic-icon",
         "herd-banner",
-        "icon-of-flame"
+        "icon-of-flame",
+        "instrument-of-chaos"
       ],
       "world-eaters": [
-        "icon-of-khorne"
+        "collar-of-khorne",
+        "daemonic-icon",
+        "icon-of-khorne",
+        "instrument-of-chaos"
       ]
     }
   },

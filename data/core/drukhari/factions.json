@@ -26,6 +26,26 @@
     "faction_rule_ids": [
       "power-from-pain-drukhari",
       "corsairs-and-travelling-players-drukhari"
+    ],
+    "keyword_limits": [
+      {
+        "keywords": [
+          "Death Jester"
+        ],
+        "max": 1
+      },
+      {
+        "keywords": [
+          "Shadowseer"
+        ],
+        "max": 1
+      },
+      {
+        "keywords": [
+          "Troupe Master"
+        ],
+        "max": 1
+      }
     ]
   }
 ]

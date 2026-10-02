@@ -5324,5 +5324,227 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "daemon-lord-of-nurgle-death-guard",
+    "name": "Daemon Lord of Nurgle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "great-unclean-one"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-icon-death-guard",
+    "name": "Daemonic Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "plague-drones",
+      "plaguebearers"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deaths-heads-death-guard",
+    "name": "Death\u2019s Heads",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "plague-drones"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "deluge-of-nurgle-death-guard",
+    "name": "Deluge of Nurgle",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "rotigus"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grotesque-regeneration-death-guard",
+    "name": "Grotesque Regeneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "beasts-of-nurgle"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infected-outbreak-death-guard",
+    "name": "Infected Outbreak",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "plaguebearers"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instrument-of-chaos-death-guard",
+    "name": "Instrument of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "plague-drones",
+      "plaguebearers"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mischief-makers-death-guard",
+    "name": "Mischief Makers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "nurglings"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nurgles-rot-death-guard",
+    "name": "Nurgle\u2019s Rot",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "great-unclean-one"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "virulent-blessing-death-guard",
+    "name": "Virulent Blessing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "rotigus"
+    ],
+    "faction_id": "death-guard",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

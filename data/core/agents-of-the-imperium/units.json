@@ -413,6 +413,13 @@
         "namespace": "mfm",
         "id": "1226ca12-8382-4ee5-a951-d0388b0daed6"
       }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 115,
+        "detachment_id": "veiled-blade-elimination-force"
+      }
     ]
   },
   {
@@ -1213,6 +1220,13 @@
         "namespace": "mfm",
         "id": "2863b534-dc9f-403b-8cd6-13afcc11ec40"
       }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 115,
+        "detachment_id": "veiled-blade-elimination-force"
+      }
     ]
   },
   {
@@ -1520,6 +1534,13 @@
         "namespace": "mfm",
         "id": "713e1ac7-039e-4f59-bd2a-e063a18ba7cb"
       }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 130,
+        "detachment_id": "veiled-blade-elimination-force"
+      }
     ]
   },
   {
@@ -1826,6 +1847,13 @@
       {
         "namespace": "mfm",
         "id": "f2201df4-0031-4c22-b938-38bbe0396ff0"
+      }
+    ],
+    "detachment_pricing": [
+      {
+        "models": 1,
+        "cost": 95,
+        "detachment_id": "veiled-blade-elimination-force"
       }
     ]
   },

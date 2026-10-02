@@ -899,13 +899,6 @@
         "per_models": 0
       }
     ],
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 115,
-        "host_faction": "thousand-sons"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1619,13 +1612,6 @@
         "per_models": 0
       }
     ],
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 90,
-        "host_faction": "world-eaters"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2093,38 +2079,6 @@
         "per_models": 0
       }
     ],
-    "allied_points": [
-      {
-        "models": 3,
-        "cost": 95,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 190,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 3,
-        "cost": 115,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 210,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "world-eaters"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2216,19 +2170,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 3,
-        "cost": 90,
-        "host_faction": "emperors-children"
-      },
-      {
-        "models": 4,
-        "models_max": 6,
-        "cost": 190,
-        "host_faction": "emperors-children"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2324,13 +2265,6 @@
       {
         "namespace": "mfm",
         "id": "093e7b61-40cb-4318-901e-ecda04fe2d35"
-      }
-    ],
-    "allied_points": [
-      {
-        "models": 1,
-        "cost": 315,
-        "host_faction": "world-eaters"
       }
     ]
   },
@@ -3978,13 +3912,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 10,
-        "cost": 90,
-        "host_faction": "thousand-sons"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4378,18 +4305,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "allied_points": [
-      {
-        "models": 1,
-        "cost": 70,
-        "host_faction": "death-guard"
-      },
-      {
-        "models": 2,
-        "cost": 140,
-        "host_faction": "death-guard"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4481,19 +4396,6 @@
       {
         "namespace": "mfm",
         "id": "207d1da6-aabd-40cc-96ff-6ba0f2facf95"
-      }
-    ],
-    "allied_points": [
-      {
-        "models": 5,
-        "cost": 75,
-        "host_faction": "world-eaters"
-      },
-      {
-        "models": 6,
-        "models_max": 10,
-        "cost": 150,
-        "host_faction": "world-eaters"
       }
     ]
   },

@@ -689,6 +689,207 @@ describe('valid allies (soup)', () => {
 	});
 });
 
+describe('daemon-detachment sibling pools', () => {
+	// World Eaters' Blood Legions daemons are printed in Codex: World Eaters but
+	// may be taken only under Khorne Daemonkin, through the exclusive ally pool.
+	const DAEMONS = ['bloodcrushers', 'bloodletters', 'bloodthirster', 'flesh-hounds', 'skarbrand'];
+
+	it('keeps the views out of the faction picker', () => {
+		const ids = unitsForFaction('world-eaters').map((u) => u.id);
+		for (const id of DAEMONS) expect(ids).not.toContain(id);
+		expect(ids).toContain('chaos-spawn'); // ordinary World Eaters units stay
+	});
+
+	it('offers them only under Khorne Daemonkin, as the World Eaters views', () => {
+		const base = { ...emptyBuilderState(), factionId: 'world-eaters' };
+		expect(alliesForState(base).map((g) => g.rule.id)).not.toContain('world-eaters-khorne-daemons');
+		const pool = alliesForState({ ...base, detachmentIds: ['khorne-daemonkin'] }).find(
+			(g) => g.rule.id === 'world-eaters-khorne-daemons',
+		);
+		expect(pool?.units.map((u) => u.id).sort()).toEqual(DAEMONS);
+		for (const u of pool!.units) {
+			expect(u.faction_id).toBe('world-eaters');
+			expect(u.faction_keywords).toEqual(['Blood Legions']);
+		}
+		expect(allyPointsLimit(pool!.rule, 'strike-force')).toBe(1000);
+		expect(pool!.rule.cannot_be_warlord).toBe(true);
+	});
+
+	it('leaves non-exclusive sibling pools (Harlequins) as ordinary picks', () => {
+		expect(unitsForFaction('aeldari').map((u) => u.id)).toContain('troupe');
+	});
+});
+
+describe('detachment pricing, keyword caps and unavailable pools', () => {
+	const unit = (datasheetId: string, extra: Partial<BuilderUnit> = {}): BuilderUnit => ({
+		key: `${datasheetId}-${Math.random()}`,
+		datasheetId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord: false,
+		...extra,
+	});
+
+	it("prices a C'tan Shard from Pantheon of Woe's detachment_pricing only while it is selected", () => {
+		const ctan = unit('ctan-shard-of-the-deceiver');
+		expect(unitPoints(ctan, 'necrons')).toBe(330);
+		expect(unitPoints(ctan, 'necrons', 1, ['pantheon-of-woe'])).toBe(375);
+		const state = { ...emptyBuilderState(), factionId: 'necrons', units: [ctan] };
+		expect(totalPoints({ ...state, detachmentIds: ['pantheon-of-woe'] })).toBe(375);
+		expect(totalPoints(state)).toBe(330);
+	});
+
+	it('flags a second Patriarch', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'genestealer-cults',
+			units: [unit('patriarch', { isWarlord: true }), unit('patriarch')],
+		});
+		expect(issues.some((v) => v.message === 'Patriarch: 2 included (max 1)')).toBe(true);
+	});
+
+	it("applies Ghosts of the Webway's raised Troupe Master cap", () => {
+		const tms = [unit('farseer', { isWarlord: true }), unit('troupe-master'), unit('troupe-master')];
+		const base = { ...emptyBuilderState(), factionId: 'aeldari', units: tms };
+		const capMsg = (v: { message: string }) => v.message.startsWith('Troupe Master:');
+		expect(builderViolations(base).some(capMsg)).toBe(true);
+		expect(builderViolations({ ...base, detachmentIds: ['ghosts-of-the-webway'] }).some(capMsg)).toBe(false);
+	});
+
+	it('treats Commander Farsight and Ethereals as alternatives: either, never both', () => {
+		const army = (ids: string[]) =>
+			builderViolations({
+				...emptyBuilderState(),
+				factionId: 'tau-empire',
+				units: ids.map((id, i) => unit(id, { isWarlord: i === 0 })),
+			});
+		const clash = (v: { message: string }) => /cannot be taken together/.test(v.message);
+		expect(army(['commander-farsight', 'ethereal']).some(clash)).toBe(true);
+		expect(army(['ethereal', 'ethereal']).some(clash)).toBe(false);
+		expect(army(['commander-farsight']).some(clash)).toBe(false);
+	});
+
+	it('scales the per-datasheet unit limit with battle size (Incursion 2, Strike Force 3)', () => {
+		const army = (battleSize: 'incursion' | 'strike-force') =>
+			builderViolations({
+				...emptyBuilderState(),
+				factionId: 'world-eaters',
+				battleSize,
+				units: [0, 1, 2].map((i) => unit('daemon-prince-of-khorne', { isWarlord: i === 0 })),
+			});
+		const over = (v: { message: string }) => /max 2 of a datasheet/.test(v.message);
+		expect(army('incursion').some(over)).toBe(true);
+		expect(army('strike-force').some((v) => /of a datasheet/.test(v.message))).toBe(false);
+	});
+
+	it('flags Enhancements over the battle-size limit (Incursion 2)', () => {
+		const enh = (id: string, e: string | null, w = false) => unit(id, { enhancementId: e, isWarlord: w });
+		const units = [
+			enh('daemon-prince-of-khorne', 'berzerker-glaive-berzerker-warband-world-eaters', true),
+			enh('master-of-executions', 'helm-of-brazen-ire-berzerker-warband-world-eaters'),
+			enh('lord-on-juggernaut', 'favoured-of-khorne-berzerker-warband-world-eaters'),
+		];
+		const state = { ...emptyBuilderState(), factionId: 'world-eaters', detachmentIds: ['berzerker-warband'], units };
+		const over = (v: { message: string }) => v.message === '3 Enhancements (max 2)';
+		expect(builderViolations({ ...state, battleSize: 'incursion' }).some(over)).toBe(true);
+		expect(builderViolations({ ...state, battleSize: 'strike-force' }).some((v) => /Enhancements \(max/.test(v.message))).toBe(false);
+	});
+
+	it('treats a unit whose models are all excluded_from_enhancements as unable to take one', () => {
+		const ogryn = unitRaw('ogryn-bodyguard', undefined, 'astra-militarum')!;
+		expect(eligibleEnhancements(['recon-element'], ogryn, [], 'astra-militarum')).toEqual([]);
+		const castellan = unitRaw('cadian-castellan', undefined, 'astra-militarum')!;
+		expect(eligibleEnhancements(['recon-element'], castellan, [], 'astra-militarum').length).toBeGreaterThan(0);
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'astra-militarum',
+			detachmentIds: ['recon-element'],
+			units: [
+				unit('cadian-castellan', { isWarlord: true }),
+				unit('ogryn-bodyguard', { enhancementId: 'survival-gear-recon-element-astra-militarum' }),
+			],
+		});
+		expect(issues.some((v) => v.message === 'Ogryn Bodyguard cannot take Enhancements')).toBe(true);
+	});
+
+	it('flags an allied unit whose rule is no longer offered', () => {
+		const bloodletters = unit('bloodletters', {
+			factionId: 'world-eaters',
+			allyRuleId: 'world-eaters-khorne-daemons',
+			modelCount: 10,
+		});
+		const state = { ...emptyBuilderState(), factionId: 'world-eaters', units: [bloodletters] };
+		const unavailable = (v: { message: string }) => /is not available to this army/.test(v.message);
+		expect(builderViolations({ ...state, detachmentIds: ['khorne-daemonkin'] }).some(unavailable)).toBe(false);
+		expect(builderViolations(state).some(unavailable)).toBe(true);
+	});
+});
+
+describe('detachment Warlord rules and exclusions', () => {
+	const ally = (datasheetId: string, factionId: string, allyRuleId: string, isWarlord: boolean): BuilderUnit => ({
+		key: datasheetId,
+		datasheetId,
+		factionId,
+		allyRuleId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord,
+	});
+	const own = (datasheetId: string, isWarlord: boolean): BuilderUnit => ({
+		key: datasheetId,
+		datasheetId,
+		modelCount: 1,
+		loadout: new Map(),
+		enhancementId: null,
+		isWarlord,
+	});
+
+	it('offers Ynnari only under Devoted of Ynnead, never as ordinary Aeldari picks', () => {
+		expect(unitsForFaction('aeldari').map((u) => u.id)).not.toContain('yvraine');
+		const base = { ...emptyBuilderState(), factionId: 'aeldari' };
+		expect(alliesForState(base).map((g) => g.rule.id)).not.toContain('aeldari-ynnari');
+		const pool = alliesForState({ ...base, detachmentIds: ['devoted-of-ynnead'] }).find(
+			(g) => g.rule.id === 'aeldari-ynnari',
+		);
+		expect(pool?.units.map((u) => u.id)).toContain('yvraine');
+	});
+
+	it("lets Devoted of Ynnead's mandated Warlord override the Ynnari pool's Warlord lock", () => {
+		const yvraine = ally('yvraine', 'aeldari', 'aeldari-ynnari', true);
+		expect(canBeWarlord(yvraine, ['devoted-of-ynnead'], 'aeldari')).toBe(true);
+		expect(canBeWarlord(yvraine, [], 'aeldari')).toBe(false);
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'aeldari',
+			detachmentIds: ['devoted-of-ynnead'],
+			units: [yvraine],
+		});
+		expect(issues.some((v) => /cannot be Warlord|Warlord must be/.test(v.message))).toBe(false);
+	});
+
+	it('flags a Devoted of Ynnead army whose Warlord is not Yvraine or the Yncarne', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'aeldari',
+			detachmentIds: ['devoted-of-ynnead'],
+			units: [own('farseer', true), ally('yvraine', 'aeldari', 'aeldari-ynnari', false)],
+		});
+		expect(issues.some((v) => /Devoted of Ynnead: Warlord must be/.test(v.message))).toBe(true);
+	});
+
+	it('flags a datasheet the selected detachment excludes', () => {
+		const issues = builderViolations({
+			...emptyBuilderState(),
+			factionId: 'chaos-daemons',
+			detachmentIds: ['shadow-legion'],
+			units: [own('bloodthirster', true), own('skarbrand', false)],
+		});
+		expect(issues.some((v) => /Shadow Legion: Skarbrand cannot be included/.test(v.message))).toBe(true);
+	});
+});
+
 describe('shared Chaos datasheets resolve to the army faction', () => {
 	// Chaos Spawn / Master of Executions / Rhino share one datasheet id across
 	// several Chaos faction files with different faction_keywords. Own-army units

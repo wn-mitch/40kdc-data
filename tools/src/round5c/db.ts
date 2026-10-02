@@ -761,6 +761,7 @@ export function initializeWorkbench(db: DatabaseSync): void {
   upgradeAuthority(db);
   upgradeDuplicateCopyLink(db);
   upgradeSurfaceScope(db);
+  upgradeSurfaceOperator(db);
   db.exec(AUTHORITY_INDEXES);
   withTransaction(db, () => upgradeDataEpoch(db));
   initialized.add(db);
@@ -779,6 +780,13 @@ function upgradeDuplicateCopyLink(db: DatabaseSync): void {
 function upgradeSurfaceScope(db: DatabaseSync): void {
   const columns = new Set((db.prepare("PRAGMA table_info(leaf_surfaces)").all() as Array<{ name: string }>).map((column) => column.name));
   if (!columns.has("scope_json")) db.exec("ALTER TABLE leaf_surfaces ADD COLUMN scope_json TEXT CHECK(scope_json IS NULL OR json_valid(scope_json))");
+}
+
+/** The operator a surface instantiates (leaf-operators.ts); nullable, so `ADD COLUMN` suffices. */
+function upgradeSurfaceOperator(db: DatabaseSync): void {
+  const columns = new Set((db.prepare("PRAGMA table_info(leaf_surfaces)").all() as Array<{ name: string }>).map((column) => column.name));
+  if (!columns.has("operator_id")) db.exec("ALTER TABLE leaf_surfaces ADD COLUMN operator_id INTEGER REFERENCES leaf_operators(id) ON UPDATE RESTRICT ON DELETE RESTRICT");
+  db.exec("CREATE INDEX IF NOT EXISTS leaf_surfaces_operator ON leaf_surfaces(operator_id) WHERE operator_id IS NOT NULL");
 }
 
 /**

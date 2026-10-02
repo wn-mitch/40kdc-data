@@ -2441,5 +2441,436 @@
         "id": "c1293a75-ad62-442b-b6ea-d9303fdf2e52"
       }
     ]
+  },
+  {
+    "id": "bloodcrushers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5d70ec64-046f-4454-9024-2a5b3c98580d"
+      }
+    ],
+    "name": "Bloodcrushers",
+    "faction_id": "world-eaters",
+    "profiles": [
+      {
+        "name": "Bloodcrusher",
+        "M": 10,
+        "T": 7,
+        "W": 4,
+        "Sv": 3,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 95,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 3,
+        "cost": 115,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 210,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodcrushers"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellblade",
+      "juggernauts-bladed-horn"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 90,
+      "length": 52.5
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      "brass-stampede-world-eaters",
+      {
+        "id": "daemonic-icon-world-eaters",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-world-eaters",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "bloodletters",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d40f017b-61dc-4bc4-98c9-44d6cd78b7ad"
+      }
+    ],
+    "name": "Bloodletters",
+    "faction_id": "world-eaters",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Bloodletter",
+        "M": 8,
+        "T": 4,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodletters"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellblade"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      "bane-of-cowards-world-eaters",
+      {
+        "id": "daemonic-icon-world-eaters",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-world-eaters",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "bloodthirster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fdbbd4fa-7f3e-4b4f-ac05-0e8ee653b8ea"
+      }
+    ],
+    "name": "Bloodthirster",
+    "faction_id": "world-eaters",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Bloodthirster",
+        "M": 12,
+        "T": 11,
+        "W": 18,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 320,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 335,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Bloodthirster"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "hellfire-breath",
+      "great-axe-of-khorne",
+      "bloodflail",
+      "axe-of-khorne",
+      "lash-of-khorne"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 120,
+      "length": 92
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-khorne-world-eaters",
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "relentless-carnage-world-eaters"
+    ]
+  },
+  {
+    "id": "flesh-hounds",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "be8c889b-4d53-46a2-a96f-6bd15c96cd7d"
+      }
+    ],
+    "name": "Flesh Hounds",
+    "faction_id": "world-eaters",
+    "profiles": [
+      {
+        "name": "Flesh Hound",
+        "M": 12,
+        "T": 4,
+        "W": 2,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 5,
+        "cost": 75
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 150
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Chaos",
+      "Daemon",
+      "Khorne",
+      "Summoned",
+      "Flesh Hounds"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 5,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "burning-roar",
+      "gore-drenched-fangs"
+    ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
+    "ability_ids": [
+      {
+        "id": "collar-of-khorne-world-eaters",
+        "wargear": "collar-of-khorne"
+      },
+      "deep-strike",
+      "hunters-from-the-warp-world-eaters"
+    ]
+  },
+  {
+    "id": "skarbrand",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "950d3e3d-e4cb-4ff0-aa3a-df8d0552de41"
+      }
+    ],
+    "name": "Skarbrand",
+    "faction_id": "world-eaters",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Skarbrand",
+        "M": 10,
+        "T": 11,
+        "W": 20,
+        "Sv": 3,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 315
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Chaos",
+      "Khorne",
+      "Daemon",
+      "Summoned",
+      "Skarbrand"
+    ],
+    "faction_keywords": [
+      "Blood Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "bellow-of-endless-fury",
+      "slaughter-and-carnage"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "ability_ids": [
+      "damaged-1-7-wounds-remaining-world-eaters",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "murderlust-world-eaters",
+      "rage-embodied-world-eaters"
+    ]
   }
 ]

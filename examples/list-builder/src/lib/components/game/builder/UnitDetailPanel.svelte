@@ -36,7 +36,7 @@ const enhancements = $derived(
 	unit ? eligibleEnhancements(draft.detachmentIds, raw, unit.selectedGrants ?? [], armyFaction) : [],
 );
 const points = $derived(
-	unit ? unitPoints(unit, armyFaction, unitOrdinals(draft.units).get(unit.key)) : 0,
+	unit ? unitPoints(unit, armyFaction, unitOrdinals(draft.units).get(unit.key), draft.detachmentIds) : 0,
 );
 const modelRange = $derived(raw?.model_count ?? null);
 const warlordEligible = $derived(unit ? canBeWarlord(unit, draft.detachmentIds, armyFaction) : false);

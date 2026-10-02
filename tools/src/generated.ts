@@ -434,6 +434,10 @@ export type GameModes1 = [GameModeId, ...GameModeId[]];
  */
 export type GameModes2 = [GameModeId, ...GameModeId[]];
 /**
+ * Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
+ */
+export type KeywordList6 = Keyword[];
+/**
  * Eligibility predicate for which units may perform the action.
  */
 export type AbilityDSLCondition = SimpleCondition | CompoundCondition;
@@ -792,11 +796,11 @@ export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
-export type KeywordList6 = Keyword[];
+export type KeywordList7 = Keyword[];
 /**
  * OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.
  */
-export type KeywordList7 = Keyword[];
+export type KeywordList8 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -858,21 +862,21 @@ export type GameModes6 = [GameModeId, ...GameModeId[]];
  *
  * @minItems 1
  */
-export type KeywordList8 = [Keyword, ...Keyword[]];
+export type KeywordList9 = [Keyword, ...Keyword[]];
 /**
  * The keyword does not apply when the target has any listed keyword.
  */
-export type KeywordList9 = Keyword[];
+export type KeywordList10 = Keyword[];
 /**
  * The profile can target a unit carrying at least one listed keyword.
  *
  * @minItems 1
  */
-export type KeywordList10 = [Keyword, ...Keyword[]];
+export type KeywordList11 = [Keyword, ...Keyword[]];
 /**
  * The profile cannot target a unit carrying any listed keyword.
  */
-export type KeywordList11 = Keyword[];
+export type KeywordList12 = Keyword[];
 /**
  * Game modes this weapon is legal or authored for; absent implies matched-play.
  *
@@ -1841,6 +1845,10 @@ export interface AlliedRule {
    */
   max_units?: number | null;
   /**
+   * True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.
+   */
+  exclusive?: boolean;
+  /**
    * True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings).
    */
   cannot_be_warlord?: boolean;
@@ -1993,6 +2001,25 @@ export interface Detachment {
    * Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum.
    */
   unit_minimums?: UnitMinimum[];
+  /**
+   * While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.
+   */
+  mandatory_warlord_datasheet_ids?: EntityId[];
+  /**
+   * Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.
+   */
+  granted_warlord_datasheet_ids?: EntityId[];
+  /**
+   * Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.
+   */
+  keyword_limit_overrides?: {
+    keywords: KeywordList;
+    max: number;
+  }[];
+  /**
+   * Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.
+   */
+  excluded_datasheet_ids?: EntityId[];
   game_version: GameVersionReference;
   game_modes?: GameModes1;
 }
@@ -2059,6 +2086,18 @@ export interface Faction {
    * @minItems 1
    */
   faction_rule_ids: [EntityId, ...EntityId[]];
+  /**
+   * Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.
+   */
+  keyword_limits?: {
+    keywords: KeywordList;
+    max: number;
+    /**
+     * How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+     */
+    mode?: "units" | "alternatives";
+    exempt_faction_keywords?: KeywordList6;
+  }[];
   /**
    * Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
    */
@@ -5829,8 +5868,8 @@ export interface StratagemTargetRestriction {
    * Kebab-case identifier
    */
   name?: string;
-  required_keywords?: KeywordList6;
-  required_keywords_any?: KeywordList7;
+  required_keywords?: KeywordList7;
+  required_keywords_any?: KeywordList8;
   excluded_keywords?: KeywordList;
   /**
    * How many targets are selected: one, one or more, or up to `count_max`.
@@ -6217,6 +6256,10 @@ export interface UnitComposition {
        */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      /**
+       * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+       */
+      excluded_from_enhancements?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
@@ -6313,6 +6356,10 @@ export interface UnitComposition {
        */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      /**
+       * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+       */
+      excluded_from_enhancements?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
@@ -6593,6 +6640,20 @@ export interface Unit {
     unit_count_max?: number | null;
   }[];
   /**
+   * 11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.
+   */
+  detachment_pricing?: {
+    /**
+     * Kebab-case identifier
+     */
+    detachment_id: string;
+    models: number;
+    cost: number;
+    models_max?: number;
+    unit_count_min?: number;
+    unit_count_max?: number | null;
+  }[];
+  /**
    * True when point costs are carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate.
    */
   points_provisional?: boolean;
@@ -6794,16 +6855,16 @@ export interface Weapon {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
-          required_target_keywords_any?: KeywordList8;
-          excluded_target_keywords?: KeywordList9;
+          required_target_keywords_any?: KeywordList9;
+          excluded_target_keywords?: KeywordList10;
         };
       }[];
       /**
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList10;
-        excluded_keywords?: KeywordList11;
+        required_keywords_any?: KeywordList11;
+        excluded_keywords?: KeywordList12;
       } | null;
     },
     ...{
@@ -6830,16 +6891,16 @@ export interface Weapon {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
-          required_target_keywords_any?: KeywordList8;
-          excluded_target_keywords?: KeywordList9;
+          required_target_keywords_any?: KeywordList9;
+          excluded_target_keywords?: KeywordList10;
         };
       }[];
       /**
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList10;
-        excluded_keywords?: KeywordList11;
+        required_keywords_any?: KeywordList11;
+        excluded_keywords?: KeywordList12;
       } | null;
     }[]
   ];

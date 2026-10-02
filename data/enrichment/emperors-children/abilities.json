@@ -6334,5 +6334,227 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "daemon-lord-of-slaanesh-emperors-children",
+    "name": "Daemon Lord of Slaanesh",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "keeper-of-secrets"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-icon-emperors-children",
+    "name": "Daemonic Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "daemonettes",
+      "seekers"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "horrifying-beauty-emperors-children",
+    "name": "Horrifying Beauty",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "daemonettes"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instrument-of-chaos-emperors-children",
+    "name": "Instrument of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "daemonettes",
+      "seekers"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mesmerising-form-emperors-children",
+    "name": "Mesmerising Form",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "keeper-of-secrets"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "monarch-of-the-hunt-emperors-children",
+    "name": "Monarch of the Hunt",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "shalaxi-helbane"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "no-prey-can-evade-emperors-children",
+    "name": "No Prey Can Evade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "shalaxi-helbane"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shining-aegis-emperors-children",
+    "name": "Shining Aegis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "keeper-of-secrets"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "soporific-musk-emperors-children",
+    "name": "Soporific Musk",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "fiends"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unholy-speed-emperors-children",
+    "name": "Unholy Speed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "seekers"
+    ],
+    "faction_id": "emperors-children",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

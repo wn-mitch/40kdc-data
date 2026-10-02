@@ -4005,6 +4005,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///      "description": "A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).",
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "exclusive": {
+///      "description": "True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
 ///    },
@@ -4139,6 +4144,9 @@ pub struct AlliedRule {
     ///A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.
+    #[serde(default)]
+    pub exclusive: bool,
     pub game_version: GameVersionRef,
     pub id: EntityId,
     ///Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
@@ -13553,6 +13561,14 @@ pub struct DestructionRuleEffectModifier {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
 ///    },
+///    "excluded_datasheet_ids": {
+///      "description": "Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "external_refs": {
 ///      "$ref": "#/$defs/external-reference-list"
 ///    },
@@ -13581,8 +13597,45 @@ pub struct DestructionRuleEffectModifier {
 ///        "$ref": "#/$defs/granted-keyword"
 ///      }
 ///    },
+///    "granted_warlord_datasheet_ids": {
+///      "description": "Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "keyword_limit_overrides": {
+///      "description": "Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "keywords",
+///          "max"
+///        ],
+///        "properties": {
+///          "keywords": {
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "max": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "mandatory_warlord_datasheet_ids": {
+///      "description": "While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
 ///    },
 ///    "name": {
 ///      "type": "string",
@@ -13651,6 +13704,9 @@ pub struct Detachment {
     pub detachment_rule_ids: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub enhancement_ids: ::std::vec::Vec<EntityId>,
+    ///Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub external_refs: ::std::option::Option<ExternalReferenceList>,
     pub faction_id: EntityId,
@@ -13664,7 +13720,16 @@ pub struct Detachment {
     ///Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub granted_keywords: ::std::vec::Vec<GrantedKeyword>,
+    ///Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub granted_warlord_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     pub id: EntityId,
+    ///Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keyword_limit_overrides: ::std::vec::Vec<DetachmentKeywordLimitOverridesItem>,
+    ///While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mandatory_warlord_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     pub name: DetachmentName,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub restrictions: ::std::option::Option<DetachmentRestrictions>,
@@ -13676,6 +13741,36 @@ pub struct Detachment {
     ///Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub unit_minimums: ::std::vec::Vec<UnitMinimum>,
+}
+///`DetachmentKeywordLimitOverridesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keywords",
+///    "max"
+///  ],
+///  "properties": {
+///    "keywords": {
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "max": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DetachmentKeywordLimitOverridesItem {
+    pub keywords: KeywordList,
+    pub max: u64,
 }
 ///`DetachmentName`
 ///
@@ -18269,6 +18364,39 @@ impl<'de> ::serde::Deserialize<'de> for ExternalReferenceNamespace {
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "keyword_limits": {
+///      "description": "Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "keywords",
+///          "max"
+///        ],
+///        "properties": {
+///          "exempt_faction_keywords": {
+///            "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).",
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "keywords": {
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "max": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "mode": {
+///            "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///            "default": "units",
+///            "enum": [
+///              "units",
+///              "alternatives"
+///            ]
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
@@ -18311,6 +18439,9 @@ pub struct Faction {
     pub faction_rule_ids: Vec<EntityId>,
     pub game_version: GameVersionRef,
     pub id: EntityId,
+    ///Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keyword_limits: ::std::vec::Vec<FactionKeywordLimitsItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keywords: ::std::option::Option<KeywordList>,
     ///URL to the faction's logo/emblem image.
@@ -18444,6 +18575,136 @@ for FactionArmyConstructionRulesItemAdditionalKeywordSource {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`FactionKeywordLimitsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keywords",
+///    "max"
+///  ],
+///  "properties": {
+///    "exempt_faction_keywords": {
+///      "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "keywords": {
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "max": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "mode": {
+///      "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///      "default": "units",
+///      "enum": [
+///        "units",
+///        "alternatives"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct FactionKeywordLimitsItem {
+    ///Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exempt_faction_keywords: ::std::option::Option<KeywordList>,
+    pub keywords: KeywordList,
+    pub max: u64,
+    ///How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+    #[serde(default = "defaults::faction_keyword_limits_item_mode")]
+    pub mode: FactionKeywordLimitsItemMode,
+}
+///How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///  "default": "units",
+///  "enum": [
+///    "units",
+///    "alternatives"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum FactionKeywordLimitsItemMode {
+    #[serde(rename = "units")]
+    Units,
+    #[serde(rename = "alternatives")]
+    Alternatives,
+}
+impl ::std::fmt::Display for FactionKeywordLimitsItemMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Units => f.write_str("units"),
+            Self::Alternatives => f.write_str("alternatives"),
+        }
+    }
+}
+impl ::std::str::FromStr for FactionKeywordLimitsItemMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "units" => Ok(Self::Units),
+            "alternatives" => Ok(Self::Alternatives),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for FactionKeywordLimitsItemMode {
+    fn default() -> Self {
+        FactionKeywordLimitsItemMode::Units
     }
 }
 ///`FactionName`
@@ -62930,6 +63191,52 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerSourceAbilityOwne
 ///        "additionalProperties": false
 ///      }
 ///    },
+///    "detachment_pricing": {
+///      "description": "11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "cost",
+///          "detachment_id",
+///          "models"
+///        ],
+///        "properties": {
+///          "cost": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "detachment_id": {
+///            "description": "The detachment whose selection puts this cost in effect.",
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "models": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "models_max": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "unit_count_max": {
+///            "oneOf": [
+///              {
+///                "type": "integer",
+///                "minimum": 1.0
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
+///          },
+///          "unit_count_min": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "excluded_faction_keywords": {
 ///      "description": "Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.",
 ///      "oneOf": [
@@ -63264,6 +63571,9 @@ pub struct Unit {
     ///Keywords granted to this unit only when roster construction satisfies the source condition. Conditions are conjunctive within an entry; entries are independent grants.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub conditional_keywords: ::std::vec::Vec<UnitConditionalKeywordsItem>,
+    ///11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub detachment_pricing: ::std::vec::Vec<UnitDetachmentPricingItem>,
     ///Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_faction_keywords: ::std::option::Option<KeywordList>,
@@ -63614,6 +63924,11 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
 ///              "$ref": "#/$defs/entity-id"
 ///            }
 ///          },
+///          "excluded_from_enhancements": {
+///            "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.",
+///            "default": false,
+///            "type": "boolean"
+///          },
 ///          "hull_shape_id": {
 ///            "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
 ///            "oneOf": [
@@ -63821,6 +64136,11 @@ pub struct UnitComposition {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
 ///    },
+///    "excluded_from_enhancements": {
+///      "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "hull_shape_id": {
 ///      "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
 ///      "oneOf": [
@@ -63948,6 +64268,9 @@ pub struct UnitCompositionModelsItem {
     ///The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
+    ///True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+    #[serde(default)]
+    pub excluded_from_enhancements: bool,
     ///Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hull_shape_id: ::std::option::Option<EntityId>,
@@ -64666,6 +64989,69 @@ pub struct UnitConditionalKeywordsItem {
     pub required_detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_faction_keyword: ::std::option::Option<Keyword>,
+}
+///`UnitDetachmentPricingItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "cost",
+///    "detachment_id",
+///    "models"
+///  ],
+///  "properties": {
+///    "cost": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "detachment_id": {
+///      "description": "The detachment whose selection puts this cost in effect.",
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "models": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "models_max": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "unit_count_max": {
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "unit_count_min": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitDetachmentPricingItem {
+    pub cost: u64,
+    ///The detachment whose selection puts this cost in effect.
+    pub detachment_id: EntityId,
+    pub models: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models_max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit_count_max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit_count_min: ::std::option::Option<::std::num::NonZeroU64>,
 }
 ///Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
 ///
@@ -69109,6 +69495,9 @@ pub mod defaults {
     }
     pub(super) fn dice_gated_effect_comparison() -> super::DiceGatedEffectComparison {
         super::DiceGatedEffectComparison::Gte
+    }
+    pub(super) fn faction_keyword_limits_item_mode() -> super::FactionKeywordLimitsItemMode {
+        super::FactionKeywordLimitsItemMode::Units
     }
     pub(super) fn for_each_unit_effect_selector_keyword_match() -> super::ForEachUnitEffectSelectorKeywordMatch {
         super::ForEachUnitEffectSelectorKeywordMatch::All

@@ -146,6 +146,22 @@
     ],
     "detachment_rule_ids": [
       "first-prince-of-chaos-chaos-daemons"
+    ],
+    "excluded_datasheet_ids": [
+      "daemon-prince-of-chaos",
+      "daemon-prince-of-chaos-with-wings",
+      "epidemius",
+      "horticulous-slimux",
+      "kairos-fateweaver",
+      "karanak",
+      "rotigus",
+      "shalaxi-helbane",
+      "skarbrand",
+      "skulltaker",
+      "syllesske",
+      "the-blue-scribes",
+      "the-changeling",
+      "the-masque-of-slaanesh"
     ]
   },
   {

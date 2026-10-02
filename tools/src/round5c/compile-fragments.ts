@@ -126,8 +126,16 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       if (!pool) throw new CompileError(`Resource ${String(resource)} has no DSL pool yet.`);
       return { type: "resource-gain", target: "this-model", modifier: { pool, amount } };
     }
-    case "characteristic-set":
-      return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: "set", value: closed(leaf, "value") } };
+    case "characteristic-set": {
+      const subject = leaf.parameters.subject;
+      const characteristic = closed(leaf, "characteristic");
+      const weaponType = leaf.parameters.weapon_type;
+      if (leaf.family_version >= 3 && subject === undefined) throw new CompileError("Characteristic setter needs a reviewed recipient.");
+      if (leaf.family_version >= 3 && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
+        throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
+      }
+      return { type: "stat-modifier", target: target(subject), modifier: { stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) } };
+    }
     case "weapon-ability-grant": {
       const weaponType = closed(leaf, "weapon_type");
       const weaponName = leaf.parameters.weapon_name;

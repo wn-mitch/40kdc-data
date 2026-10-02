@@ -6,6 +6,11 @@
  *   - restrictions.required_keywords ← detachment_faction_keyword (applicability)
  *   - tags                           ← detachment_unique_keyword (mutual-exclusivity)
  *   - detachment_rule_ids            ← detachment_rule (named rule → ability link)
+ *   - mandatory_warlord_datasheet_ids ← detachment_mandatory_warlord_miniature
+ *   - granted_warlord_datasheet_ids   ← detachment_granted_warlord_miniature
+ *   - excluded_datasheet_ids          ← detachment_excluded_datasheet
+ *   - keyword_limit_overrides         ← restriction_group_detachment_limit.maxRosterLimit
+ *     (authoritative; each miniature/datasheet resolves to a repo unit id by name slug)
  *
  * ── detachment_rule_ids: structural rule-ability association ──
  * detachment_rule lists the named rule(s) a detachment carries. The rule PROSE is
@@ -75,7 +80,129 @@ interface DetRecord {
   detachment_rule_id?: string | null;
   detachment_rule_ids?: string[] | null;
   restrictions?: DetachmentRestrictions | null;
+  mandatory_warlord_datasheet_ids?: string[];
+  granted_warlord_datasheet_ids?: string[];
+  excluded_datasheet_ids?: string[];
+  keyword_limit_overrides?: { keywords: string[]; max: number }[];
   [k: string]: unknown;
+}
+
+/**
+ * Replacement army-wide keyword caps a detachment sets, from
+ * `restriction_group_detachment_limit` rows with a `maxRosterLimit` (Ghosts of the
+ * Webway: up to three of each Harlequin leader). The restriction group's keyword rows
+ * give `keywords`, matching the faction's `keyword_limits` entry they replace. A
+ * `minRosterLimit` row (Houndpack Lance: three or more WAR DOG units) is a minimum,
+ * carried by `unit_minimums`, and is not projected here. Sorted for a stable diff.
+ */
+export function keywordLimitOverridesForDetachment(
+  dump: MfmDump,
+  detId: string,
+): { keywords: string[]; max: number }[] {
+  const kwByGroup = dump.groupBy("keyword_restriction_group_keyword", "keywordRestrictionGroupId");
+  const out: { keywords: string[]; max: number }[] = [];
+  for (const r of dump.table("restriction_group_detachment_limit")) {
+    if (r.detachmentId !== detId || r.maxRosterLimit === null || r.maxRosterLimit === undefined) continue;
+    const keywords = [
+      ...new Set(
+        (kwByGroup.get(r.restrictionGroupId) ?? [])
+          .map((k) => keywordLabel(dump, k.keywordId))
+          .filter((k): k is string => !!k),
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+    if (keywords.length) out.push({ keywords, max: r.maxRosterLimit });
+  }
+  return out.sort((a, b) => a.keywords.join("+").localeCompare(b.keywords.join("+")));
+}
+
+/** The three datasheet-list requirements a detachment carries (see file header). */
+export type DatasheetListField =
+  | "mandatory_warlord_datasheet_ids"
+  | "granted_warlord_datasheet_ids"
+  | "excluded_datasheet_ids";
+
+export const DATASHEET_LIST_FIELDS: readonly DatasheetListField[] = [
+  "mandatory_warlord_datasheet_ids",
+  "granted_warlord_datasheet_ids",
+  "excluded_datasheet_ids",
+];
+
+/**
+ * A detachment's datasheet-list requirements as repo unit ids, sorted. Warlord rows
+ * name a miniature (resolved to its datasheet); exclusions name a datasheet. Each
+ * datasheet's English name slugs to the unit id; a slug with no repo unit lands in
+ * `unresolved` and is left out (an unresolved id would fail integrity).
+ */
+export function datasheetListsForDetachment(
+  dump: MfmDump,
+  detId: string,
+  unitIds: ReadonlySet<string>,
+  unresolved?: string[],
+): Record<DatasheetListField, string[]> {
+  const ds = dump.byId("datasheet");
+  const mini = dump.byId("miniature");
+  const resolve = (datasheetId: string | undefined): string | null => {
+    const name = datasheetId ? dump.enName(ds.get(datasheetId)) : undefined;
+    let id: string | null = null;
+    try {
+      id = name ? nameToId(name) : null;
+    } catch {
+      id = null;
+    }
+    if (id && unitIds.has(id)) return id;
+    if (unresolved) unresolved.push(name ?? datasheetId ?? "?");
+    return null;
+  };
+  const collect = (datasheetIds: (string | undefined)[]): string[] =>
+    [...new Set(datasheetIds.map(resolve).filter((id): id is string => !!id))].sort((a, b) =>
+      a.localeCompare(b),
+    );
+  const rows = <T,>(table: string): T[] =>
+    ((dump.tables as Record<string, unknown[] | undefined>)[table] ?? []) as T[];
+  type MiniRow = { detachmentId: string; miniatureId: string };
+  type DsRow = { detachmentId: string; datasheetId: string };
+  return {
+    mandatory_warlord_datasheet_ids: collect(
+      rows<MiniRow>("detachment_mandatory_warlord_miniature")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => mini.get(r.miniatureId)?.datasheetId),
+    ),
+    granted_warlord_datasheet_ids: collect(
+      rows<MiniRow>("detachment_granted_warlord_miniature")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => mini.get(r.miniatureId)?.datasheetId),
+    ),
+    excluded_datasheet_ids: collect(
+      rows<DsRow>("detachment_excluded_datasheet")
+        .filter((r) => r.detachmentId === detId)
+        .map((r) => r.datasheetId),
+    ),
+  };
+}
+
+/** Replace (or clear) each datasheet-list field; returns the fields that changed. */
+export function applyDatasheetLists(
+  det: DetRecord,
+  lists: Record<DatasheetListField, string[]>,
+): DatasheetListField[] {
+  const changed: DatasheetListField[] = [];
+  for (const field of DATASHEET_LIST_FIELDS) {
+    if (same(det[field], lists[field])) continue;
+    changed.push(field);
+    if (lists[field].length) det[field] = [...lists[field]];
+    else delete det[field];
+  }
+  return changed;
+}
+
+/** Every unit id authored across data/core. */
+function loadAllUnitIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const dir of repoDirs()) {
+    const p = path.join(CORE_DIR, dir, "units.json");
+    if (fs.existsSync(p)) for (const u of readJsonArray<{ id: string }>(p)) ids.add(u.id);
+  }
+  return ids;
 }
 
 /**
@@ -253,6 +380,8 @@ export interface DirDetFieldResult {
   ruleConfirmed: number;
   ruleReview: { id: string; authored: string[]; derived: string[] }[];
   ruleUnauthored: { id: string; derived: string[] }[];
+  listsChanged: { id: string; fields: (DatasheetListField | "keyword_limit_overrides")[] }[];
+  unresolvedDatasheets: { id: string; names: string[] }[];
   unresolvedKeywords: { id: string; ids: string[] }[];
 }
 
@@ -292,6 +421,7 @@ export function applyAuthoritativeDetachmentFields(
 export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
   const detIdByRepoId = dumpDetIdByRepoId(dump);
   const abilityIds = makeAbilityIdLoader();
+  const unitIds = loadAllUnitIds();
   const dirs: DirDetFieldResult[] = [];
   const staged: StagedWrite[] = [];
 
@@ -311,6 +441,8 @@ export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
       ruleConfirmed: 0,
       ruleReview: [],
       ruleUnauthored: [],
+      listsChanged: [],
+      unresolvedDatasheets: [],
       unresolvedKeywords: [],
     };
     let changed = false;
@@ -367,6 +499,25 @@ export function runDetachmentFields(dump: MfmDump): DetFieldsReport {
         }
       }
 
+      // Warlord requirements/permissions and datasheet exclusions — authoritative.
+      const unresolvedDs: string[] = [];
+      const listFields = applyDatasheetLists(
+        det,
+        datasheetListsForDetachment(dump, detId, unitIds, unresolvedDs),
+      );
+      if (listFields.length) {
+        res.listsChanged.push({ id: det.id, fields: listFields });
+        changed = true;
+      }
+      const overrides = keywordLimitOverridesForDetachment(dump, detId);
+      if (JSON.stringify(det.keyword_limit_overrides ?? []) !== JSON.stringify(overrides)) {
+        if (overrides.length) det.keyword_limit_overrides = overrides;
+        else delete det.keyword_limit_overrides;
+        res.listsChanged.push({ id: det.id, fields: ["keyword_limit_overrides"] });
+        changed = true;
+      }
+      if (unresolvedDs.length) res.unresolvedDatasheets.push({ id: det.id, names: [...new Set(unresolvedDs)] });
+
       if (unresolved.length) res.unresolvedKeywords.push({ id: det.id, ids: [...new Set(unresolved)] });
     }
 
@@ -412,6 +563,8 @@ export function buildDetFieldsReport(report: DetFieldsReport, write: boolean): s
     d.ruleFilled.forEach((c) => details.push(`- detachment_rule_ids filled ${c.id}: [${c.to.join(", ")}]`));
     d.ruleReview.forEach((c) => details.push(`- detachment_rule_ids REVIEW ${c.id}: authored [${c.authored.join(", ")}] vs dump [${c.derived.join(", ")}]`));
     d.ruleUnauthored.forEach((c) => details.push(`- detachment_rule_ids UNAUTHORED ${c.id}: dump rule(s) [${c.derived.join(", ")}] have no authored ability yet`));
+    d.listsChanged.forEach((c) => details.push(`- datasheet lists changed ${c.id}: ${c.fields.join(", ")}`));
+    d.unresolvedDatasheets.forEach((c) => details.push(`- unresolved datasheets ${c.id}: ${c.names.join(", ")}`));
     d.unresolvedKeywords.forEach((c) => details.push(`- unresolved keyword ids ${c.id}: ${c.ids.join(", ")}`));
     if (details.length) L.push(`## ${d.dir}`, ...details, "");
   }

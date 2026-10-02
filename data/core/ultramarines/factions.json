@@ -33,6 +33,20 @@
         "additional_keyword_source": "chapter",
         "max_distinct": 1
       }
+    ],
+    "keyword_limits": [
+      {
+        "keywords": [
+          "Marneus Calgar"
+        ],
+        "max": 1
+      },
+      {
+        "keywords": [
+          "Sicarius"
+        ],
+        "max": 1
+      }
     ]
   }
 ]

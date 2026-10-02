@@ -3949,5 +3949,455 @@
         "id": "6267c763-c582-4e33-b165-a225fd6b610b"
       }
     ]
+  },
+  {
+    "id": "foul-mouthparts",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "20a1dfd6-8a4e-4f5a-9156-f95c600128c3"
+      }
+    ],
+    "name": "Foul mouthparts",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Foul mouthparts",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": -1,
+          "D": 2,
+          "WS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "deaths-heads",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7dabe7f2-0d50-447c-a0ad-b914994a2c36"
+      }
+    ],
+    "name": "Death’s heads",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Death’s heads",
+        "range": 12,
+        "stats": {
+          "A": "D3",
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "plaguesword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "552bd0d9-7fa4-4165-a8d4-fa2b920e5084"
+      }
+    ],
+    "name": "Plaguesword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Plaguesword",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "diseased-claws-and-teeth",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e5e26961-72b0-4a63-98e4-17ec24e98393"
+      }
+    ],
+    "name": "Diseased claws and teeth",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Diseased claws and teeth",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 2,
+          "AP": 0,
+          "D": 1,
+          "WS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "putrid-appendages",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1a20ef81-f49e-46fb-95a7-d18249a25342"
+      }
+    ],
+    "name": "Putrid appendages",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Putrid appendages",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "WS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "gnarlrod",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "212867cb-ca5d-4ddd-91f0-a8dc26e4df2d"
+      }
+    ],
+    "name": "Gnarlrod",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "strike",
+        "range": "Melee",
+        "stats": {
+          "A": 7,
+          "S": 10,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          },
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 14,
+          "S": 8,
+          "AP": -1,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "streams-of-brackish-filth",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1ae96bcf-e738-4a39-8a53-6c37b81980ce"
+      }
+    ],
+    "name": "Streams of brackish filth",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Streams of brackish filth",
+        "range": 12,
+        "stats": {
+          "A": "2D6",
+          "S": 8,
+          "AP": -2,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          },
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "plague-flail",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7f41dd02-1f17-4303-a767-208fdf79876f"
+      }
+    ],
+    "name": "Plague flail",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Plague flail",
+        "range": 6,
+        "stats": {
+          "A": "D6+1",
+          "S": 7,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "bilesword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2189b2c8-a85a-46f0-b75c-cff4c6dfa7b5"
+      }
+    ],
+    "name": "Bilesword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "strike",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 10,
+          "AP": -2,
+          "D": "D6+1",
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      },
+      {
+        "name": "sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 12,
+          "S": 7,
+          "AP": -1,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "putrid-vomit",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "be2784f7-0c7b-4604-8797-0561b5b68406"
+      }
+    ],
+    "name": "Putrid vomit",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Putrid vomit",
+        "range": 12,
+        "stats": {
+          "A": "D6+3",
+          "S": 5,
+          "AP": -2,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "doomsday-bell",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "1837f519-61d6-4bb0-bdfc-22b36e2339d4"
+      }
+    ],
+    "name": "Doomsday bell",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Doomsday bell",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": -1,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "reverberating-summons"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "bileblade",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "206db61d-bf18-4715-8eb7-ce9dbd5eb0dc"
+      }
+    ],
+    "name": "Bileblade",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Bileblade",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          },
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

@@ -1317,6 +1317,11 @@
           ],
           "description": "Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap."
         },
+        "exclusive": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin."
+        },
         "cannot_be_warlord": {
           "type": "boolean",
           "default": false,
@@ -1690,6 +1695,51 @@
           },
           "description": "Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum."
         },
+        "mandatory_warlord_datasheet_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "uniqueItems": true,
+          "description": "While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement."
+        },
+        "granted_warlord_datasheet_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "uniqueItems": true,
+          "description": "Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none."
+        },
+        "keyword_limit_overrides": {
+          "type": "array",
+          "description": "Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "keywords": {
+                "$ref": "#/$defs/keyword-list"
+              },
+              "max": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "keywords",
+              "max"
+            ]
+          }
+        },
+        "excluded_datasheet_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "uniqueItems": true,
+          "description": "Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none."
+        },
         "game_version": {
           "$ref": "#/$defs/game-version-ref"
         },
@@ -1858,6 +1908,39 @@
           "minItems": 1,
           "uniqueItems": true,
           "description": "References to the faction-wide abilities in display order"
+        },
+        "keyword_limits": {
+          "type": "array",
+          "description": "Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "keywords": {
+                "$ref": "#/$defs/keyword-list"
+              },
+              "max": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "mode": {
+                "enum": [
+                  "units",
+                  "alternatives"
+                ],
+                "default": "units",
+                "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both)."
+              },
+              "exempt_faction_keywords": {
+                "$ref": "#/$defs/keyword-list",
+                "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap)."
+              }
+            },
+            "required": [
+              "keywords",
+              "max"
+            ]
+          }
         },
         "army_construction_rules": {
           "type": "array",
@@ -3239,6 +3322,11 @@
                 "type": "boolean",
                 "default": false
               },
+              "excluded_from_enhancements": {
+                "type": "boolean",
+                "default": false,
+                "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded."
+              },
               "base_size_mm": {
                 "description": "This model's base. Absent when no base could be resolved for the model.",
                 "$ref": "#/$defs/base-size"
@@ -3666,6 +3754,52 @@
             },
             "required": [
               "host_faction",
+              "models",
+              "cost"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "detachment_pricing": {
+          "type": "array",
+          "description": "11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "detachment_id": {
+                "$ref": "#/$defs/entity-id",
+                "description": "The detachment whose selection puts this cost in effect."
+              },
+              "models": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "cost": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "models_max": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "unit_count_min": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "unit_count_max": {
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "detachment_id",
               "models",
               "cost"
             ],

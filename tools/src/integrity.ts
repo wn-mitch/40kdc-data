@@ -34,6 +34,22 @@ export const FACTION_HOME_KEYWORD: Record<string, string> = {
 };
 
 /**
+ * The daemon cult-legion faction keyword each single-token Chaos faction may also
+ * carry. GW prints a legion's daemons as separate datasheets in that legion's codex
+ * (Bloodletters in Codex: World Eaters carry `Blood Legions`, not `Legiones
+ * Daemonica`); the army takes them through the legion's daemon detachment (the
+ * dump's sibling `allied_faction` pool, gated by `allied_faction_required_detachment`).
+ * These per-faction views live in the host faction dir with this keyword, so the
+ * home-keyword guard admits it alongside {@link FACTION_HOME_KEYWORD}.
+ */
+export const FACTION_SIBLING_KEYWORDS: Record<string, readonly string[]> = {
+  "world-eaters": ["Blood Legions"],
+  "death-guard": ["Plague Legions"],
+  "thousand-sons": ["Scintillating Legions"],
+  "emperors-children": ["Legions of Excess"],
+};
+
+/**
  * How one per-faction data file type's ids may collide across faction
  * directories. Every basename that appears under a `data/{core,enrichment}/
  * <faction>/` directory MUST be declared here — an undeclared basename fails
@@ -398,6 +414,129 @@ async function checkAbilityUnitRefs(root: string, result: ValidationResult): Pro
   }
 }
 
+/**
+ * A detachment's datasheet lists (`mandatory_warlord_datasheet_ids`,
+ * `granted_warlord_datasheet_ids`, `excluded_datasheet_ids`) must each name a core
+ * unit in some faction dir: a dangling id would silently make a Warlord requirement
+ * unsatisfiable or an exclusion a no-op.
+ */
+async function checkDetachmentDatasheetRefs(root: string, result: ValidationResult): Promise<void> {
+  const units = new Set<string>();
+  for (const f of await glob("core/*/units.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_")) continue;
+    try {
+      for (const u of readArray<{ id?: string }>(f)) if (u.id) units.add(u.id);
+    } catch {
+      // structural problems are the AJV pass's job
+    }
+  }
+  const fields = ["mandatory_warlord_datasheet_ids", "granted_warlord_datasheet_ids", "excluded_datasheet_ids"] as const;
+  const files = await glob("core/*/detachments.json", { cwd: root, absolute: true });
+  for (const file of files.sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let dets: Array<{ id?: string } & Partial<Record<(typeof fields)[number], string[]>>>;
+    try {
+      dets = readArray(file);
+    } catch {
+      continue;
+    }
+    dets.forEach((d, index) => {
+      const errors = fields.flatMap((field) =>
+        (d[field] ?? [])
+          .filter((u) => !units.has(u))
+          .map((u) => ({ path: `/${index}/${field}`, message: `detachment "${d.id}": ${field} entry "${u}" is no core unit` })),
+      );
+      if (!errors.length) return;
+      result.failed++;
+      result.errors.push({ file, index, errors });
+    });
+  }
+}
+
+/**
+ * Keyword caps and detachment pricing must point at something real:
+ *  - a faction `keyword_limits` entry needs at least one keyword;
+ *  - a detachment `keyword_limit_overrides` entry must name the exact keyword set of
+ *    a `keyword_limits` entry on its own faction (otherwise it overrides nothing);
+ *  - a unit `detachment_pricing` entry must name a detachment of the unit's faction.
+ */
+async function checkListRequirementRefs(root: string, result: ValidationResult): Promise<void> {
+  const keyOf = (keywords: readonly string[]): string => [...keywords].sort().join("+");
+  const capsByFaction = new Map<string, Set<string>>();
+  for (const file of (await glob("core/*/factions.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let factions: Array<{ id?: string; keyword_limits?: Array<{ keywords?: string[] }> }>;
+    try {
+      factions = readArray(file);
+    } catch {
+      continue;
+    }
+    factions.forEach((f, index) => {
+      const caps = new Set<string>();
+      const errors: Array<{ path: string; message: string }> = [];
+      (f.keyword_limits ?? []).forEach((kl, i) => {
+        if (!kl.keywords?.length)
+          errors.push({ path: `/${index}/keyword_limits/${i}/keywords`, message: `faction "${f.id}": keyword_limits entry ${i} has no keywords` });
+        else caps.add(keyOf(kl.keywords));
+      });
+      if (f.id) capsByFaction.set(f.id, caps);
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+  const detachmentsByFaction = new Map<string, Set<string>>();
+  for (const file of (await glob("core/*/detachments.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let dets: Array<{ id?: string; faction_id?: string; keyword_limit_overrides?: Array<{ keywords?: string[] }> }>;
+    try {
+      dets = readArray(file);
+    } catch {
+      continue;
+    }
+    dets.forEach((d, index) => {
+      if (d.faction_id && d.id)
+        (detachmentsByFaction.get(d.faction_id) ?? detachmentsByFaction.set(d.faction_id, new Set()).get(d.faction_id)!).add(d.id);
+      const caps = capsByFaction.get(d.faction_id ?? "") ?? new Set<string>();
+      const errors = (d.keyword_limit_overrides ?? [])
+        .map((o, i) => ({ o, i }))
+        .filter(({ o }) => !caps.has(keyOf(o.keywords ?? [])))
+        .map(({ o, i }) => ({
+          path: `/${index}/keyword_limit_overrides/${i}`,
+          message: `detachment "${d.id}": keyword_limit_overrides entry [${(o.keywords ?? []).join(", ")}] matches no keyword_limits entry of faction "${d.faction_id}"`,
+        }));
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+  for (const file of (await glob("core/*/units.json", { cwd: root, absolute: true })).sort()) {
+    if (basename(dirname(file)).startsWith("_")) continue;
+    let units: Array<{ id?: string; faction_id?: string; detachment_pricing?: Array<{ detachment_id?: string }> }>;
+    try {
+      units = readArray(file);
+    } catch {
+      continue;
+    }
+    units.forEach((u, index) => {
+      const known = detachmentsByFaction.get(u.faction_id ?? "") ?? new Set<string>();
+      const errors = (u.detachment_pricing ?? [])
+        .map((t, i) => ({ t, i }))
+        .filter(({ t }) => !known.has(t.detachment_id ?? ""))
+        .map(({ t, i }) => ({
+          path: `/${index}/detachment_pricing/${i}/detachment_id`,
+          message: `unit "${u.id}": detachment_pricing detachment "${t.detachment_id}" is no detachment of faction "${u.faction_id}"`,
+        }));
+      if (errors.length) {
+        result.failed++;
+        result.errors.push({ file, index, errors });
+      }
+    });
+  }
+}
+
 function checkMissionCardLinks(root: string, result: ValidationResult): void {
   const missionsFile = resolve(root, "core/missions.json");
   const missionCardsFile = resolve(root, "core/mission-cards.json");
@@ -557,6 +696,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
 
   checkMissionCardLinks(root, result);
   await checkAbilityUnitRefs(root, result);
+  await checkDetachmentDatasheetRefs(root, result);
+  await checkListRequirementRefs(root, result);
   await checkDslShapes(root, result);
   await checkTargetProfiles(root, result);
 
@@ -653,10 +794,10 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
 
       if (home !== undefined) {
         for (const fk of u.faction_keywords ?? []) {
-          if (fk !== home) {
+          if (fk !== home && !(FACTION_SIBLING_KEYWORDS[faction] ?? []).includes(fk)) {
             errs.push({
               path: `/${i}/faction_keywords`,
-              message: `unit "${u.id}": faction_keyword "${fk}" is not permitted for ${faction} (expected only "${home}")`,
+              message: `unit "${u.id}": faction_keyword "${fk}" is not permitted for ${faction} (expected only "${home}"${(FACTION_SIBLING_KEYWORDS[faction] ?? []).map((k) => ` or "${k}"`).join("")})`,
             });
           }
         }

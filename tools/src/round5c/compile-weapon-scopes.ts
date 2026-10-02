@@ -3,7 +3,8 @@ import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 const SCOPE = "weapon-property-scope";
 const KEYWORD = "weapon-ability-keyword";
-const isStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5;
+const isStat = (leaf: CompileLeaf) => (leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5)
+  || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3);
 const isProperty = (leaf: CompileLeaf) => isStat(leaf) || leaf.family_id === KEYWORD;
 
 function between(source: Buffer | undefined, left: CompileLeaf, right: CompileLeaf): string {
@@ -18,7 +19,10 @@ function grantFrame(scope: CompileLeaf, firstKeyword?: CompileLeaf): CompileLeaf
 }
 
 function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
-  if (!(leaf.parameters.characteristics as string[]).every((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
+  const characteristics = leaf.family_id === "characteristic-set"
+    ? [leaf.parameters.characteristic as string]
+    : leaf.parameters.characteristics as string[];
+  if (!characteristics.every((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
     throw new CompileError("An attack-property scope cannot modify a model characteristic.");
   }
   for (const key of ["subject", "weapon_type"] as const) {

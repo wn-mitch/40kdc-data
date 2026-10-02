@@ -1,3 +1,4 @@
+import { keywordKey } from "./core-keywords.js";
 import { familyRole, normalizeFingerprintParameters, currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { prefillFromSource, type PrefillFamily } from "./leaf-prefill.js";
 
@@ -49,7 +50,7 @@ export function keywordsIn(text: string, index: ReadonlyMap<string, string>): st
   for (let start = 0; start < words.length;) {
     let matched = 0;
     for (let length = Math.min(MAX_KEYWORD_WORDS, words.length - start); length > 0; length -= 1) {
-      const phrase = words.slice(start, start + length).join(" ").toUpperCase();
+      const phrase = keywordKey(words.slice(start, start + length).join(" "));
       if (index.has(phrase)) {
         found.push(phrase);
         matched = length;
@@ -77,7 +78,7 @@ export function predicateProposal(text: string, index: ReadonlyMap<string, strin
       // Only keywords core has: a capitalised word that is not a unit keyword is not this leaf.
       const listed = keywordsIn(plain, index);
       const stated = Array.isArray(parameters.keywords) ? parameters.keywords as string[] : [];
-      if (!listed.length || stated.some((keyword) => !index.has(keyword.toUpperCase()))) continue;
+      if (!listed.length || stated.some((keyword) => !index.has(keywordKey(keyword)))) continue;
       parameters.keywords = [...new Set([...stated.map((keyword) => keyword.toUpperCase()), ...listed])];
     }
     if (parameters.subject === "target" && !TARGET_SUBJECT.test(plain)) continue;

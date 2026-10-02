@@ -1090,5 +1090,75 @@
       "model_name": "Goremongers",
       "any_number": true
     }
+  },
+  {
+    "id": "bloodcrushers-wgo-mfm-1",
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "daemonic-icon"
+      ],
+      [
+        "instrument-of-chaos"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Bloodcrusher",
+      "any_number": true
+    }
+  },
+  {
+    "id": "bloodletters-wgo-mfm-1",
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "instrument-of-chaos"
+      ],
+      [
+        "daemonic-icon"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Bloodletter",
+      "any_number": true
+    }
+  },
+  {
+    "id": "bloodthirster-wgo-mfm-1",
+    "unit_id": "bloodthirster",
+    "faction_id": "world-eaters",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "great-axe-of-khorne"
+    ],
+    "replacement_choice": [
+      [
+        "bloodflail",
+        "axe-of-khorne"
+      ],
+      [
+        "lash-of-khorne",
+        "axe-of-khorne"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
   }
 ]

@@ -26,6 +26,56 @@
     "faction_rule_ids": [
       "battle-focus-aeldari",
       "disparate-paths-aeldari"
+    ],
+    "keyword_limits": [
+      {
+        "keywords": [
+          "Death Jester"
+        ],
+        "max": 1
+      },
+      {
+        "keywords": [
+          "Epic Hero",
+          "The Visarch"
+        ],
+        "max": 0,
+        "exempt_faction_keywords": [
+          "Ynnari"
+        ]
+      },
+      {
+        "keywords": [
+          "Epic Hero",
+          "The Yncarne"
+        ],
+        "max": 0,
+        "exempt_faction_keywords": [
+          "Ynnari"
+        ]
+      },
+      {
+        "keywords": [
+          "Epic Hero",
+          "Yvraine"
+        ],
+        "max": 0,
+        "exempt_faction_keywords": [
+          "Ynnari"
+        ]
+      },
+      {
+        "keywords": [
+          "Shadowseer"
+        ],
+        "max": 1
+      },
+      {
+        "keywords": [
+          "Troupe Master"
+        ],
+        "max": 1
+      }
     ]
   }
 ]

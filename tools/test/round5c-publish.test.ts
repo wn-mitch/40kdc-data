@@ -255,7 +255,7 @@ describe("Round 5C explicit publication", () => {
       const leaf = applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
         fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: 2, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+        role: "EFFECT", family_id: "characteristic-set", family_version: 3, parameters: { subject: "this-model", characteristic: "M", value: 1 },
       }] });
       await expect(prepare()).rejects.toThrow(/leaves changed after approval/i);
       fixture.db.prepare("UPDATE annotations SET status = 'retracted' WHERE batch_id = ?").run(leaf.batch_id);
@@ -299,7 +299,7 @@ describe("Round 5C explicit publication", () => {
       applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
         fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: 2, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+        role: "EFFECT", family_id: "characteristic-set", family_version: 3, parameters: { subject: "this-model", characteristic: "M", value: 1 },
       }] });
       expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "stale" });
       expect(getPublicationReport(fixture.db)).toMatchObject({ stale_published_abilities: [`${factionId}/${selectedAbilityId}`] });

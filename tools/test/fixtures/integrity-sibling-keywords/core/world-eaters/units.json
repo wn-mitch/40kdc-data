@@ -1,0 +1,6 @@
+[
+  { "id": "berzerker-pack", "faction_keywords": ["World Eaters"] },
+  { "id": "blood-hound-pack", "faction_keywords": ["Blood Legions"] },
+  { "id": "rot-swarm", "faction_keywords": ["Plague Legions"] },
+  { "id": "daemon-host", "faction_keywords": ["Legiones Daemonica"] }
+]

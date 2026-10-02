@@ -1476,5 +1476,221 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "blue-horrors",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Blue Horror",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "coruscating-blue-flames",
+          "blue-claws"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Blue Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "flamers",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Pyrocaster",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "flickering-flames",
+          "flamer-mouths"
+        ]
+      },
+      {
+        "name": "Flamer",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "flickering-flames",
+          "flamer-mouths"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pyrocaster",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flamer",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Pyrocaster",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flamer",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "kairos-fateweaver",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Kairos Fateweaver",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "infernal-gateway",
+          "staff-of-tomorrow"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Kairos Fateweaver",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Pink Horror",
+        "min": 10,
+        "max": 10,
+        "default_weapon_ids": [
+          "coruscating-pink-flames",
+          "pink-claws"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Pink Horror",
+            "min": 10,
+            "max": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "screamers",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Screamer",
+        "min": 3,
+        "max": 6,
+        "default_weapon_ids": [
+          "lamprey-bite"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Screamer",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Screamer",
+            "min": 4,
+            "max": 6
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "lord-of-change",
+    "faction_id": "thousand-sons",
+    "models": [
+      {
+        "name": "Lord of Change",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bolt-of-change",
+          "staff-of-tzeentch"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Lord of Change",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

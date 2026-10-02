@@ -1,0 +1,3 @@
+[
+  { "id": "masque", "faction_id": "court", "keyword_limit_overrides": [{ "keywords": ["Jester"], "max": 3 }, { "keywords": ["Mime"], "max": 2 }] }
+]

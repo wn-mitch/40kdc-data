@@ -107,10 +107,12 @@ const SURFACE_EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 
 /** Edge punctuation is not wording, except a sign introducing a numeric term. */
 export function leafSurfaceKey(text: string): string {
-  const numeric = /^[\s\p{P}]*?([+\-−–]\s*\d)/u.exec(text);
-  const wording = numeric ? text.slice(numeric[0].length - numeric[1]!.length).replace(/[\s\p{P}]+$/gu, "")
-    : text.replace(SURFACE_EDGE_PUNCTUATION, "");
-  return normalizedSurface(wording);
+  const normalized = normalizedSurface(text);
+  const numeric = /^([\s\p{P}]*?)([+-−])\s*\d/u.exec(normalized);
+  const wording = numeric
+    ? normalized.slice(numeric[1]!.length).replace(/[\s\p{P}]+$/gu, "")
+    : normalized.replace(SURFACE_EDGE_PUNCTUATION, "");
+  return wording;
 }
 
 function record(value: unknown, label: string): Record<string, unknown> {

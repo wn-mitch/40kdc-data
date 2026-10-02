@@ -1766,7 +1766,8 @@
           "huge-knife-ogryn-bodyguard",
           "ripper-gun-ogryn-bodyguard",
           "close-combat-weapon-ogryn-bodyguard"
-        ]
+        ],
+        "excluded_from_enhancements": true
       }
     ],
     "game_version": {

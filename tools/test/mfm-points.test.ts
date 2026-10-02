@@ -12,6 +12,8 @@ function mk(parts: {
   comps: { id: string; pts: number; models: number | [number, number]; group?: string }[];
   step?: { stepAt: number; stepPoints: number };
   keywords?: { id: string; name: string }[];
+  /** composition id → gating detachment display name (unit_composition_required_detachment). */
+  gated?: Record<string, string>;
 }): MfmDump {
   const lo = (m: number | [number, number]) => (Array.isArray(m) ? m[0] : m);
   const hi = (m: number | [number, number]) => (Array.isArray(m) ? m[1] : m);
@@ -39,11 +41,46 @@ function mk(parts: {
         id: k.id,
         localisations: { en: { name: k.name } },
       })),
+      detachment: Object.values(parts.gated ?? {}).map((name) => ({ id: `det-${name}`, localisations: { en: { name } } })),
+      unit_composition_required_detachment: Object.entries(parts.gated ?? {}).map(([comp, name]) => ({
+        unitCompositionId: comp,
+        detachmentId: `det-${name}`,
+      })),
     },
   });
 }
 
 describe("deriveDatasheet", () => {
+  it("prices a detachment-gated composition as a detachment tier, not a second native cost", () => {
+    // C'tan Shard shape: 1@330 native, 1@375 only under Pantheon of Woe.
+    const d = mk({
+      comps: [
+        { id: "native", pts: 330, models: 1 },
+        { id: "pantheon", pts: 375, models: 1 },
+      ],
+      gated: { pantheon: "Pantheon of Woe" },
+    });
+    const { native, byDetachment, ambiguous } = deriveDatasheet(d, "ds");
+    expect(ambiguous).toBe(false);
+    expect(native).toEqual([{ models: 1, models_max: 1, cost: 330 }]);
+    expect(byDetachment).toEqual([{ models: 1, models_max: 1, cost: 375, detachment_id: "pantheon-of-woe" }]);
+  });
+
+  it("bands detachment tiers by the datasheet's ordinal step", () => {
+    const d = mk({
+      comps: [
+        { id: "native", pts: 340, models: 1 },
+        { id: "pantheon", pts: 380, models: 1 },
+      ],
+      step: { stepAt: 2, stepPoints: 20 },
+      gated: { pantheon: "Pantheon of Woe" },
+    });
+    expect(deriveDatasheet(d, "ds").byDetachment).toEqual([
+      { models: 1, models_max: 1, cost: 380, unit_count_min: 1, unit_count_max: 1, detachment_id: "pantheon-of-woe" },
+      { models: 1, models_max: 1, cost: 400, unit_count_min: 2, unit_count_max: null, detachment_id: "pantheon-of-woe" },
+    ]);
+  });
+
   it("expands datasheet_points_step into per-army-ordinal bands", () => {
     // celestian-sacresants shape: 5@75, 10@150, step(2,15) → #2+ at 90/165.
     const d = mk({
@@ -150,6 +187,20 @@ describe("routeChapterTwin", () => {
       { models: 5, cost: 95, host_faction: "blood-angels" },
       { models: 10, cost: 180, host_faction: "blood-angels" },
     ]);
+  });
+
+  it("clears its host's entries when the host dir carries its own unit for the datasheet", () => {
+    // World Eaters' Bloodletters view is priced natively in world-eaters, so the
+    // chaos-daemons copy must not also price it for a World Eaters host.
+    const rec = {
+      points: [{ models: 10, cost: 110 }],
+      allied_points: [
+        { models: 10, cost: 90, host_faction: "world-eaters" },
+        { models: 10, cost: 100, host_faction: "chaos-space-marines" },
+      ],
+    };
+    const next = routeChapterTwin(rec, "world-eaters", [{ models: 10, cost: 90 }], true);
+    expect(next).toEqual([{ models: 10, cost: 100, host_faction: "chaos-space-marines" }]);
   });
 
   it("keeps other hosts' entries and replaces only its own", () => {

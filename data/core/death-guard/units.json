@@ -2842,5 +2842,495 @@
         "id": "0037a838-5993-4cfe-8d14-064f0bb4d9e0"
       }
     ]
+  },
+  {
+    "id": "beasts-of-nurgle",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3c21511d-aa1d-45fd-aa09-4c0b7fc1f052"
+      }
+    ],
+    "name": "Beasts of Nurgle",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Beast of Nurgle",
+        "M": 6,
+        "T": 9,
+        "W": 7,
+        "Sv": 6,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70
+      },
+      {
+        "models": 2,
+        "cost": 140
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Beasts of Nurgle"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 2
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "putrid-appendages"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 60
+    },
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "deep-strike",
+      "grotesque-regeneration-death-guard",
+      {
+        "id": "scouts",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "id": "great-unclean-one",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9515922a-ddf1-4503-b48c-a0cfb72db6ca"
+      }
+    ],
+    "name": "Great Unclean One",
+    "faction_id": "death-guard",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Great Unclean One",
+        "M": 7,
+        "T": 12,
+        "W": 20,
+        "Sv": 5,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 265,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 280,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Psyker",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Great Unclean One"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "plague-flail",
+      "putrid-vomit",
+      "bilesword",
+      "bileblade",
+      "doomsday-bell"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-nurgle-death-guard",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "nurgles-rot-death-guard"
+    ]
+  },
+  {
+    "id": "nurglings",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2d118322-ade2-48f8-af17-f1b3609f3fb8"
+      }
+    ],
+    "name": "Nurglings",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Nurgling Swarm",
+        "M": 5,
+        "T": 3,
+        "W": 4,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 45
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Swarm",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Nurglings"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "diseased-claws-and-teeth"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 40
+    },
+    "ability_ids": [
+      "deep-strike",
+      "infiltrators",
+      "mischief-makers-death-guard"
+    ]
+  },
+  {
+    "id": "plague-drones",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "15580b19-8d83-4398-87c2-c163d37e3a28"
+      }
+    ],
+    "name": "Plague Drones",
+    "faction_id": "death-guard",
+    "profiles": [
+      {
+        "name": "Plague Drone",
+        "M": 10,
+        "T": 8,
+        "W": 5,
+        "Sv": 6,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 110
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 220
+      }
+    ],
+    "keywords": [
+      "Mounted",
+      "Fly",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Plague Drones"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "deaths-heads",
+      "foul-mouthparts",
+      "plaguesword"
+    ],
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-death-guard",
+        "wargear": "daemonic-icon"
+      },
+      "deaths-heads-death-guard",
+      "deep-strike",
+      {
+        "id": "instrument-of-chaos-death-guard",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "plaguebearers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "24af7758-52d7-4260-a41c-5a88e685306c"
+      }
+    ],
+    "name": "Plaguebearers",
+    "faction_id": "death-guard",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Plaguebearer",
+        "M": 5,
+        "T": 5,
+        "W": 2,
+        "Sv": 7,
+        "invuln_sv": 5,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 115
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Plaguebearers"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "plaguesword"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-death-guard",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      "infected-outbreak-death-guard",
+      {
+        "id": "instrument-of-chaos-death-guard",
+        "wargear": "instrument-of-chaos"
+      }
+    ]
+  },
+  {
+    "id": "rotigus",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "71f1dac7-11cc-4f1e-a47c-5a100781e7cd"
+      }
+    ],
+    "name": "Rotigus",
+    "faction_id": "death-guard",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Rotigus",
+        "M": 7,
+        "T": 12,
+        "W": 22,
+        "Sv": 5,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 280
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Psyker",
+      "Chaos",
+      "Nurgle",
+      "Daemon",
+      "Summoned",
+      "Rotigus"
+    ],
+    "faction_keywords": [
+      "Plague Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "streams-of-brackish-filth",
+      "gnarlrod"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 130
+    },
+    "ability_ids": [
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "deluge-of-nurgle-death-guard",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      "virulent-blessing-death-guard"
+    ]
   }
 ]

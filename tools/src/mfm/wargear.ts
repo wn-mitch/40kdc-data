@@ -125,6 +125,8 @@ interface CompModel {
   /** Whole-loadout variants (from BSData, not the dump); renames carry into them. */
   loadout_variants?: Array<{ name: string; weapon_ids: string[]; [k: string]: unknown }>;
   is_leader_model?: boolean;
+  /** The dump's miniature.excludedFromEnhancements for this model row. */
+  excluded_from_enhancements?: boolean;
   [k: string]: unknown;
 }
 interface CompRecord {
@@ -172,6 +174,17 @@ export const WEAPON_ALIASES: Record<string, Record<string, string>> = {
     "screamer-killer-talons": "scream-killer-talons",
   },
 };
+
+/**
+ * Reviewed weapon-id pairs one edit apart that name DIFFERENT weapons, so the
+ * fuzzy fallback in {@link makeResolver} must never bridge them. Keyed
+ * `<dump-slug>|<repo-id>`. A Great Unclean One's `bilesword` (S9 AP-2) is not the
+ * Plague Surgeon's `balesword`; bridging them rewrote the Plague Surgeon's weapon
+ * name the first time a Death Guard Great Unclean One was projected.
+ */
+export const NOT_SPELLING_DRIFT: ReadonlySet<string> = new Set([
+  "bilesword|balesword",
+]);
 
 /**
  * Per-unit weapon-name overrides, by `faction → unit_id → dump-name-slug → repo-id`.
@@ -308,7 +321,9 @@ export function makeResolver(
       return aliased;
     }
     if (id.length < 6) return null;
-    const near = idList.filter((v) => withinEditDistance1(id, v));
+    const near = idList.filter(
+      (v) => withinEditDistance1(id, v) && !NOT_SPELLING_DRIFT.has(`${id}|${v}`),
+    );
     if (near.length === 1) {
       audit.push({ name, from: id, to: near[0] });
       return near[0];
@@ -2499,6 +2514,28 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
+      // Per-model Enhancement eligibility (miniature.excludedFromEnhancements),
+      // authoritative and matched by model name: set on the matching row, cleared
+      // when the dump drops it. Runs before the composition rebuild, which skips
+      // datasheets with no composition rows (Sir Hekhtur).
+      const excludedNames = new Set(
+        (dump.groupBy("miniature", "datasheetId").get(ds.id!) ?? [])
+          .filter((m) => m.excludedFromEnhancements)
+          .map((m) => dump.enName(m))
+          .filter((n): n is string => !!n),
+      );
+      for (const comp of compsByUnit.get(id) ?? []) {
+        for (const row of comp.models) {
+          const excluded = excludedNames.has(row.name);
+          if (excluded && row.excluded_from_enhancements !== true) {
+            row.excluded_from_enhancements = true;
+            changed = true;
+          } else if (!excluded && row.excluded_from_enhancements !== undefined) {
+            delete row.excluded_from_enhancements;
+            changed = true;
+          }
+        }
+      }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {
         skipped.push({ dir, id, reason: "kill-team duplicate-name shape — cannot rebuild" });

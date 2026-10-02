@@ -83,7 +83,7 @@ export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_i
 
 const SURFACE_COLUMNS = "id, normalized_surface, fingerprint_id, status, batch_id, authority_kind, scope_json";
 
-type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
+export type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
 
 export type ApplyReport = {
   applied: number;
@@ -109,7 +109,7 @@ export function occurrenceContext(ability: AbilityContext, occurrence: { fragmen
   };
 }
 
-function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
+export function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
   const row = db.prepare(`
     SELECT fingerprints.id, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json, semantic_families.role
     FROM fingerprints JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
@@ -196,7 +196,7 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
  * this leaf at this authority, one overlapping a different leaf of its layer, or where a human
  * rejected this meaning, is reported and not written.
  */
-function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, batchId: string, abilityVersionIds?: ReadonlySet<number>): ApplyReport & { touched: Set<number> } {
+export function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, batchId: string, abilityVersionIds?: ReadonlySet<number>): ApplyReport & { touched: Set<number> } {
   const fingerprint = fingerprintRow(db, surface.fingerprint_id);
   const authority = propagatedAuthority(surface.authority_kind);
   const trusted = authority !== "machine";
@@ -283,18 +283,19 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
   return report;
 }
 
-function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefined {
+export function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefined {
   return db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'`).get(surface) as SurfaceRow | undefined;
 }
 
-function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null, scope: string | null = null): SurfaceRow {
-  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at, scope_json) VALUES (?, ?, 'active', ?, ?, ?, ?, ?)")
-    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString(), scope);
+/** Record an active surface; `operatorId` links a spelling instantiated from a decided operator. */
+export function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null, scope: string | null = null, operatorId: number | null = null): SurfaceRow {
+  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at, scope_json, operator_id) VALUES (?, ?, 'active', ?, ?, ?, ?, ?, ?)")
+    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString(), scope, operatorId);
   addMember(db, batchId, "leaf-surface-created", Number(inserted.lastInsertRowid));
   return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId, authority_kind: authority, scope_json: scope };
 }
 
-function finish(db: DatabaseSync, touched: Iterable<number>): void {
+export function finish(db: DatabaseSync, touched: Iterable<number>): void {
   invalidateWholeReview(db, touched);
   bumpWorkbenchRevision(db);
 }
@@ -546,6 +547,10 @@ export function assertLeafUndo(db: DatabaseSync, batchId: string, members: Reado
     const expected = member.entity_kind === "leaf-surface-created" ? "active" : "retired";
     if (!row || row.status !== expected) throw new LeafError(409, "This batch cannot be undone because one of its surfaces was later changed.");
   }
+  for (const member of members.filter((item) => item.entity_kind === "leaf-operator-created")) {
+    const row = db.prepare("SELECT status FROM leaf_operators WHERE id = ?").get(Number(member.entity_id)) as { status: string } | undefined;
+    if (row?.status !== "active") throw new LeafError(409, "This batch cannot be undone because its operator was later changed.");
+  }
 }
 
 function mergeMetadata(db: DatabaseSync, batchId: string): { from: string; to: string } | null {
@@ -592,6 +597,10 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
     db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
     retractDerivedRows(db, reversalId, Number(member.entity_id));
+  }
+  for (const member of members.filter((item) => item.entity_kind === "leaf-operator-created")) {
+    db.prepare("UPDATE leaf_operators SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
+    addMember(db, reversalId, "leaf-operator-retired", member.entity_id);
   }
   for (const member of members.filter((item) => item.entity_kind === "leaf-surface-retired")) {
     const row = db.prepare("SELECT normalized_surface FROM leaf_surfaces WHERE id = ?").get(Number(member.entity_id)) as { normalized_surface: string };

@@ -1,6 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumValue, exactKeys, integerOrSource, integerOrSourceSchema } from "./family-validation.js";
-import { normalizeEffectParameters } from "./effect-families.js";
+import { normalizeEffectParameters, WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 /**
  * The first effect buffs: set a characteristic, give weapons an ability, Feel No Pain, an
@@ -107,6 +107,26 @@ export const BUFF_FAMILIES: readonly SemanticFamilyDefinition[] = [
         subject: { enum: ["this-model", "this-unit"] },
         characteristic: { enum: CHARACTERISTICS },
         value: integerOrSourceSchema,
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-set",
+    version: 3,
+    role: "EFFECT",
+    label: "Set a characteristic",
+    description: "Sets a model, unit, or weapon characteristic to a source-specified value without guessing its recipient or weapon scope. Reviewed subject and weapon_type bindings can accompany a qualified setter.",
+    starter: { characteristic: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristic", "value"],
+      properties: {
+        subject: { enum: ["this-model", "this-unit", "selected-unit"] },
+        characteristic: { enum: CHARACTERISTICS },
+        value: integerOrSourceSchema,
+        weapon_type: { enum: ["all", "melee", "ranged"] },
       },
       additionalProperties: false,
     },
@@ -308,13 +328,20 @@ export function normalizeBuffParameters(
   version: number,
 ): Record<string, unknown> | null {
   switch (family) {
-    case "characteristic-set":
-      exactKeys(input, ["subject", "characteristic", "value"], family);
+    case "characteristic-set": {
+      exactKeys(input, version >= 3 ? ["characteristic", "value", ...(input.subject !== undefined ? ["subject"] : []), ...(input.weapon_type !== undefined ? ["weapon_type"] : [])] : ["subject", "characteristic", "value"], family);
+      const characteristic = enumValue(input.characteristic, CHARACTERISTICS, "characteristic-set.characteristic");
+      const weaponType = version >= 3 && input.weapon_type !== undefined ? enumValue(input.weapon_type, ["all", "melee", "ranged"], "characteristic-set.weapon_type") : undefined;
+      if (weaponType !== undefined && weaponType !== "all" && !(WEAPON_CHARACTERISTICS as readonly string[]).includes(characteristic)) {
+        throw new TypeError("characteristic-set: only weapon characteristics (A, WS, BS, S, AP, D) can be limited to melee or ranged weapons.");
+      }
       return {
-        subject: enumValue(input.subject, version === 1 ? ["bearer", "this-model", "this-unit"] : ["this-model", "this-unit"], "characteristic-set.subject"),
-        characteristic: enumValue(input.characteristic, ["M", "T", "Sv", "W", "A", "Ld", "OC", "WS", "BS", "S", "AP", "D"], "characteristic-set.characteristic"),
+        ...(version >= 3 && input.subject === undefined ? {} : { subject: enumValue(input.subject, version === 1 ? ["bearer", "this-model", "this-unit"] : version >= 3 ? ["this-model", "this-unit", "selected-unit"] : ["this-model", "this-unit"], "characteristic-set.subject") }),
+        characteristic,
         value: integerOrSource(input.value, "characteristic-set.value"),
+        ...(weaponType !== undefined ? { weapon_type: weaponType } : {}),
       };
+    }
     case "core-ability-grant": {
       const ability = enumValue(input.ability, CORE_ABILITY_GRANT_IDS, "core-ability-grant.ability");
       const valued = (VALUED_ABILITY_GRANTS as readonly string[]).includes(ability);

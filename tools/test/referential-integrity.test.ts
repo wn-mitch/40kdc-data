@@ -237,6 +237,42 @@ describe("referential integrity", () => {
     expect(FACTION_HOME_KEYWORD["world-eaters"]).toBe("World Eaters");
     expect(FACTION_HOME_KEYWORD["chaos-space-marines"]).toBe("Heretic Astartes");
   });
+
+  it("admits a cult faction's own daemon-legion keyword and rejects every other legion's", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-sibling-keywords"));
+    const messages = result.errors
+      .flatMap((e) => e.errors.map((x) => x.message))
+      .filter((m) => m.includes("is not permitted for"));
+    expect(messages).toEqual([
+      'unit "rot-swarm": faction_keyword "Plague Legions" is not permitted for world-eaters (expected only "World Eaters" or "Blood Legions")',
+      'unit "daemon-host": faction_keyword "Legiones Daemonica" is not permitted for world-eaters (expected only "World Eaters" or "Blood Legions")',
+    ]);
+  });
+});
+
+describe("detachment datasheet references", () => {
+  it("flags each warlord/exclusion datasheet id that names no core unit, and only those", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-detachment-datasheets"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message)).filter((m) => m.includes("is no core unit"));
+    expect(messages).toEqual([
+      'detachment "path-of-the-dead": mandatory_warlord_datasheet_ids entry "lost-avatar" is no core unit',
+      'detachment "path-of-the-dead": excluded_datasheet_ids entry "retired-walker" is no core unit',
+    ]);
+  });
+});
+
+describe("keyword caps and detachment pricing references", () => {
+  it("flags an empty cap, an override with no matching cap, and pricing for an unknown detachment", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-list-requirements"));
+    const messages = result.errors
+      .flatMap((e) => e.errors.map((x) => x.message))
+      .filter((m) => /keyword_limits|keyword_limit_overrides|detachment_pricing/.test(m));
+    expect(messages).toEqual([
+      'faction "court": keyword_limits entry 1 has no keywords',
+      'detachment "masque": keyword_limit_overrides entry [Mime] matches no keyword_limits entry of faction "court"',
+      'unit "jester": detachment_pricing detachment "lost-revel" is no detachment of faction "court"',
+    ]);
+  });
 });
 
 describe("ability unit references", () => {

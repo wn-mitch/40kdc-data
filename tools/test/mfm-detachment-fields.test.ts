@@ -9,6 +9,8 @@ import {
   requiredKeywordsForDetachment,
   tagsForDetachment,
   ruleIdsForDetachment,
+  datasheetListsForDetachment,
+  applyDatasheetLists,
   type DetFieldsReport,
   type DirDetFieldResult,
 } from "../src/mfm/detachment-fields.js";
@@ -122,6 +124,61 @@ describe("authoritative detachment field reconciliation", () => {
   });
 });
 
+
+describe("detachment datasheet lists (synthetic)", () => {
+  const dump = new MfmDump({
+    data: {
+      datasheet: [
+        { id: "ds-yv", localisations: { en: { name: "Yvraine" } } },
+        { id: "ds-yn", localisations: { en: { name: "The Yncarne" } } },
+        { id: "ds-tm", localisations: { en: { name: "Troupe Master" } } },
+        { id: "ds-sk", localisations: { en: { name: "Skarbrand" } } },
+        { id: "ds-gone", localisations: { en: { name: "Retired Hero" } } },
+      ],
+      miniature: [
+        { id: "m-yv", datasheetId: "ds-yv" },
+        { id: "m-yn", datasheetId: "ds-yn" },
+        { id: "m-tm", datasheetId: "ds-tm" },
+      ],
+      detachment_mandatory_warlord_miniature: [
+        { detachmentId: "d-ynnead", miniatureId: "m-yv" },
+        { detachmentId: "d-ynnead", miniatureId: "m-yn" },
+      ],
+      detachment_granted_warlord_miniature: [{ detachmentId: "d-ghosts", miniatureId: "m-tm" }],
+      detachment_excluded_datasheet: [
+        { detachmentId: "d-shadow", datasheetId: "ds-sk" },
+        { detachmentId: "d-shadow", datasheetId: "ds-gone" },
+      ],
+    } as never,
+  });
+  const units = new Set(["yvraine", "the-yncarne", "troupe-master", "skarbrand"]);
+
+  it("resolves warlord miniatures and excluded datasheets to repo unit ids, per detachment", () => {
+    expect(datasheetListsForDetachment(dump, "d-ynnead", units)).toEqual({
+      mandatory_warlord_datasheet_ids: ["the-yncarne", "yvraine"],
+      granted_warlord_datasheet_ids: [],
+      excluded_datasheet_ids: [],
+    });
+    expect(datasheetListsForDetachment(dump, "d-ghosts", units).granted_warlord_datasheet_ids).toEqual(["troupe-master"]);
+  });
+
+  it("leaves out and reports a datasheet with no repo unit", () => {
+    const unresolved: string[] = [];
+    expect(datasheetListsForDetachment(dump, "d-shadow", units, unresolved).excluded_datasheet_ids).toEqual(["skarbrand"]);
+    expect(unresolved).toEqual(["Retired Hero"]);
+  });
+
+  it("replaces stale lists and clears a list the source no longer derives", () => {
+    const det = { id: "x", name: "X", faction_id: "f", excluded_datasheet_ids: ["old"], granted_warlord_datasheet_ids: ["kept"] };
+    const changed = applyDatasheetLists(det, {
+      mandatory_warlord_datasheet_ids: [],
+      granted_warlord_datasheet_ids: ["kept"],
+      excluded_datasheet_ids: [],
+    });
+    expect(changed).toEqual(["excluded_datasheet_ids"]);
+    expect(det).toEqual({ id: "x", name: "X", faction_id: "f", granted_warlord_datasheet_ids: ["kept"] });
+  });
+});
 
 describe("detachment-rule id derivation (synthetic)", () => {
   it("gives each dump rule the mirrored id (<name>-<faction>), sorted and de-duplicated", () => {

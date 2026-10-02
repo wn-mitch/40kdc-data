@@ -36,6 +36,14 @@
         "additional_keyword_source": "chapter",
         "max_distinct": 1
       }
+    ],
+    "keyword_limits": [
+      {
+        "keywords": [
+          "Emperor’s Champion"
+        ],
+        "max": 1
+      }
     ]
   }
 ]

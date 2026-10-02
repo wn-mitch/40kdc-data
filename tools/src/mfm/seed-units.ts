@@ -23,7 +23,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
-import { FACTION_HOME_KEYWORD } from "../integrity.js";
+import { FACTION_HOME_KEYWORD, FACTION_SIBLING_KEYWORDS } from "../integrity.js";
 import {
   MfmDump,
   type DatasheetRow,
@@ -185,19 +185,8 @@ function buildKeywords(dump: MfmDump, datasheetId: string): string[] {
   return out;
 }
 
-/**
- * faction_keywords. For the single-token Chaos factions in FACTION_HOME_KEYWORD,
- * the integrity check requires the set to be exactly `{home}` (shared-template
- * datasheets carry contaminant multi-legion lines), so we emit only `[home]`.
- * Every other faction takes the dump's list, deduped in display order.
- */
-function buildFactionKeywords(
-  dump: MfmDump,
-  datasheetId: string,
-  dir: string,
-): string[] {
-  const home = FACTION_HOME_KEYWORD[dir];
-  if (home) return [home];
+/** The datasheet's own faction keyword names (`datasheet_faction_keyword`), deduped in display order. */
+function datasheetFactionKeywords(dump: MfmDump, datasheetId: string): string[] {
   const rows = (
     dump.groupBy("datasheet_faction_keyword", "datasheetId").get(datasheetId) ??
     []
@@ -214,6 +203,42 @@ function buildFactionKeywords(
     out.push(nm);
   }
   return out;
+}
+
+/**
+ * The daemon cult-legion keyword (see FACTION_SIBLING_KEYWORDS) this datasheet
+ * carries for `dir`, if any. Such a datasheet — Codex: World Eaters' Bloodletters,
+ * faction keyword `Blood Legions` — is the host faction's own VIEW of a daemon
+ * unit: it differs from the Legiones Daemonica datasheet (faction ability, points,
+ * some stats), so it is seeded into `dir` rather than skipped as a reprint of the
+ * chaos-daemons unit.
+ */
+export function siblingKeywordOf(
+  dump: MfmDump,
+  datasheetId: string,
+  dir: string,
+): string | undefined {
+  const siblings = FACTION_SIBLING_KEYWORDS[dir] ?? [];
+  return datasheetFactionKeywords(dump, datasheetId).find((k) =>
+    siblings.includes(k),
+  );
+}
+
+/**
+ * faction_keywords. For the single-token Chaos factions in FACTION_HOME_KEYWORD,
+ * the integrity check requires the set to be exactly `{home}` (shared-template
+ * datasheets carry contaminant multi-legion lines), so we emit only `[home]` —
+ * or only the datasheet's daemon cult-legion keyword for a sibling view.
+ * Every other faction takes the dump's list, deduped in display order.
+ */
+function buildFactionKeywords(
+  dump: MfmDump,
+  datasheetId: string,
+  dir: string,
+): string[] {
+  const home = FACTION_HOME_KEYWORD[dir];
+  if (home) return [siblingKeywordOf(dump, datasheetId, dir) ?? home];
+  return datasheetFactionKeywords(dump, datasheetId);
 }
 
 /** Battlefield role derived from keywords; absent when none of the role keywords apply. */
@@ -431,7 +456,10 @@ export function runSeedUnits(
       } catch {
         continue;
       }
-      if (effIds.has(id) || sharedIds.has(id)) continue; // matched, or a shared-roster dup
+      // Matched, or a shared-roster dup — except a daemon cult-legion view, which is
+      // the host faction's own datasheet even though chaos-daemons has the name.
+      if (effIds.has(id)) continue;
+      if (sharedIds.has(id) && !siblingKeywordOf(dump, ds.id!, effDir)) continue;
       const cp = pub.get(ds.publicationId)?.isCombatPatrol ?? false;
       const prev = bySlug.get(id);
       if (

@@ -14,17 +14,17 @@
       }
     },
     "unit": {
-      "entities": 1077,
-      "with_external_refs": 1074,
+      "entities": 1099,
+      "with_external_refs": 1096,
       "covered_entities_by_namespace": {
         "bsdata": 961,
         "game-datacards": 967,
-        "mfm": 1074
+        "mfm": 1096
       },
       "references_by_namespace": {
         "bsdata": 1024,
         "game-datacards": 967,
-        "mfm": 1087
+        "mfm": 1109
       }
     },
     "detachment": {
@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3238,
-      "with_external_refs": 3108,
+      "entities": 3287,
+      "with_external_refs": 3157,
       "covered_entities_by_namespace": {
         "bsdata": 2680,
-        "mfm": 3054
+        "mfm": 3103
       },
       "references_by_namespace": {
         "bsdata": 3175,
-        "mfm": 3458
+        "mfm": 3507
       }
     },
     "wargear": {
@@ -3513,6 +3513,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "069ed322-b137-479f-b40c-638d849161ab",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "flamer-mouths",
+          "faction_id": "thousand-sons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "flamer-mouths-flamers",
+          "faction_id": "chaos-daemons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "07a22d49-78e1-4fda-850f-a1dff15b1371",
       "targets": [
         {
@@ -3776,6 +3792,22 @@
           "entity_type": "weapon",
           "id": "battlesuit-fists-commander-shadowsun",
           "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "0b8341ca-a8d1-40ef-a251-237522dfe7a3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "soulpiercer",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "soulpiercer",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -4141,6 +4173,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "12f26830-ca88-42cb-8303-3b3ca9e22876",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "barbed-tail-and-dissecting-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "barbed-tail-and-dissecting-claws",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "1363a78e-baf0-4373-9cf7-2a84014ff02d",
       "targets": [
         {
@@ -4369,6 +4417,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "1837f519-61d6-4bb0-bdfc-22b36e2339d4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "doomsday-bell",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "doomsday-bell",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "19bef32c-bfb4-4ff1-bd4b-91b005dcd4f3",
       "targets": [
         {
@@ -4422,6 +4486,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "1a20ef81-f49e-46fb-95a7-d18249a25342",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "putrid-appendages",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "putrid-appendages",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "1a59e343-916f-40cc-ab1b-638e5a9e74b3",
       "targets": [
         {
@@ -4458,6 +4538,22 @@
           "entity_type": "weapon",
           "id": "plasma-pistol-krieg-command-squad",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "1ae96bcf-e738-4a39-8a53-6c37b81980ce",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "streams-of-brackish-filth",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "streams-of-brackish-filth",
+          "faction_id": "death-guard"
         }
       ]
     },
@@ -4614,6 +4710,38 @@
     },
     {
       "namespace": "mfm",
+      "id": "206db61d-bf18-4715-8eb7-ce9dbd5eb0dc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bileblade",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bileblade",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "20a1dfd6-8a4e-4f5a-9156-f95c600128c3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "foul-mouthparts",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "foul-mouthparts",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "20c2ca3c-9c5b-40de-aa54-3d7bbd08e9fe",
       "targets": [
         {
@@ -4661,6 +4789,22 @@
           "entity_type": "weapon",
           "id": "plasma-gun-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "212867cb-ca5d-4ddd-91f0-a8dc26e4df2d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "gnarlrod",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "gnarlrod",
+          "faction_id": "death-guard"
         }
       ]
     },
@@ -4852,6 +4996,22 @@
           "entity_type": "weapon",
           "id": "neo-volkite-pistol-lieutenant",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "2992d448-9d16-4f6a-8466-1b13c72b73ee",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "staff-of-tzeentch",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "staff-of-tzeentch",
+          "faction_id": "thousand-sons"
         }
       ]
     },
@@ -5605,6 +5765,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "34915f1f-0200-4294-83ab-b90354935ab7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slaughter-and-carnage",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slaughter-and-carnage",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "34df57a9-5fbb-42cd-8c1e-38d881c15981",
       "targets": [
         {
@@ -5785,6 +5961,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "3af9218b-6be8-49c6-8135-7af6ed4628c8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "baleful-sword",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "baleful-sword",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "3b4bff07-ef0a-444c-858b-958b3a64f132",
       "targets": [
         {
@@ -5833,6 +6025,22 @@
           "entity_type": "weapon",
           "id": "relic-fist-captain-in-terminator-armour",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "3e156fbc-4575-47e9-a675-b656875ac119",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "witstealer-sword",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "witstealer-sword",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -6199,6 +6407,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "4770ee9f-d714-4ce7-b9e8-683f33945dcc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ritual-knife",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ritual-knife",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "47a82dd5-7ac6-4b82-a6a5-0bfc7918d889",
       "targets": [
         {
@@ -6480,6 +6704,22 @@
           "entity_type": "weapon",
           "id": "boltgun-traitor-guardsmen-squad",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "552bd0d9-7fa4-4165-a8d4-fa2b920e5084",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plaguesword",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plaguesword",
+          "faction_id": "death-guard"
         }
       ]
     },
@@ -6802,6 +7042,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "5e28b88e-060f-4679-89fc-bef36336f6b2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "lashing-tongue",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "lashing-tongue",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "5ead546a-c5ec-47e1-80ee-ec93b34612cc",
       "targets": [
         {
@@ -6829,6 +7085,22 @@
           "entity_type": "weapon",
           "id": "hellfire-extremis",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "61af8f3c-9e83-4eec-9d07-e60707ffc477",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "blue-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "blue-claws",
+          "faction_id": "thousand-sons"
         }
       ]
     },
@@ -6930,6 +7202,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "660e4e68-1b4f-44f2-b2e0-0fd2961c41a6",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "lamprey-bite",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "lamprey-bite",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "67935177-b9ae-4697-b448-34fc9bc0c70e",
       "targets": [
         {
@@ -6983,6 +7271,22 @@
           "entity_type": "weapon",
           "id": "flamestorm-cannon",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6bd888ce-a898-4525-8ee5-d19819ea6a5f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bloodflail",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bloodflail",
+          "faction_id": "world-eaters"
         }
       ]
     },
@@ -7453,6 +7757,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "7dabe7f2-0d50-447c-a0ad-b914994a2c36",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "deaths-heads",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "deaths-heads",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "7e513cd6-a5ba-4575-adfa-a4b36b9b3d42",
       "targets": [
         {
@@ -7526,6 +7846,22 @@
           "entity_type": "weapon",
           "id": "forgefiend-jaws",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "7f41dd02-1f17-4303-a767-208fdf79876f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "plague-flail",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "plague-flail",
+          "faction_id": "death-guard"
         }
       ]
     },
@@ -7701,6 +8037,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "8df87802-e40a-4248-800d-47ff5c295799",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "living-whip",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "living-whip",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "8e3b693e-d6cf-457f-a023-23d9cffe2d94",
       "targets": [
         {
@@ -7811,6 +8163,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "90d464b6-2687-40a0-8687-006bf16acc72",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-of-change",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-of-change",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "91330b1d-dcd2-4b9b-8dc7-ec44c83e6812",
       "targets": [
         {
@@ -7859,6 +8227,86 @@
           "entity_type": "weapon",
           "id": "neuro-disruptor-troupe-master",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "956d3025-056d-451a-8eb6-f0a0967acfc4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bellow-of-endless-fury",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bellow-of-endless-fury",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "975bd5ef-0de5-490e-8081-20845fef41e4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "juggernauts-bladed-horn",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "juggernauts-bladed-horn",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "97698e45-c88c-4860-8791-5304e6157287",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hellfire-breath",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hellfire-breath",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "976ff7c4-44fa-45df-8936-4b15730b3f8c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "axe-of-khorne",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "axe-of-khorne",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "97c196a5-8d70-4cc8-bf34-f62e0794aa33",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "gore-drenched-fangs",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "gore-drenched-fangs",
+          "faction_id": "world-eaters"
         }
       ]
     },
@@ -8096,6 +8544,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "9d7d69ca-fe3e-404e-a89c-372f46a37157",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-yellow-flames",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-yellow-flames",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "9dfe44f9-ce8e-400c-82f8-2ef2aa5dd206",
       "targets": [
         {
@@ -8238,6 +8702,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "a509fce8-64d6-4bf6-8fa6-9d412d24e93c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-blue-flames",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-blue-flames",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "a57154c2-eacf-4598-943b-c36727d2185b",
       "targets": [
         {
@@ -8310,6 +8790,22 @@
           "entity_type": "weapon",
           "id": "combi-weapon-sisters-of-battle-squad",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "a8620149-53df-4838-ab2d-6d3d57e3c2ac",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "staff-of-tomorrow",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "staff-of-tomorrow",
+          "faction_id": "thousand-sons"
         }
       ]
     },
@@ -8436,6 +8932,22 @@
           "entity_type": "weapon",
           "id": "power-fist-traitor-enforcer",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ac90c84f-aae8-4a85-8edd-09476327ba2a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "phantasmagoria",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "phantasmagoria",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -8610,6 +9122,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "af6284ae-10b8-43d5-95c0-efd08748c205",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "yellow-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "yellow-claws",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b025e618-470e-45fa-9937-7e6050f6ed3e",
       "targets": [
         {
@@ -8768,6 +9296,22 @@
           "entity_type": "weapon",
           "id": "flamer",
           "faction_id": "genestealer-cults"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b7535c07-1d64-4791-9bc3-40a53c72cf98",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "burning-roar",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "burning-roar",
+          "faction_id": "world-eaters"
         }
       ]
     },
@@ -8963,6 +9507,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "ba60345e-290e-4787-a7a0-9531c5c1f45b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "great-axe-of-khorne",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "great-axe-of-khorne",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "baa80049-9a6f-4984-a9e7-5a239122f612",
       "targets": [
         {
@@ -9059,6 +9619,54 @@
           "entity_type": "weapon",
           "id": "artificer-crafted-storm-bolter-battle-sisters-squad",
           "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "be2784f7-0c7b-4604-8797-0561b5b68406",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "putrid-vomit",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "putrid-vomit",
+          "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "bef81642-65ec-4d43-908e-8bab8e99f33e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pink-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pink-claws",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "c0355616-ccdc-40c4-863d-947419c324c1",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "pavane-of-slaanesh",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "pavane-of-slaanesh",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -9740,6 +10348,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "d315ebc6-07c8-4d1f-a799-d1bed7404f2b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-pink-flames",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "coruscating-pink-flames",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "d391dc88-f22b-40ce-a412-5e943898df8f",
       "targets": [
         {
@@ -10127,6 +10751,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "dd14659c-d4c5-4c7b-9074-e01951630d02",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slashing-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slashing-claws",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ddb647a9-1664-4c21-a198-69291e16f6f3",
       "targets": [
         {
@@ -10201,6 +10841,22 @@
           "entity_type": "weapon",
           "id": "titanic-feet-chaos-acastus-knight-porphyrion",
           "faction_id": "chaos-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "dfce9f5e-7a96-4d3d-9dca-2c85a78f1933",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "snapping-claws",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "snapping-claws",
+          "faction_id": "emperors-children"
         }
       ]
     },
@@ -10352,6 +11008,22 @@
           "entity_type": "weapon",
           "id": "hellstrike-missile-battery",
           "faction_id": "grey-knights"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e5e26961-72b0-4a63-98e4-17ec24e98393",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "diseased-claws-and-teeth",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "diseased-claws-and-teeth",
+          "faction_id": "death-guard"
         }
       ]
     },
@@ -10778,6 +11450,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "f2cbf030-20a4-4968-977c-41a7e78041aa",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hellblade",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hellblade",
+          "faction_id": "world-eaters"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "f47dafa7-e7a0-47b7-8037-6684ead232c7",
       "targets": [
         {
@@ -10814,6 +11502,22 @@
           "entity_type": "weapon",
           "id": "chainsword-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "f70cbcdd-a635-498b-adaa-93e64a15ebe5",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "flickering-flames",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "flickering-flames",
+          "faction_id": "thousand-sons"
         }
       ]
     },
@@ -11000,6 +11704,38 @@
           "entity_type": "weapon",
           "id": "grenade-launcher",
           "faction_id": "genestealer-cults"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "fce763a1-5bb1-4f58-b629-9929c7a5c1fa",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "rod-of-sorcery",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "rod-of-sorcery",
+          "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "fdb02e79-fbac-47b0-824b-a298021561d7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "lash-of-slaanesh",
+          "faction_id": "chaos-daemons"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "lash-of-slaanesh",
+          "faction_id": "emperors-children"
         }
       ]
     },

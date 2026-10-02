@@ -476,14 +476,14 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: 7 },
-        2,
+        3,
         "The bearer's M characteristic is 7",
       )).toMatch(/^fp_/);
       expect(validateFingerprint(
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "Sv", value: 3 },
-        2,
+        3,
         "its Sv characteristic is 3",
       )).toMatch(/^fp_/);
     } finally {
@@ -498,7 +498,7 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: { source: "D6" } },
-        2,
+        3,
         "Set the bearer's M characteristic to D6",
       )).toMatch(/^fp_/);
       expect(() => normalizeFingerprintParameters("characteristic-set", {
@@ -515,7 +515,7 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: { source: "D3" } },
-        2,
+        3,
         "Set the bearer's M characteristic to D6",
       )).toThrow(/exact source span/i);
     } finally {

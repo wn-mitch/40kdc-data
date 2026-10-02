@@ -3,8 +3,9 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
-import { confirmSurface, leafSurface, retireSurface } from "./leaves.js";
+import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leaves.js";
 import { confirmConnectiveSurface } from "./connective-surfaces.js";
+import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -27,7 +28,7 @@ export type ChatDecision = {
   description?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
-  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface";
+  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "operator" | "move-surface";
   /** For `connective-surface`: the composition relation the joiner expresses, if any. */
   relation?: string;
   role?: string;
@@ -37,8 +38,14 @@ export type ChatDecision = {
   /** New wording for a correction, located inside the proposal's fragment. */
   exact_text?: string;
   /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere.
-   * `retire-surface` names the active surface to stop applying by its wording in `exact_text`. */
+   * `retire-surface` and `move-surface` name the active surface by its wording in `exact_text`. */
   scope?: Record<string, unknown>;
+  /** For `operator`: wording with {slot}s, each slot's spellings and their parameter values, and
+   * the parameters every spelling shares (leaf-operators.ts). */
+  template?: string;
+  slots?: Record<string, OperatorSlot>;
+  fixed?: Record<string, unknown>;
+  combinations?: Array<Record<string, string>>;
 };
 
 export type ChatReview = { reviewer: string; decisions: ChatDecision[]; pilot_reviewed?: number[] };
@@ -157,10 +164,30 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
         applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, promoted: report.promoted, out_of_scope: report.out_of_scope, blocked: report.blocked.length } } as never);
         continue;
       }
+      if (item.action === "operator") {
+        // One worded operator whose slots each occurrence's own spelling fills.
+        const report = confirmOperator(db, {
+          reviewer: actor.reviewer, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}),
+          template: item.template, slots: item.slots, fixed: item.fixed ?? {}, ...(item.scope ? { scope: item.scope } : {}), ...(item.combinations ? { combinations: item.combinations } : {}),
+        }, actor);
+        applied.push({ batch_id: report.batch_id, operator: report } as never);
+        continue;
+      }
       if (item.action === "connective-surface") {
         // Joining words decided once: a connective wherever they occur between leaves, in scope.
         const report = confirmConnectiveSurface(db, { reviewer: actor.reviewer, exact_text: String(item.exact_text ?? ""), scope: item.scope, relation: item.relation }, actor);
         applied.push({ batch_id: report.batch_id, connective: report } as never);
+        continue;
+      }
+      if (item.action === "move-surface") {
+        // Give a decided wording a different meaning; its annotations move with it.
+        const surface = leafSurface(String(item.exact_text ?? ""));
+        const row = db.prepare("SELECT id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as { id: number } | undefined;
+        if (!row) throw new Error(`No active surface "${surface}".`);
+        const report = moveSurface(db, {
+          reviewer: actor.reviewer, surface_id: row.id, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}), parameters: item.parameters ?? {},
+        }, actor);
+        applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, blocked: report.blocked.length } } as never);
         continue;
       }
       if (item.action === "retire-surface") {

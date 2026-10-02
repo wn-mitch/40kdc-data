@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import * as fs from "fs";
 import { MfmDump, DEFAULT_DUMP_PATH, loadDump } from "../src/mfm/loader.js";
 import { REPO_ROOT } from "../src/mfm/repo-files.js";
-import { buildSeedUnit, runSeedUnits, effectiveDir } from "../src/mfm/seed-units.js";
+import { buildSeedUnit, runSeedUnits, effectiveDir, siblingKeywordOf } from "../src/mfm/seed-units.js";
 
 /**
  * buildSeedUnit is pure over the dump tables (no filesystem), so it runs without
@@ -156,6 +156,21 @@ describe("buildSeedUnit", () => {
     expect(u.faction_keywords).toEqual(["World Eaters"]);
   });
 
+  it("emits a cult faction's daemon-legion keyword (not the home keyword) for a sibling view", () => {
+    const dump = mkDump({
+      datasheet: [{ ...DS, localisations: { en: { name: "Bloodletters" } } }],
+      miniature: [mini({})],
+      datasheet_faction_keyword: [{ id: "f1", displayOrder: 1, datasheetId: "ds1", factionKeywordId: "fk-bl" }],
+      faction_keyword: [{ id: "fk-bl", localisations: { en: { name: "Blood Legions" } } }],
+    });
+    const ds = dump.byId("datasheet").get("ds1") as never;
+    expect(buildSeedUnit(dump, ds, "world-eaters").faction_keywords).toEqual(["Blood Legions"]);
+    expect(siblingKeywordOf(dump, "ds1", "world-eaters")).toBe("Blood Legions");
+    // Another cult's legion keyword is not this faction's view: home keyword, no sibling.
+    expect(siblingKeywordOf(dump, "ds1", "death-guard")).toBeUndefined();
+    expect(buildSeedUnit(dump, ds, "death-guard").faction_keywords).toEqual(["Death Guard"]);
+  });
+
   it("never leaks GW prose (lore) into the seeded unit", () => {
     const dump = mkDump({
       datasheet: [
@@ -188,6 +203,26 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("runSeedUnits over the real d
     // Every Combat-Patrol datasheet now has a repo entity, so none is held back;
     // a re-run over the committed repo is a pure no-op.
     expect({ created, cpExcluded, skipped }).toEqual({ created: 0, cpExcluded: 0, skipped: 0 });
+  });
+
+  it("files each daemon cult-legion datasheet as its host faction's own view", () => {
+    // The chaos-daemons units share these names, but each legion codex prints its
+    // own datasheet (own faction keyword, faction ability, points). Seeded once,
+    // they are matched in the host dir, so the idempotence test above covers re-runs.
+    const views: Record<string, [string, string[]]> = {
+      "world-eaters": ["Blood Legions", ["bloodcrushers", "bloodletters", "bloodthirster", "flesh-hounds", "skarbrand"]],
+      "death-guard": ["Plague Legions", ["beasts-of-nurgle", "great-unclean-one", "nurglings", "plague-drones", "plaguebearers", "rotigus"]],
+      "emperors-children": ["Legions of Excess", ["daemonettes", "fiends", "keeper-of-secrets", "seekers", "shalaxi-helbane"]],
+      "thousand-sons": ["Scintillating Legions", ["blue-horrors", "flamers", "kairos-fateweaver", "lord-of-change", "pink-horrors", "screamers"]],
+    };
+    for (const [dir, [keyword, ids]] of Object.entries(views)) {
+      const units = JSON.parse(fs.readFileSync(`${REPO_ROOT}/data/core/${dir}/units.json`, "utf8")) as {
+        id: string;
+        faction_keywords?: string[];
+      }[];
+      const carrying = units.filter((u) => u.faction_keywords?.includes(keyword)).map((u) => u.id).sort();
+      expect(carrying, dir).toEqual(ids);
+    }
   });
 
   it("routes SM-chapter dirs to their adeptus-astartes parent", () => {

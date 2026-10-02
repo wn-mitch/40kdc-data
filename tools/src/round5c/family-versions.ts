@@ -3,6 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { familyRole, validateFingerprint } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
+import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 /**
  * Move leaves from a deprecated family version to its successor, which may be another family.
@@ -86,6 +87,13 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   },
   // These versions drop the value "bearer", which meant the same model as "this-model".
   { family: "characteristic-set", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  // Version 2's weapon setters applied to all weapons; preserve that historical scope, not a new default.
+  {
+    family: "characteristic-set", from: 2, to: 3,
+    map: (parameters) => (WEAPON_CHARACTERISTICS as readonly unknown[]).includes(parameters.characteristic)
+      ? { ...parameters, weapon_type: "all" }
+      : parameters,
+  },
   { family: "weapon-ability-grant", from: 2, to: 3, map: bearerIsThisModel("subject") },
   { family: "feel-no-pain", from: 1, to: 2, map: bearerIsThisModel("subject") },
   { family: "invulnerable-save", from: 1, to: 2, map: bearerIsThisModel("subject") },

@@ -308,6 +308,7 @@ class AlliedRule(TypedDict):
     points_limits: NotRequired[list[AlliedPointsLimit]]
     keyword_limits: NotRequired[list[AlliedKeywordLimit]]
     max_units: NotRequired[int | None]
+    exclusive: NotRequired[bool]
     cannot_be_warlord: NotRequired[bool]
     cannot_take_enhancements: NotRequired[bool]
     warlord_required_keyword: NotRequired[Keyword | None]
@@ -378,6 +379,11 @@ class Restrictions(TypedDict):
     notes: NotRequired[str]
 
 
+class KeywordLimitOverride(TypedDict):
+    keywords: KeywordList
+    max: int
+
+
 class Detachment(TypedDict):
     id: EntityId
     external_refs: NotRequired[ExternalReferenceList]
@@ -393,6 +399,10 @@ class Detachment(TypedDict):
     restrictions: NotRequired[Restrictions | None]
     granted_keywords: NotRequired[list[GrantedKeyword]]
     unit_minimums: NotRequired[list[UnitMinimum]]
+    mandatory_warlord_datasheet_ids: NotRequired[list[EntityId]]
+    granted_warlord_datasheet_ids: NotRequired[list[EntityId]]
+    keyword_limit_overrides: NotRequired[list[KeywordLimitOverride]]
+    excluded_datasheet_ids: NotRequired[list[EntityId]]
     game_version: GameVersionRef
     game_modes: NotRequired[GameModes]
 
@@ -419,6 +429,13 @@ class Enhancement(TypedDict):
     game_modes: NotRequired[GameModes]
 
 
+class KeywordLimit(TypedDict):
+    keywords: KeywordList
+    max: int
+    mode: NotRequired[Literal["units", "alternatives"]]
+    exempt_faction_keywords: NotRequired[KeywordList]
+
+
 class ArmyConstructionRule(TypedDict):
     type: Literal["faction-keyword-cohesion"]
     base_faction_keyword: Keyword
@@ -435,6 +452,7 @@ class Faction(TypedDict):
     keywords: NotRequired[KeywordList]
     aliases: NotRequired[list[str]]
     faction_rule_ids: list[EntityId]
+    keyword_limits: NotRequired[list[KeywordLimit]]
     army_construction_rules: NotRequired[list[ArmyConstructionRule]]
     logo_url: NotRequired[str]
 
@@ -661,6 +679,7 @@ class Model(TypedDict):
     max: int
     default_weapon_ids: NotRequired[list[EntityId]]
     is_leader_model: NotRequired[bool]
+    excluded_from_enhancements: NotRequired[bool]
     base_size_mm: NotRequired[BaseSize]
     hull_shape_id: NotRequired[EntityId | None]
     loadout_variants: NotRequired[list[LoadoutVariant]]
@@ -709,6 +728,15 @@ class Point(TypedDict):
 
 class AlliedPoint(TypedDict):
     host_faction: EntityId
+    models: int
+    cost: int
+    models_max: NotRequired[int]
+    unit_count_min: NotRequired[int]
+    unit_count_max: NotRequired[int | None]
+
+
+class DetachmentPricingItem(TypedDict):
+    detachment_id: EntityId
     models: int
     cost: int
     models_max: NotRequired[int]
@@ -772,6 +800,7 @@ class Unit(TypedDict):
     profiles: list[Profile]
     points: NotRequired[list[Point]]
     allied_points: NotRequired[list[AlliedPoint]]
+    detachment_pricing: NotRequired[list[DetachmentPricingItem]]
     points_provisional: NotRequired[bool]
     wargear_costs: NotRequired[list[WargearCost]]
     keywords: NotRequired[KeywordList]

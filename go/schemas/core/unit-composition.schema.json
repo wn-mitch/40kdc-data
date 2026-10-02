@@ -30,6 +30,11 @@
             "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
           },
           "is_leader_model": { "type": "boolean", "default": false },
+          "excluded_from_enhancements": {
+            "type": "boolean",
+            "default": false,
+            "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded."
+          },
           "base_size_mm": {
             "description": "This model's base. Absent when no base could be resolved for the model.",
             "$ref": "../defs/common.schema.json#/$defs/base-size"
