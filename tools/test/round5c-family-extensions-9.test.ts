@@ -114,6 +114,19 @@ describe("Reserves states", () => {
     expect(nodes(target.eligibility, (node) => node.type === "unit-state").map((node) => node.parameters)).toEqual([{ state: "in-strategic-reserves" }]);
   });
 
+  it("lowers arriving from Reserves as being set up from Strategic Reserves, alone or with another activity", () => {
+    const text = "While this unit did not Remain Stationary or arrive from Reserves this phase, this unit has the Feel No Pain 6+ ability.";
+    const mechanics = compiled(placed(text, [
+      ["While this unit did not Remain Stationary or arrive from Reserves this phase", "unit-activity", { activities: ["remained-stationary", "set-up-from-reserves-this-phase"], subject: "this-unit", negated: true }],
+      ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
+    ]));
+    const happened = nodes(mechanics, (node) => node.type === "happened").map((node) => node.parameters as Record<string, unknown>);
+    expect(happened).toContainEqual(expect.objectContaining({ event: "set-up", filter: { from: "strategic-reserves" }, window: "phase" }));
+    expect(happened).toHaveLength(2);
+    expect(schemaErrors(mechanics)).toEqual([]);
+    expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "strategic-reserves" }, window: "turn" } } as never)).toMatch(/set up .*Strategic Reserves this turn/u);
+  });
+
   it("refuses a Reserves state paired with engaged-with", () => {
     expect(() => normalize("unit-state", { states: ["in-cult-ambush"], subject: "this-unit", negated: false, with: "this-unit" })).toThrow();
   });

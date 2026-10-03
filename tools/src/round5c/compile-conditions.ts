@@ -47,6 +47,9 @@ const HISTORY: Record<string, (subject: string | undefined) => Node> = {
   "set-up-by-deep-strike-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "phase" }),
   "set-up-by-deep-strike-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "turn" }),
   // Version 9: "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
+  // Version 10: "that arrived from Reserves this turn"; Reserves are Strategic Reserves.
+  "set-up-from-reserves-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "phase" }),
+  "set-up-from-reserves-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "turn" }),
   "disembarked-from-this-transport-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "disembarked", filter: { transport: "this-unit" }, window: "turn" }),
   "lost-models-to-triggering-attacks": (subject) => ({
     event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
