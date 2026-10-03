@@ -428,6 +428,9 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   if (parts.length === 0 && eligibility.length === 0) return null;
   const selectors = parts.filter((leaf) => leaf.family_id === "stratagem-target" || leaf.family_id === "triggering-target");
   const bindings = parts.filter((leaf) => leaf.family_id === "target-binding");
+  // The DSL holds several named targets, but an effect leaf cannot yet say which one it applies
+  // to ("your unit" after two targets), so a second target refuses until leaves can name it.
+  if (selectors.length > 1) throw new CompileError(`A stratagem TARGET names ${selectors.length} targets; no effect leaf can yet say which target it applies to, so the second target has no binding.`);
   if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
   if (bindings.length > 1) throw new CompileError("A stratagem TARGET is bound to more than one unit.");
   const selector = selectors[0]!;

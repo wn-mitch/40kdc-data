@@ -55,8 +55,29 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   return !(before && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter"));
 }
 
+/** Leaves that claim a unit-filter right before them, so it is not an effect's postfix recipient. */
+const FILTER_CLAIMANTS = new Set(["aura-range", "event", "attack"]);
+
+/**
+ * "Add 1 to the Strength characteristic of" + "**K** models from your army": an effect whose units
+ * a unit-filter right after it names, in the same fragment, when nothing after the filter (past a
+ * "from your army") claims it instead.
+ */
+export function postfixFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  const filter = leaves[index + 1];
+  if (!ANY_UNIT_KEYS[leaf.family_id] || filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
+  let at = index + 2;
+  while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at += 1;
+  const next = leaves[at];
+  // A back-referring effect after the filter takes it as its own prefix ("Friendly X units have …").
+  return !(next && next.fragment === leaf.fragment
+    && (FILTER_CLAIMANTS.has(next.family_id) || (next.role === "EFFECT" && Object.values(next.parameters).includes("antecedent"))));
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number): string | null {
+  if (postfixFilter(leaves, index)) return FILTERED_UNITS;
   const earlier = leaves.slice(0, index);
   if (earlier.some((other) => SELECTIONS.has(other.family_id))) return "selected-unit";
   if (bareFilter(leaves, index)) return FILTERED_UNITS;

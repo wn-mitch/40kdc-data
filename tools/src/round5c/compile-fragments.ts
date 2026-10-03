@@ -38,7 +38,7 @@ const SUBJECT_TARGETS: Record<string, string> = {
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
 const OTHER_UNITS = new Set(["selected-unit", "event-subject", "defender", "recipient"]);
 
-const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model", recipient: "recipient" };
+const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model", recipient: "recipient", "event-subject": "event-subject" };
 
 const isSource = (value: unknown): boolean => value !== null && typeof value === "object" && "source" in value;
 

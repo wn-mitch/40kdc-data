@@ -29,6 +29,8 @@ export const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
 export const TARGET_SIDES = ["your-army", "enemy"] as const;
 export const TARGET_SELECTS = ["unit", "model"] as const;
 export const TARGET_BINDINGS = ["triggering-unit", "attacked-unit"] as const;
+/** Who holds the options chosen from a menu. */
+export const CHOSEN_OPTION_HOLDERS = ["this-model", "this-unit"] as const;
 
 const keywordList = { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 0, uniqueItems: true } as const;
 
@@ -177,6 +179,20 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    id: "chosen-option-grant",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Holder of the chosen options",
+    description: "\"This model has that ability\" / \"has those abilities\" after a menu (\"select one of the abilities in the X section\"): the options chosen from that menu apply, held by this model or this unit. It adds no effect of its own; a record with no menu opener before it cannot compile.",
+    starter: { holder: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["holder"],
+      properties: { holder: { enum: CHOSEN_OPTION_HOLDERS } },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "usage-scope",
     version: 1,
     role: "RESTRICTION",
@@ -320,6 +336,9 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
         ...(hasScope ? { per: enumValue(input.per, USAGE_PER, "usage-limit.per") } : {}),
       };
     }
+    case "chosen-option-grant":
+      exactKeys(input, ["holder"], family);
+      return { holder: enumValue(input.holder, CHOSEN_OPTION_HOLDERS, "chosen-option-grant.holder") };
     case "usage-scope":
       exactKeys(input, ["per"], family);
       return { per: enumValue(input.per, USAGE_PER, "usage-scope.per") };

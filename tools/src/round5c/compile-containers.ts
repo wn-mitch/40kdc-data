@@ -94,7 +94,8 @@ function namedOption(group: readonly CompileLeaf[], forRequirement: boolean): { 
 }
 
 function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
-  const options = groups.map((group) => effectsOf(group));
+  // A DSL choice's options carry no names, so a named-option heading adds nothing to its option.
+  const options = groups.map((group) => effectsOf(group[0]?.family_id === "named-option" ? group.slice(1) : group));
   const node: Node = { type: "choice", options };
   if (head.parameters.choice_label !== undefined) node.choice_label = closed(head, "choice_label");
   const min = head.parameters.min_choices;
@@ -355,7 +356,9 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     let currentSentence: number | null = null;
     // Under a named-option container each option begins at its marker, whatever the punctuation
     // ("roll one D6: on a 4+" stays in one option; a heading with no full stop does not leak).
-    const byMarker = NAMED_OPTION_CONTAINERS.has(leaf.family_id);
+    // A choice whose options carry named-option markers splits at them too.
+    const byMarker = NAMED_OPTION_CONTAINERS.has(leaf.family_id)
+      || (leaf.family_id === "choice-open" && list.slice(index + 1).some((item) => item.family_id === "named-option"));
     for (let cursor = index + 1; cursor < list.length && !LEADING_CONTAINERS.has(list[cursor]!.family_id); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
       const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence;
@@ -381,7 +384,9 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // each one once per battle round", "until the end of the battle round") carry no option of
     // their own; their leaves go back to the ordinary pipeline, which already places a usage
     // limit, a duration or a gate on the whole ability.
-    if (byMarker && groups.length && groups[0]![0]!.family_id !== "named-option" && groups[0]!.every((item) => item.role !== "EFFECT")) {
+    // The same holds for any opener whose leading groups have no effect at all ("this model has
+    // that ability", "until the start of your next Command phase"): no option is only a gate.
+    while (!SINGLE_BODY_CONTAINERS.has(leaf.family_id) && groups.length && groups[0]![0]!.family_id !== "named-option" && groups[0]!.every((item) => item.role !== "EFFECT")) {
       for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
     }
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {

@@ -200,6 +200,14 @@ export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
       // "each time a model in this unit makes an attack" + "that targets a" + "VEHICLE unit": the
       // attack's target. "an enemy unit" alone adds nothing an attack's target is not already.
       if (Object.keys(filterOf(leaf)).length > 0 || leaf.parameters.side === "friendly") out.push({ ...leaf, family_id: "unit-filter-target" });
+    } else if (isFilter(leaf) && postfixRecipient(out.at(-1))) {
+      // "Add 1 to the Strength characteristic of" + "**K** models from your army": the units the
+      // effect before it applies to. A "from your army" after it is the filter's own wording.
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+      const at = pastOwners(list, index, leaf);
+      const effect = out.at(-1)!;
+      out[out.length - 1] = { ...effect, parameters: { ...effect.parameters, subject_filter: dslUnitFilter(leaf) } };
+      index = at - 1;
     } else if (isFilter(leaf) && filteredAfter(list, index) !== null) {
       // "Friendly **K** units (from your army)" + "have the Scouts ability": every unit it
       // matches receives the effect. A "from your army" between them is the filter's own wording.
@@ -262,7 +270,14 @@ function objectEvent(leaf: CompileLeaf | undefined): boolean {
   if (leaf?.family_id !== "event" || leaf.parameters.object_owner !== undefined || leaf.parameters.object_filter !== undefined) return false;
   // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
   // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
-  return leaf.parameters.kind === "damage-allocated" || (leaf.parameters.kind === "unit-destroyed" && leaf.parameters.by !== undefined);
+  // "when an enemy unit targets a friendly X unit": the unit targeted.
+  return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
+    || (leaf.parameters.kind === "unit-destroyed" && leaf.parameters.by !== undefined);
+}
+
+/** An effect bound to the units of the unit-filter right after it (compile-antecedent.ts postfixFilter). */
+function postfixRecipient(leaf: CompileLeaf | undefined): boolean {
+  return leaf !== undefined && leaf.role === "EFFECT" && leaf.parameters.subject_filter === undefined && Object.values(leaf.parameters).includes(FILTERED_UNITS);
 }
 
 /** The index of the leaf a bare unit-filter's units receive (`FILTERED_UNITS`), past any "from your army". */

@@ -1,11 +1,12 @@
 import { bindAntecedents } from "./compile-antecedent.js";
+import { foldAsIfPhases } from "./compile-as-if.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, negate, targetRestrictions } from "./compile-conditions.js";
 import { trigger } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
-import { planContainers } from "./compile-containers.js";
+import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
@@ -113,7 +114,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText));
+    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -197,6 +198,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
   for (const at of eligibilityIndexes) endConditions.add(at);
   const battleSizeCount = list.find((leaf) => leaf.family_id === "count-by-battle-size");
+  // Battle-size leaves for two or more sizes are table rows: alternatives, one per size. Each row
+  // decides only its own sentence, so a row never joins the ability-wide gates (where rows would
+  // AND together and the ability could never apply).
+  const sizeRows = new Set(list.filter((leaf) => leaf.family_id === "battle-size").map((leaf) => String(leaf.parameters.size))).size >= 2;
 
   list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
@@ -229,6 +234,16 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         if (leaf.family_id === "aura-range") auraLeaf = leaf;
         else leaderLeaf = leaf;
       }
+      else if (leaf.role === "CONDITION" && sizeRows && leaf.family_id === "battle-size") {
+        // A row whose sentence holds a count-by-battle-size is already said by that count's value
+        // for this size; a row with effects gates them; a bare heading row decides nothing.
+        if (list.some((other, at) => other.family_id === "count-by-battle-size" && places[at]!.sentence === sentence)) return;
+        // An effectless row joins the next sentence (compile-placement.ts), so two sizes on one
+        // sentence are headings over the same effect, and neither says what its size decides.
+        const other = list.find((item, at) => at !== index && item.family_id === "battle-size" && places[at]!.sentence === sentence && item.parameters.size !== leaf.parameters.size);
+        if (!effectSentences.has(sentence) || other) throw new CompileError(`A ${String(leaf.parameters.size)} row has no effect or count in its sentence for its battle size to decide.`);
+        sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
+      }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
@@ -244,6 +259,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
         else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size") { /* folded below */ }
+        // "this model has that ability": the menu before it already applies the chosen options.
+        else if (leaf.family_id === "chosen-option-grant") {
+          if (!list.slice(0, index).some((other) => isContainerOpener(other.family_id))) throw new CompileError("\"Has that ability\" names the options chosen from a menu, but no menu opens before it.");
+        }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
       else if (leaf.role === "EVENT") {
@@ -412,7 +431,18 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     // The keywords narrow whoever acted: a filter subject gains all_of; this unit gets a keyword condition.
     if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
       const keywords = bound.parameters.keywords as string[];
-      if (moment.subject !== null && typeof moment.subject === "object") moment.subject = { ...(moment.subject as Node), all_of: keywords };
+      const withKeywords = (unit: Node) => ({ ...unit, all_of: [...new Set([...((unit.all_of as string[] | undefined) ?? []), ...keywords])] });
+      // On a targeting moment ("when an enemy unit targets a friendly X unit") the Stratagem's
+      // unit is the one targeted: the moment's object, never the enemy that targets it.
+      const enemyActs = moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy";
+      if (moment.event === "targets-selected" && enemyActs) {
+        if (moment.object !== null && typeof moment.object === "object") moment.object = withKeywords(moment.object as Node);
+        else {
+          const gate: Node = { type: "has-keyword", parameters: { all_of: keywords } };
+          const own = moment.condition as Node | undefined;
+          moment.condition = own ? { operator: "and", operands: [own, gate] } : gate;
+        }
+      } else if (moment.subject !== null && typeof moment.subject === "object") moment.subject = withKeywords(moment.subject as Node);
       else {
         const gate: Node = { type: "has-keyword", parameters: { ...(moment.subject ? { subject: moment.subject } : {}), all_of: keywords } };
         const own = moment.condition as Node | undefined;
