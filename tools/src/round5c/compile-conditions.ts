@@ -36,6 +36,21 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "set-up-this-turn": ["set-up", {}, "turn"],
 };
 
+/**
+ * Version 8 history, whose subject is not the unit the event happens to: the unit that destroyed
+ * enemy units (the DSL's filter.by), or the unit whose models the triggering attacks destroyed.
+ */
+const HISTORY: Record<string, (subject: string | undefined) => Node> = {
+  "destroyed-enemy-unit-this-phase": (subject) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit" }, window: "phase" }),
+  "destroyed-enemy-unit-this-turn": (subject) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
+  "set-up-by-deep-strike-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "phase" }),
+  "set-up-by-deep-strike-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "turn" }),
+  "lost-models-to-triggering-attacks": (subject) => ({
+    event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
+    filter: { by: "event-subject" }, window: "event",
+  }),
+};
+
 /** A unit-state leaf's states that are not core-rules unit states. */
 const STRENGTH_STATES: Record<string, string> = { "below-starting-strength": "starting", "below-half-strength": "half" };
 
@@ -129,6 +144,8 @@ export function condition(leaf: CompileLeaf): Node {
           : STRENGTH_STATES[state] ? who
             : state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
         if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, subject);
+        // Version 7: some unit is embarked within the subject (a Transport carries units).
+        if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
         // Version 5: engaged with one named unit, the DSL's `with`.
         if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) }, subject);
         return pred("unit-state", { state }, subject);
@@ -151,6 +168,8 @@ export function condition(leaf: CompileLeaf): Node {
       // Version 4 names several activities: any of them, and negated none of them.
       const activities = leaf.family_version >= 4 ? closed(leaf, "activities") as string[] : [String(closed(leaf, "activity"))];
       return polarity(leaf, anyOf(activities.map((activity) => {
+        const history = HISTORY[activity];
+        if (history) return { type: "happened", parameters: history(subject) };
         const [event, filter, window] = ACTIVITIES[activity]!;
         return pred("happened", { event, ...(Object.keys(filter).length ? { filter: structuredClone(filter) } : {}), window }, subject);
       })));
@@ -194,6 +213,8 @@ export function condition(leaf: CompileLeaf): Node {
         // distance from this unit to the attack's target, as the authored data measures it.
         const node = leaf.parameters.of === "marker"
           ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          : leaf.parameters.of === "battlefield-edge"
+          ? pred("within", { of: "battlefield-edge", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of === "matching-unit"
           ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of !== undefined
@@ -452,6 +473,8 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
   const filtered: Node[] = [
     ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    // Version 3: "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
+    ...(Array.isArray(selector.parameters.any_keywords) ? [{ type: "has-keyword", parameters: { any_of: selector.parameters.any_keywords } }] : []),
     ...(filter.states ?? []).map((state) => state === "unengaged" ? negate({ type: "unit-state", parameters: { state: "engaged" } }) : { type: "unit-state", parameters: { state } }),
     ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
   ];

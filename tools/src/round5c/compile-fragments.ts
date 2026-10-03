@@ -191,8 +191,10 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         const { keywords: _keywords, keyword_choice: _choice, ...frame } = leaf.parameters;
         return { type: "choice", options: keywords.map((keyword) => effect({ ...leaf, parameters: { ...frame, keyword } }, context)) };
       }
+      // Version 7: "that attack has the [X] ability" — the attack's weapon, whoever makes the attack.
+      const holder = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
       return {
-        type: "weapon-ability-grant", target: target(leaf.parameters.subject),
+        type: "weapon-ability-grant", target: holder,
         modifier: {
           abilities: keywords,
           ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
@@ -307,7 +309,9 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
         type: "stat-modifier", target: owner,
         modifier: {
-          stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
+          stat, operation: closed(leaf, "operation"),
+          // Version 11: halve takes no value.
+          ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
         },

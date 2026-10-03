@@ -17,7 +17,10 @@ type CoreRecord = Record<string, unknown>;
 
 const cache = new Map<string, Map<string, CoreRecord>>();
 
-/** Core records of one kind across every faction directory, keyed by ability id. */
+/**
+ * Core records of one kind, keyed by ability id: the core rules' own file (Fire Overwatch,
+ * Command Re-roll) and every faction directory's.
+ */
 function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.json"): Map<string, CoreRecord> {
   const key = `${dataRoot}\u0000${file}`;
   const cached = cache.get(key);
@@ -25,7 +28,7 @@ function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.j
   const records = new Map<string, CoreRecord>();
   const core = join(dataRoot, "core");
   if (existsSync(core)) {
-    for (const faction of readdirSync(core)) {
+    for (const faction of ["", ...readdirSync(core)]) {
       const path = join(core, faction, file);
       if (!existsSync(path)) continue;
       for (const record of JSON.parse(readFileSync(path, "utf8")) as CoreRecord[]) {

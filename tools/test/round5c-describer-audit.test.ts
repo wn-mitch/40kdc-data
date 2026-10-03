@@ -59,7 +59,9 @@ describe("Round 5C leaf describer audit", () => {
       "unit-keyword": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "hit-by-attacks": { unrendered: [], colliding: ["subject"], problems: 0 },
-      "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // Version 8's set-up-by-deep-strike: the shared DSL describer does not render a set-up's
+      // `from`, so it reads the same as set-up-this-turn (a four-port describer fix).
+      "unit-activity": { unrendered: [], colliding: ["activities", "subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
       // Version 4's `of`: "of this unit" and "of the recipient" both read "of the unit".
       "unit-position": { unrendered: [], colliding: ["subject", "to", "of"], problems: 0 },
@@ -75,7 +77,8 @@ describe("Round 5C leaf describer audit", () => {
       // Version 11: the describer reads neither whose army used a rule (used's subject owner) nor
       // who made a roll and its outcome (after-roll's subject and result filter) yet. Version 12's
       // `by` is a destroyed trigger's subject, which the describer never reads.
-      event: { unrendered: ["by"], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 0 },
+      // A moment before or after a Deadly Demise roll refuses: the DSL roll-kind has no deadly-demise (16 samples).
+      event: { unrendered: ["by"], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 16 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
       // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
       // "recipient" collision every widened subject-like enum in this file already has.

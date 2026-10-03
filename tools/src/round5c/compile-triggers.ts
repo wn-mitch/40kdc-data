@@ -63,6 +63,15 @@ function withTurn(node: Node, leaf: CompileLeaf): Node {
   return { ...node, condition: { type: "player-turn-is", parameters: { turn: `${String(closed(leaf, "turn"))}-turn` } } };
 }
 
+/** Rolls the DSL's trigger filter cannot name; a moment on one of them refuses instead of emitting an invalid roll. */
+const UNNAMED_TRIGGER_ROLLS = new Set(["deadly-demise"]);
+
+function triggerRoll(leaf: CompileLeaf): unknown {
+  const roll = closed(leaf, "roll");
+  if (UNNAMED_TRIGGER_ROLLS.has(String(roll))) throw new CompileError(`DSL_GAP: the DSL roll-kind has no ${String(roll)} roll, so a moment before or after one has no trigger yet.`);
+  return roll;
+}
+
 /** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
 const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
@@ -71,10 +80,10 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "state-changed": (leaf) => ({ event: "state-changed", filter: { state: closed(leaf, "state") } }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
-  "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: closed(leaf, "roll") } }),
+  "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: triggerRoll(leaf) } }),
   // Version 8 (batch 7a).
   "after-roll": (leaf) => ({
-    event: "after-roll", filter: { roll: closed(leaf, "roll"), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}) },
+    event: "after-roll", filter: { roll: triggerRoll(leaf), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}) },
     ...(leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
   }),
   "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),

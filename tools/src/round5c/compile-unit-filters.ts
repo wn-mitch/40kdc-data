@@ -32,6 +32,7 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
+    ...(Array.isArray(filter.parameters.excluded_abilities) ? { lacks_ability: filter.parameters.excluded_abilities } : {}),
   };
 }
 
@@ -44,6 +45,8 @@ function side(filter: CompileLeaf, what: string): string {
 
 /** The filter's keyword fields, as the folded leaf carries them. */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
+  // Selections, auras and Stratagem targets carry keyword fields only; an ability exclusion would be dropped.
+  if (filter.parameters.excluded_abilities !== undefined) throw new CompileError("A unit-filter excluding abilities has no DSL shape here yet; only a filter lowered as a DSL unit-filter keeps lacks_ability.");
   const { side: _side, visible: _visible, level: _level, ...rest } = filter.parameters;
   return rest;
 }
