@@ -127,6 +127,24 @@ describe("Reserves states", () => {
     expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "strategic-reserves" }, window: "turn" } } as never)).toMatch(/set up .*Strategic Reserves this turn/u);
   });
 
+  it("sets up using a Cult Ambush marker, within a range of it, and moves only an unmoved marker", () => {
+    const text = 'Set your unit up wholly within 6" of that Cult Ambush marker. Move that Cult Ambush marker up to 6".';
+    const mechanics = compiled(placed(text, [
+      ['Set your unit up wholly within 6" of that Cult Ambush marker', "set-up", { subject: "this-unit", to: "battlefield", via: "cult-ambush-marker", marker_inches: 6, marker_wholly: true }],
+      ['Move that Cult Ambush marker up to 6"', "battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker", operation: "relocate", distance: 6, not_moved_this_turn: true }],
+    ]));
+    expect(nodes(mechanics, (node) => node.type === "set-up")[0]!.modifier).toEqual({ to: "battlefield", via: "cult-ambush-marker", marker_range: { inches: 6, wholly: true } });
+    expect(nodes(mechanics, (node) => node.type === "marker")[0]!.modifier).toMatchObject({ operation: "relocate", distance: 6, not_moved_this_turn: true });
+    expect(schemaErrors(mechanics)).toEqual([]);
+    expect(() => normalize("set-up", { subject: "this-unit", to: "battlefield", marker_inches: 6 })).toThrow(/cult-ambush-marker/u);
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker", operation: "place", not_moved_this_turn: true })).toThrow(/relocate/u);
+    const say = (effect: unknown) => describeAbility({ effect, scope: { duration: "resolution" } } as never);
+    expect(say({ type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "cult-ambush-marker", marker_range: { inches: 6, wholly: true } } }))
+      .toContain('set up on the battlefield using a Cult Ambush marker, wholly within 6" of that marker');
+    expect(say({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: 6, not_moved_this_turn: true } }))
+      .toContain('marker that has not been moved this turn up to 6"');
+  });
+
   it("refuses a Reserves state paired with engaged-with", () => {
     expect(() => normalize("unit-state", { states: ["in-cult-ambush"], subject: "this-unit", negated: false, with: "this-unit" })).toThrow();
   });

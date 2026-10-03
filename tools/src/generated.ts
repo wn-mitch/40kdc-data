@@ -5093,7 +5093,17 @@ export interface SetUpEffect {
     allow?: boolean;
     to: "battlefield" | "strategic-reserves";
     from?: "strategic-reserves" | "transport" | "battlefield";
-    via?: "deep-strike";
+    /**
+     * deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
+     */
+    via?: "deep-strike" | "cult-ambush-marker";
+    /**
+     * With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.
+     */
+    marker_range?: {
+      inches: number;
+      wholly?: true;
+    };
     subject?: UnitRef | "models-on-this-model";
     min_enemy_distance?: number;
     within_edge?: number;
@@ -5199,6 +5209,10 @@ export interface MarkerEffect {
     placement?: string;
     distance?: number;
     consume?: "on-use" | "never";
+    /**
+     * Relocate: only a marker that has not been moved this turn.
+     */
+    not_moved_this_turn?: true;
   };
   scaling?: Scaling;
 }

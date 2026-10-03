@@ -488,6 +488,12 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s = f"{who_can} {can} be set up on the battlefield{source}"
     if m.get("via") == "deep-strike":
         s += " using the Deep Strike rules"
+    if m.get("via") == "cult-ambush-marker":
+        s += " using a Cult Ambush marker"
+    marker_range = m.get("marker_range")
+    if isinstance(marker_range, dict):
+        wholly = "wholly " if marker_range.get("wholly") is True else ""
+        s += f', {wholly}within {jstr(marker_range.get("inches"))}" of that marker'
     s += _mode_clause(m)
     if isinstance(m.get("turns"), list):
         turns = re.sub(r", ([^,]*)$", r" or \1", ", ".join(_turn_ord(t) for t in m["turns"]))
@@ -529,7 +535,10 @@ def _marker(m: dict[str, Any]) -> str:
     consume = "; using the marker consumes it" if m.get("consume") == "on-use" else ""
     if m.get("operation") == "relocate":
         dist = f' up to {jstr(m["distance"])}"' if m.get("distance") is not None else ""
-        return f"move the {label} marker{dist}{consume}"
+        unmoved = ""
+        if m.get("not_moved_this_turn") is True:
+            unmoved = " that has not been moved this turn"
+        return f"move the {label} marker{unmoved}{dist}{consume}"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
     article = "an" if re.match(r"[aeiou]", label, re.IGNORECASE) else "a"
     return f"place {article} {label} marker{where}{consume}"

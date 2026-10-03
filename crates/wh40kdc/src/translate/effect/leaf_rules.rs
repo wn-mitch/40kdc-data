@@ -26,7 +26,12 @@ pub(super) fn marker(m: &P) -> String {
         let dist = nn(m, "distance")
             .map(|d| format!(" up to {}\"", jv(d)))
             .unwrap_or_default();
-        return format!("move the {label} marker{dist}{consume}");
+        let unmoved = if is_true(m, "not_moved_this_turn") {
+            " that has not been moved this turn"
+        } else {
+            ""
+        };
+        return format!("move the {label} marker{unmoved}{dist}{consume}");
     }
     let place = nn(m, "placement")
         .map(|p| format!(" {}", dekebab(&jv(p))))

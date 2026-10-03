@@ -37,12 +37,17 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.round_offset !== undefined) modifier.round_offset = closed(leaf, "round_offset");
       if (leaf.parameters.placement !== undefined) modifier.placement = closed(leaf, "placement");
       if (leaf.parameters.ignore_limits === true) modifier.ignore_limits = true;
+      // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
+      if (leaf.parameters.via !== undefined) modifier.via = closed(leaf, "via");
+      if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { inches: closed(leaf, "marker_inches"), ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
       return { type: "set-up", target: closed(leaf, "subject"), modifier };
     }
     case "battlefield-marker": {
       const modifier: Node = { label: closed(leaf, "label") };
       if (leaf.parameters.operation !== undefined) modifier.operation = closed(leaf, "operation");
       if (leaf.parameters.distance !== undefined) modifier.distance = closed(leaf, "distance");
+      // Version 2: only a marker not yet moved this turn.
+      if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
       return { type: "marker", target: closed(leaf, "subject"), modifier };
     }
     case "transport-capacity": {

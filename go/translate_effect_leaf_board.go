@@ -332,6 +332,16 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["via"] == "deep-strike" {
 		s += " using the Deep Strike rules"
 	}
+	if m["via"] == "cult-ambush-marker" {
+		s += " using a Cult Ambush marker"
+	}
+	if markerRange, ok := asMap(m["marker_range"]); ok && markerRange != nil {
+		wholly := ""
+		if markerRange["wholly"] == true {
+			wholly = "wholly "
+		}
+		s += ", " + wholly + "within " + ejstr(markerRange["inches"]) + "\" of that marker"
+	}
 	s += moveModeClause(m)
 	if turns, ok := asList(m["turns"]); ok {
 		parts := make([]string, len(turns))
@@ -401,7 +411,11 @@ func markerLeaf(m map[string]any) string {
 		if m["distance"] != nil {
 			dist = " up to " + ejstr(m["distance"]) + "\""
 		}
-		return "move the " + label + " marker" + dist + consume
+		unmoved := ""
+		if m["not_moved_this_turn"] == true {
+			unmoved = " that has not been moved this turn"
+		}
+		return "move the " + label + " marker" + unmoved + dist + consume
 	}
 	where := ""
 	if m["placement"] != nil {

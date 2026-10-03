@@ -3665,6 +3665,8 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/permission-as-if-charge-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "declare-charge", allow: true, as_if: "charge-phase" } } },
     { caseId: "fidelity/permission-as-if-command-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "command-phase" } } },
     { caseId: "fidelity/permission-as-if-movement-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "movement-phase" } } },
+    { caseId: "fidelity/set-up-cult-ambush-marker-range", effect: { type: "set-up", target: "this-unit", modifier: { to: "battlefield", via: "cult-ambush-marker", marker_range: { inches: 6, wholly: true } } } },
+    { caseId: "fidelity/marker-relocate-not-moved", effect: { type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker", operation: "relocate", distance: 6, not_moved_this_turn: true } } },
     { caseId: "fidelity/move-as-if-movement-phase", effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } } },
     { caseId: "fidelity/add-unit-copy-cult-ambush", effect: { type: "add-unit", target: "this-unit", modifier: { copy_of: "event-object", count: 1, excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, placement: "cult-ambush" } } },
     { caseId: "fidelity/condition-in-cult-ambush", effect: { type: "conditional", condition: { type: "unit-state", parameters: { state: "in-cult-ambush" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },

@@ -186,6 +186,9 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const whoCan = m.allow === false ? noneOf(who) : who;
   let s = m.from === "battlefield" ? `${whoCan} ${can} be removed from the battlefield and set up again` : `${whoCan} ${can} be set up on the battlefield${from}`;
   if (m.via === "deep-strike") s += " using the Deep Strike rules";
+  if (m.via === "cult-ambush-marker") s += " using a Cult Ambush marker";
+  const markerRange = m.marker_range as P | undefined;
+  if (markerRange != null) s += `, ${markerRange.wholly === true ? "wholly " : ""}within ${jstr(markerRange.inches)}" of that marker`;
   s += modeClause(m);
   if (Array.isArray(m.turns)) s += ` in the Reinforcements step of your ${(m.turns as number[]).map((t) => ORD[t] ?? `${t}th`).join(", ").replace(/, ([^,]*)$/, " or $1")} Movement phase`;
   if (m.arrives === "next-movement-phase") s += ` in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? " (even in the first battle round)" : ""}`;
@@ -205,7 +208,8 @@ function marker(m: Record<string, unknown>): string {
   // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker marker".
   const label = dekebab(jstr(m.label)).replace(/ marker$/i, "");
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
-  if (m.operation === "relocate") return `move the ${label} marker${m.distance != null ? ` up to ${jstr(m.distance)}"` : ""}${consume}`;
+  const unmoved = m.not_moved_this_turn === true ? " that has not been moved this turn" : "";
+  if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${jstr(m.distance)}"` : ""}${consume}`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
   return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${consume}`;
 }

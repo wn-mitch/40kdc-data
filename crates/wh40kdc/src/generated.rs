@@ -25520,6 +25520,10 @@ for LoadoutConditionParametersUniform {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "not_moved_this_turn": {
+///      "description": "Relocate: only a marker that has not been moved this turn.",
+///      "const": true
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "place",
@@ -25543,6 +25547,9 @@ pub struct MarkerEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<f64>,
     pub label: MarkerEffectModifierLabel,
+    ///Relocate: only a marker that has not been moved this turn.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_moved_this_turn: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub operation: ::std::option::Option<MarkerEffectModifierOperation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -52382,6 +52389,23 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///    "mandatory": {
 ///      "const": true
 ///    },
+///    "marker_range": {
+///      "description": "With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.",
+///      "type": "object",
+///      "required": [
+///        "inches"
+///      ],
+///      "properties": {
+///        "inches": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "wholly": {
+///          "const": true
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "min_distance_from": {
 ///      "type": "object",
 ///      "required": [
@@ -52483,7 +52507,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "minItems": 1
 ///    },
 ///    "via": {
-///      "const": "deep-strike"
+///      "description": "deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).",
+///      "enum": [
+///        "deep-strike",
+///        "cult-ambush-marker"
+///      ]
 ///    },
 ///    "within_edge": {
 ///      "type": "number"
@@ -52518,6 +52546,8 @@ pub struct SetUpEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mandatory: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub marker_range: ::std::option::Option<SetUpEffectModifierMarkerRange>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_distance_from: ::std::option::Option<SetUpEffectModifierMinDistanceFrom>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_enemy_distance: ::std::option::Option<f64>,
@@ -52536,8 +52566,9 @@ pub struct SetUpEffectModifier {
     pub to: SetUpEffectModifierTo,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub turns: ::std::vec::Vec<::std::num::NonZeroU64>,
+    ///deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub via: ::std::option::Option<::serde_json::Value>,
+    pub via: ::std::option::Option<SetUpEffectModifierVia>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within_edge: ::std::option::Option<f64>,
 }
@@ -52752,6 +52783,37 @@ impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierFrom 
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.",
+///  "type": "object",
+///  "required": [
+///    "inches"
+///  ],
+///  "properties": {
+///    "inches": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "wholly": {
+///      "const": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SetUpEffectModifierMarkerRange {
+    pub inches: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wholly: ::std::option::Option<::serde_json::Value>,
 }
 ///`SetUpEffectModifierMinDistanceFrom`
 ///
@@ -53203,6 +53265,82 @@ impl ::std::convert::TryFrom<&::std::string::String> for SetUpEffectModifierTo {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).",
+///  "enum": [
+///    "deep-strike",
+///    "cult-ambush-marker"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SetUpEffectModifierVia {
+    #[serde(rename = "deep-strike")]
+    DeepStrike,
+    #[serde(rename = "cult-ambush-marker")]
+    CultAmbushMarker,
+}
+impl ::std::fmt::Display for SetUpEffectModifierVia {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DeepStrike => f.write_str("deep-strike"),
+            Self::CultAmbushMarker => f.write_str("cult-ambush-marker"),
+        }
+    }
+}
+impl ::std::str::FromStr for SetUpEffectModifierVia {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "deep-strike" => Ok(Self::DeepStrike),
+            "cult-ambush-marker" => Ok(Self::CultAmbushMarker),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SetUpEffectModifierVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SetUpEffectModifierVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierVia {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,

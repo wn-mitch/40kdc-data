@@ -9532,7 +9532,28 @@
                   ]
                 },
                 "via": {
-                  "const": "deep-strike"
+                  "enum": [
+                    "deep-strike",
+                    "cult-ambush-marker"
+                  ],
+                  "description": "deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed)."
+                },
+                "marker_range": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "inches"
+                  ],
+                  "properties": {
+                    "inches": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "wholly": {
+                      "const": true
+                    }
+                  },
+                  "description": "With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it."
                 },
                 "subject": {
                   "oneOf": [
@@ -9727,6 +9748,10 @@
                     "on-use",
                     "never"
                   ]
+                },
+                "not_moved_this_turn": {
+                  "const": true,
+                  "description": "Relocate: only a marker that has not been moved this turn."
                 }
               },
               "required": [

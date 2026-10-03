@@ -28,7 +28,7 @@ describe("Round 5C leaf describer audit", () => {
       // "any" and "all" rolls both read as bare "rolls"; the describer does not tell them apart.
       "ignore-modifiers": { unrendered: [], colliding: ["rolls"], problems: 0 },
       // "from" and the placement-limit fields (placement included) only render when "to" is not strategic-reserves.
-      "set-up": { unrendered: [], colliding: ["from", "min_enemy_distance", "within_edge", "round_offset", "placement"], problems: 0 },
+      "set-up": { unrendered: [], colliding: ["from", "min_enemy_distance", "within_edge", "round_offset", "placement", "marker_inches"], problems: 0 },
       // The marker's subject (who places it) never appears in the English; distance only shows on a relocate.
       "battlefield-marker": { unrendered: ["subject"], colliding: ["distance"], problems: 0 },
       // value and rolls only render for a substitute; an add ignores both.

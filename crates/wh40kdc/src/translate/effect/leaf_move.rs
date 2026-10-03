@@ -297,6 +297,20 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
     if sv(m, "via") == Some("deep-strike") {
         s.push_str(" using the Deep Strike rules");
     }
+    if sv(m, "via") == Some("cult-ambush-marker") {
+        s.push_str(" using a Cult Ambush marker");
+    }
+    if let Some(range) = nn(m, "marker_range").and_then(|v| v.as_object()) {
+        let wholly = if is_true(range, "wholly") {
+            "wholly "
+        } else {
+            ""
+        };
+        s.push_str(&format!(
+            ", {wholly}within {}\" of that marker",
+            jv(range.get("inches").unwrap_or(&Value::Null))
+        ));
+    }
     s.push_str(&mode_clause(m));
     if let Some(turns) = arr(m, "turns") {
         let joined = turns.iter().map(ordinal).collect::<Vec<_>>().join(", ");

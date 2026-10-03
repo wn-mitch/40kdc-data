@@ -21816,6 +21816,46 @@
     }
   },
   {
+    "caseId": "fidelity/set-up-cult-ambush-marker-range",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "via": "cult-ambush-marker",
+        "marker_range": {
+          "inches": 6,
+          "wholly": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can be set up on the battlefield using a Cult Ambush marker, wholly within 6\" of that marker."
+    }
+  },
+  {
+    "caseId": "fidelity/marker-relocate-not-moved",
+    "effect": {
+      "type": "marker",
+      "target": "this-unit",
+      "modifier": {
+        "label": "cult-ambush-marker",
+        "operation": "relocate",
+        "distance": 6,
+        "not_moved_this_turn": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, move the cult ambush marker that has not been moved this turn up to 6\"."
+    }
+  },
+  {
     "caseId": "fidelity/move-as-if-movement-phase",
     "effect": {
       "type": "move",

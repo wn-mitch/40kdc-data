@@ -1735,6 +1735,11 @@ class Modifier34(TypedDict):
     end_on_terrain: NotRequired[Literal[True]]
 
 
+class MarkerRange(TypedDict):
+    inches: int
+    wholly: NotRequired[Literal[True]]
+
+
 Turn: TypeAlias = int
 
 
@@ -1744,6 +1749,7 @@ class Modifier36(TypedDict):
     placement: NotRequired[str]
     distance: NotRequired[float]
     consume: NotRequired[Literal["on-use", "never"]]
+    not_moved_this_turn: NotRequired[Literal[True]]
 
 
 class SpacePerModelItem(TypedDict):
@@ -3749,7 +3755,8 @@ Modifier35 = TypedDict(
         "allow": NotRequired[bool],
         "to": Literal["battlefield", "strategic-reserves"],
         "from": NotRequired[Literal["strategic-reserves", "transport", "battlefield"]],
-        "via": NotRequired[Literal["deep-strike"]],
+        "via": NotRequired[Literal["deep-strike", "cult-ambush-marker"]],
+        "marker_range": NotRequired[MarkerRange],
         "subject": NotRequired[UnitRef | Literal["models-on-this-model"]],
         "min_enemy_distance": NotRequired[float],
         "within_edge": NotRequired[float],
