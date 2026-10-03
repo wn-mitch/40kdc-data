@@ -4,7 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
 import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leaves.js";
-import { confirmConnectiveSurface } from "./connective-surfaces.js";
+import { confirmConnectiveSpan, confirmConnectiveSurface } from "./connective-surfaces.js";
 import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 
 /**
@@ -28,7 +28,7 @@ export type ChatDecision = {
   description?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
-  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "operator" | "move-surface";
+  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface";
   /** For `connective-surface`: the composition relation the joiner expresses, if any. */
   relation?: string;
   role?: string;
@@ -171,6 +171,12 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
           template: item.template, slots: item.slots, fixed: item.fixed ?? {}, ...(item.scope ? { scope: item.scope } : {}), ...(item.combinations ? { combinations: item.combinations } : {}),
         }, actor);
         applied.push({ batch_id: report.batch_id, operator: report } as never);
+        continue;
+      }
+      if (item.action === "add-connective") {
+        // One span with no rule meaning in its record (a designer's note), out of the denominator.
+        const report = confirmConnectiveSpan(db, { reviewer: actor.reviewer, ability_version_id: Number(item.ability_version_id), exact_text: String(item.exact_text ?? ""), relation: item.relation }, actor);
+        applied.push({ ability_version_id: Number(item.ability_version_id), batch_id: report.batch_id } as never);
         continue;
       }
       if (item.action === "connective-surface") {

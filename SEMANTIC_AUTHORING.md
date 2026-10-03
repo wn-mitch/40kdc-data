@@ -78,6 +78,17 @@ unless it is needed to operate.
   spelling whose wording another surface decides with a different meaning refuses the whole
   operator; one decided with the same meaning stays as decided. Anaphoric spellings ("that unit",
   "it") and spellings whose value a family's earlier decisions contradict are not slot spellings.
+- **Anaphoric subjects point back; compilation binds them.** "That enemy unit", "that unit",
+  "it" and "those units" record the unit-ref value `antecedent` (`antecedent-families.ts` lists
+  the families and keys that accept it). Compilation (`compile-antecedent.ts`) binds it to the
+  selected unit when a selection precedes the leaf, else to a Stratagem's target, else to the
+  unit of a preceding event that names a unit, else, outside a Stratagem, to the record's own
+  unit (its model when the record only ever names this model). It refuses a Stratagem leaf with
+  none of these, and a leaf whose family cannot name the unit it binds to. Because the leaf
+  stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
+- **A family version widens; it never reinterprets.** A later version (`family-extensions.ts`)
+  adds values or optional parameters and hands the rest of a leaf to the previous version, so
+  earlier leaves move across by identity.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one selector; authoring
   does not absorb qualifiers into a broader leaf to raise completion counts.

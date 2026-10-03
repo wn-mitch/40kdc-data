@@ -22,6 +22,8 @@ import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
+import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
+import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -68,7 +70,7 @@ export { PHASE_EVENT_KINDS } from "./core-families.js";
 export type * from "./stamp-types.js";
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
-export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
+export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = withFamilyExtensions(withAntecedentVersions([
   ...CORE_FAMILIES,
   ...BUFF_FAMILIES,
   ...TARGETING_FAMILIES,
@@ -91,7 +93,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...UNIT_FILTER_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
-] as const;
+]));
 
 /** The version new fingerprints and model requests use for a family. */
 export function currentFamilyVersion(id: string): number {
@@ -129,9 +131,16 @@ export function normalizeFingerprintParameters(
   parameters: FamilyParameters,
   version = 1,
 ): Record<string, unknown> {
-  reviewedFamily(family, version);
+  const definition = reviewedFamily(family, version);
   const input = requiredObject(parameters);
+  // A family extension checks its own additions and hands the rest to the previous version.
+  const extension = familyExtension(family, version);
+  if (extension) return extension.normalize(input, (rest) => normalizeFingerprintParameters(family, rest, version - 1));
+  return normalizeWithAntecedent(family, input, version, (checked, at) => familyParameters(family, checked, at), definition.parameterSchema);
+}
 
+/** Each family's own parameter rules, at one version. */
+function familyParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> {
   const normalized = normalizeCoreParameters(family, input, version)
     ?? normalizeBuffParameters(family, input, version)
     ?? normalizeTargetingParameters(family, input, version)

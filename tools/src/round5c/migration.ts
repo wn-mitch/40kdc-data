@@ -4,7 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
 import { hashJson } from "../round4/hash.js";
-import { familyRole, validateFingerprint, type SemanticRole } from "./contracts.js";
+import { currentFamilyVersion, familyRole, validateFingerprint, type SemanticRole } from "./contracts.js";
 import { bumpWorkbenchRevision, exactSpan, insertSpan, withTransaction } from "./db.js";
 
 type JsonRecord = Record<string, unknown>;
@@ -410,7 +410,7 @@ export function repairRelatedVariantProposals(db: DatabaseSync): { rebound: numb
     let unclassified = 0;
     for (const row of rows) {
       const parameters = explicitHitModifier(row.exact_text);
-      const inferred = parameters ? validateFingerprint(db, "roll-modifier", parameters, 1, row.exact_text) : null;
+      const inferred = parameters ? validateFingerprint(db, "roll-modifier", parameters, currentFamilyVersion("roll-modifier"), row.exact_text) : null;
       const fingerprint = inferred === row.queried_fingerprint_id ? null : inferred;
       if (fingerprint === row.fingerprint_id) continue;
       update.run(fingerprint, row.id, row.fingerprint_id);
@@ -588,7 +588,7 @@ function importPairwiseRows(
     if (row.verdict === "related-variant" || sidewaysChoice) {
       const sidewaysFingerprint = fingerprintForSidewaysChoice(db, sidewaysChoice, row.targetSpan, report);
       const inferred = row.verdict === "related-variant" && !sidewaysFingerprint ? explicitHitModifier(row.targetSpan) : null;
-      const inferredId = inferred ? validateFingerprint(db, "roll-modifier", inferred, 1, row.targetSpan) : null;
+      const inferredId = inferred ? validateFingerprint(db, "roll-modifier", inferred, currentFamilyVersion("roll-modifier"), row.targetSpan) : null;
       const fingerprintId = sidewaysFingerprint?.id ?? (inferredId === mappedFingerprintId ? null : inferredId);
       const role = sidewaysFingerprint?.role ?? (mappedFingerprintId ? familyRole(legacy.family, legacy.version) : "UNRESOLVED");
       const migrationKey = `${manifestHash}:${row.candidateId}:${sidewaysFingerprint?.id ?? mappedFingerprintId ?? row.queriedFingerprintId}:parameter-review`;

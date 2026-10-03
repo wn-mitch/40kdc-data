@@ -1066,6 +1066,19 @@ function numericMemberId(member: BatchMember): number {
   return value;
 }
 
+/**
+ * Whether a later surface decision superseded this leaf with a longer one ("longer wording
+ * wins"). That decision owns the row now: undoing it restores the row, so this undo leaves it be.
+ */
+function supersededByLaterSurface(db: DatabaseSync, annotationId: number, batchId: string): boolean {
+  return db.prepare(`
+    SELECT 1 FROM batch_members JOIN annotations ON annotations.id = ?
+    WHERE batch_members.entity_kind = 'annotation-superseded-by-surface' AND batch_members.entity_id = ?
+      AND batch_members.batch_id <> ? AND annotations.status = 'superseded'
+    LIMIT 1
+  `).get(annotationId, String(annotationId), batchId) !== undefined;
+}
+
 function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoAnnotation {
   const annotation = db.prepare(`
     SELECT annotations.id, annotations.span_id, annotations.supersedes_id, annotations.status, source_spans.ability_version_id
@@ -1073,8 +1086,21 @@ function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoA
     WHERE annotations.id = ?
   `).get(annotationId) as UndoAnnotation | undefined;
   if (!annotation) conflict("An annotation in this batch no longer exists.");
-  if (annotation.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
-  return annotation;
+  // A family-version migration replaces a leaf with an identical one on the successor version; the
+  // successor is this batch's leaf, and what the batch superseded is still what undo restores.
+  let current = annotation;
+  while (current.status === "superseded") {
+    const successor = db.prepare(`
+      SELECT annotations.id, annotations.span_id, annotations.supersedes_id, annotations.status, source_spans.ability_version_id
+      FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+      JOIN annotation_batches ON annotation_batches.id = annotations.batch_id
+      WHERE annotations.supersedes_id = ? AND annotation_batches.operation = 'migration-family-versions'
+    `).get(current.id) as UndoAnnotation | undefined;
+    if (!successor) break;
+    current = successor;
+  }
+  if (current.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
+  return { ...current, supersedes_id: annotation.supersedes_id };
 }
 
 /** Batch members keyed by a text id; their own undo hooks handle them. */
@@ -1130,7 +1156,9 @@ export function undoBatch(
       .all(batchId) as BatchMember[];
     if (original.operation !== "review") conflict("This batch operation cannot be undone.");
     const annotationMembers = members.filter((member) => member.entity_kind === "annotation");
-    const annotations = annotationMembers.map((member) => currentAnnotationForUndo(db, numericMemberId(member)));
+    const annotations = annotationMembers
+      .filter((member) => !supersededByLaterSurface(db, numericMemberId(member), batchId))
+      .map((member) => currentAnnotationForUndo(db, numericMemberId(member)));
     for (const annotation of annotations) {
       if (annotation.supersedes_id === null) continue;
       const previous = db.prepare("SELECT status FROM annotations WHERE id = ?").get(annotation.supersedes_id) as { status: string } | undefined;

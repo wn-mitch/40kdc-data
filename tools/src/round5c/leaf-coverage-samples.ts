@@ -8,7 +8,7 @@ import { normalizeFingerprintParameters, type SemanticFamilyDefinition } from ".
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; oneOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>;
+  items?: Schema; pattern?: string; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
 
 /** A handful of representative strings, tried against a `pattern` until one matches it. */
@@ -99,7 +99,10 @@ export function familyCombinations(family: SemanticFamilyDefinition): Record<str
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
   let sets: Record<string, unknown>[] = [{}];
   for (const [name, schema] of properties) {
-    sets = sets.flatMap((set) => appliesGiven(schema, set) ? domain(name, schema, family.starter).map((value) => ({ ...set, [name]: value })) : [set]);
+    // An optional parameter (`x-optional`) is also tried absent.
+    sets = sets.flatMap((set) => appliesGiven(schema, set)
+      ? [...domain(name, schema, family.starter).map((value) => ({ ...set, [name]: value })), ...(schema["x-optional"] ? [set] : [])]
+      : [set]);
   }
   const valid = new Map<string, Record<string, unknown>>();
   for (const set of sets) {
@@ -119,7 +122,7 @@ export function boundedCombinations(family: SemanticFamilyDefinition): Record<st
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
   const baseline: Record<string, unknown> = {};
   for (const [name, schema] of properties) {
-    if (!appliesGiven(schema, baseline)) continue;
+    if (!appliesGiven(schema, baseline) || schema["x-optional"]) continue;
     const values = domain(name, schema, family.starter);
     if (values.length) baseline[name] = values[0];
   }

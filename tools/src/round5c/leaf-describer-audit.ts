@@ -16,7 +16,7 @@ import { previewLeaf } from "./leaf-preview.js";
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>;
+  items?: Schema; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
 
 export type FamilyAudit = {
@@ -42,8 +42,10 @@ function domain(name: string, schema: Schema): unknown[] {
   if (schema.anyOf) {
     const listed = schema.anyOf.flatMap((item) => item.enum ?? []);
     if (listed.length) return listed.filter((value) => value !== "source");
-    if (schema.anyOf.some((item) => item.pattern)) return ["Lethal Hits", "Sustained Hits 1"];
-    if (schema.anyOf.some((item) => item.type === "integer")) return name === "threshold" ? [4, 5] : [1, 2];
+    const numbers = schema.anyOf.some((item) => item.type === "integer") ? (name === "threshold" ? [4, 5] : [1, 2]) : [];
+    // A number-or-dice amount (characteristic-modifier's value) samples both; the family keeps what it accepts.
+    if (schema.anyOf.some((item) => item.pattern)) return [...numbers, ...(numbers.length ? ["D3"] : ["Lethal Hits", "Sustained Hits 1"])];
+    if (numbers.length) return numbers;
   }
   if (schema.type === "integer") {
     const low = schema.minimum ?? 1;
@@ -63,7 +65,10 @@ function combinations(family: SemanticFamilyDefinition): Record<string, unknown>
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
   let sets: Record<string, unknown>[] = [{}];
   for (const [name, schema] of properties) {
-    sets = sets.flatMap((set) => applies(schema, set) ? domain(name, schema).map((value) => ({ ...set, [name]: value })) : [set]);
+    // An optional parameter (`x-optional`) is also tried absent.
+    sets = sets.flatMap((set) => applies(schema, set)
+      ? [...domain(name, schema).map((value) => ({ ...set, [name]: value })), ...(schema["x-optional"] ? [set] : [])]
+      : [set]);
   }
   const valid = new Map<string, Record<string, unknown>>();
   for (const set of sets) {

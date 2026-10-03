@@ -85,7 +85,7 @@ describe("Round 5C targeting families", () => {
         { family_id: "unit-state", parameters: { states: ["below-starting-strength"], subject: "target", negated: false } },
       ]);
       expect(surfaceMeaning(db, ATTACK.toLowerCase())).toMatchObject({ family_id: "attack", family_version: 4 });
-      expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 5 });
+      expect(surfaceMeaning(db, WEAK.toLowerCase())).toMatchObject({ family_id: "unit-state", family_version: 6 });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, repointed_surfaces: 0 });
     } finally {
       db.close();
@@ -100,7 +100,7 @@ describe("Round 5C targeting families", () => {
       db.prepare("UPDATE annotations SET status = 'superseded' WHERE fingerprint_id = ?").run(stale);
       db.prepare("UPDATE fingerprints SET status = 'superseded' WHERE id = ?").run(stale);
       expect(upgradeFamilyVersions(db).repointed_surfaces).toBe(1);
-      expect(surfaceMeaning(db, "after this unit has shot")).toEqual({ family_id: "event", family_version: 9, parameters_json: JSON.stringify({ kind: "after-shooting" }) });
+      expect(surfaceMeaning(db, "after this unit has shot")).toEqual({ family_id: "event", family_version: 10, parameters_json: JSON.stringify({ kind: "after-shooting" }) });
     } finally {
       db.close();
     }

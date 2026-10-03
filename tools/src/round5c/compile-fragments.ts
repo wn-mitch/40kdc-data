@@ -28,7 +28,13 @@ const RESOURCE_POOLS: Record<string, string> = {
 };
 
 /** Whose models an effect changes. "The bearer" is this-model; leaves still spelling it bearer are on a retired version. */
-const SUBJECT_TARGETS: Record<string, string> = { "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit" };
+const SUBJECT_TARGETS: Record<string, string> = {
+  "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit",
+  // Later versions of some effect families (family-extensions.ts) also name the triggering unit and the attack's target.
+  "event-subject": "event-subject", target: "defender",
+};
+/** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
+const OTHER_UNITS = new Set(["selected-unit", "event-subject", "defender"]);
 
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model" };
 
@@ -59,7 +65,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
     // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
-    return context.attached && found !== "selected-unit" ? "this-unit" : found;
+    return context.attached && !OTHER_UNITS.has(found) ? "this-unit" : found;
   };
   const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
@@ -108,6 +114,11 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     case "end-attack-sequence":
       return { type: "end-attack-sequence", target: "attacker" };
     case "roll-modifier": {
+      // "Add 1 to Advance and Charge rolls": the same change to each roll, together.
+      if (Array.isArray(leaf.parameters.rolls)) {
+        const { rolls, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
+        return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
+      }
       const roll = closed(leaf, "roll");
       return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
     }
@@ -255,7 +266,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }
       if (leaf.parameters.subject === undefined) throw new CompileError("Stat adjustment needs a reviewed recipient.");
-      if (leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
+      if (leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => stat === "Range" || (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
         throw new CompileError("Stat adjustment needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks: the attacker when it targets this unit.

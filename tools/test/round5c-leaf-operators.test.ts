@@ -113,6 +113,37 @@ describe("Round 5C leaf operators", () => {
     expect(db.prepare("SELECT count(*) AS n FROM leaf_surfaces WHERE operator_id = ? AND status = 'active'").get(report.operator_id)).toEqual({ n: 0 });
   });
 
+  it("undoes an operator whose leaf a family-version migration later replaced", () => {
+    const db = fixture(["This model is eligible to declare a charge in a turn in which it Advanced."]);
+    const report = confirmOperator(db, MOVE_PERMISSION, WILL);
+    const leaf = db.prepare("SELECT id, span_id, fingerprint_id, origin, authority_kind, confirmed_by, derived_from_surface_id FROM annotations WHERE status = 'active'").get() as
+      { id: number; span_id: number; fingerprint_id: string; origin: string; authority_kind: string; confirmed_by: string; derived_from_surface_id: number };
+    // What `migrateFamilyVersions` writes: the leaf superseded by an identical successor in a system batch.
+    db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('migration_test', 'migration-family-versions', 'system', 'now')").run();
+    db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ?").run(leaf.id);
+    const successor = Number(db.prepare(`
+      INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, supersedes_id, derived_from_surface_id, created_at)
+      VALUES (?, ?, 'active', ?, ?, ?, 'migration_test', ?, ?, 'now')
+    `).run(leaf.span_id, leaf.fingerprint_id, leaf.origin, leaf.authority_kind, leaf.confirmed_by, leaf.id, leaf.derived_from_surface_id).lastInsertRowid);
+    undoBatch(db, report.batch_id, { reviewer: "will" }, WILL);
+    expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(successor)).toEqual({ status: "retracted" });
+    // The batch's own row stays superseded; nothing it replaced comes back.
+    expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(leaf.id)).toEqual({ status: "superseded" });
+    expect(moveRows(db)).toEqual([]);
+  });
+
+  it("undoes an operator around a leaf a later, longer surface superseded, leaving that surface's leaf", () => {
+    const db = fixture(["This model is eligible to declare a charge in a turn in which it Advanced, even if it was Battle-shocked."]);
+    const report = confirmOperator(db, MOVE_PERMISSION, WILL);
+    const longer = "This model is eligible to declare a charge in a turn in which it Advanced, even if it was Battle-shocked";
+    confirmSurface(db, { reviewer: "will", exact_text: longer, family_id: "act-after-move", family_version: 2, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] } }, WILL);
+    const before = moveRows(db);
+    expect(before).toEqual([expect.objectContaining({ exact_text: longer, operator_id: null })]);
+    undoBatch(db, report.batch_id, { reviewer: "will" }, WILL);
+    expect(moveRows(db)).toEqual(before);
+    expect(db.prepare("SELECT status FROM leaf_operators WHERE id = ?").get(report.operator_id)).toEqual({ status: "retired" });
+  });
+
   it("rejects malformed templates and spellings that collapse to one surface", () => {
     expect(() => operatorDefinition({ ...MOVE_PERMISSION, template: "this unit is eligible to charge" })).toThrow(/at least one \{slot\}/u);
     expect(() => operatorDefinition({ ...MOVE_PERMISSION, template: "{subject} is eligible to {acts}" })).toThrow(/unused moves/u);

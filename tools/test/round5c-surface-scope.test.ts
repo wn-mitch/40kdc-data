@@ -11,6 +11,7 @@ import { confirmSurface, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { applyChatReview } from "../src/round5c/review-apply.js";
+import { undoBatch } from "../src/round5c/review.js";
 import { inScope, parseScope } from "../src/round5c/surface-scope.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
@@ -117,6 +118,30 @@ describe("Round 5C surface scope", () => {
       expect(unaccounted("a1").join(" ")).not.toMatch(/^and\b/u);
       expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "connective-surface", exact_text: "and", relation: "not-a-relation" } as never] }).failed[0]!.error)
         .toMatch(/not a known relation/u);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("takes one designer's note out of the denominator, refusing an overlap and undoing cleanly", () => {
+    // Fabricated fixture prose only.
+    const db = fixture(["Roll one D6. Designer's Note: this only clarifies timing."]);
+    try {
+      confirmSurface(db, { reviewer: "will", exact_text: "Roll one D6", ...D6 }, WILL);
+      const id = (db.prepare("SELECT id FROM abilities WHERE current = 1").get() as { id: number }).id;
+      const before = getAbilityCoverage(db, id).leaf_bytes;
+      const note = "Designer's Note: this only clarifies timing";
+      const result = applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: note } as never] });
+      expect(result.failed).toEqual([]);
+      const after = getAbilityCoverage(db, id);
+      expect(after.unaccounted).toEqual([]);
+      expect(after.leaf_bytes.denominator).toBeLessThan(before.denominator);
+      expect(after.leaf_bytes.numerator).toBe(before.numerator);
+      // A span that overlaps a trusted leaf is not a connective.
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6. Designer" } as never] }).failed[0]!.error)
+        .toMatch(/overlaps a trusted leaf/u);
+      undoBatch(db, result.applied[0]!.batch_id, { reviewer: "will" }, WILL);
+      expect(getAbilityCoverage(db, id).leaf_bytes).toEqual(before);
     } finally {
       db.close();
     }

@@ -1,3 +1,4 @@
+import { bindAntecedents, hasAntecedent } from "./compile-antecedent.js";
 import { exactSpan } from "./contracts.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import {
@@ -142,6 +143,9 @@ export type LeafFragment =
   | { kind: "implicit"; note: string };
 
 export function leafFragment(leaf: CompileLeaf): LeafFragment {
+  if (hasAntecedent(leaf)) {
+    return { kind: "implicit", note: "No separate text: points back to the unit an earlier leaf introduced (the selected unit, else the triggering unit), bound when the record compiles." };
+  }
   if (isContainerOpener(leaf.family_id)) {
     return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
   }
@@ -225,7 +229,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(ordered(leaves), sourceText), sourceText), sourceText));
+    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(bindAntecedents(ordered(leaves)), sourceText), sourceText), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

@@ -16,9 +16,10 @@ describe("Round 5C leaf describer audit", () => {
     expect(summary()).toEqual({
       // Only gains compile; losing, spending and setting a resource have no DSL fragment.
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
-      // A Leader is a model, so the subject never shows. Supporting compiles only for this model
-      // (as part of an attached unit); a supporting unit or bearer's unit has no DSL condition.
-      "leading-unit": { unrendered: ["subject"], colliding: [], problems: 2 },
+      // A Leader is a model, so leading never shows the subject. Supporting compiles only for this
+      // model, as part of an attached unit, which is also what attached in any role reads as; a
+      // supporting unit or bearer's unit has no DSL condition.
+      "leading-unit": { unrendered: [], colliding: ["subject", "attachment"], problems: 2 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.

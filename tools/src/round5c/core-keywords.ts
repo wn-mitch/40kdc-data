@@ -101,7 +101,8 @@ export function coreTargetKeywords(
 const KEYWORD_PARAMETERS: Record<string, readonly string[]> = {
   "stratagem-target": ["keywords", "excluded_keywords"],
   "triggering-target": ["keywords"],
-  "bearer-eligibility": ["keywords", "excluded_keywords"],
+  "bearer-eligibility": ["keywords", "excluded_keywords", "any_keywords"],
+  "unit-position": ["of_keywords"],
   "unit-keyword": ["keywords"],
 };
 

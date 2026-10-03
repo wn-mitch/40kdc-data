@@ -51,7 +51,7 @@ function buildFixture({ recognizedRecall = false, sidewaysReviewed = true }: { r
   const rubric = "fixture-rubric/v1";
   const fingerprints = [
     { id: "legacy-reroll", canonical_hash: hashJson({ legacy: "reroll" }), family: "reroll", version: 3, parameters: { roll: "hit", subset: "ones", weapon_type: "all" } },
-    { id: "legacy-add", canonical_hash: hashJson({ legacy: "add" }), family: "roll-modifier", version: 1, parameters: { roll: "hit", operation: "add", value: 1 } },
+    { id: "legacy-add", canonical_hash: hashJson({ legacy: "add" }), family: "roll-modifier", version: 2, parameters: { roll: "hit", operation: "add", value: 1 } },
     { id: "legacy-threshold", canonical_hash: hashJson({ legacy: "threshold" }), family: "critical-hit-threshold", version: 1, parameters: { value: "source" } },
   ];
   const candidates = {

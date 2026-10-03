@@ -4,6 +4,8 @@ import type { DatabaseSync } from "node:sqlite";
 import { familyRole, validateFingerprint } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { ANTECEDENT_KEYS, antecedentVersion } from "./antecedent-families.js";
+import { extensionVersionPairs } from "./family-extensions.js";
 
 /**
  * Move leaves from a deprecated family version to its successor, which may be another family.
@@ -197,6 +199,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       ? { ...parameters, ...(parameters.subject === "target" ? { of: "this-unit" } : { of: "target" }) }
       : parameters,
   },
+  // An antecedent version only lets its unit-ref keys point back to an earlier leaf's unit;
+  // every earlier leaf still fits it unchanged.
+  ...Object.keys(ANTECEDENT_KEYS).map((family) => ({ family, from: antecedentVersion(family)! - 1, to: antecedentVersion(family)!, map: (parameters: Record<string, unknown>) => parameters })),
+  // A family extension widens what the previous version could say; every earlier leaf fits it.
+  ...extensionVersionPairs().map(({ family, from, to }) => ({ family, from, to, map: (parameters: Record<string, unknown>) => parameters })),
 ];
 
 export type FamilyVersionReport = {

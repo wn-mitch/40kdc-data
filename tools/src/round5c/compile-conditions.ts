@@ -134,6 +134,8 @@ export function kindKey(leaf: CompileLeaf): string {
 function ownedEventTrigger(leaf: CompileLeaf): Node {
   const node: Node = { event: closed(leaf, "kind") };
   if (leaf.parameters.owner !== undefined) node.subject = { owner: closed(leaf, "owner") };
+  // An explicit subject other than this unit (the default) names whose moment it is.
+  if (leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit") node.subject = closed(leaf, "subject");
   const filter: Node = {};
   if (leaf.parameters.move_types !== undefined) filter.move_types = closed(leaf, "move_types");
   if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to");
@@ -169,6 +171,17 @@ export function attackTypeCondition(leaf: CompileLeaf): Node | null {
 }
 
 /**
+ * "One or more (other) friendly **K** units" as the DSL's unit-filter: every keyword, the side,
+ * and, for "other", not the subject itself.
+ */
+function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
+  return {
+    owner: closed(leaf, "of_side"), all_of: closed(leaf, "of_keywords"),
+    ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
+  };
+}
+
+/**
  * A batch-6-widened predicate's subject value, turned into the DSL's "who": omitted for the
  * implicit default (this-unit), `defender` for the attack's target (the pre-widening
  * convention), everything else (this-model, attacker, event-subject, recipient, selected-unit)
@@ -190,6 +203,8 @@ export function condition(leaf: CompileLeaf): Node {
       // Leader model is leading. Version 1 leaves only ever meant leading.
       const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
       if (attachment === "leading") return pred("attachment", { role: "leading" }, "this-model");
+      // Attached in either role: the model, or the unit (the bearer's unit is this unit), is part of an attached unit.
+      if (attachment === "any") return pred("attachment", { role: "attached" }, closed(leaf, "subject") === "this-model" ? "this-model" : "this-unit");
       // The DSL has no supporting role. A model attached in support is part of an attached unit,
       // and a Support model is attached only in support, so "this model is supporting a unit"
       // is "this model is part of an attached unit". A unit is attached whether it is led or
@@ -271,7 +286,9 @@ export function condition(leaf: CompileLeaf): Node {
       if (kind === "within" || kind === "beyond") {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
-        const node = leaf.parameters.of !== undefined
+        const node = leaf.parameters.of === "matching-unit"
+          ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") } }, subject)
+          : leaf.parameters.of !== undefined
           ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") } }, subject)
           : pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);

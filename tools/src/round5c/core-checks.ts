@@ -53,11 +53,24 @@ function eligibilityProblem(record: CoreRecord, parameters: Record<string, unkno
   }
   // Core adds the army's faction keyword the wording leaves out, so each named keyword must be
   // present, not the lists equal.
+  if (Array.isArray(parameters.any_keywords)) {
+    // Every keyword plus one of several: one core group per one-of keyword, each holding all the
+    // required keywords and exactly that one.
+    const any = (parameters.any_keywords as string[]).map(upper);
+    const fits = groups.length === any.length && groups.every((group) => words.every((word) => group.includes(word)) && any.filter((word) => group.includes(word)).length === 1)
+      && any.every((word) => groups.some((group) => group.includes(word)));
+    return fits ? null : `core requires ${groups.map((group) => group.join(" + ")).join(" or ")}`;
+  }
   if (parameters.match === "all") {
     return groups.length === 1 && words.every((word) => groups[0]!.includes(word)) ? null : `core requires ${groups.map((group) => group.join(" + ")).join(" or ")}`;
   }
   const matched = words.every((word) => groups.some((group) => group.includes(word))) && groups.every((group) => words.some((word) => group.includes(word)));
   return matched ? null : `core allows ${groups.map((group) => group.join(" + ")).join(" or ")}`;
+}
+
+function eligibleReading(parameters: Record<string, unknown>): string {
+  const keywords = (parameters.keywords as string[]).join(parameters.match === "any" ? " or " : " + ");
+  return Array.isArray(parameters.any_keywords) ? `${keywords} + (${(parameters.any_keywords as string[]).join(" or ")})` : keywords;
 }
 
 /** Disagreements between restriction leaves and the core record for one ability. */
@@ -82,7 +95,7 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
         continue;
       }
       const problem = eligibilityProblem(record, check.parameters);
-      if (problem) errors.push(`Eligible bearers read as ${(check.parameters.keywords as string[]).join(check.parameters.match === "any" ? " or " : " + ")}, but ${problem}.`);
+      if (problem) errors.push(`Eligible bearers read as ${eligibleReading(check.parameters)}, but ${problem}.`);
     }
   }
   return errors;

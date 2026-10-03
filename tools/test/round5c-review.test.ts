@@ -421,7 +421,7 @@ describe("Round 5C source-bound review ledger", () => {
           ...span,
           role: "CONDITION",
           family_id: "leading-unit",
-          family_version: 2,
+          family_version: 3,
           parameters: { subject: { source: span.exact_text }, attachment: "leading" },
         }],
       });
