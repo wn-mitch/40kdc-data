@@ -17,7 +17,7 @@ import { inScope, parseScope } from "../src/round5c/surface-scope.js";
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 const WILL = humanActor("will", "test");
 // Fabricated fixture prose only.
-const D6 = { family_id: "dice-roll", family_version: 4, parameters: { dice: "D6" } };
+const D6 = { family_id: "dice-roll", family_version: 5, parameters: { dice: "D6" } };
 
 const roots: string[] = [];
 afterEach(() => {

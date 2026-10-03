@@ -216,10 +216,19 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
   }
 }
 
+/**
+ * Source wording as a keyword comparison sees it: lower case, with the typographic hyphens the
+ * printed text uses ("ANTI‑MONSTER", U+2010–U+2012, en dash, minus) and no-break spaces folded to
+ * their plain forms.
+ */
+export function foldKeywordText(text: string): string {
+  return text.replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+}
+
 /** Require the granted ability name in the exact source-backed effect span. */
 export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
   if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword !== undefined
-    && !exactText.toLowerCase().includes(String(parameters.keyword).toLowerCase())) {
+    && !foldKeywordText(exactText).includes(foldKeywordText(String(parameters.keyword)))) {
     throw new TypeError("The granted weapon ability must occur in the exact source span.");
   }
 }

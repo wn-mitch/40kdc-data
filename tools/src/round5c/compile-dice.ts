@@ -81,7 +81,11 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const faces = DICE_FACES[die]! + bonus;
   // A roll_var (dice-roll@2) binds the roll as the DSL's `roll` container; a single band then
   // compiles its dice-gated `from` that binding instead of a fresh `dice` field.
-  const rollVar = rolls[0]!.parameters.roll_var as string | undefined;
+  // A named test ("take a Psychic test") is the DSL's roll with a kind; the roll binds a var so
+  // its bands read that roll.
+  const kind = rolls[0]!.parameters.kind as string | undefined;
+  const rollVar = (rolls[0]!.parameters.roll_var as string | undefined) ?? (kind !== undefined ? `${kind}-test` : undefined);
+  const wrap = (effect: Node): Node => rollVar ? { type: "roll", dice, ...(kind !== undefined ? { kind } : {}), roll_var: rollVar, effect } : effect;
   const bandOf = (item: Planned) => {
     const markers = item.gate.filter(isRollMarker);
     if (markers.length > 1) throw new CompileError("One effect is gated by two result bands.");
@@ -123,7 +127,16 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
       const gate: Node = rollVar
         ? { type: "dice-gated", from: { roll_var: rollVar }, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null }
         : { type: "dice-gated", dice, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null };
-      return rollVar ? { type: "roll", dice, roll_var: rollVar, effect: gate } : gate;
+      return wrap(gate);
+    }
+    // A pass and a fail band that split the faces ("on a 7+ … otherwise …", a Psychic test passed
+    // or failed) are one dice-gated with both branches, which a 2D6 roll can carry.
+    if (table.length === 2 && table[0]!.band.from === 1 && table[0]!.band.to + 1 === table[1]!.band.from && table[1]!.band.to === faces) {
+      const threshold = table[1]!.band.from;
+      const gate: Node = rollVar
+        ? { type: "dice-gated", from: { roll_var: rollVar }, threshold, comparison: "gte", on_success: body(table[1]!.items), on_fail: body(table[0]!.items) }
+        : { type: "dice-gated", dice, threshold, comparison: "gte", on_success: body(table[1]!.items), on_fail: body(table[0]!.items) };
+      if (die === "2D6" || kind !== undefined) return wrap(gate);
     }
     if (die === "2D6") throw new CompileError("Several result bands on 2D6 have no DSL table; only D3 and D6 tables exist.");
     if (bonus > 0) throw new CompileError(`Several result bands on ${dice} have no DSL table; a table rolls one plain D3 or D6.`);
@@ -140,7 +153,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     const table_: Node = { type: "dice-table", dice, outcomes };
     // dice-table always rolls its own dice (the DSL gives it no `from`); roll_var still binds the
     // wrapping roll so the total (or successes_on count) is available to a sibling `from` elsewhere.
-    return rollVar ? { type: "roll", dice, roll_var: rollVar, effect: table_ } : table_;
+    return wrap(table_);
   };
 
   // The roll takes the place of its first banded effect; everything else keeps its order.

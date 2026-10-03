@@ -105,6 +105,8 @@ export function trigger(leaf: CompileLeaf): Node {
   const node = eventTrigger(leaf);
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
   if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
+  // A folded unit-filter after it ("allocated to an ADEPTA SORORITAS unit") names what it happens to.
+  if (leaf.parameters.object_filter !== undefined) node.object = structuredClone(leaf.parameters.object_filter as Node);
   return node;
 }
 

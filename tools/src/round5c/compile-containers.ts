@@ -6,8 +6,8 @@ import { trigger } from "./compile-triggers.js";
  *
  * - Wrapping leaves (`aura-range`, `leader-target`, `for-each-unit-select`, `rules-bundle-marker`)
  *   sit anywhere among an otherwise ordinary ability's leaves; `compile.ts` finds them during its
- *   own leaf walk and calls the matching `wrap*` function on the body it already assembled, the
- *   same way it already wraps a `select-unit` leaf into `select-units` or `designate-target`.
+ *   own leaf walk and calls the matching `wrap*` function (`compile-wrappers.ts`) on the body it
+ *   already assembled, the same way it wraps a `select-unit` leaf into `select-units` or `designate-target`.
  * - Container openers (`choice-open`, `stance-select-open`, `issue-orders-open`,
  *   `dice-pool-allocation-open`, all role EFFECT) fold every leaf sentence after them, up to the
  *   next opener or the end of the ability, into one option each. `planContainers` computes the
@@ -34,70 +34,6 @@ export function isContainerOpener(familyId: string): boolean {
   return LEADING_CONTAINERS.has(familyId);
 }
 
-/** Families `compile.ts` treats as body-wrapping markers rather than ordinary conditions/events. */
-export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
-
-// ---------------------------------------------------------------------------------------------
-// Wrapping leaves: fold the already-assembled body of an otherwise ordinary ability into one
-// more layer. Order (aura, then leader-target, then for-each-unit, then rules-bundle) matches
-// how `compile.ts` calls them; a real ability is expected to use at most one of these at once.
-// ---------------------------------------------------------------------------------------------
-
-/** A folded unit-filter's fields (compile-unit-filters.ts), as selectUnit and wrapAura read them. */
-type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean };
-
-export function wrapAura(leaf: CompileLeaf, body: Node): Node {
-  const modifier: Node = { range: closed(leaf, "inches"), effect: body };
-  // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
-  const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
-  if (filter.other === true) throw new CompileError("An aura reaching only other units has no DSL shape yet.");
-  if (leaf.parameters.wholly === true) modifier.wholly = true;
-  const keywords = (leaf.parameters.keywords ?? filter.keywords) as string[] | undefined;
-  const eligible: Node = {};
-  if (filter.states?.length) eligible.states = filter.states;
-  if (keywords?.length) eligible.required_keywords = keywords;
-  if (filter.any_keywords?.length) eligible.any_keywords = filter.any_keywords;
-  if (filter.excluded_keywords?.length) eligible.excluded_keywords = filter.excluded_keywords;
-  if (Object.keys(eligible).length) modifier.eligible = eligible;
-  // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
-  if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
-  return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
-}
-
-/**
- * The DSL's `grant.effect` here is targetless (dispatched to the resolved leader model, not to a
- * unit-ref): a single effect with `target` stripped. A sequence or another container has no
- * place there; the ability needs to grant exactly one effect to the leader.
- */
-export function wrapLeaderTarget(leaf: CompileLeaf, body: Node): Node {
-  if (typeof body.type !== "string" || "steps" in body || "effect" in body) {
-    throw new CompileError("leader-target needs exactly one plain effect to grant to the leader model, not a sequence or another container.");
-  }
-  const { target: _target, ...granted } = body;
-  const keywords = leaf.parameters.leader_keywords as string[] | undefined;
-  return {
-    type: "leader-model-ability-grant",
-    source: "bearer-unit",
-    beneficiary: "leading-leader-model",
-    ...(keywords?.length ? { leader_filter: { keywords } } : {}),
-    attached_unit_filter: null,
-    duration: "while-leading",
-    grant: { recipient: "beneficiary", effect: granted },
-    recipient_binding: "beneficiary-only",
-  };
-}
-
-export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
-  return {
-    type: "for-each-unit",
-    selector: {
-      owner: closed(leaf, "scope") === "friendly" ? "friendly" : "enemy",
-      ...(leaf.parameters.distance === "within" ? { within_inches: closed(leaf, "inches") } : {}),
-    },
-    effect: body,
-  };
-}
-
 /** The container batch's one flat (non-wrapping) effect: stance-selection-capacity. */
 export function containerEffect(leaf: CompileLeaf): Node | undefined {
   if (leaf.family_id !== "stance-selection-capacity") return undefined;
@@ -112,73 +48,6 @@ export function containerEffect(leaf: CompileLeaf): Node | undefined {
   return node;
 }
 
-export function wrapRulesBundle(body: Node): Node {
-  const steps = body.type === "sequence" && Array.isArray(body.steps) ? (body.steps as Node[]) : [body];
-  return { type: "rules-bundle", steps };
-}
-
-/**
- * `select-unit`'s own two wraps (pre-batch-5, moved here so `compile.ts` stays under the line
- * ceiling): a selection with no attack on it is only who "that unit" names, so it becomes a
- * `select-units` around the effects; one with an attack becomes a `designate-target`.
- */
-export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null } = {}): Node {
-  // select-unit v2 with a folded unit-filter (compile-unit-filters.ts): keywords all of which the
-  // unit has, or (match any) one of which it has, which only an eligibility condition can say.
-  const filter = (selection.parameters.filter ?? {}) as UnitFilter;
-  // In an eligibility filter the default subject is the candidate; ability-unit is the ability's own unit.
-  const checks: Node[] = [
-    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
-    ...(filter.states ?? []).map((state) => state === "unengaged"
-      ? { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] }
-      : { type: "unit-state", parameters: { state } }),
-    ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
-    ...(extra.eligibility ? [extra.eligibility] : []),
-  ];
-  const eligibility = checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
-  // select-unit v3 counts its own units: exactly that many, or (up to) at most that many.
-  const own = selection.parameters.count as number | undefined;
-  if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size.");
-  const count = own === undefined ? (extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }) : selection.parameters.up_to === true ? { max_count: own } : { count: own };
-  return {
-    type: "select-units",
-    selector: {
-      owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
-      // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
-      ...count,
-      ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
-      ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
-      ...(eligibility ? { eligibility } : {}),
-      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
-      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
-    },
-    effect: body,
-  };
-}
-
-/** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
-export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
-  if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
-    throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
-  }
-  if (selection.parameters.count !== undefined) throw new CompileError("A designated target is one unit; a selection of several has no designate-target shape yet.");
-  const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
-  if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
-  const own = attack.parameters.unit === "this-model";
-  return {
-    type: "designate-target",
-    designation: "selected-unit",
-    select: {
-      scope: selection.parameters.scope === "friendly" ? "friendly-unit" : "enemy-unit",
-      count: 1,
-      ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
-      ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
-    },
-    applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
-    ...(lasting ? { duration: lasting } : {}),
-  };
-}
-
 // ---------------------------------------------------------------------------------------------
 // Container openers: fold the leaf sentences after an opener into that opener's options.
 // ---------------------------------------------------------------------------------------------
@@ -191,7 +60,7 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
  * already names a bearer (persistent-designation's `beneficiary`) passes that name instead, so a
  * reroll inside it targets the same bearer the container itself names, not a second default.
  */
-function effectsOf(leaves: readonly CompileLeaf[], attacker: string | null = null): Node {
+function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unknown> | string | null = null): Node {
   if (leaves.length === 0) throw new CompileError("An option has no effect.");
   const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
   if (bad) {
@@ -235,7 +104,19 @@ function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
     node.min_choices = closed(head, "min_choices");
     node.max_choices = closed(head, "max_choices");
   }
-  return node;
+  return head.parameters.or_random === undefined ? node : orRandom(node, options, head.parameters.or_random as { dice: string; count: number });
+}
+
+/**
+ * "either select one from the list below, or randomly select two by rolling two D6": a choice
+ * between the selection and rolling count dice on a table whose faces are the options in order.
+ */
+function orRandom(selection: Node, options: Node[], random: { dice: string; count: number }): Node {
+  const faces = random.dice === "D3" ? 3 : 6;
+  if (options.length !== faces) throw new CompileError(`Randomly selecting by rolling a ${random.dice} needs exactly ${faces} numbered options; found ${options.length}.`);
+  const table: Node = { type: "dice-table", dice: random.dice, outcomes: options.map((effect, at) => ({ results: [at + 1], effect: structuredClone(effect) })) };
+  if (random.count > 1) table.count = random.count;
+  return { type: "choice", options: [selection, table] };
 }
 
 function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {

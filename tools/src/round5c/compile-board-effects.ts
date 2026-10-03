@@ -112,6 +112,10 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       } else if (withKeywords) modifier.with = { all_of: withKeywords };
       if (leaf.parameters.max !== undefined) modifier.max = closed(leaf, "max");
       if (leaf.parameters.led_by !== undefined) modifier.led_by = closed(leaf, "led_by");
+      // Version 2: allied inclusion counted in points or models, once per matching unit, or for one faction.
+      if (leaf.parameters.measure !== undefined && leaf.parameters.measure !== "units") modifier.measure = closed(leaf, "measure");
+      if (leaf.parameters.per_keywords !== undefined) modifier.per = { all_of: closed(leaf, "per_keywords") };
+      if (leaf.parameters.faction !== undefined) modifier.faction = closed(leaf, "faction");
       return { type: "army-rule", target: "this-unit", modifier };
     }
     case "return-models": {

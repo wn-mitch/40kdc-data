@@ -164,10 +164,38 @@ export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
         keywords: keywords ?? [], match: "all", excluded_keywords: excluded ?? [], filter: rest,
       } });
       index += 1;
-    } else if (isFilter(leaf) && ownerlessEvent(next)) {
-      // "each time a friendly AELDARI unit" + "makes an attack": the trigger's subject.
-      out.push({ ...next!, parameters: { ...next!.parameters, subject_filter: dslUnitFilter(leaf) } });
-      index += 1;
+    } else if (isFilter(leaf) && ownerlessEvent(list[pastOwners(list, index, leaf)])) {
+      // "each time a friendly AELDARI unit" (+ "from your army") + "makes an attack": the trigger's subject.
+      const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      index = at;
+    } else if (isFilter(leaf) && ownedBy(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {
+      // "just after an ADEPTUS CUSTODES unit" + "from your army Falls Back": the event's owner is
+      // the filter's own side, so the filter names the unit whose moment it is.
+      const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      index = at;
+    } else if (isFilter(leaf) && attackerAfter(list[pastOwners(list, index, leaf)], leaf)) {
+      // "each time a friendly AELDARI model" + "makes an attack": who attacks. A model-level filter
+      // before "in your unit makes …" is those models of this unit.
+      const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(leaf, list[at]!) } });
+      index = at;
+    } else if (isFilter(leaf) && subjectlessRoll(list[pastOwners(list, index, leaf)]) && !out.some((before) => before.role === "EVENT" && before.fragment === leaf.fragment)) {
+      // "Friendly Adeptus Astartes Dreadnought units" + "can re-roll hit rolls of 1": the units
+      // whose rolls it is. After an attack or a moment in its fragment the filter belongs to that
+      // instead ("destroyed by an X unit"), and the attacker already says whose rolls.
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units re-roll or modify rolls must say friendly or enemy.");
+      const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      index = at;
+    } else if (isFilter(leaf) && objectEvent(out.at(-1))) {
+      // "just after a mortal wound is allocated to an" + "ADEPTA SORORITAS unit": what the moment
+      // happens to. A "from your army" of the same side after it is the filter's own wording.
+      const at = pastOwners(list, index, leaf);
+      const event = out.at(-1)!;
+      out[out.length - 1] = { ...event, parameters: { ...event.parameters, object_filter: dslUnitFilter(leaf) } };
+      index = at - 1;
     } else if (isFilter(leaf) && out.at(-1)?.family_id === "attack") {
       // "each time a model in this unit makes an attack" + "that targets a" + "VEHICLE unit": the
       // attack's target. "an enemy unit" alone adds nothing an attack's target is not already.
@@ -194,6 +222,47 @@ export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
     }
   }
   return out;
+}
+
+/** The index past any "from your army" of the filter's own side right after it. */
+function pastOwners(list: readonly CompileLeaf[], index: number, filter: CompileLeaf): number {
+  let at = index + 1;
+  while (list[at]?.family_id === "unit-owner" && list[at]!.parameters.owner === filter.parameters.side) at += 1;
+  return at;
+}
+
+/** An event the filter's side owns and that names no subject of its own. */
+function ownedBy(leaf: CompileLeaf | undefined, side: unknown): boolean {
+  return leaf?.family_id === "event" && leaf.parameters.subject === undefined && side !== "any" && leaf.parameters.owner === side;
+}
+
+/**
+ * An attack whose maker the filter names: any friendly unit, or a model-level filter before an
+ * attack by this unit's models ("each time a PENITENT model in your unit makes a melee attack").
+ */
+function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  if (leaf?.family_id !== "attack" || leaf.parameters.direction !== "makes" || leaf.parameters.attacker_filter !== undefined) return false;
+  if (leaf.parameters.unit === "friendly-unit") return filter.parameters.side === "friendly";
+  return leaf.parameters.unit === "this-unit" && filter.parameters.level === "model" && filter.parameters.side === "friendly";
+}
+
+function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string, unknown> {
+  const dsl = dslUnitFilter(filter);
+  if (attack.parameters.unit !== "this-unit") return dsl;
+  const { owner: _owner, ...rest } = dsl;
+  return { ...rest, member_of: "this-unit" };
+}
+
+/** Roll effects that carry no subject: whose rolls they are comes from an attack or a filter before them. */
+const SUBJECTLESS_ROLLS = new Set(["reroll", "roll-modifier", "roll-auto-result"]);
+const subjectlessRoll = (leaf: CompileLeaf | undefined) => leaf !== undefined && SUBJECTLESS_ROLLS.has(leaf.family_id) && leaf.parameters.subject === undefined;
+
+/** Moments that happen to a unit, whose object a unit-filter right after them can name. */
+function objectEvent(leaf: CompileLeaf | undefined): boolean {
+  if (leaf?.family_id !== "event" || leaf.parameters.object_owner !== undefined || leaf.parameters.object_filter !== undefined) return false;
+  // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
+  // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
+  return leaf.parameters.kind === "damage-allocated" || (leaf.parameters.kind === "unit-destroyed" && leaf.parameters.by !== undefined);
 }
 
 /** The index of the leaf a bare unit-filter's units receive (`FILTERED_UNITS`), past any "from your army". */

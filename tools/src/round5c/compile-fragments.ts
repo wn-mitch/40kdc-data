@@ -79,7 +79,7 @@ function pickOne(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node
  * is attached, else the family's subject parameter. `incoming` marks an effect on attacks that
  * target this unit, where the attacker's rolls are modified.
  */
-export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: string | null; incoming: boolean }): Node {
+export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean }): Node {
   const target = (subject: unknown): Node | string => {
     // Every unit a folded unit-filter matches (compile-unit-filters.ts): an army-wide grant.
     if (subject === "filtered-units") {
@@ -91,7 +91,9 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
     return context.attached && !OTHER_UNITS.has(found) ? "this-unit" : found;
   };
-  const rollTarget = (roll: unknown) => context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
+  // A unit-filter folded onto a subjectless roll ("Friendly X units can re-roll …") names whose rolls.
+  const rollTarget = (roll: unknown): Node | string => leaf.parameters.subject_filter !== undefined ? structuredClone(leaf.parameters.subject_filter as Node)
+    : context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
     case "reroll": {
       // Version 3: a pick of one from several rolls is a choice of one re-roll each.

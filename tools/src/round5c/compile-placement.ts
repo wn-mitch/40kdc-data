@@ -1,0 +1,85 @@
+import { exactSpan } from "./contracts.js";
+import { ATTACK_EVENTS } from "./compile-conditions.js";
+import type { CompileLeaf } from "./compile-fragments.js";
+import { kindKey } from "./compile-triggers.js";
+
+/**
+ * Where leaves sit in their ability: sentences and clauses from the source text between them,
+ * and the ability's shape signature built on them (the composition rules are in `compile.ts`).
+ */
+
+/** Where each leaf sits: which sentence and which clause, both counted from zero. */
+export type Placement = { sentence: number; clause: number };
+
+export const ordered = (leaves: readonly CompileLeaf[]) => [...leaves].sort((left, right) => left.start_byte - right.start_byte);
+
+function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string | undefined): { sentence: boolean; and: boolean } {
+  if (previous.fragment !== undefined && next.fragment !== undefined && previous.fragment !== next.fragment) return { sentence: true, and: false };
+  if (sourceText === undefined || previous.end_byte === undefined || next.start_byte <= previous.end_byte) return { sentence: false, and: false };
+  const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
+  return { sentence: /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+}
+
+export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
+  const sentenceOf: number[] = [];
+  const andBefore: boolean[] = [];
+  leaves.forEach((leaf, index) => {
+    const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
+    sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
+    andBefore.push(gap.and && !gap.sentence);
+  });
+  // A sentence without an effect ("While this model is leading a unit.") only sets conditions
+  // for what follows, so it joins the next sentence; the last one joins the one before.
+  const effectful = new Set(leaves.flatMap((leaf, index) => leaf.role === "EFFECT" ? [sentenceOf[index]!] : []));
+  const sentences = [...new Set(sentenceOf)];
+  const merged = new Map<number, number>();
+  let pending: number[] = [];
+  for (const sentence of sentences) {
+    pending.push(sentence);
+    if (effectful.has(sentence)) {
+      for (const item of pending) merged.set(item, sentence);
+      pending = [];
+    }
+  }
+  const last = [...effectful].at(-1) ?? sentences.at(-1) ?? 0;
+  for (const item of pending) merged.set(item, last);
+  sentenceOf.forEach((sentence, index) => { sentenceOf[index] = merged.get(sentence)!; });
+  const result: Placement[] = [];
+  let clause = 0;
+  let clauseStart = 0;
+  leaves.forEach((_, index) => {
+    if (index > 0 && sentenceOf[index] !== sentenceOf[index - 1]) {
+      clause += 1;
+      clauseStart = index;
+    } else if (index > 0 && andBefore[index]) {
+      const sentence = sentenceOf[index];
+      const left = leaves.slice(clauseStart, index);
+      const right = leaves.slice(index).filter((_, offset) => sentenceOf[index + offset] === sentence);
+      if (left.some((leaf) => leaf.role === "EFFECT") && right.some((leaf) => leaf.role === "EFFECT")) {
+        clause += 1;
+        clauseStart = index;
+      }
+    }
+    result.push({ sentence: sentenceOf[index]!, clause });
+  });
+  return result;
+}
+
+function signaturePart(leaf: CompileLeaf): string {
+  if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.direction)})`;
+  if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
+  if (leaf.family_id === "select-unit") return "EVENT(select-unit)";
+  if (leaf.family_id === "dice-roll") return "EVENT(dice-roll)";
+  return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
+}
+
+/**
+ * The shape of an ability: its leaves' roles and families in source order, parameters left out,
+ * with ` | ` between clauses so the binding of conditions is part of what a reviewer approves.
+ * Attacks keep their direction and other events their kind, because both change the structure.
+ */
+export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: string): string {
+  const list = ordered(leaves);
+  const places = placements(list, sourceText);
+  return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${signaturePart(leaf)}`).join(" ");
+}

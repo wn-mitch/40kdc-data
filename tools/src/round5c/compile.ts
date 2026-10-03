@@ -1,13 +1,12 @@
-import { bindAntecedents, hasAntecedent } from "./compile-antecedent.js";
+import { bindAntecedents } from "./compile-antecedent.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
-import { exactSpan } from "./contracts.js";
-import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
+import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, negate, targetRestrictions } from "./compile-conditions.js";
-import { kindKey, trigger } from "./compile-triggers.js";
+import { trigger } from "./compile-triggers.js";
+import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
-import {
-  designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
-} from "./compile-containers.js";
+import { planContainers } from "./compile-containers.js";
+import { designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
@@ -16,7 +15,6 @@ import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
-import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -60,148 +58,18 @@ type Node = Record<string, unknown>;
 /** Fields the leaves set on the core record rather than the enrichment entry (a stratagem's target). */
 export type CorePatch = { target_restrictions: Node };
 
-/** Where each leaf sits: which sentence and which clause, both counted from zero. */
-type Placement = { sentence: number; clause: number };
-
-const ordered = (leaves: readonly CompileLeaf[]) => [...leaves].sort((left, right) => left.start_byte - right.start_byte);
-
-function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string | undefined): { sentence: boolean; and: boolean } {
-  if (previous.fragment !== undefined && next.fragment !== undefined && previous.fragment !== next.fragment) return { sentence: true, and: false };
-  if (sourceText === undefined || previous.end_byte === undefined || next.start_byte <= previous.end_byte) return { sentence: false, and: false };
-  const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
-  return { sentence: /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
-}
-
-function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
-  const sentenceOf: number[] = [];
-  const andBefore: boolean[] = [];
-  leaves.forEach((leaf, index) => {
-    const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
-    sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
-    andBefore.push(gap.and && !gap.sentence);
-  });
-  // A sentence without an effect ("While this model is leading a unit.") only sets conditions
-  // for what follows, so it joins the next sentence; the last one joins the one before.
-  const effectful = new Set(leaves.flatMap((leaf, index) => leaf.role === "EFFECT" ? [sentenceOf[index]!] : []));
-  const sentences = [...new Set(sentenceOf)];
-  const merged = new Map<number, number>();
-  let pending: number[] = [];
-  for (const sentence of sentences) {
-    pending.push(sentence);
-    if (effectful.has(sentence)) {
-      for (const item of pending) merged.set(item, sentence);
-      pending = [];
-    }
-  }
-  const last = [...effectful].at(-1) ?? sentences.at(-1) ?? 0;
-  for (const item of pending) merged.set(item, last);
-  sentenceOf.forEach((sentence, index) => { sentenceOf[index] = merged.get(sentence)!; });
-  const result: Placement[] = [];
-  let clause = 0;
-  let clauseStart = 0;
-  leaves.forEach((_, index) => {
-    if (index > 0 && sentenceOf[index] !== sentenceOf[index - 1]) {
-      clause += 1;
-      clauseStart = index;
-    } else if (index > 0 && andBefore[index]) {
-      const sentence = sentenceOf[index];
-      const left = leaves.slice(clauseStart, index);
-      const right = leaves.slice(index).filter((_, offset) => sentenceOf[index + offset] === sentence);
-      if (left.some((leaf) => leaf.role === "EFFECT") && right.some((leaf) => leaf.role === "EFFECT")) {
-        clause += 1;
-        clauseStart = index;
-      }
-    }
-    result.push({ sentence: sentenceOf[index]!, clause });
-  });
-  return result;
-}
-
-function signaturePart(leaf: CompileLeaf): string {
-  if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.direction)})`;
-  if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
-  if (leaf.family_id === "select-unit") return "EVENT(select-unit)";
-  if (leaf.family_id === "dice-roll") return "EVENT(dice-roll)";
-  return ATTACK_EVENTS.has(String(leaf.parameters.kind)) ? "EVENT(attack)" : `EVENT(${kindKey(leaf)})`;
-}
+export { leafFragment, type LeafFragment } from "./compile-leaf-fragment.js";
+export { shapeSignature } from "./compile-placement.js";
 
 /**
- * The shape of an ability: its leaves' roles and families in source order, parameters left out,
- * with ` | ` between clauses so the binding of conditions is part of what a reviewer approves.
- * Attacks keep their direction and other events their kind, because both change the structure.
+ * Who makes an attack: a unit-filter folded onto it (compile-unit-filters.ts), any friendly unit,
+ * or this model, the aura's recipient or this unit.
  */
-export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: string): string {
-  const list = ordered(leaves);
-  const places = placements(list, sourceText);
-  return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${signaturePart(leaf)}`).join(" ");
-}
-
-/** What one leaf contributes on its own, for the per-leaf preview. */
-export type LeafFragment =
-  | { kind: "effect" | "condition" | "trigger"; node: Node }
-  | { kind: "duration"; duration: string }
-  | { kind: "implicit"; note: string };
-
-export function leafFragment(leaf: CompileLeaf): LeafFragment {
-  if (hasAntecedent(leaf)) {
-    return { kind: "implicit", note: "No separate text: points back to the unit an earlier leaf introduced (the selected unit, else the triggering unit), bound when the record compiles." };
-  }
-  if (isContainerOpener(leaf.family_id)) {
-    return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
-  }
-  if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
-  if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
-  if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
-  if (leaf.family_id === "weapon-property-scope") return { kind: "implicit", note: "No separate text: identifies the recipient and weapon scope of the following property; grants nothing by itself." };
-  if (leaf.family_id === "returned-model-exclusion") return { kind: "implicit", note: `Exclude individual returned models with any of these keywords: ${(leaf.parameters.keywords as string[]).join(", ")}; do not exclude their whole unit.` };
-  if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: its reviewed weapon scope or ability-grant frame grants ${String(leaf.parameters.keyword)}.` };
-  if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
-    return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };
-  }
-  if ((leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5 && (leaf.parameters.subject === undefined
-    || leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))))
-    || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3 && (leaf.parameters.subject === undefined
-      || leaf.parameters.weapon_type === undefined && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(leaf.parameters.characteristic))))) {
-    return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
-  }
-  if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
-  if (leaf.role === "COMBINATOR") {
-    return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };
-  }
-  if (leaf.role === "RESTRICTION") {
-    if (leaf.family_id === "usage-limit") {
-      return { kind: "implicit", note: leaf.parameters.per === undefined
-        ? `No separate text: frequency ${String(leaf.parameters.frequency)} needs a reviewed allowance scope.`
-        : `No separate text: sets the ability's usage to ${JSON.stringify(usageFor(leaf.parameters))}.` };
-    }
-    if (leaf.family_id === "usage-scope") {
-      return { kind: "implicit", note: `No separate text: qualifies the usage allowance as per ${String(leaf.parameters.per)}.` };
-    }
-    return { kind: "implicit", note: leaf.family_id === "optional-use"
-      ? "No separate text: the player chooses whether to use it (an optional trigger, or an activated ability)."
-      : leaf.family_id === "rules-bundle-marker" ? "No separate text: the whole ability's body becomes a named rules bundle."
-        : leaf.family_id === "activation-window" ? "No separate text: the whole ability applies only in the phases it names."
-          : leaf.family_id === "move-must-end" ? "No separate text: the conditions after it become where the move before it must end."
-            : "No separate text: checked against the core record, which already holds it." };
-  }
-  if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
-  if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
-  if (leaf.family_id === "roll-result") return { kind: "implicit", note: leaf.parameters.to === undefined
-    ? `No separate text: the effects in its clause happen on at least ${String(leaf.parameters.from)}; the dice roll supplies the upper bound.`
-    : `No separate text: the effects in its clause happen on a ${String(leaf.parameters.from)}-${String(leaf.parameters.to)}.` };
-  if (leaf.family_id === "unit-filter") return { kind: "implicit", note: "No separate text: says which units the selection before it may pick, or which units the aura after it reaches." };
-  if (leaf.family_id === "aura-range" || leaf.family_id === "leader-target") {
-    return { kind: "implicit", note: "No separate text: wraps the rest of the ability's effects, the same way select-unit does." };
-  }
-  if (leaf.role === "CONDITION") return { kind: "condition", node: condition(leaf) };
-  if (leaf.role === "DURATION") return { kind: "duration", duration: duration(leaf) };
-  if (leaf.family_id === "attack") {
-    const gate = attackTypeCondition(leaf);
-    return gate ? { kind: "condition", node: gate } : { kind: "implicit", note: "No separate text: an attack is part of the effect it goes with." };
-  }
-  if (leaf.family_id === "select-unit" || leaf.family_id === "for-each-unit-select") return { kind: "implicit", note: "No separate text: the selection is written with the effects that refer to the selected unit." };
-  if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit", note: "No separate text: an attack-time event is part of the effect it goes with." };
-  return { kind: "trigger", node: trigger(leaf) };
+function attackerOf(attack: CompileLeaf): Node | string {
+  if (attack.parameters.attacker_filter !== undefined) return structuredClone(attack.parameters.attacker_filter as Node);
+  const unit = attack.parameters.unit;
+  if (unit === "friendly-unit") return { owner: "friendly" };
+  return unit === "this-model" ? "this-model" : unit === "recipient" ? "recipient" : "this-unit";
 }
 
 const gated = (gate: Node[], body: Node): Node => {
@@ -403,8 +271,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
       return effect(leaf, {
         attached,
-        attacker: attack && attack.parameters.direction === "makes"
-          ? (attack.parameters.unit === "this-model" ? "this-model" : attack.parameters.unit === "recipient" ? "recipient" : "this-unit") : null,
+        attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack) : null,
         incoming: attack?.parameters.direction === "targeted",
       });
     });
