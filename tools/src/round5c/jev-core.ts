@@ -118,12 +118,29 @@ export function estimateWorstCaseCostUsd(state: Record<string, JsonValue>, quest
   return (approxTokens / 1_000_000) * JEV_INPUT_PRICE_PER_MILLION_USD;
 }
 
+/**
+ * A client error no retry or later request can fix: out of credits (402), bad key (401/403), a
+ * malformed request. Timeouts (408) and rate limits (429) stay transient.
+ */
+export class JevPermanentError extends Error {
+  constructor(readonly status: number, cause: unknown) {
+    super(`Jev request failed permanently (HTTP ${status}): ${cause instanceof Error ? cause.message : String(cause)}`, { cause });
+  }
+}
+
+function permanentStatus(error: unknown): number | null {
+  const status = (error as { status?: unknown } | null)?.status;
+  return typeof status === "number" && status >= 400 && status < 500 && status !== 408 && status !== 429 ? status : null;
+}
+
 async function withRetry<T>(fn: () => Promise<T>): Promise<{ value: T; attempts: number } | { error: unknown; attempts: number }> {
   let lastError: unknown;
   for (let attempt = 1; attempt <= RETRY_ATTEMPTS; attempt += 1) {
     try {
       return { value: await fn(), attempts: attempt };
     } catch (error) {
+      const status = permanentStatus(error);
+      if (status !== null) throw new JevPermanentError(status, error);
       lastError = error;
       if (attempt < RETRY_ATTEMPTS) await new Promise((r) => setTimeout(r, RETRY_BACKOFF_MS[attempt - 1] ?? 900));
     }
@@ -151,7 +168,15 @@ async function performRequest(
   if (!budget.tryReserve(estimate)) return null; // skipped-budget: no network call, no reservation held
 
   const started = performance.now();
-  const outcome = await withRetry(() => client.systemOne({ state, questions, model: JEV_MODEL }, { timeout: timeoutMs, retry: { maxRetries: 0 } }));
+  let outcome: Awaited<ReturnType<typeof withRetry<SystemOneResult<Questions>>>>;
+  try {
+    outcome = await withRetry(() => client.systemOne({ state, questions, model: JEV_MODEL }, { timeout: timeoutMs, retry: { maxRetries: 0 } }));
+  } catch (error) {
+    // Every later request would fail the same way, so the run stops instead of reporting each
+    // span as unanswered at zero cost.
+    budget.releaseReservation(estimate, spanKey, kind, Math.round(performance.now() - started), 1);
+    throw error;
+  }
   const latency = Math.round(performance.now() - started);
 
   if ("error" in outcome) {
