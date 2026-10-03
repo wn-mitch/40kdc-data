@@ -13,7 +13,7 @@ values and absent source relations clear them. Prose is never read or written.
 | adeptus-custodes | 32 | 0 | 0 | 0 | 0 | 0 | 0 |
 | adeptus-mechanicus | 36 | 0 | 0 | 0 | 0 | 0 | 0 |
 | aeldari | 54 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agents-of-the-imperium | 22 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agents-of-the-imperium | 22 | 0 | 0 | 0 | 4 | 0 | 0 |
 | astra-militarum | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
 | black-templars | 12 | 0 | 0 | 0 | 0 | 0 | 0 |
 | blood-angels | 12 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -42,17 +42,26 @@ values and absent source relations clear them. Prose is never read or written.
 | ultramarines | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | white-scars | 6 | 0 | 0 | 0 | 0 | 0 | 0 |
 | world-eaters | 28 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **885** | **0** | **0** | **0** | **0** | **0** | **0** |
+| **TOTAL** | **885** | **0** | **0** | **0** | **4** | **0** | **0** |
 
-## Enhancement seeds skipped (3)
+## agents-of-the-imperium
+
+**Eligibility changes:**
+- intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium: {"keyword_restrictions":["Agents of the Imperium","DNU"],"keyword_restriction_groups":null} → {"keyword_restrictions":["Agents of the Imperium","Eversor Assassin"],"keyword_restriction_groups":null}
+- decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium: {"keyword_restrictions":["Agents of the Imperium","DNU"],"keyword_restriction_groups":null} → {"keyword_restrictions":["Agents of the Imperium","Callidus Assassin"],"keyword_restriction_groups":null}
+- esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium: {"keyword_restrictions":["Agents of the Imperium","DNU"],"keyword_restriction_groups":null} → {"keyword_restrictions":["Agents of the Imperium","Culexus Assassin"],"keyword_restriction_groups":null}
+- micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium: {"keyword_restrictions":["Agents of the Imperium","DNU"],"keyword_restriction_groups":null} → {"keyword_restrictions":["Agents of the Imperium","Vindicare Assassin"],"keyword_restriction_groups":null}
+
+## Enhancement seeds skipped (1)
 
 - beacon-angelis-deathwatch-support-deathwatch: detachment deathwatch-support is ambiguous across adeptus-astartes, black-templars, blood-angels, dark-angels, imperial-fists, iron-hands, raven-guard, salamanders, space-wolves, ultramarines, white-scars
-- extra-platin-ardmob-orks: matched-play enhancement has no points cost
-- rallying-war-cry-ardmob-orks: matched-play enhancement has no points cost
 
 ## Unresolved enhancements in dump (no unambiguous repo detachment)
 
 - beacon-angelis-deathwatch-support-deathwatch
+
+## Combat-Patrol enhancements held back (2 — pass --include-combat-patrol to author)
+
 - extra-platin-ardmob-orks
 - rallying-war-cry-ardmob-orks
 

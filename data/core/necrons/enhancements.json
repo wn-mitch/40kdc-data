@@ -1091,7 +1091,7 @@
     "upgrade_tag": false,
     "max_targets": 1,
     "keyword_restrictions": [
-      "DNU",
+      "C’tan Shard of the Deceiver",
       "Necrons"
     ],
     "external_refs": [
@@ -1120,7 +1120,7 @@
     "upgrade_tag": false,
     "max_targets": 1,
     "keyword_restrictions": [
-      "DNU",
+      "C’tan Shard of the Nightbringer",
       "Necrons"
     ],
     "external_refs": [
@@ -1149,7 +1149,7 @@
     "upgrade_tag": false,
     "max_targets": 1,
     "keyword_restrictions": [
-      "DNU",
+      "C’tan Shard of the Void Dragon",
       "Necrons"
     ],
     "external_refs": [
@@ -1178,8 +1178,8 @@
     "upgrade_tag": false,
     "max_targets": 1,
     "keyword_restrictions": [
-      "DNU",
-      "Necrons"
+      "Necrons",
+      "Transcendent C’tan"
     ],
     "external_refs": [
       {

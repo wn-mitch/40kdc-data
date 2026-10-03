@@ -113,6 +113,26 @@ describe("Round 5C restrictions", () => {
     expect(coreCheckErrors(root, "relic", bearers(["ORACLE"], "all"))[0]).toMatch(/core requires/u);
   });
 
+  it("accepts a bearer spelled differently from core when both admit the same units, and only then", () => {
+    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match }), grant()]).checks;
+    const root = dataRoot([], [
+      { id: "node", ability_id: "node", keyword_restriction_groups: [["Clan Forge"], ["Loremaster"]] },
+      { id: "blade", ability_id: "blade", keyword_restrictions: ["Hive Faction", "Gilded Warden"] },
+    ]);
+    writeFileSync(join(root, "core", "fixture", "units.json"), JSON.stringify([
+      { id: "forge-smith", name: "Clan Forge Smith", keywords: ["Character", "Clan Forge", "Smith"], faction_keywords: ["Hive Faction"] },
+      { id: "forge-walkers", name: "Clan Forge Walkers", keywords: ["Clan Forge", "Walker"], faction_keywords: ["Hive Faction"] },
+      { id: "loremaster", name: "Loremaster", keywords: ["Character", "Loremaster"], faction_keywords: ["Hive Faction"] },
+      { id: "gilded-warden", name: "Gilded Warden", keywords: ["Character", "Champion", "Warden's Blades"], faction_keywords: ["Hive Faction"] },
+      { id: "champion", name: "Champion", keywords: ["Character", "Champion"], faction_keywords: ["Hive Faction"] },
+    ]));
+    // SMITH and CLAN FORGE admit different units (Clan Forge Walkers), so only the same set passes.
+    expect(coreCheckErrors(root, "node", bearers(["SMITH", "LOREMASTER"], "any"))[0]).toMatch(/core allows/u);
+    // The datasheet-scoped core group names the unit; the printed keywords pick out the same one.
+    expect(coreCheckErrors(root, "blade", bearers(["CHAMPION", "WARDEN'S BLADES"], "all"))).toEqual([]);
+    expect(coreCheckErrors(root, "blade", bearers(["CHAMPION"], "all"))[0]).toMatch(/core requires/u);
+  });
+
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
     expect(trigger("enemy-selected-targets")).toEqual({ event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" });

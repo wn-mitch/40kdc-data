@@ -15,7 +15,32 @@ export type CoreCheck =
 
 type CoreRecord = Record<string, unknown>;
 
+/** A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is EMPEROR'S). */
+const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").toUpperCase();
+
 const cache = new Map<string, Map<string, CoreRecord>>();
+/** The core faction directory each record was read from ("" for the core rules' own file). */
+const recordFaction = new WeakMap<CoreRecord, string>();
+const unitCache = new Map<string, Array<{ id: string; labels: Set<string> }>>();
+
+/**
+ * A faction's units, each with every label a restriction can name it by: its keywords, its
+ * faction keywords and its name (a datasheet-scoped core group names the datasheet).
+ */
+function factionUnits(dataRoot: string, faction: string): Array<{ id: string; labels: Set<string> }> {
+  const key = `${dataRoot}\u0000${faction}`;
+  const cached = unitCache.get(key);
+  if (cached) return cached;
+  const path = join(dataRoot, "core", faction, "units.json");
+  const units = existsSync(path)
+    ? (JSON.parse(readFileSync(path, "utf8")) as Array<{ id: string; name?: string; keywords?: string[]; faction_keywords?: string[] }>).map((unit) => ({
+      id: unit.id,
+      labels: new Set([...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), ...(unit.name ? [unit.name] : [])].map(upper)),
+    }))
+    : [];
+  unitCache.set(key, units);
+  return units;
+}
 
 /**
  * Core records of one kind, keyed by ability id: the core rules' own file (Fire Overwatch,
@@ -33,6 +58,7 @@ function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.j
       if (!existsSync(path)) continue;
       for (const record of JSON.parse(readFileSync(path, "utf8")) as CoreRecord[]) {
         records.set(String(record.ability_id ?? record.id), record);
+        recordFaction.set(record, faction);
       }
     }
   }
@@ -70,8 +96,6 @@ function characterImplied(dataRoot: string, record: CoreRecord): boolean {
   return flags !== null && id !== undefined && flags.get(id) === false;
 }
 
-/** A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is EMPEROR'S). */
-const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").toUpperCase();
 
 function eligibilityProblem(record: CoreRecord, parameters: Record<string, unknown>, implied: boolean): string | null {
   const groups = Array.isArray(record.keyword_restriction_groups)
@@ -103,6 +127,31 @@ function eligibilityProblem(record: CoreRecord, parameters: Record<string, unkno
   return matched ? null : `core allows ${groups.map((group) => group.join(" + ")).join(" or ")}`;
 }
 
+/**
+ * Whether the leaf and the core record admit the same units of the record's faction, when they
+ * spell the bearer differently: the printed IRON-MASTER where the dump requires BRÔKHYR, the
+ * TRISTRAEN'S GILDED BLADES keyword where the dump names the Tristraen datasheet. Both readings
+ * must admit at least one unit; an implied CHARACTER requirement applies to both.
+ */
+function sameBearers(dataRoot: string, record: CoreRecord, parameters: Record<string, unknown>, implied: boolean): boolean {
+  const faction = recordFaction.get(record);
+  if (faction === undefined || faction === "") return false;
+  const groups = Array.isArray(record.keyword_restriction_groups)
+    ? (record.keyword_restriction_groups as unknown[][]).map((group) => group.map(upper))
+    : Array.isArray(record.keyword_restrictions) ? [(record.keyword_restrictions as unknown[]).map(upper)] : [];
+  if (groups.length === 0) return false;
+  const words = (parameters.keywords as string[]).map(upper);
+  const any = Array.isArray(parameters.any_keywords) ? (parameters.any_keywords as string[]).map(upper) : null;
+  const byLeaf = (labels: Set<string>) => any
+    ? words.every((word) => labels.has(word)) && any.some((word) => labels.has(word))
+    : parameters.match === "any" ? words.some((word) => labels.has(word)) : words.every((word) => labels.has(word));
+  const byCore = (labels: Set<string>) => groups.some((group) => group.every((word) => labels.has(word)));
+  const units = factionUnits(dataRoot, faction).filter((unit) => !implied || unit.labels.has("CHARACTER"));
+  const leafIds = units.filter((unit) => byLeaf(unit.labels)).map((unit) => unit.id).sort();
+  const coreIds = units.filter((unit) => byCore(unit.labels)).map((unit) => unit.id).sort();
+  return leafIds.length > 0 && leafIds.join() === coreIds.join();
+}
+
 function eligibleReading(parameters: Record<string, unknown>): string {
   const keywords = (parameters.keywords as string[]).join(parameters.match === "any" ? " or " : " + ");
   return Array.isArray(parameters.any_keywords) ? `${keywords} + (${(parameters.any_keywords as string[]).join(" or ")})` : keywords;
@@ -129,7 +178,9 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
         errors.push("The eligibility leaf names bearers, but there is no core enhancement record to check them against.");
         continue;
       }
-      const problem = eligibilityProblem(record, check.parameters, characterImplied(dataRoot, record));
+      const implied = characterImplied(dataRoot, record);
+      let problem = eligibilityProblem(record, check.parameters, implied);
+      if (problem && !problem.startsWith("core excludes") && sameBearers(dataRoot, record, check.parameters, implied)) problem = null;
       if (problem) errors.push(`Eligible bearers read as ${eligibleReading(check.parameters)}, but ${problem}.`);
     }
   }

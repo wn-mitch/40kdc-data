@@ -152,6 +152,40 @@ describe("buildEnhFieldCanon", () => {
     expect(min.attachment_bodyguard_ids).toEqual(["repentia-squad"]);
   });
 
+  it("names a placeholder DNU group by the bearer the printed rule names, and refuses an unmapped one", () => {
+    const dump = new MfmDump({
+      data: {
+        publication: [{ id: "p", factionKeywordId: "fk-nec", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
+        detachment: [{ id: "det", publicationId: "p", localisations: { en: { name: "Pantheon of Woe" } } }],
+        keyword: [{ id: "k-dnu", localisations: { en: { name: "DNU" } } }],
+        faction_keyword: [{ id: "fk-nec", localisations: { en: { name: "Necrons" } } }],
+        enhancement: [
+          { id: "e-goad", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 45, localisations: { en: { name: "Quantum Goad" } } },
+          { id: "e-new", detachmentId: "det", enhancementType: "miniature", limit: 1, basePointsCost: 10, localisations: { en: { name: "Unmapped Binding" } } },
+        ],
+        enhancement_required_keyword_group: [
+          { id: "g-goad", enhancementId: "e-goad", datasheetId: null },
+          { id: "g-new", enhancementId: "e-new", datasheetId: null },
+        ],
+        enhancement_required_keyword_group_keyword: [
+          { enhancementRequiredKeywordGroupId: "g-goad", keywordId: "k-dnu" },
+          { enhancementRequiredKeywordGroupId: "g-new", keywordId: "k-dnu" },
+        ],
+        enhancement_required_keyword_group_faction_keyword: [
+          { enhancementRequiredKeywordGroupId: "g-goad", factionKeywordId: "fk-nec" },
+          { enhancementRequiredKeywordGroupId: "g-new", factionKeywordId: "fk-nec" },
+        ],
+      },
+    });
+    const canon = buildEnhFieldCanon(dump);
+    const goad = canon.get("quantum-goad-pantheon-of-woe-necrons")!;
+    expect(goad.keyword_restrictions).toEqual(["C’tan Shard of the Nightbringer", "Necrons"]);
+    expect(goad.unresolvedKeywordIds).toEqual([]);
+    const unmapped = canon.get("unmapped-binding-pantheon-of-woe-necrons")!;
+    expect(unmapped.keyword_restrictions).not.toContain("DNU");
+    expect(unmapped.unresolvedKeywordIds).toEqual(["k-dnu"]);
+  });
+
   it("preserves divergent groups as explicit alternatives", () => {
     const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
     expect(multi.keywordRestrictionsAmbiguous).toBe(true);
