@@ -921,10 +921,7 @@
     "detachment_id": "legion-of-excess",
     "cp_cost": 1,
     "phases": [
-      "command",
-      "movement",
       "shooting",
-      "charge",
       "fight"
     ],
     "player_turn": "either",

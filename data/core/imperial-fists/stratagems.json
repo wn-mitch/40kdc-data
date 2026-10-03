@@ -148,6 +148,7 @@
     "detachment_id": "ceramite-sentinels",
     "cp_cost": 1,
     "phases": [
+      "shooting",
       "fight"
     ],
     "player_turn": "either",
