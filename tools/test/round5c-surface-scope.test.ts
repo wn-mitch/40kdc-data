@@ -146,4 +146,24 @@ describe("Round 5C surface scope", () => {
       db.close();
     }
   });
+
+  it("picks one occurrence of a repeated joiner by its start byte, and refuses a byte where it is not", () => {
+    // Fabricated fixture prose only.
+    const text = "Roll one D6 and roll one D6 again.";
+    const db = fixture([text]);
+    try {
+      const id = (db.prepare("SELECT id FROM abilities WHERE current = 1").get() as { id: number }).id;
+      const and = (at: number) => applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: " and ", start_byte: at } as never] });
+      // " and " occurs once here, but "one D6" repeats: the byte form also works where text search would.
+      expect(and(text.indexOf(" and ")).failed).toEqual([]);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6" } as never] }).failed[0]!.error)
+        .toMatch(/exactly once/u);
+      const second = text.lastIndexOf("one D6");
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second } as never] }).failed).toEqual([]);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ action: "add-connective", ability_version_id: id, exact_text: "one D6", start_byte: second + 1 } as never] }).failed[0]!.error)
+        .toMatch(/is not at byte/u);
+    } finally {
+      db.close();
+    }
+  });
 });

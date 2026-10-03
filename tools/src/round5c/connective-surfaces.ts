@@ -101,7 +101,11 @@ export function confirmConnectiveSurface(db: DatabaseSync, value: { reviewer: st
  * is named by its exact text, which must occur once in the record and overlap no trusted leaf or
  * accepted connective. Recorded like a connective surface's occurrence, so undo sends it back.
  */
-export function confirmConnectiveSpan(db: DatabaseSync, value: { reviewer: string; ability_version_id: number; exact_text: string; relation?: string }, actor: Actor): { batch_id: string; span_id: number } {
+/**
+ * One connective span in one record, located by its wording; `start_byte` picks one occurrence of
+ * a wording that repeats ("that", "the") and must match the wording there.
+ */
+export function confirmConnectiveSpan(db: DatabaseSync, value: { reviewer: string; ability_version_id: number; exact_text: string; relation?: string; start_byte?: number }, actor: Actor): { batch_id: string; span_id: number } {
   requireHuman(actor, "decide a connective");
   assertReviewer(actor, value.reviewer);
   const exact = value.exact_text;
@@ -111,12 +115,21 @@ export function confirmConnectiveSpan(db: DatabaseSync, value: { reviewer: strin
     { id: number; source_text: string; fragments_json: string } | undefined;
   if (!ability) throw new Error(`No current ability ${value.ability_version_id}.`);
   const bytes = Buffer.from(ability.source_text, "utf8");
-  const hits = (JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>).flatMap((fragment) => {
+  const fragments = JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>;
+  const at = value.start_byte;
+  const hits = at !== undefined
+    ? fragments.filter((fragment) => fragment.start_byte <= at && at + Buffer.byteLength(exact, "utf8") <= fragment.end_byte
+      && bytes.subarray(at, at + Buffer.byteLength(exact, "utf8")).toString("utf8") === exact).map((fragment) => ({ fragment: fragment.fragment, start: at }))
+    : fragments.flatMap((fragment) => {
     const text = bytes.subarray(fragment.start_byte, fragment.end_byte).toString("utf8");
     const index = text.indexOf(exact);
     return index < 0 || text.indexOf(exact, index + 1) >= 0 ? [] : [{ fragment: fragment.fragment, start: fragment.start_byte + Buffer.byteLength(text.slice(0, index), "utf8") }];
   });
-  if (hits.length !== 1) throw new Error(`"${exact.slice(0, 60)}" must occur exactly once in ability ${value.ability_version_id}.`);
+  if (hits.length !== 1) {
+    throw new Error(at !== undefined
+      ? `"${exact.slice(0, 60)}" is not at byte ${at} of ability ${value.ability_version_id}.`
+      : `"${exact.slice(0, 60)}" must occur exactly once in ability ${value.ability_version_id}.`);
+  }
   const { fragment, start } = hits[0]!;
   const end = start + Buffer.byteLength(exact, "utf8");
   return withTransaction(db, () => {
