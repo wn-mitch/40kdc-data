@@ -200,7 +200,7 @@
     "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
