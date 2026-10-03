@@ -16,15 +16,15 @@ import { describeTrigger } from "../src/translate/trigger.js";
 
 const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
 
-function placed(text: string, parts: Array<[string, string, Record<string, unknown>]>): { leaves: CompileLeaf[]; text: string } {
+function placed(text: string, parts: Array<[string, string, Record<string, unknown>, string?]>): { leaves: CompileLeaf[]; text: string } {
   let from = 0;
-  const leaves = parts.map(([wording, family_id, parameters]) => {
+  const leaves = parts.map(([wording, family_id, parameters, fragment]) => {
     const index = text.indexOf(wording, from);
     if (index < 0) throw new Error(`"${wording}" is not in the fixture text after byte ${from}.`);
     from = index + wording.length;
     const start = Buffer.byteLength(text.slice(0, index));
     const version = currentFamilyVersion(family_id);
-    return { role: familyRole(family_id, version), family_id, family_version: version, start_byte: start, end_byte: start + Buffer.byteLength(wording), parameters: normalize(family_id, parameters) };
+    return { role: familyRole(family_id, version), family_id, family_version: version, start_byte: start, end_byte: start + Buffer.byteLength(wording), parameters: normalize(family_id, parameters), ...(fragment ? { fragment } : {}) };
   });
   return { leaves, text };
 }
@@ -86,18 +86,32 @@ describe("a mortal-wound cap", () => {
 });
 
 describe("Reserves states", () => {
-  it("names Strategic Reserves and Cult Ambush as unit states", () => {
-    for (const state of ["in-strategic-reserves", "in-cult-ambush"] as const) {
+  it("lowers \"in Reserves\" to Strategic Reserves and keeps Cult Ambush as its own state", () => {
+    for (const [state, lowered] of [["in-reserves", "in-strategic-reserves"], ["in-strategic-reserves", "in-strategic-reserves"], ["in-cult-ambush", "in-cult-ambush"]] as const) {
       const mechanics = compiled(placed("While this unit is held aside, this unit has the Feel No Pain 6+ ability.", [
         ["While this unit is held aside", "unit-state", { states: [state], subject: "this-unit", negated: false }],
         ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
       ]));
-      expect(nodes(mechanics, (node) => node.type === "unit-state")[0]!.parameters).toMatchObject({ state });
+      expect(nodes(mechanics, (node) => node.type === "unit-state")[0]!.parameters).toMatchObject({ state: lowered });
       expect(schemaErrors(mechanics)).toEqual([]);
     }
     expect(describeCondition({ type: "unit-state", parameters: { state: "in-cult-ambush" } } as never)).toBe("the unit is in Cult Ambush");
-    // "Reserves" is Strategic Reserves in the rules; there is no wider any-Reserves state.
-    expect(() => normalize("unit-state", { states: ["in-reserves"], subject: "this-unit", negated: false })).toThrow();
+  });
+
+  it("checks a Stratagem target held in Reserves as being in Strategic Reserves", () => {
+    const text = "One friendly **JUMP PACK** unit from your army that is in Reserves. Set your unit up on the battlefield.";
+    const { leaves } = placed(text, [
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly **JUMP PACK** unit", "unit-filter", { side: "friendly", keywords: ["JUMP PACK"] }, "TARGET"],
+      ["from your army", "unit-owner", { owner: "friendly" }, "TARGET"],
+      ["that is in Reserves", "unit-filter", { side: "friendly", held_in: "strategic-reserves" }, "TARGET"],
+      ["Set your unit up on the battlefield", "set-up", { subject: "this-unit", to: "battlefield" }, "EFFECT"],
+    ]);
+    const result = compileLeaves(leaves, text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const target = (result.core as { target_restrictions: Record<string, unknown> }).target_restrictions;
+    expect(target).toMatchObject({ side: "your-army", required_keywords: ["JUMP PACK"] });
+    expect(nodes(target.eligibility, (node) => node.type === "unit-state").map((node) => node.parameters)).toEqual([{ state: "in-strategic-reserves" }]);
   });
 
   it("refuses a Reserves state paired with engaged-with", () => {

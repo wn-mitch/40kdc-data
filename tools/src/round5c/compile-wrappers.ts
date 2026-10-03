@@ -44,6 +44,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (filter.states?.includes("not-battle-shocked")) throw new CompileError("An aura reaching only units that are not Battle-shocked has no DSL eligible field yet.");
   if (filter.excluded_all_keywords?.length) throw new CompileError("An aura excluding only units with every listed keyword has no DSL eligible field yet.");
   if (filter.excluded_abilities?.length) throw new CompileError("An aura excluding units by ability has no DSL eligible field yet.");
+  if (filter.states?.some((state) => state.startsWith("in-"))) throw new CompileError("An aura cannot reach a unit held off the battlefield.");
   if (filter.states?.length) eligible.states = filter.states;
   if (keywords?.length) eligible.required_keywords = keywords;
   if (filter.any_keywords?.length) eligible.any_keywords = filter.any_keywords;

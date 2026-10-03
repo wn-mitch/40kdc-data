@@ -56,7 +56,7 @@ describe("Round 5C leaf describer audit", () => {
       // Version 2/4/3 (batch 6) widen subject to also include "recipient", which reads as "the
       // unit" too — the same collision the omitted default already had with "this-unit".
       "unit-keyword": { unrendered: [], colliding: ["subject"], problems: 0 },
-      "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
+      "unit-state": { unrendered: [], colliding: ["states", "subject"], problems: 0 }, // states: "in Reserves" lowers to Strategic Reserves.
       "hit-by-attacks": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.

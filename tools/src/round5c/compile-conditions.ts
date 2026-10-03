@@ -151,7 +151,8 @@ export function condition(leaf: CompileLeaf): Node {
         if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
         // Version 5: engaged with one named unit, the DSL's `with`.
         if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) }, subject);
-        return pred("unit-state", { state }, subject);
+        // Version 8: "in Reserves" is Strategic Reserves in the rules; the DSL has only that state.
+        return pred("unit-state", { state: state === "in-reserves" ? "in-strategic-reserves" : state }, subject);
       })));
     }
     case "unit-keyword": {

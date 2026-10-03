@@ -7,8 +7,11 @@ import { activitiesExtension, type FamilyExtension, KEYWORD_ITEMS, keywordList, 
  * additions and hands the rest to the previous one.
  */
 
-/** Reserves states a unit-state leaf can name, as the DSL unit-state spells them. */
-export const RESERVE_STATES = ["in-strategic-reserves", "in-cult-ambush"] as const;
+/**
+ * Reserves states a unit-state leaf can name. in-reserves records the wording "in Reserves", which
+ * the rules define as Strategic Reserves; compilation lowers it to the DSL's in-strategic-reserves.
+ */
+export const RESERVE_STATES = ["in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
 
 /** History that names the Transport, lowered to `happened` disembarked in compile-conditions.ts. */
 export const TRANSPORT_ACTIVITIES = ["disembarked-from-this-transport-this-turn"] as const;
@@ -36,7 +39,7 @@ export const FAMILY_EXTENSIONS_9: readonly FamilyExtension[] = [
   {
     // "While this unit is in Reserves", "a unit in Cult Ambush": the DSL's Reserves unit-states.
     family: "unit-state",
-    description: "As the previous version, plus in-strategic-reserves (\"in Reserves\" means Strategic Reserves) and in-cult-ambush (a type of Strategic Reserves).",
+    description: "As the previous version, plus in-reserves (\"in Reserves\", which the rules define as Strategic Reserves), in-strategic-reserves and in-cult-ambush (a type of Strategic Reserves).",
     schema: (previous) => {
       const property = properties(previous).states!;
       const items = property.items as Record<string, unknown>;

@@ -56,13 +56,17 @@ function side(filter: CompileLeaf, what: string): string {
   return value;
 }
 
-/** The filter's keyword fields, as the folded leaf carries them. */
+/**
+ * The filter's keyword fields, as the folded leaf carries them. Selections, auras and Stratagem
+ * targets carry them into their own eligibility (compile-wrappers.ts, compile-conditions.ts); a
+ * held unit ("that is in Reserves") is one more state there, its DSL Reserves unit-state.
+ */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
-  // Selections, auras and Stratagem targets carry the filter's fields into their own eligibility
-  // (compile-wrappers.ts, compile-conditions.ts); a held state has no place there yet.
-  if (filter.parameters.held_in !== undefined) throw new CompileError("A unit-filter for held units has no DSL shape here yet; only a filter lowered as a DSL unit-filter keeps its Reserves state.");
-  const { side: _side, visible: _visible, level: _level, ...rest } = filter.parameters;
-  return rest;
+  const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = filter.parameters;
+  if (heldIn === undefined) return rest;
+  const held = HELD_STATES[String(heldIn)];
+  if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
+  return { ...rest, states: [...((rest.states as string[] | undefined) ?? []), held] };
 }
 
 /**
