@@ -2952,6 +2952,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///      "description": "The new unit can be set up within Engagement Range of this unit only.",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "at_starting_strength": {
+///      "description": "The new unit has every model of its Starting Strength, each with all of its wounds remaining.",
+///      "const": true
+///    },
 ///    "away_from": {
 ///      "type": "array",
 ///      "items": {
@@ -2985,6 +2989,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    },
 ///    "datasheet": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "excluded_keywords": {
+///      "description": "copy_of: the copy leaves out models with any of these keywords (\"excluding CHARACTER models\").",
+///      "$ref": "#/$defs/keyword-list"
 ///    },
 ///    "in_region": {
 ///      "$ref": "#/$defs/placement-region"
@@ -3031,6 +3039,7 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -3048,6 +3057,7 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -3061,6 +3071,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    },
 ///    "range": {
 ///      "$ref": "#/$defs/range-ref"
+///    },
+///    "reset_one_shot": {
+///      "description": "The copy's [ONE SHOT] weapons count as not having been shot.",
+///      "const": true
 ///    },
 ///    "starting_strength": {
 ///      "type": "integer",
@@ -3077,6 +3091,9 @@ pub struct AddUnitEffectModifier {
     ///The new unit can be set up within Engagement Range of this unit only.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub allow_engagement_with: ::std::option::Option<UnitRef>,
+    ///The new unit has every model of its Starting Strength, each with all of its wounds remaining.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub at_starting_strength: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub away_from: ::std::vec::Vec<PlacementAway>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -3085,6 +3102,9 @@ pub struct AddUnitEffectModifier {
     pub count: ::std::option::Option<AddUnitEffectModifierCount>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub datasheet: ::std::option::Option<EntityId>,
+    ///copy_of: the copy leaves out models with any of these keywords ("excluding CHARACTER models").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_keywords: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub in_region: ::std::option::Option<PlacementRegion>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -3097,6 +3117,9 @@ pub struct AddUnitEffectModifier {
     pub placement: ::std::option::Option<AddUnitEffectModifierPlacement>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
+    ///The copy's [ONE SHOT] weapons count as not having been shot.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reset_one_shot: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
 }
@@ -3104,16 +3127,19 @@ impl ::std::default::Default for AddUnitEffectModifier {
     fn default() -> Self {
         Self {
             allow_engagement_with: Default::default(),
+            at_starting_strength: Default::default(),
             away_from: Default::default(),
             copy_of: Default::default(),
             count: Default::default(),
             datasheet: Default::default(),
+            excluded_keywords: Default::default(),
             in_region: Default::default(),
             join: Default::default(),
             model_count: Default::default(),
             near: Default::default(),
             placement: Default::default(),
             range: Default::default(),
+            reset_one_shot: Default::default(),
             starting_strength: Default::default(),
         }
     }
@@ -3417,6 +3443,7 @@ impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModelCountString {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -3434,6 +3461,7 @@ impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModelCountString {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -3479,6 +3507,7 @@ for AddUnitEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -3514,6 +3543,8 @@ pub enum AddUnitEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -3533,6 +3564,7 @@ impl ::std::fmt::Display for AddUnitEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -3553,6 +3585,7 @@ impl ::std::str::FromStr for AddUnitEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -3601,6 +3634,7 @@ for AddUnitEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -3636,6 +3670,8 @@ pub enum AddUnitEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -3655,6 +3691,7 @@ impl ::std::fmt::Display for AddUnitEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -3675,6 +3712,7 @@ impl ::std::str::FromStr for AddUnitEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -16546,6 +16584,12 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "declare-charge"
 ///      ]
 ///    },
+///    "transport": {
+///      "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
+///      "enum": [
+///        "this-unit"
+///      ]
+///    },
 ///    "weapon_keyword": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -16610,6 +16654,9 @@ pub struct EventFilter {
     ///selected: what the unit was selected to do. attack means shoot or fight.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub to: ::std::option::Option<EventFilterTo>,
+    ///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub transport: ::std::option::Option<EventFilterTransport>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_keyword: ::std::option::Option<EventFilterWeaponKeyword>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16638,6 +16685,7 @@ impl ::std::default::Default for EventFilter {
             through: Default::default(),
             timing: Default::default(),
             to: Default::default(),
+            transport: Default::default(),
             weapon_keyword: Default::default(),
             weapon_name: Default::default(),
         }
@@ -17699,6 +17747,77 @@ impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTo {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for EventFilterTo {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
+///  "enum": [
+///    "this-unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterTransport {
+    #[serde(rename = "this-unit")]
+    ThisUnit,
+}
+impl ::std::fmt::Display for EventFilterTransport {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::ThisUnit => f.write_str("this-unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterTransport {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "this-unit" => Ok(Self::ThisUnit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterTransport {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTransport {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterTransport {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -20460,13 +20579,13 @@ impl<'de> ::serde::Deserialize<'de> for ForceDispositionText {
             })
     }
 }
-///The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.
+///The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.",
+///  "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.",
 ///  "type": "string",
 ///  "enum": [
 ///    "battle-started",
@@ -20481,6 +20600,7 @@ impl<'de> ::serde::Deserialize<'de> for ForceDispositionText {
 ///    "step-started",
 ///    "selected",
 ///    "targets-selected",
+///    "move-started",
 ///    "move-ended",
 ///    "set-up",
 ///    "disembarked",
@@ -20539,6 +20659,8 @@ pub enum GameEvent {
     Selected,
     #[serde(rename = "targets-selected")]
     TargetsSelected,
+    #[serde(rename = "move-started")]
+    MoveStarted,
     #[serde(rename = "move-ended")]
     MoveEnded,
     #[serde(rename = "set-up")]
@@ -20589,6 +20711,7 @@ impl ::std::fmt::Display for GameEvent {
             Self::StepStarted => f.write_str("step-started"),
             Self::Selected => f.write_str("selected"),
             Self::TargetsSelected => f.write_str("targets-selected"),
+            Self::MoveStarted => f.write_str("move-started"),
             Self::MoveEnded => f.write_str("move-ended"),
             Self::SetUp => f.write_str("set-up"),
             Self::Disembarked => f.write_str("disembarked"),
@@ -20627,6 +20750,7 @@ impl ::std::str::FromStr for GameEvent {
             "step-started" => Ok(Self::StepStarted),
             "selected" => Ok(Self::Selected),
             "targets-selected" => Ok(Self::TargetsSelected),
+            "move-started" => Ok(Self::MoveStarted),
             "move-ended" => Ok(Self::MoveEnded),
             "set-up" => Ok(Self::SetUp),
             "disembarked" => Ok(Self::Disembarked),
@@ -26213,6 +26337,11 @@ pub struct ModelProfileConditionParameters {
 ///    "count": {
 ///      "$ref": "#/$defs/quantity"
 ///    },
+///    "max": {
+///      "description": "No more than this many mortal wounds in total (\"to a maximum of 6 mortal wounds\").",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
 ///    "per": {
 ///      "enum": [
 ///        "model",
@@ -26267,6 +26396,9 @@ pub struct ModelProfileConditionParameters {
 #[serde(deny_unknown_fields)]
 pub struct MortalWoundsEffectModifier {
     pub count: Quantity,
+    ///No more than this many mortal wounds in total ("to a maximum of 6 mortal wounds").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<MortalWoundsEffectModifierPer>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -33502,7 +33634,10 @@ for PairedUnitSelectorVariant1SelectionLimitPeriod {
 ///      "enum": [
 ///        "shooting-phase",
 ///        "snap-shooting",
-///        "fight-phase"
+///        "fight-phase",
+///        "movement-phase",
+///        "charge-phase",
+///        "command-phase"
 ///      ]
 ///    },
 ///    "consumes_shared_use": {
@@ -33837,7 +33972,10 @@ for PermissionEffectModifierAfterItem {
 ///  "enum": [
 ///    "shooting-phase",
 ///    "snap-shooting",
-///    "fight-phase"
+///    "fight-phase",
+///    "movement-phase",
+///    "charge-phase",
+///    "command-phase"
 ///  ]
 ///}
 /// ```
@@ -33861,6 +33999,12 @@ pub enum PermissionEffectModifierAsIf {
     SnapShooting,
     #[serde(rename = "fight-phase")]
     FightPhase,
+    #[serde(rename = "movement-phase")]
+    MovementPhase,
+    #[serde(rename = "charge-phase")]
+    ChargePhase,
+    #[serde(rename = "command-phase")]
+    CommandPhase,
 }
 impl ::std::fmt::Display for PermissionEffectModifierAsIf {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -33868,6 +34012,9 @@ impl ::std::fmt::Display for PermissionEffectModifierAsIf {
             Self::ShootingPhase => f.write_str("shooting-phase"),
             Self::SnapShooting => f.write_str("snap-shooting"),
             Self::FightPhase => f.write_str("fight-phase"),
+            Self::MovementPhase => f.write_str("movement-phase"),
+            Self::ChargePhase => f.write_str("charge-phase"),
+            Self::CommandPhase => f.write_str("command-phase"),
         }
     }
 }
@@ -33880,6 +34027,9 @@ impl ::std::str::FromStr for PermissionEffectModifierAsIf {
             "shooting-phase" => Ok(Self::ShootingPhase),
             "snap-shooting" => Ok(Self::SnapShooting),
             "fight-phase" => Ok(Self::FightPhase),
+            "movement-phase" => Ok(Self::MovementPhase),
+            "charge-phase" => Ok(Self::ChargePhase),
+            "command-phase" => Ok(Self::CommandPhase),
             _ => Err("invalid value".into()),
         }
     }
@@ -43196,6 +43346,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -43213,6 +43364,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -43399,6 +43551,7 @@ impl<'de> ::serde::Deserialize<'de> for ReturnModelsEffectModifierModelKeyword {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -43416,6 +43569,7 @@ impl<'de> ::serde::Deserialize<'de> for ReturnModelsEffectModifierModelKeyword {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -43461,6 +43615,7 @@ for ReturnModelsEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -43496,6 +43651,8 @@ pub enum ReturnModelsEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -43515,6 +43672,7 @@ impl ::std::fmt::Display for ReturnModelsEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -43535,6 +43693,7 @@ impl ::std::str::FromStr for ReturnModelsEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -43583,6 +43742,7 @@ for ReturnModelsEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -43618,6 +43778,8 @@ pub enum ReturnModelsEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -43637,6 +43799,7 @@ impl ::std::fmt::Display for ReturnModelsEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -43657,6 +43820,7 @@ impl ::std::str::FromStr for ReturnModelsEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -44320,7 +44484,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RollEffectType {
 ///        "dark-pact",
 ///        "blessings-of-khorne",
 ///        "manoeuvre",
-///        "channelling"
+///        "channelling",
+///        "deadly-demise"
 ///      ]
 ///    },
 ///    {
@@ -44367,7 +44532,8 @@ impl ::std::convert::From<AbilityRoll> for RollKind {
 ///    "dark-pact",
 ///    "blessings-of-khorne",
 ///    "manoeuvre",
-///    "channelling"
+///    "channelling",
+///    "deadly-demise"
 ///  ]
 ///}
 /// ```
@@ -44415,6 +44581,8 @@ pub enum RollKindVariant0 {
     Manoeuvre,
     #[serde(rename = "channelling")]
     Channelling,
+    #[serde(rename = "deadly-demise")]
+    DeadlyDemise,
 }
 impl ::std::fmt::Display for RollKindVariant0 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -44434,6 +44602,7 @@ impl ::std::fmt::Display for RollKindVariant0 {
             Self::BlessingsOfKhorne => f.write_str("blessings-of-khorne"),
             Self::Manoeuvre => f.write_str("manoeuvre"),
             Self::Channelling => f.write_str("channelling"),
+            Self::DeadlyDemise => f.write_str("deadly-demise"),
         }
     }
 }
@@ -44458,6 +44627,7 @@ impl ::std::str::FromStr for RollKindVariant0 {
             "blessings-of-khorne" => Ok(Self::BlessingsOfKhorne),
             "manoeuvre" => Ok(Self::Manoeuvre),
             "channelling" => Ok(Self::Channelling),
+            "deadly-demise" => Ok(Self::DeadlyDemise),
             _ => Err("invalid value".into()),
         }
     }
@@ -52171,6 +52341,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -52188,6 +52359,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -52546,6 +52718,7 @@ pub struct SetUpEffectModifierMinDistanceFrom {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -52563,6 +52736,7 @@ pub struct SetUpEffectModifierMinDistanceFrom {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -52608,6 +52782,7 @@ for SetUpEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -52643,6 +52818,8 @@ pub enum SetUpEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -52662,6 +52839,7 @@ impl ::std::fmt::Display for SetUpEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -52682,6 +52860,7 @@ impl ::std::str::FromStr for SetUpEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -52730,6 +52909,7 @@ for SetUpEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -52765,6 +52945,8 @@ pub enum SetUpEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -52784,6 +52966,7 @@ impl ::std::fmt::Display for SetUpEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -52804,6 +52987,7 @@ impl ::std::str::FromStr for SetUpEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -65121,6 +65305,10 @@ pub struct UnitDetachmentPricingItem {
 ///    "none_of": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "not_all_of": {
+///      "description": "Not units that have every listed keyword (\"excluding MONSTER CHARACTER units\" excludes only units that are both).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
 ///    "not_designated": {
 ///      "description": "The unit does not carry this designation.",
 ///      "$ref": "#/$defs/designation-id"
@@ -65128,6 +65316,15 @@ pub struct UnitDetachmentPricingItem {
 ///    "not_engaged_with": {
 ///      "description": "Units within Engagement Range of no unit matching this filter.",
 ///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "not_states": {
+///      "description": "Only units in none of these states (\"unengaged\", \"not Battle-shocked\").",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-state"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "owner": {
 ///      "$ref": "#/$defs/owner"
@@ -65199,12 +65396,18 @@ pub struct UnitFilter {
     pub member_of: ::std::boxed::Box<::std::option::Option<UnitRef>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub none_of: ::std::option::Option<KeywordList>,
+    ///Not units that have every listed keyword ("excluding MONSTER CHARACTER units" excludes only units that are both).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_all_of: ::std::option::Option<KeywordList>,
     ///The unit does not carry this designation.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_designated: ::std::option::Option<DesignationId>,
     ///Units within Engagement Range of no unit matching this filter.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_engaged_with: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///Only units in none of these states ("unengaged", "not Battle-shocked").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_states: ::std::option::Option<Vec<UnitState>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<Owner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -65230,8 +65433,10 @@ impl ::std::default::Default for UnitFilter {
             level: Default::default(),
             member_of: Default::default(),
             none_of: Default::default(),
+            not_all_of: Default::default(),
             not_designated: Default::default(),
             not_engaged_with: Default::default(),
+            not_states: Default::default(),
             owner: Default::default(),
             state: Default::default(),
             visible: Default::default(),
@@ -66363,19 +66568,20 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitRole {
         value.parse()
     }
 }
-///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged).
+///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged).",
+///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.",
 ///  "type": "string",
 ///  "enum": [
 ///    "engaged",
 ///    "battle-shocked",
 ///    "embarked",
 ///    "in-strategic-reserves",
+///    "in-cult-ambush",
 ///    "on-battlefield",
 ///    "hidden",
 ///    "fights-first",
@@ -66405,6 +66611,8 @@ pub enum UnitState {
     Embarked,
     #[serde(rename = "in-strategic-reserves")]
     InStrategicReserves,
+    #[serde(rename = "in-cult-ambush")]
+    InCultAmbush,
     #[serde(rename = "on-battlefield")]
     OnBattlefield,
     #[serde(rename = "hidden")]
@@ -66421,6 +66629,7 @@ impl ::std::fmt::Display for UnitState {
             Self::BattleShocked => f.write_str("battle-shocked"),
             Self::Embarked => f.write_str("embarked"),
             Self::InStrategicReserves => f.write_str("in-strategic-reserves"),
+            Self::InCultAmbush => f.write_str("in-cult-ambush"),
             Self::OnBattlefield => f.write_str("on-battlefield"),
             Self::Hidden => f.write_str("hidden"),
             Self::FightsFirst => f.write_str("fights-first"),
@@ -66438,6 +66647,7 @@ impl ::std::str::FromStr for UnitState {
             "battle-shocked" => Ok(Self::BattleShocked),
             "embarked" => Ok(Self::Embarked),
             "in-strategic-reserves" => Ok(Self::InStrategicReserves),
+            "in-cult-ambush" => Ok(Self::InCultAmbush),
             "on-battlefield" => Ok(Self::OnBattlefield),
             "hidden" => Ok(Self::Hidden),
             "fights-first" => Ok(Self::FightsFirst),

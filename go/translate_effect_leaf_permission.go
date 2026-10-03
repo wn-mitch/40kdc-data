@@ -27,6 +27,7 @@ var permissionDespite = map[string]string{
 var permissionIsState = map[string]bool{"engaged": true, "battle-shocked": true, "performing-action": true}
 var permissionAsIf = map[string]string{
 	"shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
+	"movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
 }
 
 func lookupOr(table map[string]string, key string) string {

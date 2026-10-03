@@ -39,6 +39,7 @@ from wh40kdc.translate.effect_words import (
     num,
     num_str,
     of_or_possessive,
+    or_list,
     pronoun,
     range_phrase,
     region_phrase,
@@ -75,6 +76,12 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
     if m.get("range") is not None and f" within {range_phrase(m['range'])}" not in subj:
         rng = f" within {range_phrase(m['range'])}"
     who = f"{subj}{rng}"
+    # "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    cap = (
+        f" (to a maximum of {jstr(m['max'])} mortal {'wound' if m['max'] == 1 else 'wounds'})"
+        if m.get("max") is not None
+        else ""
+    )
     roll = m.get("roll")
     if roll is not None:
         roll = _obj(roll)
@@ -90,14 +97,14 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
         return (
             f"roll {dice}{each}: for each {jstr(roll.get('threshold'))}+, {who} "
             f"{v(who, 'suffers')} "
-            f"{suffered}{psychic}"
+            f"{suffered}{psychic}{cap}"
         )
     per = (
         f" for each model in {'them' if pronoun(who) == 'their' else 'it'}"
         if m.get("per") == "model"
         else ""
     )
-    return f"{who} {v(who, 'suffers')} {suffered}{per}{psychic}"
+    return f"{who} {v(who, 'suffers')} {suffered}{per}{psychic}{cap}"
 
 
 _FNP_AGAINST = {
@@ -253,14 +260,30 @@ def _add_unit(m: dict[str, Any], ctx: Ctx) -> str:
             units = f"{num_str(n)} new units"
         else:
             units = amount_of(m.get("count"), "new unit", "new units")
-        what = f"{units} identical to {effect_subject(m['copy_of'], ctx)}"
+        excluded = (
+            f" (excluding {or_list([jstr(k) for k in m['excluded_keywords']])} models)"
+            if isinstance(m.get("excluded_keywords"), list)
+            else ""
+        )
+        what = f"{units} identical to {effect_subject(m['copy_of'], ctx)}{excluded}"
     elif n == 1:
         what = f"a {sheet} unit"
     elif literal:
         what = f"{num_str(n)} {sheet} units"
     else:
         what = amount_of(m.get("count"), f"{sheet} unit", f"{sheet} units")
-    return f"add {what}{models}{strength} to your army{where}{engage}"
+    full = (
+        ", at its Starting Strength and with all of its wounds remaining"
+        if m.get("at_starting_strength") is True
+        else ""
+    )
+    one_shot = (
+        ", with its [ONE SHOT] weapons counted as not having been shot"
+        if m.get("reset_one_shot") is True
+        else ""
+    )
+    # Where the unit goes comes first, then what it comes back with.
+    return f"add {what}{models}{strength} to your army{where}{full}{one_shot}{engage}"
 
 
 _MOVE_VERBS = {

@@ -89,7 +89,8 @@ func describeHappened(p map[string]any, negated bool) string {
 		if negated {
 			was = "was not"
 		}
-		return withWindow(who+" "+was+" set up", p["window"])
+		setUpFrom := map[string]string{"deep-strike": " using Deep Strike", "strategic-reserves": " from Strategic Reserves", "cult-ambush": " from Cult Ambush", "transport": " from a Transport"}
+		return withWindow(who+" "+was+" set up"+setUpFrom[cstr(f["from"])], p["window"])
 	case "targets-selected":
 		has := "has"
 		if negated {
@@ -101,7 +102,13 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":
-		return withWindow(who+" "+didNot("disembark")+" from a Transport", p["window"])
+		from := "a Transport"
+		if f["transport"] == "this-unit" || f["transport"] == "this-model" {
+			from = "this Transport"
+		} else if f["transport"] != nil {
+			from = unitRefPhrase(f["transport"], "the unit")
+		}
+		return withWindow(who+" "+didNot("disembark")+" from "+from, p["window"])
 	case "after-roll":
 		obj := unitRefPhrase(p["object"], "the unit")
 		target := obj
@@ -159,6 +166,16 @@ func describeHappened(p map[string]any, negated bool) string {
 				attacker = " made by " + unitRefPhrase(p["subject"], "the unit")
 			}
 			return neg + target + " was hit by " + hits + attacker + weapon + by + when
+		}
+		// Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
+		if p["subject"] != nil {
+			outcome := ""
+			if f["result"] == "failure" {
+				outcome = " and failed it"
+			} else if f["result"] == "success" {
+				outcome = " and passed it"
+			}
+			return trimEnd(neg + who + " made a " + rollWord(f["roll"]) + " roll" + outcome + " " + windowPhrase(p["window"]))
 		}
 		result := "was made "
 		if jsTruthy(f["result"]) {

@@ -1639,7 +1639,10 @@
                   "enum": [
                     "shooting-phase",
                     "snap-shooting",
-                    "fight-phase"
+                    "fight-phase",
+                    "movement-phase",
+                    "charge-phase",
+                    "command-phase"
                   ]
                 },
                 "next": {
@@ -2016,6 +2019,11 @@
               "properties": {
                 "count": {
                   "$ref": "../../defs/common.schema.json#/$defs/quantity"
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "No more than this many mortal wounds in total (\"to a maximum of 6 mortal wounds\")."
                 },
                 "per": {
                   "enum": [
@@ -2407,6 +2415,7 @@
                         "wholly-within",
                         "within",
                         "strategic-reserves",
+                        "cult-ambush",
                         "anywhere",
                         "connected-sections",
                         "deployment-zone",
@@ -2424,6 +2433,7 @@
                           "wholly-within",
                           "within",
                           "strategic-reserves",
+                          "cult-ambush",
                           "anywhere",
                           "connected-sections",
                           "deployment-zone",
@@ -2757,6 +2767,18 @@
                   "type": "integer",
                   "minimum": 1
                 },
+                "at_starting_strength": {
+                  "const": true,
+                  "description": "The new unit has every model of its Starting Strength, each with all of its wounds remaining."
+                },
+                "excluded_keywords": {
+                  "$ref": "../../defs/common.schema.json#/$defs/keyword-list",
+                  "description": "copy_of: the copy leaves out models with any of these keywords (\"excluding CHARACTER models\")."
+                },
+                "reset_one_shot": {
+                  "const": true,
+                  "description": "The copy's [ONE SHOT] weapons count as not having been shot."
+                },
                 "join": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
@@ -2771,6 +2793,7 @@
                         "wholly-within",
                         "within",
                         "strategic-reserves",
+                        "cult-ambush",
                         "anywhere",
                         "connected-sections",
                         "deployment-zone",
@@ -2788,6 +2811,7 @@
                           "wholly-within",
                           "within",
                           "strategic-reserves",
+                          "cult-ambush",
                           "anywhere",
                           "connected-sections",
                           "deployment-zone",
@@ -3334,6 +3358,7 @@
                         "wholly-within",
                         "within",
                         "strategic-reserves",
+                        "cult-ambush",
                         "anywhere",
                         "connected-sections",
                         "deployment-zone",
@@ -3351,6 +3376,7 @@
                           "wholly-within",
                           "within",
                           "strategic-reserves",
+                          "cult-ambush",
                           "anywhere",
                           "connected-sections",
                           "deployment-zone",

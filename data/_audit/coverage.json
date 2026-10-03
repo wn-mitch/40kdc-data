@@ -156,12 +156,12 @@
     },
     {
       "faction": "death-guard",
-      "total": 150,
+      "total": 160,
       "offensive": 13,
       "defensive": 4,
-      "inert": 135,
+      "inert": 145,
       "stub": 1,
-      "stubStructural": 68,
+      "stubStructural": 78,
       "gwTextLeak": 0,
       "defensiveSkipped": 3
     },
@@ -189,12 +189,12 @@
     },
     {
       "faction": "emperors-children",
-      "total": 136,
+      "total": 146,
       "offensive": 24,
       "defensive": 9,
-      "inert": 103,
+      "inert": 113,
       "stub": 3,
-      "stubStructural": 3,
+      "stubStructural": 13,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
@@ -332,12 +332,12 @@
     },
     {
       "faction": "thousand-sons",
-      "total": 145,
+      "total": 158,
       "offensive": 30,
       "defensive": 13,
-      "inert": 105,
+      "inert": 118,
       "stub": 3,
-      "stubStructural": 8,
+      "stubStructural": 21,
       "gwTextLeak": 0,
       "defensiveSkipped": 1
     },
@@ -376,30 +376,30 @@
     },
     {
       "faction": "world-eaters",
-      "total": 136,
+      "total": 147,
       "offensive": 16,
       "defensive": 10,
-      "inert": 112,
+      "inert": 123,
       "stub": 0,
-      "stubStructural": 13,
+      "stubStructural": 24,
       "gwTextLeak": 0,
       "defensiveSkipped": 0
     }
   ],
   "totals": {
-    "total": 4483,
+    "total": 4527,
     "offensive": 669,
     "defensive": 225,
-    "inert": 3651,
+    "inert": 3695,
     "stub": 67,
-    "stubStructural": 1603,
+    "stubStructural": 1647,
     "gwTextLeak": 0,
     "defensiveSkipped": 47
   },
   "unsupportedReasons": [
     {
       "reason": "effect type \"no-effect\" is not modelled by the buff layer",
-      "count": 1613
+      "count": 1657
     },
     {
       "reason": "conditional: cannot evaluate condition \"undefined\" against current context",
@@ -24542,6 +24542,106 @@
       "gap": "effect type \"no-effect\" is not modelled by the buff layer"
     },
     {
+      "faction": "death-guard",
+      "ability_id": "daemon-lord-of-nurgle-death-guard",
+      "name": "Daemon Lord of Nurgle",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "daemonic-icon-death-guard",
+      "name": "Daemonic Icon",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "deaths-heads-death-guard",
+      "name": "Death’s Heads",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "deluge-of-nurgle-death-guard",
+      "name": "Deluge of Nurgle",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "grotesque-regeneration-death-guard",
+      "name": "Grotesque Regeneration",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "infected-outbreak-death-guard",
+      "name": "Infected Outbreak",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "instrument-of-chaos-death-guard",
+      "name": "Instrument of Chaos",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "mischief-makers-death-guard",
+      "name": "Mischief Makers",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "nurgles-rot-death-guard",
+      "name": "Nurgle’s Rot",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "death-guard",
+      "ability_id": "virulent-blessing-death-guard",
+      "name": "Virulent Blessing",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
       "faction": "deathwatch",
       "ability_id": "auspex-array-deathwatch",
       "name": "Auspex Array",
@@ -27895,6 +27995,106 @@
       "faction": "emperors-children",
       "ability_id": "nimble-strikes-emperors-children",
       "name": "Nimble Strikes",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "daemon-lord-of-slaanesh-emperors-children",
+      "name": "Daemon Lord of Slaanesh",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "daemonic-icon-emperors-children",
+      "name": "Daemonic Icon",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "horrifying-beauty-emperors-children",
+      "name": "Horrifying Beauty",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "instrument-of-chaos-emperors-children",
+      "name": "Instrument of Chaos",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "mesmerising-form-emperors-children",
+      "name": "Mesmerising Form",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "monarch-of-the-hunt-emperors-children",
+      "name": "Monarch of the Hunt",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "no-prey-can-evade-emperors-children",
+      "name": "No Prey Can Evade",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "shining-aegis-emperors-children",
+      "name": "Shining Aegis",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "soporific-musk-emperors-children",
+      "name": "Soporific Musk",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "emperors-children",
+      "ability_id": "unholy-speed-emperors-children",
+      "name": "Unholy Speed",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,
@@ -42222,6 +42422,136 @@
       "gap": "effect type \"no-effect\" is not modelled by the buff layer"
     },
     {
+      "faction": "thousand-sons",
+      "ability_id": "bounding-leaps-thousand-sons",
+      "name": "Bounding Leaps",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "daemon-lord-of-tzeentch-thousand-sons",
+      "name": "Daemon Lord of Tzeentch",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "daemonic-icon-thousand-sons",
+      "name": "Daemonic Icon",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "exploding-horrors-thousand-sons",
+      "name": "Exploding Horrors",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons",
+      "name": "HORRORS ARE PINK. HORRORS ARE BLUE. WHERE ONCE THERE WAS ONE, NOW THERE ARE TWO.",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "instrument-of-chaos-thousand-sons",
+      "name": "Instrument of Chaos",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "master-of-magicks-thousand-sons",
+      "name": "Master of Magicks",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "one-head-looks-back-thousand-sons",
+      "name": "One Head Looks Back",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "one-head-looks-forward-thousand-sons",
+      "name": "One Head Looks Forward",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "slashing-dive-thousand-sons",
+      "name": "Slashing Dive",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "split-pink-horrors-thousand-sons",
+      "name": "Split",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "split-thousand-sons",
+      "name": "Split",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "thousand-sons",
+      "ability_id": "sullen-malevolence-thousand-sons",
+      "name": "Sullen Malevolence",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
       "faction": "tyranids",
       "ability_id": "subterranean-tunnels-tyranids",
       "name": "Subterranean Tunnels",
@@ -45655,6 +45985,116 @@
       "faction": "world-eaters",
       "ability_id": "murderous-charge-world-eaters",
       "name": "Murderous Charge",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "bane-of-cowards-world-eaters",
+      "name": "Bane of Cowards",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "brass-stampede-world-eaters",
+      "name": "Brass Stampede",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "collar-of-khorne-world-eaters",
+      "name": "Collar of Khorne",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "daemon-lord-of-khorne-world-eaters",
+      "name": "Daemon Lord of Khorne",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "daemonic-icon-world-eaters",
+      "name": "Daemonic Icon",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "damaged-1-7-wounds-remaining-world-eaters",
+      "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "hunters-from-the-warp-world-eaters",
+      "name": "Hunters from the Warp",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "instrument-of-chaos-world-eaters",
+      "name": "Instrument of Chaos",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "murderlust-world-eaters",
+      "name": "Murderlust",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "rage-embodied-world-eaters",
+      "name": "Rage Embodied",
+      "shape": "no-effect",
+      "stub": true,
+      "offensive": false,
+      "defensive": false,
+      "gap": "effect type \"no-effect\" is not modelled by the buff layer"
+    },
+    {
+      "faction": "world-eaters",
+      "ability_id": "relentless-carnage-world-eaters",
+      "name": "Relentless Carnage",
       "shape": "no-effect",
       "stub": true,
       "offensive": false,

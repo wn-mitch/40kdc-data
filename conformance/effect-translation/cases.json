@@ -1279,7 +1279,7 @@
       }
     },
     "expected": {
-      "text": "After a saving throw is made within 6\" of this model, once per battle round per model, each time an attack targets friendly units within 6\", set the Damage characteristic of that attack to 0.\nApplies to: units with TECHMARINE."
+      "text": "After a friendly unit makes a saving throw within 6\" of this model, once per battle round per model, each time an attack targets friendly units within 6\", set the Damage characteristic of that attack to 0.\nApplies to: units with TECHMARINE."
     }
   },
   {
@@ -7917,7 +7917,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "destroyed",
-            "subject": "this-model"
+            "object": "this-model"
           },
           "effect": {
             "type": "test",
@@ -7943,7 +7943,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While this model is leading a unit, add 1 to the unit's Attacks characteristic.\n-> When the unit is destroyed: friendly ADEPTUS ASTARTES units within 6\" must take a Battle-shock test."
+      "text": "While this model is leading a unit, add 1 to the unit's Attacks characteristic.\n-> Each time this model is destroyed: friendly ADEPTUS ASTARTES units within 6\" must take a Battle-shock test."
     }
   },
   {
@@ -21708,6 +21708,562 @@
     },
     "expected": {
       "text": "When resolving this use, the unit can Fall Back up to 6\"; it must end that move where the unit is wholly within your deployment zone or the unit is within range of an objective marker."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-move-started",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit starts a Normal move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-move-started-enemy-consolidation",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time an enemy unit starts a Consolidation move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-charge-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "declare-charge",
+        "allow": true,
+        "as_if": "charge-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to declare a charge as if it were your Charge phase."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-command-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "command-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to shoot as if it were your Command phase."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-movement-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "movement-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to shoot as if it were your Movement phase."
+    }
+  },
+  {
+    "caseId": "fidelity/add-unit-copy-cult-ambush",
+    "effect": {
+      "type": "add-unit",
+      "target": "this-unit",
+      "modifier": {
+        "copy_of": "event-object",
+        "count": 1,
+        "excluded_keywords": [
+          "CHARACTER"
+        ],
+        "at_starting_strength": true,
+        "reset_one_shot": true,
+        "placement": "cult-ambush"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-in-cult-ambush",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "in-cult-ambush"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is in Cult Ambush, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-not-states-not-all-of",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": {
+        "owner": "enemy",
+        "not_states": [
+          "engaged",
+          "battle-shocked"
+        ],
+        "not_all_of": [
+          "MONSTER",
+          "CHARACTER"
+        ]
+      },
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, enemy units (excluding MONSTER CHARACTER units) that are unengaged and not Battle-shocked suffer 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-subject-not-states",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "not_states": [
+          "engaged"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time an enemy unit that is unengaged ends a move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/mortal-wounds-max",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "event-subject",
+      "modifier": {
+        "count": "2D6",
+        "max": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the triggering unit suffers 2D6 mortal wounds (to a maximum of 6 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "fidelity/mortal-wounds-roll-max",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "roll": {
+          "dice": "3D6",
+          "threshold": 4
+        },
+        "max": 3
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll 3D6: for each 4+, the unit suffers 1 mortal wound (to a maximum of 3 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-disembarked-from-this-transport",
+    "trigger": {
+      "event": "disembarked",
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit disembarks from this Transport, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-disembarked-from-this-transport",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "disembarked",
+          "filter": {
+            "transport": "this-unit"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit disembarked from this Transport this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-before-deadly-demise",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "deadly-demise"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Before a Deadly Demise roll is made, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-set-up-deep-strike",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "set-up",
+          "filter": {
+            "from": "deep-strike"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit was set up using Deep Strike this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/dice-table-two-dice-distinct",
+    "effect": {
+      "type": "dice-table",
+      "dice": "D6",
+      "count": 2,
+      "distinct": true,
+      "outcomes": [
+        {
+          "results": [
+            1,
+            2,
+            3
+          ],
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 6
+            }
+          }
+        },
+        {
+          "results": [
+            4,
+            5,
+            6
+          ],
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 5
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Roll 2 D6 and resolve each one (re-rolling any repeated result):\n    - On 1-3: The unit has the Feel No Pain 6+ ability.\n    - On 4-6: The unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-allied-faction",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 500,
+        "measure": "points",
+        "faction": "chaos-daemons"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include at most 500 points of Chaos Daemons units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attached-to-keywords",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "role": "attached",
+          "with": {
+            "all_of": [
+              "DOMINION SQUAD"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is attached to a DOMINION SQUAD unit, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-by-opponent",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time your opponent uses a Stratagem, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-failed-test",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock",
+        "result": "failure"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit fails a Battle-shock test, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-save-failed-for-model",
+    "trigger": {
+      "event": "after-roll",
+      "subject": "this-model",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a saving throw made for this model is failed, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-successful-charge",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "charge",
+        "result": "success"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a successful Charge roll, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-by-this-unit",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy unit, when resolving this use, the unit has the Feel No Pain 6+ ability."
     }
   }
 ]

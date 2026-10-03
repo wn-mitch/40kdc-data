@@ -91,7 +91,7 @@ export function conditionLeadIn(c: Condition): string {
         if (types[0] === "advance") return "if the unit Advanced this turn";
         if (types[0] === "remain-stationary") return "if the unit Remained Stationary this turn";
       }
-      if (p.event === "disembarked" && p.subject == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
+      if (p.event === "disembarked" && p.subject == null && f.transport == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
       if ((p.event === "destroyed" || p.event === "model-destroyed") && p.object === "event-object" && p.window === "event")
         return `when ${describeHappened(p, false)}`;
       return `if ${describeHappened(p, false)}`;

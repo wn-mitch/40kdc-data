@@ -5,7 +5,7 @@ structural stub — an effect carrying an empty-modifier placeholder node that s
 DSL authored. This is the actionable counterpart to the per-faction `stub*` counts in
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and [`summary.md`](summary.md).
 
-Total: 1603 stub abilities.
+Total: 1647 stub abilities.
 
 | faction | ability | shape | needs |
 |---|---|---|---|
@@ -820,8 +820,12 @@ Total: 1603 stub abilities.
 | death-guard | cornucophagus-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | creeping-blight-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | creeping-rot-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | daemon-lord-of-nurgle-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | daemon-weapon-of-nurgle-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | daemonic-icon-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | deaths-heads-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | deaths-heads-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | deluge-of-nurgle-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | disgustingly-resilient-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | drawn-to-despair-mortarions-hammer-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | entropic-knell-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -837,18 +841,23 @@ Total: 1603 stub abilities.
 | death-guard | grim-reapers-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | grip-of-the-walking-pox-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | grotesque-fortitude-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | grotesque-regeneration-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | helm-of-the-fly-king-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | hidden-amongst-the-dead-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | inexorable-executioners-maggot-lords-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | infected-outbreak-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | instrument-of-chaos-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | leechspore-eruption-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | lord-of-the-walking-pox-shamblerot-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | malignance-magnified-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | mireslick-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | mischief-makers-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | mobile-vector-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | mortarions-teachings-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | needle-of-nurgle-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | noisome-veil-maggot-lords-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | nurgles-gift-maggot-lords-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | nurgles-rot-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | overwhelming-generosity-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | persistent-pests-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | plaguesurge-virulent-vectorium-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -871,6 +880,7 @@ Total: 1603 stub abilities.
 | death-guard | tome-of-bounteous-blessings-tallyband-summoners-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | undying-spite-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | vile-vigour-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| death-guard | virulent-blessing-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | visions-of-virulence-champions-of-contagion-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | vomitous-salvoes-maggot-lords-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | death-guard | warprot-talisman-death-lords-chosen-death-guard | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -971,9 +981,19 @@ Total: 1603 stub abilities.
 | drukhari | webway-awl-kabalite-cartel-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | webway-walker-reapers-wager-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | drukhari | wraithlike-retreat-skysplinter-assault-drukhari | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | daemon-lord-of-slaanesh-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | daemonic-icon-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | emperors-children | daemonic-patrons-callous-blades-flawless-blades-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | horrifying-beauty-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | emperors-children | icon-of-excess-callous-blades-infractors-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | instrument-of-chaos-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | mesmerising-form-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | monarch-of-the-hunt-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | emperors-children | nimble-strikes-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | no-prey-can-evade-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | shining-aegis-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | soporific-musk-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| emperors-children | unholy-speed-emperors-children | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | genestealer-cults | a-chink-in-their-armour-host-of-ascension-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | genestealer-cults | a-dark-network-brood-brothers-auxilia-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | genestealer-cults | a-deadly-snare-host-of-ascension-genestealer-cults | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -1486,13 +1506,26 @@ Total: 1603 stub abilities.
 | tau-empire | rapid-disembark-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tau-empire | weapon-support-system-tau-empire | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | bestial-prophet-kaaskrek-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | bounding-leaps-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | cabal-of-sorcerers-prism-of-zadophon-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | committed-to-the-ritual-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | daemon-lord-of-tzeentch-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | daemonic-icon-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | exploding-horrors-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | glamour-of-tzeentch-zadophon-the-soul-eater-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | icon-of-flame-prism-of-zadophon-rubric-marines-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | instrument-of-chaos-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | master-of-magicks-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | one-head-looks-back-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | one-head-looks-forward-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | prophesied-doom-prism-of-zadophon-tzaangor-enlightened-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | sacrificial-blessing-kaaskrek-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | slashing-dive-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | thousand-sons | spirit-snare-zadophon-the-soul-eater-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | split-pink-horrors-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | split-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| thousand-sons | sullen-malevolence-thousand-sons | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tyranids | ablative-carapace-assimilation-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tyranids | adapted-organism-the-vardenghast-swarm-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | tyranids | adaptive-biology-invasion-fleet-tyranids | no-effect | effect type "no-effect" is not modelled by the buff layer |
@@ -1600,15 +1633,26 @@ Total: 1603 stub abilities.
 | white-scars | stormseers-wisdom-spearpoint-task-force-white-scars | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | white-scars | withdraw-and-regroup-spearpoint-task-force-white-scars | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | a-worthy-skull-frenzied-reavers-master-of-executions-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | bane-of-cowards-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | bane-of-the-craven-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | berserk-resilience-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | berzerker-charge-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | blessings-of-khorne-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | blood-surge-frenzied-reavers-khorne-berzerkers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | brass-stampede-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | collar-of-khorne-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | daemon-lord-of-khorne-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | daemonic-icon-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | damaged-1-7-wounds-remaining-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | fearsome-presence-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | horrifying-butchery-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | hunters-from-the-warp-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | icon-of-khorne-frenzied-reavers-jakhals-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | instrument-of-chaos-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | murderlust-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | murderous-charge-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | objective-ravaged-frenzied-reavers-jakhals-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | pact-of-blood-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
 | world-eaters | rabid-response-frenzied-reavers-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | rage-embodied-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |
+| world-eaters | relentless-carnage-world-eaters | no-effect | effect type "no-effect" is not modelled by the buff layer |

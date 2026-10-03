@@ -3869,7 +3869,7 @@
     }
    }
   ],
-  "out": "after an Agile Manoeuvre roll is made"
+  "out": "after the unit makes an Agile Manoeuvre roll"
  },
  {
   "fn": "describeTrigger",
@@ -3883,7 +3883,7 @@
     }
    }
   ],
-  "out": "after a Channel the Warp roll is made"
+  "out": "after a successful Channel the Warp roll made for the unit"
  },
  {
   "fn": "describeTrigger",
@@ -3915,7 +3915,7 @@
     }
    }
   ],
-  "out": "each time an enemy unit uses a Psychic ability"
+  "out": "each time your opponent uses a Psychic ability"
  },
  {
   "fn": "describeAbility",

@@ -203,13 +203,26 @@ func diceTableResultLabel(results any) string {
 	return strings.Join(parts, ", ")
 }
 
+// diceTableHead renders "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)".
+func diceTableHead(e map[string]any) string {
+	count, ok := e["count"].(float64)
+	if !ok || count < 2 {
+		return "roll one " + diceCase(e["dice"])
+	}
+	s := "roll " + jsNumStr(count) + " " + diceCase(e["dice"]) + " and resolve each one"
+	if e["distinct"] == true {
+		s += " (re-rolling any repeated result)"
+	}
+	return s
+}
+
 func diceTableInline(e map[string]any, ctx effCtx) string {
 	var outcomes []string
 	for _, o := range getList(e, "outcomes") {
 		om := mapOr(o)
 		outcomes = append(outcomes, "on "+diceTableResultLabel(om["results"])+", "+describeEffectInline(mapOr(om["effect"]), ctx))
 	}
-	return "roll one " + diceCase(e["dice"]) + ": " + strings.Join(outcomes, "; ")
+	return diceTableHead(e) + ": " + strings.Join(outcomes, "; ")
 }
 
 // rollWithRider renders a [dice-gated rider, unconditional primary] sequence.
@@ -540,7 +553,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		}
 		return selectObjectiveBlock(e, indent, arrow, nested, hasNested, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "dice-table":
-		lines := []string{indent + arrow + "Roll one " + diceCase(e["dice"]) + ":"}
+		lines := []string{indent + arrow + capitalize(diceTableHead(e)) + ":"}
 		for _, o := range getList(e, "outcomes") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - On "+diceTableResultLabel(om["results"])+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")

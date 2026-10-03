@@ -57,7 +57,13 @@ def _describe_happened(p: P, negated: bool) -> str:
         verb = "shoot or fight" if to == "attack" else dekebab(to)
         return _with_window(f"{who} {has} been selected to {verb}", window)
     if event == "set-up":
-        return _with_window(f"{who} {'was not' if negated else 'was'} set up", window)
+        source = {
+            "deep-strike": " using Deep Strike",
+            "strategic-reserves": " from Strategic Reserves",
+            "cult-ambush": " from Cult Ambush",
+            "transport": " from a Transport",
+        }.get(_str(f.get("from")), "")
+        return _with_window(f"{who} {'was not' if negated else 'was'} set up{source}", window)
     if event == "targets-selected":
         has = "has not" if negated else "has"
         what = (
@@ -67,7 +73,14 @@ def _describe_happened(p: P, negated: bool) -> str:
         )
         return _with_window(f"{who} {has} selected {what}", window)
     if event == "disembarked":
-        return _with_window(f"{who} {did_not('disembark')} from a Transport", window)
+        transport = f.get("transport")
+        if transport is None:
+            source = "a Transport"
+        elif transport in ("this-unit", "this-model"):
+            source = "this Transport"
+        else:
+            source = unit_ref_phrase(transport)
+        return _with_window(f"{who} {did_not('disembark')} from {source}", window)
     if event == "after-roll":
         obj = unit_ref_phrase(p.get("object"), "the unit")
         target = "the target" if obj == "the target unit" else obj
@@ -114,6 +127,18 @@ def _describe_happened(p: P, negated: bool) -> str:
             else:
                 hits = f"a {atk}attack"
             return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
+        # Whose roll it was, when the subject names one:
+        # "the unit made a battle-shock roll and failed it".
+        if subj is not None:
+            outcome = (
+                " and failed it"
+                if f.get("result") == "failure"
+                else " and passed it"
+                if f.get("result") == "success"
+                else ""
+            )
+            made = f"{neg}{who} made a {roll_word(f.get('roll'))} roll{outcome}"
+            return f"{made} {_window_phrase(window)}".rstrip()
         result = f"was a {_str(f['result'])} " if _truthy(f.get("result")) else "was made "
         return f"{neg}a {roll_word(f.get('roll'))} roll {result}{_window_phrase(window)}".rstrip()
     if event == "damage-allocated":

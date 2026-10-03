@@ -224,6 +224,8 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
+    if isinstance(f.get("not_all_of"), list):
+        s += f" (excluding {' '.join(_str(k) for k in f['not_all_of'])} {noun}s)"
     if isinstance(f.get("has_ability"), list):
         s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):
@@ -248,6 +250,8 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" that is not {_designation_phrase(_str(f['not_designated']))}"
     if f.get("state") is not None:
         s += f" that is {_state_phrase(_str(f['state']))}"
+    if isinstance(f.get("not_states"), list):
+        s += f" that is {_and_list([_state_phrase(_str(x), True) for x in f['not_states']])}"
     if f.get("visible") is True:
         s += " that is visible to it"
     within = f.get("within")
@@ -341,6 +345,7 @@ _STATE_PHRASES: dict[str, str] = {
     "battle-shocked": "Battle-shocked",
     "embarked": "embarked",
     "in-strategic-reserves": "in Strategic Reserves",
+    "in-cult-ambush": "in Cult Ambush",
     "on-battlefield": "on the battlefield",
     "hidden": "hidden",
     "fights-first": "a Fights First unit",

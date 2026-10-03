@@ -227,6 +227,9 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             return f"{neg}{leader} is leading a {kw}unit"
         if p.get("role") == "led":
             return f"{neg}{_subject_of(p, 'this unit')} is being led by {_article(kw)} {kw}model"
+        # Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+        if kw:
+            return f"{neg}{_subject_of(p)} is attached to {_article(kw)} {kw}unit"
         return f"{neg}{_subject_of(p)} is an attached unit"
     if ctype == "strength":
         below = "half strength" if p.get("below") == "half" else "starting strength"

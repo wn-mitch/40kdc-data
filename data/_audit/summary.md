@@ -20,10 +20,10 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | chaos-knights | 110 | 23 | 9 | 79 | 0 | 2 | 0 | 0 |
 | chaos-space-marines | 281 | 43 | 10 | 232 | 132 | 7 | 0 | 3 |
 | dark-angels | 77 | 16 | 7 | 57 | 21 | 0 | 0 | 2 |
-| death-guard | 150 | 13 | 4 | 135 | 68 | 1 | 0 | 3 |
+| death-guard | 160 | 13 | 4 | 145 | 78 | 1 | 0 | 3 |
 | deathwatch | 36 | 5 | 1 | 30 | 23 | 1 | 0 | 0 |
 | drukhari | 164 | 24 | 5 | 136 | 73 | 5 | 0 | 1 |
-| emperors-children | 136 | 24 | 9 | 103 | 3 | 3 | 0 | 1 |
+| emperors-children | 146 | 24 | 9 | 113 | 13 | 3 | 0 | 1 |
 | genestealer-cults | 147 | 18 | 5 | 126 | 74 | 1 | 0 | 1 |
 | grey-knights | 134 | 9 | 4 | 122 | 87 | 0 | 0 | 0 |
 | imperial-fists | 11 | 2 | 0 | 9 | 2 | 0 | 0 | 0 |
@@ -36,18 +36,18 @@ abilities that translate into cruncher buffs via the real `effectToBuffs`
 | salamanders | 11 | 3 | 0 | 8 | 5 | 0 | 0 | 0 |
 | space-wolves | 87 | 12 | 4 | 74 | 47 | 5 | 0 | 0 |
 | tau-empire | 166 | 39 | 8 | 120 | 8 | 3 | 0 | 3 |
-| thousand-sons | 145 | 30 | 13 | 105 | 8 | 3 | 0 | 1 |
+| thousand-sons | 158 | 30 | 13 | 118 | 21 | 3 | 0 | 1 |
 | tyranids | 186 | 18 | 7 | 163 | 84 | 4 | 0 | 5 |
 | ultramarines | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
 | white-scars | 11 | 0 | 0 | 11 | 11 | 0 | 0 | 0 |
-| world-eaters | 136 | 16 | 10 | 112 | 13 | 0 | 0 | 0 |
-| **TOTAL** | **4483** | **669** | **225** | **3651** | **1603** | **67** | **0** | **47** |
+| world-eaters | 147 | 16 | 10 | 123 | 24 | 0 | 0 | 0 |
+| **TOTAL** | **4527** | **669** | **225** | **3695** | **1647** | **67** | **0** | **47** |
 
 `stub*` = structural (empty-modifier placeholder node) — the authoring worklist. `notes-stub` = flagged in community_notes.
 
 ## Unsupported-effect reasons (offensive walk)
 
-- `1613` — effect type "no-effect" is not modelled by the buff layer
+- `1657` — effect type "no-effect" is not modelled by the buff layer
 - `243` — conditional: cannot evaluate condition "undefined" against current context
 - `158` — effect type "permission" is not modelled by the buff layer
 - `108` — selection/history/model/attack predicates are not resolved by the buff engine

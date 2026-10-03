@@ -45,6 +45,9 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(none) = map_arr(f, "none_of", jv) {
         s.push_str(&format!(" (excluding {} {noun})", or_list(&none)));
     }
+    if let Some(not_all) = map_arr(f, "not_all_of", jv) {
+        s.push_str(&format!(" (excluding {} {noun})", not_all.join(" ")));
+    }
     let within = nn(f, "within");
     if let Some(w) = within {
         let w = obj(Some(w));
@@ -76,6 +79,9 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(state) = nn(f, "state") {
         s.push_str(&format!(" that are {}", state_phrase(&jv(state), false)));
     }
+    if let Some(not) = map_arr(f, "not_states", |x| state_phrase(&jv(x), true)) {
+        s.push_str(&format!(" that are {}", and_list(&not)));
+    }
     if let Some(ex) = nn(f, "excluding") {
         s.push_str(&format!(" other than {}", effect_subject(Some(ex), ctx)));
     }
@@ -84,6 +90,7 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
         || nn(f, "designated").is_some()
         || nn(f, "not_designated").is_some()
         || nn(f, "state").is_some()
+        || nn(f, "not_states").is_some()
         || [
             "embarked_in",
             "member_of",

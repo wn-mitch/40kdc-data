@@ -207,6 +207,14 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                     article(&kw)
                 );
             }
+            // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+            if !kw.is_empty() {
+                return format!(
+                    "{neg}{} is attached to {} {kw}unit",
+                    subject_of(p, "the unit"),
+                    article(&kw)
+                );
+            }
             format!("{neg}{} is an attached unit", subject_of(p, "the unit"))
         }
         "strength" => format!(

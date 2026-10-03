@@ -467,6 +467,9 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if l, ok := asList(f["none_of"]); ok {
 		s += " (excluding " + orList(jstrList(l)) + " " + noun + ")"
 	}
+	if l, ok := asList(f["not_all_of"]); ok {
+		s += " (excluding " + strings.Join(jstrList(l), " ") + " " + noun + ")"
+	}
 	within, hasWithin := asMap(f["within"])
 	if hasWithin && within != nil {
 		s += " "
@@ -496,10 +499,17 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["state"] != nil {
 		s += " that are " + statePhrase(ejstr(f["state"]), false)
 	}
+	if l, ok := asList(f["not_states"]); ok {
+		negs := []string{}
+		for _, x := range jstrList(l) {
+			negs = append(negs, statePhrase(x, true))
+		}
+		s += " that are " + andList(negs)
+	}
 	if f["excluding"] != nil {
 		s += " other than " + effectSubject(f["excluding"], ctx)
 	}
-	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil ||
+	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
 		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
 	if bounded {
 		return s

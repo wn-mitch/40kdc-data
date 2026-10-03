@@ -97,6 +97,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const kw = Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : "";
       if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p)} is leading a ${kw}unit`;
       if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}model`;
+      // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+      if (kw) return `${neg}${subjectOf(p)} is attached to ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}unit`;
       return `${neg}${subjectOf(p)} is an attached unit`;
     }
     case "strength": {

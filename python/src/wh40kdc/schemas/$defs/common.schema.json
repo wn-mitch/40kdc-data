@@ -122,7 +122,7 @@
     },
     "game-event": {
       "type": "string",
-      "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.",
+      "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.",
       "enum": [
         "battle-started",
         "battle-formations-declared",
@@ -136,6 +136,7 @@
         "step-started",
         "selected",
         "targets-selected",
+        "move-started",
         "move-ended",
         "set-up",
         "disembarked",
@@ -369,12 +370,13 @@
         "battle-shocked",
         "embarked",
         "in-strategic-reserves",
+        "in-cult-ambush",
         "on-battlefield",
         "hidden",
         "fights-first",
         "benefit-of-cover"
       ],
-      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged)."
+      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves."
     },
     "unit-filter": {
       "type": "object",
@@ -394,12 +396,25 @@
         "none_of": {
           "$ref": "#/$defs/keyword-list"
         },
+        "not_all_of": {
+          "$ref": "#/$defs/keyword-list",
+          "description": "Not units that have every listed keyword (\"excluding MONSTER CHARACTER units\" excludes only units that are both)."
+        },
         "designated": {
           "$ref": "#/$defs/designation-id",
           "description": "The unit carries this designation (a tag an effect applied)."
         },
         "state": {
           "$ref": "#/$defs/unit-state"
+        },
+        "not_states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unit-state"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Only units in none of these states (\"unengaged\", \"not Battle-shocked\")."
         },
         "level": {
           "enum": [
@@ -808,6 +823,12 @@
             "transport"
           ]
         },
+        "transport": {
+          "enum": [
+            "this-unit"
+          ],
+          "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\"."
+        },
         "through": {
           "enum": [
             "terrain",
@@ -903,7 +924,8 @@
             "dark-pact",
             "blessings-of-khorne",
             "manoeuvre",
-            "channelling"
+            "channelling",
+            "deadly-demise"
           ]
         },
         {

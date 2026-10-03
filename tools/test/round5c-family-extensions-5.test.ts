@@ -162,28 +162,33 @@ describe("Cult Ambush", () => {
     expect(() => normalize("unit-position", { kind: "within", inches: 8, subject: "this-unit", of: "this-unit", of_marker: "cult-ambush-marker", negated: false })).toThrow(/of: marker/u);
   });
 
-  it("refuses units in Cult Ambush rather than dropping where they are held", () => {
-    const { leaves, text } = placed("Friendly units held aside cannot be targeted with the Swift Arrival Stratagem.", [
-      ["Friendly units held aside", "unit-filter", { side: "friendly", held_in: "cult-ambush" }],
-      ["cannot be targeted with the Swift Arrival Stratagem", "targeting-restriction", { may: "cannot-target", kind: "stratagem", weapon_type: "all", target: "friendly-units", stratagem: "rapid-ingress" }],
-    ]);
-    const result = compileLeaves(leaves, text);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? "" : result.errors.join()).toMatch(/Cult Ambush/u);
+  it("names units in Cult Ambush by their own state, not as Strategic Reserves", () => {
+    for (const [held, state] of [["cult-ambush", "in-cult-ambush"], ["strategic-reserves", "in-strategic-reserves"]] as const) {
+      const { leaves, text } = placed("Units held aside cannot be targeted with the Swift Arrival Stratagem.", [
+        ["Units held aside", "unit-filter", { side: "friendly", held_in: held }],
+        ["cannot be targeted with the Swift Arrival Stratagem", "targeting-restriction", { may: "cannot-target", kind: "stratagem", weapon_type: "all", target: "antecedent", stratagem: "rapid-ingress" }],
+      ]);
+      const result = compileLeaves(leaves, text);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      expect(first(result.mechanics, "targeting")!.modifier).toMatchObject({ target: { owner: "friendly", state }, stratagem: "rapid-ingress" });
+    }
   });
 
-  it("keeps what an added copy carries, lowering Strategic Reserves and refusing what the DSL cannot hold", () => {
+  it("keeps everything an added copy carries, Cult Ambush included", () => {
     const copy = { source: "copy-of-destroyed", count: "1" };
     expect(() => normalize("add-unit", { source: "datasheet", datasheet: "alpha-squad", count: "1", copy_excluded_keywords: ["CHARACTER"] })).toThrow(/copy/u);
     expect(normalize("add-unit", { ...copy, copy_excluded_keywords: ["character"], at_starting_strength: true, reset_one_shot: true, held_in: "cult-ambush" }))
       .toEqual({ ...copy, copy_excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, held_in: "cult-ambush" });
     const compile = (parameters: Record<string, unknown>) => compileLeaves(placed("Add a new unit to your army.", [["Add a new unit to your army", "add-unit", parameters]]).leaves, "Add a new unit to your army.");
+    const whole = compile({ ...copy, copy_excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, held_in: "cult-ambush" });
+    if (!whole.ok) throw new Error(whole.errors.join("; "));
+    const modifier = first(whole.mechanics, "add-unit")!.modifier as Record<string, unknown>;
+    expect(modifier).toEqual({ copy_of: "event-object", count: 1, excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, placement: "cult-ambush" });
+    // The lowered copy passes the DSL schema, carried on any authored entry.
+    const host = (JSON.parse(readFileSync(join(resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment"), "world-eaters", "abilities.json"), "utf8")) as Array<Record<string, unknown>>)[0]!;
+    expect(checkEntry(entryWithMechanics(host, whole.mechanics)).errors).toEqual([]);
     const reserves = compile({ ...copy, held_in: "strategic-reserves" });
     if (!reserves.ok) throw new Error(reserves.errors.join("; "));
-    expect(first(reserves.mechanics, "add-unit")!.modifier).toMatchObject({ copy_of: "event-object", placement: "strategic-reserves" });
-    for (const [extra, message] of [[{ held_in: "cult-ambush" }, /Cult Ambush/u], [{ copy_excluded_keywords: ["CHARACTER"] }, /excluded/u], [{ at_starting_strength: true }, /Starting Strength/u], [{ reset_one_shot: true }, /One Shot/u]] as const) {
-      const result = compile({ ...copy, ...extra });
-      expect(result.ok ? "compiled" : result.errors.join()).toMatch(message);
-    }
+    expect(first(reserves.mechanics, "add-unit")!.modifier).toEqual({ copy_of: "event-object", count: 1, placement: "strategic-reserves" });
   });
 });

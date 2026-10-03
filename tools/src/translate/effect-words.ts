@@ -300,6 +300,7 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   let s = `${owner}${all}${noun}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
+  if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(jstr).join(" ")} ${noun})`;
   const within = f.within as P | undefined;
   if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${effectSubject(within.of, ctx)}` : ""}`;
   s += filterRelations(f, ctx);
@@ -307,8 +308,9 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
   if (f.not_designated != null) s += ` that are not ${designationPhrase(jstr(f.not_designated), true)}`;
   if (f.state != null) s += ` that are ${statePhrase(jstr(f.state))}`;
+  if (Array.isArray(f.not_states)) s += ` that are ${andList((f.not_states as unknown[]).map((x) => statePhrase(jstr(x), true)))}`;
   if (f.excluding != null) s += ` other than ${effectSubject(f.excluding, ctx)}`;
-  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null ||
+  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null || f.not_states != null ||
     f.embarked_in != null || f.member_of != null || f.engaged_with != null || f.not_engaged_with != null;
   return bounded ? s : `all ${s}`;
 }

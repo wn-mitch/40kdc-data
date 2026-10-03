@@ -147,26 +147,40 @@ describe("weapon ability for the attack being made", () => {
 });
 
 describe("ability exclusions", () => {
-  it("lowers to lacks_ability, and a fold that would drop it refuses", () => {
+  it("lowers to lacks_ability, and a selection keeps it as a negated has-ability check", () => {
     const filter = { role: "CONDITION", family_id: "unit-filter", family_version: currentFamilyVersion("unit-filter"), start_byte: 0, end_byte: 1,
       parameters: normalize("unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }) } as CompileLeaf;
     expect(dslUnitFilter(filter)).toEqual({ owner: "enemy", lacks_ability: ["lone-operative"] });
-    const folded = refusal(placed("Select one enemy unit (excluding units with the Lone Operative ability). That unit has the Feel No Pain 6+ ability.", [
+    const mechanics = compiled(placed("Select one enemy unit (excluding units with the Lone Operative ability). That unit has the Feel No Pain 6+ ability.", [
       ["Select one", "select-unit", { distance: "any", visible: false }],
       ["excluding units with the Lone Operative ability", "unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }],
       ["That unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
-    expect(folded).toMatch(/excluding abilities/u);
+    expect(nodes(mechanics, (node) => node.type === "has-ability")).toEqual([{ type: "has-ability", parameters: { ability: "lone-operative" } }]);
+    expect(nodes(mechanics, (node) => node.operator === "not" && JSON.stringify(node).includes("lone-operative"))).toHaveLength(1);
+    expect(schemaErrors(mechanics)).toEqual([]);
+    // A stacked visible filter merges with it and keeps the exclusion rather than dropping it.
+    const merged = compiled(placed("Select one visible enemy unit (excluding units with the Lone Operative ability). That unit has the Feel No Pain 6+ ability.", [
+      ["Select one", "select-unit", { distance: "any", visible: false }],
+      ["visible enemy unit", "unit-filter", { side: "enemy", visible: true }],
+      ["excluding units with the Lone Operative ability", "unit-filter", { side: "enemy", excluded_abilities: ["lone-operative"] }],
+      ["That unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
+    ]));
+    expect(nodes(merged, (node) => node.type === "has-ability")).toHaveLength(1);
   });
 });
 
 describe("Deadly Demise rolls", () => {
-  it("refuses a moment on a roll the DSL trigger filter cannot name", () => {
+  it("names a moment before or after a Deadly Demise roll with the DSL's deadly-demise roll", () => {
     const text = "Each time you roll for this model's Deadly Demise ability, this unit has the Feel No Pain 6+ ability.";
-    expect(refusal(placed(text, [
-      ["Each time you roll for this model's Deadly Demise ability", "event", { kind: "before-roll", roll: "deadly-demise" }],
-      ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
-    ]))).toMatch(/DSL_GAP.*deadly-demise/u);
+    for (const kind of ["before-roll", "after-roll"]) {
+      const mechanics = compiled(placed(text, [
+        ["Each time you roll for this model's Deadly Demise ability", "event", { kind, roll: "deadly-demise" }],
+        ["this unit has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
+      ]));
+      expect(mechanics.trigger).toMatchObject({ event: kind, filter: { roll: "deadly-demise" } });
+      expect(schemaErrors(mechanics)).toEqual([]);
+    }
   });
 });
 

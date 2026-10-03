@@ -257,13 +257,22 @@ def dice_table_result_label(results: Any) -> str:
     return ", ".join(jstr(f) for f in faces)
 
 
+def dice_table_head(e: Effect) -> str:
+    """ "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)"."""
+    count = e.get("count")
+    if not isinstance(count, (int, float)) or isinstance(count, bool) or count < 2:
+        return f"roll one {dice_case(e.get('dice'))}"
+    distinct = " (re-rolling any repeated result)" if e.get("distinct") is True else ""
+    return f"roll {jstr(count)} {dice_case(e.get('dice'))} and resolve each one{distinct}"
+
+
 def _dice_table_inline(e: Effect, ctx: Ctx) -> str:
     outcomes = [
         f"on {dice_table_result_label(_obj(o).get('results'))}, "
         f"{inline(_obj(o).get('effect'), ctx)}"
         for o in (e.get("outcomes") or [])
     ]
-    return f"roll one {dice_case(e.get('dice'))}: {'; '.join(outcomes)}"
+    return f"{dice_table_head(e)}: {'; '.join(outcomes)}"
 
 
 def roll_with_rider(steps: list[Any], ctx: Ctx) -> str | None:

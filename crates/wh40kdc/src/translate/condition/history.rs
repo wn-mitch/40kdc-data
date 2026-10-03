@@ -85,10 +85,22 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             };
             with_window(&format!("{who} {has} been selected to {what}"), window)
         }
-        "set-up" => with_window(
-            &format!("{who} {} set up", if negated { "was not" } else { "was" }),
-            window,
-        ),
+        "set-up" => {
+            let from = match st(f.get("from")).as_str() {
+                "deep-strike" => " using Deep Strike",
+                "strategic-reserves" => " from Strategic Reserves",
+                "cult-ambush" => " from Cult Ambush",
+                "transport" => " from a Transport",
+                _ => "",
+            };
+            with_window(
+                &format!(
+                    "{who} {} set up{from}",
+                    if negated { "was not" } else { "was" }
+                ),
+                window,
+            )
+        }
         "targets-selected" => {
             let what = match nn(p, "object") {
                 Some(o) => format!("{} as a target", unit_ref_phrase(Some(o), "the unit")),
@@ -102,10 +114,19 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 window,
             )
         }
-        "disembarked" => with_window(
-            &format!("{who} {} from a Transport", did_not("disembark")),
-            window,
-        ),
+        "disembarked" => {
+            let from = match f.get("transport") {
+                None | Some(Value::Null) => "a Transport".to_string(),
+                Some(Value::String(s)) if s == "this-unit" || s == "this-model" => {
+                    "this Transport".to_string()
+                }
+                other => unit_ref_phrase(other, "the unit"),
+            };
+            with_window(
+                &format!("{who} {} from {from}", did_not("disembark")),
+                window,
+            )
+        }
         "after-roll" => {
             let obj_phrase = unit_ref_phrase(p.get("object"), "the unit");
             let target = if obj_phrase == "the target unit" {
@@ -171,6 +192,24 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                     format!("a {atk}attack")
                 };
                 return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
+            }
+            // Whose roll it was, when the subject names one: "the unit made a battle-shock roll
+            // and failed it".
+            if nn(p, "subject").is_some() {
+                let outcome = if is(f, "result", "failure") {
+                    " and failed it"
+                } else if is(f, "result", "success") {
+                    " and passed it"
+                } else {
+                    ""
+                };
+                return format!(
+                    "{neg}{who} made a {} roll{outcome} {}",
+                    roll_word(f.get("roll")),
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
             }
             let result = if truthy(f.get("result")) {
                 format!("was a {} ", st(f.get("result")))

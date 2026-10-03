@@ -18,6 +18,7 @@ fn placement_name(k: &str) -> Option<&'static str> {
         "coherency" => "in Unit Coherency",
         "unengaged" => "not within Engagement Range of any enemy units",
         "strategic-reserves" => "in Strategic Reserves",
+        "cult-ambush" => "in Cult Ambush",
         "anywhere" => "anywhere on the battlefield",
         "connected-sections" => "with its sections touching",
         "deployment-zone" => "wholly within your deployment zone",

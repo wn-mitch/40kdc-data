@@ -79,34 +79,34 @@ Repair worklist by faction — abilities still needing DSL work (not total cover
 | tyranids | 84 | 4 | 0 | 5 |
 | astra-militarum | 83 | 2 | 0 | 5 |
 | leagues-of-votann | 82 | 0 | 0 | 0 |
+| death-guard | 78 | 1 | 0 | 3 |
 | genestealer-cults | 74 | 1 | 0 | 1 |
 | drukhari | 73 | 5 | 0 | 1 |
 | adeptus-mechanicus | 72 | 0 | 0 | 2 |
-| death-guard | 68 | 1 | 0 | 3 |
 | chaos-daemons | 65 | 7 | 0 | 4 |
 | imperial-knights | 58 | 3 | 0 | 1 |
 | agents-of-the-imperium | 54 | 0 | 0 | 2 |
 | space-wolves | 47 | 5 | 0 | 0 |
 | black-templars | 47 | 0 | 0 | 0 |
 | orks | 32 | 0 | 0 | 0 |
+| world-eaters | 24 | 0 | 0 | 0 |
 | deathwatch | 23 | 1 | 0 | 0 |
+| thousand-sons | 21 | 3 | 0 | 1 |
 | dark-angels | 21 | 0 | 0 | 2 |
 | blood-angels | 15 | 1 | 0 | 0 |
-| world-eaters | 13 | 0 | 0 | 0 |
+| emperors-children | 13 | 3 | 0 | 1 |
 | adepta-sororitas | 11 | 7 | 0 | 1 |
 | ultramarines | 11 | 0 | 0 | 0 |
 | white-scars | 11 | 0 | 0 | 0 |
 | raven-guard | 10 | 0 | 0 | 0 |
 | tau-empire | 8 | 3 | 0 | 3 |
-| thousand-sons | 8 | 3 | 0 | 1 |
 | salamanders | 5 | 0 | 0 | 0 |
 | iron-hands | 4 | 0 | 0 | 0 |
 | adeptus-custodes | 3 | 3 | 0 | 3 |
-| emperors-children | 3 | 3 | 0 | 1 |
 | imperial-fists | 2 | 0 | 0 | 0 |
 | _core | 1 | 0 | 0 | 0 |
 | chaos-knights | 0 | 2 | 0 | 0 |
-| **TOTAL** | **1603** | **67** | **0** | **47** |
+| **TOTAL** | **1647** | **67** | **0** | **47** |
 
 `stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in `community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).
 <!-- coverage:end -->

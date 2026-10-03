@@ -63,13 +63,8 @@ function withTurn(node: Node, leaf: CompileLeaf): Node {
   return { ...node, condition: { type: "player-turn-is", parameters: { turn: `${String(closed(leaf, "turn"))}-turn` } } };
 }
 
-/** Rolls the DSL's trigger filter cannot name; a moment on one of them refuses instead of emitting an invalid roll. */
-const UNNAMED_TRIGGER_ROLLS = new Set(["deadly-demise"]);
-
 function triggerRoll(leaf: CompileLeaf): unknown {
-  const roll = closed(leaf, "roll");
-  if (UNNAMED_TRIGGER_ROLLS.has(String(roll))) throw new CompileError(`DSL_GAP: the DSL roll-kind has no ${String(roll)} roll, so a moment before or after one has no trigger yet.`);
-  return roll;
+  return closed(leaf, "roll");
 }
 
 /** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
@@ -122,7 +117,8 @@ export function trigger(leaf: CompileLeaf): Node {
 function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
-    if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind)) return ownedEventTrigger(leaf);
+    // Version 13's move-started takes the same owner, subject and move_types as move-ended.
+    if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind) || kind === "move-started") return ownedEventTrigger(leaf);
     if (V7_FILTERED_KINDS[kind]) return V7_FILTERED_KINDS[kind]!(leaf);
     const boundary = phaseTrigger(leaf);
     if (boundary) return boundary;

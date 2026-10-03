@@ -77,6 +77,7 @@ export interface Effect {
   trigger?: AbilityTriggerSpec;
   usage?: AbilityUsage | AbilityUsage[];
   dice?: string;
+  distinct?: boolean;
   roll_var?: string;
   extra_dice_pool?: string;
   from?: { roll_var: string; successes_on?: number };
@@ -758,11 +759,17 @@ function diceTableResultLabel(results: unknown): string {
   return faces.join(", ");
 }
 
+/** "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)". */
+function diceTableHead(e: Effect): string {
+  if (typeof e.count !== "number" || e.count < 2) return `roll one ${diceCase(e.dice)}`;
+  return `roll ${e.count} ${diceCase(e.dice)} and resolve each one${e.distinct === true ? " (re-rolling any repeated result)" : ""}`;
+}
+
 function diceTableInline(e: Effect, ctx: Ctx): string {
   const outcomes = (e.outcomes ?? []).map(
     (outcome) => `on ${diceTableResultLabel(outcome.results)}, ${describeEffectInline(outcome.effect ?? {}, ctx)}`
   );
-  return `roll one ${diceCase(e.dice)}: ${outcomes.join("; ")}`;
+  return `${diceTableHead(e)}: ${outcomes.join("; ")}`;
 }
 
 /**
@@ -1158,7 +1165,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       return selectObjectiveBlock(e as Record<string, unknown>, indent, arrow, nested, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     }
     case "dice-table": {
-      const lines = [`${indent}${arrow}Roll one ${diceCase(e.dice)}:`];
+      const lines = [`${indent}${arrow}${capitalize(diceTableHead(e))}:`];
       for (const outcome of e.outcomes ?? []) {
         lines.push(`${indent}  - On ${diceTableResultLabel(outcome.results)}: ${capitalize(describeEffectInline(outcome.effect ?? {}, ctx))}.`);
       }

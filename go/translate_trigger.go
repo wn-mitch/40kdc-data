@@ -54,7 +54,8 @@ func triggerActor(ref any) string {
 		if _, ok := r["event_var"].(string); ok {
 			return "that unit"
 		}
-		// Keywords on the actor read as a trailing requirement, as the event names them.
+		// Keywords on the actor read as a trailing requirement, as the event names them; states read
+		// as a relative clause ("an enemy unit that is unengaged").
 		owner := "a"
 		switch r["owner"] {
 		case "friendly":
@@ -65,6 +66,18 @@ func triggerActor(ref any) string {
 		noun := "unit"
 		if r["level"] == "model" {
 			noun = "model"
+		}
+		states := []string{}
+		if r["state"] != nil {
+			states = append(states, statePhrase(cstr(r["state"]), false))
+		}
+		if isList(r["not_states"]) {
+			for _, x := range cstrList(r["not_states"]) {
+				states = append(states, statePhrase(x, true))
+			}
+		}
+		if len(states) > 0 {
+			return owner + " " + noun + " that is " + andList(states)
 		}
 		return owner + " " + noun
 	case []any:
@@ -90,6 +103,9 @@ func actorKeywords(ref any) string {
 	}
 	if isList(f["none_of"]) {
 		s += " (the triggering " + noun + " must not have " + orList(cstrList(f["none_of"])) + ")"
+	}
+	if isList(f["not_all_of"]) {
+		s += " (the triggering " + noun + " must not have all of " + andList(cstrList(f["not_all_of"])) + ")"
 	}
 	return s
 }
@@ -122,6 +138,7 @@ var rollNouns = map[string]string{
 	"advance": "Advance roll", "battle-shock": "Battle-shock test", "leadership": "Leadership test", "hazard": "Hazard roll",
 	"psychic": "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
 	"blessings-of-khorne": "Blessings of Khorne roll", "manoeuvre": "Agile Manoeuvre roll", "channelling": "Channel the Warp roll",
+	"deadly-demise": "Deadly Demise roll",
 }
 
 var testRolls = map[string]bool{"battle-shock": true, "leadership": true, "desperate-escape": true}
@@ -190,6 +207,34 @@ func rollClause(t, f map[string]any) string {
 	}
 	if f["result"] == "success" && roll == "dark-pact" {
 		return "each time the unit makes a Dark Pact and passes its Leadership test"
+	}
+	// Whose roll it was and how it came out: "when the unit fails a Battle-shock test", "after a
+	// saving throw made for this model is failed".
+	art := article(noun)
+	named := subject != nil && !anyone
+	madeFor := ""
+	if named {
+		madeFor = " made for " + triggerActor(subject)
+	}
+	if f["result"] == "failure" || f["result"] == "success" {
+		passed := f["result"] == "success"
+		if testRolls[roll] {
+			verb := "fails"
+			if passed {
+				verb = "passes"
+			}
+			return "when " + triggerActor(subject) + " " + verb + " " + art + " " + noun
+		}
+		if passed {
+			return "after a successful " + noun + madeFor
+		}
+		return "after " + art + " " + noun + madeFor + " is failed"
+	}
+	if named {
+		if testRolls[roll] {
+			return "after " + triggerActor(subject) + " takes " + art + " " + noun
+		}
+		return "after " + triggerActor(subject) + " makes " + art + " " + noun
 	}
 	if roll == "psychic" {
 		return "after a Psychic test is taken"
@@ -276,6 +321,20 @@ func triggerEventPhrase(t map[string]any) string {
 			return "when " + who + " targets " + triggerObjectPhrase(object)
 		}
 		return "when " + who + " selects its targets"
+	case "move-started":
+		// "at the start of this unit's move", "just before it Consolidates": the move is about to be made.
+		startKinds := ""
+		if isList(f["move_types"]) {
+			startKinds = moveKinds(f["move_types"])
+		}
+		move := "a move"
+		if startKinds != "" {
+			move = article(startKinds) + " " + startKinds + " move"
+		}
+		if isObject(t["subject"]) {
+			return "each time " + who + " starts " + move
+		}
+		return "when " + who + " starts " + move
 	case "move-ended":
 		if f["through"] == "tall-terrain" {
 			return "when " + who + " moves through terrain over 4\" tall"
@@ -311,7 +370,13 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "when " + who + " " + from
 	case "disembarked":
-		return "when " + who + " disembarks from a Transport"
+		from := "a Transport"
+		if f["transport"] == "this-unit" || f["transport"] == "this-model" {
+			from = "this Transport"
+		} else if f["transport"] != nil {
+			from = triggerObjectPhrase(f["transport"])
+		}
+		return "when " + who + " disembarks from " + from
 	case "before-roll", "after-roll":
 		return rollClause(t, f)
 	case "damage-allocated":
@@ -335,6 +400,14 @@ func triggerEventPhrase(t map[string]any) string {
 		melee := ""
 		if f["attack_type"] == "melee" {
 			melee = " in melee"
+		}
+		// A subject names who destroyed the object: "each time the unit destroys an enemy unit".
+		if t["subject"] != nil {
+			obj := "a unit"
+			if object != nil {
+				obj = triggerObjectPhrase(object)
+			}
+			return "each time " + who + " destroys " + obj + melee
 		}
 		if object == nil || object == "this-unit" {
 			return "when the unit is destroyed" + melee
@@ -362,12 +435,22 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "when " + triggerObjectPhrase(object) + " is destroyed"
 	case "used":
+		// A rule your opponent used: the subject names only the enemy owner.
+		sm, _ := asMap(t["subject"])
+		opponent := sm != nil && sm["owner"] == "enemy" && len(sm) == 1
 		if which := usedAbilityPhrase(f); which != "" {
+			if opponent {
+				return "each time your opponent uses " + which
+			}
 			return "each time " + who + " uses " + which
 		}
 		switch {
+		case f["kind"] == "stratagem" && opponent:
+			return "each time your opponent uses a Stratagem"
 		case f["kind"] == "stratagem":
 			return "each time you use a Stratagem"
+		case opponent && f["kind"] == "ability" && f["id"] == nil:
+			return "each time your opponent uses an ability"
 		case f["kind"] == "ability" && f["id"] != nil:
 			return "when you use " + titleCase(cstr(f["id"]))
 		case f["kind"] == "ritual" && f["result"] == "success":

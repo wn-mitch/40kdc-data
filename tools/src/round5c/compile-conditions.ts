@@ -7,6 +7,7 @@
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
+import { abilityChecks, stateCheck } from "./compile-wrappers.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
 type Node = Record<string, unknown>;
@@ -45,6 +46,8 @@ const HISTORY: Record<string, (subject: string | undefined) => Node> = {
   "destroyed-enemy-unit-this-turn": (subject) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
   "set-up-by-deep-strike-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "phase" }),
   "set-up-by-deep-strike-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "turn" }),
+  // Version 9: "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
+  "disembarked-from-this-transport-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "disembarked", filter: { transport: "this-unit" }, window: "turn" }),
   "lost-models-to-triggering-attacks": (subject) => ({
     event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
     filter: { by: "event-subject" }, window: "event",
@@ -469,13 +472,15 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   const bound = triggering ? "triggering-unit" : bindings[0]?.parameters.bound_to;
   if (bound) restrictions.bound_to = bound;
   // A folded unit-filter's checks beyond all-of keywords (compile-unit-filters.ts) go to eligibility.
-  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean };
+  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean };
   if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
   const filtered: Node[] = [
     ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
     // Version 3: "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
     ...(Array.isArray(selector.parameters.any_keywords) ? [{ type: "has-keyword", parameters: { any_of: selector.parameters.any_keywords } }] : []),
-    ...(filter.states ?? []).map((state) => state === "unengaged" ? negate({ type: "unit-state", parameters: { state: "engaged" } }) : { type: "unit-state", parameters: { state } }),
+    ...(filter.states ?? []).map(stateCheck),
+    ...(filter.excluded_all_keywords?.length ? [negate({ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } })] : []),
+    ...abilityChecks(filter.excluded_abilities),
     ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
   ];
   const eligibilityCondition = allOf([...filtered, ...eligibility]);

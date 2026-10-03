@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_inline import (
     describe_requirement,
     designate_when,
     dice_gate,
+    dice_table_head,
     dice_table_result_label,
     inline,
     leader_model_ability_grant_clause,
@@ -61,7 +62,6 @@ from wh40kdc.translate.effect_select import (
 from wh40kdc.translate.effect_words import (
     Ctx,
     capitalize,
-    dice_case,
     is_num,
     jstr,
     test_name,
@@ -166,7 +166,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         nested = describe_effect(inner, depth + 1, ctx) if _is_container(inner) else None
         return select_objective_block(e, indent, arrow, nested, lambda x: inline(x, ctx))
     if t == "dice-table":
-        lines = [f"{indent}{arrow}Roll one {dice_case(e.get('dice'))}:"]
+        lines = [f"{indent}{arrow}{capitalize(dice_table_head(e))}:"]
         for o in e.get("outcomes") or []:
             o = _obj(o)
             label = dice_table_result_label(o.get("results"))

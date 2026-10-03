@@ -33,6 +33,15 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		rng = " within " + rangePhrase(m["range"])
 	}
 	who := subj + rng
+	// "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+	cap := ""
+	if m["max"] != nil {
+		noun := "wounds"
+		if f, ok := m["max"].(float64); ok && f == 1 {
+			noun = "wound"
+		}
+		cap = " (to a maximum of " + ejstr(m["max"]) + " mortal " + noun + ")"
+	}
 	if roll, ok := asMap(m["roll"]); ok && roll != nil {
 		each := ""
 		switch roll["per_model"] {
@@ -45,7 +54,7 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		if each != "" {
 			dice = "one " + dice
 		}
-		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + suffered + psychic
+		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -55,7 +64,7 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		}
 		per = " for each model in " + them
 	}
-	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic
+	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic + cap
 }
 
 var fnpAgainst = map[string]string{

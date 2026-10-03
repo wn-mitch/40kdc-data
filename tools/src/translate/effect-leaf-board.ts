@@ -8,7 +8,7 @@ import { conditionLeadIn } from "./condition-leadin.js";
 import { objectivePhrase, type P } from "./condition-refs.js";
 import type { Inline, Leaf } from "./effect-leaf.js";
 import {
-  amountOf, andList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
+  amountOf, andList, orList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
   rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
   isRatingRef,
   abilityLabel,
@@ -27,14 +27,16 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   // A range the target filter already states is not repeated ("enemy units within 9\" within 9\"").
   const range = m.range != null && !subj.includes(` within ${rangePhrase(m.range)}`) ? ` within ${rangePhrase(m.range)}` : "";
   const who = `${subj}${range}`;
+  // "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+  const cap = m.max != null ? ` (to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"})` : "";
   const roll = m.roll as P | undefined;
   if (roll != null) {
     const each = roll.per_model === "target" ? " for each model in the target unit" : roll.per_model === "this" ? " for each model in this unit" : "";
     const dice = each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
-    return `roll ${dice}${each}: for each ${jstr(roll.threshold)}+, ${who} ${v(who, "suffers")} ${suffered}${psychic}`;
+    return `roll ${dice}${each}: for each ${jstr(roll.threshold)}+, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
-  return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}`;
+  return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}${cap}`;
 }
 
 const FNP_AGAINST: Record<string, string> = {
@@ -93,10 +95,14 @@ function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
   // A fixed count reads as a number; a dice expression or bound quantity reads through amountOf.
   const count = m.count ?? 1;
   const n = typeof count === "number" ? count : null;
+  const excluded = Array.isArray(m.excluded_keywords) ? ` (excluding ${orList((m.excluded_keywords as unknown[]).map(jstr))} models)` : "";
   const what = m.copy_of != null
-    ? `${n === 1 ? "a new unit" : n != null ? `${n} new units` : amountOf(count, "new unit", "new units")} identical to ${effectSubject(m.copy_of, ctx)}`
+    ? `${n === 1 ? "a new unit" : n != null ? `${n} new units` : amountOf(count, "new unit", "new units")} identical to ${effectSubject(m.copy_of, ctx)}${excluded}`
     : n === 1 ? `a ${titleCase(jstr(m.datasheet))} unit` : n != null ? `${n} ${titleCase(jstr(m.datasheet))} units` : amountOf(count, `${titleCase(jstr(m.datasheet))} unit`, `${titleCase(jstr(m.datasheet))} units`);
-  return `add ${what}${models}${strength} to your army${where}${engage}`;
+  const full = m.at_starting_strength === true ? ", at its Starting Strength and with all of its wounds remaining" : "";
+  const oneShot = m.reset_one_shot === true ? ", with its [ONE SHOT] weapons counted as not having been shot" : "";
+  // Where the unit goes comes first, then what it comes back with.
+  return `add ${what}${models}${strength} to your army${where}${full}${oneShot}${engage}`;
 }
 
 const MOVE_VERBS: Record<string, string> = {
@@ -284,7 +290,9 @@ function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
 
 /** A composition limit: at most N units / models / points of X, per matching unit, outside the Retinue limit. */
 function composition(m: Record<string, unknown>, withF: string | null, ctx: Ctx): string {
-  const what = withF ?? "such units";
+  // An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+  const allied = m.faction != null ? titleCase(jstr(m.faction)) : null;
+  const what = withF != null ? `${withF}${allied ? ` from the ${allied} faction` : ""}` : allied ? `${allied} units` : "such units";
   const exempt = Array.isArray(m.exempt_from) ? "; they do not count toward the Retinue limit" : "";
   if (m.max == null) return `your army cannot include ${what}${exempt}`;
   const measure = m.measure === "points" ? "points of" : m.measure === "models" ? "models from" : "";

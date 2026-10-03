@@ -189,6 +189,10 @@ func describePredicate(c map[string]any, negated bool) string {
 		case "led":
 			return neg + subjectOf(p, "this unit") + " is being led by " + article(kw) + " " + kw + "model"
 		}
+		// Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+		if kw != "" {
+			return neg + subjectOf(p, "the unit") + " is attached to " + article(kw) + " " + kw + "unit"
+		}
 		return neg + subjectOf(p, "the unit") + " is an attached unit"
 	case "strength":
 		below := "starting strength"

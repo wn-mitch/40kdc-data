@@ -72,8 +72,8 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         "select-objective" => super::bind::select_objective_block(e, depth, ctx),
         "dice-table" => {
             let mut lines = vec![format!(
-                "{indent}{arrow}Roll one {}:",
-                dice_case(e.get("dice"))
+                "{indent}{arrow}{}:",
+                capitalize(&dice_table_head(e))
             )];
             for o in items(e, "outcomes") {
                 let o = obj(Some(o));

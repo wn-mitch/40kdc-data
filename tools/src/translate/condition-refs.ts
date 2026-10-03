@@ -97,6 +97,7 @@ export function unitFilterPhrase(f: P): string {
   s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
+  if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
@@ -106,6 +107,7 @@ export function unitFilterPhrase(f: P): string {
   if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}${f.designated_by != null ? ` by ${unitRefPhrase(f.designated_by)}` : ""}`;
   if (f.not_designated != null) s += ` that is not ${designationPhrase(str(f.not_designated))}`;
   if (f.state != null) s += ` that is ${statePhrase(str(f.state))}`;
+  if (Array.isArray(f.not_states)) s += ` that is ${andList((f.not_states as unknown[]).map((x) => statePhrase(str(x), true)))}`;
   if (f.visible === true) s += " that is visible to it";
   const within = f.within as P | undefined;
   if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
@@ -165,7 +167,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
 
 const STATE_PHRASES: Record<string, string> = {
   engaged: "engaged", "battle-shocked": "Battle-shocked", embarked: "embarked",
-  "in-strategic-reserves": "in Strategic Reserves", "on-battlefield": "on the battlefield",
+  "in-strategic-reserves": "in Strategic Reserves", "in-cult-ambush": "in Cult Ambush", "on-battlefield": "on the battlefield",
   hidden: "hidden", "fights-first": "a Fights First unit", "benefit-of-cover": "receiving the benefit of cover",
 };
 const NEGATED_STATE: Record<string, string> = { engaged: "unengaged" };

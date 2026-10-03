@@ -178,6 +178,9 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["none_of"]) {
 		s += " (excluding " + orList(cstrList(f["none_of"])) + " " + noun + "s)"
 	}
+	if isList(f["not_all_of"]) {
+		s += " (excluding " + strings.Join(cstrList(f["not_all_of"]), " ") + " " + noun + "s)"
+	}
 	if isList(f["has_ability"]) {
 		s += " with the " + andList(idLabelList(f["has_ability"])) + " ability"
 	}
@@ -207,6 +210,13 @@ func unitFilterPhrase(f map[string]any) string {
 	}
 	if f["state"] != nil {
 		s += " that is " + statePhrase(cstr(f["state"]), false)
+	}
+	if isList(f["not_states"]) {
+		negs := []string{}
+		for _, x := range cstrList(f["not_states"]) {
+			negs = append(negs, statePhrase(x, true))
+		}
+		s += " that is " + andList(negs)
 	}
 	if f["visible"] == true {
 		s += " that is visible to it"
@@ -339,6 +349,7 @@ var statePhrases = map[string]string{
 	"battle-shocked":        "Battle-shocked",
 	"embarked":              "embarked",
 	"in-strategic-reserves": "in Strategic Reserves",
+	"in-cult-ambush":        "in Cult Ambush",
 	"on-battlefield":        "on the battlefield",
 	"hidden":                "hidden",
 	"fights-first":          "a Fights First unit",

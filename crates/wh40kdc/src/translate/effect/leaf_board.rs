@@ -8,7 +8,9 @@ use super::leaf_move::*;
 use super::leaf_rules::*;
 use super::placement::{placement_limits, placement_phrase};
 use super::words::*;
-use crate::translate::condition::{and_list, condition_lead_in_value, nn, obj, range_phrase, P};
+use crate::translate::condition::{
+    and_list, condition_lead_in_value, nn, obj, or_list, range_phrase, P,
+};
 
 fn wounds(n: &str, noun: &str) -> String {
     if n == "1" {
@@ -43,6 +45,19 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
         None => String::new(),
     };
     let who = format!("{subj}{range}");
+    // "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    let cap = match nn(m, "max") {
+        Some(max) => format!(
+            " (to a maximum of {} mortal {})",
+            jstr(Some(max)),
+            if max.as_f64() == Some(1.0) {
+                "wound"
+            } else {
+                "wounds"
+            }
+        ),
+        None => String::new(),
+    };
     if let Some(roll) = nn(m, "roll") {
         let roll = obj(Some(roll));
         let each = match sv(roll, "per_model") {
@@ -56,7 +71,7 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
             format!("one {}", dice_case(roll.get("dice")))
         };
         return format!(
-            "roll {dice}{each}: for each {}+, {who} {} {suffered}{psychic}",
+            "roll {dice}{each}: for each {}+, {who} {} {suffered}{psychic}{cap}",
             jstr(roll.get("threshold")),
             v(&who, "suffers")
         );
@@ -73,7 +88,7 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
     } else {
         String::new()
     };
-    format!("{who} {} {suffered}{per}{psychic}", v(&who, "suffers"))
+    format!("{who} {} {suffered}{per}{psychic}{cap}", v(&who, "suffers"))
 }
 
 fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
@@ -271,22 +286,37 @@ fn add_unit(m: &P, ctx: &Ctx) -> String {
     };
     let one = n == 1.0;
     let what = match nn(m, "copy_of") {
-        Some(copy) => format!(
-            "{} identical to {}",
-            if one {
-                "a new unit".to_string()
-            } else if literal {
-                format!("{} new units", fnum(n))
-            } else {
-                amount_of(count, "new unit", "new units")
-            },
-            effect_subject(Some(copy), ctx)
-        ),
+        Some(copy) => {
+            format!(
+                "{} identical to {}",
+                if one {
+                    "a new unit".to_string()
+                } else if literal {
+                    format!("{} new units", fnum(n))
+                } else {
+                    amount_of(count, "new unit", "new units")
+                },
+                effect_subject(Some(copy), ctx)
+            ) + &map_arr(m, "excluded_keywords", jv)
+                .map(|k| format!(" (excluding {} models)", or_list(&k)))
+                .unwrap_or_default()
+        }
         None if one => format!("a {name} unit"),
         None if literal => format!("{} {name} units", fnum(n)),
         None => amount_of(count, &format!("{name} unit"), &format!("{name} units")),
     };
-    format!("add {what}{models}{strength} to your army{place}{engage}")
+    // Where the unit goes comes first, then what it comes back with.
+    let full = if is_true(m, "at_starting_strength") {
+        ", at its Starting Strength and with all of its wounds remaining"
+    } else {
+        ""
+    };
+    let one_shot = if is_true(m, "reset_one_shot") {
+        ", with its [ONE SHOT] weapons counted as not having been shot"
+    } else {
+        ""
+    };
+    format!("add {what}{models}{strength} to your army{place}{full}{one_shot}{engage}")
 }
 
 /// The board-axis leaves; anything unknown degrades to `[type]`.

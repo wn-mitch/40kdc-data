@@ -151,7 +151,12 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _composition(m: dict[str, Any], with_f: str | None, ctx: Ctx) -> str:
     """A composition limit: at most N units / models / points of X, per matching unit,
     outside the Retinue limit."""
-    what = with_f if with_f is not None else "such units"
+    # An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+    allied = title_case(jstr(m["faction"])) if m.get("faction") is not None else None
+    if with_f is not None:
+        what = f"{with_f} from the {allied} faction" if allied else with_f
+    else:
+        what = f"{allied} units" if allied else "such units"
     exempt = (
         "; they do not count toward the Retinue limit"
         if isinstance(m.get("exempt_from"), list)

@@ -394,6 +394,8 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         s += f" with the {or_list([jstr(x) for x in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {or_list([jstr(x) for x in f['none_of']])} {noun})"
+    if isinstance(f.get("not_all_of"), list):
+        s += f" (excluding {' '.join(jstr(x) for x in f['not_all_of'])} {noun})"
     within = f.get("within")
     if within is not None:
         w = within if isinstance(within, dict) else {}
@@ -414,6 +416,8 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         s += f" that are not {_designation_phrase(jstr(f['not_designated']), True)}"
     if f.get("state") is not None:
         s += f" that are {_state_phrase(jstr(f['state']))}"
+    if isinstance(f.get("not_states"), list):
+        s += f" that are {and_list([_state_phrase(jstr(x), True) for x in f['not_states']])}"
     if f.get("excluding") is not None:
         s += f" other than {effect_subject(f['excluding'], ctx)}"
     bounded = (
@@ -422,6 +426,7 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         or f.get("designated") is not None
         or f.get("not_designated") is not None
         or f.get("state") is not None
+        or f.get("not_states") is not None
         or f.get("embarked_in") is not None
         or f.get("member_of") is not None
         or f.get("engaged_with") is not None

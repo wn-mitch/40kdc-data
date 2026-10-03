@@ -16,19 +16,32 @@ const openAura = (leaf: CompileLeaf | undefined) => leaf?.family_id === "aura-ra
 const openTarget = (leaf: CompileLeaf | undefined) => leaf?.family_id === "stratagem-target" && leaf.parameters.side === undefined;
 const ownerlessEvent = (leaf: CompileLeaf | undefined) => leaf?.family_id === "event" && leaf.parameters.owner === undefined && leaf.parameters.subject === undefined;
 
+/** A filter's negated states as the DSL's not_states: unengaged is not engaged. */
+function notStates(states: readonly string[] | undefined): string[] {
+  return [...(states?.includes("unengaged") ? ["engaged"] : []), ...(states?.includes("not-battle-shocked") ? ["battle-shocked"] : [])];
+}
+
+/** Where a held unit waits, as the DSL unit-state it is in. */
+const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategic-reserves", "cult-ambush": "in-cult-ambush" };
+
 /**
  * The who as the DSL's own unit-filter (a unit-ref "any unit that…"), for a trigger's subject or
- * an attack's target. Unengaged has no field there (state names one state a unit is in).
+ * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
 export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean };
-  if (p.states?.includes("unengaged")) throw new CompileError("An unengaged unit named by a trigger or an attack's target has no DSL unit-filter field yet.");
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string };
+  const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
+  if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
+  if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
   return {
     owner: p.side,
     ...(p.keywords?.length ? { all_of: p.keywords } : {}),
     ...(p.any_keywords?.length ? { any_of: p.any_keywords } : {}),
     ...(p.excluded_keywords?.length ? { none_of: p.excluded_keywords } : {}),
     ...(p.states?.includes("battle-shocked") ? { state: "battle-shocked" } : {}),
+    ...(held !== undefined ? { state: held } : {}),
+    ...(notStates(p.states).length ? { not_states: notStates(p.states) } : {}),
+    ...(Array.isArray(filter.parameters.excluded_all_keywords) ? { not_all_of: filter.parameters.excluded_all_keywords } : {}),
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
@@ -45,8 +58,9 @@ function side(filter: CompileLeaf, what: string): string {
 
 /** The filter's keyword fields, as the folded leaf carries them. */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
-  // Selections, auras and Stratagem targets carry keyword fields only; an ability exclusion would be dropped.
-  if (filter.parameters.excluded_abilities !== undefined) throw new CompileError("A unit-filter excluding abilities has no DSL shape here yet; only a filter lowered as a DSL unit-filter keeps lacks_ability.");
+  // Selections, auras and Stratagem targets carry the filter's fields into their own eligibility
+  // (compile-wrappers.ts, compile-conditions.ts); a held state has no place there yet.
+  if (filter.parameters.held_in !== undefined) throw new CompileError("A unit-filter for held units has no DSL shape here yet; only a filter lowered as a DSL unit-filter keeps its Reserves state.");
   const { side: _side, visible: _visible, level: _level, ...rest } = filter.parameters;
   return rest;
 }
@@ -65,7 +79,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
   return true;
 }
 
-type FilterParameters = { side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string };
+type FilterParameters = { side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string; held_in?: string; excluded_abilities?: string[] };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
 
@@ -81,6 +95,7 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (sides.size > 1) return null;
   if ((a.level ?? "unit") !== (b.level ?? "unit")) return null;
   if (a.any_keywords?.length && b.any_keywords?.length) return null;
+  if (a.held_in !== undefined && b.held_in !== undefined && a.held_in !== b.held_in) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const keywords = union(a.keywords, b.keywords);
   const excluded = union(a.excluded_keywords, b.excluded_keywords);
@@ -94,6 +109,11 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (a.visible === true || b.visible === true) parameters.visible = true;
   if (a.other === true || b.other === true) parameters.other = true;
   if (a.level === "model") parameters.level = "model";
+  // Fields only the DSL unit-filter keeps carry over rather than being dropped by the merge.
+  const held = a.held_in ?? b.held_in;
+  if (held !== undefined) parameters.held_in = held;
+  const abilities = union(a.excluded_abilities, b.excluded_abilities);
+  if (abilities.length) parameters.excluded_abilities = abilities;
   return { ...first, parameters };
 }
 
@@ -131,12 +151,6 @@ export function mergeStackedFilters(list: readonly CompileLeaf[]): CompileLeaf[]
 }
 
 export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
-  const held = input.find((leaf) => isFilter(leaf) && leaf.parameters.held_in !== undefined);
-  if (held) {
-    throw new CompileError(held.parameters.held_in === "cult-ambush"
-      ? "A unit in Cult Ambush has no DSL shape: the DSL unit-state lists in-strategic-reserves but no Cult Ambush."
-      : "A unit-filter for units held in Strategic Reserves is not lowered yet.");
-  }
   if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...input];
   const list = mergeStackedFilters(input);
   const out: CompileLeaf[] = [];

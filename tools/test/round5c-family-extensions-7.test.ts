@@ -105,11 +105,15 @@ describe("a permission that acts as if it were another phase", () => {
     expect(nodes(mechanics, (node) => node.type === "permission")[0]!.modifier).toMatchObject({ as_if: "shooting-phase" });
   });
 
-  it("refuses a hypothetical phase the DSL's as_if cannot name, instead of gating on that phase", () => {
-    expect(refusal(placed("Your unit can declare a charge as if it were your Charge phase.", [
-      ["Your unit can declare a charge", "eligibility-permission", { ...permission, activity: "declare-charge" }],
-      ["as if it were your Charge phase", "phase-window", { phase: "charge", turn: "your" }],
-    ]))).toMatch(/DSL_GAP.*charge phase/u);
+  it("folds a hypothetical Charge or Command phase into the permission instead of gating on that phase", () => {
+    for (const [phase, asIf] of [["Charge", "charge-phase"], ["Command", "command-phase"], ["Movement", "movement-phase"]] as const) {
+      const mechanics = compiled(placed(`Your unit can declare a charge as if it were your ${phase} phase.`, [
+        ["Your unit can declare a charge", "eligibility-permission", { ...permission, activity: "declare-charge" }],
+        [`as if it were your ${phase} phase`, "phase-window", { phase: phase.toLowerCase(), turn: "your" }],
+      ]));
+      expect(nodes(mechanics, (node) => node.type === "phase-is")).toHaveLength(0);
+      expect(nodes(mechanics, (node) => (node.modifier as { as_if?: string } | undefined)?.as_if === asIf)).toHaveLength(1);
+    }
   });
 
   it("refuses a hypothetical phase with no permission before it in its sentence", () => {

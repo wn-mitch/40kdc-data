@@ -264,7 +264,9 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
     case "mortal-wounds": {
       const count = String(closed(leaf, "count"));
-      return { type: "mortal-wounds", target: MORTAL_TARGETS[String(closed(leaf, "recipient"))], modifier: { count: /^\d+$/u.test(count) ? Number(count) : count } };
+      // Version 5: "(to a maximum of 6 mortal wounds)" caps the total.
+      const cap = leaf.parameters.max === undefined ? {} : { max: closed(leaf, "max") };
+      return { type: "mortal-wounds", target: MORTAL_TARGETS[String(closed(leaf, "recipient"))], modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap } };
     }
     case "fight-on-death": {
       const act = leaf.family_version >= 2 ? closed(leaf, "act") : "fight";

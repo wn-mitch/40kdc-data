@@ -167,7 +167,11 @@ def condition_lead_in(c: Condition) -> str:
                 return "if the unit Advanced this turn"
             if types[0] == "remain-stationary":
                 return "if the unit Remained Stationary this turn"
-        if p.get("event") == "disembarked" and p.get("subject") is None:
+        if (
+            p.get("event") == "disembarked"
+            and p.get("subject") is None
+            and f.get("transport") is None
+        ):
             window = _window_phrase(p.get("window"))
             return f"if the unit disembarked from a Transport {window}".rstrip()
         if (

@@ -4,7 +4,9 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 const HYPOTHETICAL = /^\W*(?:as\s+)?if\s+it\s+(?:were|was)\b/iu;
 
 /** The DSL permission's as_if values, by the phase a hypothetical phase-window names. */
-const AS_IF_BY_PHASE: Record<string, string> = { shooting: "shooting-phase", fight: "fight-phase" };
+const AS_IF_BY_PHASE: Record<string, string> = {
+  shooting: "shooting-phase", fight: "fight-phase", movement: "movement-phase", charge: "charge-phase", command: "command-phase",
+};
 
 const wording = (leaf: CompileLeaf, bytes: Buffer) => bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
 

@@ -121,6 +121,9 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(none) = strs(f.get("none_of")) {
         s.push_str(&format!(" (excluding {} {noun}s)", or_list(&none)));
     }
+    if let Some(not_all) = strs(f.get("not_all_of")) {
+        s.push_str(&format!(" (excluding {} {noun}s)", not_all.join(" ")));
+    }
     let titled = |v: &Value| id_label(Some(v));
     if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
         let names: Vec<String> = has.iter().map(titled).collect();
@@ -171,6 +174,13 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
             " that is {}",
             state_phrase(&st(Some(state)), false)
         ));
+    }
+    if let Some(Value::Array(not)) = f.get("not_states") {
+        let phrases: Vec<String> = not
+            .iter()
+            .map(|x| state_phrase(&st(Some(x)), true))
+            .collect();
+        s.push_str(&format!(" that is {}", and_list(&phrases)));
     }
     if f.get("visible") == Some(&Value::Bool(true)) {
         s.push_str(" that is visible to it");
@@ -301,6 +311,7 @@ pub(crate) fn state_phrase_base(state: &str) -> Option<&'static str> {
         "battle-shocked" => "Battle-shocked",
         "embarked" => "embarked",
         "in-strategic-reserves" => "in Strategic Reserves",
+        "in-cult-ambush" => "in Cult Ambush",
         "on-battlefield" => "on the battlefield",
         "hidden" => "hidden",
         "fights-first" => "a Fights First unit",

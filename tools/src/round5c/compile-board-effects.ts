@@ -151,13 +151,16 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const count = countValue(closed(leaf, "count"));
       const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") } : { copy_of: "event-object" };
       const join = leaf.parameters.join === true;
-      // What the DSL add-unit cannot hold yet refuses rather than being dropped.
-      if (leaf.parameters.copy_excluded_keywords !== undefined) throw new CompileError("add-unit cannot leave models out of a copy: the DSL add-unit has no excluded-keywords field.");
-      if (leaf.parameters.at_starting_strength === true) throw new CompileError("add-unit at Starting Strength with all wounds has no DSL field: starting_strength is a model count.");
-      if (leaf.parameters.reset_one_shot === true) throw new CompileError("add-unit cannot reset [One Shot] weapons: the DSL add-unit has no such field.");
-      if (leaf.parameters.held_in === "cult-ambush") throw new CompileError("add-unit into Cult Ambush has no DSL placement: placement lists strategic-reserves but no Cult Ambush.");
-      const held = leaf.parameters.held_in === "strategic-reserves" ? { placement: "strategic-reserves" } : {};
-      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...held } };
+      // A copy that leaves models out, comes back whole, resets [One Shot] weapons or waits in Reserves.
+      const copy: Node = {
+        ...(leaf.parameters.copy_excluded_keywords !== undefined ? { excluded_keywords: closed(leaf, "copy_excluded_keywords") } : {}),
+        ...(leaf.parameters.at_starting_strength === true ? { at_starting_strength: true } : {}),
+        ...(leaf.parameters.reset_one_shot === true ? { reset_one_shot: true } : {}),
+      };
+      if (Object.keys(copy).length && source === "datasheet") throw new CompileError("Only a copy of a destroyed unit can leave models out, return at Starting Strength or reset [One Shot] weapons.");
+      if (Object.keys(copy).length && join) throw new CompileError("Models joining an existing unit are not a copy: excluded keywords, Starting Strength and [One Shot] resets apply only to a new unit.");
+      const held = leaf.parameters.held_in === undefined ? {} : { placement: closed(leaf, "held_in") };
+      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...copy, ...held } };
     }
     case "battle-shock-state": {
       const recipient = String(closed(leaf, "recipient"));

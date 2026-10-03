@@ -298,7 +298,14 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
 /// A composition limit: at most N units / models / points of X, per matching unit, outside
 /// the Retinue limit.
 fn composition(m: &P, with: Option<String>, ctx: &Ctx) -> String {
-    let what = with.unwrap_or_else(|| "such units".to_string());
+    // An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+    let allied = nn(m, "faction").map(|f| title_case(&jv(f)));
+    let what = match (with, allied) {
+        (Some(w), Some(a)) => format!("{w} from the {a} faction"),
+        (Some(w), None) => w,
+        (None, Some(a)) => format!("{a} units"),
+        (None, None) => "such units".to_string(),
+    };
     let exempt = if arr(m, "exempt_from").is_some() {
         "; they do not count toward the Retinue limit"
     } else {

@@ -26,7 +26,7 @@ from wh40kdc.translate.condition import (
     title_case,
     unit_filter_phrase,
 )
-from wh40kdc.translate.condition_refs import roll_word, used_ability_phrase
+from wh40kdc.translate.condition_refs import _state_phrase, roll_word, used_ability_phrase
 
 AbilityTrigger = dict[str, Any]
 
@@ -68,7 +68,8 @@ def _actor(ref: Any) -> str:
         f = _obj(ref)
         if isinstance(f.get("event_var"), str):
             return "that unit"
-        # Keywords on the actor read as a trailing requirement, as the event names them.
+        # Keywords on the actor read as a trailing requirement, as the event names them; states read
+        # as a relative clause ("an enemy unit that is unengaged").
         owner = (
             "a friendly"
             if f.get("owner") == "friendly"
@@ -76,7 +77,13 @@ def _actor(ref: Any) -> str:
             if f.get("owner") == "enemy"
             else "a"
         )
-        return f"{owner} {'model' if f.get('level') == 'model' else 'unit'}"
+        states = ([_state_phrase(_str(f["state"]))] if f.get("state") is not None else []) + (
+            [_state_phrase(_str(x), True) for x in f["not_states"]]
+            if isinstance(f.get("not_states"), list)
+            else []
+        )
+        clause = f" that is {_and_list(states)}" if states else ""
+        return f"{owner} {'model' if f.get('level') == 'model' else 'unit'}{clause}"
     return dekebab(_str(ref))
 
 
@@ -90,6 +97,11 @@ def _actor_keywords(ref: Any) -> str:
         s += f" (the triggering {noun} must have {_and_list([_str(k) for k in ref['all_of']])})"
     if isinstance(ref.get("none_of"), list):
         s += f" (the triggering {noun} must not have {_or_list([_str(k) for k in ref['none_of']])})"
+    if isinstance(ref.get("not_all_of"), list):
+        s += (
+            f" (the triggering {noun} must not have all of "
+            f"{_and_list([_str(k) for k in ref['not_all_of']])})"
+        )
     return s
 
 
@@ -122,6 +134,7 @@ _ROLL_NOUN: dict[str, str] = {
     "blessings-of-khorne": "Blessings of Khorne roll",
     "manoeuvre": "Agile Manoeuvre roll",
     "channelling": "Channel the Warp roll",
+    "deadly-demise": "Deadly Demise roll",
 }
 _TEST_ROLLS = {"battle-shock", "leadership", "desperate-escape"}
 
@@ -168,6 +181,21 @@ def _roll_clause(t: AbilityTrigger, f: dict[str, Any]) -> str:
         return f"each time an attack{made} scores a wound"
     if f.get("result") == "success" and roll == "dark-pact":
         return "each time the unit makes a Dark Pact and passes its Leadership test"
+    # Whose roll it was and how it came out: "when the unit fails a Battle-shock test",
+    # "after a saving throw made for this model is failed".
+    article = _article(noun)
+    named = subject is not None and not anyone
+    if f.get("result") in ("failure", "success"):
+        passed = f.get("result") == "success"
+        if roll in _TEST_ROLLS:
+            return f"when {_actor(subject)} {'passes' if passed else 'fails'} {article} {noun}"
+        made_for = f" made for {_actor(subject)}" if named else ""
+        if passed:
+            return f"after a successful {noun}{made_for}"
+        return f"after {article} {noun}{made_for} is failed"
+    if named:
+        verb = "takes" if roll in _TEST_ROLLS else "makes"
+        return f"after {_actor(subject)} {verb} {article} {noun}"
     if roll == "psychic":
         return "after a Psychic test is taken"
     if roll == "blessings-of-khorne":
@@ -254,6 +282,12 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if obj is not None:
             return f"when {who} targets {_object_phrase(obj)}"
         return f"when {who} selects its targets"
+    if event == "move-started":
+        # "at the start of this unit's move", "just before it Consolidates": the move is about to
+        # be made.
+        kinds = move_kinds(f["move_types"]) if isinstance(f.get("move_types"), list) else ""
+        move = f"{f'{_article(kinds)} {kinds}' if kinds else 'a'} move"
+        return f"each time {who} starts {move}" if subject_obj else f"when {who} starts {move}"
     if event == "move-ended":
         if f.get("through") == "tall-terrain":
             return f'when {who} moves through terrain over 4" tall'
@@ -269,7 +303,14 @@ def _event_phrase(t: AbilityTrigger) -> str:
     if event == "set-up":
         return f"when {who} {_SET_UP_FROM.get(_str(f.get('from')), 'is set up')}"
     if event == "disembarked":
-        return f"when {who} disembarks from a Transport"
+        transport = f.get("transport")
+        if transport is None:
+            source = "a Transport"
+        elif transport in ("this-unit", "this-model"):
+            source = "this Transport"
+        else:
+            source = _object_phrase(transport)
+        return f"when {who} disembarks from {source}"
     if event in ("before-roll", "after-roll"):
         return _roll_clause(t, f)
     if event == "damage-allocated":
@@ -284,6 +325,10 @@ def _event_phrase(t: AbilityTrigger) -> str:
         return f"after {who} resolves its attacks"
     if event == "destroyed":
         melee = " in melee" if f.get("attack_type") == "melee" else ""
+        # A subject names who destroyed the object: "each time the unit destroys an enemy unit".
+        if t.get("subject") is not None:
+            target = "a unit" if obj is None else _object_phrase(obj)
+            return f"each time {who} destroys {target}{melee}"
         if obj is None or obj == "this-unit":
             return f"when the unit is destroyed{melee}"
         if isinstance(obj, dict) and obj.get("designated") is not None and len(obj) == 1:
@@ -302,12 +347,19 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "when a model in the unit is destroyed"
         return f"when {_object_phrase(obj)} is destroyed"
     if event == "used":
+        # A rule your opponent used: the subject names only the enemy owner.
+        subj = t.get("subject")
+        opponent = isinstance(subj, dict) and subj.get("owner") == "enemy" and len(subj) == 1
         which = used_ability_phrase(f)
         if which is not None:
-            return f"each time {who} uses {which}"
+            return f"each time {'your opponent' if opponent else who} uses {which}"
         kind = f.get("kind")
         if kind == "stratagem":
+            if opponent:
+                return "each time your opponent uses a Stratagem"
             return "each time you use a Stratagem"
+        if opponent and kind == "ability" and f.get("id") is None:
+            return "each time your opponent uses an ability"
         if kind == "ability" and f.get("id") is not None:
             return f"when you use {title_case(_str(f['id']))}"
         if kind == "ritual" and f.get("result") == "success":

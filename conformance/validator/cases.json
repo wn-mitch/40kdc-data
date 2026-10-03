@@ -142,5 +142,305 @@
     "expected_errors": [
       { "path": "/profiles/0/Sv", "code": "RANGE_VIOLATION" }
     ]
+  },
+  {
+    "name": "ability: move-started trigger with a move type",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "move-started",
+        "filter": {
+          "move_types": [
+            "consolidation"
+          ]
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: disembarked trigger naming the Transport",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "disembarked",
+        "filter": {
+          "transport": "this-unit"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: before a Deadly Demise roll",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "reactive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      },
+      "trigger": {
+        "event": "before-roll",
+        "filter": {
+          "roll": "deadly-demise"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: permission as if it were the Command phase",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "shoot",
+          "allow": true,
+          "as_if": "command-phase"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: copied unit into Cult Ambush",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "add-unit",
+        "target": "this-unit",
+        "modifier": {
+          "copy_of": "event-object",
+          "count": 1,
+          "excluded_keywords": [
+            "CHARACTER"
+          ],
+          "at_starting_strength": true,
+          "reset_one_shot": true,
+          "placement": "cult-ambush"
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: mortal wounds with a cap",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "this-unit",
+        "modifier": {
+          "count": "2D6",
+          "max": 6
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: filter with negated states and an all-of exclusion",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": {
+          "owner": "enemy",
+          "not_states": [
+            "engaged",
+            "battle-shocked"
+          ],
+          "not_all_of": [
+            "MONSTER",
+            "CHARACTER"
+          ]
+        },
+        "modifier": {
+          "count": 1
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: condition on a unit in Cult Ambush or in Strategic Reserves",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shield-wall",
+      "name": "Shield Wall",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "in-cult-ambush"
+              }
+            },
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "in-strategic-reserves"
+              }
+            }
+          ]
+        },
+        "effect": {
+          "type": "feel-no-pain",
+          "target": "this-unit",
+          "modifier": {
+            "threshold": 6
+          }
+        }
+      }
+    },
+    "expected_errors": []
   }
 ]

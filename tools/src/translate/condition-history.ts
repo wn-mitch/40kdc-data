@@ -20,12 +20,16 @@ export function describeHappened(p: P, negated: boolean): string {
       if (to === "fight") return withWindow(`${who} ${negated ? "has not" : "has"} fought`, p.window);
       return withWindow(`${who} ${negated ? "has not" : "has"} been selected to ${to === "attack" ? "shoot or fight" : dekebab(to)}`, p.window);
     }
-    case "set-up":
-      return withWindow(`${who} ${negated ? "was not" : "was"} set up`, p.window);
+    case "set-up": {
+      const from: Record<string, string> = { "deep-strike": " using Deep Strike", "strategic-reserves": " from Strategic Reserves", "cult-ambush": " from Cult Ambush", transport: " from a Transport" };
+      return withWindow(`${who} ${negated ? "was not" : "was"} set up${from[str(f.from)] ?? ""}`, p.window);
+    }
     case "targets-selected":
       return withWindow(`${who} ${negated ? "has not" : "has"} selected ${p.object != null ? `${unitRefPhrase(p.object)} as a target` : "targets"}`, p.window);
-    case "disembarked":
-      return withWindow(`${who} ${didNot("disembark")} from a Transport`, p.window);
+    case "disembarked": {
+      const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : unitRefPhrase(f.transport);
+      return withWindow(`${who} ${didNot("disembark")} from ${from}`, p.window);
+    }
     case "after-roll": {
       const obj = unitRefPhrase(p.object, "the unit");
       const target = obj === "the target unit" ? "the target" : obj;
@@ -40,6 +44,11 @@ export function describeHappened(p: P, negated: boolean): string {
       if (f.roll === "hit" && f.result === "success") {
         const hits = n > 1 ? `${n}+ ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
         return `${neg}${target} was hit by ${hits}${attacker}${weapon}${by}${when}`;
+      }
+      // Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
+      if (p.subject != null) {
+        const outcome = f.result === "failure" ? " and failed it" : f.result === "success" ? " and passed it" : "";
+        return `${neg}${who} made a ${rollWord(f.roll)} roll${outcome} ${windowPhrase(p.window)}`.trimEnd();
       }
       return `${neg}a ${rollWord(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}`.trimEnd();
     }

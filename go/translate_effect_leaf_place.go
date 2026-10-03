@@ -96,7 +96,11 @@ func addUnitLeaf(m map[string]any, ctx effCtx) string {
 		case literal:
 			units = jsNumStr(n) + " new units"
 		}
-		what = units + " identical to " + effectSubject(m["copy_of"], ctx)
+		excluded := ""
+		if l, ok := asList(m["excluded_keywords"]); ok {
+			excluded = " (excluding " + orList(jstrList(l)) + " models)"
+		}
+		what = units + " identical to " + effectSubject(m["copy_of"], ctx) + excluded
 	} else {
 		switch {
 		case n == 1:
@@ -107,7 +111,16 @@ func addUnitLeaf(m map[string]any, ctx effCtx) string {
 			what = amountOf(m["count"], sheet+" unit", sheet+" units")
 		}
 	}
-	return "add " + what + models + strength + " to your army" + where + engage
+	full := ""
+	if m["at_starting_strength"] == true {
+		full = ", at its Starting Strength and with all of its wounds remaining"
+	}
+	oneShot := ""
+	if m["reset_one_shot"] == true {
+		oneShot = ", with its [ONE SHOT] weapons counted as not having been shot"
+	}
+	// Where the unit goes comes first, then what it comes back with.
+	return "add " + what + models + strength + " to your army" + where + full + oneShot + engage
 }
 
 // passItem renders a typed pass-through item: "models (excluding MONSTER and

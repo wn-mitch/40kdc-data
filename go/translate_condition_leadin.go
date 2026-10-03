@@ -107,7 +107,7 @@ func conditionLeadIn(c map[string]any) string {
 				return "if the unit Remained Stationary this turn"
 			}
 		}
-		if p["event"] == "disembarked" && p["subject"] == nil {
+		if p["event"] == "disembarked" && p["subject"] == nil && f["transport"] == nil {
 			return trimEnd("if the unit disembarked from a Transport " + windowPhrase(p["window"]))
 		}
 		if (p["event"] == "destroyed" || p["event"] == "model-destroyed") && p["object"] == "event-object" && p["window"] == "event" {

@@ -64,6 +64,7 @@ GameEvent: TypeAlias = Literal[
     "step-started",
     "selected",
     "targets-selected",
+    "move-started",
     "move-ended",
     "set-up",
     "disembarked",
@@ -148,6 +149,7 @@ UnitState: TypeAlias = Literal[
     "battle-shocked",
     "embarked",
     "in-strategic-reserves",
+    "in-cult-ambush",
     "on-battlefield",
     "hidden",
     "fights-first",
@@ -2213,6 +2215,7 @@ RollKind: TypeAlias = (
         "blessings-of-khorne",
         "manoeuvre",
         "channelling",
+        "deadly-demise",
     ]
     | AbilityRoll
 )
@@ -2348,6 +2351,7 @@ class Modifier14(TypedDict):
 
 class Modifier20(TypedDict):
     count: Quantity
+    max: NotRequired[int]
     per: NotRequired[Literal["model", "success"]]
     roll: NotRequired[Roll]
     range: NotRequired[RangeRef]
@@ -2490,8 +2494,10 @@ class UnitFilter(TypedDict):
     all_of: NotRequired[KeywordList]
     any_of: NotRequired[KeywordList]
     none_of: NotRequired[KeywordList]
+    not_all_of: NotRequired[KeywordList]
     designated: NotRequired[DesignationId]
     state: NotRequired[UnitState]
+    not_states: NotRequired[list[UnitState]]
     level: NotRequired[Literal["unit", "model"]]
     visible: NotRequired[Literal[True]]
     within: NotRequired[Within]
@@ -2576,6 +2582,7 @@ EventFilter = TypedDict(
         "from": NotRequired[
             Literal["strategic-reserves", "deep-strike", "cult-ambush", "transport"]
         ],
+        "transport": NotRequired[Literal["this-unit"]],
         "through": NotRequired[Literal["terrain", "tall-terrain"]],
         "attack_type": NotRequired[Literal["ranged", "melee", "psychic", "mortal"]],
         "weapon_name": NotRequired[str],
@@ -3324,7 +3331,16 @@ class Modifier15(TypedDict):
         ]
     ]
     into: NotRequired[UnitRef]
-    as_if: NotRequired[Literal["shooting-phase", "snap-shooting", "fight-phase"]]
+    as_if: NotRequired[
+        Literal[
+            "shooting-phase",
+            "snap-shooting",
+            "fight-phase",
+            "movement-phase",
+            "charge-phase",
+            "command-phase",
+        ]
+    ]
     next: NotRequired[Literal[True]]
     reach: NotRequired[float]
     stratagem: NotRequired[EntityId]
@@ -3456,6 +3472,7 @@ class Modifier25(TypedDict):
             "wholly-within",
             "within",
             "strategic-reserves",
+            "cult-ambush",
             "anywhere",
             "connected-sections",
             "deployment-zone",
@@ -3470,6 +3487,7 @@ class Modifier25(TypedDict):
                 "wholly-within",
                 "within",
                 "strategic-reserves",
+                "cult-ambush",
                 "anywhere",
                 "connected-sections",
                 "deployment-zone",
@@ -3530,6 +3548,9 @@ class Modifier30(TypedDict):
     count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     model_count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     starting_strength: NotRequired[int]
+    at_starting_strength: NotRequired[Literal[True]]
+    excluded_keywords: NotRequired[KeywordList]
+    reset_one_shot: NotRequired[Literal[True]]
     join: NotRequired[UnitRef]
     placement: NotRequired[
         Literal[
@@ -3540,6 +3561,7 @@ class Modifier30(TypedDict):
             "wholly-within",
             "within",
             "strategic-reserves",
+            "cult-ambush",
             "anywhere",
             "connected-sections",
             "deployment-zone",
@@ -3554,6 +3576,7 @@ class Modifier30(TypedDict):
                 "wholly-within",
                 "within",
                 "strategic-reserves",
+                "cult-ambush",
                 "anywhere",
                 "connected-sections",
                 "deployment-zone",
@@ -3574,6 +3597,9 @@ class Modifier31(TypedDict):
     count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     model_count: NotRequired[int | str | BattleSizeValue | RollReference | CountOf]
     starting_strength: NotRequired[int]
+    at_starting_strength: NotRequired[Literal[True]]
+    excluded_keywords: NotRequired[KeywordList]
+    reset_one_shot: NotRequired[Literal[True]]
     join: NotRequired[UnitRef]
     placement: NotRequired[
         Literal[
@@ -3584,6 +3610,7 @@ class Modifier31(TypedDict):
             "wholly-within",
             "within",
             "strategic-reserves",
+            "cult-ambush",
             "anywhere",
             "connected-sections",
             "deployment-zone",
@@ -3598,6 +3625,7 @@ class Modifier31(TypedDict):
                 "wholly-within",
                 "within",
                 "strategic-reserves",
+                "cult-ambush",
                 "anywhere",
                 "connected-sections",
                 "deployment-zone",
@@ -3736,6 +3764,7 @@ Modifier35 = TypedDict(
                 "wholly-within",
                 "within",
                 "strategic-reserves",
+                "cult-ambush",
                 "anywhere",
                 "connected-sections",
                 "deployment-zone",
@@ -3750,6 +3779,7 @@ Modifier35 = TypedDict(
                     "wholly-within",
                     "within",
                     "strategic-reserves",
+                    "cult-ambush",
                     "anywhere",
                     "connected-sections",
                     "deployment-zone",

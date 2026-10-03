@@ -260,6 +260,7 @@ const DESPITE: Record<string, string> = {
 const IS_STATE = new Set(["engaged", "battle-shocked", "performing-action"]);
 const AS_IF: Record<string, string> = {
   "shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
+  "movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
 };
 
 function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string {

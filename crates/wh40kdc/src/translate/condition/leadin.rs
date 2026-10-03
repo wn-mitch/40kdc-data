@@ -126,7 +126,10 @@ pub fn condition_lead_in_value(c: &Value) -> String {
                     _ => {}
                 }
             }
-            if is(p, "event", "disembarked") && nn(p, "subject").is_none() {
+            if is(p, "event", "disembarked")
+                && nn(p, "subject").is_none()
+                && nn(f, "transport").is_none()
+            {
                 return format!(
                     "if the unit disembarked from a Transport {}",
                     window_phrase(p.get("window"))

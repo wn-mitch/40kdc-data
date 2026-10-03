@@ -246,9 +246,19 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		return "at the start of the Declare Battle Formations step, " + subj + " can join one friendly unit" + led + ", becoming part of that Bodyguard unit"
 	}
+	// An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+	allied := ""
+	if m["faction"] != nil {
+		allied = titleCase(ejstr(m["faction"]))
+	}
 	such := "such units"
-	if hasWith {
+	switch {
+	case hasWith && allied != "":
+		such = withF + " from the " + allied + " faction"
+	case hasWith:
 		such = withF
+	case allied != "":
+		such = allied + " units"
 	}
 	return compositionLimit(m, such, ctx)
 }

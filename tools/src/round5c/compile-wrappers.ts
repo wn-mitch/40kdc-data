@@ -18,7 +18,19 @@ export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
 // ---------------------------------------------------------------------------------------------
 
 /** A folded unit-filter's fields (compile-unit-filters.ts), as selectUnit and wrapAura read them. */
-type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean };
+type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean };
+
+/** "(excluding units with the Lone Operative ability)": one negated has-ability check per ability. */
+export function abilityChecks(abilities: readonly string[] | undefined): Node[] {
+  return (abilities ?? []).map((ability) => ({ operator: "not", operands: [{ type: "has-ability", parameters: { ability } }] }));
+}
+
+/** One folded filter state as an eligibility check: unengaged and not-battle-shocked negate a state. */
+export function stateCheck(state: string): Node {
+  if (state === "unengaged") return { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] };
+  if (state === "not-battle-shocked") return { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] };
+  return { type: "unit-state", parameters: { state } };
+}
 
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   const modifier: Node = { range: closed(leaf, "inches"), effect: body };
@@ -28,6 +40,10 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (leaf.parameters.wholly === true) modifier.wholly = true;
   const keywords = (leaf.parameters.keywords ?? filter.keywords) as string[] | undefined;
   const eligible: Node = {};
+  // An aura's eligible list names states a unit is in; it has no negated state or all-of exclusion.
+  if (filter.states?.includes("not-battle-shocked")) throw new CompileError("An aura reaching only units that are not Battle-shocked has no DSL eligible field yet.");
+  if (filter.excluded_all_keywords?.length) throw new CompileError("An aura excluding only units with every listed keyword has no DSL eligible field yet.");
+  if (filter.excluded_abilities?.length) throw new CompileError("An aura excluding units by ability has no DSL eligible field yet.");
   if (filter.states?.length) eligible.states = filter.states;
   if (keywords?.length) eligible.required_keywords = keywords;
   if (filter.any_keywords?.length) eligible.any_keywords = filter.any_keywords;
@@ -90,9 +106,9 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
   // In an eligibility filter the default subject is the candidate; ability-unit is the ability's own unit.
   const checks: Node[] = [
     ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
-    ...(filter.states ?? []).map((state) => state === "unengaged"
-      ? { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] }
-      : { type: "unit-state", parameters: { state } }),
+    ...(filter.states ?? []).map(stateCheck),
+    ...(filter.excluded_all_keywords?.length ? [{ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } }] }] : []),
+    ...abilityChecks(filter.excluded_abilities),
     ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
     ...(extra.eligibility ? [extra.eligibility] : []),
   ];

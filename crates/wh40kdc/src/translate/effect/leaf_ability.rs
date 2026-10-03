@@ -334,6 +334,9 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
             "shooting-phase" => " as if it were your Shooting phase".to_string(),
             "fight-phase" => " as if it were the Fight phase".to_string(),
             "snap-shooting" => " using the Snap Shooting rules".to_string(),
+            "movement-phase" => " as if it were your Movement phase".to_string(),
+            "charge-phase" => " as if it were your Charge phase".to_string(),
+            "command-phase" => " as if it were your Command phase".to_string(),
             _ => format!(" as if {key}"),
         });
     }

@@ -18,10 +18,9 @@ describe("Round 5C leaf describer audit", () => {
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
       // A Leader is a model, so leading never shows the subject. Supporting compiles only for this
       // model, as part of an attached unit, which is also what attached in any role reads as; a
-      // supporting unit or bearer's unit has no DSL condition. Version 4's attached_to_keywords is
-      // the condition's `with`, which the describer does not read yet; supporting a named unit has
-      // no DSL condition.
-      "leading-unit": { unrendered: [], colliding: ["subject", "attachment", "attached_to_keywords"], problems: 8 },
+      // supporting unit or bearer's unit has no DSL condition. Supporting a named unit has no DSL
+      // condition.
+      "leading-unit": { unrendered: [], colliding: ["subject", "attachment"], problems: 8 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
@@ -39,9 +38,9 @@ describe("Round 5C leaf describer audit", () => {
       // with_keywords and max render only for the composition and enhancement-slot rules. A
       // detachment-tag-exclusive rule needs exactly one keyword, its tag; with none or two it refuses.
       "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 2 },
-      // A copy that leaves models out, comes back at Starting Strength, resets [One Shot] weapons
-      // or goes into Cult Ambush has no DSL field yet, so every such sample refuses to compile.
-      "add-unit": { unrendered: [], colliding: [], problems: 340 },
+      // Models that join an existing unit are not a copy, so a join carrying copy fields (excluded
+      // keywords, Starting Strength, a [One Shot] reset) refuses to compile.
+      "add-unit": { unrendered: [], colliding: [], problems: 165 },
       // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
       "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
       // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads
@@ -59,9 +58,7 @@ describe("Round 5C leaf describer audit", () => {
       "unit-keyword": { unrendered: [], colliding: ["subject"], problems: 0 },
       "unit-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "hit-by-attacks": { unrendered: [], colliding: ["subject"], problems: 0 },
-      // Version 8's set-up-by-deep-strike: the shared DSL describer does not render a set-up's
-      // `from`, so it reads the same as set-up-this-turn (a four-port describer fix).
-      "unit-activity": { unrendered: [], colliding: ["activities", "subject"], problems: 0 },
+      "unit-activity": { unrendered: [], colliding: ["subject"], problems: 0 },
       // closest-eligible's "to" (default the attacker) has the same "this-unit"/"recipient" collision.
       // Version 4's `of`: "of this unit" and "of the recipient" both read "of the unit".
       "unit-position": { unrendered: [], colliding: ["subject", "to", "of"], problems: 0 },
@@ -74,11 +71,8 @@ describe("Round 5C leaf describer audit", () => {
       // (kind: selected) that has nothing to do with a move or an attack ("selected to shoot"
       // with a move_types filter); the describer only renders move/attack wording for the kinds
       // that call for it, so those combinations read the same regardless of the filter's value.
-      // Version 11: the describer reads neither whose army used a rule (used's subject owner) nor
-      // who made a roll and its outcome (after-roll's subject and result filter) yet. Version 12's
-      // `by` is a destroyed trigger's subject, which the describer never reads.
-      // A moment before or after a Deadly Demise roll refuses: the DSL roll-kind has no deadly-demise (16 samples).
-      event: { unrendered: ["by"], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 16 },
+      // owner and subject still collide on kinds whose wording names neither.
+      event: { unrendered: [], colliding: ["owner", "subject", "move_types", "action_kind"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
       // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
       // "recipient" collision every widened subject-like enum in this file already has.

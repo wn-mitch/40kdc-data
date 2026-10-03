@@ -4,7 +4,7 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
-import { rollWord, usedAbilityPhrase } from "./condition-refs.js";
+import { rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
 
 type P = Record<string, unknown>;
 
@@ -67,9 +67,14 @@ function actor(ref: unknown): string {
   if (typeof ref === "object") {
     const f = ref as P;
     if (typeof f.event_var === "string") return "that unit";
-    // Keywords on the actor read as a trailing requirement, as the event names them.
+    // Keywords on the actor read as a trailing requirement, as the event names them; states read
+    // as a relative clause ("an enemy unit that is unengaged").
     const owner = f.owner === "friendly" ? "a friendly" : f.owner === "enemy" ? "an enemy" : "a";
-    return `${owner} ${f.level === "model" ? "model" : "unit"}`;
+    const states = [
+      ...(f.state != null ? [statePhrase(str(f.state))] : []),
+      ...(Array.isArray(f.not_states) ? (f.not_states as unknown[]).map((x) => statePhrase(str(x), true)) : []),
+    ];
+    return `${owner} ${f.level === "model" ? "model" : "unit"}${states.length ? ` that is ${andList(states)}` : ""}`;
   }
   return dekebab(str(ref));
 }
@@ -82,6 +87,7 @@ function actorKeywords(ref: unknown): string {
   let s = "";
   if (Array.isArray(f.all_of)) s += ` (the triggering ${noun} must have ${andList((f.all_of as unknown[]).map(str))})`;
   if (Array.isArray(f.none_of)) s += ` (the triggering ${noun} must not have ${orList((f.none_of as unknown[]).map(str))})`;
+  if (Array.isArray(f.not_all_of)) s += ` (the triggering ${noun} must not have all of ${andList((f.not_all_of as unknown[]).map(str))})`;
   return s;
 }
 
@@ -99,6 +105,7 @@ const ROLL_NOUN: Record<string, string> = {
   advance: "Advance roll", "battle-shock": "Battle-shock test", leadership: "Leadership test", hazard: "Hazard roll",
   psychic: "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
   "blessings-of-khorne": "Blessings of Khorne roll", manoeuvre: "Agile Manoeuvre roll", channelling: "Channel the Warp roll",
+  "deadly-demise": "Deadly Demise roll",
 };
 const TEST_ROLLS = new Set(["battle-shock", "leadership", "desperate-escape"]);
 
@@ -121,6 +128,16 @@ function rollClause(t: AbilityTrigger, f: P): string {
     return `each time an attack${by} scores a wound`;
   }
   if (f.result === "success" && roll === "dark-pact") return "each time the unit makes a Dark Pact and passes its Leadership test";
+  // Whose roll it was and how it came out: "when the unit fails a Battle-shock test", "after a saving throw made for this model is failed".
+  const article = /^[aeiou]/i.test(noun) ? "an" : "a";
+  const named = subject != null && !anyone;
+  if (f.result === "failure" || f.result === "success") {
+    const passed = f.result === "success";
+    if (TEST_ROLLS.has(roll)) return `when ${actor(subject)} ${passed ? "passes" : "fails"} ${article} ${noun}`;
+    if (passed) return `after a successful ${noun}${named ? ` made for ${actor(subject)}` : ""}`;
+    return `after ${article} ${noun}${named ? ` made for ${actor(subject)}` : ""} is failed`;
+  }
+  if (named) return TEST_ROLLS.has(roll) ? `after ${actor(subject)} takes ${article} ${noun}` : `after ${actor(subject)} makes ${article} ${noun}`;
   if (roll === "psychic") return "after a Psychic test is taken";
   if (roll === "blessings-of-khorne") return "each time you make a Blessings of Khorne roll";
   return `after ${/^[aeiou]/i.test(noun) ? "an" : "a"} ${noun} is made`;
@@ -170,6 +187,12 @@ function eventPhrase(t: AbilityTrigger): string {
       }
       return t.object != null ? `when ${who} targets ${objectPhrase(t.object)}` : `when ${who} selects its targets`;
     }
+    case "move-started": {
+      // "at the start of this unit's move", "just before it Consolidates": the move is about to be made.
+      const kinds = Array.isArray(f.move_types) ? moveKinds(f.move_types) : "";
+      const move = `${kinds ? `${/^[aeiou]/i.test(kinds) ? "an" : "a"} ${kinds}` : "a"} move`;
+      return typeof t.subject === "object" ? `each time ${who} starts ${move}` : `when ${who} starts ${move}`;
+    }
     case "move-ended": {
       if (f.through === "tall-terrain") return `when ${who} moves through terrain over 4" tall`;
       if (f.through === "terrain") return `when ${who} moves through terrain`;
@@ -188,8 +211,10 @@ function eventPhrase(t: AbilityTrigger): string {
       };
       return `when ${who} ${from[str(f.from)] ?? "is set up"}`;
     }
-    case "disembarked":
-      return `when ${who} disembarks from a Transport`;
+    case "disembarked": {
+      const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : objectPhrase(f.transport);
+      return `when ${who} disembarks from ${from}`;
+    }
     case "before-roll":
     case "after-roll":
       return rollClause(t, f);
@@ -201,6 +226,8 @@ function eventPhrase(t: AbilityTrigger): string {
     case "destroyed": {
       const obj = t.object;
       const melee = f.attack_type === "melee" ? " in melee" : "";
+      // A subject names who destroyed the object: "each time the unit destroys an enemy unit".
+      if (t.subject != null) return `each time ${who} destroys ${obj == null ? "a unit" : objectPhrase(obj)}${melee}`;
       if (obj == null || obj === "this-unit") return `when the unit is destroyed${melee}`;
       if (typeof obj === "object" && (obj as P).designated != null && Object.keys(obj as P).length === 1) return "each time your quarry is destroyed";
       return `${melee ? "when" : "each time"} ${objectPhrase(obj)} is destroyed${melee}`;
@@ -215,9 +242,13 @@ function eventPhrase(t: AbilityTrigger): string {
       return `when ${objectPhrase(obj)} is destroyed`;
     }
     case "used": {
+      // A rule your opponent used: the subject names only the enemy owner.
+      const subj = t.subject as P | undefined;
+      const opponent = typeof subj === "object" && subj !== null && subj.owner === "enemy" && Object.keys(subj).length === 1;
       const which = usedAbilityPhrase(f);
-      if (which != null) return `each time ${who} uses ${which}`;
-      if (f.kind === "stratagem") return "each time you use a Stratagem";
+      if (which != null) return `each time ${opponent ? "your opponent" : who} uses ${which}`;
+      if (f.kind === "stratagem") return opponent ? "each time your opponent uses a Stratagem" : "each time you use a Stratagem";
+      if (opponent && f.kind === "ability" && f.id == null) return "each time your opponent uses an ability";
       if (f.kind === "ability" && f.id != null) return `when you use ${titleCase(str(f.id))}`;
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;
       if (f.kind === "act-of-faith") return f.result === "success" ? "after an Act of Faith is completed" : "when an Act of Faith is performed";
