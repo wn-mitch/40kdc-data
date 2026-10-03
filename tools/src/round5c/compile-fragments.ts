@@ -327,18 +327,27 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       };
     }
     case "targeting-restriction": {
-      const subject = closed(leaf, "subject");
-      const targetNode = subject === "enemy-units" ? { owner: "enemy" } : target(subject);
+      // enemy-units / friendly-units are every unit of that side, as a DSL unit-filter.
+      const unit = (value: unknown) => value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
       const weaponType = closed(leaf, "weapon_type");
       const range = leaf.parameters.range;
-      return {
-        type: "targeting", target: targetNode,
-        modifier: {
-          may: closed(leaf, "may"), kind: closed(leaf, "kind"),
-          ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
-          ...(range != null ? { range: { inches: range } } : {}),
-        },
+      const modifier: Node = {
+        may: closed(leaf, "may"), kind: closed(leaf, "kind"),
+        ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
+        ...(range != null ? { range: { inches: range } } : {}),
       };
+      // Version 3 names both sides: the effect sits on the unit that targets when the leaf says
+      // which, else on the unit being targeted.
+      if (leaf.parameters.target !== undefined) {
+        const targeted = unit(closed(leaf, "target"));
+        const by = leaf.parameters.by === undefined ? undefined : unit(closed(leaf, "by"));
+        const named: Node = {
+          ...(leaf.parameters.stratagem !== undefined ? { stratagem: closed(leaf, "stratagem") } : {}),
+          ...(leaf.parameters.except !== undefined ? { except: closed(leaf, "except") } : {}),
+        };
+        return { type: "targeting", target: structuredClone(by ?? targeted), modifier: { ...(by !== undefined ? { by } : {}), ...modifier, target: targeted, ...named } };
+      }
+      return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
     }
     case "counts-as":
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier: { within: { inches: closed(leaf, "within") } } };

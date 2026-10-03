@@ -3,6 +3,7 @@ import { ANTECEDENT } from "./antecedent-families.js";
 import { DICE, EVENT_SUBJECT, type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { FAMILY_EXTENSIONS_2 } from "./family-extensions-2.js";
 import { FAMILY_EXTENSIONS_3 } from "./family-extensions-3.js";
+import { FAMILY_EXTENSIONS_4 } from "./family-extensions-4.js";
 import { ROLL_KINDS } from "./dice-families.js";
 import { enumValue } from "./family-validation.js";
 
@@ -166,7 +167,7 @@ const FAMILY_EXTENSIONS_1: readonly FamilyExtension[] = [
 ];
 
 /** Every extension in order; a family listed twice gains two versions, the later on top of the earlier. */
-export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3];
+export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3, ...FAMILY_EXTENSIONS_4];
 
 const extensionVersions = new Map<string, { extension: FamilyExtension; version: number }>();
 

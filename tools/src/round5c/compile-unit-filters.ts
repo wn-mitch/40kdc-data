@@ -62,8 +62,74 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
   return true;
 }
 
-export function foldUnitFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
-  if (!list.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...list];
+type FilterParameters = { side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string };
+
+const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
+
+/**
+ * One unit-filter from two that name the same units in a row ("friendly **HERETIC ASTARTES**
+ * unit" + "(excluding **DAMNED** units)"), or null when they cannot be one: different sides,
+ * models against units, or two any-of lists (one unit-filter holds a single any-of).
+ */
+function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | null {
+  const a = first.parameters as FilterParameters;
+  const b = second.parameters as FilterParameters;
+  const sides = new Set([a.side, b.side].filter((value) => value !== "any"));
+  if (sides.size > 1) return null;
+  if ((a.level ?? "unit") !== (b.level ?? "unit")) return null;
+  if (a.any_keywords?.length && b.any_keywords?.length) return null;
+  const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
+  const keywords = union(a.keywords, b.keywords);
+  const excluded = union(a.excluded_keywords, b.excluded_keywords);
+  if (keywords.some((keyword) => excluded.includes(keyword))) throw new CompileError("A unit-filter cannot both require and exclude the same keyword.");
+  if (keywords.length) parameters.keywords = keywords;
+  const anyOf = a.any_keywords?.length ? a.any_keywords : b.any_keywords;
+  if (anyOf?.length) parameters.any_keywords = anyOf;
+  if (excluded.length) parameters.excluded_keywords = excluded;
+  const states = union(a.states, b.states);
+  if (states.length) parameters.states = states;
+  if (a.visible === true || b.visible === true) parameters.visible = true;
+  if (a.other === true || b.other === true) parameters.other = true;
+  if (a.level === "model") parameters.level = "model";
+  return { ...first, parameters };
+}
+
+/**
+ * Stacked unit-filters of one fragment become one, so a selection, aura, target or attack sees a
+ * single filter. A "from your army" of the same side between them stays, after the merged filter,
+ * where it sits after a single filter.
+ */
+export function mergeStackedFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
+  const out: CompileLeaf[] = [];
+  for (let index = 0; index < list.length; index += 1) {
+    const leaf = list[index]!;
+    if (!isFilter(leaf)) { out.push(leaf); continue; }
+    let merged = leaf;
+    const owners: CompileLeaf[] = [];
+    let at = index + 1;
+    for (;;) {
+      let next = at;
+      const between: CompileLeaf[] = [];
+      while (list[next]?.family_id === "unit-owner" && list[next]!.fragment === leaf.fragment) between.push(list[next++]!);
+      const candidate = list[next];
+      if (!isFilter(candidate) || candidate!.fragment !== leaf.fragment) break;
+      const side = (merged.parameters as FilterParameters).side;
+      if (between.some((owner) => owner.parameters.owner !== side)) break;
+      const combined = mergedFilter(merged, candidate!);
+      if (combined === null) break;
+      merged = combined;
+      owners.push(...between);
+      at = next + 1;
+    }
+    out.push(merged, ...owners);
+    index = at - 1;
+  }
+  return out;
+}
+
+export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...input];
+  const list = mergeStackedFilters(input);
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;

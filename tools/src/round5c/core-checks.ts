@@ -37,14 +37,45 @@ function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.j
   return records;
 }
 
+const nonCharacterCache = new Map<string, Map<string, boolean> | null>();
+
+/**
+ * Whether each dump enhancement may go to a non-Character (`isEquipableByNonCharacterUnit`), by
+ * its MFM id, from the private dump beside the data directory; null when there is no dump.
+ */
+function nonCharacterFlags(dataRoot: string): Map<string, boolean> | null {
+  if (nonCharacterCache.has(dataRoot)) return nonCharacterCache.get(dataRoot)!;
+  const path = join(dataRoot, "..", "_private", "dump.json");
+  let flags: Map<string, boolean> | null = null;
+  if (existsSync(path)) {
+    const rows = (JSON.parse(readFileSync(path, "utf8")) as { data?: { enhancement?: Array<{ id: string; isEquipableByNonCharacterUnit?: boolean }> } }).data?.enhancement ?? [];
+    flags = new Map(rows.map((row) => [row.id, row.isEquipableByNonCharacterUnit === true]));
+  }
+  nonCharacterCache.set(dataRoot, flags);
+  return flags;
+}
+
+/**
+ * Whether the bearer must be a CHARACTER although the core record does not list it: the dump
+ * says this enhancement is not for non-Character units, a requirement the core entity has no
+ * field for. Without the dump, nothing is implied.
+ */
+function characterImplied(dataRoot: string, record: CoreRecord): boolean {
+  const flags = nonCharacterFlags(dataRoot);
+  const refs = Array.isArray(record.external_refs) ? record.external_refs as Array<{ namespace?: string; id?: string }> : [];
+  const id = refs.find((ref) => ref.namespace === "mfm")?.id;
+  return flags !== null && id !== undefined && flags.get(id) === false;
+}
+
 /** A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is EMPEROR'S). */
 const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").toUpperCase();
 
-function eligibilityProblem(record: CoreRecord, parameters: Record<string, unknown>): string | null {
-  const words = (parameters.keywords as string[]).map(upper);
+function eligibilityProblem(record: CoreRecord, parameters: Record<string, unknown>, implied: boolean): string | null {
   const groups = Array.isArray(record.keyword_restriction_groups)
     ? (record.keyword_restriction_groups as unknown[][]).map((group) => group.map(upper))
     : Array.isArray(record.keyword_restrictions) ? [(record.keyword_restrictions as unknown[]).map(upper)] : [];
+  // CHARACTER the record leaves implied is not a keyword its groups must list.
+  const words = (parameters.keywords as string[]).map(upper).filter((word) => !(implied && word === "CHARACTER" && !groups.some((group) => group.includes(word))));
   if (groups.length === 0) return "the core enhancement names no eligible keywords";
   // Excluded models, when the leaf names any, must be exactly the ones core excludes.
   if (Array.isArray(parameters.excluded_keywords)) {
@@ -95,7 +126,7 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
         errors.push("The eligibility leaf names bearers, but there is no core enhancement record to check them against.");
         continue;
       }
-      const problem = eligibilityProblem(record, check.parameters);
+      const problem = eligibilityProblem(record, check.parameters, characterImplied(dataRoot, record));
       if (problem) errors.push(`Eligible bearers read as ${eligibleReading(check.parameters)}, but ${problem}.`);
     }
   }

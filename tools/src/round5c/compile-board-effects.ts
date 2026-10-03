@@ -4,7 +4,7 @@
  * for any family it does not handle itself.
  */
 
-import { closed, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
@@ -105,7 +105,11 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "army-construction": {
       const modifier: Node = { rule: closed(leaf, "rule") };
       const withKeywords = leaf.parameters.with_keywords as string[] | undefined;
-      if (withKeywords) modifier.with = { all_of: withKeywords };
+      if (modifier.rule === "detachment-tag-exclusive") {
+        // "This Detachment has the COVENS tag": the tag is a name for detachments, not a unit filter.
+        if (withKeywords?.length !== 1) throw new CompileError("A detachment-tag-exclusive leaf names exactly one tag in with_keywords.");
+        modifier.tag = withKeywords[0];
+      } else if (withKeywords) modifier.with = { all_of: withKeywords };
       if (leaf.parameters.max !== undefined) modifier.max = closed(leaf, "max");
       if (leaf.parameters.led_by !== undefined) modifier.led_by = closed(leaf, "led_by");
       return { type: "army-rule", target: "this-unit", modifier };

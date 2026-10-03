@@ -36,8 +36,9 @@ describe("Round 5C leaf describer audit", () => {
       "resource-die": { unrendered: [], colliding: ["value", "rolls"], problems: 0 },
       // A Stratagem's id only shows for the triggering-use wording, so other applies_to values hide it.
       "stratagem-cost": { unrendered: [], colliding: ["id"], problems: 0 },
-      // with_keywords and max render only for the composition and enhancement-slot rules.
-      "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 0 },
+      // with_keywords and max render only for the composition and enhancement-slot rules. A
+      // detachment-tag-exclusive rule needs exactly one keyword, its tag; with none or two it refuses.
+      "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 2 },
       // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
       "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
       // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads

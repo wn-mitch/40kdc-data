@@ -214,6 +214,21 @@ describe("Round 5C authority boundary", () => {
     }
   });
 
+  it("corrects a leaf around an approved inner leaf of another role only with containment approval", () => {
+    const db = fixture([{ ability_id: "inner", raw_text: `Then ${CP} next turn.` }]);
+    try {
+      const wide = { ...confirmDecision(db, "inner", `${CP} next turn`) };
+      const inner = { ...confirmDecision(db, "inner", "next turn"), role: "DURATION", family_id: "duration", parameters: { endpoint: "end-of-your-next-turn" }, allow_overlap: true };
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [wide, inner] }, WILL);
+      const outer = db.prepare("SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active' AND source_spans.exact_text = ?").get(`${CP} next turn`) as { id: number };
+      const correction = { annotation_id: outer.id, action: "correct" as const, parameters: { ...cp.parameters, amount: 2 } };
+      expect(applyChatReview(db, { reviewer: "will", decisions: [correction] }).failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/containment approval/u) })]);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ ...correction, allow_overlap: true }] }).failed).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("copies a trusted leaf onto a byte-identical record as derived, and undoing the source retracts the copy", () => {
     const db = fixture([{ ability_id: "first", raw_text: `Then ${CP}.` }, { ability_id: "second", raw_text: `Then ${CP}.` }]);
     try {

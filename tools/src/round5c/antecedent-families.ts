@@ -53,6 +53,7 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
 const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   event: ["subject", "by"],
   "rule-state": ["subject"],
+  "targeting-restriction": ["by", "target"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

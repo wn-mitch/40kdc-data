@@ -90,7 +90,7 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
     // New wording (widened or narrowed) must still overlap the row it replaces.
     const bytes = item.exact_text ? { ...located({ ...row, id: annotationId }, item.exact_text), exact_text: item.exact_text } : {};
     return {
-      ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role,
+      ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role, ...(item.allow_overlap ? { allow_overlap: true } : {}),
       family_id: item.family_id ?? row.family_id, ...(item.family_id ? {} : { family_version: row.family_version }),
       parameters: item.parameters ?? JSON.parse(row.parameters_json!) as Record<string, unknown>,
     };

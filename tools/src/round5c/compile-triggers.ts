@@ -94,7 +94,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit") node.subject = closed(leaf, "subject");
   const filter: Node = {};
   if (leaf.parameters.move_types !== undefined) filter.move_types = closed(leaf, "move_types");
-  if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to");
+  // Selected "to charge" is selected to declare a charge, which the DSL spells declare-charge.
+  if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to") === "charge" ? "declare-charge" : closed(leaf, "to");
   if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
   if (Object.keys(filter).length) node.filter = filter;
   return node;
