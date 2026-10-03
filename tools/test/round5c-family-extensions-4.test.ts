@@ -127,6 +127,70 @@ describe("stacked unit-filters", () => {
     expect(mergeStackedFilters([friendly({ keywords: ["ALPHA"] }), leaf("unit-owner", { owner: "enemy" }, "TARGET"), friendly({ excluded_keywords: ["BETA"] })])).toHaveLength(3);
   });
 
+  /** Filters placed on their own wording in `text`, so the joiners between them are real source. */
+  const placed = (text: string, ...items: Array<[string, Record<string, unknown>]>): CompileLeaf[] => {
+    const bytes = Buffer.from(text, "utf8");
+    let from = 0;
+    return items.map(([wording, extra]) => {
+      const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
+      if (start < 0) throw new Error(`"${wording}" is not in the text`);
+      from = start + Buffer.byteLength(wording, "utf8");
+      return { ...friendly(extra), start_byte: start, end_byte: from };
+    });
+  };
+
+  it("joins filters written as alternatives into one any-of instead of narrowing to both", () => {
+    const text = "One **HERETIC ASTARTES TERMINATOR**, **OBLITERATORS** or **MUTILATORS** unit from your army.";
+    const merged = mergeStackedFilters(placed(text,
+      ["HERETIC ASTARTES TERMINATOR", { keywords: ["HERETIC ASTARTES", "TERMINATOR"] }],
+      ["OBLITERATORS", { keywords: ["HERETIC ASTARTES", "OBLITERATORS"] }],
+      ["MUTILATORS** unit", { keywords: ["HERETIC ASTARTES", "MUTILATORS"] }]), text);
+    expect(merged).toHaveLength(1);
+    expect(merged[0]!.parameters).toEqual({ side: "friendly", keywords: ["HERETIC ASTARTES"], any_keywords: ["MUTILATORS", "OBLITERATORS", "TERMINATOR"] });
+  });
+
+  it("keeps an exclusion's own parentheses as narrowing, and refuses it when only one alternative has it", () => {
+    const text = "One **HERETIC ASTARTES INFANTRY** (excluding **DAMNED** units) or **HERETIC ASTARTES MOUNTED** unit";
+    expect(() => mergeStackedFilters(placed(text,
+      ["HERETIC ASTARTES INFANTRY", { keywords: ["HERETIC ASTARTES", "INFANTRY"] }],
+      ["excluding **DAMNED** units", { excluded_keywords: ["DAMNED"] }],
+      ["HERETIC ASTARTES MOUNTED** unit", { keywords: ["HERETIC ASTARTES", "MOUNTED"] }]), text)).toThrow(/exclude different keywords/u);
+  });
+
+  it("refuses alternatives that share no keyword prefix, rather than narrowing to both", () => {
+    // (HERETIC ASTARTES and VEHICLE) or VASHTORR THE ARKIFANE: no single any-of says it.
+    const text = "One **HERETIC ASTARTES VEHICLE** or **VASHTORR THE ARKIFANE** unit";
+    expect(() => mergeStackedFilters(placed(text,
+      ["HERETIC ASTARTES VEHICLE", { keywords: ["HERETIC ASTARTES", "VEHICLE"] }],
+      ["VASHTORR THE ARKIFANE** unit", { keywords: ["VASHTORR THE ARKIFANE"] }]), text)).toThrow(/more than one keyword/u);
+  });
+
+  it("still narrows a comma list with no \"or\", and filters with no source text", () => {
+    const text = "**ALPHA**, **BETA** unit";
+    const leaves = placed(text, ["ALPHA", { keywords: ["ALPHA"] }], ["BETA** unit", { keywords: ["BETA"] }]);
+    expect(mergeStackedFilters(leaves, text)[0]!.parameters).toEqual({ side: "friendly", keywords: ["ALPHA", "BETA"] });
+    expect(mergeStackedFilters(leaves)[0]!.parameters).toEqual({ side: "friendly", keywords: ["ALPHA", "BETA"] });
+  });
+
+  it("compiles a Stratagem target of alternatives as any of them", () => {
+    const text = "Your Shooting phase.\nOne **HERETIC ASTARTES INFANTRY** or **HERETIC ASTARTES MOUNTED** unit from your army.\nOne model in your unit regains 1 lost wound.";
+    const at = (wording: string) => Buffer.from(text, "utf8").indexOf(Buffer.from(wording, "utf8"));
+    const [infantry, mounted] = placed(text,
+      ["HERETIC ASTARTES INFANTRY", { keywords: ["HERETIC ASTARTES", "INFANTRY"] }],
+      ["HERETIC ASTARTES MOUNTED** unit", { keywords: ["HERETIC ASTARTES", "MOUNTED"] }]);
+    const result = compileLeaves([
+      { ...leaf("use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }, "WHEN"), start_byte: 0, end_byte: 19 },
+      { ...leaf("stratagem-target", { count: "one" }, "TARGET"), start_byte: at("One"), end_byte: at("One") + 3 },
+      infantry!, mounted!,
+      { ...leaf("unit-owner", { owner: "friendly" }, "TARGET"), start_byte: at("from your army"), end_byte: at("from your army") + 14 },
+      { ...leaf("regain-wounds", { subject: "this-unit", amount: "1" }, "EFFECT"), start_byte: at("One model"), end_byte: text.length },
+    ], text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const core = JSON.stringify(result.core);
+    expect(core).toContain('"any_of":["INFANTRY","MOUNTED"]');
+    expect(core).not.toContain('"INFANTRY","MOUNTED"],"match":"all"');
+  });
+
   it("refuses a merged filter that requires and excludes one keyword", () => {
     expect(() => mergeStackedFilters([friendly({ keywords: ["ALPHA"] }), friendly({ excluded_keywords: ["ALPHA"] })])).toThrow(/require and exclude/u);
   });

@@ -114,7 +114,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText), sourceText));
+    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText), sourceText), sourceText);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

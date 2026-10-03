@@ -126,27 +126,55 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
  * single filter. A "from your army" of the same side between them stays, after the merged filter,
  * where it sits after a single filter.
  */
-export function mergeStackedFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
+export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
     if (!isFilter(leaf)) { out.push(leaf); continue; }
-    let merged = leaf;
+    // Alternatives ("**A** or **B** unit") are groups; filters with nothing between them, or only
+    // an exclusion's parentheses, narrow the group they follow.
+    const groups: Array<{ filter: CompileLeaf; at: number }> = [{ filter: leaf, at: index + 1 }];
     const owners: CompileLeaf[] = [];
-    let at = index + 1;
+    let last = leaf;
+    let sawOr = false;
     for (;;) {
-      let next = at;
+      const group = groups.at(-1)!;
+      let next = group.at;
       const between: CompileLeaf[] = [];
       while (list[next]?.family_id === "unit-owner" && list[next]!.fragment === leaf.fragment) between.push(list[next++]!);
       const candidate = list[next];
       if (!isFilter(candidate) || candidate!.fragment !== leaf.fragment) break;
-      const side = (merged.parameters as FilterParameters).side;
+      const joiner = between.length === 0 ? joinerBetween(sourceText, last, candidate!) : null;
+      if (joiner !== null && ALTERNATIVE_JOINERS.has(joiner)) {
+        sawOr ||= joiner.includes("or");
+        groups.push({ filter: candidate!, at: next + 1 });
+        last = candidate!;
+        continue;
+      }
+      const side = (group.filter.parameters as FilterParameters).side;
       if (between.some((owner) => owner.parameters.owner !== side)) break;
-      const combined = mergedFilter(merged, candidate!);
+      const combined = mergedFilter(group.filter, candidate!);
       if (combined === null) break;
-      merged = combined;
+      group.filter = combined;
+      group.at = next + 1;
       owners.push(...between);
-      at = next + 1;
+      last = candidate!;
+    }
+    let merged: CompileLeaf;
+    let at: number;
+    if (groups.length > 1 && sawOr) {
+      merged = alternativeFilter(groups.map((group) => group.filter));
+      at = groups.at(-1)!.at;
+    } else {
+      // A comma list with no "or" ("**A**, **B** unit") still narrows, as stacked filters do.
+      merged = groups[0]!.filter;
+      at = groups[0]!.at;
+      for (const group of groups.slice(1)) {
+        const combined = mergedFilter(merged, group.filter);
+        if (combined === null) break;
+        merged = combined;
+        at = group.at;
+      }
     }
     out.push(merged, ...owners);
     index = at - 1;
@@ -154,9 +182,44 @@ export function mergeStackedFilters(list: readonly CompileLeaf[]): CompileLeaf[]
   return out;
 }
 
-export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
+/** Joiners that make the next filter an alternative to the one before it, read without bold or spaces. */
+const ALTERNATIVE_JOINERS = new Set(["or", ",", ",or"]);
+
+/** The source between two leaves, without bold markers, spaces or an exclusion's parentheses. */
+function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right: CompileLeaf): string | null {
+  if (sourceText === undefined || left.end_byte === undefined || right.start_byte < left.end_byte) return null;
+  return Buffer.from(sourceText, "utf8").subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
+}
+
+/**
+ * One unit-filter for alternatives ("**HERETIC ASTARTES VEHICLE** or **VASHTORR THE ARKIFANE**
+ * unit"): the keywords every alternative names stay required, and each alternative's one other
+ * keyword joins the any-of. Alternatives that differ in anything else (side, level, an exclusion
+ * on one of them, two extra keywords) have no single DSL unit-filter, so they fail rather than
+ * narrow to units that are both.
+ */
+function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf {
+  const params = filters.map((filter) => filter.parameters as FilterParameters);
+  const fail = (why: string): never => { throw new CompileError(`Alternative unit-filters (A or B) ${why}; one DSL unit-filter cannot say them.`); };
+  const same = (pick: (p: FilterParameters) => unknown) => params.every((p) => JSON.stringify(pick(p) ?? null) === JSON.stringify(pick(params[0]!) ?? null));
+  const sides = new Set(params.map((p) => p.side).filter((value) => value !== "any"));
+  if (sides.size > 1) fail("are on different sides");
+  if (!same((p) => p.level ?? "unit")) fail("name both models and units");
+  if (!same((p) => [...(p.excluded_keywords ?? [])].sort())) fail("exclude different keywords");
+  if (!same((p) => [...(p.states ?? [])].sort()) || !same((p) => p.held_in) || !same((p) => p.visible === true) || !same((p) => p.other === true)) fail("carry different states");
+  if (params.some((p) => p.any_keywords?.length)) fail("already hold an any-of");
+  const common = (params[0]!.keywords ?? []).filter((keyword) => params.every((p) => (p.keywords ?? []).includes(keyword)));
+  const alternatives = params.map((p) => (p.keywords ?? []).filter((keyword) => !common.includes(keyword)));
+  if (alternatives.some((rest) => rest.length !== 1)) fail("differ by more than one keyword");
+  const { keywords: _keywords, ...rest } = params[0]!;
+  const parameters: Record<string, unknown> = { ...rest, side: [...sides][0] ?? "any", any_keywords: [...new Set(alternatives.map((one) => one[0]!))].sort() };
+  if (common.length) parameters.keywords = [...common].sort();
+  return { ...filters[0]!, end_byte: filters.at(-1)!.end_byte, parameters };
+}
+
+export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...input];
-  const list = mergeStackedFilters(input);
+  const list = mergeStackedFilters(input, sourceText);
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
