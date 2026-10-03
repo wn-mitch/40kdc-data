@@ -141,10 +141,6 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
       "fight"
     ],
     "player_turn": "either",
@@ -179,6 +175,7 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
+      "movement",
       "charge"
     ],
     "player_turn": "your-turn",
