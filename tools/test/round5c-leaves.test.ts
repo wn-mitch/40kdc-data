@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, qualifiedAt, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { getAbility } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { applyAnnotationBatch, confirmSurface, mergeFingerprints, moveSurface, retireSurface, undoBatch } from "./round5c-human.js";
@@ -385,6 +385,17 @@ describe("Round 5C family versions", () => {
     } finally {
       db.close();
     }
+  });
+
+  it("treats a keyword before a noun as a qualifier but not before a duration, clause or determiner", () => {
+    const at = (text: string, match: string) => qualifiedAt(text, Buffer.byteLength(text.slice(0, text.indexOf(match))));
+    expect(at("select one **INFANTRY** unit from your army", "unit from your army")).toBe(true);
+    expect(at("**PSYKER** models in your unit have the Feel No Pain 4+ ability", "models in your unit")).toBe(true);
+    expect(at("melee weapons equipped by models in that unit have", "weapons equipped")).toBe(true);
+    expect(at("this unit is not **eligible to declare a charge** until the end of the turn", "until the end of the turn")).toBe(false);
+    expect(at("Is **riled up** until the start of your next turn", "until the start")).toBe(false);
+    expect(at("If that unit is **BATTLE-SHOCKED** when this unit is selected to fight", "when this unit")).toBe(false);
+    expect(at("those **riled up** models have -1 to wound rolls", "have -1")).toBe(false);
   });
 
   it("accepts melee and valued weapon abilities but not unit keywords", () => {

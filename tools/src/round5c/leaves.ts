@@ -58,11 +58,24 @@ export class LeafError extends Error {
  */
 const QUALIFIER_BEFORE = /(?:\b(?:melee|ranged)|\*\*[^*]+\*\*|\b[A-Z][A-Z'-]{2,})\s+$/u;
 
+/**
+ * Leading words no premodifier can narrow: determiners, prepositions, clause openers and verbs.
+ * "**battle-shocked** until the end of the turn" is a state followed by a duration, not a
+ * qualified duration, so a match starting with one of these is never qualified.
+ */
+const UNQUALIFIABLE_START = new Set([
+  "a", "after", "an", "are", "as", "at", "before", "by", "can", "cannot", "during", "each", "every", "for", "from", "has", "have",
+  "if", "in", "is", "it", "its", "must", "of", "on", "once", "one", "roll", "select", "that", "the", "then", "this", "to",
+  "until", "when", "whenever", "while", "with", "within", "you", "your",
+]);
+
 /** Whether the words right before a byte offset qualify what follows it. */
 export function qualifiedAt(sourceText: string, startByte: number): boolean {
   const bytes = Buffer.from(sourceText, "utf8");
   const before = bytes.subarray(Math.max(0, startByte - 80), startByte).toString("utf8");
-  return QUALIFIER_BEFORE.test(before);
+  if (!QUALIFIER_BEFORE.test(before)) return false;
+  const first = /^\W*([A-Za-z]+)/u.exec(bytes.subarray(startByte, startByte + 40).toString("utf8"))?.[1]?.toLowerCase();
+  return first === undefined || !UNQUALIFIABLE_START.has(first);
 }
 
 /** The surface key of source wording: normalized, without edge punctuation. */
