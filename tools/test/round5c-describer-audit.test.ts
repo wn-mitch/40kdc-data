@@ -28,8 +28,8 @@ describe("Round 5C leaf describer audit", () => {
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
       // "any" and "all" rolls both read as bare "rolls"; the describer does not tell them apart.
       "ignore-modifiers": { unrendered: [], colliding: ["rolls"], problems: 0 },
-      // "from" and the placement-limit fields only render when "to" is not strategic-reserves.
-      "set-up": { unrendered: [], colliding: ["from", "min_enemy_distance", "within_edge", "round_offset"], problems: 0 },
+      // "from" and the placement-limit fields (placement included) only render when "to" is not strategic-reserves.
+      "set-up": { unrendered: [], colliding: ["from", "min_enemy_distance", "within_edge", "round_offset", "placement"], problems: 0 },
       // The marker's subject (who places it) never appears in the English; distance only shows on a relocate.
       "battlefield-marker": { unrendered: ["subject"], colliding: ["distance"], problems: 0 },
       // value and rolls only render for a substitute; an add ignores both.
@@ -69,8 +69,9 @@ describe("Round 5C leaf describer audit", () => {
       // with a move_types filter); the describer only renders move/attack wording for the kinds
       // that call for it, so those combinations read the same regardless of the filter's value.
       // Version 11: the describer reads neither whose army used a rule (used's subject owner) nor
-      // who made a roll and its outcome (after-roll's subject and result filter) yet.
-      event: { unrendered: [], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 0 },
+      // who made a roll and its outcome (after-roll's subject and result filter) yet. Version 12's
+      // `by` is a destroyed trigger's subject, which the describer never reads.
+      event: { unrendered: ["by"], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
       // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
       // "recipient" collision every widened subject-like enum in this file already has.

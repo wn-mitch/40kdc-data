@@ -249,7 +249,7 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
 
   it("migrates a unit-activity@3 leaf to a one-item list", () => {
     expect(mapToLatest("unit-activity", 3, { activity: "fought-this-phase", subject: "this-unit", negated: true }))
-      .toEqual({ family: "unit-activity", version: 6, parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
+      .toEqual({ family: "unit-activity", version: 7, parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
   });
 
   it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {

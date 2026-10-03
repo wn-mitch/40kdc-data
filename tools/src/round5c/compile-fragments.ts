@@ -32,11 +32,13 @@ const SUBJECT_TARGETS: Record<string, string> = {
   "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit",
   // Later versions of some effect families (family-extensions.ts) also name the triggering unit and the attack's target.
   "event-subject": "event-subject", target: "defender",
+  // Bound by compile-antecedent.ts only: the unit an aura reaches.
+  recipient: "recipient",
 };
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
-const OTHER_UNITS = new Set(["selected-unit", "event-subject", "defender"]);
+const OTHER_UNITS = new Set(["selected-unit", "event-subject", "defender", "recipient"]);
 
-const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model" };
+const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model", recipient: "recipient" };
 
 const isSource = (value: unknown): boolean => value !== null && typeof value === "object" && "source" in value;
 
@@ -44,6 +46,17 @@ export function closed(leaf: CompileLeaf, name: string): unknown {
   const value = leaf.parameters[name];
   if (isSource(value)) throw new CompileError(`${leaf.family_id} ${name} is quoted source text; give it a listed value before it can compile.`);
   return value;
+}
+
+/**
+ * "**CHARACTER** models in this unit": the subject's own models with every listed keyword, as a
+ * model-level DSL unit-filter; without model_keywords, the subject itself.
+ */
+function models(leaf: CompileLeaf, subject: Node | string): Node | string {
+  const keywords = leaf.parameters.model_keywords as string[] | undefined;
+  if (keywords === undefined) return subject;
+  if (subject === "this-model") throw new CompileError(`${leaf.family_id} limits this model to its models with keywords; name its unit instead.`);
+  return { level: "model", member_of: subject, all_of: keywords };
 }
 
 /** A modifier's melee or ranged limit; "all" (or none) limits nothing. */
@@ -67,7 +80,12 @@ function pickOne(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node
  * target this unit, where the attacker's rolls are modified.
  */
 export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: string | null; incoming: boolean }): Node {
-  const target = (subject: unknown) => {
+  const target = (subject: unknown): Node | string => {
+    // Every unit a folded unit-filter matches (compile-unit-filters.ts): an army-wide grant.
+    if (subject === "filtered-units") {
+      if (leaf.parameters.subject_filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
+      return structuredClone(leaf.parameters.subject_filter as Node);
+    }
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
     // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
@@ -151,7 +169,13 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       if (leaf.family_version >= 3 && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
       }
-      return { type: "stat-modifier", target: target(subject), modifier: { stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}) } };
+      return {
+        type: "stat-modifier", target: target(subject),
+        modifier: {
+          stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
+          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
+        },
+      };
     }
     case "weapon-ability-grant": {
       const weaponType = closed(leaf, "weapon_type");
@@ -223,10 +247,10 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     }
     case "feel-no-pain": {
       const against = closed(leaf, "against");
-      return { type: "feel-no-pain", target: target(leaf.parameters.subject), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { against } : {}) } };
+      return { type: "feel-no-pain", target: models(leaf, target(leaf.parameters.subject)), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { against } : {}) } };
     }
     case "invulnerable-save":
-      return { type: "invulnerable-save", target: target(leaf.parameters.subject), modifier: { invuln_sv: closed(leaf, "threshold") } };
+      return { type: "invulnerable-save", target: models(leaf, target(leaf.parameters.subject)), modifier: { invuln_sv: closed(leaf, "threshold") } };
     case "fights-first":
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: "fights-first" } };
     case "sticky-objective":
@@ -276,13 +300,14 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         throw new CompileError("Stat adjustment needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks: the attacker when it targets this unit.
-      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
+      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : models(leaf, target(leaf.parameters.subject));
       const weaponType = closed(leaf, "weapon_type") ?? "all";
       const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
         type: "stat-modifier", target: owner,
         modifier: {
           stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
+          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
         },
       }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };

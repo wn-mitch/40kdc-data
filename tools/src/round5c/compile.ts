@@ -1,9 +1,9 @@
 import { bindAntecedents, hasAntecedent } from "./compile-antecedent.js";
+import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { exactSpan } from "./contracts.js";
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
-import {
-  activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, kindKey, negate, targetRestrictions, trigger,
-} from "./compile-conditions.js";
+import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, negate, targetRestrictions } from "./compile-conditions.js";
+import { kindKey, trigger } from "./compile-triggers.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
 import {
   designation, isContainerOpener, planContainers, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES,
@@ -229,7 +229,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(bindAntecedents(ordered(leaves)), sourceText), sourceText), sourceText));
+    list = foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

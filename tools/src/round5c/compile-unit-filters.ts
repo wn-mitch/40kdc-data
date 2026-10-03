@@ -1,3 +1,4 @@
+import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
@@ -99,6 +100,15 @@ export function foldUnitFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
       // "each time a model in this unit makes an attack" + "that targets a" + "VEHICLE unit": the
       // attack's target. "an enemy unit" alone adds nothing an attack's target is not already.
       if (Object.keys(filterOf(leaf)).length > 0 || leaf.parameters.side === "friendly") out.push({ ...leaf, family_id: "unit-filter-target" });
+    } else if (isFilter(leaf) && filteredAfter(list, index) !== null) {
+      // "Friendly **K** units (from your army)" + "have the Scouts ability": every unit it
+      // matches receives the effect. A "from your army" between them is the filter's own wording.
+      const at = filteredAfter(list, index)!;
+      const owners = list.slice(index + 1, at);
+      if (owners.some((owner) => owner.parameters.owner !== leaf.parameters.side)) throw new CompileError("A unit-filter and the \"from your army\" after it name different sides.");
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      index = at;
     } else if (isFilter(leaf)) {
       throw new CompileError("A unit-filter needs a select-unit or attack right before it, or an aura-range or event right after it, or a Stratagem target leaf before it.");
     } else if (openSelect(leaf)) {
@@ -112,4 +122,12 @@ export function foldUnitFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
     }
   }
   return out;
+}
+
+/** The index of the leaf a bare unit-filter's units receive (`FILTERED_UNITS`), past any "from your army". */
+function filteredAfter(list: readonly CompileLeaf[], index: number): number | null {
+  let at = index + 1;
+  while (list[at]?.family_id === "unit-owner") at += 1;
+  const leaf = list[at];
+  return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
 }

@@ -9,7 +9,7 @@ import { closed, type CompileLeaf } from "./compile-fragments.js";
 type Node = Record<string, unknown>;
 
 /** The effect for a board or economy family, or undefined when the family is not one of them. */
-export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => string): Node | undefined {
+export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Node | string): Node | undefined {
   switch (leaf.family_id) {
     case "make-move": {
       const modifier: Node = { move_type: closed(leaf, "move_type") };
@@ -33,6 +33,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = closed(leaf, "min_enemy_distance");
       if (leaf.parameters.within_edge !== undefined) modifier.within_edge = closed(leaf, "within_edge");
       if (leaf.parameters.round_offset !== undefined) modifier.round_offset = closed(leaf, "round_offset");
+      if (leaf.parameters.placement !== undefined) modifier.placement = closed(leaf, "placement");
+      if (leaf.parameters.ignore_limits === true) modifier.ignore_limits = true;
       return { type: "set-up", target: closed(leaf, "subject"), modifier };
     }
     case "battlefield-marker": {

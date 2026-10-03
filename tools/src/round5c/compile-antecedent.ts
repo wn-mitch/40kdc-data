@@ -25,14 +25,63 @@ function isStratagem(leaves: readonly CompileLeaf[]): boolean {
     || STRATAGEM_TARGETS.has(leaf.family_id) || leaf.family_id === "use-window");
 }
 
+/**
+ * The unit an aura reaches ("While a friendly X unit is within 6\" of this model, that unit …"):
+ * the DSL's `recipient`, the unit the aura is being applied to.
+ */
+export const AURA_RECIPIENT = "recipient";
+/**
+ * Every unit a unit-filter right before the leaf matches ("Friendly **K** units" + "have the
+ * Scouts ability"): an army-wide grant. Folding (`compile-unit-filters.ts`) puts the filter on
+ * the leaf as `subject_filter`, which becomes its DSL target.
+ */
+export const FILTERED_UNITS = "filtered-units";
+
+/** Leaves a unit-filter right after them belongs to: it says which units they pick or aim at. */
+const FILTER_ANCHORS = new Set(["select-unit", "stratagem-target", "attack"]);
+
+/**
+ * The unit-filter an anaphor right after it names, when nothing else claims the filter: it sits
+ * in the same fragment directly before the leaf (a "from your army" between them is the filter's
+ * own wording), with no selection, Stratagem target or attack right before it.
+ */
+function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  let at = index - 1;
+  while (at >= 0 && leaves[at]!.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at -= 1;
+  const filter = leaves[at];
+  if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
+  const before = leaves[at - 1];
+  return !(before && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter"));
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number): string | null {
   const earlier = leaves.slice(0, index);
   if (earlier.some((other) => SELECTIONS.has(other.family_id))) return "selected-unit";
+  if (bareFilter(leaves, index)) return FILTERED_UNITS;
+  if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
   if (leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
   if (earlier.some((other) => other.family_id === "event" && UNIT_EVENT_KINDS.has(String(other.parameters.kind)))) return "event-subject";
   return null;
 }
+
+/**
+ * Keys whose lowering takes any DSL unit-ref, so they can name an aura's recipient or the units a
+ * filter matches even though their family's own enum lists neither: effects go through
+ * `compile-fragments.ts` target(), conditions through widenedWho. A filter's units are a DSL
+ * unit-filter object, which only an effect's target can hold.
+ */
+const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
+  "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
+  "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject"], "core-ability-grant": ["subject"],
+  "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
+};
+const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
+  "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],
+  // An owned moment's subject goes into the trigger as is (compile-triggers.ts).
+  event: ["subject"],
+};
 
 /** Subject-like keys whose values say which of the record's own unit or model it talks about. */
 const SELF_KEYS = ["subject", "recipient", "target", "unit", "who", "of", "with", "to"];
@@ -51,6 +100,12 @@ function ownRole(leaves: readonly CompileLeaf[]): string {
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
 function boundValue(leaf: CompileLeaf, key: string, role: string): string | null {
+  if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) ? role : null;
+  if (role === AURA_RECIPIENT) {
+    if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
+    if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;
+    return null;
+  }
   const values = keyEnum(reviewedFamily(leaf.family_id, leaf.family_version).parameterSchema, key) ?? [];
   if (values.includes(role)) return role;
   if (leaf.family_id === "mortal-wounds" && role === "selected-unit" && values.includes("that-unit")) return "that-unit";
@@ -59,9 +114,10 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
 
 /**
  * Bind every `antecedent` to the unit an earlier leaf of the record introduced: the selected
- * unit when a selection precedes the leaf; else, in a Stratagem, its target (this-unit); else
- * the unit of a preceding event whose moment names a unit (the triggering unit); else, outside
- * a Stratagem, the record's own unit (or model). A Stratagem leaf with none of these, or a leaf
+ * unit when a selection precedes the leaf; else the units a unit-filter right before it matches
+ * (an army-wide grant); else the unit a preceding aura reaches (its recipient); else, in a
+ * Stratagem, its target (this-unit); else the unit of a preceding event whose moment names a unit
+ * (the triggering unit); else, outside a Stratagem, the record's own unit (or model). A Stratagem leaf with none of these, or a leaf
  * whose family cannot name the unit it binds to, refuses compilation. Later lowering only sees
  * the bound roles.
  */

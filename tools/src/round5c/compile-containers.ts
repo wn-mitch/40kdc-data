@@ -1,5 +1,5 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
-import { trigger } from "./compile-conditions.js";
+import { trigger } from "./compile-triggers.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:

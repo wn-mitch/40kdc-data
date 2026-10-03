@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "./antecedent-families.js";
-import { DICE, EVENT_SUBJECT, type FamilyExtension, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { activitiesExtension, DICE, EVENT_SUBJECT, type FamilyExtension, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue } from "./family-validation.js";
 
 /**
@@ -74,27 +74,8 @@ export const FAMILY_EXTENSIONS_2: readonly FamilyExtension[] = [
       return { ...normalized, weapon_keyword: enumValue(keyword, WEAPON_KEYWORDS, "characteristic-modifier.weapon_keyword") };
     },
   },
-  {
-    // "if that unit has declared a charge this phase", "if this unit Fell Back this turn".
-    family: "unit-activity",
-    description: "As the previous version, plus two activities: declared a charge this phase, and made a Fall Back move this turn.",
-    schema: (previous) => {
-      const activities = properties(previous).activities!;
-      const items = activities.items as Schema;
-      return withProperties(previous, { activities: { ...activities, items: { ...items, enum: [...(items.enum as string[]), ...NEW_ACTIVITIES] } } });
-    },
-    normalize: (input, previous) => {
-      const listed = Array.isArray(input.activities) ? input.activities as unknown[] : [];
-      const added = listed.filter((activity) => (NEW_ACTIVITIES as readonly unknown[]).includes(activity));
-      if (added.length === 0) return previous(input);
-      if (new Set(listed).size !== listed.length) throw new TypeError("unit-activity lists an activity twice.");
-      const older = listed.filter((activity) => !added.includes(activity));
-      // The previous version checks the rest of the leaf with one activity it knows standing in.
-      const normalized = previous({ ...input, activities: older.length ? older : ["remained-stationary"] });
-      const kept = older.length ? normalized.activities as string[] : [];
-      return { ...normalized, activities: [...kept, ...(added as string[])].sort() };
-    },
-  },
+  // "if that unit has declared a charge this phase", "if this unit Fell Back this turn".
+  activitiesExtension(NEW_ACTIVITIES, "two activities: declared a charge this phase, and made a Fall Back move this turn"),
   {
     // "while this unit is wholly within 6\" of one or more friendly **K** units", "within 3\" of one or more enemy units".
     family: "unit-position",

@@ -71,11 +71,14 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     return planned.map((item) => gated(item.gate, item.node));
   }
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
-  const dice = String(rolls[0]!.parameters.dice);
+  const die = String(rolls[0]!.parameters.dice);
   const count = rolls[0]!.parameters.count as number | undefined;
   const perModel = rolls[0]!.parameters.per_model as string | undefined;
-  if (count !== undefined || perModel !== undefined) return perSuccess(planned, banded, dice, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel);
-  const faces = DICE_FACES[dice]!;
+  if (count !== undefined || perModel !== undefined) return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel);
+  // "adding 1 to the result" (compile-preceding-roll.ts): the bands read the roll plus the bonus.
+  const bonus = Number(rolls[0]!.parameters.bonus ?? 0);
+  const dice = bonus > 0 ? `${die}+${bonus}` : die;
+  const faces = DICE_FACES[die]! + bonus;
   // A roll_var (dice-roll@2) binds the roll as the DSL's `roll` container; a single band then
   // compiles its dice-gated `from` that binding instead of a fresh `dice` field.
   const rollVar = rolls[0]!.parameters.roll_var as string | undefined;
@@ -122,7 +125,8 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
         : { type: "dice-gated", dice, threshold: table[0]!.band.from, comparison: "gte", on_success: body(table[0]!.items), on_fail: null };
       return rollVar ? { type: "roll", dice, roll_var: rollVar, effect: gate } : gate;
     }
-    if (dice === "2D6") throw new CompileError("Several result bands on 2D6 have no DSL table; only D3 and D6 tables exist.");
+    if (die === "2D6") throw new CompileError("Several result bands on 2D6 have no DSL table; only D3 and D6 tables exist.");
+    if (bonus > 0) throw new CompileError(`Several result bands on ${dice} have no DSL table; a table rolls one plain D3 or D6.`);
     const outcomes: Array<{ results: number[]; effect: Node }> = [];
     let next = 1;
     const range = (from: number, to: number) => Array.from({ length: to - from + 1 }, (_, offset) => from + offset);

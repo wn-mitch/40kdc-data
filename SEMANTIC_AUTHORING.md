@@ -81,10 +81,14 @@ unless it is needed to operate.
 - **Anaphoric subjects point back; compilation binds them.** "That enemy unit", "that unit",
   "it" and "those units" record the unit-ref value `antecedent` (`antecedent-families.ts` lists
   the families and keys that accept it). Compilation (`compile-antecedent.ts`) binds it to the
-  selected unit when a selection precedes the leaf, else to a Stratagem's target, else to the
-  unit of a preceding event that names a unit, else, outside a Stratagem, to the record's own
-  unit (its model when the record only ever names this model). It refuses a Stratagem leaf with
-  none of these, and a leaf whose family cannot name the unit it binds to. Because the leaf
+  selected unit when a selection precedes the leaf; else to every unit a unit-filter right
+  before it matches ("Friendly **K** units" + "have X", an army-wide grant); else to the unit a
+  preceding aura reaches (its recipient: "While a friendly X unit is within 6\" of this model,
+  that unit …"); else to a Stratagem's target; else to the unit of a preceding event that names
+  a unit; else, outside a Stratagem, to the record's own unit (its model when the record only
+  ever names this model). It refuses a Stratagem leaf with none of these, and a leaf whose family
+  cannot name the unit it binds to. A roll-modifier's `preceding` roll ("adding 1 to the result")
+  binds the same way to the nearest roll or test before it (`compile-preceding-roll.ts`). Because the leaf
   stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
 - **A family version widens; it never reinterprets.** A later version (`family-extensions.ts`)
   adds values or optional parameters and hands the rest of a leaf to the previous version, so

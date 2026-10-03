@@ -56,3 +56,26 @@ export const optional = (schema: Schema): Schema => ({ ...schema, "x-optional": 
 export const KEYWORD_ITEMS = { type: "string", pattern: UNIT_KEYWORD.source };
 /** Units an effect's own recipient can be, beyond the earlier versions: the unit a trigger names. */
 export const EVENT_SUBJECT = "event-subject";
+
+/** unit-activity with more activities; the previous version checks the rest with one it knows standing in. */
+export function activitiesExtension(activities: readonly string[], what: string): FamilyExtension {
+  return {
+    family: "unit-activity",
+    description: `As the previous version, plus ${what}.`,
+    schema: (previous) => {
+      const property = properties(previous).activities!;
+      const items = property.items as Schema;
+      return withProperties(previous, { activities: { ...property, items: { ...items, enum: [...(items.enum as string[]), ...activities] } } });
+    },
+    normalize: (input, previous) => {
+      const listed = Array.isArray(input.activities) ? input.activities as unknown[] : [];
+      const added = listed.filter((activity) => activities.includes(activity as string));
+      if (added.length === 0) return previous(input);
+      if (new Set(listed).size !== listed.length) throw new TypeError("unit-activity lists an activity twice.");
+      const older = listed.filter((activity) => !added.includes(activity));
+      const normalized = previous({ ...input, activities: older.length ? older : ["remained-stationary"] });
+      const kept = older.length ? normalized.activities as string[] : [];
+      return { ...normalized, activities: [...kept, ...(added as string[])].sort() };
+    },
+  };
+}
