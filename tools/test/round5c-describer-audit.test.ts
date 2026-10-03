@@ -18,8 +18,10 @@ describe("Round 5C leaf describer audit", () => {
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
       // A Leader is a model, so leading never shows the subject. Supporting compiles only for this
       // model, as part of an attached unit, which is also what attached in any role reads as; a
-      // supporting unit or bearer's unit has no DSL condition.
-      "leading-unit": { unrendered: [], colliding: ["subject", "attachment"], problems: 2 },
+      // supporting unit or bearer's unit has no DSL condition. Version 4's attached_to_keywords is
+      // the condition's `with`, which the describer does not read yet; supporting a named unit has
+      // no DSL condition.
+      "leading-unit": { unrendered: [], colliding: ["subject", "attachment", "attached_to_keywords"], problems: 8 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
@@ -66,7 +68,9 @@ describe("Round 5C leaf describer audit", () => {
       // (kind: selected) that has nothing to do with a move or an attack ("selected to shoot"
       // with a move_types filter); the describer only renders move/attack wording for the kinds
       // that call for it, so those combinations read the same regardless of the filter's value.
-      event: { unrendered: [], colliding: ["move_types", "action_kind"], problems: 0 },
+      // Version 11: the describer reads neither whose army used a rule (used's subject owner) nor
+      // who made a roll and its outcome (after-roll's subject and result filter) yet.
+      event: { unrendered: [], colliding: ["owner", "subject", "result", "move_types", "action_kind"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
       // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
       // "recipient" collision every widened subject-like enum in this file already has.

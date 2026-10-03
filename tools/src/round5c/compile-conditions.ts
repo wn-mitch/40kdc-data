@@ -58,6 +58,8 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "fought-this-phase": ["selected", { to: "fight" }, "phase"],
   "selected-to-shoot-this-phase": ["selected", { to: "shoot" }, "phase"],
   "selected-to-move-this-phase": ["selected", { to: "move" }, "phase"],
+  "declared-charge-this-phase": ["targets-selected", { kind: "charge" }, "phase"],
+  "fell-back-this-turn": ["move-ended", { move_types: ["fall-back"] }, "turn"],
 };
 
 /** A unit-state leaf's states that are not core-rules unit states. */
@@ -110,17 +112,27 @@ function turnEndedTrigger(leaf: CompileLeaf): Node {
   return { event: "turn-ended", condition: { type: "player-turn-is", parameters: { turn: `${String(turn)}-turn` } } };
 }
 
+/** A trigger narrowed to one player's turn, unless the leaf says either or nothing. */
+function withTurn(node: Node, leaf: CompileLeaf): Node {
+  const turn = leaf.parameters.turn;
+  if (turn === undefined || turn === "either") return node;
+  return { ...node, condition: { type: "player-turn-is", parameters: { turn: `${String(closed(leaf, "turn"))}-turn` } } };
+}
+
 /** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
 const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
-  "step-started": (leaf) => ({ event: "step-started", filter: { step: closed(leaf, "step") } }),
-  used: (leaf) => ({ event: "used", filter: { kind: closed(leaf, "activity") } }),
+  "step-started": (leaf) => withTurn({ event: "step-started", filter: { step: closed(leaf, "step") } }, leaf),
+  used: (leaf) => ({ event: "used", filter: { kind: closed(leaf, "activity") }, ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}) }),
   "state-changed": (leaf) => ({ event: "state-changed", filter: { state: closed(leaf, "state") } }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: closed(leaf, "roll") } }),
   // Version 8 (batch 7a).
-  "after-roll": (leaf) => ({ event: "after-roll", filter: { roll: closed(leaf, "roll") } }),
+  "after-roll": (leaf) => ({
+    event: "after-roll", filter: { roll: closed(leaf, "roll"), ...(leaf.parameters.result !== undefined ? { result: closed(leaf, "result") } : {}) },
+    ...(leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
+  }),
   "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),
   "resource-gained": (leaf) => ({ event: "resource-gained", filter: { pool: closed(leaf, "pool") } }),
   "resource-spent": (leaf) => ({ event: "resource-spent", filter: { pool: closed(leaf, "pool") } }),
@@ -176,7 +188,7 @@ export function attackTypeCondition(leaf: CompileLeaf): Node | null {
  */
 function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
   return {
-    owner: closed(leaf, "of_side"), all_of: closed(leaf, "of_keywords"),
+    owner: closed(leaf, "of_side"), ...(leaf.parameters.of_keywords !== undefined ? { all_of: closed(leaf, "of_keywords") } : {}),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
   };
 }
@@ -202,9 +214,12 @@ export function condition(leaf: CompileLeaf): Node {
       // A Leader is a model, so this model, this unit and the bearer's unit leading all say the
       // Leader model is leading. Version 1 leaves only ever meant leading.
       const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
-      if (attachment === "leading") return pred("attachment", { role: "leading" }, "this-model");
+      // Version 4: the unit it is attached to has these keywords.
+      const attachedTo = leaf.parameters.attached_to_keywords === undefined ? {} : { with: { all_of: closed(leaf, "attached_to_keywords") } };
+      if (attachment === "leading") return pred("attachment", { role: "leading", ...attachedTo }, "this-model");
       // Attached in either role: the model, or the unit (the bearer's unit is this unit), is part of an attached unit.
-      if (attachment === "any") return pred("attachment", { role: "attached" }, closed(leaf, "subject") === "this-model" ? "this-model" : "this-unit");
+      if (attachment === "any") return pred("attachment", { role: "attached", ...attachedTo }, closed(leaf, "subject") === "this-model" ? "this-model" : "this-unit");
+      if (leaf.parameters.attached_to_keywords !== undefined) throw new CompileError("leading-unit supporting a named unit has no DSL condition yet.");
       // The DSL has no supporting role. A model attached in support is part of an attached unit,
       // and a Support model is attached only in support, so "this model is supporting a unit"
       // is "this model is part of an attached unit". A unit is attached whether it is led or
@@ -287,9 +302,9 @@ export function condition(leaf: CompileLeaf): Node {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
         const node = leaf.parameters.of === "matching-unit"
-          ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") } }, subject)
+          ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of !== undefined
-          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") } }, subject)
+          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
@@ -395,6 +410,8 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));
     }
     case "battle-round": {
+      // Version 2: any one of several listed rounds.
+      if (Array.isArray(leaf.parameters.rounds)) return anyOf((leaf.parameters.rounds as number[]).map((round) => ({ type: "battle-round", parameters: { min: round, max: round } })));
       const parameters: Node = {};
       if (leaf.parameters.min !== undefined) parameters.min = closed(leaf, "min");
       if (leaf.parameters.max !== undefined) parameters.max = closed(leaf, "max");

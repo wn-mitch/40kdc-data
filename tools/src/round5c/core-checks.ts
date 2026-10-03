@@ -37,7 +37,8 @@ function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.j
   return records;
 }
 
-const upper = (value: unknown) => String(value).toUpperCase();
+/** A keyword as compared: upper case, with curly apostrophes as straight ones (EMPEROR’S is EMPEROR'S). */
+const upper = (value: unknown) => String(value).replace(/[‘’]/gu, "'").toUpperCase();
 
 function eligibilityProblem(record: CoreRecord, parameters: Record<string, unknown>): string | null {
   const words = (parameters.keywords as string[]).map(upper);

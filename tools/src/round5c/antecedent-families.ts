@@ -33,6 +33,13 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "eligibility-permission": ["subject"],
   "targeting-restriction": ["subject"],
   "move-through": ["subject"],
+  // "that unit has the [LETHAL HITS] ability", "models in that unit have the Feel No Pain 5+ ability".
+  "weapon-ability-grant": ["subject"],
+  "keyword-grant": ["subject"],
+  "feel-no-pain": ["subject"],
+  "regain-wounds": ["subject"],
+  "return-models": ["subject"],
+  "unit-has-ability": ["subject"],
 };
 
 /**

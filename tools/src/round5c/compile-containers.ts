@@ -134,12 +134,16 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
     ...(extra.eligibility ? [extra.eligibility] : []),
   ];
   const eligibility = checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
+  // select-unit v3 counts its own units: exactly that many, or (up to) at most that many.
+  const own = selection.parameters.count as number | undefined;
+  if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size.");
+  const count = own === undefined ? (extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }) : selection.parameters.up_to === true ? { max_count: own } : { count: own };
   return {
     type: "select-units",
     selector: {
       owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
       // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
-      ...(extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }),
+      ...count,
       ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
       ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
       ...(eligibility ? { eligibility } : {}),
@@ -155,6 +159,7 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
   if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
     throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
   }
+  if (selection.parameters.count !== undefined) throw new CompileError("A designated target is one unit; a selection of several has no designate-target shape yet.");
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
   const own = attack.parameters.unit === "this-model";

@@ -46,6 +46,12 @@ export function closed(leaf: CompileLeaf, name: string): unknown {
   return value;
 }
 
+/** A modifier's melee or ranged limit; "all" (or none) limits nothing. */
+function weaponScope(leaf: CompileLeaf): Node {
+  const type = leaf.parameters.weapon_type === undefined ? "all" : closed(leaf, "weapon_type");
+  return type === "all" ? {} : { weapon_type: type };
+}
+
 /** Rolls the attacker makes; when an attack targets this unit, modifiers to them belong to the attacker. */
 const ATTACKER_ROLLS = new Set(["hit", "wound", "damage"]);
 
@@ -120,7 +126,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
       }
       const roll = closed(leaf, "roll");
-      return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
+      return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...weaponScope(leaf) } };
     }
     case "critical-hit-threshold": {
       const value = closed(leaf, "value");
@@ -274,7 +280,10 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       const weaponType = closed(leaf, "weapon_type") ?? "all";
       const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
         type: "stat-modifier", target: owner,
-        modifier: { stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}) },
+        modifier: {
+          stat, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
+          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
+        },
       }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
     }

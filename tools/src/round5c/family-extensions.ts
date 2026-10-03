@@ -1,6 +1,7 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { ANTECEDENT } from "./antecedent-families.js";
-import { UNIT_KEYWORD } from "./buff-families.js";
+import { DICE, EVENT_SUBJECT, type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, type Schema, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { FAMILY_EXTENSIONS_2 } from "./family-extensions-2.js";
 import { ROLL_KINDS } from "./dice-families.js";
 import { enumValue } from "./family-validation.js";
 
@@ -11,62 +12,9 @@ import { enumValue } from "./family-validation.js";
  * leaf still fits it unchanged and `family-versions.ts` moves leaves across by identity.
  */
 
-type Schema = Record<string, unknown>;
-type Normalize = (input: Record<string, unknown>) => Record<string, unknown>;
+export type { FamilyExtension } from "./family-extension-helpers.js";
 
-export type FamilyExtension = {
-  family: string;
-  description: string;
-  /** The new version's schema, from the previous version's. */
-  schema: (previous: Schema) => Schema;
-  /** Check the new parameters; `previous` normalizes a leaf as the previous version does. */
-  normalize: (input: Record<string, unknown>, previous: Normalize) => Record<string, unknown>;
-};
-
-const properties = (schema: Schema) => schema.properties as Record<string, Schema>;
-
-function withProperties(schema: Schema, added: Record<string, Schema>): Schema {
-  return { ...schema, properties: { ...properties(schema), ...added } };
-}
-
-/** The enum of one property with more values, directly or in its anyOf enum branch. */
-function widenedEnum(schema: Schema, key: string, values: readonly string[]): Schema {
-  const property = properties(schema)[key]!;
-  const widen = (list: string[]) => [...list, ...values.filter((value) => !list.includes(value))];
-  return Array.isArray(property.enum)
-    ? { ...property, enum: widen(property.enum as string[]) }
-    : { ...property, anyOf: (property.anyOf as Schema[]).map((item) => Array.isArray(item.enum) ? { ...item, enum: widen(item.enum as string[]) } : item) };
-}
-
-function keywordList(value: unknown, label: string, minimum: number): string[] {
-  if (!Array.isArray(value) || value.length < minimum) throw new TypeError(`${label} must list at least ${minimum} keyword${minimum === 1 ? "" : "s"}.`);
-  const list = value.map((item) => {
-    const keyword = String(item).replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
-    if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`${label} keyword ${JSON.stringify(item)} is not a unit keyword.`);
-    return keyword;
-  });
-  if (new Set(list).size !== list.length) throw new TypeError(`${label} lists a keyword twice.`);
-  return list.sort();
-}
-
-/** Run the previous version with `key` set to a value it accepts, then put the new value back. */
-function standIn(input: Record<string, unknown>, key: string, value: unknown, previous: Normalize): Record<string, unknown> {
-  const original = input[key];
-  const normalized = previous({ ...input, [key]: value });
-  return { ...normalized, [key]: original };
-}
-
-const DICE = /^\d*D(3|6)(\+\d+)?$/u;
-/**
- * An optional parameter a leaf may leave out entirely. Parameter samplers (the leaf-coverage
- * sweep, the describer audit) try a leaf without it as well as with each of its values.
- */
-const optional = (schema: Schema): Schema => ({ ...schema, "x-optional": true });
-const KEYWORD_ITEMS = { type: "string", pattern: UNIT_KEYWORD.source };
-/** Units an effect's own recipient can be, beyond the earlier versions: the unit a trigger names. */
-const EVENT_SUBJECT = "event-subject";
-
-export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
+const FAMILY_EXTENSIONS_1: readonly FamilyExtension[] = [
   {
     // "ADEPTUS ASTARTES INFANTRY/MOUNTED model only": every keyword, plus any one of these.
     family: "bearer-eligibility",
@@ -215,6 +163,9 @@ export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [
     normalize: (input, previous) => input.subject === EVENT_SUBJECT ? standIn(input, "subject", "this-unit", previous) : previous(input),
   },
 ];
+
+/** Every extension in order; a family listed twice gains two versions, the later on top of the earlier. */
+export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2];
 
 const extensionVersions = new Map<string, { extension: FamilyExtension; version: number }>();
 
