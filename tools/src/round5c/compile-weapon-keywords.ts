@@ -11,7 +11,9 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  */
 
 const KEYWORD = "weapon-ability-keyword";
-const isFrame = (leaf: CompileLeaf) => leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined;
+// A frame already folded (it carries `keywords`) is not a frame again: a container option's
+// leaves are compiled a second time, after this fold has run on the whole ability.
+const isFrame = (leaf: CompileLeaf) => leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined && leaf.parameters.keywords === undefined;
 const CHOICE_JOINER = /\bor\b|[■▪•]/iu;
 const ALL_JOINER = /\band\b/iu;
 

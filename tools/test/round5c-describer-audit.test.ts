@@ -39,6 +39,9 @@ describe("Round 5C leaf describer audit", () => {
       // with_keywords and max render only for the composition and enhancement-slot rules. A
       // detachment-tag-exclusive rule needs exactly one keyword, its tag; with none or two it refuses.
       "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 2 },
+      // A copy that leaves models out, comes back at Starting Strength, resets [One Shot] weapons
+      // or goes into Cult Ambush has no DSL field yet, so every such sample refuses to compile.
+      "add-unit": { unrendered: [], colliding: [], problems: 340 },
       // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
       "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
       // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads

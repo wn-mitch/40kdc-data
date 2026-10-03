@@ -192,7 +192,9 @@ export function condition(leaf: CompileLeaf): Node {
       if (kind === "within" || kind === "beyond") {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
-        const node = leaf.parameters.of === "matching-unit"
+        const node = leaf.parameters.of === "marker"
+          ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          : leaf.parameters.of === "matching-unit"
           ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of !== undefined
           ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)

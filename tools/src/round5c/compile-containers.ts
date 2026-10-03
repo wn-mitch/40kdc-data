@@ -25,6 +25,8 @@ const LEADING_CONTAINERS = new Set([
 ]);
 /** Openers that wrap a single combined body instead of splitting into two or more options. */
 const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-objective-open"]);
+/** Openers each of whose options leads with a named-option leaf. */
+const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open"]);
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
 const ONE_OR_MORE_CONTAINERS = new Set(["resource-action-menu-open"]);
 
@@ -190,18 +192,31 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
  * reroll inside it targets the same bearer the container itself names, not a second default.
  */
 function effectsOf(leaves: readonly CompileLeaf[], attacker: string | null = null): Node {
-  const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
-  if (bad) throw new CompileError(`An option here can only hold effect leaves; ${bad.family_id} has no place inside it.`);
   if (leaves.length === 0) throw new CompileError("An option has no effect.");
+  const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
+  if (bad) {
+    // An option with its own moment or conditions ("Each time a model in this unit makes a
+    // Pile-in move, …") compiles like a whole ability of its own, as one ability-part.
+    if (nestedCompiler) return nestedCompiler(leaves);
+    throw new CompileError(`An option here can only hold effect leaves; ${bad.family_id} has no place inside it.`);
+  }
   const nodes = leaves.map((leaf) => effect(leaf, { attached: false, attacker, incoming: false }));
   return nodes.length === 1 ? nodes[0]! : { type: "sequence", steps: nodes };
 }
+
+/**
+ * Compiles an option's leaves as a self-contained ability (trigger, conditions, effects), set by
+ * `planContainers` for the duration of one plan: `compile.ts` owns that pipeline, and passing it in
+ * keeps this module free of an import cycle.
+ */
+let nestedCompiler: ((leaves: readonly CompileLeaf[]) => Node) | null = null;
 
 /** A named option's leading `named-option` leaf, and the plain effect leaves after it. */
 function namedOption(group: readonly CompileLeaf[], forRequirement: boolean): { name: unknown; effect: Node; marker: CompileLeaf } {
   const marker = group[0];
   if (!marker || marker.family_id !== "named-option") throw new CompileError("Each option here needs a leading named-option leaf giving its name.");
-  if (forRequirement === (marker.parameters.requirement_type === undefined)) {
+  const hasRequirement = marker.parameters.requirement_type !== undefined || marker.parameters.requirement_any_of !== undefined;
+  if (forRequirement !== hasRequirement) {
     throw new CompileError(forRequirement
       ? "A dice-pool-allocation option's named-option leaf needs a dice requirement."
       : "This option's named-option leaf carries a dice requirement, but nothing here uses one.");
@@ -255,7 +270,10 @@ function buildIssueOrders(head: CompileLeaf, groups: CompileLeaf[][]): Node {
 function buildDicePoolAllocation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   const options = groups.map((group) => {
     const { name, effect: optionEffect, marker } = namedOption(group, true);
-    return { name, requirement: { type: closed(marker, "requirement_type"), min_value: closed(marker, "requirement_min_value") }, effect: optionEffect };
+    const requirement = marker.parameters.requirement_any_of !== undefined
+      ? { any_of: closed(marker, "requirement_any_of") }
+      : { type: closed(marker, "requirement_type"), min_value: closed(marker, "requirement_min_value") };
+    return { name, requirement, effect: optionEffect };
   });
   return {
     type: "dice-pool-allocation",
@@ -434,7 +452,19 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  * opener itself keeps its own index and role (EFFECT), becoming one ordinary planned effect whose
  * node is `nodes.get(openerIndex)`.
  */
-export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonly number[]): ContainerPlan {
+export function planContainers(
+  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[]) => Node) | null = null,
+): ContainerPlan {
+  const outer = nestedCompiler;
+  nestedCompiler = nested;
+  try {
+    return planContainerNodes(list, sentenceOf);
+  } finally {
+    nestedCompiler = outer;
+  }
+}
+
+function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   list.forEach((leaf, index) => {
@@ -442,9 +472,13 @@ export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonl
     const groups: CompileLeaf[][] = [];
     let current: CompileLeaf[] = [];
     let currentSentence: number | null = null;
+    // Under a named-option container each option begins at its marker, whatever the punctuation
+    // ("roll one D6: on a 4+" stays in one option; a heading with no full stop does not leak).
+    const byMarker = NAMED_OPTION_CONTAINERS.has(leaf.family_id);
     for (let cursor = index + 1; cursor < list.length && !LEADING_CONTAINERS.has(list[cursor]!.family_id); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
-      if (currentSentence === null || sentence !== currentSentence) {
+      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence;
+      if (starts) {
         if (current.length) groups.push(current);
         current = [];
         currentSentence = sentence;
@@ -462,6 +496,13 @@ export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonl
         for (const returned of groups.pop()!) consumed.delete(list.indexOf(returned));
       }
     }
+    // Ability-wide sentences between an opener and its first named option ("You can only activate
+    // each one once per battle round", "until the end of the battle round") carry no option of
+    // their own; their leaves go back to the ordinary pipeline, which already places a usage
+    // limit, a duration or a gate on the whole ability.
+    if (byMarker && groups.length && groups[0]![0]!.family_id !== "named-option" && groups[0]!.every((item) => item.role !== "EFFECT")) {
+      for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
+    }
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {
       if (groups.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
     } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {
@@ -469,7 +510,16 @@ export function planContainers(list: readonly CompileLeaf[], sentenceOf: readonl
     } else if (groups.length < 2) {
       throw new CompileError(`${leaf.family_id} needs at least two options after it, one sentence each.`);
     }
-    nodes.set(index, buildContainer(leaf, groups));
+    // An option compiles as a whole ability only where its bounds are certain: a named option's
+    // marker, or a single body. Sentence-split options ("…; if that test is passed, gain 1CP")
+    // can cut one option in two, so those keep refusing a non-effect leaf.
+    const outer = nestedCompiler;
+    if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id)) nestedCompiler = null;
+    try {
+      nodes.set(index, buildContainer(leaf, groups));
+    } finally {
+      nestedCompiler = outer;
+    }
   });
   return { nodes, consumed };
 }

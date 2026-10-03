@@ -128,6 +128,12 @@ export function mergeStackedFilters(list: readonly CompileLeaf[]): CompileLeaf[]
 }
 
 export function foldUnitFilters(input: readonly CompileLeaf[]): CompileLeaf[] {
+  const held = input.find((leaf) => isFilter(leaf) && leaf.parameters.held_in !== undefined);
+  if (held) {
+    throw new CompileError(held.parameters.held_in === "cult-ambush"
+      ? "A unit in Cult Ambush has no DSL shape: the DSL unit-state lists in-strategic-reserves but no Cult Ambush."
+      : "A unit-filter for units held in Strategic Reserves is not lowered yet.");
+  }
   if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...input];
   const list = mergeStackedFilters(input);
   const out: CompileLeaf[] = [];

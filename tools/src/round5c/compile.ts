@@ -224,6 +224,22 @@ function isAdvanceInPlace(node: Node): boolean {
 
 type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
+/**
+ * A container option that carries its own moment or conditions, compiled as a whole ability and
+ * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
+ */
+function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined): Node {
+  const compiled = compileLeaves(group, sourceText);
+  if (!compiled.ok) throw new CompileError(compiled.errors[0]!);
+  const { effect: body, trigger: moment, usage, scope } = compiled.mechanics;
+  if (!moment && !usage && (scope.duration === undefined || scope.duration === "permanent")) return body;
+  const part: Node = { type: "ability-part", effect: body };
+  if (moment) part.trigger = moment;
+  if (usage) part.usage = usage;
+  if (scope.duration !== undefined && scope.duration !== "permanent") part.duration = scope.duration;
+  return part;
+}
+
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
@@ -252,7 +268,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
