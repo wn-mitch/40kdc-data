@@ -4901,6 +4901,10 @@ export interface MoveEffect {
       | "pulse-jet";
     distance?: Quantity;
     /**
+     * The move is made as if it were your Movement phase, outside it.
+     */
+    as_if?: "movement-phase";
+    /**
      * @minItems 1
      */
     passthrough?: [

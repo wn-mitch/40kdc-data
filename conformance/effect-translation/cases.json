@@ -21816,6 +21816,24 @@
     }
   },
   {
+    "caseId": "fidelity/move-as-if-movement-phase",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "as_if": "movement-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can make a Normal move of up to 6\" as if it were your Movement phase."
+    }
+  },
+  {
     "caseId": "fidelity/add-unit-copy-cult-ambush",
     "effect": {
       "type": "add-unit",

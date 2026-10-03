@@ -191,4 +191,23 @@ describe("describer readings the earlier rounds pinned as collisions", () => {
         .toContain(`as if it were your ${words} phase`);
     }
   });
+
+  it("folds \"as if it were your Movement phase\" into the move before it, and refuses any other phase there", () => {
+    const text = 'That unit can make a Normal move of up to 6" as if it were your Movement phase.';
+    const move = { subject: "this-unit", move_type: "normal", distance: 6 };
+    const mechanics = compiled(placed(text, [
+      ["That unit can make a Normal move of up to 6", "make-move", move],
+      ["as if it were your Movement phase", "phase-window", { phase: "movement", turn: "your" }],
+    ]));
+    expect(nodes(mechanics, (node) => node.type === "move")[0]!.modifier).toMatchObject({ move_type: "normal", distance: 6, as_if: "movement-phase" });
+    // The hypothetical phase is not a real-phase gate on the ability.
+    expect(nodes(mechanics, (node) => node.type === "phase")).toEqual([]);
+    expect(schemaErrors(mechanics)).toEqual([]);
+    expect(() => compiled(placed(text.replace("Movement", "Charge"), [
+      ["That unit can make a Normal move of up to 6", "make-move", move],
+      ["as if it were your Charge phase", "phase-window", { phase: "charge", turn: "your" }],
+    ]))).toThrow(/DSL_GAP: a move cannot act as if it were the charge phase/u);
+    expect(describeAbility({ effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } }, scope: { duration: "resolution" } } as never))
+      .toContain('make a Normal move of up to 6" as if it were your Movement phase');
+  });
 });

@@ -132,6 +132,9 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         None => String::new(),
     };
     let mut s = format!("{subj} can {verb}{up_to}{}", mode_clause(m));
+    if m.get("as_if").and_then(|v| v.as_str()) == Some("movement-phase") {
+        s.push_str(" as if it were your Movement phase");
+    }
     if let Some(p) = arr(m, "passthrough") {
         s.push_str(&format!(
             ", moving over {} as though they were not there",

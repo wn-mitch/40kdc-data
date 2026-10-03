@@ -3665,6 +3665,7 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/permission-as-if-charge-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "declare-charge", allow: true, as_if: "charge-phase" } } },
     { caseId: "fidelity/permission-as-if-command-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "command-phase" } } },
     { caseId: "fidelity/permission-as-if-movement-phase", effect: { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, as_if: "movement-phase" } } },
+    { caseId: "fidelity/move-as-if-movement-phase", effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } } },
     { caseId: "fidelity/add-unit-copy-cult-ambush", effect: { type: "add-unit", target: "this-unit", modifier: { copy_of: "event-object", count: 1, excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, placement: "cult-ambush" } } },
     { caseId: "fidelity/condition-in-cult-ambush", effect: { type: "conditional", condition: { type: "unit-state", parameters: { state: "in-cult-ambush" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
     { caseId: "fidelity/filter-not-states-not-all-of", effect: { type: "mortal-wounds", target: { owner: "enemy", not_states: ["engaged", "battle-shocked"], not_all_of: ["MONSTER", "CHARACTER"] }, modifier: { count: 1 } } },

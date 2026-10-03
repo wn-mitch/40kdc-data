@@ -211,6 +211,9 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 	}
 	s := subj + " can " + verb + upTo + moveModeClause(m)
+	if m["as_if"] == "movement-phase" {
+		s += " as if it were your Movement phase"
+	}
 	if _, ok := asList(m["passthrough"]); ok {
 		s += ", moving over " + passthroughList(m["passthrough"]) + " as though they were not there"
 	}

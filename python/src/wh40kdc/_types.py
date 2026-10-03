@@ -3680,6 +3680,7 @@ class Modifier33(TypedDict):
         "pulse-jet",
     ]
     distance: NotRequired[Quantity]
+    as_if: NotRequired[Literal["movement-phase"]]
     passthrough: NotRequired[
         list[
             Literal[

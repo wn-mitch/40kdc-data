@@ -387,6 +387,8 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         d = dice_case(m["distance"])
         up_to = f' of up to {d}"' if verb.startswith("make ") else f' up to {d}"'
     s = f"{subj} can {verb}{up_to}{_mode_clause(m)}"
+    if m.get("as_if") == "movement-phase":
+        s += " as if it were your Movement phase"
     if isinstance(m.get("passthrough"), list):
         s += f", moving over {_passthrough(m['passthrough'])} as though they were not there"
     ends = m.get("ends_within")

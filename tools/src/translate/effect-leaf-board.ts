@@ -134,6 +134,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const verb = MOVE_VERBS[jstr(m.move_type)] ?? `make a ${dekebab(jstr(m.move_type))} move`;
   const upTo = m.distance != null ? (verb.startsWith("make ") ? ` of up to ${diceCase(m.distance)}"` : ` up to ${diceCase(m.distance)}"`) : "";
   let s = `${subj} can ${verb}${upTo}${modeClause(m)}`;
+  if (m.as_if === "movement-phase") s += " as if it were your Movement phase";
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;

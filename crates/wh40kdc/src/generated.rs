@@ -26783,6 +26783,12 @@ for MortalWoundsEffectModifierRollPerModel {
 ///    "allow_engagement": {
 ///      "const": true
 ///    },
+///    "as_if": {
+///      "description": "The move is made as if it were your Movement phase, outside it.",
+///      "enum": [
+///        "movement-phase"
+///      ]
+///    },
 ///    "counts_as_move": {
 ///      "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
 ///      "enum": [
@@ -26915,6 +26921,9 @@ for MortalWoundsEffectModifierRollPerModel {
 pub struct MoveEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub allow_engagement: ::std::option::Option<::serde_json::Value>,
+    ///The move is made as if it were your Movement phase, outside it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if: ::std::option::Option<MoveEffectModifierAsIf>,
     ///The move counts as this kind of move for rules that check what the unit did this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<MoveEffectModifierCountsAsMove>,
@@ -26932,6 +26941,77 @@ pub struct MoveEffectModifier {
     pub move_type: MoveEffectModifierMoveType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<Vec<MoveEffectModifierPassthroughItem>>,
+}
+///The move is made as if it were your Movement phase, outside it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The move is made as if it were your Movement phase, outside it.",
+///  "enum": [
+///    "movement-phase"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierAsIf {
+    #[serde(rename = "movement-phase")]
+    MovementPhase,
+}
+impl ::std::fmt::Display for MoveEffectModifierAsIf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MovementPhase => f.write_str("movement-phase"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierAsIf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "movement-phase" => Ok(Self::MovementPhase),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///The move counts as this kind of move for rules that check what the unit did this turn.
 ///
