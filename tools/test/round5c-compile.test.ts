@@ -131,6 +131,21 @@ describe("Round 5C leaf compiler", () => {
     expect(JSON.stringify(result.mechanics)).toContain('{"type":"ability-grant","target":"selected-unit","modifier":{"ability":"infiltrators"}}');
   });
 
+  it("measures a distance or engagement to the unit-filter right after it", () => {
+    const result = compiled([
+      leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")),
+      leaf("CONDITION", "unit-filter", { side: "friendly", states: ["unengaged"] }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", with: "following-filter", negated: false }, currentFamilyVersion("unit-state")),
+      leaf("CONDITION", "unit-filter", { side: "friendly", keywords: ["VEHICLE"] }, currentFamilyVersion("unit-filter")),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"type":"within","parameters":{"of":{"owner":"friendly","not_states":["engaged"]},"range":{"inches":8}}');
+    expect(text).toContain('"type":"unit-state","parameters":{"state":"engaged","with":{"owner":"friendly","all_of":["VEHICLE"]}}');
+    const missing = compileLeaves([leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]);
+    expect(missing.ok ? "" : missing.errors.join()).toMatch(/no unit-filter follows it/u);
+  });
+
   it("negates where a move cannot end, and keeps must as the default", () => {
     const leaves = (polarity?: string) => [
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }, 2),

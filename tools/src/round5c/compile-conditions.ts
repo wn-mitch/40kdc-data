@@ -118,6 +118,13 @@ function widenedWho(value: unknown): string | undefined {
   return subject;
 }
 
+/** The unit-filter right after a distance or engagement (compile-unit-filters.ts), as its other unit. */
+function followingFilter(leaf: CompileLeaf): Node {
+  const filter = leaf.parameters.following_filter as Node | undefined;
+  if (filter === undefined) throw new CompileError(`${leaf.family_id} measures to the unit-filter after it, but no unit-filter follows it in its clause.`);
+  return structuredClone(filter);
+}
+
 /** Stands in for a folded filter's units while a condition lowers; replaced by the filter itself. */
 const FILTER_STAND_IN = "__filtered-units__";
 
@@ -180,6 +187,7 @@ export function condition(leaf: CompileLeaf): Node {
         // Version 7: some unit is embarked within the subject (a Transport carries units).
         if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
         // Version 5: engaged with one named unit, the DSL's `with`.
+        if (leaf.parameters.with === "following-filter") return pred("unit-state", { state, with: followingFilter(leaf) }, subject);
         if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) }, subject);
         // Version 8: "in Reserves" is Strategic Reserves in the rules; the DSL has only that state.
         return pred("unit-state", { state: state === "in-reserves" ? "in-strategic-reserves" : state }, subject);
@@ -249,6 +257,8 @@ export function condition(leaf: CompileLeaf): Node {
           ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of === "battlefield-edge"
           ? pred("within", { of: "battlefield-edge", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          : leaf.parameters.of === "following-filter"
+          ? pred("within", { of: followingFilter(leaf), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of === "matching-unit"
           ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
           : leaf.parameters.of !== undefined

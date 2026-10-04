@@ -103,9 +103,9 @@ describe("Round 5C anaphoric subjects", () => {
 
   it("accepts antecedent only from the new version, which every earlier leaf still fits", () => {
     const old = { states: ["engaged"], subject: "selected-unit", negated: false };
-    expect(currentFamilyVersion("unit-state")).toBe(8);
+    expect(currentFamilyVersion("unit-state")).toBe(9);
     expect(normalizeFingerprintParameters("unit-state", old, 5)).toEqual(old);
-    expect(mapToLatest("unit-state", 5, old)).toEqual({ family: "unit-state", version: 8, parameters: old });
+    expect(mapToLatest("unit-state", 5, old)).toEqual({ family: "unit-state", version: 9, parameters: old });
     expect(() => normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent" }, 5)).toThrow(/subject must be one of/u);
     expect(normalizeFingerprintParameters("unit-state", { ...old, subject: "antecedent" }, 6)).toEqual({ ...old, subject: "antecedent" });
     // Both ends of one leaf can point back, and each stays its own value.

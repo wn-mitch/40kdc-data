@@ -1,4 +1,5 @@
 import { FILTERED_UNITS } from "./compile-antecedent.js";
+import { FOLLOWING_FILTER } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
@@ -234,6 +235,13 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     } else if (leaf.family_id === "select-unit" && openAura(next)) {
       out.push(leaf);
       reach(out, next) && (index += 1);
+    } else if (isFilter(leaf) && followedBy(out.at(-1), leaf)) {
+      // "within 8\" of a" + "friendly unengaged unit": the other unit of the distance or engagement
+      // before it. A "from your army" after it is the filter's own wording.
+      const at = pastOwners(list, index, leaf);
+      const condition = out.at(-1)!;
+      out[out.length - 1] = { ...condition, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf) } };
+      index = at - 1;
     } else if (isFilter(leaf) && openAura(next)) {
       if (leaf.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
       out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura"), filter: filterOf(leaf) } });
@@ -324,6 +332,12 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     }
   }
   return out;
+}
+
+/** A distance or engagement in the filter's fragment whose other unit is the filter right after it. */
+function followedBy(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  return leaf !== undefined && leaf.fragment === filter.fragment && leaf.parameters.following_filter === undefined
+    && (leaf.parameters.of === FOLLOWING_FILTER || leaf.parameters.with === FOLLOWING_FILTER);
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */

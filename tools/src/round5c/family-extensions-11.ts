@@ -7,6 +7,9 @@ import { enumValue } from "./family-validation.js";
  * additions and hands the rest to the previous one.
  */
 
+/** A distance or engagement whose other unit is the unit-filter right after the leaf. */
+export const FOLLOWING_FILTER = "following-filter";
+
 export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   {
     // "but cannot end that move within Engagement Range of them".
@@ -19,6 +22,21 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
       const value = enumValue(polarity, ["must", "cannot"], "move-must-end.polarity");
       return value === "must" ? previous(rest) : { ...previous(rest), polarity: "cannot" };
     },
+  },
+  {
+    // "ends a move within 8\" of a" + "friendly unengaged unit": the distance is measured to the
+    // units of the unit-filter right after it in its clause (compile-unit-filters.ts folds it).
+    family: "unit-position",
+    description: "As the previous version, plus of following-filter: the distance is to any unit the unit-filter right after this leaf, in the same clause, matches (\"within 8\\\" of a\" + \"friendly unengaged unit\").",
+    schema: (previous) => withProperties(previous, { of: widenedEnum(previous, "of", [FOLLOWING_FILTER]) }),
+    normalize: (input, previous) => input.of === FOLLOWING_FILTER ? { ...previous({ ...input, of: "this-unit" }), of: FOLLOWING_FILTER } : previous(input),
+  },
+  {
+    // "engaged with one or more" + "friendly GREY KNIGHTS VEHICLE units".
+    family: "unit-state",
+    description: "As the previous version, plus with following-filter: engaged with any unit the unit-filter right after this leaf, in the same clause, matches.",
+    schema: (previous) => withProperties(previous, { with: widenedEnum(previous, "with", [FOLLOWING_FILTER]) }),
+    normalize: (input, previous) => input.with === FOLLOWING_FILTER ? { ...previous({ ...input, with: "this-unit" }), with: FOLLOWING_FILTER } : previous(input),
   },
   // "Friendly WORLD EATERS units' melee attacks have +1 A": the units a bare filter before the
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
