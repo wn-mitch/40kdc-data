@@ -50,7 +50,9 @@ const FILTER_ANCHORS = new Set(["select-unit", "stratagem-target", "attack"]);
 function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   const leaf = leaves[index]!;
   let at = index - 1;
-  while (at >= 0 && leaves[at]!.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at -= 1;
+  // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
+  while (at >= 0 && leaves[at]!.fragment === leaf.fragment
+    && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!)))) at -= 1;
   const filter = leaves[at];
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
   const before = leaves[at - 1];
@@ -212,13 +214,16 @@ export function bindAntecedents(leaves: readonly CompileLeaf[]): CompileLeaf[] {
     }
     // "While an enemy unit is within Engagement Range of this unit": a condition on the units a
     // bare filter matches holds when any of them meets it. When a later leaf also points back
-    // ("If a friendly X unit is …, that unit …"), the condition is per recipient instead, which
-    // this binding does not say.
-    if (introduced === FILTERED_UNITS && leaf.role === "CONDITION" && leaves.slice(index + 1).some(hasAntecedent)) {
-      throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} tests the units of a unit-filter that a later leaf points back to; a per-recipient condition cannot compile yet.`);
-    }
+    // ("If a friendly X unit is …, that unit …"), the condition is per recipient instead: each
+    // unit the effect's filter matches receives it only while that unit meets the condition.
+    const perRecipient = introduced === FILTERED_UNITS && leaf.role === "CONDITION" && leaves.slice(index + 1).some(hasAntecedent);
     const parameters = { ...leaf.parameters };
     for (const key of keys) {
+      if (perRecipient) {
+        if (boundValue(leaf, key, AURA_RECIPIENT) === null) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} tests each unit a later effect's filter matches, which its ${key} cannot name.`);
+        parameters[key] = AURA_RECIPIENT;
+        continue;
+      }
       // The record's own unit is the unit or its model, whichever the family can name here.
       const own = ownRole(leaves);
       const role = introduced ?? (boundValue(leaf, key, own) === null ? (own === "this-unit" ? "this-model" : "this-unit") : own);

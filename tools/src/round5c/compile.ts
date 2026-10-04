@@ -224,6 +224,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // AND together and the ability could never apply).
   const sizeRows = new Set(list.filter((leaf) => leaf.family_id === "battle-size").map((leaf) => String(leaf.parameters.size))).size >= 2;
 
+  // Outside an aura or a for-each, a condition about the recipient is about each unit an effect's filter matches.
+  const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
   list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
     // A container opener's options are folded into its own node (`containerNodes.get(index)`,
@@ -263,6 +265,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         // sentence are headings over the same effect, and neither says what its size decides.
         const other = list.find((item, at) => at !== index && item.family_id === "battle-size" && places[at]!.sentence === sentence && item.parameters.size !== leaf.parameters.size);
         if (!effectSentences.has(sentence) || other) throw new CompileError(`A ${String(leaf.parameters.size)} row has no effect or count in its sentence for its battle size to decide.`);
+        sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
+      }
+      // "If a friendly X unit is …, that unit's …": a per-recipient condition (compile-antecedent.ts)
+      // is about the units of its own sentence's effect, so it gates only that sentence.
+      else if (leaf.role === "CONDITION" && perRecipient && effectSentences.has(sentence) && Object.values(leaf.parameters).includes("recipient")) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));

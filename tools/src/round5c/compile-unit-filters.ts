@@ -328,9 +328,13 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // "Friendly **K** units (from your army)" + "have the Scouts ability": every unit it
       // matches receives the effect. A "from your army" between them is the filter's own wording.
       const at = filteredAfter(list, index)!;
-      const owners = list.slice(index + 1, at);
+      const between = list.slice(index + 1, at);
+      const owners = between.filter((other) => other.family_id === "unit-owner");
       if (owners.some((owner) => owner.parameters.owner !== leaf.parameters.side)) throw new CompileError("A unit-filter and the \"from your army\" after it name different sides.");
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+      // "If a friendly X unit" + "is within range of an objective" + "that unit's …": the per-recipient
+      // conditions (compile-antecedent.ts) stay ahead of the effect, about its recipient.
+      out.push(...between.filter((other) => other.family_id !== "unit-owner"));
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
       // "Friendly X units' melee attacks have +1 A and +1 S": every property of one scope after the
@@ -435,10 +439,14 @@ function postfixRecipient(leaf: CompileLeaf | undefined): boolean {
   return leaf !== undefined && leaf.role === "EFFECT" && leaf.parameters.subject_filter === undefined && Object.values(leaf.parameters).includes(FILTERED_UNITS);
 }
 
+/** A condition about each recipient of the filter's effect, in the filter's fragment (compile-antecedent.ts). */
+const perRecipientCondition = (leaf: CompileLeaf | undefined, filter: CompileLeaf) =>
+  leaf !== undefined && leaf.role === "CONDITION" && leaf.fragment === filter.fragment && Object.values(leaf.parameters).includes(AURA_RECIPIENT);
+
 /** The index of the leaf a bare unit-filter's units receive (`FILTERED_UNITS`), past any "from your army". */
 function filteredAfter(list: readonly CompileLeaf[], index: number): number | null {
   let at = index + 1;
-  while (list[at]?.family_id === "unit-owner") at += 1;
+  while (list[at]?.family_id === "unit-owner" || perRecipientCondition(list[at], list[index]!)) at += 1;
   const leaf = list[at];
   return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
 }

@@ -104,7 +104,7 @@ describe("Round 5C leaf compiler", () => {
     expect(effect.modifier.ends_when?.operands).toHaveLength(2);
   });
 
-  it("tests a condition on a bare filter's units as any unit that meets it, and refuses a per-recipient reading", () => {
+  it("tests a condition on a bare filter's units as any unit that meets it, or per recipient when a later leaf points back", () => {
     const unitState = currentFamilyVersion("unit-state");
     // The later leaf is built after the gate's two, so it sits after them in the source.
     const gate = (later: () => CompileLeaf) => compileLeaves([
@@ -119,8 +119,12 @@ describe("Round 5C leaf compiler", () => {
     expect(text).toMatch(/"subject":\{[^}]*"owner":"enemy"[^}]*"all_of":\["MONSTER"\]/u);
     expect(text).not.toContain("filtered-units");
     const perRecipient = gate(() => leaf("EFFECT", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "add", value: 1 }, currentFamilyVersion("characteristic-modifier")));
-    expect(perRecipient.ok).toBe(false);
-    expect(perRecipient.ok ? "" : perRecipient.errors.join()).toMatch(/per-recipient/u);
+    if (!perRecipient.ok) throw new Error(perRecipient.errors.join("; "));
+    expect(perRecipient.mechanics).toMatchObject({ effect: {
+      type: "conditional",
+      condition: { type: "unit-state", parameters: { subject: "recipient", state: "engaged" } },
+      effect: { type: "stat-modifier", target: { owner: "enemy", all_of: ["MONSTER"] } },
+    } });
   });
 
   it("binds a selected unit to a key lowered as any unit-ref, even when the family's enum does not list it", () => {

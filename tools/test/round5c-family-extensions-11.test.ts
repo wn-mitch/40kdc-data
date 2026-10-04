@@ -193,3 +193,19 @@ describe("a change to a test another unit takes", () => {
     expect(JSON.stringify(result.mechanics)).toContain('"type":"roll-modifier","target":"recipient","modifier":{"roll":"desperate-escape"');
   });
 });
+
+describe("a condition on each unit a filter names", () => {
+  it("gates the effect per recipient, and only its own sentence", () => {
+    const text = "If a friendly GRAVIS unit is within range of an objective, that unit's melee attacks have +1 A. This unit has +1 Move.";
+    const result = compileLeaves(placed(text, "RAW_TEXT",
+      ["friendly GRAVIS unit", "unit-filter", { side: "friendly", keywords: ["GRAVIS"] }],
+      ["within range of an objective", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "antecedent", negated: false }],
+      ["that unit's melee attacks have", "weapon-property-scope", { subject: "antecedent", weapon_type: "melee" }],
+      ["+1 A", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }],
+      ["This unit has +1 Move", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1 }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const steps = (result.mechanics as { effect: { steps: Array<Record<string, unknown>> } }).effect.steps;
+    expect(steps[0]).toMatchObject({ type: "conditional", condition: { type: "within", parameters: { subject: "recipient" } }, effect: { target: { owner: "friendly", all_of: ["GRAVIS"] } } });
+    expect(steps[1]).toMatchObject({ type: "stat-modifier", target: "this-unit" });
+  });
+});
