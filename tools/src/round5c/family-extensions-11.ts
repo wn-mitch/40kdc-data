@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "./antecedent-families.js";
-import { activitiesExtension, type FamilyExtension, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { activitiesExtension, type FamilyExtension, keywordList, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue } from "./family-validation.js";
 
 /**
@@ -74,6 +74,31 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   // "whose attacks have been resolved this phase": the unit has finished its attacks, which is
   // more than being selected to shoot or fight.
   activitiesExtension(["resolved-attacks-this-phase"], "resolved-attacks-this-phase: the subject has resolved its attacks this phase"),
+  {
+    // "While a FARSEER model is leading this unit"; "unless it is leading a unit"; "while that unit
+    // is being led".
+    family: "leading-unit",
+    description: "As the previous version, plus attachment led (the subject unit is led by a Leader; leader_keywords: that Leader has every one of these keywords), negated (the attachment does not hold), and subject antecedent or selected-unit.",
+    schema: (previous) => withProperties(previous, {
+      attachment: widenedEnum(previous, "attachment", ["led"]),
+      subject: widenedEnum(previous, "subject", [ANTECEDENT, "selected-unit"]),
+      leader_keywords: optional({ type: "array", items: { type: "string" }, minItems: 1, uniqueItems: true, "x-only-when": { attachment: ["led"] } }),
+      negated: optional({ type: "boolean" }),
+    }),
+    normalize: (input, previous) => {
+      const { leader_keywords: leaders, negated, ...rest } = input;
+      if (negated !== undefined && typeof negated !== "boolean") throw new TypeError("leading-unit.negated is true or false.");
+      if (leaders !== undefined && rest.attachment !== "led") throw new TypeError("leading-unit.leader_keywords names the Leader of a led unit (attachment led).");
+      const subject = rest.subject;
+      const standIn = { ...rest, ...(rest.attachment === "led" ? { attachment: "leading" } : {}), ...(subject === ANTECEDENT || subject === "selected-unit" ? { subject: "this-unit" } : {}) };
+      const normalized = previous(standIn);
+      return {
+        ...normalized, attachment: rest.attachment, ...(subject === ANTECEDENT || subject === "selected-unit" ? { subject } : {}),
+        ...(leaders !== undefined ? { leader_keywords: keywordList(leaders, "leading-unit.leader_keywords", 1) } : {}),
+        ...(negated === true ? { negated: true } : {}),
+      };
+    },
+  },
   // "Friendly WORLD EATERS units' melee attacks have +1 A": the units a bare filter before the
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),

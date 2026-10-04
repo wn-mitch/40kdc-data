@@ -56,6 +56,7 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "targeting-restriction": ["by", "target"],
   "weapon-property-scope": ["subject"],
   "ignore-modifiers": ["subject"],
+  "leading-unit": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

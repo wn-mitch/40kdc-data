@@ -159,11 +159,24 @@ export function condition(leaf: CompileLeaf): Node {
   const who = target ? "defender" : undefined;
   switch (leaf.family_id) {
     case "leading-unit": {
+      // Version 5: "unless it is leading a unit" negates; a led unit is the bodyguard's view.
+      if (leaf.parameters.negated === true) return negate(condition({ ...leaf, parameters: { ...leaf.parameters, negated: false } }));
+      if (leaf.parameters.attachment === "led") {
+        const leaders = leaf.parameters.leader_keywords === undefined ? {} : { with: { all_of: closed(leaf, "leader_keywords") } };
+        const subject = String(closed(leaf, "subject"));
+        return pred("attachment", { role: "led", ...leaders }, subject === "this-model" || subject === "bearers-unit" ? "this-unit" : widenedWho(subject));
+      }
       // A Leader is a model, so this model, this unit and the bearer's unit leading all say the
       // Leader model is leading. Version 1 leaves only ever meant leading.
       const attachment = leaf.family_version >= 2 ? closed(leaf, "attachment") : "leading";
       // Version 4: the unit it is attached to has these keywords.
       const attachedTo = leaf.parameters.attached_to_keywords === undefined ? {} : { with: { all_of: closed(leaf, "attached_to_keywords") } };
+      // Version 5: another model or unit ("that CHARACTER model is leading a unit").
+      const named = String(closed(leaf, "subject"));
+      if (!["this-model", "this-unit", "bearers-unit"].includes(named)) {
+        if (attachment === "supporting") throw new CompileError("leading-unit supporting for another unit has no DSL condition yet.");
+        return pred("attachment", { role: attachment === "leading" ? "leading" : "attached", ...attachedTo }, widenedWho(named));
+      }
       if (attachment === "leading") return pred("attachment", { role: "leading", ...attachedTo }, "this-model");
       // Attached in either role: the model, or the unit (the bearer's unit is this unit), is part of an attached unit.
       if (attachment === "any") return pred("attachment", { role: "attached", ...attachedTo }, closed(leaf, "subject") === "this-model" ? "this-model" : "this-unit");

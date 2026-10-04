@@ -55,3 +55,15 @@ describe("Round 5C family extensions, eleventh round", () => {
       .toThrow(/at reads only/u);
   });
 });
+
+describe("leading-unit from the led unit's side", () => {
+  it("says this unit is led by a Leader with keywords, negates, and names a selected unit", () => {
+    const text = (parameters: Record<string, unknown>) => JSON.stringify(mechanicsOf(leaves(["leading-unit", parameters], heal())));
+    expect(text({ subject: "this-unit", attachment: "led", leader_keywords: ["FARSEER"] }))
+      .toContain('{"type":"attachment","parameters":{"role":"led","with":{"all_of":["FARSEER"]}}}');
+    expect(text({ subject: "this-model", attachment: "leading", negated: true })).toContain('"operator":"not"');
+    expect(text({ subject: "selected-unit", attachment: "led" })).toContain('"subject":"selected-unit"');
+    expect(() => normalizeFingerprintParameters("leading-unit", { subject: "this-model", attachment: "leading", leader_keywords: ["FARSEER"] }, currentFamilyVersion("leading-unit")))
+      .toThrow(/attachment led/u);
+  });
+});

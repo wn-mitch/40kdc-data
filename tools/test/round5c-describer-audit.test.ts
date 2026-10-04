@@ -18,9 +18,10 @@ describe("Round 5C leaf describer audit", () => {
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
       // A Leader is a model, so leading never shows the subject. Supporting compiles only for this
       // model, as part of an attached unit, which is also what attached in any role reads as; a
-      // supporting unit or bearer's unit has no DSL condition. Supporting a named unit has no DSL
-      // condition.
-      "leading-unit": { unrendered: [], colliding: ["subject", "attachment"], problems: 8 },
+      // supporting unit or bearer's unit has no DSL condition. Supporting a named unit, or another
+      // unit supporting, has no DSL condition (negated or not). attached_to_keywords: a led unit's
+      // Leader keywords and the attached unit's keywords both read as "with".
+      "leading-unit": { unrendered: [], colliding: ["subject", "attachment", "attached_to_keywords"], problems: 22 },
       // Who attacks and which way only show in the effect's target, not in text of their own.
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.

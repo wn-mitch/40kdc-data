@@ -5,7 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
 import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, qualifiedAt, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
@@ -332,7 +332,7 @@ describe("Round 5C family versions", () => {
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2 });
       expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
-      expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: 4, parameters: { subject: "this-model", attachment: "leading" } })]);
+      expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: currentFamilyVersion("leading-unit"), parameters: { subject: "this-model", attachment: "leading" } })]);
       expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 13, parameters: { kind: "after-shooting" } })]);
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(lead)).toEqual({ status: "superseded" });
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(odd)).toEqual({ status: "active" });
