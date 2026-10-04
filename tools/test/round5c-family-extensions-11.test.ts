@@ -86,6 +86,49 @@ describe("designations each rule prints", () => {
     expect(text).toContain('"type":"designate"');
     expect(text).toContain('"tag":"wracked-with-agonies"');
     expect(designationLabel("infested-with-snotlings")).toBe("infested with Snotlings");
-    expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked" }, currentFamilyVersion("apply-mark"))).toThrow();
+    expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked" }, currentFamilyVersion("apply-mark"))).toThrow(/not a registered designation/u);
+    // Version 1's schema is frozen at the registry it was reviewed with; growing the registry must not drift it.
+    expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked-with-agonies" }, 1)).toThrow();
+    expect(normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: { source: "wracked with agonies" } }, currentFamilyVersion("apply-mark")))
+      .toEqual({ subject: "this-unit", tag: { source: "wracked with agonies" } });
+  });
+});
+
+describe("a unit-filter before moments joined by \"or\"", () => {
+  /** Leaves on their own wording in `text`, in order, all in the WHEN fragment. */
+  function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
+    const bytes = Buffer.from(text, "utf8");
+    let from = 0;
+    return items.map(([wording, family, parameters]) => {
+      const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
+      if (start < 0) throw new Error(`"${wording}" is not in the text`);
+      from = start + Buffer.byteLength(wording, "utf8");
+      const version = currentFamilyVersion(family);
+      return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "WHEN" };
+    });
+  }
+  const triggersOf = (text: string, between: string) => {
+    const when = `when a friendly WALKER unit is **selected to move**${between}**declares a charge**.`;
+    const leaves = placed(when,
+      ["a friendly WALKER unit", "unit-filter", { side: "friendly", keywords: ["WALKER"] }],
+      ["is **selected to move", "event", { kind: "selected", to: "move" }],
+      ["**declares a charge", "event", { kind: "targets-selected", action_kind: "charge" }]);
+    const version = currentFamilyVersion("regain-wounds");
+    const end = Buffer.byteLength(when);
+    const heal: CompileLeaf = { role: familyRole("regain-wounds", version), family_id: "regain-wounds", family_version: version, parameters: { subject: "this-unit", amount: "D3" }, start_byte: end + 1, end_byte: end + 2, fragment: "EFFECT" };
+    const result = compileLeaves([...leaves, heal], `${when} ${text}`);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return (result.mechanics as { trigger: Array<{ subject?: unknown }> }).trigger;
+  };
+
+  it("gives the alternative moment the same unit", () => {
+    const [move, charge] = triggersOf("x", "** or **");
+    expect(charge!.subject).toEqual(move!.subject);
+    expect(JSON.stringify(charge!.subject)).toContain("WALKER");
+  });
+
+  it("leaves a moment joined by other words to its own unit", () => {
+    const [, charge] = triggersOf("x", "**, then later **");
+    expect(JSON.stringify(charge!.subject ?? null)).not.toContain("WALKER");
   });
 });

@@ -261,6 +261,11 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
+      // "is selected to move" + "or" + "declares a charge": the alternative moment is the same unit's.
+      for (let alternative = list[index + 1]; orAlternative(list[index]!, alternative, sourceText); alternative = list[index + 1]) {
+        out.push({ ...alternative!, parameters: { ...alternative!.parameters, subject_filter: dslUnitFilter(leaf) } });
+        index += 1;
+      }
     } else if (isFilter(leaf) && momentOfFilter(list, index) !== null) {
       // "an enemy unit" + "engaged with this unit" + "is selected to fight": the filter is the
       // moment's unit; the conditions between them (bound to that unit by compile-antecedent.ts)
@@ -354,6 +359,13 @@ function pastOwners(list: readonly CompileLeaf[], index: number, filter: Compile
   let at = index + 1;
   while (list[at]?.family_id === "unit-owner" && list[at]!.parameters.owner === filter.parameters.side) at += 1;
   return at;
+}
+
+/** An ownerless, subjectless event in the same fragment as `event`, joined to it by nothing but "or". */
+function orAlternative(event: CompileLeaf, next: CompileLeaf | undefined, sourceText: string | undefined): boolean {
+  if (sourceText === undefined || !ownerlessEvent(next) || next!.fragment !== event.fragment || next!.parameters.subject_filter !== undefined) return false;
+  const between = Buffer.from(sourceText, "utf8").subarray(event.end_byte, next!.start_byte).toString("utf8");
+  return /^[\s*,]*or[\s*]*$/u.test(between);
 }
 
 /** An event the filter's side owns and that names no subject of its own. */

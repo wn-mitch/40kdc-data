@@ -1,6 +1,6 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { activitiesExtension, type FamilyExtension, keywordList, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
-import { enumValue } from "./family-validation.js";
+import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
 /**
@@ -124,6 +124,18 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),
   antecedentSubject("ignore-modifiers", "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
+  {
+    // "That unit is wracked with agonies": any designation in the live registry, not only the ones
+    // registered when apply-mark was first reviewed.
+    family: "apply-mark",
+    description: "As the previous version, but tag is any registered designation id (tools/src/translate/designations.ts), or still a source-qualified value.",
+    schema: (previous) => withProperties(previous, { tag: { anyOf: [{ type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", examples: ["afflicted"] }, sourceQualifiedSchema] } }),
+    normalize: (input, previous) => {
+      if (typeof input.tag !== "string") return previous(input);
+      if (!DESIGNATION_IDS.has(input.tag)) throw new TypeError(`apply-mark.tag ${JSON.stringify(input.tag)} is not a registered designation.`);
+      return { ...previous({ ...input, tag: "designated" }), tag: input.tag };
+    },
+  },
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

@@ -8,7 +8,7 @@ import { normalizeFingerprintParameters, type SemanticFamilyDefinition } from ".
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; oneOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
+  items?: Schema; pattern?: string; examples?: unknown[]; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
 
 /** A handful of representative strings, tried against a `pattern` until one matches it. */
@@ -45,6 +45,9 @@ function domain(name: string, schema: Schema, starter: Record<string, unknown> |
     values.push(...listed.filter((value) => value !== "source"));
     const patterned = branches.map((item) => sampleForPattern(item.pattern)).find((value) => value !== undefined);
     if (patterned) values.push(patterned);
+    // A pattern a family narrows by hand (apply-mark's tag must also be a registered designation)
+    // names a valid value in the branch's own `examples`.
+    values.push(...branches.flatMap((item) => item.examples ?? []));
     if (branches.some((item) => item.type === "integer")) values.push(...(name === "threshold" ? [4, 5] : [1, 2]));
     // An object branch closed to one const-valued shape (buff-families.ts's abilityRatingSchema:
     // `{rating: true}`, the "or rated instead of numbered" alternative on a cap/value field).
