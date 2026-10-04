@@ -374,6 +374,14 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
       continue;
     }
+    // "Re-roll Hit rolls of 1. Or: if …, re-roll Hit rolls": the player picks one of the two, each
+    // under its own conditions.
+    if (list[combinator]!.parameters.choice === true) {
+      replaced.node = { type: "choice", options: [gated(replaced.gate, replaced.node), gated(replacement.gate, replacement.node)] };
+      replaced.gate = [];
+      planned.splice(planned.indexOf(replacement), 1);
+      continue;
+    }
     const alternative = allOf(replacement.gate);
     if (!alternative) {
       errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
@@ -462,11 +470,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
       const keywords = bound.parameters.keywords as string[];
       const withKeywords = (unit: Node) => ({ ...unit, all_of: [...new Set([...((unit.all_of as string[] | undefined) ?? []), ...keywords])] });
-      // On a targeting moment ("when an enemy unit targets a friendly X unit") the Stratagem's
-      // unit is the one targeted: the moment's object, never the enemy that targets it.
+      // When an enemy acts ("when an enemy unit targets a friendly X unit", "ends a move within 8\"
+      // of a friendly X unit") the Stratagem's unit is never that enemy: it is the moment's
+      // object, or else this unit, which the keywords gate.
       const enemyActs = moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy";
-      if (moment.event === "targets-selected" && enemyActs) {
-        if (moment.object !== null && typeof moment.object === "object") moment.object = withKeywords(moment.object as Node);
+      if (enemyActs) {
+        if (moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy") moment.object = withKeywords(moment.object as Node);
         else {
           const gate: Node = { type: "has-keyword", parameters: { all_of: keywords } };
           const own = moment.condition as Node | undefined;

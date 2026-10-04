@@ -219,7 +219,7 @@ function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf {
 }
 
 export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf))) return [...input];
+  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select")) return [...input];
   const list = mergeStackedFilters(input, sourceText);
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
@@ -235,6 +235,10 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
         out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, engaged_with: list[index + 1]!.parameters.with } };
         index += 1;
       }
+    } else if (leaf.family_id === "for-each-unit-select" && !bareForEach(leaf) && engagedWithOwnUnit(next, leaf)) {
+      // "Each enemy unit" + "within Engagement Range of your unit": the units each pass takes.
+      out.push({ ...leaf, parameters: { ...leaf.parameters, engaged_with: next!.parameters.with } });
+      index += 1;
     } else if (openSelect(leaf) && isFilter(next)) {
       out.push({ ...leaf, parameters: {
         ...leaf.parameters, scope: side(next!, "a selection"), filter: filterOf(next!),

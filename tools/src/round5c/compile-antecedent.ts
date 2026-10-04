@@ -135,8 +135,11 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
-  if (leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
   const moment = earlier.filter((other) => other.family_id === "event" && UNIT_EVENT_KINDS.has(String(other.parameters.kind))).at(-1);
+  // In a Stratagem's WHEN clause, "an enemy unit ends a move" + "within 8\" of …": the moment's
+  // unit, not the Stratagem's target, which only the later clauses name.
+  const inWhen = leaves[index]!.fragment === "WHEN" && moment?.fragment === "WHEN";
+  if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
   // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
   if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) ? "event-object" : "event-subject";

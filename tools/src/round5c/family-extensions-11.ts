@@ -125,6 +125,18 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),
   antecedentSubject("ignore-modifiers", "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
   {
+    // "Your unit can make a Normal move of: Up to D6\". Or: If …, up to 6\"": the player picks one.
+    family: "instead",
+    description: "As the previous version, plus choice: true on \"Or:\" between two effects of the same kind: the player picks one of them (each under its own conditions), rather than this clause replacing the earlier one when its condition holds.",
+    schema: (previous) => withProperties(previous, { choice: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (input.choice === undefined) return previous(input);
+      const { choice, ...rest } = input;
+      if (choice !== true) throw new TypeError("instead.choice must be true, or omitted.");
+      return { ...previous(rest), choice: true };
+    },
+  },
+  {
     // "roll one D6 for each" + "enemy unit" + "within 6\" of this model": a bare quantifier, whose
     // units the unit-filter (and range or engagement) right after it name (compile-unit-filters.ts).
     family: "for-each-unit-select",

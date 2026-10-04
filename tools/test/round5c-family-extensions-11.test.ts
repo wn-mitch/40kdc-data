@@ -209,3 +209,63 @@ describe("a condition on each unit a filter names", () => {
     expect(steps[1]).toMatchObject({ type: "stat-modifier", target: "this-unit" });
   });
 });
+
+describe("wave-4 review fixes", () => {
+  const ok = (result: ReturnType<typeof compileLeaves>) => {
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return result as Extract<typeof result, { ok: true }>;
+  };
+  const stratagem = (when: string, target: string, effect: string) => ({ when, target, effect, text: `${when}\n${target}\n${effect}` });
+  const across = (s: ReturnType<typeof stratagem>, when: Array<[string, string, Record<string, unknown>]>, target: Array<[string, string, Record<string, unknown>]>, effect: Array<[string, string, Record<string, unknown>]>) => {
+    const shift = (leaves: CompileLeaf[], by: number) => leaves.map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + by, end_byte: leaf.end_byte + by }));
+    const t = Buffer.byteLength(s.when) + 1;
+    const e = t + Buffer.byteLength(s.target) + 1;
+    return [...placed(s.when, "WHEN", ...when), ...shift(placed(s.target, "TARGET", ...target), t), ...shift(placed(s.effect, "EFFECT", ...effect), e)];
+  };
+
+  it("keeps the Stratagem unit's keywords off an enemy that moves, and binds the WHEN clause to that enemy", () => {
+    const s = stratagem("Your opponent's Movement phase, when an enemy unit ends a move within 8\" of a friendly HAVOCS unit.", "That HAVOCS unit.", "Your unit can make a Normal move of up to D6\".");
+    const { mechanics } = ok(compileLeaves(across(s,
+      [["Your opponent's Movement phase", "use-window", { your_phases: [], opponent_phases: ["movement"], either_phases: [] }],
+        ["enemy unit", "unit-filter", { side: "enemy" }],
+        ["ends a move", "event", { kind: "move-ended", owner: "enemy" }],
+        ["within 8\" of a", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "antecedent", negated: false }],
+        ["friendly HAVOCS unit", "unit-filter", { side: "friendly", keywords: ["HAVOCS"] }]],
+      [["That HAVOCS unit", "triggering-target", { selects: "unit", keywords: ["HAVOCS"], match: "all" }]],
+      [["Your unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }]]), s.text)) as { mechanics: Record<string, any> };
+    expect(mechanics.trigger.subject).toEqual({ owner: "enemy" });
+    expect(mechanics.trigger.condition).toEqual({ type: "has-keyword", parameters: { all_of: ["HAVOCS"] } });
+    expect(mechanics.effect.condition.parameters.subject).toBe("event-subject");
+  });
+
+  it("puts -1 to the hazard rolls of Desperate Escape on the unit escaping", () => {
+    const text = "When an enemy unit is selected to Fall Back, that enemy unit must use the desperate escape mode, with -1 to those hazard rolls.";
+    const { mechanics } = ok(compileLeaves(placed(text, "RAW_TEXT",
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["is selected to Fall Back", "event", { kind: "selected", move_types: ["fall-back"], to: "move" }],
+      ["that enemy unit must use the desperate escape mode", "test", { target: "event-subject", test: "desperate-escape" }],
+      ["with -1 to those hazard rolls", "roll-modifier", { roll: "hazard", operation: "subtract", value: 1 }]), text));
+    expect(JSON.stringify(mechanics)).toContain('{"type":"roll-modifier","target":"event-subject","modifier":{"roll":"hazard"');
+  });
+
+  it("takes the units engaged with this unit into an already scoped \"each\"", () => {
+    const text = "Each enemy unit within Engagement Range of your unit must take a Battle-shock test.";
+    const { mechanics } = ok(compileLeaves(placed(text, "RAW_TEXT",
+      ["Each enemy unit", "for-each-unit-select", { scope: "enemy", distance: "any" }],
+      ["within Engagement Range of your unit", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }],
+      ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }]), text)) as { mechanics: Record<string, any> };
+    expect(mechanics.effect).toEqual({ type: "for-each-unit", selector: { owner: "enemy", engagement_relation: "engaged-with-bearer", reference: "bearer-unit" }, effect: { type: "test", target: "recipient", modifier: { test: "battle-shock" } } });
+  });
+
+  it("reads \"Or:\" between two effects of one kind as the player's choice of one", () => {
+    const text = "This unit's attacks can re-roll Hit rolls of 1. Or: if the target is a MONSTER, re-roll Hit rolls.";
+    const { mechanics } = ok(compileLeaves(placed(text, "RAW_TEXT",
+      ["re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
+      ["Or:", "instead", { choice: true }],
+      ["the target is a MONSTER", "unit-keyword", { keywords: ["MONSTER"], subject: "target", negated: false }],
+      ["re-roll Hit rolls", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text)) as { mechanics: Record<string, any> };
+    expect(mechanics.effect.type).toBe("choice");
+    expect(mechanics.effect.options[1].type).toBe("conditional");
+    expect(mechanics.effect.options[0]).toMatchObject({ type: "re-roll", modifier: { subset: "ones" } });
+  });
+});

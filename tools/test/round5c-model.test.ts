@@ -540,7 +540,7 @@ describe("Round 5C characteristic-set family", () => {
           role: "COMBINATOR",
           status: "EXISTING",
           family_id: "instead",
-          family_version: 1,
+          family_version: currentFamilyVersion("instead"),
           parameters: {},
         },
         {

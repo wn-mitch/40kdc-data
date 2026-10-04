@@ -60,7 +60,9 @@ function bindTestTakers(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] 
     if (leaf.family_id !== "roll-modifier" || test?.family_id !== "test" || test.fragment !== leaf.fragment) return leaf;
     const roll = leaf.parameters.roll === "preceding" ? test.parameters.test : leaf.parameters.roll;
     const taker = test.parameters.target;
-    if (roll !== test.parameters.test || typeof taker !== "string" || taker === "this-unit") return leaf;
+    // A Desperate Escape test is the hazard rolls of the Desperate Escape mode ("-1 to those hazard rolls").
+    const same = roll === test.parameters.test || (roll === "hazard" && test.parameters.test === "desperate-escape");
+    if (!same || typeof taker !== "string" || taker === "this-unit") return leaf;
     return { ...leaf, parameters: { ...leaf.parameters, roll, test_taker: taker } };
   });
 }
