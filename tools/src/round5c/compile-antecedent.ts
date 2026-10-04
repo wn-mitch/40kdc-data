@@ -3,7 +3,6 @@ import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
-const SELECTIONS = new Set(["select-unit", "for-each-unit-select"]);
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
 const STRATAGEM_TARGETS = new Set(["stratagem-target", "triggering-target", "target-binding"]);
 /**
@@ -129,7 +128,9 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   if (onMomentUnit(leaves, index)) return "event-subject";
   const earlier = leaves.slice(0, index);
-  if (earlier.some((other) => SELECTIONS.has(other.family_id))) return "selected-unit";
+  // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
+  if (earlier.some((other) => other.family_id === "select-unit")) return "selected-unit";
+  if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
   if (leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
@@ -179,7 +180,8 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
     if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;
-    return null;
+    // A family that lists the recipient itself ("each enemy unit … must take a Battle-shock test").
+    return keyEnum(reviewedFamily(leaf.family_id, leaf.family_version).parameterSchema, key)?.includes(role) ? role : null;
   }
   const values = keyEnum(reviewedFamily(leaf.family_id, leaf.family_version).parameterSchema, key) ?? [];
   if (values.includes(role)) return role;

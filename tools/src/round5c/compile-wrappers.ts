@@ -79,14 +79,36 @@ export function wrapLeaderTarget(leaf: CompileLeaf, body: Node): Node {
 }
 
 export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
+  if (leaf.parameters.scope === undefined) throw new CompileError("A bare for-each-unit-select (\"each\") needs a unit-filter right after it, in its fragment.");
+  // A bare quantifier's folded unit-filter (compile-unit-filters.ts) narrows the units as select-unit's does.
+  const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
+  const eligibility = filterEligibility(filter);
   return {
     type: "for-each-unit",
     selector: {
       owner: closed(leaf, "scope") === "friendly" ? "friendly" : "enemy",
+      ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
+      ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
+      ...(eligibility ? { eligibility } : {}),
       ...(leaf.parameters.distance === "within" ? { within_inches: closed(leaf, "inches") } : {}),
+      ...(leaf.parameters.engaged_with !== undefined ? { engagement_relation: "engaged-with-bearer", reference: leaf.parameters.engaged_with === "this-model" ? "bearer" : "bearer-unit" } : {}),
     },
     effect: body,
   };
+}
+
+/** The checks a folded unit-filter adds to a selector beyond its all-of and excluded keywords, as one condition. */
+function filterEligibility(filter: UnitFilter, extra: Node | null = null): Node | null {
+  // In an eligibility filter the default subject is the candidate; ability-unit is the ability's own unit.
+  const checks: Node[] = [
+    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    ...(filter.states ?? []).map(stateCheck),
+    ...(filter.excluded_all_keywords?.length ? [{ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } }] }] : []),
+    ...abilityChecks(filter.excluded_abilities),
+    ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
+    ...(extra ? [extra] : []),
+  ];
+  return checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
 }
 
 
@@ -104,16 +126,7 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
   // select-unit v2 with a folded unit-filter (compile-unit-filters.ts): keywords all of which the
   // unit has, or (match any) one of which it has, which only an eligibility condition can say.
   const filter = (selection.parameters.filter ?? {}) as UnitFilter;
-  // In an eligibility filter the default subject is the candidate; ability-unit is the ability's own unit.
-  const checks: Node[] = [
-    ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
-    ...(filter.states ?? []).map(stateCheck),
-    ...(filter.excluded_all_keywords?.length ? [{ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } }] }] : []),
-    ...abilityChecks(filter.excluded_abilities),
-    ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
-    ...(extra.eligibility ? [extra.eligibility] : []),
-  ];
-  const eligibility = checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
+  const eligibility = filterEligibility(filter, extra.eligibility ?? null);
   // select-unit v3 counts its own units: exactly that many, or (up to) at most that many.
   const own = selection.parameters.count as number | undefined;
   if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size.");

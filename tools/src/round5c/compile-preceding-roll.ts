@@ -19,7 +19,8 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
  * change the dice cannot carry (a subtraction, a several-dice roll) refuses, as does a
  * modifier with no roll before it.
  */
-export function bindPrecedingRolls(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+export function bindPrecedingRolls(input: readonly CompileLeaf[]): CompileLeaf[] {
+  const leaves = bindTestTakers(input);
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
   const dropped = new Set<number>();
@@ -42,4 +43,24 @@ export function bindPrecedingRolls(leaves: readonly CompileLeaf[]): CompileLeaf[
     dropped.add(index);
   });
   return out.filter((_, index) => !dropped.has(index));
+}
+
+/**
+ * "Each enemy unit … must take a Battle-shock test, subtracting 1 from that test": a change to
+ * the test right before it in its fragment (past any conditions on the change) is a change to
+ * the roll of the unit taking that test, not this unit's. compile-fragments.ts lowers
+ * `test_taker` as the modifier's target.
+ */
+function bindTestTakers(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] {
+  return leaves.map((leaf, index) => {
+    // Past the conditions on the change ("if that enemy unit is Battle-shocked, subtract 1 …").
+    let at = index - 1;
+    while (leaves[at]?.role === "CONDITION" && leaves[at]!.fragment === leaf.fragment) at -= 1;
+    const test = leaves[at];
+    if (leaf.family_id !== "roll-modifier" || test?.family_id !== "test" || test.fragment !== leaf.fragment) return leaf;
+    const roll = leaf.parameters.roll === "preceding" ? test.parameters.test : leaf.parameters.roll;
+    const taker = test.parameters.target;
+    if (roll !== test.parameters.test || typeof taker !== "string" || taker === "this-unit") return leaf;
+    return { ...leaf, parameters: { ...leaf.parameters, roll, test_taker: taker } };
+  });
 }

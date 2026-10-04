@@ -125,6 +125,14 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),
   antecedentSubject("ignore-modifiers", "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
   {
+    // "roll one D6 for each" + "enemy unit" + "within 6\" of this model": a bare quantifier, whose
+    // units the unit-filter (and range or engagement) right after it name (compile-unit-filters.ts).
+    family: "for-each-unit-select",
+    description: "As the previous version, plus the bare quantifier {} on \"each\" / \"for each\" / \"every\": the unit-filter right after it, in the same fragment, names the units, with a range or \"engaged with this unit\" after that. A later \"that unit\" is the unit of each pass.",
+    schema: (previous) => ({ ...previous, required: [] }),
+    normalize: (input, previous) => Object.keys(input).length === 0 ? {} : previous(input),
+  },
+  {
     // "That unit is wracked with agonies": any designation in the live registry, not only the ones
     // registered when apply-mark was first reviewed.
     family: "apply-mark",

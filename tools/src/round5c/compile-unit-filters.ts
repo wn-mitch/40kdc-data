@@ -1,4 +1,4 @@
-import { FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
 import { FOLLOWING_FILTER } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -225,7 +225,17 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
     const next = list[index + 1];
-    if (openSelect(leaf) && isFilter(next)) {
+    if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
+      // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
+      // units each pass takes, folded into the quantifier as select-unit's filter is.
+      out.push({ ...leaf, parameters: { scope: side(next!, "a for-each"), distance: "any", filter: filterOf(next!) } });
+      index += 1;
+      if (reach(out, list[index + 1])) index += 1;
+      else if (engagedWithOwnUnit(list[index + 1], leaf)) {
+        out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, engaged_with: list[index + 1]!.parameters.with } };
+        index += 1;
+      }
+    } else if (openSelect(leaf) && isFilter(next)) {
       out.push({ ...leaf, parameters: {
         ...leaf.parameters, scope: side(next!, "a selection"), filter: filterOf(next!),
         visible: leaf.parameters.visible === true || next!.parameters.visible === true,
@@ -341,11 +351,16 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       throw new CompileError("A Stratagem target leaf without a side needs a unit-filter right after it.");
     } else if (openAura(leaf)) {
       throw new CompileError("An aura-range without a side needs a unit-filter right before it.");
+    } else if (bareForEach(leaf)) {
+      throw new CompileError("A bare for-each-unit-select (\"each\") needs a unit-filter right after it, in its fragment.");
     } else {
       out.push(leaf);
     }
   }
-  return out;
+  // "For each enemy unit …: that enemy unit suffers D3 mortal wounds": each pass's unit.
+  const quantifier = out.findIndex((leaf) => leaf.family_id === "for-each-unit-select");
+  return quantifier < 0 ? out : out.map((leaf, at) => at > quantifier && leaf.family_id === "mortal-wounds" && leaf.parameters.recipient === "that-unit"
+    ? { ...leaf, parameters: { ...leaf.parameters, recipient: AURA_RECIPIENT } } : leaf);
 }
 
 /** A distance or engagement in the filter's fragment whose other unit is the filter right after it. */
@@ -359,6 +374,17 @@ function pastOwners(list: readonly CompileLeaf[], index: number, filter: Compile
   let at = index + 1;
   while (list[at]?.family_id === "unit-owner" && list[at]!.parameters.owner === filter.parameters.side) at += 1;
   return at;
+}
+
+/** A for-each-unit-select with no parameters: the bare "each" whose units the next leaves name. */
+const bareForEach = (leaf: CompileLeaf) => leaf.family_id === "for-each-unit-select" && Object.keys(leaf.parameters).length === 0;
+
+/** "Engaged with your unit" about each pass's unit (bound to the recipient), in the quantifier's fragment. */
+function engagedWithOwnUnit(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): boolean {
+  if (leaf?.family_id !== "unit-state" || leaf.fragment !== quantifier.fragment) return false;
+  const p = leaf.parameters;
+  return p.subject === AURA_RECIPIENT && p.negated !== true && p.at === undefined
+    && (p.with === "this-unit" || p.with === "this-model") && JSON.stringify(p.states) === JSON.stringify(["engaged"]);
 }
 
 /** An ownerless, subjectless event in the same fragment as `event`, joined to it by nothing but "or". */
