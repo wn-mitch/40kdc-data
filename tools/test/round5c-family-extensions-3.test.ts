@@ -111,7 +111,8 @@ describe("Round 5C family extensions, third round", () => {
     it("refuses a filter and a 'from your army' that name different sides, and a family that cannot take a filter", () => {
       expect(errors([friendly(["INFANTRY"]), leaf("unit-owner", { owner: "enemy" }), leaf("feel-no-pain", { subject: "antecedent", threshold: 5, against: "all" })]).join(" "))
         .toMatch(/different sides/u);
-      expect(errors([friendly(["INFANTRY"]), leaf("unit-state", { states: ["battle-shocked"], subject: "antecedent", negated: false })]).join(" "))
+      // A family that cannot take a filter's units refuses it.
+      expect(errors([friendly(["INFANTRY"]), leaf("targeting-restriction", { subject: "antecedent", may: "cannot-target", kind: "shoot", weapon_type: "all" })]).join(" "))
         .toMatch(/cannot name|unit-filter needs/u);
     });
   });

@@ -32,11 +32,13 @@ const SUBJECT_TARGETS: Record<string, string> = {
   "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit",
   // Later versions of some effect families (family-extensions.ts) also name the triggering unit and the attack's target.
   "event-subject": "event-subject", target: "defender",
+  // Bound by compile-antecedent.ts only: the unit a moment happens to (damage allocated to it).
+  "event-object": "event-object",
   // Bound by compile-antecedent.ts only: the unit an aura reaches.
   recipient: "recipient",
 };
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
-const OTHER_UNITS = new Set(["selected-unit", "event-subject", "defender", "recipient"]);
+const OTHER_UNITS = new Set(["selected-unit", "event-subject", "event-object", "defender", "recipient"]);
 
 const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit": "selected-unit", "this-unit": "this-unit", "this-model": "this-model", recipient: "recipient", "event-subject": "event-subject" };
 

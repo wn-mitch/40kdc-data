@@ -58,7 +58,11 @@ describe("Round 5C anaphoric subjects", () => {
     // Families that only name the ability's own unit can point back to the target, and nothing else.
     const permission = (subject: string) => ({ ...leaf("eligibility-permission", { subject, activity: "shoot", allow: true }), fragment: "EFFECT" });
     expect(compileLeaves([target(), permission("antecedent")])).toEqual(compileLeaves([target(), permission("this-unit")]));
-    expect(compileLeaves([selectEnemy(), permission("antecedent")]))
+    // A selected unit is a plain DSL unit-ref, which the permission's subject (lowered as any unit-ref) takes.
+    expect(JSON.stringify(compileLeaves([selectEnemy(), permission("antecedent")]))).toContain('"target":"selected-unit"');
+    // A key that names only the ability's own unit still refuses it.
+    const restriction = () => ({ ...leaf("targeting-restriction", { subject: "antecedent", may: "cannot-target", kind: "shoot", weapon_type: "all" }), fragment: "EFFECT" });
+    expect(compileLeaves([selectEnemy(), restriction()]))
       .toMatchObject({ ok: false, errors: [expect.stringMatching(/selected-unit, which its subject cannot name/u)] });
     // A selection inside the Stratagem still comes first: "select one enemy unit … that enemy unit".
     expect(compileLeaves([target(), selectEnemy(), mortal("antecedent")])).toEqual(compileLeaves([target(), selectEnemy(), mortal("that-unit")]));

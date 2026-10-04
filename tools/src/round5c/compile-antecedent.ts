@@ -17,6 +17,9 @@ const UNIT_EVENT_KINDS = new Set([
   "disembarked", "damage-allocated", "state-changed", "move-ended", "selected", "targets-selected", "attacks-resolved", "set-up",
 ]);
 
+/** Moments whose only named unit is the one they happen to (the trigger's object). */
+const OBJECT_MOMENTS = new Set(["damage-allocated"]);
+
 /** A Stratagem's own fragments; every other record is one RAW_TEXT. */
 const STRATAGEM_FRAGMENTS = new Set(["WHEN", "TARGET", "EFFECT", "RESTRICTIONS"]);
 
@@ -83,7 +86,10 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
   if (leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
-  if (earlier.some((other) => other.family_id === "event" && UNIT_EVENT_KINDS.has(String(other.parameters.kind)))) return "event-subject";
+  const moment = earlier.filter((other) => other.family_id === "event" && UNIT_EVENT_KINDS.has(String(other.parameters.kind))).at(-1);
+  // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
+  // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
+  if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) ? "event-object" : "event-subject";
   return null;
 }
 
@@ -122,7 +128,7 @@ function ownRole(leaves: readonly CompileLeaf[]): string {
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
 function boundValue(leaf: CompileLeaf, key: string, role: string): string | null {
-  if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) ? role : null;
+  if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key) ? role : null;
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
     if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;
@@ -130,6 +136,10 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   }
   const values = keyEnum(reviewedFamily(leaf.family_id, leaf.family_version).parameterSchema, key) ?? [];
   if (values.includes(role)) return role;
+  // A selected or triggering unit is a plain DSL unit-ref, which a key lowered as any unit-ref
+  // takes even when its family's own enum does not list it.
+  if ((role === "selected-unit" || role === "event-subject" || role === "event-object")
+    && (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key))) return role;
   if (leaf.family_id === "mortal-wounds" && role === "selected-unit" && values.includes("that-unit")) return "that-unit";
   return null;
 }
@@ -150,6 +160,13 @@ export function bindAntecedents(leaves: readonly CompileLeaf[]): CompileLeaf[] {
     const introduced = antecedentRole(leaves, index);
     if (introduced === null && isStratagem(leaves)) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
+    }
+    // "While an enemy unit is within Engagement Range of this unit": a condition on the units a
+    // bare filter matches holds when any of them meets it. When a later leaf also points back
+    // ("If a friendly X unit is …, that unit …"), the condition is per recipient instead, which
+    // this binding does not say.
+    if (introduced === FILTERED_UNITS && leaf.role === "CONDITION" && leaves.slice(index + 1).some(hasAntecedent)) {
+      throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} tests the units of a unit-filter that a later leaf points back to; a per-recipient condition cannot compile yet.`);
     }
     const parameters = { ...leaf.parameters };
     for (const key of keys) {

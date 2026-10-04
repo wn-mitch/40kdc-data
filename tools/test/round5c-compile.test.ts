@@ -104,6 +104,45 @@ describe("Round 5C leaf compiler", () => {
     expect(effect.modifier.ends_when?.operands).toHaveLength(2);
   });
 
+  it("tests a condition on a bare filter's units as any unit that meets it, and refuses a per-recipient reading", () => {
+    const unitState = currentFamilyVersion("unit-state");
+    // The later leaf is built after the gate's two, so it sits after them in the source.
+    const gate = (later: () => CompileLeaf) => compileLeaves([
+      leaf("CONDITION", "unit-filter", { side: "enemy", keywords: ["MONSTER"] }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }, unitState),
+      later(),
+    ]);
+    const result = gate(() => leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }));
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"type":"unit-state"');
+    expect(text).toMatch(/"subject":\{[^}]*"owner":"enemy"[^}]*"all_of":\["MONSTER"\]/u);
+    expect(text).not.toContain("filtered-units");
+    const perRecipient = gate(() => leaf("EFFECT", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "add", value: 1 }, currentFamilyVersion("characteristic-modifier")));
+    expect(perRecipient.ok).toBe(false);
+    expect(perRecipient.ok ? "" : perRecipient.errors.join()).toMatch(/per-recipient/u);
+  });
+
+  it("binds a selected unit to a key lowered as any unit-ref, even when the family's enum does not list it", () => {
+    const result = compiled([
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, currentFamilyVersion("select-unit")),
+      leaf("EFFECT", "core-ability-grant", { subject: "antecedent", ability: "infiltrators" }, currentFamilyVersion("core-ability-grant")),
+    ]);
+    expect(JSON.stringify(result.mechanics)).toContain('{"type":"ability-grant","target":"selected-unit","modifier":{"ability":"infiltrators"}}');
+  });
+
+  it("negates where a move cannot end, and keeps must as the default", () => {
+    const leaves = (polarity?: string) => [
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }, 2),
+      leaf("RESTRICTION", "move-must-end", { match: "all", ...(polarity ? { polarity } : {}) }, currentFamilyVersion("move-must-end")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }, currentFamilyVersion("unit-state")),
+    ];
+    const ends = (polarity?: string) => (compiled(leaves(polarity)).mechanics.effect as { modifier: { ends_when: { operator?: string; operands?: unknown[]; type?: string } } }).modifier.ends_when;
+    expect(ends("cannot")).toEqual({ operator: "not", operands: [ends()] });
+    expect(ends("must")).toEqual(ends());
+    expect(ends().operator).toBeUndefined();
+  });
+
   it("gates a whole non-Stratagem ability on its own phase window, in the turn each phase belongs to", () => {
     const window = leaf("RESTRICTION", "activation-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: ["fight"] });
     const result = compiled([window, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);

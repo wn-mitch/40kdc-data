@@ -60,7 +60,7 @@ describe("Round 5C family extensions, second round", () => {
     }
   });
 
-  it("binds 'that unit' in grants, Feel No Pain, healing and returned models to a Stratagem's target, and refuses a selection it cannot name", () => {
+  it("binds 'that unit' in grants, Feel No Pain, healing and returned models to a Stratagem's target, or to a selected unit", () => {
     for (const [family, parameters] of [
       ["weapon-ability-grant", { keyword: "Lethal Hits", weapon_type: "melee" }],
       ["keyword-grant", { keywords: ["FLY"] }],
@@ -70,9 +70,9 @@ describe("Round 5C family extensions, second round", () => {
     ] as const) {
       const tree = compiled([target(), leaf(family, { subject: "antecedent", ...parameters })]);
       expect(JSON.stringify(tree), family).not.toContain("antecedent");
-      // A selected enemy unit is not a unit these families can name: compiling refuses, never guesses.
-      const refused = compileLeaves([leaf("select-unit", { scope: "enemy", distance: "any", visible: false }), leaf(family, { subject: "antecedent", ...parameters })]);
-      expect(refused, family).toMatchObject({ ok: false, errors: [expect.stringMatching(/cannot name/u)] });
+      // A selected unit is a plain DSL unit-ref: these families' subjects lower as any unit-ref, so they name it.
+      const selected = compileLeaves([leaf("select-unit", { scope: "enemy", distance: "any", visible: false }), leaf(family, { subject: "antecedent", ...parameters })]);
+      expect(JSON.stringify(selected), family).toContain('"target":"selected-unit"');
     }
     // unit-has-ability names a selected unit, so its antecedent binds there.
     const has = first(compiled([leaf("select-unit", { scope: "enemy", distance: "any", visible: false }), leaf("unit-has-ability", { subject: "antecedent", ability: "lone-operative", negated: true }), heal()]), "has-ability");

@@ -199,7 +199,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // "Your unit must end that move either …": the conditions after a move-must-end in its sentence
   // say where the preceding move ends, so they gate nothing and are taken out of clause binding.
   const moveEnds = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" ? [{
-    index, match: String(leaf.parameters.match),
+    index, match: String(leaf.parameters.match), cannot: leaf.parameters.polarity === "cannot",
     conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && places[at]!.sentence === places[index]!.sentence ? [at] : []),
   }] : []);
   const endConditions = new Set(moveEnds.flatMap((rule) => rule.conditions));
@@ -333,7 +333,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     if (rule.conditions.length === 0) { errors.push("\"Must end that move\" names no condition for where the move ends."); continue; }
     const nodes = rule.conditions.map((at) => attempt(() => condition(list[at]!))).filter((node): node is Node => node !== null);
     if (nodes.length !== rule.conditions.length) continue;
-    (move.node.modifier as Node).ends_when = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
+    const where: Node = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
+    // "Cannot end that move …": the move ends anywhere the named place is not.
+    (move.node.modifier as Node).ends_when = rule.cannot ? { operator: "not", operands: [where] } : where;
   }
 
   for (const combinator of combinators) {

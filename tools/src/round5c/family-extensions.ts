@@ -9,6 +9,7 @@ import { FAMILY_EXTENSIONS_6 } from "./family-extensions-6.js";
 import { FAMILY_EXTENSIONS_7 } from "./family-extensions-7.js";
 import { FAMILY_EXTENSIONS_8 } from "./family-extensions-8.js";
 import { FAMILY_EXTENSIONS_9 } from "./family-extensions-9.js";
+import { FAMILY_EXTENSIONS_11 } from "./family-extensions-11.js";
 import { FAMILY_EXTENSIONS_10 } from "./family-extensions-10.js";
 import { ROLL_KINDS } from "./dice-families.js";
 import { enumValue } from "./family-validation.js";
@@ -173,7 +174,7 @@ const FAMILY_EXTENSIONS_1: readonly FamilyExtension[] = [
 ];
 
 /** Every extension in order; a family listed twice gains two versions, the later on top of the earlier. */
-export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3, ...FAMILY_EXTENSIONS_4, ...FAMILY_EXTENSIONS_5, ...FAMILY_EXTENSIONS_6, ...FAMILY_EXTENSIONS_7, ...FAMILY_EXTENSIONS_8, ...FAMILY_EXTENSIONS_9, ...FAMILY_EXTENSIONS_10];
+export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3, ...FAMILY_EXTENSIONS_4, ...FAMILY_EXTENSIONS_5, ...FAMILY_EXTENSIONS_6, ...FAMILY_EXTENSIONS_7, ...FAMILY_EXTENSIONS_8, ...FAMILY_EXTENSIONS_9, ...FAMILY_EXTENSIONS_10, ...FAMILY_EXTENSIONS_11];
 
 const extensionVersions = new Map<string, { extension: FamilyExtension; version: number }>();
 

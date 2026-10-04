@@ -118,7 +118,26 @@ function widenedWho(value: unknown): string | undefined {
   return subject;
 }
 
+/** Stands in for a folded filter's units while a condition lowers; replaced by the filter itself. */
+const FILTER_STAND_IN = "__filtered-units__";
+
+function withFilter(node: unknown, filter: Node): unknown {
+  if (node === FILTER_STAND_IN) return structuredClone(filter);
+  if (Array.isArray(node)) return node.map((item) => withFilter(item, filter));
+  if (node !== null && typeof node === "object") return Object.fromEntries(Object.entries(node).map(([key, value]) => [key, withFilter(value, filter)]));
+  return node;
+}
+
 export function condition(leaf: CompileLeaf): Node {
+  // "While an enemy unit is within Engagement Range of this unit": the units of the folded filter
+  // (compile-unit-filters.ts), as the DSL's "any unit that …" filter in place of a fixed role.
+  if (Object.values(leaf.parameters).includes("filtered-units")) {
+    const filter = leaf.parameters.subject_filter as Node | undefined;
+    if (filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
+    const { subject_filter: _filter, ...rest } = leaf.parameters;
+    const parameters = Object.fromEntries(Object.entries(rest).map(([key, value]) => [key, value === "filtered-units" ? FILTER_STAND_IN : value]));
+    return withFilter(condition({ ...leaf, parameters }), filter) as Node;
+  }
   // Alternatives folded by compile-alternative-conditions.ts: any one of them, each its own conditions together.
   if (leaf.family_id === "__any-of") {
     const alternatives = leaf.parameters.alternatives as CompileLeaf[][];
