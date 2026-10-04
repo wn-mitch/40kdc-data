@@ -119,6 +119,14 @@ function widenedWho(value: unknown): string | undefined {
 }
 
 export function condition(leaf: CompileLeaf): Node {
+  // Alternatives folded by compile-alternative-conditions.ts: any one of them, each its own conditions together.
+  if (leaf.family_id === "__any-of") {
+    const alternatives = leaf.parameters.alternatives as CompileLeaf[][];
+    return anyOf(alternatives.map((conditions) => {
+      const nodes = conditions.map(condition);
+      return nodes.length === 1 ? nodes[0]! : { operator: "and", operands: nodes };
+    }));
+  }
   const target = closed(leaf, "subject") === "target";
   const who = target ? "defender" : undefined;
   switch (leaf.family_id) {
