@@ -10,6 +10,7 @@ import { runJevV2Proposer } from "../src/round5c/jev-v2.js";
 import type { JevClient } from "../src/round5c/jev-core.js";
 import type { Span } from "../src/round5c/jev-proposer.js";
 import { confirmSurface } from "./round5c-human.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 
 // Fabricated wording only; no GW rule prose.
 
@@ -69,7 +70,7 @@ function fixtureDb(): DatabaseSync {
   const db = new DatabaseSyncCtor(":memory:") as DatabaseSync;
   initializeWorkbench(db);
   confirmSurface(db, { reviewer: REVIEWER, exact_text: "re-roll a hit roll of 1", family_id: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" } });
-  confirmSurface(db, { reviewer: REVIEWER, exact_text: "If this model is on the battlefield", family_id: "unit-state", family_version: 9, parameters: { states: ["on-battlefield"], subject: "this-model", negated: false } });
+  confirmSurface(db, { reviewer: REVIEWER, exact_text: "If this model is on the battlefield", family_id: "unit-state", family_version: currentFamilyVersion("unit-state"), parameters: { states: ["on-battlefield"], subject: "this-model", negated: false } });
   return db;
 }
 

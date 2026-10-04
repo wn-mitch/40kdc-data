@@ -58,6 +58,51 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   return !(before && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter"));
 }
 
+/**
+ * A leaf a bare filter's description runs through on its way to the moment it describes: a
+ * condition, a "from your army", or the unit-filter a following-filter distance measures to.
+ */
+function describes(leaves: readonly CompileLeaf[], at: number, fragment: string | undefined): boolean {
+  const leaf = leaves[at];
+  if (!leaf || leaf.fragment !== fragment) return false;
+  if (leaf.family_id === "unit-owner") return true;
+  if (leaf.family_id === "unit-filter") {
+    const before = leaves[at - 1];
+    return before !== undefined && (before.parameters.of === "following-filter" || before.parameters.with === "following-filter");
+  }
+  return leaf.role === "CONDITION";
+}
+
+/**
+ * "an enemy unit" + "engaged with this unit" + "is selected to fight": the index of the ownerless
+ * moment that a bare filter, and the conditions between them, describe; null when there is none.
+ * The filter is the moment's unit, and each condition is on that unit.
+ */
+export function momentOfFilter(leaves: readonly CompileLeaf[], filterIndex: number): number | null {
+  const filter = leaves[filterIndex];
+  if (filter?.family_id !== "unit-filter") return null;
+  const before = leaves[filterIndex - 1];
+  if (before && before.fragment === filter.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter")) return null;
+  let at = filterIndex + 1;
+  while (describes(leaves, at, filter.fragment)) at += 1;
+  const moment = leaves[at];
+  // An ownerless moment, or one its filter's own side owns ("an enemy model" + "selects its targets").
+  return moment?.family_id === "event" && moment.fragment === filter.fragment && moment.parameters.subject === undefined
+    && (moment.parameters.owner === undefined || (filter.parameters.side !== "any" && moment.parameters.owner === filter.parameters.side)) ? at : null;
+}
+
+/** Whether a condition sits between a bare filter and the moment they describe. */
+function onMomentUnit(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  if (leaf.role !== "CONDITION") return false;
+  // Back past the description to the filter it starts with (a filter a following-filter distance
+  // measures to is part of the description, so the walk passes it).
+  let at = index - 1;
+  while (at >= 0 && describes(leaves, at, leaf.fragment)) at -= 1;
+  const moment = momentOfFilter(leaves, at);
+  return moment !== null && moment > index;
+}
+
 /** Leaves that claim a unit-filter right before them, so it is not an effect's postfix recipient. */
 const FILTER_CLAIMANTS = new Set(["aura-range", "event", "attack"]);
 
@@ -81,6 +126,8 @@ export function postfixFilter(leaves: readonly CompileLeaf[], index: number): bo
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number): string | null {
   if (postfixFilter(leaves, index)) return FILTERED_UNITS;
+  // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
+  if (onMomentUnit(leaves, index)) return "event-subject";
   const earlier = leaves.slice(0, index);
   if (earlier.some((other) => SELECTIONS.has(other.family_id))) return "selected-unit";
   if (bareFilter(leaves, index)) return FILTERED_UNITS;

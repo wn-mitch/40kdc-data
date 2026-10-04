@@ -1,4 +1,4 @@
-import { FILTERED_UNITS } from "./compile-antecedent.js";
+import { FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
 import { FOLLOWING_FILTER } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -259,6 +259,15 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     } else if (isFilter(leaf) && ownerlessEvent(list[pastOwners(list, index, leaf)])) {
       // "each time a friendly AELDARI unit" (+ "from your army") + "makes an attack": the trigger's subject.
       const at = pastOwners(list, index, leaf);
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      index = at;
+    } else if (isFilter(leaf) && momentOfFilter(list, index) !== null) {
+      // "an enemy unit" + "engaged with this unit" + "is selected to fight": the filter is the
+      // moment's unit; the conditions between them (bound to that unit by compile-antecedent.ts)
+      // stay where they are, with any unit-filter their own distances measure to.
+      const at = momentOfFilter(list, index)!;
+      const between = foldUnitFilters(list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
+      out.push(...between);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
     } else if (isFilter(leaf) && ownedBy(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {

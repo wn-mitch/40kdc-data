@@ -131,6 +131,32 @@ describe("Round 5C leaf compiler", () => {
     expect(JSON.stringify(result.mechanics)).toContain('{"type":"ability-grant","target":"selected-unit","modifier":{"ability":"infiltrators"}}');
   });
 
+  it("binds conditions between a filter and its moment to the moment's unit, not to any unit", () => {
+    const result = compiled([
+      leaf("CONDITION", "unit-filter", { side: "enemy" }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }, currentFamilyVersion("unit-state")),
+      leaf("EVENT", "event", { kind: "selected", to: "fight" }, currentFamilyVersion("event")),
+      leaf("EFFECT", "mortal-wounds", { recipient: "antecedent", count: "1" }, currentFamilyVersion("mortal-wounds")),
+    ]);
+    const text = JSON.stringify(result.mechanics);
+    // The engaged test is on the unit selected to fight, which is the enemy filter's unit.
+    expect(text).toContain('"type":"unit-state","parameters":{"subject":"event-subject","state":"engaged"');
+    expect(text).toContain('"subject":{"owner":"enemy"}');
+    expect(text).not.toContain("filtered-units");
+  });
+
+  it("names this unit in engaged-with, and reads a state at an earlier point", () => {
+    const state = (parameters: Record<string, unknown>) => compileLeaves([
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "event-subject", negated: false, ...parameters }, currentFamilyVersion("unit-state")),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    const text = (parameters: Record<string, unknown>) => { const result = state(parameters); return result.ok ? JSON.stringify(result.mechanics) : result.errors.join(); };
+    // Without with, the DSL means engaged with any unit; "with this unit" must stay.
+    expect(text({ with: "this-unit" })).toContain('"parameters":{"subject":"event-subject","state":"engaged","with":"this-unit"}');
+    expect(text({ with: "this-unit", at: "phase-start" })).toContain('"state":"engaged","with":"this-unit","at":"phase-start"');
+    expect(compileLeaves([leaf("CONDITION", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false, at: "turn-start" }, currentFamilyVersion("unit-state")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]).ok).toBe(false);
+  });
+
   it("measures a distance or engagement to the unit-filter right after it", () => {
     const result = compiled([
       leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")),
