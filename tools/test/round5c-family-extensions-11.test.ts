@@ -86,6 +86,8 @@ describe("designations each rule prints", () => {
     expect(text).toContain('"type":"designate"');
     expect(text).toContain('"tag":"wracked-with-agonies"');
     expect(designationLabel("infested-with-snotlings")).toBe("infested with Snotlings");
+    expect(designationLabel("vendetta-target")).toBe("a Vendetta target");
+    expect(designationLabel("victim", true)).toBe("victims");
     expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked" }, currentFamilyVersion("apply-mark"))).toThrow(/not a registered designation/u);
     // Version 1's schema is frozen at the registry it was reviewed with; growing the registry must not drift it.
     expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked-with-agonies" }, 1)).toThrow();

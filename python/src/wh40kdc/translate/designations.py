@@ -89,6 +89,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "pledge-of-mortal-pain",
         "plundered",
         "poisoned",
+        "prey",
         "prey-marked",
         "priority-target",
         "prosecuted",
@@ -112,6 +113,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "singular-purpose-enemy",
         "singular-purpose-marker",
         "slayer-of-champions",
+        "slayers-oath",
         "slowed",
         "smashed",
         "snared",
@@ -134,7 +136,10 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "unbridled-ardour-slayer",
         "unhideable",
         "unmasked",
+        "unravelling",
+        "vendetta-target",
         "vengeful-dead",
+        "victim",
         "whispering-web",
         "wholly-within-flow-of-magic",
         "winning-the-wager",
@@ -173,6 +178,11 @@ _DESIGNATION_TERMS: dict[str, dict[str, str]] = {
     "wobbled": {"adjective": "wobbled"},
     "wracked-with-agonies": {"adjective": "wracked with agonies"},
     "zapped": {"adjective": "zapped"},
+    "unravelling": {"adjective": "unravelling"},
+    "prey": {"noun": "prey"},
+    "slayers-oath": {"noun": "Slayer's Oath"},
+    "vendetta-target": {"noun": "Vendetta target"},
+    "victim": {"noun": "victim"},
 }
 
 

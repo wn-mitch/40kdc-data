@@ -83,6 +83,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "pledge-of-mortal-pain",
   "plundered",
   "poisoned",
+  "prey",
   "prey-marked",
   "priority-target",
   "prosecuted",
@@ -106,6 +107,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "singular-purpose-enemy",
   "singular-purpose-marker",
   "slayer-of-champions",
+  "slayers-oath",
   "slowed",
   "smashed",
   "snared",
@@ -128,7 +130,10 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "unbridled-ardour-slayer",
   "unhideable",
   "unmasked",
+  "unravelling",
+  "vendetta-target",
   "vengeful-dead",
+  "victim",
   "whispering-web",
   "wholly-within-flow-of-magic",
   "winning-the-wager",
@@ -166,6 +171,11 @@ const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: st
   wobbled: { adjective: "wobbled" },
   "wracked-with-agonies": { adjective: "wracked with agonies" },
   zapped: { adjective: "zapped" },
+  unravelling: { adjective: "unravelling" },
+  prey: { noun: "prey" },
+  "slayers-oath": { noun: "Slayer's Oath" },
+  "vendetta-target": { noun: "Vendetta target" },
+  victim: { noun: "victim" },
 };
 
 /** The printed term for a registered id after "is"/"are" ("Spotted", "an Observer" / "Observers"), else undefined. */

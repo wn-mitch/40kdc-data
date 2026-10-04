@@ -40,6 +40,11 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"wobbled":                 {adjective: "wobbled"},
 	"wracked-with-agonies":    {adjective: "wracked with agonies"},
 	"zapped":                  {adjective: "zapped"},
+	"unravelling":             {adjective: "unravelling"},
+	"prey":                    {noun: "prey"},
+	"slayers-oath":            {noun: "Slayer's Oath"},
+	"vendetta-target":         {noun: "Vendetta target"},
+	"victim":                  {noun: "victim"},
 }
 
 // designationTerm is the printed term for a registered id after "is"/"are",
