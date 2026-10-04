@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { mapToLatest } from "../src/round5c/family-versions.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/round5c/leaf-prefill.js";
@@ -249,7 +249,7 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
 
   it("migrates a unit-activity@3 leaf to a one-item list", () => {
     expect(mapToLatest("unit-activity", 3, { activity: "fought-this-phase", subject: "this-unit", negated: true }))
-      .toEqual({ family: "unit-activity", version: 10, parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
+      .toEqual({ family: "unit-activity", version: currentFamilyVersion("unit-activity"), parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
   });
 
   it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {

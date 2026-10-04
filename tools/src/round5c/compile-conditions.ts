@@ -35,6 +35,8 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "disembarked-this-turn": ["disembarked", {}, "turn"],
   "made-ingress-move-this-turn": ["move-ended", { move_types: ["ingress"] }, "turn"],
   "set-up-this-turn": ["set-up", {}, "turn"],
+  // Version 12: "whose attacks have been resolved this phase".
+  "resolved-attacks-this-phase": ["attacks-resolved", {}, "phase"],
 };
 
 /**
@@ -386,7 +388,8 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "phase-window": {
       const operands: Node[] = [];
-      if (leaf.parameters.phase !== undefined) operands.push({ type: "phase-is", parameters: { phase: closed(leaf, "phase") } });
+      // Version 2: "in any phase" names no phase; compile.ts drops it when no turn is named either.
+      if (leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: closed(leaf, "phase") } });
       const turn = leaf.parameters.turn === undefined ? undefined : closed(leaf, "turn");
       if (turn !== undefined && turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: `${String(turn)}-turn` } });
       if (operands.length === 0) throw new CompileError("phase-window needs a phase, a turn other than either, or both.");
@@ -500,8 +503,16 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   // The DSL holds several named targets, but an effect leaf cannot yet say which one it applies
   // to ("your unit" after two targets), so a second target refuses until leaves can name it.
   if (selectors.length > 1) throw new CompileError(`A stratagem TARGET names ${selectors.length} targets; no effect leaf can yet say which target it applies to, so the second target has no binding.`);
-  if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
   if (bindings.length > 1) throw new CompileError("A stratagem TARGET is bound to more than one unit.");
+  // "That Frenzied Reavers Jakhals unit." with no selector of its own: the target is the one unit the
+  // binding names (the triggering or the attacked unit); the WHEN's own filter says which units qualify.
+  if (selectors.length === 0 && bindings.length === 1) {
+    const restrictions: Node = { count: "one", selects: "unit", bound_to: bindings[0]!.parameters.bound_to };
+    const eligibilityCondition = allOf([...eligibility]);
+    if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
+    return restrictions;
+  }
+  if (selectors.length !== 1) throw new CompileError(`A stratagem TARGET needs exactly one target leaf; found ${selectors.length}.`);
   const selector = selectors[0]!;
   const keywords = selector.parameters.keywords as string[];
   const excluded = (selector.parameters.excluded_keywords as string[] | undefined) ?? [];

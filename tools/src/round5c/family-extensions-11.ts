@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "./antecedent-families.js";
-import { type FamilyExtension, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { activitiesExtension, type FamilyExtension, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue } from "./family-validation.js";
 
 /**
@@ -57,6 +57,23 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
       return { ...normalized, at: enumValue(at, ["phase-start", "turn-start"], "unit-state.at") };
     },
   },
+  {
+    // "Once per battle, in any phase, just after …": every phase, said outright.
+    family: "phase-window",
+    description: "As the previous version, plus phase any: \"in any phase\" (with turn either it gates nothing; with your or opponent it is that player's turn).",
+    schema: (previous) => withProperties(previous, { phase: widenedEnum(previous, "phase", ["any"]) }),
+    normalize: (input, previous) => input.phase === "any" ? { ...previous({ ...input, phase: "command" }), phase: "any" } : previous(input),
+  },
+  {
+    // "Place two tokens next to the unit, removing one each time this ability is used."
+    family: "usage-limit",
+    description: "As the previous version, plus frequency twice-per-battle.",
+    schema: (previous) => withProperties(previous, { frequency: widenedEnum(previous, "frequency", ["twice-per-battle"]) }),
+    normalize: (input, previous) => input.frequency === "twice-per-battle" ? { ...previous({ ...input, frequency: "once-per-battle" }), frequency: "twice-per-battle" } : previous(input),
+  },
+  // "whose attacks have been resolved this phase": the unit has finished its attacks, which is
+  // more than being selected to shoot or fight.
+  activitiesExtension(["resolved-attacks-this-phase"], "resolved-attacks-this-phase: the subject has resolved its attacks this phase"),
   // "Friendly WORLD EATERS units' melee attacks have +1 A": the units a bare filter before the
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),

@@ -133,6 +133,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
   }
+  // "in any phase" with no turn restricts nothing: it says the ability is not phase-bound.
+  list = list.filter((leaf) => !(leaf.family_id === "phase-window" && leaf.parameters.phase === "any"
+    && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either")));
   // named-region-state is a whole ability by itself: the DSL shape it produces has no room for
   // any other leaf beside it (see compile-named-region.ts for why).
   if (list.length === 1 && list[0]!.family_id === "named-region-state") {

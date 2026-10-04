@@ -368,7 +368,8 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
 
 /** A frequency in the DSL's spelling, with ownership only when the leaf explicitly records it. */
 export function usageFor(parameters: Record<string, unknown>): Record<string, unknown> {
-  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 } : { frequency: parameters.frequency };
+  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 }
+    : parameters.frequency === "twice-per-battle" ? { frequency: "n-per-battle", count: 2 } : { frequency: parameters.frequency };
   return { ...frequency, ...(parameters.per !== undefined && parameters.per !== "any" ? { per: parameters.per } : {}) };
 }
 

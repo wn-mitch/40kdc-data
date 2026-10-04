@@ -59,6 +59,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if ((leaf.parameters.of === "following-filter" || leaf.parameters.with === "following-filter") && leaf.parameters.following_filter === undefined) {
     return { kind: "implicit", note: `No separate text: ${leaf.family_id === "unit-state" ? "engaged with" : "measured to"} any unit the unit-filter right after it names.` };
   }
+  if (leaf.family_id === "phase-window" && leaf.parameters.phase === "any" && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either")) {
+    return { kind: "implicit", note: "No separate text: in any phase, so the ability is not limited to a phase." };
+  }
   if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
   if (leaf.family_id === "roll-result") return { kind: "implicit", note: leaf.parameters.to === undefined
