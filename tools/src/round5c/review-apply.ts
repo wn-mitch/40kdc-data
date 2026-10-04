@@ -28,6 +28,8 @@ export type ChatDecision = {
   description?: string;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
+  /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
+  merges_annotation_ids?: number[];
   action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface";
   /** For `add-connective`: which occurrence of a wording that repeats in its fragment. */
   start_byte?: number;
@@ -93,6 +95,7 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
     const bytes = item.exact_text ? { ...located({ ...row, id: annotationId }, item.exact_text), exact_text: item.exact_text } : {};
     return {
       ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role, ...(item.allow_overlap ? { allow_overlap: true } : {}),
+      ...(item.merges_annotation_ids ? { merges_annotation_ids: item.merges_annotation_ids } : {}),
       family_id: item.family_id ?? row.family_id, ...(item.family_id ? {} : { family_version: row.family_version }),
       parameters: item.parameters ?? JSON.parse(row.parameters_json!) as Record<string, unknown>,
     };

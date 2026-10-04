@@ -325,10 +325,10 @@ describe("Round 5C picked rolls and just-destroyed Stratagem targets", () => {
       { type: "roll-result", target: "this-unit", modifier: { roll: "wound", count: 1, result: 6 } },
     ] });
     expect(rendered(base(), [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6", count: 1 }, 2)])).toMatch(/one of [^.]*Hit rolls counts as 6/iu);
-    const reroll = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "damage"], subset: "all", weapon_type: "all", count: 1 }, 3)]);
+    const reroll = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "damage"], subset: "all", weapon_type: "all", count: 1 }, 4)]);
     expect((reroll.mechanics.effect as { type: string; options: unknown[] }).options).toHaveLength(2);
     // A pick needs two rolls, and names either roll or rolls, never both.
-    expect(() => normalizeFingerprintParameters("reroll", { rolls: ["hit"], subset: "all", weapon_type: "all" }, 3)).toThrow(/two or more/u);
+    expect(() => normalizeFingerprintParameters("reroll", { rolls: ["hit"], subset: "all", weapon_type: "all" }, 4)).toThrow(/two or more/u);
     expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "hit", rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 }, 2)).toThrow(/exactly one of roll and rolls/u);
     expect(() => normalizeFingerprintParameters("roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6" }, 2)).toThrow(/needs count 1/u);
   });

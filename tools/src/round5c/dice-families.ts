@@ -189,6 +189,28 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "ignore-modifiers",
+    version: 2,
+    role: "EFFECT",
+    label: "Ignore modifiers",
+    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered.",
+    starter: { subject: "this-unit", what: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "what"],
+      properties: {
+        subject: { enum: IGNORE_SUBJECTS },
+        what: { type: "array", items: { enum: ["characteristics", "rolls"] }, minItems: 1, uniqueItems: true },
+        stats: { type: "array", items: { enum: IGNORE_STATS }, minItems: 1, uniqueItems: true },
+        rolls: { type: "array", items: { enum: ROLL_KINDS }, minItems: 1, uniqueItems: true },
+        only: { enum: IGNORE_ONLY },
+        weapon_type: { enum: WEAPON_TYPES },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "roll-auto-result",
@@ -293,6 +315,20 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
     }
     case "ignore-modifiers": {
       const subject = enumValue(input.subject, IGNORE_SUBJECTS, "ignore-modifiers.subject");
+      if (version >= 2) {
+        // Version 2: `what` lists every kind the list names; each named kind's array may appear.
+        const kinds = enumSet(input.what, ["characteristics", "rolls"], "ignore-modifiers.what");
+        const allowed = new Set(["subject", "what", "only", "weapon_type", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])]);
+        for (const key of Object.keys(input)) {
+          if (!allowed.has(key)) throw new TypeError(`ignore-modifiers parameters must be subject, what, only, weapon_type, and stats/rolls only for the kinds what names.`);
+        }
+        const result: Record<string, unknown> = { subject, what: kinds };
+        if (input.stats !== undefined) result.stats = enumSet(input.stats, IGNORE_STATS, "ignore-modifiers.stats");
+        if (kinds.includes("rolls")) result.rolls = enumSet(input.rolls, ROLL_KINDS, "ignore-modifiers.rolls");
+        if (input.only !== undefined) result.only = enumValue(input.only, IGNORE_ONLY, "ignore-modifiers.only");
+        if (input.weapon_type !== undefined) result.weapon_type = enumValue(input.weapon_type, WEAPON_TYPES, "ignore-modifiers.weapon_type");
+        return result;
+      }
       const what = enumValue(input.what, ["characteristics", "rolls"], "ignore-modifiers.what");
       const allowed = new Set(["subject", "what", "only", "weapon_type", what === "characteristics" ? "stats" : "rolls"]);
       for (const key of Object.keys(input)) {

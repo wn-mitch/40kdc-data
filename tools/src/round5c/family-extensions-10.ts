@@ -46,4 +46,17 @@ export const FAMILY_EXTENSIONS_10: readonly FamilyExtension[] = [
       return { ...previous(rest), not_moved_this_turn: true };
     },
   },
+  {
+    // "can re-roll hit rolls and wound rolls"; "re-roll one Hit roll, one Wound roll and one Damage roll".
+    family: "reroll",
+    description: "As the previous version, plus each: with rolls, every listed roll can be re-rolled (\"re-roll Hit rolls and Wound rolls\"), not one picked from them; a count applies to each roll.",
+    schema: (previous) => withProperties(previous, { each: optional({ const: true }) }),
+    normalize: (input, previous) => {
+      if (input.each === undefined) return previous(input);
+      const { each, ...rest } = input;
+      if (each !== true) throw new TypeError("reroll.each is true or absent.");
+      if (rest.rolls === undefined) throw new TypeError("reroll.each qualifies a rolls list.");
+      return { ...previous(rest), each: true };
+    },
+  },
 ];

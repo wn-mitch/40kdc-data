@@ -49,7 +49,7 @@ async function deepseekCall(_instructions: string, requestText: string): Promise
       faction_id: "fixture", ability_id: ability.ability_id, source_hash: ability.source_hash,
       spans: [{
         start_byte: 0, end_byte: Buffer.byteLength(PHRASE, "utf8"), exact_text: PHRASE, role: "EFFECT", status: "EXISTING",
-        family_id: "reroll", family_version: 3, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
+        family_id: "reroll", family_version: 4, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
       }],
       structural_spans: [], connectives: [], unresolved_regions: [],
     })),
@@ -126,7 +126,7 @@ describe("Round 5C pilot step", () => {
     for (const ability of report.abilities) {
       // The labelled phrase, and the rest of the text the model left unlabelled.
       expect(ability.spans).toEqual([
-        expect.objectContaining({ family: "reroll@3", status: "pending", jev_agrees: true }),
+        expect.objectContaining({ family: "reroll@4", status: "pending", jev_agrees: true }),
         expect.objectContaining({ role: "UNRESOLVED", status: "unresolved", family: null }),
       ]);
     }
@@ -162,7 +162,7 @@ describe("Round 5C pilot step", () => {
         applyAnnotationBatch(db, { reviewer: "will", decisions: [{
           action: text === PHRASE ? "confirm" : "correct", proposal_id: proposal.id, ability_version_id: id, source_hash: ability.source_hash,
           fragment: "RAW_TEXT", start_byte: 0, end_byte: Buffer.byteLength(text, "utf8"), exact_text: text, role: "EFFECT",
-          family_id: "reroll", family_version: 3, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
+          family_id: "reroll", family_version: 4, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
         }] });
         // The unlabelled residue keeps the source from being fully accounted, so the whole-context
         // check is unavailable; the pilot mark is how Will says the step's review is done.

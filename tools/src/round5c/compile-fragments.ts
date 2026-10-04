@@ -97,7 +97,12 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
   switch (leaf.family_id) {
     case "reroll": {
       // Version 3: a pick of one from several rolls is a choice of one re-roll each.
-      if (Array.isArray(leaf.parameters.rolls)) return pickOne(leaf, context);
+      if (Array.isArray(leaf.parameters.rolls)) {
+        if (leaf.parameters.each !== true) return pickOne(leaf, context);
+        // Version 4 `each`: every listed roll can be re-rolled, together.
+        const { rolls, each: _each, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
+        return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
+      }
       const roll = closed(leaf, "roll");
       const subset = closed(leaf, "subset");
       const modifier: Node = subset === "ones" ? { roll, subset: "ones" } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
@@ -109,6 +114,13 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "re-roll", target: rollTarget(roll), modifier };
     }
     case "ignore-modifiers": {
+      // Version 2 lists kinds; compileLeaves splits a two-kind leaf first, so only a lone leaf
+      // (a preview) reaches here with both, and it reads as one effect per kind.
+      if (Array.isArray(leaf.parameters.what)) {
+        const { what: kinds, stats, rolls, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
+        const steps = kinds.map((kind) => effect({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls }) } }, context));
+        return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+      }
       const what = closed(leaf, "what");
       const modifier: Node = { what };
       if (what === "characteristics") {

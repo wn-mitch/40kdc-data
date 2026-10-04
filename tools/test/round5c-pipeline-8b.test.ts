@@ -79,7 +79,7 @@ function fixture(): DatabaseSync {
   confirmSurface(db, { reviewer: REVIEWER, exact_text: "re-roll a hit roll of 1", family_id: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" } });
   // Both leaves of the bad-shape ability decided up front — nothing for auto-confirm to do here.
   confirmSurface(db, { reviewer: REVIEWER, exact_text: "Whenever this model shoots", family_id: "attack", parameters: { direction: "makes", unit: "this-model", attack_type: "ranged" } });
-  confirmSurface(db, { reviewer: REVIEWER, exact_text: "you can re-roll one Hit roll", family_id: "reroll", family_version: 3, parameters: { roll: "hit", subset: "ones", weapon_type: "all", count: 1 } });
+  confirmSurface(db, { reviewer: REVIEWER, exact_text: "you can re-roll one Hit roll", family_id: "reroll", family_version: 4, parameters: { roll: "hit", subset: "ones", weapon_type: "all", count: 1 } });
   return db;
 }
 

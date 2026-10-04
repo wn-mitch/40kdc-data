@@ -300,7 +300,7 @@ describe("Round 5C greedy work queue", () => {
       const confirmed = applyAnnotationBatch(db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: target.id, source_hash: getAbility(db, target.id).source_hash,
         fragment: "RAW_TEXT", start_byte: bytes.start, end_byte: bytes.end, exact_text: HIT_ONES, role: "EFFECT",
-        family_id: "reroll", family_version: 3, parameters: hitOnes.parameters,
+        family_id: "reroll", family_version: 4, parameters: hitOnes.parameters,
       }] });
       const view = getAbility(db, target.id);
       expect(view.proposals).toEqual([]);

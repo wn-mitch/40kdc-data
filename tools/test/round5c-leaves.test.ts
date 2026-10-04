@@ -179,8 +179,8 @@ describe("Round 5C leaf surfaces", () => {
       { faction_id: "alpha", ability_id: "pending", raw_text: "Now re-roll a failed Hit roll." },
     ]);
     try {
-      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, 3);
-      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, 3);
+      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, 4);
+      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, 4);
       const failed = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll a failed Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed", weapon_type: "all" } });
       confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
       expect(failed.applied).toBe(2);

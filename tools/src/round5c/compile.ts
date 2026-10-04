@@ -110,12 +110,25 @@ function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefine
   return part;
 }
 
+/**
+ * An ignore-modifiers list that names characteristics and rolls together ("BS, Hit rolls and
+ * Wound rolls") is one leaf; the DSL's ignore-modifiers holds one kind, so it lowers to one
+ * single-kind leaf per kind, on the same wording, in the list's order.
+ */
+function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
+  return list.flatMap((leaf) => {
+    if (leaf.family_id !== "ignore-modifiers" || !Array.isArray(leaf.parameters.what)) return [leaf];
+    const { what, stats, rolls, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
+    return what.map((kind) => ({ ...leaf, parameters: { ...rest, what: kind, ...(kind === "characteristics" ? (stats === undefined ? {} : { stats }) : { rolls }) } }));
+  });
+}
+
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(ordered(leaves))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
+    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

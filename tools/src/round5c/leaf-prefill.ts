@@ -317,8 +317,8 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:this|that|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
-    if (/\bcharacteristics?\b/iu.test(exactText) && !/\brolls?\b/iu.test(exactText)) prefill.what = "characteristics";
-    else if (/\brolls?\b/iu.test(exactText)) prefill.what = "rolls";
+    const kinds = [...(/\bcharacteristics?\b/iu.test(exactText) ? ["characteristics"] : []), ...(/\brolls?\b/iu.test(exactText) ? ["rolls"] : [])];
+    if (kinds.length > 0) prefill.what = kinds;
     if (/\bnegative modifiers?\b|\bworsen(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "worsening";
     else if (/\bpositive modifiers?\b|\bimprov(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "improving";
   }
