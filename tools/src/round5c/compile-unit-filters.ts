@@ -301,6 +301,16 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
+      // "Friendly X units' melee attacks have +1 A and +1 S": every property of one scope after the
+      // filter names the same units (a weapon ability keyword carries no subject of its own).
+      for (;;) {
+        const next = list[index + 1];
+        if (!next || next.fragment !== leaf.fragment) break;
+        if (next.family_id === "weapon-ability-keyword") { out.push(next); index += 1; continue; }
+        if (!Object.values(next.parameters).includes(FILTERED_UNITS) || next.parameters.subject_filter !== undefined) break;
+        out.push({ ...next, parameters: { ...next.parameters, subject_filter: dslUnitFilter(leaf) } });
+        index += 1;
+      }
     } else if (isFilter(leaf)) {
       throw new CompileError("A unit-filter needs a select-unit or attack right before it, or an aura-range or event right after it, or a Stratagem target leaf before it.");
     } else if (openSelect(leaf)) {

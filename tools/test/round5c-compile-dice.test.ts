@@ -99,7 +99,7 @@ describe("Round 5C dice-family compiler", () => {
   });
 
   it("moves version 1 ignore-modifiers to a one-kind list", () => {
-    expect(mapToLatest("ignore-modifiers", 1, { subject: "this-unit", what: "rolls", rolls: ["hit"] })).toEqual({ family: "ignore-modifiers", version: 2, parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit"] } });
+    expect(mapToLatest("ignore-modifiers", 1, { subject: "this-unit", what: "rolls", rolls: ["hit"] })).toEqual({ family: "ignore-modifiers", version: currentFamilyVersion("ignore-modifiers"), parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit"] } });
   });
 
   it("moves the attacker's rolls to the attacker when the effect targets this unit", () => {

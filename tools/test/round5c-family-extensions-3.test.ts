@@ -108,6 +108,18 @@ describe("Round 5C family extensions, third round", () => {
       expect(first(selected, "mortal-wounds")).toMatchObject({ target: "selected-unit" });
     });
 
+    it("gives every property of an attack scope to the filter's units: \"Friendly X units' melee attacks have +1 A, +1 S and [LETHAL HITS]\"", () => {
+      const mechanics = compiled([
+        friendly(["WORLD EATERS"]), leaf("weapon-property-scope", { subject: "antecedent", weapon_type: "melee" }),
+        leaf("characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }),
+        leaf("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 1 }),
+        leaf("weapon-ability-keyword", { keyword: "Lethal Hits" }),
+      ]);
+      const text = JSON.stringify(mechanics);
+      expect(text).not.toContain("filtered-units");
+      expect(text.match(/"target":\{"owner":"friendly","all_of":\["WORLD EATERS"\]\}/gu)).toHaveLength(3);
+    });
+
     it("refuses a filter and a 'from your army' that name different sides, and a family that cannot take a filter", () => {
       expect(errors([friendly(["INFANTRY"]), leaf("unit-owner", { owner: "enemy" }), leaf("feel-no-pain", { subject: "antecedent", threshold: 5, against: "all" })]).join(" "))
         .toMatch(/different sides/u);
