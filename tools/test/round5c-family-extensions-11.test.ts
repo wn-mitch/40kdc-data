@@ -67,3 +67,14 @@ describe("leading-unit from the led unit's side", () => {
       .toThrow(/attachment led/u);
   });
 });
+
+describe("objective range against one marker", () => {
+  it("names a designated marker, and refuses a selected one when nothing selects a marker", () => {
+    const designated = JSON.stringify(mechanicsOf(leaves(["unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "designated", objective_tag: "acquisition" }], heal())));
+    expect(designated).toContain('"of":{"objective":{"designated":"acquisition"}}');
+    const unselected = compileLeaves(leaves(["unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "selected" }], heal()));
+    expect(unselected.ok ? "" : unselected.errors.join()).toMatch(/selects no objective marker/u);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "designated", objective_tag: "not-a-tag" }, currentFamilyVersion("unit-position")))
+      .toThrow(/not a registered designation/u);
+  });
+});

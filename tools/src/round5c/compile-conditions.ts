@@ -286,7 +286,13 @@ export function condition(leaf: CompileLeaf): Node {
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
       const controlled = closed(leaf, "controlled_by");
-      const objective = controlled === "you" ? { controlled_by: "friendly" } : controlled === "opponent" ? { controlled_by: "enemy" } : {};
+      const objective: Node = controlled === "you" ? { controlled_by: "friendly" } : controlled === "opponent" ? { controlled_by: "enemy" } : {};
+      // Version 13: the marker this record selected (bound by compile.ts), or the one carrying a designation.
+      if (leaf.parameters.objective === "designated") objective.designated = closed(leaf, "objective_tag");
+      if (leaf.parameters.objective === "selected") {
+        if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("unit-position names the selected objective marker, but this record selects no objective marker.");
+        objective.selection_var = leaf.parameters.selection_var;
+      }
       return polarity(leaf, pred("within", { of: { objective }, range: "objective-control" }, subject));
     }
     case "target-is-selected":

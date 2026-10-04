@@ -1,6 +1,7 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { activitiesExtension, type FamilyExtension, keywordList, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue } from "./family-validation.js";
+import { DESIGNATION_IDS } from "../translate/designations.js";
 
 /**
  * The eleventh round of family extensions. As in the earlier rounds, a version checks only its own
@@ -97,6 +98,26 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
         ...(leaders !== undefined ? { leader_keywords: keywordList(leaders, "leading-unit.leader_keywords", 1) } : {}),
         ...(negated === true ? { negated: true } : {}),
       };
+    },
+  },
+  {
+    // "within range of your vowed objective"; "within range of that objective marker" after a
+    // select-objective.
+    family: "unit-position",
+    description: "As the previous version, plus, for objective-range, objective: any (the default), selected (the objective marker this record's select-objective chose) or designated (the marker carrying objective_tag, a registered designation id).",
+    schema: (previous) => withProperties(previous, {
+      objective: optional({ enum: ["any", "selected", "designated"], "x-only-when": { kind: ["objective-range"] } }),
+      objective_tag: optional({ type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-only-when": { objective: ["designated"] } }),
+    }),
+    normalize: (input, previous) => {
+      const { objective, objective_tag: tag, ...rest } = input;
+      if (objective === undefined && tag === undefined) return previous(input);
+      const value = enumValue(objective ?? "any", ["any", "selected", "designated"], "unit-position.objective");
+      if (rest.kind !== "objective-range") throw new TypeError("unit-position.objective qualifies an objective-range.");
+      if ((value === "designated") !== (tag !== undefined)) throw new TypeError("unit-position.objective_tag names the designation of a designated objective, and only then.");
+      if (tag !== undefined && !DESIGNATION_IDS.has(String(tag))) throw new TypeError(`unit-position.objective_tag ${JSON.stringify(tag)} is not a registered designation.`);
+      const normalized = previous(rest);
+      return value === "any" ? normalized : { ...normalized, objective: value, ...(tag !== undefined ? { objective_tag: tag } : {}) };
     },
   },
   // "Friendly WORLD EATERS units' melee attacks have +1 A": the units a bare filter before the

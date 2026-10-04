@@ -59,6 +59,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if ((leaf.parameters.of === "following-filter" || leaf.parameters.with === "following-filter") && leaf.parameters.following_filter === undefined) {
     return { kind: "implicit", note: `No separate text: ${leaf.family_id === "unit-state" ? "engaged with" : "measured to"} any unit the unit-filter right after it names.` };
   }
+  if (leaf.family_id === "unit-position" && leaf.parameters.objective === "selected" && leaf.parameters.selection_var === undefined) {
+    return { kind: "implicit", note: "No separate text: within range of the objective marker this record's select-objective chose." };
+  }
   if (leaf.family_id === "phase-window" && leaf.parameters.phase === "any" && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either")) {
     return { kind: "implicit", note: "No separate text: in any phase, so the ability is not limited to a phase." };
   }
