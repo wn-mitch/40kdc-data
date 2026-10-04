@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { targetRestrictions } from "../src/round5c/compile-conditions.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { designationLabel } from "../src/translate/designations.js";
 
 /** Leaves in source order at the current version of their family. */
 function leaves(...items: Array<[string, Record<string, unknown>, string?]>): CompileLeaf[] {
@@ -76,5 +77,15 @@ describe("objective range against one marker", () => {
     expect(unselected.ok ? "" : unselected.errors.join()).toMatch(/selects no objective marker/u);
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, objective: "designated", objective_tag: "not-a-tag" }, currentFamilyVersion("unit-position")))
       .toThrow(/not a registered designation/u);
+  });
+});
+
+describe("designations each rule prints", () => {
+  it("tags a unit with the rule's own designation, and labels it as printed", () => {
+    const text = JSON.stringify(mechanicsOf(leaves(["apply-mark", { subject: "this-unit", tag: "wracked-with-agonies" }])));
+    expect(text).toContain('"type":"designate"');
+    expect(text).toContain('"tag":"wracked-with-agonies"');
+    expect(designationLabel("infested-with-snotlings")).toBe("infested with Snotlings");
+    expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "wracked" }, currentFamilyVersion("apply-mark"))).toThrow();
   });
 });
