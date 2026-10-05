@@ -51,6 +51,17 @@ export function closed(leaf: CompileLeaf, name: string): unknown {
 }
 
 /**
+ * A unit a family names by a closed role: the role itself, or every unit the unit-filter folded
+ * before the leaf matches (`filtered-units`, bound by compile-antecedent.ts).
+ */
+export function unitOf(leaf: CompileLeaf, name: string): Node | string {
+  const value = closed(leaf, name);
+  if (value !== "filtered-units") return value as string;
+  if (leaf.parameters.subject_filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
+  return structuredClone(leaf.parameters.subject_filter as Node);
+}
+
+/**
  * "**CHARACTER** models in this unit": the subject's own models with every listed keyword, as a
  * model-level DSL unit-filter; without model_keywords, the subject itself.
  */

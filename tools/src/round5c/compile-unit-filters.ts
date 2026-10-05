@@ -1,4 +1,5 @@
-import { AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
+import { exactSpan } from "./contracts.js";
+import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
 import { FOLLOWING_FILTER } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -295,6 +296,14 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
+    } else if (isFilter(leaf) && attackOfFilter(list, index) !== null && attackerAfter(list[attackOfFilter(list, index)!], leaf)) {
+      // "a friendly model" + "that disembarked from this TRANSPORT this turn" + "makes an attack":
+      // the filter is who attacks; the conditions between (bound to the attacker by
+      // compile-antecedent.ts) stay ahead of the attack as gates on it.
+      const at = attackOfFilter(list, index)!;
+      out.push(...list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(leaf, list[at]!) } });
+      index = at;
     } else if (isFilter(leaf) && attackerAfter(list[pastOwners(list, index, leaf)], leaf)) {
       // "each time a friendly AELDARI model" + "makes an attack": who attacks. A model-level filter
       // before "in your unit makes …" is those models of this unit.
@@ -316,9 +325,16 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const event = out.at(-1)!;
       out[out.length - 1] = { ...event, parameters: { ...event.parameters, object_filter: dslUnitFilter(leaf) } };
       index = at - 1;
-    } else if (isFilter(leaf) && out.at(-1)?.family_id === "attack") {
+    } else if (isFilter(leaf) && madeBy(out.at(-1), leaf, sourceText)) {
+      // "each time an attack made by a" + "NURGLE model": the filter after "made by" is who attacks.
+      const at = pastOwners(list, index, leaf);
+      const attack = out.at(-1)!;
+      out[out.length - 1] = { ...attack, parameters: { ...attack.parameters, attacker_filter: attackerFilter(leaf, attack) } };
+      index = at - 1;
+    } else if (isFilter(leaf) && (out.at(-1)?.family_id === "attack" || (out.at(-1)?.family_id === "attack-filter" && out.at(-2)?.family_id === "attack"))) {
       // "each time a model in this unit makes an attack" + "that targets a" + "VEHICLE unit": the
-      // attack's target. "an enemy unit" alone adds nothing an attack's target is not already.
+      // attack's target, also past the weapon the attack is made with ("with a melta weapon against
+      // a VEHICLE unit"). "an enemy unit" alone adds nothing an attack's target is not already.
       if (Object.keys(filterOf(leaf)).length > 0 || leaf.parameters.side === "friendly") out.push({ ...leaf, family_id: "unit-filter-target" });
     } else if (isFilter(leaf) && postfixRecipient(out.at(-1))) {
       // "Add 1 to the Strength characteristic of" + "**K** models from your army": the units the
@@ -414,7 +430,14 @@ function ownedBy(leaf: CompileLeaf | undefined, side: unknown): boolean {
 function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   if (leaf?.family_id !== "attack" || leaf.parameters.direction !== "makes" || leaf.parameters.attacker_filter !== undefined) return false;
   if (leaf.parameters.unit === "friendly-unit") return filter.parameters.side === "friendly";
+  if (leaf.parameters.unit === "enemy-unit") return filter.parameters.side === "enemy";
   return leaf.parameters.unit === "this-unit" && filter.parameters.level === "model" && filter.parameters.side === "friendly";
+}
+
+/** "an attack made by a" + filter: the attack's own wording, or the words before the filter, say who made it. */
+function madeBy(attack: CompileLeaf | undefined, filter: CompileLeaf, sourceText: string | undefined): boolean {
+  if (sourceText === undefined || !attackerAfter(attack, filter) || attack!.fragment !== filter.fragment || filter.start_byte <= attack!.start_byte) return false;
+  return /\bmade by\b/iu.test(exactSpan(sourceText, attack!.start_byte, filter.start_byte));
 }
 
 function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string, unknown> {
@@ -448,9 +471,18 @@ const perRecipientCondition = (leaf: CompileLeaf | undefined, filter: CompileLea
   leaf !== undefined && leaf.role === "CONDITION" && leaf.fragment === filter.fragment && Object.values(leaf.parameters).includes(AURA_RECIPIENT);
 
 /** The index of the leaf a bare unit-filter's units receive (`FILTERED_UNITS`), past any "from your army". */
+/** A condition on the attack's target ("that target that enemy unit"), which a scope's frame keeps in front of it. */
+function targetGate(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  if (leaf?.role !== "CONDITION" || leaf.fragment !== filter.fragment) return false;
+  return leaf.family_id === "target-is-selected" || leaf.parameters.subject === "defender" || leaf.parameters.subject === "target";
+}
+
 function filteredAfter(list: readonly CompileLeaf[], index: number): number | null {
   let at = index + 1;
-  while (list[at]?.family_id === "unit-owner" || perRecipientCondition(list[at], list[index]!)) at += 1;
+  // Past per-recipient conditions, and past conditions on the attack's target that a property
+  // scope folded ahead of its frame ("Friendly X units' attacks that target that unit have …").
+  while (list[at]?.family_id === "unit-owner" || perRecipientCondition(list[at], list[index]!) || targetGate(list[at], list[index]!)
+    || (list[at]?.role === "DURATION" && list[at]!.fragment === list[index]!.fragment)) at += 1;
   const leaf = list[at];
   return leaf && Object.values(leaf.parameters).includes(FILTERED_UNITS) ? at : null;
 }

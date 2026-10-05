@@ -1,4 +1,4 @@
-import { AURA_RECIPIENT, bindAntecedents } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, bindAntecedents, UNIT_EVENT_KINDS } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
@@ -13,6 +13,7 @@ import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
+import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import type { CoreCheck } from "./core-checks.js";
@@ -68,13 +69,16 @@ export { leafFragment, type LeafFragment } from "./compile-leaf-fragment.js";
 export { shapeSignature } from "./compile-placement.js";
 
 /**
- * Who makes an attack: a unit-filter folded onto it (compile-unit-filters.ts), any friendly unit,
- * or this model, the aura's recipient or this unit.
+ * Who makes an attack: a unit-filter folded onto it (compile-unit-filters.ts), any friendly or
+ * enemy unit, this model, the aura's recipient or this unit. "That unit" is the unit an earlier
+ * leaf introduced: the aura's recipient, else the selected unit, else this unit (a led unit).
  */
-function attackerOf(attack: CompileLeaf): Node | string {
+function attackerOf(attack: CompileLeaf, thatUnit: string): Node | string {
   if (attack.parameters.attacker_filter !== undefined) return structuredClone(attack.parameters.attacker_filter as Node);
   const unit = attack.parameters.unit;
   if (unit === "friendly-unit") return { owner: "friendly" };
+  if (unit === "enemy-unit") return { owner: "enemy" };
+  if (unit === "that-unit") return thatUnit;
   return unit === "this-model" ? "this-model" : unit === "recipient" ? "recipient" : "this-unit";
 }
 
@@ -146,7 +150,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
+    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -316,7 +320,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
       }
       else if (leaf.role === "EVENT") {
         if (leaf.family_id === "attack") {
-          const gate = attackTypeCondition(leaf);
+          // An attack whose properties compile-attack-properties.ts framed has its type on each of them.
+          const gate = leaf.parameters.framed === true ? null : attackTypeCondition(leaf);
           if (gate) scope(gate);
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
@@ -335,6 +340,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
     });
   });
 
+  // "a model in that unit makes an attack": the aura's recipient, else the selected unit, else the
+  // unit of the moment the ability fires on, else this unit (a led unit).
+  const unitMoment = list.some((leaf) => leaf.family_id === "event" && UNIT_EVENT_KINDS.has(String(leaf.parameters.kind)) && !ATTACK_EVENTS.has(String(leaf.parameters.kind)));
+  const thatUnit = auraLeaf ? AURA_RECIPIENT : selections.length ? "selected-unit" : unitMoment ? "event-subject" : "this-unit";
   const planned: PlannedEffect[] = [];
   list.forEach((leaf, index) => {
     if (consumedByContainer.has(index)) return;
@@ -345,7 +354,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
       const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
       return effect(leaf, {
         attached,
-        attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack) : null,
+        attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack, thatUnit) : null,
         incoming: attack?.parameters.direction === "targeted",
       });
     });

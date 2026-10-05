@@ -133,6 +133,8 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (!found) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
   const node = structuredClone(found);
   // "each time this unit destroys an enemy unit": who destroyed it, and whose unit it was.
+  // A destroyer bound to a folded filter's units ("each time a friendly X unit destroys …") is that filter.
+  if (leaf.parameters.by === "filtered-units" && leaf.parameters.subject_filter === undefined) throw new CompileError("event by names the units of a unit-filter, but none sits right before it.");
   if (leaf.parameters.by !== undefined) node.subject = leaf.parameters.by === "enemy" ? { owner: "enemy" } : closed(leaf, "by");
   // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
   if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner"), ...(node.event === "model-destroyed" ? { level: "model" } : {}) };

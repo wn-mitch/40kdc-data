@@ -1,5 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { sameRun } from "./compile-attack-properties.js";
 
 const SCOPE = "weapon-property-scope";
 const KEYWORD = "weapon-ability-keyword";
@@ -57,7 +58,9 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     // properties after them, so they stay in front of the frame the scope becomes.
     let first = index + 1;
     const gates: CompileLeaf[] = [];
-    while (first < list.length && targetCondition(list[first]!, scope) && !/[.;]/u.test(between(source, list[first - 1]!, list[first]!))) {
+    // A duration between them ("until the end of the phase, have [LETHAL HITS]") keeps its place too.
+    while (first < list.length && (targetCondition(list[first]!, scope) || (gates.length > 0 && list[first]!.role === "DURATION" && list[first]!.fragment === scope.fragment))
+      && !/[.;]/u.test(between(source, list[first - 1]!, list[first]!))) {
       const leaf = list[first]!;
       gates.push(leaf.family_id === "designated-filter" && leaf.parameters.subject === undefined ? { ...leaf, parameters: { ...leaf.parameters, subject: "defender" } } : leaf);
       first += 1;
@@ -68,7 +71,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     let containsStat = false;
     let choice = false;
     while (end < list.length && isProperty(list[end]!) && list[end]!.fragment === scope.fragment
-      && !/[.;]/u.test(between(source, list[end - 1]!, list[end]!))) {
+      && (end === first || sameRun(source, list[end - 1]!, list[end]!)) && !/[.;]/u.test(end === first ? between(source, list[end - 1]!, list[end]!) : "")) {
       containsStat ||= isStat(list[end]!);
       if (end > first && /\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, list[end]!))) choice = true;
       end += 1;

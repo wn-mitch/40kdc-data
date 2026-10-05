@@ -154,8 +154,12 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
   }
   if (selection.parameters.count !== undefined) throw new CompileError("A designated target is one unit; a selection of several has no designate-target shape yet.");
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
-  if (!attack) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
-  const own = attack.parameters.unit === "this-model";
+  // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
+  // (compile-weapon-scopes.ts) says whose attacks as well as an attack leaf does.
+  const frame = attack ? undefined : leaves.find((leaf) => leaf.start_byte > selection.start_byte && leaf.parameters.weapon_type !== undefined
+    && (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "characteristic-modifier") && leaf.parameters.subject !== "attack");
+  if (!attack && !frame) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
+  const own = attack ? attack.parameters.unit === "this-model" : frame!.parameters.subject === "this-model";
   return {
     type: "designate-target",
     designation: "selected-unit",

@@ -26,6 +26,8 @@ const TIED_BACK = /^(?:when doing so|(?:each time|when) (?:you|it|they) do(?:es)
 const IN_ADDITION = /^in addition\b/iu;
 // "In addition, each time a model in that unit …": the sentence's opening clause names a unit an
 // earlier sentence introduced. Later in the sentence, "that unit" is usually its own subject.
+// "such an enemy unit" always points back, wherever it sits in the sentence.
+const SUCH = /\bsuch (?:an? )?(?:\w+ )?(?:units?|models?|weapons?|attacks?)\b/iu;
 const REFERS_BACK = /\b(?:that|those|such(?: an?)?) (?:units?|models?|weapons?|attacks?)\b/iu;
 /** Leaves that make an ability a Stratagem, used once as a whole. */
 export const STRATAGEM_HEADER = new Set(["stratagem-target", "use-window", "stratagem-cost"]);
@@ -90,7 +92,7 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   sentences.forEach((sentence, position) => {
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
     const opensPart = position > firstEffectful && !listed.slice(0, position + 1).includes(true) && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
-      IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words))) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!);
+      IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words))) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     if (opensPart || (position > firstEffectful && (armyOnly(sentence) || armyOnly(sentences[position - 1]!)))) parts.push([]);
     if (position >= firstEffectful) parts.at(-1)!.push(...sentence);
   });

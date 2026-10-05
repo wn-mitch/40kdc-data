@@ -59,6 +59,7 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "leading-unit": ["subject"],
   "roll-modifier": ["subject"],
   reroll: ["subject"],
+  "in-region": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

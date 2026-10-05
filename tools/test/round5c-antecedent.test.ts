@@ -44,9 +44,8 @@ describe("Round 5C anaphoric subjects", () => {
       .toMatchObject({ ok: false, errors: [expect.stringMatching(/no earlier leaf selects a unit, targets a Stratagem or names a unit's moment/u)] });
     // A selection after the anaphor does not count.
     expect(compileLeaves([inEffect(mortal("antecedent")), inEffect(selectEnemy())])).toMatchObject({ ok: false });
-    // An apply-mark subject names a selected unit but never a triggering one.
-    expect(compileLeaves([enemyFallsBack(), leaf("apply-mark", { subject: "antecedent", tag: "suppressed" })]))
-      .toMatchObject({ ok: false, errors: [expect.stringMatching(/event-subject, which its subject cannot name/u)] });
+    // An apply-mark subject lowers as any unit-ref, so it also names a triggering unit.
+    expect(JSON.stringify(compileLeaves([enemyFallsBack(), leaf("apply-mark", { subject: "antecedent", tag: "suppressed" })]))).toContain('"type":"designate","target":"event-subject"');
   });
 
   it("binds a Stratagem's 'that unit' to its target, which its effects name as this unit", () => {

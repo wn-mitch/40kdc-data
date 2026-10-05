@@ -1,4 +1,4 @@
-import { closed, type CompileLeaf } from "./compile-fragments.js";
+import { closed, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
@@ -14,7 +14,7 @@ function withinOf(leaf: CompileLeaf): unknown {
 
 /** The `target` a `test`/`test-exemption` leaf names: a fixed role, or an owner+range filter. */
 function testTarget(leaf: CompileLeaf): Node | string {
-  const target = closed(leaf, "target") as string;
+  const target = unitOf(leaf, "target");
   if (target !== "enemy" && target !== "friendly") return target;
   const node: Node = { owner: target };
   const range = leaf.parameters.range;

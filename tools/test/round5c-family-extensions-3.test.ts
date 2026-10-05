@@ -73,7 +73,9 @@ describe("Round 5C family extensions, third round", () => {
 
     it("still binds to the record's own unit without an aura, and refuses a family that cannot name the recipient", () => {
       expect(first(compiled([leaf("feel-no-pain", { subject: "antecedent", threshold: 5, against: "all" })]), "feel-no-pain")).toMatchObject({ target: "this-unit" });
-      expect(errors([friendly(["INFANTRY"]), aura(), leaf("set-up", { subject: "antecedent", to: "strategic-reserves", from: "battlefield" })]).join(" "))
+      // A set-up's subject lowers as any unit-ref, so it names the recipient too.
+      expect(first(compiled([friendly(["INFANTRY"]), aura(), leaf("set-up", { subject: "antecedent", to: "strategic-reserves", from: "battlefield" })]), "set-up")).toMatchObject({ target: "recipient" });
+      expect(errors([friendly(["INFANTRY"]), aura(), leaf("targeting-restriction", { subject: "antecedent", may: "cannot-target", kind: "shoot", weapon_type: "all" })]).join(" "))
         .toMatch(/points back to the recipient/u);
     });
 

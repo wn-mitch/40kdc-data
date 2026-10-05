@@ -4,7 +4,7 @@
  * for any family it does not handle itself.
  */
 
-import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
@@ -19,7 +19,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.counts_as_move !== undefined) modifier.counts_as_move = closed(leaf, "counts_as_move");
       // Folded from "as if it were your Movement phase" after the move (compile-as-if.ts).
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
-      return { type: "move", target: closed(leaf, "subject"), modifier };
+      return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-distance":
       return { type: "move-modifier", target: closed(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), distance_bonus: closed(leaf, "bonus") } };
@@ -27,7 +27,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const modifier: Node = { passthrough: [closed(leaf, "passthrough")] };
       if (leaf.parameters.applies_to_moves !== undefined) modifier.applies_to_moves = closed(leaf, "applies_to_moves");
       if (leaf.parameters.ignore_vertical !== undefined) modifier.ignore_vertical = closed(leaf, "ignore_vertical");
-      return { type: "move-modifier", target: closed(leaf, "subject"), modifier };
+      return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier };
     }
     case "set-up": {
       const modifier: Node = { to: closed(leaf, "to") };
@@ -40,7 +40,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
       if (leaf.parameters.via !== undefined) modifier.via = closed(leaf, "via");
       if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { inches: closed(leaf, "marker_inches"), ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
-      return { type: "set-up", target: closed(leaf, "subject"), modifier };
+      return { type: "set-up", target: unitOf(leaf, "subject"), modifier };
     }
     case "battlefield-marker": {
       const modifier: Node = { label: closed(leaf, "label") };
@@ -107,7 +107,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "apply-mark": {
       const modifier: Node = { tag: closed(leaf, "tag") };
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
-      return { type: "designate", target: closed(leaf, "subject"), modifier };
+      return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
     case "army-construction": {
       const modifier: Node = { rule: closed(leaf, "rule") };

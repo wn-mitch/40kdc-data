@@ -10,7 +10,7 @@ const STRATAGEM_TARGETS = new Set(["stratagem-target", "triggering-target", "tar
  * turn, round and step boundaries, resource and designation changes, uses of a rule and named
  * rolls introduce no unit.
  */
-const UNIT_EVENT_KINDS = new Set([
+export const UNIT_EVENT_KINDS = new Set([
   "attack-made", "hit-roll", "wound-roll", "charge", "unit-destroyed", "model-destroyed", "this-model-destroyed", "after-shooting",
   "selected-to-shoot", "selected-to-fight", "enemy-selected-targets", "enemy-ended-move", "enemy-has-shot", "enemy-declared-charge",
   "disembarked", "damage-allocated", "state-changed", "move-ended", "selected", "targets-selected", "attacks-resolved", "set-up",
@@ -104,6 +104,33 @@ function onMomentUnit(leaves: readonly CompileLeaf[], index: number): boolean {
   return moment !== null && moment > index;
 }
 
+/**
+ * "a friendly model" + "that disembarked from this TRANSPORT this turn" + "makes an attack": the
+ * index of the attack a bare filter and the conditions after it describe, or null. The filter is
+ * the attacker (compile-unit-filters.ts), and each condition is on the attacking unit.
+ */
+export function attackOfFilter(leaves: readonly CompileLeaf[], filterIndex: number): number | null {
+  const filter = leaves[filterIndex];
+  if (filter?.family_id !== "unit-filter") return null;
+  const before = leaves[filterIndex - 1];
+  if (before && before.fragment === filter.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter")) return null;
+  let at = filterIndex + 1;
+  while (describes(leaves, at, filter.fragment) && leaves[at]!.family_id !== "unit-filter") at += 1;
+  const attack = leaves[at];
+  return at > filterIndex + 1 && attack?.family_id === "attack" && attack.fragment === filter.fragment && attack.parameters.direction === "makes"
+    && leaves.slice(filterIndex + 1, at).some((leaf) => leaf.role === "CONDITION") ? at : null;
+}
+
+/** Whether a condition sits between a bare filter and the attack they describe. */
+function onAttacker(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  if (leaf.role !== "CONDITION") return false;
+  let at = index - 1;
+  while (at >= 0 && describes(leaves, at, leaf.fragment) && leaves[at]!.family_id !== "unit-filter") at -= 1;
+  const attack = attackOfFilter(leaves, at);
+  return attack !== null && attack > index;
+}
+
 /** Leaves that claim a unit-filter right before them, so it is not an effect's postfix recipient. */
 const FILTER_CLAIMANTS = new Set(["aura-range", "event", "attack"]);
 
@@ -129,9 +156,14 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   if (postfixFilter(leaves, index)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   if (onMomentUnit(leaves, index)) return "event-subject";
+  // "a friendly model" + "that disembarked this turn" + "makes an attack": the attacking unit.
+  if (onAttacker(leaves, index)) return "attacker";
   const earlier = leaves.slice(0, index);
-  // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
+  // "Friendly X units' attacks that target that unit": a filter right before an attack-property
+  // scope names whose attacks, even after a selection the rest of the record points to.
+  if (leaves[index]!.family_id === "weapon-property-scope" && bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "select-unit")) return "selected-unit";
+  // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
@@ -158,11 +190,13 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"],
+  "make-move": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],
-  // An owned moment's subject goes into the trigger as is (compile-triggers.ts).
-  event: ["subject"],
+  "in-region": ["subject"],
+  // An owned moment's subject, and who destroyed a unit, go into the trigger as is (compile-triggers.ts).
+  event: ["subject", "by"],
 };
 
 /** Subject-like keys whose values say which of the record's own unit or model it talks about. */
@@ -193,7 +227,7 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (values.includes(role)) return role;
   // A selected or triggering unit is a plain DSL unit-ref, which a key lowered as any unit-ref
   // takes even when its family's own enum does not list it.
-  if ((role === "selected-unit" || role === "event-subject" || role === "event-object")
+  if ((role === "selected-unit" || role === "event-subject" || role === "event-object" || role === "attacker")
     && (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key))) return role;
   if (leaf.family_id === "mortal-wounds" && role === "selected-unit" && values.includes("that-unit")) return "that-unit";
   return null;
