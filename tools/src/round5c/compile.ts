@@ -1,6 +1,6 @@
-import { bindAntecedents } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, bindAntecedents } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
-import { bindPrecedingRolls } from "./compile-preceding-roll.js";
+import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { trigger } from "./compile-triggers.js";
@@ -192,6 +192,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const rolls: CompileLeaf[] = [];
   const combinators: number[] = [];
   const usages: Record<string, unknown>[] = [];
+  const usageIndexes: number[] = [];
   const usageScopes = new Set<string>();
   let optional = false;
   const checks: CoreCheck[] = [];
@@ -252,7 +253,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       }
     };
     attempt(() => {
-      if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") targetEligibility.push(condition(leaf));
+      // In the TARGET fragment no attack is being made: "target" is the candidate unit, the eligibility's default subject.
+      if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") targetEligibility.push(condition(leaf.parameters.subject === "target" ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf));
       else if (leaf.role === "CONDITION" && WRAP_CONDITION_FAMILIES.has(leaf.family_id)) {
         if (leaf.family_id === "aura-range") auraLeaf = leaf;
         else leaderLeaf = leaf;
@@ -278,6 +280,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       else if (leaf.role === "RESTRICTION") {
         if (leaf.family_id === "usage-limit") {
           usages.push(usageFor(leaf.parameters));
+          usageIndexes.push(index);
           if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
         } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
         else if (leaf.family_id === "optional-use") optional = true;
@@ -453,6 +456,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const steps = pieces[0]!;
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
+  // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
+  // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
+  if (auraLeaf || forEachLeaf) {
+    const perUnit = global.filter((node) => JSON.stringify(node).includes(`"${AURA_RECIPIENT}"`));
+    if (perUnit.length) {
+      global.splice(0, global.length, ...global.filter((node) => !perUnit.includes(node)));
+      body = gated(perUnit, body!);
+    }
+  }
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
   if (selections.length === 1 && selected.length > 0) {
     // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
@@ -509,10 +521,18 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.
     const first = pieces[0]!;
     const partSteps: Node[] = entryTrigger ? [{ type: "ability-part", trigger: entryTrigger, effect: body }] : first;
+    // "The first time the bearer's unit destroys an enemy unit": a usage limit right before a later
+    // part's moment, after an earlier effect, limits only that part.
+    const usageAt = usageIndexes.length === 1 && firstEffectIndex !== -1 && usageIndexes[0]! > firstEffectIndex ? usageIndexes[0]! : -1;
+    const usagePart = usageAt === -1 ? -1 : partStarts.findIndex((part) => part.index > usageAt && !planned.some((item) => item.index > usageAt && item.index < part.index));
     partStarts.forEach((part, position) => {
       const own = pieces[position + 1]!;
-      partSteps.push({ type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own } });
+      partSteps.push({
+        type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own },
+        ...(position === usagePart ? { usage: usages[0] } : {}),
+      });
     });
+    if (usagePart !== -1) usages.splice(0);
     body = { type: "sequence", steps: partSteps };
     entryTrigger = null;
   }
@@ -521,7 +541,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     signature,
     ...(target ? { core: { target_restrictions: target } } : {}),
     mechanics: {
-      effect: gated(global, body),
+      effect: gated(global, foldConditionalTestModifiers(body)),
       scope: { duration: scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An

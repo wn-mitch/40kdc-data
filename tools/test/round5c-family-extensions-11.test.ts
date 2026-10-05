@@ -372,3 +372,60 @@ describe("hidden units, a bearer's Transport and floored characteristics", () =>
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["OC"], operation: "add", value: 1, weapon_type: "all", minimum: 1 }, currentFamilyVersion("characteristic-modifier"))).toThrow(/minimum/u);
   });
 });
+
+describe("wave-5 review fixes", () => {
+  const compiled = (text: string, fragment: string, ...items: Array<[string, string, Record<string, unknown>]>) => {
+    const result = compileLeaves(placed(text, fragment, ...items), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return result;
+  };
+
+  it("takes a test with a conditional change as two tests, one per side of the condition", () => {
+    const text = "When an enemy unit Falls Back, that unit must take a Desperate Escape test; if that unit is Battle-shocked, subtract 1 from that test.";
+    const out = JSON.stringify(compiled(text, "RAW_TEXT",
+      ["When an enemy unit Falls Back", "event", { kind: "move-started", move_types: ["fall-back"] }],
+      ["that unit must take a Desperate Escape test", "test", { target: "event-subject", test: "desperate-escape" }],
+      ["if that unit is Battle-shocked", "unit-state", { states: ["battle-shocked"], subject: "event-subject", negated: false }],
+      ["subtract 1 from that test", "roll-modifier", { roll: "desperate-escape", operation: "subtract", value: 1 }]).mechanics);
+    expect(out).toContain('"effect":{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape","modifier":-1}}');
+    expect(out).toContain('{"type":"conditional","condition":{"operator":"not","operands":[{"type":"unit-state","parameters":{"subject":"event-subject","state":"battle-shocked"}}]},"effect":{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape"}}}');
+    expect(out).not.toContain('"roll-modifier"');
+  });
+
+  it("limits only the part a \"first time\" opens", () => {
+    const text = "Add 1 to this unit's Move characteristic. The first time this unit destroys an enemy unit, add 1 to this unit's Leadership characteristic.";
+    const mechanics = compiled(text, "RAW_TEXT",
+      ["Add 1 to this unit's Move characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 1, weapon_type: "all" }],
+      ["The first time", "usage-limit", { frequency: "first-this-battle", per: "model" }],
+      ["this unit destroys an", "event", { kind: "unit-destroyed", by: "this-unit" }],
+      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]).mechanics as Record<string, unknown>;
+    expect(mechanics.usage).toBeUndefined();
+    expect(JSON.stringify(mechanics.effect)).toMatch(/"type":"ability-part".*"usage":\{"frequency":"first-this-battle"/u);
+  });
+
+  it("reads a Stratagem target's own state as the candidate's", () => {
+    const text = "One unit from your army that is within Engagement Range of one or more enemy units. Add 1 to this unit's Leadership characteristic.";
+    const leaves = [
+      ...placed(text, "TARGET",
+        ["One", "stratagem-target", { count: "one" }],
+        ["unit from your army", "unit-filter", { side: "friendly" }],
+        ["within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "target", negated: false }]),
+      ...placed(text, "EFFECT", ["Add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]),
+    ];
+    const result = compileLeaves(leaves, text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const eligibility = JSON.stringify(result.core);
+    expect(eligibility).toContain('{"type":"unit-state","parameters":{"state":"engaged"}}');
+    expect(eligibility).not.toContain('"defender"');
+  });
+
+  it("gates each unit an aura reaches inside the aura", () => {
+    const text = "If an enemy unit within 8\" of this unit is below Starting Strength, that enemy unit must take a Battle-shock test.";
+    const out = JSON.stringify(compiled(text, "RAW_TEXT",
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["within 8\" of this unit", "aura-range", { inches: 8, of: "this-unit" }],
+      ["below Starting Strength", "unit-state", { states: ["below-starting-strength"], subject: "antecedent", negated: false }],
+      ["that enemy unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]).mechanics);
+    expect(out).toMatch(/^\{"effect":\{"type":"aura".*"effect":\{"type":"conditional","condition":\{"type":"strength","parameters":\{"subject":"recipient"/u);
+  });
+});

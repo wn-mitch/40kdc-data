@@ -88,3 +88,38 @@ function foldTestModifiers(leaves: readonly CompileLeaf[]): CompileLeaf[] {
   }
   return out;
 }
+
+type Node = Record<string, unknown>;
+
+/**
+ * "Must take a Desperate Escape test. When doing so, if that enemy unit is Battle-shocked,
+ * subtract 1 from each of those tests": a change to the test just taken that holds only under a
+ * condition cannot ride on the test's own modifier, and as a later step it would change rolls
+ * after the test was taken. The test splits in two, one per side of the condition, so exactly
+ * one of them is taken: with the change while the condition holds, without it otherwise.
+ */
+export function foldConditionalTestModifiers(node: Node): Node {
+  if (node.type === "sequence" && Array.isArray(node.steps)) {
+    const steps: Node[] = [];
+    for (const step of (node.steps as Node[]).map(foldConditionalTestModifiers)) {
+      const test = steps.at(-1);
+      const change = step.type === "conditional" ? step.effect as Node : undefined;
+      const modifier = change?.modifier as Node | undefined;
+      const testModifier = test?.modifier as Node | undefined;
+      const roll = modifier?.roll;
+      const same = test?.type === "test" && change?.type === "roll-modifier" && change.target === test.target && testModifier?.modifier === undefined
+        && (roll === testModifier?.test || (roll === "hazard" && testModifier?.test === "desperate-escape"))
+        && (modifier!.operation === "add" || modifier!.operation === "subtract") && typeof modifier!.value === "number"
+        && Object.keys(modifier!).every((key) => ["roll", "operation", "value"].includes(key));
+      if (!same) { steps.push(step); continue; }
+      const value = (modifier!.operation === "subtract" ? -1 : 1) * (modifier!.value as number);
+      steps[steps.length - 1] = { type: "conditional", condition: step.condition, effect: { ...test, modifier: { ...testModifier, modifier: value } } };
+      steps.push({ type: "conditional", condition: { operator: "not", operands: [step.condition] }, effect: test });
+    }
+    return steps.length === 1 ? steps[0]! : { ...node, steps };
+  }
+  for (const key of ["effect", "then"]) {
+    if (node[key] && typeof node[key] === "object" && !Array.isArray(node[key])) return { ...node, [key]: foldConditionalTestModifiers(node[key] as Node) };
+  }
+  return node;
+}
