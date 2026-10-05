@@ -297,9 +297,32 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         ),
         Some("designate-target") => {
             let applies = object(node.get("applies"));
-            if applies.is_some_and(|a| is_str(a, "to", "attackers-of-target")) {
+            if applies.is_some_and(|a| {
+                is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
+            }) {
+                // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
+                // lever ("this defender is the designated unit"); the player vouches for the
+                // selection's eligibility (range, visibility, "hit by those attacks").
                 let effect = applies.and_then(|a| a.get("effect"));
-                walk(effect.unwrap_or(&Value::Null), opts, out);
+                let mut sub = Out::default();
+                walk(effect.unwrap_or(&Value::Null), opts, &mut sub);
+                out.unsupported.extend(sub.unsupported);
+                out.activatable.extend(sub.activatable);
+                if !sub.applied.is_empty() {
+                    let designation = node
+                        .get("designation")
+                        .and_then(Value::as_str)
+                        .unwrap_or("designated");
+                    out.activatable.push(Lever {
+                        id: format!("{}#{designation}", opts.ability_id),
+                        label: format!(
+                            "Designated target: {}",
+                            applicability::label_for_buffs(&sub.applied)
+                        ),
+                        buffs: sub.applied,
+                        group: None,
+                    });
+                }
             } else {
                 out.unsupported(
                     "designate-target debuff on the marked unit: not a buff on the bearer",
@@ -470,28 +493,18 @@ fn has_unresolved_fidelity_binding(node: &Obj) -> bool {
                 .any(|k| has(sel, k))
                 || truthy_flag(sel, "visibility_required")
         }
+        // A designation's own selection (range, visibility, eligibility) is what its lever's
+        // player vouches for; only the applied effect's bindings are unresolved.
         Some("designate-target") => {
-            let select = object(node.get("select"));
             let applies = object(node.get("applies"));
             [
-                "eligibility",
+                "attacker_keywords",
+                "attacker_unit_keywords",
+                "beneficiary",
                 "reference",
-                "bind_as",
-                "within_inches_from",
-                "visible_to",
-                "selection_limit",
             ]
             .iter()
-            .any(|k| has(select, k))
-                || truthy_flag(select, "visibility_required")
-                || [
-                    "attacker_keywords",
-                    "attacker_unit_keywords",
-                    "beneficiary",
-                    "reference",
-                ]
-                .iter()
-                .any(|k| has(applies, k))
+            .any(|k| has(applies, k))
         }
         Some("ability-part") => has_unresolved_trigger_binding(node.get("trigger")),
         Some("named-region-state") => {

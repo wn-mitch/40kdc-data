@@ -337,8 +337,18 @@ function walk(
       return;
     case "designate-target": {
       const applies = isObject(currentNode.applies) ? currentNode.applies : {};
-      if (applies.to === "attackers-of-target") {
-        walk(applies.effect, source, opts, out);
+      if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
+        // Which enemy unit is designated is the player's pick, so its buffs are one opt-in lever
+        // ("this defender is the designated unit"); the player vouches for the selection's
+        // eligibility (range, visibility, "hit by those attacks").
+        const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+        walk(applies.effect, source, opts, sub);
+        out.unsupported.push(...sub.unsupported);
+        out.activatable.push(...sub.activatable);
+        if (sub.applied.length > 0) {
+          const designation = typeof currentNode.designation === "string" ? currentNode.designation : "designated";
+          out.activatable.push({ id: `${opts.abilityId}#${designation}`, label: `Designated target: ${labelForBuffs(sub.applied)}`, buffs: sub.applied });
+        }
       } else {
         out.unsupported.push({
           reason: "designate-target debuff on the marked unit: not a buff on the bearer",
@@ -1738,7 +1748,6 @@ function unsizedValueReason(node: Record<string, unknown>): string | undefined {
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";
 function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
   const selector = isObject(node.selector) ? node.selector : undefined;
-  const select = isObject(node.select) ? node.select : undefined;
   const applies = isObject(node.applies) ? node.applies : undefined;
   const modifier = isObject(node.modifier) ? node.modifier : undefined;
   const consumer = isObject(modifier?.consumer) ? modifier.consumer : undefined;
@@ -1748,9 +1757,8 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
         selector?.reference != null || selector?.origin != null || selector?.selection_limit != null ||
         selector?.bind_as != null || selector?.within_inches_from != null ||
         selector?.visible_to != null || selector?.visibility_required === true)) ||
-    (node.type === "designate-target" && (select?.eligibility != null ||
-      select?.reference != null || select?.visibility_required === true || select?.bind_as != null ||
-      select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
+    // A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
+    (node.type === "designate-target" && (
       applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
       applies?.beneficiary != null || applies?.reference != null)) ||
     (node.type === "ability-part" && hasUnresolvedTriggerBinding(node.trigger)) ||

@@ -228,13 +228,30 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "persistent-designation":
 		out.unsupported = append(out.unsupported, unsup("persistent-designation: retained selection state is not resolved by the buff engine", n))
 	case "designate-target":
-		// Mark an enemy unit; when `to: attackers-of-target` the nested effect is
-		// a buff every friendly attack against that unit receives (Oath of Moment).
-		// A `to: target` debuff lands on the enemy, not the bearer, so it is not a
-		// buff in this perspective.
+		// Mark an enemy unit; when `to: attackers-of-target` or `to:
+		// bearer-attacks-target` the nested effect is a buff attacks against that
+		// unit receive (Oath of Moment). Which enemy unit is designated is the
+		// player's pick, so its buffs are one opt-in lever ("this defender is the
+		// designated unit"); the player vouches for the selection's eligibility
+		// (range, visibility, "hit by those attacks"). A `to: target` debuff lands
+		// on the enemy, not the bearer, so it is not a buff in this perspective.
 		applies, _ := getMap(n, "applies")
-		if applies["to"] == "attackers-of-target" {
-			dslWalk(applies["effect"], source, opts, out)
+		if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
+			sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
+			dslWalk(applies["effect"], source, opts, sub)
+			out.unsupported = append(out.unsupported, sub.unsupported...)
+			out.activatable = append(out.activatable, sub.activatable...)
+			if len(sub.applied) > 0 {
+				designation, ok := n["designation"].(string)
+				if !ok {
+					designation = "designated"
+				}
+				out.activatable = append(out.activatable, map[string]any{
+					"id":    opts.abilityID + "#" + designation,
+					"label": "Designated target: " + labelForBuffs(sub.applied),
+					"buffs": sub.applied,
+				})
+			}
 		} else {
 			out.unsupported = append(out.unsupported, unsup("designate-target debuff on the marked unit: not a buff on the bearer", n))
 		}
@@ -1710,7 +1727,6 @@ const fidelityBindingReason = "selection/history/model/attack predicates are not
 
 func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	selector, _ := getMap(n, "selector")
-	selectSpec, _ := getMap(n, "select")
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
@@ -1723,14 +1739,8 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 		selector["within_inches_from"] != nil ||
 		selector["visible_to"] != nil ||
 		selector["visibility_required"] == true)
-	designationUnresolved := n["type"] == "designate-target" && (selectSpec["eligibility"] != nil ||
-		selectSpec["reference"] != nil ||
-		selectSpec["visibility_required"] == true ||
-		selectSpec["bind_as"] != nil ||
-		selectSpec["within_inches_from"] != nil ||
-		selectSpec["visible_to"] != nil ||
-		selectSpec["selection_limit"] != nil ||
-		applies["attacker_keywords"] != nil ||
+	// A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
+	designationUnresolved := n["type"] == "designate-target" && (applies["attacker_keywords"] != nil ||
 		applies["attacker_unit_keywords"] != nil ||
 		applies["beneficiary"] != nil ||
 		applies["reference"] != nil)

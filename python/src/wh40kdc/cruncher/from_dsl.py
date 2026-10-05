@@ -318,14 +318,33 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             }
         )
     elif node_type == "designate-target":
-        # Mark an enemy unit; when `to: attackers-of-target` the nested effect is
-        # a buff every friendly attack against that unit receives (Oath of Moment).
-        # A `to: target` debuff lands on the enemy, not the bearer, so it is not a
-        # buff in this perspective.
+        # Mark an enemy unit; when `to: attackers-of-target` or
+        # `to: bearer-attacks-target` the nested effect is a buff the attacks
+        # against that unit receive (Oath of Moment). Which enemy unit is
+        # designated is the player's pick, so its buffs are one opt-in lever
+        # ("this defender is the designated unit"); the player vouches for the
+        # selection's eligibility (range, visibility, "hit by those attacks").
+        # A `to: target` debuff lands on the enemy, not the bearer, so it is not
+        # a buff in this perspective.
         applies_raw = node.get("applies")
         applies = applies_raw if isinstance(applies_raw, dict) else {}
-        if applies.get("to") == "attackers-of-target":
-            _walk(applies.get("effect"), source, opts, out)
+        if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
+            sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+            _walk(applies.get("effect"), source, opts, sub)
+            out["unsupported"].extend(sub["unsupported"])
+            out["activatable"].extend(sub["activatable"])
+            if sub["applied"]:
+                designation_value = node.get("designation")
+                designation = (
+                    designation_value if isinstance(designation_value, str) else "designated"
+                )
+                out["activatable"].append(
+                    {
+                        "id": f"{opts['abilityId']}#{designation}",
+                        "label": f"Designated target: {_label_for_buffs(sub['applied'])}",
+                        "buffs": sub["applied"],
+                    }
+                )
         else:
             out["unsupported"].append(
                 {
@@ -1855,16 +1874,6 @@ _SELECTOR_FIDELITY_FIELDS = (
     "visible_to",
     "visibility_required",
 )
-_DESIGNATION_SELECTION_FIDELITY_FIELDS = (
-    "eligibility",
-    "reference",
-    "origin",
-    "selection_limit",
-    "bind_as",
-    "within_inches_from",
-    "visible_to",
-    "visibility_required",
-)
 
 
 def _trigger_has_unresolved_source(trigger: Any) -> bool:
@@ -1877,7 +1886,6 @@ def _trigger_has_unresolved_source(trigger: Any) -> bool:
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
     selector = node.get("selector") or {}
-    select = node.get("select") or {}
     applies = node.get("applies") or {}
     modifier = node.get("modifier") or {}
     consumer = modifier.get("consumer") or {}
@@ -1886,9 +1894,10 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
         selector.get("target_kind") == "model"
         or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
     )
+    # A designation's own selection (range, visibility, eligibility) is what its
+    # lever's player vouches for, so only the `applies` bindings are unresolved.
     designation_binding = node_type == "designate-target" and (
-        any(select.get(key) is not None for key in _DESIGNATION_SELECTION_FIDELITY_FIELDS)
-        or applies.get("attacker_keywords") is not None
+        applies.get("attacker_keywords") is not None
         or applies.get("attacker_unit_keywords") is not None
         or applies.get("beneficiary") is not None
         or applies.get("reference") is not None

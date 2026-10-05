@@ -324,6 +324,72 @@
           }
         ]
       }
+    },
+    {
+      "_comment": "Fabricated. Which enemy unit is designated is the player's pick, so the designation's buffs are one opt-in lever, and the player vouches for the selection's range, visibility and hit eligibility.",
+      "abilityId": "example-quarry-designation",
+      "source": {
+        "kind": "ability",
+        "abilityId": "example-quarry-designation",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "example-quarry",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "within_inches": 18,
+          "visibility_required": true,
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "selected-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "example-quarry-designation#example-quarry",
+            "label": "Designated target: re-roll hit 1s",
+            "group": null,
+            "buffs": [
+              {
+                "type": "reroll",
+                "roll": "hit",
+                "subset": "ones"
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }
