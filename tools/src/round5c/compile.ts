@@ -380,7 +380,10 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
       continue;
     }
     if (!replaced) {
-      errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
+      // "It can move up to 6\" instead of up to 3\"": the default it replaces is another rule's,
+      // printed after "instead of", so the clause's effect already says the new value.
+      const named = sourceText !== undefined && /^\s*of\b/u.test(Buffer.from(sourceText, "utf8").subarray(list[combinator]!.end_byte).toString("utf8"));
+      if (!named) errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
       continue;
     }
     // "Re-roll Hit rolls of 1. Or: if …, re-roll Hit rolls": the player picks one of the two, each

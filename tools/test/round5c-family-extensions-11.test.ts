@@ -477,3 +477,20 @@ describe("more of a unit's history", () => {
     expect(of("lost-models-this-phase")).toContain('{"event":"model-destroyed","object":"model-in-this-unit","window":"phase"}');
   });
 });
+
+describe("an instead of another rule's default", () => {
+  const consolidate = (text: string) => compileLeaves(placed(text, "RAW_TEXT",
+    ["Each time this unit Consolidates", "event", { kind: "move-ended", move_types: ["consolidation"] }],
+    ["it can move up to 6\"", "make-move", { subject: "this-unit", move: "consolidation", distance: 6 }],
+    ["instead", "instead", {}]), text);
+
+  it("stands alone when the replaced value is printed after \"instead of\"", () => {
+    const result = consolidate("Each time this unit Consolidates, it can move up to 6\" instead of up to 3\".");
+    expect(result.ok).toBe(true);
+  });
+
+  it("still refuses a bare instead with nothing to replace", () => {
+    const result = consolidate("Each time this unit Consolidates, it can move up to 6\" instead.");
+    expect(result.ok).toBe(false);
+  });
+});
