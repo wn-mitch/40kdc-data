@@ -21,7 +21,9 @@ const foldable = (leaf: CompileLeaf | undefined) => leaf !== undefined && leaf.r
 /** The words between two leaves, without bold markers or spaces. */
 function between(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): string | null {
   if (left.end_byte === undefined || right.start_byte < left.end_byte) return null;
-  return bytes.subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s]/g, "").toLowerCase();
+  // A parenthesised alternative ("on the battlefield (or any TRANSPORT it is embarked within …)")
+  // joins with "(or" as a bare "or" does.
+  return bytes.subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
 }
 
 /** A conditional list header: "if any of the following apply:". Other "one or more of the following" lists (abilities to gain, options to pick) are not conditions. */

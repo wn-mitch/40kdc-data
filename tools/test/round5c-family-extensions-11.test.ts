@@ -439,3 +439,15 @@ describe("moments done to this unit or model", () => {
     expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", object: "this-model" }, currentFamilyVersion("event"))).toThrow(/event.object/u);
   });
 });
+
+describe("a parenthesised alternative", () => {
+  it("joins two conditions with \"(or\" as either", () => {
+    const text = "If this model is on the battlefield (or any TRANSPORT it is embarked within is on the battlefield), add 1 to this unit's Leadership characteristic.";
+    const result = compileLeaves(placed(text, "RAW_TEXT",
+      ["this model is on the battlefield", "unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }],
+      ["any TRANSPORT it is embarked within is on the battlefield", "unit-state", { states: ["on-battlefield"], subject: "bearer-transport", negated: false }],
+      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics)).toContain('"condition":{"operator":"or"');
+  });
+});
