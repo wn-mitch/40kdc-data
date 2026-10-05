@@ -75,6 +75,55 @@ const pred = (type: string, parameters: Node, subject?: string): Node => ({ type
 export const ATTACK_EVENTS = new Set(["attack-made", "hit-roll", "wound-roll"]);
 
 /** Several alternatives are any one of them. */
+/** The attack-filter fields a hit's event filter can carry. */
+const HIT_FILTER_KEYS = new Set(["attack_type", "weapon_name", "weapon_keyword"]);
+const HIT_ATTACK_TYPES = new Set(["ranged", "melee", "psychic"]);
+
+/**
+ * "Hit by one or more of those attacks made with Arcane Fire", "hit by those ranged attacks": an
+ * attack-filter right after a hit-by-attacks leaf (only spaces or emphasis between) says which
+ * hits count, so it narrows that hit's event filter rather than gating the whole ability on an
+ * attack that, at the ability's moment, is not being made.
+ */
+export function foldHitFilters(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined || !leaves.some((leaf) => leaf.family_id === "hit-by-attacks")) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const hit = out.at(-1);
+    const keys = Object.keys(leaf.parameters);
+    const foldable = hit?.family_id === "hit-by-attacks" && hit.parameters.hit_filter === undefined && leaf.family_id === "attack-filter"
+      && leaf.parameters.negated !== true && keys.length > 0 && keys.every((key) => HIT_FILTER_KEYS.has(key))
+      && (leaf.parameters.attack_type === undefined || HIT_ATTACK_TYPES.has(String(leaf.parameters.attack_type)))
+      && /^[\s*]*$/u.test(bytes.subarray(hit.end_byte, leaf.start_byte).toString("utf8"));
+    if (!foldable) { out.push(leaf); continue; }
+    out[out.length - 1] = { ...hit, end_byte: leaf.end_byte, parameters: { ...hit.parameters, hit_filter: { ...leaf.parameters } } };
+  }
+  return out;
+}
+
+/** The units a designated-filter's subject can name. */
+const DESIGNATED_SUBJECTS = new Set(["this-model", "model-in-this-unit", "attacker", "defender", "event-subject", "event-object", "selected-unit", "recipient"]);
+
+/**
+ * "While a unit is enfeebled, subtract 2\" from the Move characteristic of models in that unit": a
+ * designation check that names no unit is about the unit its next effect changes, not this unit.
+ * A count ("while two or more units are pinned") names no one unit and stays as it is.
+ */
+export function bindDesignationSubjects(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  return leaves.map((leaf, index) => {
+    if (leaf.family_id !== "designated-filter" || leaf.parameters.subject !== undefined) return leaf;
+    if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) return leaf;
+    const after = leaves.slice(index + 1);
+    const effect = after.find((other) => other.role === "EFFECT");
+    if (!effect || effect.fragment !== leaf.fragment) return leaf;
+    // "While a unit is scanned, ranged attacks that target that unit …": the attacks' target.
+    const attack = after.slice(0, after.indexOf(effect)).find((other) => other.family_id === "attack");
+    const who = attack ? (attack.parameters.direction === "targeted" ? "defender" : undefined) : effect.parameters.subject ?? effect.parameters.target;
+    return typeof who === "string" && DESIGNATED_SUBJECTS.has(who) ? { ...leaf, parameters: { ...leaf.parameters, subject: who } } : leaf;
+  });
+}
+
 export function anyOf(nodes: Node[]): Node {
   return nodes.length === 1 ? nodes[0]! : { operator: "or", operands: nodes };
 }
@@ -238,7 +287,8 @@ export function condition(leaf: CompileLeaf): Node {
     case "hit-by-attacks":
       // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
       // attacks of the ability's moment ("after this model has shot"), during that moment.
-      return { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success" }, window: "event" } };
+      // `hit_filter` is the attack-filter foldHitFilters folded in ("… made with its Plague Wind").
+      return { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) }, window: "event" } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
       const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true };

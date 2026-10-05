@@ -2,7 +2,7 @@ import { bindAntecedents } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
-import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, condition, duration, negate, targetRestrictions } from "./compile-conditions.js";
+import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { trigger } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
@@ -128,7 +128,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
+    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -453,9 +453,15 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   const steps = pieces[0]!;
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
   const scopeDuration = durations[0] ?? "permanent";
-  if (selections.length === 1 && selected.length > 0) body = attempt(() => designation(selections[0]!, list, body!, durations[0]));
+  const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
+  if (selections.length === 1 && selected.length > 0) {
+    // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
+    // designated unit are changed, so it narrows the designation's effect, not the selection.
+    const attackGates = global.filter((node) => node.type === "attack-is");
+    if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => node.type !== "attack-is"));
+    body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
+  }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
-    const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
       eligibility,

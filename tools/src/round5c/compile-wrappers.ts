@@ -148,7 +148,7 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
 }
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
-export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined): Node {
+export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null): Node {
   if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
     throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
   }
@@ -164,6 +164,8 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
       count: 1,
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
+      // "Select one enemy unit hit by those attacks": which units can be designated.
+      ...(eligibility ? { eligibility } : {}),
     },
     applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
     ...(lasting ? { duration: lasting } : {}),

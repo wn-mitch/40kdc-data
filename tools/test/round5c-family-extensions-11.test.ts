@@ -293,3 +293,60 @@ describe("rolls that belong to another unit", () => {
     expect(() => normalizeFingerprintParameters("reroll", { roll: "charge", subset: "all", weapon_type: "all", subject: "enemy" }, currentFamilyVersion("reroll"))).toThrow(/reroll.subject/u);
   });
 });
+
+describe("selections narrowed by the attacks that hit them", () => {
+  const compiled = (text: string, ...items: Array<[string, string, Record<string, unknown>]>) => {
+    const result = compileLeaves(placed(text, "RAW_TEXT", ...items), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return JSON.stringify(result.mechanics);
+  };
+
+  it("folds a weapon named after \"hit by those attacks\" into the hit, and binds \"a unit is\" to the effect's unit", () => {
+    const text = "After this model has shot, select one enemy unit hit by those attacks made with its Glimmer Lance. That unit is dazed. While a unit is dazed, subtract 1 from its Move characteristic.";
+    const out = compiled(text,
+      ["After this model has shot", "event", { kind: "after-shooting" }],
+      ["select one", "select-unit", { distance: "any", visible: false }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["hit by those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["made with its Glimmer Lance", "attack-filter", { weapon_name: "Glimmer Lance" }],
+      ["That unit is dazed", "apply-mark", { subject: "antecedent", tag: "slowed" }],
+      ["While a unit is dazed", "designated-filter", { tag: "slowed" }],
+      ["subtract 1 from its Move characteristic", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "subtract", value: 1, weapon_type: "all" }]);
+    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapon_name":"Glimmer Lance"}');
+    expect(out).not.toContain('"attack-is"');
+    expect(out).toContain('{"type":"designated","parameters":{"subject":"selected-unit","tag":"slowed"}}');
+  });
+
+  it("keeps a weapon filter that does not follow a hit as a gate", () => {
+    const text = "Each time this model makes an attack made with its Glimmer Lance, add 1 to the Hit roll.";
+    const out = compiled(text,
+      ["makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
+      ["made with its Glimmer Lance", "attack-filter", { weapon_name: "Glimmer Lance" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    expect(out).toContain('{"type":"attack-is","parameters":{"weapon_name":"Glimmer Lance"}}');
+  });
+
+  it("gives a designated unit's selection its hit eligibility, and limits the changed attacks inside the designation", () => {
+    const text = "After this unit has shot, select one enemy unit hit by those ranged attacks. Ranged attacks that target that unit have +1 to Hit rolls.";
+    const out = compiled(text,
+      ["After this unit has shot", "event", { kind: "after-shooting" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by those", "hit-by-attacks", { subject: "antecedent" }],
+      ["ranged attacks", "attack-filter", { attack_type: "ranged" }],
+      ["Ranged attacks", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "ranged" }],
+      ["that target that unit", "target-is-selected", {}],
+      ["have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    expect(out).toMatch(/"select":\{"scope":"enemy-unit","count":1,"eligibility":\{"type":"happened".*"attack_type":"ranged"/u);
+    expect(out).toMatch(/"applies":\{"to":"attackers-of-target","effect":\{"type":"conditional","condition":\{"type":"attack-is"/u);
+    expect(out.startsWith('{"effect":{"type":"designate-target"')).toBe(true);
+  });
+
+  it("binds \"while a unit is\" to the target of the attacks it changes", () => {
+    const text = "While a unit is dazed, ranged attacks that target that unit can re-roll Hit rolls of 1.";
+    const out = compiled(text,
+      ["While a unit is dazed", "designated-filter", { tag: "slowed" }],
+      ["ranged attacks that target that unit", "attack", { direction: "targeted", unit: "that-unit", attack_type: "ranged" }],
+      ["can re-roll Hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }]);
+    expect(out).toContain('{"type":"designated","parameters":{"subject":"defender","tag":"slowed"}}');
+  });
+});
