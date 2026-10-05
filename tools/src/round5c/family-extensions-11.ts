@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "./antecedent-families.js";
-import { activitiesExtension, type FamilyExtension, keywordList, optional, properties, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { activitiesExtension, type FamilyExtension, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
@@ -13,6 +13,49 @@ export const FOLLOWING_FILTER = "following-filter";
 
 /** States the DSL's unit-state can read at the start of the phase or turn (strength and carrying are other predicates). */
 const STATES_AT = ["engaged", "battle-shocked", "on-battlefield", "in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
+
+/** The unit-state families a hidden unit and a bearer's Transport extend (see FAMILY_EXTENSIONS_11). */
+const UNIT_STATE_HIDDEN: FamilyExtension = {
+  // "if that friendly unit is hidden": the core state, not a designation.
+  family: "unit-state",
+  description: "As the previous version, plus the state hidden: the core rules' hidden state (\"if that friendly unit is hidden\"), not a designation an ability applies.",
+  schema: (previous) => {
+    const states = properties(previous).states!;
+    const items = states.items as Record<string, unknown>;
+    return withProperties(previous, { states: { ...states, items: { ...items, enum: [...(items.enum as string[]), "hidden"] } } });
+  },
+  normalize: (input, previous) => {
+    if (!Array.isArray(input.states) || !input.states.includes("hidden")) return previous(input);
+    if (input.at !== undefined) throw new TypeError("unit-state hidden has no earlier point (at).");
+    const rest = input.states.filter((state) => state !== "hidden");
+    // Battle-shocked stands in for a hidden-only leaf: it takes no with, as hidden takes none.
+    const normalized = previous({ ...input, states: rest.length ? rest : ["battle-shocked"] });
+    return { ...normalized, states: [...(rest.length ? normalized.states as string[] : []), "hidden"] };
+  },
+};
+
+const UNIT_STATE_BEARER_TRANSPORT: FamilyExtension = {
+  // "(or any TRANSPORT it is embarked within is on the battlefield)".
+  family: "unit-state",
+  description: "As the previous version, plus subject bearer-transport: the Transport this model is embarked within (\"any TRANSPORT it is embarked within is on the battlefield\").",
+  schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", ["bearer-transport"]) }),
+  normalize: (input, previous) => input.subject === "bearer-transport" ? standIn(input, "subject", "this-unit", previous) : previous(input),
+};
+
+const CHARACTERISTIC_FLOOR: FamilyExtension = {
+  // "subtract 1 from the Objective Control characteristic … (to a minimum of 1)".
+  family: "characteristic-modifier",
+  description: "As the previous version, plus minimum: a lowered characteristic never goes below this value (\"(to a minimum of 1)\"). Only for subtract or worsen.",
+  schema: (previous) => withProperties(previous, { minimum: optional({ type: "integer", minimum: 0, maximum: 20 }) }),
+  normalize: (input, previous) => {
+    if (input.minimum === undefined) return previous(input);
+    const { minimum, ...rest } = input;
+    if (!Number.isInteger(minimum) || (minimum as number) < 0 || (minimum as number) > 20) throw new TypeError("characteristic-modifier.minimum must be an integer from 0 to 20.");
+    const normalized = previous(rest);
+    if (normalized.operation !== "subtract" && normalized.operation !== "worsen") throw new TypeError("characteristic-modifier.minimum floors only a subtract or worsen.");
+    return { ...normalized, minimum };
+  },
+};
 
 export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   {
@@ -194,6 +237,9 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
       return { ...previous({ ...input, tag: "designated" }), tag: input.tag };
     },
   },
+  UNIT_STATE_HIDDEN,
+  UNIT_STATE_BEARER_TRANSPORT,
+  CHARACTERISTIC_FLOOR,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

@@ -337,6 +337,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
           ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
+          ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
         },
       }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };

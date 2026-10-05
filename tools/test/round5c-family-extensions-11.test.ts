@@ -350,3 +350,25 @@ describe("selections narrowed by the attacks that hit them", () => {
     expect(out).toContain('{"type":"designated","parameters":{"subject":"defender","tag":"slowed"}}');
   });
 });
+
+describe("hidden units, a bearer's Transport and floored characteristics", () => {
+  it("reads hidden as the core state and keeps the other states it lists", () => {
+    const out = JSON.stringify(mechanicsOf(leaves(["unit-state", { states: ["hidden"], subject: "this-unit", negated: false }], heal())));
+    expect(out).toContain('{"type":"unit-state","parameters":{"state":"hidden"}}');
+    expect(out).not.toContain('"designated"');
+    expect(normalizeFingerprintParameters("unit-state", { states: ["engaged", "hidden"], subject: "this-unit", negated: false }, currentFamilyVersion("unit-state")).states).toEqual(["engaged", "hidden"]);
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["hidden"], subject: "this-unit", negated: false, at: "phase-start" }, currentFamilyVersion("unit-state"))).toThrow(/hidden/u);
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["hidden"], subject: "this-unit", negated: false, with: "this-unit" }, currentFamilyVersion("unit-state"))).toThrow();
+  });
+
+  it("names the Transport this model is embarked within", () => {
+    const out = JSON.stringify(mechanicsOf(leaves(["unit-state", { states: ["on-battlefield"], subject: "bearer-transport", negated: false }], heal())));
+    expect(out).toContain('{"type":"unit-state","parameters":{"subject":"bearer-transport","state":"on-battlefield"}}');
+  });
+
+  it("floors a lowered characteristic, and refuses a floor on a raise", () => {
+    const out = JSON.stringify(mechanicsOf(leaves(["characteristic-modifier", { subject: "this-unit", characteristics: ["OC"], operation: "subtract", value: 1, weapon_type: "all", minimum: 1 }])));
+    expect(out).toContain('"modifier":{"stat":"OC","operation":"subtract","value":1,"minimum":1}');
+    expect(() => normalizeFingerprintParameters("characteristic-modifier", { subject: "this-unit", characteristics: ["OC"], operation: "add", value: 1, weapon_type: "all", minimum: 1 }, currentFamilyVersion("characteristic-modifier"))).toThrow(/minimum/u);
+  });
+});
