@@ -14,6 +14,26 @@ export const FOLLOWING_FILTER = "following-filter";
 /** States the DSL's unit-state can read at the start of the phase or turn (strength and carrying are other predicates). */
 const STATES_AT = ["engaged", "battle-shocked", "on-battlefield", "in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
 
+/** Kinds whose moment can name this unit or model as what it was done to. */
+const OBJECT_KINDS = ["targets-selected", "damage-allocated"];
+
+const EVENT_OBJECT: FamilyExtension = {
+  // "Each time you target the bearer with a Stratagem", "each time an attack is allocated to the bearer".
+  family: "event",
+  description: "As the previous version, plus object: this-unit or this-model is what the moment was done to (\"each time you target the bearer with a Stratagem\" = targets-selected, action_kind stratagem, owner friendly, object this-model; \"each time an attack is allocated to this model\" = damage-allocated, object this-model); and action_kind stratagem: a Stratagem's targets were selected.",
+  schema: (previous) => withProperties(previous, {
+    action_kind: widenedEnum(previous, "action_kind", ["stratagem"]),
+    object: optional({ enum: ["this-unit", "this-model"], "x-only-when": { kind: OBJECT_KINDS } }),
+  }),
+  normalize: (input, previous) => {
+    const { object, ...rest } = input;
+    const normalized = rest.action_kind === "stratagem" ? standIn(rest, "action_kind", "attack", previous) : previous(rest);
+    if (object === undefined) return normalized;
+    if (!OBJECT_KINDS.includes(String(normalized.kind))) throw new TypeError(`event.object applies only to ${OBJECT_KINDS.join(", ")}.`);
+    return { ...normalized, object: enumValue(object, ["this-unit", "this-model"], "event.object") };
+  },
+};
+
 /** The unit-state families a hidden unit and a bearer's Transport extend (see FAMILY_EXTENSIONS_11). */
 const UNIT_STATE_HIDDEN: FamilyExtension = {
   // "if that friendly unit is hidden": the core state, not a designation.
@@ -240,6 +260,7 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   UNIT_STATE_HIDDEN,
   UNIT_STATE_BEARER_TRANSPORT,
   CHARACTERISTIC_FLOOR,
+  EVENT_OBJECT,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

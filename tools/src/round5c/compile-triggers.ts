@@ -102,6 +102,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to") === "charge" ? "declare-charge" : closed(leaf, "to");
   if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
   if (Object.keys(filter).length) node.filter = filter;
+  // "Each time you target the bearer with a Stratagem": what the moment was done to.
+  if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
 }
 
@@ -129,5 +131,7 @@ function eventTrigger(leaf: CompileLeaf): Node {
   // "each time this unit destroys an enemy unit": who destroyed it, and whose unit it was.
   if (leaf.parameters.by !== undefined) node.subject = closed(leaf, "by");
   if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner") };
+  // "Each time an attack is allocated to this model".
+  if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
 }

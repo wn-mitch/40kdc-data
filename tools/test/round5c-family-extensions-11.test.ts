@@ -429,3 +429,13 @@ describe("wave-5 review fixes", () => {
     expect(out).toMatch(/^\{"effect":\{"type":"aura".*"effect":\{"type":"conditional","condition":\{"type":"strength","parameters":\{"subject":"recipient"/u);
   });
 });
+
+describe("moments done to this unit or model", () => {
+  it("fires when a friendly Stratagem targets the bearer, and when an attack is allocated to it", () => {
+    const targeted = JSON.stringify(mechanicsOf(leaves(["event", { kind: "targets-selected", owner: "friendly", action_kind: "stratagem", object: "this-model" }], heal())));
+    expect(targeted).toContain('"trigger":{"event":"targets-selected","subject":{"owner":"friendly"},"filter":{"kind":"stratagem"},"object":"this-model"}');
+    const allocated = JSON.stringify(mechanicsOf(leaves(["event", { kind: "damage-allocated", object: "this-model" }], heal())));
+    expect(allocated).toContain('"trigger":{"event":"damage-allocated","object":"this-model"}');
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", object: "this-model" }, currentFamilyVersion("event"))).toThrow(/event.object/u);
+  });
+});

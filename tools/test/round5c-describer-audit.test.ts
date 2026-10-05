@@ -76,7 +76,7 @@ describe("Round 5C leaf describer audit", () => {
       // with a move_types filter); the describer only renders move/attack wording for the kinds
       // that call for it, so those combinations read the same regardless of the filter's value.
       // owner and subject still collide on kinds whose wording names neither.
-      event: { unrendered: [], colliding: ["owner", "subject", "move_types", "action_kind"], problems: 0 },
+      event: { unrendered: [], colliding: ["object", "owner", "subject", "move_types", "action_kind"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
       // "event-object"/"stratagem-target" both read "that unit" — the same "this-unit"/
       // "recipient" collision every widened subject-like enum in this file already has.
