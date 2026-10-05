@@ -107,12 +107,12 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
  * shape" (the conservative default) rather than being assumed out of scope. */
 /** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
 // Effects that change no attack's damage: healing, moving, placement, eligibility permissions.
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission"]);
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier"]);
 // Which objective an ability picks decides control, never an attack's damage.
 const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 
-function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
+export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
   if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason) || ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return true;
   if (REROLL_OUTSIDE_DAMAGE_PATH.test(item.reason)) {
     const fragment = item.effectFragment as { modifier?: { roll?: unknown } } | undefined;
@@ -121,6 +121,8 @@ function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): bo
   }
   if (OBJECTIVE_SELECTION.test(item.reason)) return true;
   const unmodelled = UNMODELLED_EFFECT_TYPE.exec(item.reason);
+  // How many times an ability or Stratagem can be used never changes an attack's damage.
+  if (unmodelled?.[1] === "ability-modifier") return (item.effectFragment as { modifier?: { aspect?: unknown } } | undefined)?.modifier?.aspect === "uses";
   if (unmodelled) return NON_DAMAGE_EFFECT_TYPES.has(unmodelled[1]!);
   return false;
 }

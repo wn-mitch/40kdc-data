@@ -14,6 +14,7 @@ import { foldUnitFilters } from "./compile-unit-filters.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
+import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -27,6 +28,9 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * - Clauses. Sentences end at `.`, `;` or `:` (or a change of source fragment); a sentence
  *   with no effect joins the next one. Inside a sentence, an "and", "or" or "(" with an
  *   effect on both sides starts a new clause.
+ * - Independent sentences. A sentence opening a new moment or "In addition," and an
+ *   army-construction sentence compile alone as parts of the ability (`compile-segments.ts`);
+ *   the rules below apply inside each part.
  * - Binding. Conditions before the ability's first effect gate every effect. A condition
  *   before a later sentence's first effect gates that sentence; any other condition gates only
  *   the effects of its own clause, in either word order ("if X, add 1" or "add 1 if X").
@@ -125,6 +129,20 @@ function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
+  const segments = sentenceSegments(ordered(leaves), sourceText);
+  if (!segments) return compilePart(leaves, sourceText);
+  // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
+  const signature = shapeSignature(ordered(leaves), sourceText);
+  const results = segments.map((part) => compilePart(part, sourceText));
+  // A part that cannot stand alone ("such a unit", an "instead" of an earlier sentence's effect)
+  // is still tied to the sentences before it: the ability compiles as one part.
+  if (results.some((result) => !result.ok)) return compilePart(leaves, sourceText);
+  const joined = joinSegments(results.flatMap((result) => result.ok ? [result] : []), leaves.some((leaf) => STRATAGEM_HEADER.has(leaf.family_id)));
+  if (joined.errors.length) return { ok: false, signature, errors: joined.errors };
+  return { ok: true, signature, mechanics: joined.mechanics, checks: joined.checks, ...(joined.core ? { core: joined.core } : {}) };
+}
+
+function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
