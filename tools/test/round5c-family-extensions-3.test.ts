@@ -187,10 +187,17 @@ describe("Round 5C family extensions, third round: rolls and printed keywords", 
   });
 
   it("names the roll a test or roll event made, and refuses with no roll before it or a subtraction from dice", () => {
+    // A condition between them keeps the change its own effect, naming the test's roll.
     const test = compiled([
-      leaf("test", { target: "this-unit", test: "battle-shock" }), leaf("roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }),
+      leaf("test", { target: "this-unit", test: "battle-shock" }),
+      leaf("unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false }),
+      leaf("roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }),
     ]);
     expect(first(test, "roll-modifier")).toMatchObject({ modifier: { roll: "battle-shock", operation: "subtract", value: 1 } });
+    // Right after the test, the change is that test's own modifier.
+    const folded = compiled([leaf("test", { target: "this-unit", test: "battle-shock" }), leaf("roll-modifier", { roll: "preceding", operation: "subtract", value: 1 })]);
+    expect(first(folded, "test")).toMatchObject({ modifier: { test: "battle-shock", modifier: -1 } });
+    expect(first(folded, "roll-modifier")).toBeUndefined();
     expect(errors([leaf("roll-modifier", { roll: "preceding", operation: "add", value: 1 })]).join(" ")).toMatch(/no roll or test comes before it/u);
     expect(errors([leaf("dice-roll", { dice: "D6" }), leaf("roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }), band(4), leaf("mortal-wounds", { recipient: "this-unit", count: "1" })]).join(" "))
       .toMatch(/Only adding/u);

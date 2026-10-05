@@ -20,7 +20,7 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
  * modifier with no roll before it.
  */
 export function bindPrecedingRolls(input: readonly CompileLeaf[]): CompileLeaf[] {
-  const leaves = bindTestTakers(input);
+  const leaves = bindTestTakers(foldTestModifiers(input));
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
   const dropped = new Set<number>();
@@ -65,4 +65,26 @@ function bindTestTakers(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] 
     if (!same || typeof taker !== "string" || taker === "this-unit") return leaf;
     return { ...leaf, parameters: { ...leaf.parameters, roll, test_taker: taker } };
   });
+}
+
+/**
+ * "Must take a Battle-shock test, subtracting 1 from that test": a plain change right after the
+ * test, with no condition of its own, is that test's own modifier, not a standing change to every
+ * later test.
+ */
+function foldTestModifiers(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const test = out.at(-1);
+    const value = leaf.parameters.value;
+    if (leaf.family_id === "roll-modifier" && test?.family_id === "test" && test.fragment === leaf.fragment
+      && test.parameters.modifier === undefined && typeof value === "number" && leaf.parameters.weapon_type === undefined
+      && (leaf.parameters.roll === "preceding" || leaf.parameters.roll === test.parameters.test
+        || (leaf.parameters.roll === "hazard" && test.parameters.test === "desperate-escape"))) {
+      out[out.length - 1] = { ...test, end_byte: leaf.end_byte, parameters: { ...test.parameters, modifier: leaf.parameters.operation === "subtract" ? -value : value } };
+      continue;
+    }
+    out.push(leaf);
+  }
+  return out;
 }

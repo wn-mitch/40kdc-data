@@ -167,10 +167,7 @@ describe("a bare \"each\" before a unit-filter", () => {
       ["makes a Battle-shock roll", "test", { target: "antecedent", test: "battle-shock" }],
       ["with -1 to that Battle-shock roll", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }]);
     expect(effect.selector).toEqual({ owner: "enemy", keywords: ["MONSTER"], engagement_relation: "engaged-with-bearer", reference: "bearer-unit" });
-    expect(effect.effect).toEqual({ type: "sequence", steps: [
-      { type: "test", target: "recipient", modifier: { test: "battle-shock" } },
-      { type: "roll-modifier", target: "recipient", modifier: { roll: "battle-shock", operation: "subtract", value: 1 } },
-    ] });
+    expect(effect.effect).toEqual({ type: "test", target: "recipient", modifier: { test: "battle-shock", modifier: -1 } });
   });
 
   it("refuses a bare \"each\" with no unit-filter after it", () => {
@@ -238,14 +235,14 @@ describe("wave-4 review fixes", () => {
     expect(mechanics.effect.condition.parameters.subject).toBe("event-subject");
   });
 
-  it("puts -1 to the hazard rolls of Desperate Escape on the unit escaping", () => {
+  it("makes -1 to the hazard rolls of Desperate Escape part of the escaping unit's test", () => {
     const text = "When an enemy unit is selected to Fall Back, that enemy unit must use the desperate escape mode, with -1 to those hazard rolls.";
     const { mechanics } = ok(compileLeaves(placed(text, "RAW_TEXT",
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["is selected to Fall Back", "event", { kind: "selected", move_types: ["fall-back"], to: "move" }],
       ["that enemy unit must use the desperate escape mode", "test", { target: "event-subject", test: "desperate-escape" }],
       ["with -1 to those hazard rolls", "roll-modifier", { roll: "hazard", operation: "subtract", value: 1 }]), text));
-    expect(JSON.stringify(mechanics)).toContain('{"type":"roll-modifier","target":"event-subject","modifier":{"roll":"hazard"');
+    expect(JSON.stringify(mechanics)).toContain('{"type":"test","target":"event-subject","modifier":{"test":"desperate-escape","modifier":-1}}');
   });
 
   it("takes the units engaged with this unit into an already scoped \"each\"", () => {
