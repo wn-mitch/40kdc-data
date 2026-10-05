@@ -124,6 +124,8 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),
   antecedentSubject("ignore-modifiers", "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
+  rollSubject("roll-modifier", "\"add 1 to Charge rolls made for that unit\", \"that enemy unit has -2 to Charge rolls\""),
+  rollSubject("reroll", "\"you can re-roll Charge rolls made for that unit\""),
   {
     // "At the start or end of this unit's move": one leaf, either moment.
     family: "event",
@@ -201,5 +203,22 @@ function antecedentSubject(family: string, example: string): FamilyExtension {
     description: `As the previous version, plus subject antecedent: ${example}.`,
     schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [ANTECEDENT]) }),
     normalize: (input, previous) => input.subject === ANTECEDENT ? { ...previous({ ...input, subject: "this-unit" }), subject: ANTECEDENT } : previous(input),
+  };
+}
+
+/** Whose rolls a roll change or re-roll is about, when the text names a unit other than this one. */
+const ROLL_SUBJECTS = ["this-unit", "this-model", "event-subject", "selected-unit", "recipient", ANTECEDENT] as const;
+
+/** A version whose rolls belong to a named unit: subject, which an earlier leaf's unit may bind. */
+function rollSubject(family: string, example: string): FamilyExtension {
+  return {
+    family,
+    description: `As the previous version, plus subject: the unit whose rolls these are (${example}); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).`,
+    schema: (previous) => withProperties(previous, { subject: optional({ enum: ROLL_SUBJECTS }) }),
+    normalize: (input, previous) => {
+      if (input.subject === undefined) return previous(input);
+      const { subject, ...rest } = input;
+      return { ...previous(rest), subject: enumValue(subject, ROLL_SUBJECTS, `${family}.subject`) };
+    },
   };
 }

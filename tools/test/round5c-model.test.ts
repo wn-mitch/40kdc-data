@@ -136,7 +136,7 @@ function existingRerollSpan(ability: RequestAbility) {
     role: "EFFECT",
     status: "EXISTING",
     family_id: "reroll",
-    family_version: 4,
+    family_version: currentFamilyVersion("reroll"),
     parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }

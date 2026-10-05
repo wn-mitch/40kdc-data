@@ -281,3 +281,15 @@ describe("wave-4 rulings", () => {
     expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", also: "move-ended" }, currentFamilyVersion("event"))).toThrow(/other end/u);
   });
 });
+
+describe("rolls that belong to another unit", () => {
+  it("puts a roll change on the unit an earlier moment names, and a re-roll on the aura's recipient", () => {
+    const moved = JSON.stringify(mechanicsOf(leaves(
+      ["event", { kind: "move-ended", subject: "this-unit" }],
+      ["roll-modifier", { roll: "charge", operation: "add", value: 1, subject: "antecedent" }])));
+    expect(moved).toContain('{"type":"roll-modifier","target":"event-subject","modifier":{"roll":"charge","operation":"add","value":1}}');
+    const own = JSON.stringify(mechanicsOf(leaves(["roll-modifier", { roll: "charge", operation: "add", value: 1 }])));
+    expect(own).toContain('"target":"this-unit"');
+    expect(() => normalizeFingerprintParameters("reroll", { roll: "charge", subset: "all", weapon_type: "all", subject: "enemy" }, currentFamilyVersion("reroll"))).toThrow(/reroll.subject/u);
+  });
+});

@@ -131,6 +131,8 @@ async function resolveRole(
   const unresolved: string[] = [];
   for (const [name, property] of Object.entries(properties)) {
     if (Object.hasOwn(parameters, name)) continue;
+    // An extension's optional parameter has a default reading when absent, so it is never asked.
+    if ((property as Record<string, unknown>)["x-optional"] === true) continue;
     if (budget.exhausted()) { unresolved.push(name); continue; }
     const options = choices(property);
     if (property.type === "boolean") {

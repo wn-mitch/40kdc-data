@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { getQueue } from "../src/round5c/queue.js";
@@ -79,7 +79,7 @@ function rerollDecision(fixtureValue: Fixture, span: Span, action: "confirm" | "
     ...span,
     role: "EFFECT",
     family_id: "reroll",
-    family_version: 4,
+    family_version: currentFamilyVersion("reroll"),
     parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
@@ -102,7 +102,7 @@ function insertRetrievalProposal(fixtureValue: Fixture, span: Span): number {
     fixtureValue.db,
     "reroll",
     { roll: "hit", subset: "ones", weapon_type: "all" },
-    4,
+    currentFamilyVersion("reroll"),
     span.exact_text,
   );
   const proposal = fixtureValue.db.prepare(`

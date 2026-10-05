@@ -96,6 +96,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
   // A unit-filter folded onto a subjectless roll ("Friendly X units can re-roll …") names whose rolls.
   const rollTarget = (roll: unknown): Node | string => leaf.parameters.subject_filter !== undefined ? structuredClone(leaf.parameters.subject_filter as Node)
     : typeof leaf.parameters.test_taker === "string" ? leaf.parameters.test_taker
+    : typeof leaf.parameters.subject === "string" && (leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") ? target(leaf.parameters.subject)
     : context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   switch (leaf.family_id) {
     case "reroll": {

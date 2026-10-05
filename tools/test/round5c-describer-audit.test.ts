@@ -26,6 +26,8 @@ describe("Round 5C leaf describer audit", () => {
       attack: { unrendered: ["direction", "unit"], colliding: [], problems: 0 },
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit.
       "characteristic-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // A roll change's unit renders as "the unit" for every unit-ref, so a named subject reads like this unit's.
+      "roll-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
       // "any" and "all" rolls both read as bare "rolls"; the describer does not tell them apart.
       "ignore-modifiers": { unrendered: [], colliding: ["rolls"], problems: 0 },
       // "from" and the placement-limit fields (placement included) only render when "to" is not strategic-reserves.
