@@ -179,6 +179,11 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "resource-gain", target: "this-model", modifier: { pool, amount } };
     }
     case "characteristic-set": {
+      // A list set together: each pair is one setter with the shared subject and scope.
+      if (Array.isArray(leaf.parameters.values)) {
+        const { values, ...rest } = leaf.parameters as { values: Array<Record<string, unknown>> } & Record<string, unknown>;
+        return { type: "sequence", steps: values.map((item) => effect({ ...leaf, parameters: { ...rest, ...item } }, context)) };
+      }
       const subject = leaf.parameters.subject;
       const characteristic = closed(leaf, "characteristic");
       const weaponType = leaf.parameters.weapon_type;

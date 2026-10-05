@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "./antecedent-families.js";
-import { activitiesExtension, type FamilyExtension, keywordList, optional, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { activitiesExtension, type FamilyExtension, keywordList, optional, properties, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
@@ -124,6 +124,42 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   // scope matches (compile-antecedent.ts binds the antecedent; compile-unit-filters.ts folds it).
   antecedentSubject("weapon-property-scope", "\"Friendly X units' melee attacks have\": the units a unit-filter right before it matches"),
   antecedentSubject("ignore-modifiers", "\"Friendly X units can ignore modifiers to …\": the units a unit-filter right before it matches, or a selected unit"),
+  {
+    // "At the start or end of this unit's move": one leaf, either moment.
+    family: "event",
+    description: "As the previous version, plus also: the other end of the same move (move-started with also move-ended, or the reverse), so \"at the start or end of this unit's move\" is one leaf that fires at either moment.",
+    schema: (previous) => withProperties(previous, { also: optional({ enum: ["move-started", "move-ended"], "x-only-when": { kind: ["move-started", "move-ended"] } }) }),
+    normalize: (input, previous) => {
+      if (input.also === undefined) return previous(input);
+      const { also, ...rest } = input;
+      const other = enumValue(also, ["move-started", "move-ended"], "event.also");
+      if (!["move-started", "move-ended"].includes(String(rest.kind)) || rest.kind === other) throw new TypeError("event.also names the other end of a move-started or move-ended moment.");
+      return { ...previous(rest), also: other };
+    },
+  },
+  {
+    // "The bearer has a Move characteristic of 7\" and a Save characteristic of 3+": one leaf over
+    // the list, each item a characteristic and its value, sharing the subject and scope.
+    family: "characteristic-set",
+    description: "As the previous version, plus values: two or more {characteristic, value} pairs set together (\"has a Move characteristic of 7\\\" and a Save characteristic of 3+\") in place of characteristic and value.",
+    schema: (previous) => {
+      const item = { type: "object", required: ["characteristic", "value"], properties: { characteristic: properties(previous).characteristic!, value: properties(previous).value! }, additionalProperties: false };
+      const widened = withProperties(previous, { values: optional({ type: "array", minItems: 2, items: item }) });
+      return { ...widened, required: ((previous.required as string[] | undefined) ?? []).filter((key) => key !== "characteristic" && key !== "value") };
+    },
+    normalize: (input, previous) => {
+      if (input.values === undefined) return previous(input);
+      const { values, ...rest } = input;
+      if (!Array.isArray(values) || values.length < 2) throw new TypeError("characteristic-set.values lists two or more characteristics.");
+      if (rest.characteristic !== undefined || rest.value !== undefined) throw new TypeError("characteristic-set.values replaces characteristic and value.");
+      const items = values.map((item) => {
+        const { characteristic, value } = previous({ ...rest, ...(item as Record<string, unknown>) }) as Record<string, unknown>;
+        return { characteristic, value };
+      });
+      const { characteristic: _c, value: _v, ...shared } = previous({ ...rest, ...(values[0] as Record<string, unknown>) }) as Record<string, unknown>;
+      return { ...shared, values: items };
+    },
+  },
   {
     // "Your unit can make a Normal move of: Up to D6\". Or: If …, up to 6\"": the player picks one.
     family: "instead",

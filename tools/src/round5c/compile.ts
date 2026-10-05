@@ -303,6 +303,12 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
           triggers.push(trigger(leaf));
           triggerIndexes.push(index);
+          // "At the start or end of this unit's move": the other end is an alternative moment.
+          if (leaf.family_id === "event" && typeof leaf.parameters.also === "string") {
+            const { also, ...rest } = leaf.parameters;
+            triggers.push(trigger({ ...leaf, parameters: { ...rest, kind: also } }));
+            triggerIndexes.push(index);
+          }
         }
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
     });

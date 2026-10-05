@@ -266,3 +266,18 @@ describe("wave-4 review fixes", () => {
     expect(mechanics.effect.options[0]).toMatchObject({ type: "re-roll", modifier: { subset: "ones" } });
   });
 });
+
+describe("wave-4 rulings", () => {
+  it("sets a list of characteristics in one leaf", () => {
+    const text = JSON.stringify(mechanicsOf(leaves(["characteristic-set", { subject: "this-model", values: [{ characteristic: "M", value: 7 }, { characteristic: "Sv", value: 3 }] }])));
+    expect(text).toContain('{"type":"stat-modifier","target":"this-model","modifier":{"stat":"M","operation":"set","value":7}}');
+    expect(text).toContain('"stat":"Sv","operation":"set","value":3');
+    expect(() => normalizeFingerprintParameters("characteristic-set", { subject: "this-model", values: [{ characteristic: "M", value: 7 }] }, currentFamilyVersion("characteristic-set"))).toThrow(/two or more/u);
+  });
+
+  it("fires at either end of a move from one leaf", () => {
+    const mechanics = mechanicsOf(leaves(["event", { kind: "move-started", subject: "this-unit", also: "move-ended" }], heal()));
+    expect((mechanics.trigger as Array<{ event: string }>).map((moment) => moment.event)).toEqual(["move-started", "move-ended"]);
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", also: "move-ended" }, currentFamilyVersion("event"))).toThrow(/other end/u);
+  });
+});
