@@ -451,3 +451,19 @@ describe("a parenthesised alternative", () => {
     expect(JSON.stringify(result.mechanics)).toContain('"condition":{"operator":"or"');
   });
 });
+
+describe("a selection a persistent designation makes", () => {
+  it("is made once, by the designation", () => {
+    const text = "At the start of the battle, select one enemy unit to be this model's quarry. Each time this model makes an attack that targets its quarry, you can re-roll the Hit roll.";
+    const result = compileLeaves(placed(text, "RAW_TEXT",
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["to be this model's quarry", "persistent-designation-open", { designation: "prey", scope: "enemy-unit", timing: "start-of-first-battle-round", beneficiary: "this-model" }],
+      ["Each time this model makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
+      ["that targets its quarry", "designated-filter", { subject: "defender", tag: "prey" }],
+      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const out = JSON.stringify(result.mechanics);
+    expect(out).toContain('"type":"persistent-designation"');
+    expect(out).not.toContain('"select-units"');
+  });
+});

@@ -473,6 +473,8 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => node.type !== "attack-is"));
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
   }
+  // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
+  else if (selections.length === 1 && body?.type === "persistent-designation") { /* its own select */ }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
