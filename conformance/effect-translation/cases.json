@@ -22323,5 +22323,59 @@
     "expected": {
       "text": "Each time the unit destroys an enemy unit, when resolving this use, the unit has the Feel No Pain 6+ ability."
     }
+  },
+  {
+    "caseId": "model-destroyed-by-destroyer",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy",
+        "all_of": [
+          "CHARACTER"
+        ],
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy CHARACTER model, add 1 to the unit's Leadership characteristic."
+    }
+  },
+  {
+    "caseId": "model-destroyed-by-enemy",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "model-in-this-unit"
+    },
+    "expected": {
+      "text": "When a model in the unit is destroyed by an enemy unit, add 1 to the unit's Leadership characteristic."
+    }
   }
 ]

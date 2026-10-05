@@ -497,6 +497,19 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if f.get("first") == Some(&Value::Bool(true)) {
                 return "the first time a model in the unit is destroyed".to_string();
             }
+            // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+            if nn(t, "subject").is_some() {
+                if is(t, "object", "this-model") {
+                    return format!("when this model is destroyed by {who}");
+                }
+                if is(t, "object", "model-in-this-unit")
+                    || is(t, "object", "this-unit")
+                    || nn(t, "object").is_none()
+                {
+                    return format!("when a model in the unit is destroyed by {who}");
+                }
+                return format!("each time {who} destroys {}", object_phrase(object));
+            }
             if is(t, "object", "this-model") {
                 return "when this model is destroyed".to_string();
             }

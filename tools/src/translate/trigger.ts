@@ -236,6 +236,12 @@ function eventPhrase(t: AbilityTrigger): string {
       if (f.timing === "before-removal") return "before this model is removed from play";
       if (f.first === true) return "the first time a model in the unit is destroyed";
       const obj = t.object;
+      // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+      if (t.subject != null) {
+        if (obj === "this-model") return `when this model is destroyed by ${who}`;
+        if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return `when a model in the unit is destroyed by ${who}`;
+        return `each time ${who} destroys ${objectPhrase(obj)}`;
+      }
       if (obj === "this-model") return "when this model is destroyed";
       // A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
       if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return "when a model in the unit is destroyed";

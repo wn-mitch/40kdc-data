@@ -34,6 +34,26 @@ const EVENT_OBJECT: FamilyExtension = {
   },
 };
 
+const EVENT_MODEL_DESTROYER: FamilyExtension = {
+  // "Each time this model's unit destroys an enemy CHARACTER model", "destroyed as the result of an enemy unit's attacks".
+  family: "event",
+  description: "As the previous version, plus by and object_owner on model-destroyed (who destroyed the model, and whose model it was), and by enemy: an enemy unit destroyed it.",
+  schema: (previous) => {
+    const props = properties(previous);
+    const only = { kind: ["unit-destroyed", "model-destroyed"] };
+    return withProperties(previous, {
+      by: { ...widenedEnum(previous, "by", ["enemy"]), "x-only-when": only },
+      object_owner: { ...props.object_owner!, "x-only-when": only },
+    });
+  },
+  normalize: (input, previous) => {
+    const model = input.kind === "model-destroyed" && ("by" in input || "object_owner" in input);
+    const enemy = input.by === "enemy";
+    const normalized = previous({ ...input, ...(model ? { kind: "unit-destroyed" } : {}), ...(enemy ? { by: "this-unit" } : {}) });
+    return { ...normalized, ...(model ? { kind: "model-destroyed" } : {}), ...(enemy ? { by: "enemy" } : {}) };
+  },
+};
+
 /** The unit-state families a hidden unit and a bearer's Transport extend (see FAMILY_EXTENSIONS_11). */
 const UNIT_STATE_HIDDEN: FamilyExtension = {
   // "if that friendly unit is hidden": the core state, not a designation.
@@ -265,6 +285,7 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
     ["fell-back-this-phase", "charged-this-phase", "made-normal-move-this-phase", "made-normal-move-this-turn", "disembarked-this-phase", "set-up-this-phase", "made-dark-pact-this-phase", "lost-models-this-phase", "destroyed-enemy-model-this-phase", "destroyed-enemy-model-this-turn"],
     "a unit's moves and moments this phase (fell back, charged, made a Normal move, disembarked, was set up, made a Dark Pact), made a Normal move this turn, lost models this phase, and destroyed an enemy model this phase or turn",
   ),
+  EVENT_MODEL_DESTROYER,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

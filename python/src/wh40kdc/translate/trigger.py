@@ -339,6 +339,14 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "before this model is removed from play"
         if f.get("first") is True:
             return "the first time a model in the unit is destroyed"
+        # A subject names who destroyed the model: "each time the unit destroys an enemy
+        # CHARACTER model".
+        if t.get("subject") is not None:
+            if obj == "this-model":
+                return f"when this model is destroyed by {who}"
+            if obj in ("model-in-this-unit", "this-unit") or obj is None:
+                return f"when a model in the unit is destroyed by {who}"
+            return f"each time {who} destroys {_object_phrase(obj)}"
         if obj == "this-model":
             return "when this model is destroyed"
         # A model of this unit dying: the object names the model's unit, never the whole

@@ -112,7 +112,11 @@ export function trigger(leaf: CompileLeaf): Node {
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
   if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
   // A folded unit-filter after it ("allocated to an ADEPTA SORORITAS unit") names what it happens to.
-  if (leaf.parameters.object_filter !== undefined) node.object = structuredClone(leaf.parameters.object_filter as Node);
+  if (leaf.parameters.object_filter !== undefined) {
+    node.object = structuredClone(leaf.parameters.object_filter as Node);
+    // "Destroys an enemy CHARACTER model": the filter names the destroyed model.
+    if (node.event === "model-destroyed") (node.object as Node).level = "model";
+  }
   return node;
 }
 
@@ -129,8 +133,9 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (!found) throw new CompileError(`Event ${kindKey(leaf)} has no DSL trigger yet.`);
   const node = structuredClone(found);
   // "each time this unit destroys an enemy unit": who destroyed it, and whose unit it was.
-  if (leaf.parameters.by !== undefined) node.subject = closed(leaf, "by");
-  if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner") };
+  if (leaf.parameters.by !== undefined) node.subject = leaf.parameters.by === "enemy" ? { owner: "enemy" } : closed(leaf, "by");
+  // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
+  if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner"), ...(node.event === "model-destroyed" ? { level: "model" } : {}) };
   // "Each time an attack is allocated to this model".
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;

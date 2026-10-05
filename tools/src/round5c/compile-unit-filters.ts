@@ -435,7 +435,7 @@ function objectEvent(leaf: CompileLeaf | undefined): boolean {
   // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
   // "when an enemy unit targets a friendly X unit": the unit targeted.
   return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
-    || (leaf.parameters.kind === "unit-destroyed" && leaf.parameters.by !== undefined);
+    || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
 }
 
 /** An effect bound to the units of the unit-filter right after it (compile-antecedent.ts postfixFilter). */

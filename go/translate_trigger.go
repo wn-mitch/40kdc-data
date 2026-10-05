@@ -427,10 +427,21 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["first"] == true {
 			return "the first time a model in the unit is destroyed"
 		}
+		// A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+		if t["subject"] != nil {
+			if object == "this-model" {
+				return "when this model is destroyed by " + who
+			}
+			if object == "model-in-this-unit" || object == "this-unit" || object == nil {
+				return "when a model in the unit is destroyed by " + who
+			}
+			return "each time " + who + " destroys " + triggerObjectPhrase(object)
+		}
 		if object == "this-model" {
 			return "when this model is destroyed"
 		}
-		if object == "model-in-this-unit" || object == nil {
+		// A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
+		if object == "model-in-this-unit" || object == "this-unit" || object == nil {
 			return "when a model in the unit is destroyed"
 		}
 		return "when " + triggerObjectPhrase(object) + " is destroyed"

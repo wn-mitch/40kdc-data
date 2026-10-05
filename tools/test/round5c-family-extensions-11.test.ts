@@ -510,3 +510,25 @@ describe("an attack-property scope narrowed by its target", () => {
     expect(out).toContain('"stat":"S"');
   });
 });
+
+describe("who destroyed a model", () => {
+  it("names the destroyer and the destroyed model's side", () => {
+    const own = JSON.stringify(mechanicsOf(leaves(["event", { kind: "model-destroyed", by: "this-unit", object_owner: "enemy" }], heal())));
+    expect(own).toContain('"trigger":{"event":"model-destroyed","object":{"owner":"enemy","level":"model"},"subject":"this-unit"}');
+    const enemy = JSON.stringify(mechanicsOf(leaves(["event", { kind: "model-destroyed", by: "enemy" }], heal())));
+    expect(enemy).toContain('"subject":{"owner":"enemy"}');
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", by: "enemy" }, currentFamilyVersion("event"))).toThrow();
+  });
+});
+
+describe("the model a destroyer destroyed", () => {
+  it("folds the filter after \"destroys an\" into the destroyed model", () => {
+    const text = "Each time this unit destroys an enemy CHARACTER model, add 1 to this unit's Leadership characteristic.";
+    const result = compileLeaves(placed(text, "RAW_TEXT",
+      ["this unit destroys an", "event", { kind: "model-destroyed", by: "this-unit" }],
+      ["enemy CHARACTER model", "unit-filter", { side: "enemy", keywords: ["CHARACTER"], level: "model" }],
+      ["add 1 to this unit's Leadership characteristic", "characteristic-modifier", { subject: "this-unit", characteristics: ["Ld"], operation: "add", value: 1, weapon_type: "all" }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics)).toMatch(/"event":"model-destroyed".*"object":\{"owner":"enemy","all_of":\["CHARACTER"\],"level":"model"\}/u);
+  });
+});
