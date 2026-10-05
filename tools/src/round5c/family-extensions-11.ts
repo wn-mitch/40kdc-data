@@ -261,6 +261,10 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   UNIT_STATE_BEARER_TRANSPORT,
   CHARACTERISTIC_FLOOR,
   EVENT_OBJECT,
+  activitiesExtension(
+    ["fell-back-this-phase", "charged-this-phase", "made-normal-move-this-phase", "made-normal-move-this-turn", "disembarked-this-phase", "set-up-this-phase", "made-dark-pact-this-phase", "lost-models-this-phase", "destroyed-enemy-model-this-phase", "destroyed-enemy-model-this-turn"],
+    "a unit's moves and moments this phase (fell back, charged, made a Normal move, disembarked, was set up, made a Dark Pact), made a Normal move this turn, lost models this phase, and destroyed an enemy model this phase or turn",
+  ),
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

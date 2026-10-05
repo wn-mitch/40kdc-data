@@ -467,3 +467,13 @@ describe("a selection a persistent designation makes", () => {
     expect(out).not.toContain('"select-units"');
   });
 });
+
+describe("more of a unit's history", () => {
+  it("reads each new activity as its own event and window", () => {
+    const of = (activity: string) => JSON.stringify(mechanicsOf(leaves(["unit-activity", { activities: [activity], subject: "this-unit", negated: false }], heal())));
+    expect(of("fell-back-this-phase")).toContain('"event":"move-ended","filter":{"move_types":["fall-back"]},"window":"phase"');
+    expect(of("made-normal-move-this-turn")).toContain('"filter":{"move_types":["normal"]},"window":"turn"');
+    expect(of("destroyed-enemy-model-this-phase")).toContain('{"event":"model-destroyed","object":{"owner":"enemy","level":"model"},"filter":{"by":"this-unit"},"window":"phase"}');
+    expect(of("lost-models-this-phase")).toContain('{"event":"model-destroyed","object":"model-in-this-unit","window":"phase"}');
+  });
+});

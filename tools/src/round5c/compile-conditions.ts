@@ -37,6 +37,14 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
   "set-up-this-turn": ["set-up", {}, "turn"],
   // Version 12: "whose attacks have been resolved this phase".
   "resolved-attacks-this-phase": ["attacks-resolved", {}, "phase"],
+  // Version 13: more of a unit's own moves and moments, this phase or turn.
+  "fell-back-this-phase": ["move-ended", { move_types: ["fall-back"] }, "phase"],
+  "charged-this-phase": ["move-ended", { move_types: ["charge"] }, "phase"],
+  "made-normal-move-this-phase": ["move-ended", { move_types: ["normal"] }, "phase"],
+  "made-normal-move-this-turn": ["move-ended", { move_types: ["normal"] }, "turn"],
+  "disembarked-this-phase": ["disembarked", {}, "phase"],
+  "set-up-this-phase": ["set-up", {}, "phase"],
+  "made-dark-pact-this-phase": ["used", { kind: "dark-pact" }, "phase"],
 };
 
 /**
@@ -53,6 +61,10 @@ const HISTORY: Record<string, (subject: string | undefined) => Node> = {
   "set-up-from-reserves-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "phase" }),
   "set-up-from-reserves-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "strategic-reserves" }, window: "turn" }),
   "disembarked-from-this-transport-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "disembarked", filter: { transport: "this-unit" }, window: "turn" }),
+  // Version 13: models the subject lost, and enemy models it destroyed.
+  "lost-models-this-phase": (subject) => ({ event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject }, window: "phase" }),
+  "destroyed-enemy-model-this-phase": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "phase" }),
+  "destroyed-enemy-model-this-turn": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
   "lost-models-to-triggering-attacks": (subject) => ({
     event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
     filter: { by: "event-subject" }, window: "event",
