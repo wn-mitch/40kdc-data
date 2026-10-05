@@ -494,3 +494,19 @@ describe("an instead of another rule's default", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe("an attack-property scope narrowed by its target", () => {
+  it("gates the granted property on the attacks' target", () => {
+    const text = "This unit's ranged attacks that target a dazed unit have [LETHAL HITS] and +1 Strength.";
+    const result = compileLeaves(placed(text, "RAW_TEXT",
+      ["This unit's ranged attacks", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
+      ["that target a dazed unit", "designated-filter", { tag: "slowed" }],
+      ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["+1 Strength", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const out = JSON.stringify(result.mechanics);
+    expect(out).toMatch(/"condition":\{"type":"designated","parameters":\{"subject":"defender","tag":"slowed"\}\}/u);
+    expect(out).toContain('"weapon-ability-grant"');
+    expect(out).toContain('"stat":"S"');
+  });
+});

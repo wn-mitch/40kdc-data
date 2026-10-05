@@ -34,6 +34,18 @@ function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
 }
 
 /** Bind a property's explicit recipient and weapon scope, without changing the reviewed operand. */
+/** Conditions on the attack's target that can sit between a scope and its property ("that target a marked unit"). */
+const TARGET_CONDITIONS = new Set(["target-is-selected", "designated-filter", "unit-mark", "unit-keyword", "unit-position", "unit-state", "unit-filter-target"]);
+const TARGET_SUBJECTS = new Set(["target", "defender"]);
+
+function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
+  if (leaf.role !== "CONDITION" || leaf.fragment !== scope.fragment || !TARGET_CONDITIONS.has(leaf.family_id)) return false;
+  const subject = leaf.parameters.subject;
+  // A designation with no subject in this position names the attacks' target ("that target a busted unit").
+  return leaf.family_id === "target-is-selected" || leaf.family_id === "unit-filter-target" || (leaf.family_id === "designated-filter" && subject === undefined)
+    || (typeof subject === "string" && TARGET_SUBJECTS.has(subject));
+}
+
 export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === SCOPE)) return list;
   const source = sourceText === undefined ? undefined : Buffer.from(sourceText, "utf8");
@@ -41,16 +53,27 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
   for (let index = 0; index < list.length; index += 1) {
     const scope = list[index]!;
     if (scope.family_id !== SCOPE) { result.push(scope); continue; }
-    let end = index + 1;
+    // "Attacks that target a marked unit have [LETHAL HITS]": the target's conditions gate the
+    // properties after them, so they stay in front of the frame the scope becomes.
+    let first = index + 1;
+    const gates: CompileLeaf[] = [];
+    while (first < list.length && targetCondition(list[first]!, scope) && !/[.;]/u.test(between(source, list[first - 1]!, list[first]!))) {
+      const leaf = list[first]!;
+      gates.push(leaf.family_id === "designated-filter" && leaf.parameters.subject === undefined ? { ...leaf, parameters: { ...leaf.parameters, subject: "defender" } } : leaf);
+      first += 1;
+    }
+    result.push(...gates);
+    index = first - 1;
+    let end = first;
     let containsStat = false;
     let choice = false;
     while (end < list.length && isProperty(list[end]!) && list[end]!.fragment === scope.fragment
       && !/[.;]/u.test(between(source, list[end - 1]!, list[end]!))) {
       containsStat ||= isStat(list[end]!);
-      if (end > index + 1 && /\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, list[end]!))) choice = true;
+      if (end > first && /\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, list[end]!))) choice = true;
       end += 1;
     }
-    if (end === index + 1) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
+    if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
     if (!containsStat) {
       // Preserve the existing keyword-menu composition rules.
       result.push(grantFrame(scope));
@@ -60,7 +83,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
       throw new CompileError("An attack-property choice containing stat adjustments needs an explicit composition relation.");
     }
     let inKeywords = false;
-    for (let at = index + 1; at < end; at += 1) {
+    for (let at = first; at < end; at += 1) {
       const leaf = list[at]!;
       if (isStat(leaf)) {
         result.push(bindStat(leaf, scope));
