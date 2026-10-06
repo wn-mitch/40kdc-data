@@ -96,7 +96,7 @@ export type ShapeMember = {
   authored_text: string | null;
   compiled_text: string | null;
   /** The stratagem target the leaves set on the core record, when they set one. */
-  core_target: Record<string, unknown> | null;
+  core_target: Record<string, unknown> | Array<Record<string, unknown>> | null;
   differs: boolean;
   state: "approved" | "rejected" | "stale" | "open";
   errors: string[];

@@ -106,7 +106,7 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   return parts.map((part) => armyOnly(part) ? part : [...header, ...part]);
 }
 
-type PartResult = { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node } };
+type PartResult = { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node | Node[] } };
 
 const BEHAVIOR_RANK = ["reactive", "activated", "aura", "passive"];
 
@@ -114,7 +114,7 @@ const BEHAVIOR_RANK = ["reactive", "activated", "aura", "passive"];
  * One ability from its independently compiled parts. Each part keeps its own moment, usage limit
  * and duration on an ability-part; a part with none of those is its effect alone.
  */
-export function joinSegments(results: readonly PartResult[], oneUse = false): { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node }; errors: string[] } {
+export function joinSegments(results: readonly PartResult[], oneUse = false): { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node | Node[] }; errors: string[] } {
   const errors: string[] = [];
   const cores = [...new Set(results.flatMap((result) => result.core ? [JSON.stringify(result.core)] : []))];
   if (cores.length > 1) errors.push("Parts disagree on the Stratagem's target.");

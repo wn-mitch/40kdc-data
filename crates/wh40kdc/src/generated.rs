@@ -58768,9 +58768,9 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///      ]
 ///    },
 ///    "count_max": {
-///      "description": "Upper bound when `count` is up-to.",
+///      "description": "Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).",
 ///      "type": "integer",
-///      "minimum": 2.0
+///      "minimum": 1.0
 ///    },
 ///    "eligibility": {
 ///      "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.",
@@ -58822,9 +58822,9 @@ pub struct StratagemTargetRestriction {
     ///How many targets are selected: one, one or more, or up to `count_max`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<StratagemTargetRestrictionCount>,
-    ///Upper bound when `count` is up-to.
+    ///Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub count_max: ::std::option::Option<i64>,
+    pub count_max: ::std::option::Option<::std::num::NonZeroU64>,
     ///What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
@@ -59259,9 +59259,9 @@ pub struct StratagemTargetRestrictionsArrayItem {
     ///How many targets are selected: one, one or more, or up to `count_max`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<StratagemTargetRestrictionsArrayItemCount>,
-    ///Upper bound when `count` is up-to.
+    ///Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub count_max: ::std::option::Option<i64>,
+    pub count_max: ::std::option::Option<::std::num::NonZeroU64>,
     ///What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,

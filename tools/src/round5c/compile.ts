@@ -26,6 +26,8 @@ import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segm
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
+import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
+import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -55,6 +57,8 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  *   on death takes its band and conditions as its own per-model gate (compile-dice.ts).
  * - Stratagem TARGET. The target leaves and every condition in the TARGET fragment compile to
  *   the core record's target_restrictions (conditions become its eligibility), never the effect.
+ *   Several target leaves are several named targets (compile-target-groups.ts), which effects
+ *   name through among-filters and anaphors (compile-target-refs.ts).
  * - Restrictions. How often compiles to `usage`; a stratagem's phases and an enhancement's
  *   eligible bearers compile to nothing and come back as checks against the core records.
  * - Two or more effects form a sequence in source order; a duration sets `scope.duration`;
@@ -70,7 +74,7 @@ export type Compiled =
 type Node = Record<string, unknown>;
 
 /** Fields the leaves set on the core record rather than the enrichment entry (a stratagem's target). */
-export type CorePatch = { target_restrictions: Node };
+export type CorePatch = { target_restrictions: Node | Node[] };
 
 export { leafFragment, type LeafFragment } from "./compile-leaf-fragment.js";
 export { shapeSignature } from "./compile-placement.js";
@@ -192,7 +196,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText, options.abilityId), sourceText)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
+    // A Stratagem with several targets: references to them first (compile-target-refs.ts).
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(refuseBareTarget(bindAntecedents(refs.leaves, refs.focus)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -261,7 +267,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let optional = false;
   const checks: CoreCheck[] = [];
   const targetParts: CompileLeaf[] = [];
-  const targetEligibility: Node[] = [];
+  const targetPartIndexes: number[] = [];
+  const targetConditions: Array<{ index: number; node: Node; eachTarget: boolean }> = [];
+  const optionalTargets = new Set<number>();
   // Container-wrapping markers (batch 5): at most one of each is expected on a real ability.
   let auraLeaf: CompileLeaf | null = null;
   let leaderLeaf: CompileLeaf | null = null;
@@ -318,7 +326,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     };
     attempt(() => {
       // In the TARGET fragment no attack is being made: "target" is the candidate unit, the eligibility's default subject.
-      if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") targetEligibility.push(condition(leaf.parameters.subject === "target" ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf));
+      // Each target (subject each-target) is the candidate of every group it is copied into (compile-target-groups.ts).
+      if (leaf.role === "CONDITION" && leaf.fragment === "TARGET") {
+        const candidate = leaf.parameters.subject === "target" || leaf.parameters.subject === "each-target";
+        targetConditions.push({ index, eachTarget: leaf.parameters.subject === "each-target", node: condition(candidate ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf) });
+      }
       else if (leaf.role === "CONDITION" && WRAP_CONDITION_FAMILIES.has(leaf.family_id)) {
         if (leaf.family_id === "aura-range") auraLeaf = leaf;
         else leaderLeaf = leaf;
@@ -347,9 +359,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           usageIndexes.push(index);
           if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
         } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
-        else if (leaf.family_id === "optional-use") optional = true;
+        else if (leaf.family_id === "optional-use") {
+          // "You can also target one …": that later target is optional, not the Stratagem's use.
+          const group = optionalTargetGroup(list, index);
+          if (group === null) optional = true;
+          else optionalTargets.add(group);
+        }
         else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
-        else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) targetParts.push(leaf);
+        else if (["stratagem-target", "target-binding", "triggering-target"].includes(leaf.family_id)) { targetParts.push(leaf); targetPartIndexes.push(index); }
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
@@ -511,7 +528,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const per = usageScopes.values().next().value!;
     if (per !== "any") usages[0]!.per = per;
   }
-  const target = attempt(() => targetRestrictions(targetParts, targetEligibility));
+  const target = attempt(() => groupedTargetRestrictions(list, targetPartIndexes, targetConditions, optionalTargets, sourceText, targetRestrictions));
   const selected = planned.filter((item) => item.selected);
   if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
@@ -626,18 +643,25 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     body = { type: "sequence", steps: partSteps };
     entryTrigger = null;
   }
+  let resolved: ReturnType<typeof resolveEntry>;
+  try {
+    resolved = resolveEntry(gated(global, foldConditionalTestModifiers(body)), entryTrigger, target, severalTargets(list));
+  } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature, errors: [error.message] };
+  }
   return {
     ok: true,
     signature,
-    ...(target ? { core: { target_restrictions: target } } : {}),
+    ...(resolved.core ? { core: resolved.core } : {}),
     mechanics: {
-      effect: gated(global, foldConditionalTestModifiers(body)),
+      effect: resolved.effect,
       scope: { duration: period ?? scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
       // aura-range leaf always reads as an aura, ahead of any of those.
       behavior,
-      trigger: entryTrigger,
+      trigger: resolved.trigger as typeof entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
     checks,

@@ -691,6 +691,7 @@ const VALIDATOR_TARGET_SCHEMAS: Record<string, string> = {
   ability: "https://40kdc.dev/schemas/enrichment/ability-dsl/ability.schema.json",
   wargear: "https://40kdc.dev/schemas/core/wargear.schema.json",
   "wargear-option": "https://40kdc.dev/schemas/core/wargear-option.schema.json",
+  stratagem: "https://40kdc.dev/schemas/core/stratagem.schema.json",
 };
 
 /** Map an AJV error to the closed-enum code defined in RUNNER_PROTOCOL.md. */

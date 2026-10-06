@@ -2673,8 +2673,8 @@
         },
         "count_max": {
           "type": "integer",
-          "minimum": 2,
-          "description": "Upper bound when `count` is up-to."
+          "minimum": 1,
+          "description": "Upper bound when `count` is up-to (1: an optional extra target, zero or one unit)."
         },
         "side": {
           "enum": [

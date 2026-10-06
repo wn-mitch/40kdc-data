@@ -207,13 +207,14 @@ describe("menus and their targets", () => {
     ]))).toMatch(/no menu opens before it/u);
   });
 
-  it("refuses a second Stratagem target, naming the missing effect binding", () => {
+  // Two targets are named targets now (compile-target-groups.ts); "your unit" as this unit says neither.
+  it("refuses an effect on this unit when the Stratagem has two targets", () => {
     expect(refusal(placed("One ADEPTUS ASTARTES unit and one ADEPTUS ASTARTES unit. Your unit has the Feel No Pain 5+ ability.", [
       ["One", "stratagem-target", { count: "one" }, "TARGET"],
       ["ADEPTUS ASTARTES unit", "unit-filter", { side: "friendly", keywords: ["ADEPTUS ASTARTES"] }, "TARGET"],
       ["one", "stratagem-target", { count: "one" }, "TARGET"],
       ["ADEPTUS ASTARTES unit", "unit-filter", { side: "friendly", keywords: ["ADEPTUS ASTARTES"] }, "TARGET"],
       ["Your unit has the Feel No Pain 5+ ability", "feel-no-pain", FNP(5), "EFFECT"],
-    ]))).toMatch(/names 2 targets; no effect leaf can yet say which target/u);
+    ]))).toMatch(/several targets; name the one it means/u);
   });
 });

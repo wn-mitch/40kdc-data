@@ -442,5 +442,101 @@
       }
     },
     "expected_errors": []
+  },
+  {
+    "name": "stratagem: up to one target (an optional extra target)",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": {
+        "count": "up-to",
+        "count_max": 1,
+        "side": "your-army",
+        "selects": "unit"
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: two named targets, the second optional and gated on the first",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-pair-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "ALPHA"
+          ]
+        },
+        {
+          "name": "second",
+          "count": "up-to",
+          "count_max": 1,
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "BETA"
+          ],
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "first"
+                  },
+                  "all_of": [
+                    "BATTLELINE"
+                  ]
+                }
+              },
+              {
+                "type": "within",
+                "parameters": {
+                  "of": {
+                    "stratagem_target": "first"
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "expected_errors": []
   }
 ]

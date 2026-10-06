@@ -63,7 +63,7 @@ export type CompiledEntryRow = {
   shape_signature: string;
   mechanics: Mechanics;
   /** Fields for the core record (a stratagem's target_restrictions), or null. */
-  core: { target_restrictions: Record<string, unknown> } | null;
+  core: { target_restrictions: Record<string, unknown> | Array<Record<string, unknown>> } | null;
   inputs_hash: string;
   status: string;
 };

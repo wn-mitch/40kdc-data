@@ -11,7 +11,7 @@ import { coreTargetKeywords, keywordIndex } from "./core-keywords.js";
  * its abilities.json. The keywords are canonicalised to the units' own spellings here.
  */
 
-export type CoreRow = { id: string; ability_id: string; core: { target_restrictions: Record<string, unknown> } | null };
+export type CoreRow = { id: string; ability_id: string; core: { target_restrictions: Record<string, unknown> | Array<Record<string, unknown>> } | null };
 
 export type CoreProjection = {
   file: string;
@@ -34,8 +34,9 @@ export function coreStratagemFile(dataRoot: string, factionId: string): string {
   return join(dataRoot, "core", factionId, "stratagems.json");
 }
 
-/** Leaf-form target_restrictions (uppercase phrases) in the form core stores. */
-export function canonicalTarget(target: Record<string, unknown>, index: ReadonlyMap<string, string>): Record<string, unknown> {
+/** Leaf-form target_restrictions (uppercase phrases) in the form core stores; several named targets each so. */
+export function canonicalTarget(target: Record<string, unknown> | Array<Record<string, unknown>>, index: ReadonlyMap<string, string>): Record<string, unknown> | Array<Record<string, unknown>> {
+  if (Array.isArray(target)) return target.map((item) => canonicalTarget(item, index) as Record<string, unknown>);
   const { required_keywords, required_keywords_any, excluded_keywords, ...rest } = target;
   const phrases = (required_keywords_any ?? required_keywords ?? []) as string[];
   const keywords = coreTargetKeywords(phrases, required_keywords_any ? "any" : "all", (excluded_keywords ?? []) as string[], index);
@@ -61,7 +62,7 @@ export function projectCore(dataRoot: string, factionId: string, rows: readonly 
         : `Stratagem ${factionId}/${row.ability_id} is ambiguous in core stratagems.json.`);
     }
     const { record, position } = matches[0]!;
-    let target: Record<string, unknown>;
+    let target: Record<string, unknown> | Array<Record<string, unknown>>;
     try {
       target = canonicalTarget(row.core!.target_restrictions, index);
     } catch (error) {

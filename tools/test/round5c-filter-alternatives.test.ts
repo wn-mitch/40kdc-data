@@ -73,7 +73,8 @@ describe("unit-filter alternatives (family)", () => {
   });
 
   it("is a new version: the previous unit-filter version has no alternatives", () => {
-    expect(() => normalize("unit-filter", { side: "friendly", alternatives: ALPHA_OR_BETA_GAMMA }, currentFamilyVersion("unit-filter") - 1)).toThrow();
+    // Version 5 added alternatives (family-extensions-11.ts); version 4 has none.
+    expect(() => normalize("unit-filter", { side: "friendly", alternatives: ALPHA_OR_BETA_GAMMA }, 4)).toThrow();
   });
 
   it("puts unit-position's alternatives on the matching-unit form only", () => {

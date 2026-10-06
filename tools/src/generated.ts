@@ -6010,7 +6010,7 @@ export interface StratagemTargetRestriction {
    */
   count?: "one" | "one-or-more" | "up-to";
   /**
-   * Upper bound when `count` is up-to.
+   * Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
    */
   count_max?: number;
   /**

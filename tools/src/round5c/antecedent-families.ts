@@ -67,6 +67,9 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "chosen-option-grant": ["holder"],
   // "change the Damage of that attack to 0" for the model whose save an earlier roll moment names.
   "damage-reduction": ["subject"],
+  // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (family-extensions-w8-multi.ts).
+  "act-after-move": ["subject"],
+  "no-advance-roll": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

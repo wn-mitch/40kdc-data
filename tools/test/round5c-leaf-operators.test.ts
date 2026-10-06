@@ -14,6 +14,8 @@ import { confirmSurface } from "../src/round5c/leaves.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { undoBatch } from "../src/round5c/review.js";
 
+/** act-after-move's current version, which a confirmed operator must name. */
+const MOVE_VERSION = currentFamilyVersion("act-after-move");
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 const WILL = humanActor("will", "test");
 
@@ -21,7 +23,7 @@ const WILL = humanActor("will", "test");
 const MOVE_PERMISSION = {
   reviewer: "will",
   family_id: "act-after-move",
-  family_version: 2,
+  family_version: MOVE_VERSION,
   template: "{subject} is eligible to {acts} in a turn in which it {moves}",
   slots: {
     subject: { parameter: "subject", spellings: { "this unit": "this-unit", "this model": "this-model", "the bearer’s unit": "this-unit" } },
@@ -84,7 +86,7 @@ describe("Round 5C leaf operators", () => {
     const db = fixture(["This model is eligible to declare a charge in a turn in which it Advanced."]);
     confirmSurface(db, {
       reviewer: "will", exact_text: "This model is eligible to declare a charge in a turn in which it Advanced",
-      family_id: "act-after-move", family_version: 2, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] },
+      family_id: "act-after-move", family_version: MOVE_VERSION, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] },
     }, WILL);
     const before = moveRows(db);
     expect(() => confirmOperator(db, MOVE_PERMISSION, WILL)).toThrow(/already decided with another meaning/iu);
@@ -96,7 +98,7 @@ describe("Round 5C leaf operators", () => {
     const db = fixture(["This unit is eligible to declare a charge in a turn in which it Advanced.", "This model is eligible to shoot in a turn in which it Advanced."]);
     const earlier = confirmSurface(db, {
       reviewer: "will", exact_text: "This unit is eligible to declare a charge in a turn in which it Advanced",
-      family_id: "act-after-move", family_version: 2, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] },
+      family_id: "act-after-move", family_version: MOVE_VERSION, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] },
     }, WILL);
     const report = confirmOperator(db, MOVE_PERMISSION, WILL);
     expect(report.spellings.find((item) => item.surface_id === earlier.surface_id)?.surface_status).toBe("kept");
@@ -136,7 +138,7 @@ describe("Round 5C leaf operators", () => {
     const db = fixture(["This model is eligible to declare a charge in a turn in which it Advanced, even if it was Battle-shocked."]);
     const report = confirmOperator(db, MOVE_PERMISSION, WILL);
     const longer = "This model is eligible to declare a charge in a turn in which it Advanced, even if it was Battle-shocked";
-    confirmSurface(db, { reviewer: "will", exact_text: longer, family_id: "act-after-move", family_version: 2, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] } }, WILL);
+    confirmSurface(db, { reviewer: "will", exact_text: longer, family_id: "act-after-move", family_version: MOVE_VERSION, parameters: { subject: "this-unit", moves: ["advance"], acts: ["charge"] } }, WILL);
     const before = moveRows(db);
     expect(before).toEqual([expect.objectContaining({ exact_text: longer, operator_id: null })]);
     undoBatch(db, report.batch_id, { reviewer: "will" }, WILL);
@@ -149,18 +151,18 @@ describe("Round 5C leaf operators", () => {
     expect(() => operatorDefinition({ ...MOVE_PERMISSION, template: "{subject} is eligible to {acts}" })).toThrow(/unused moves/u);
     expect(() => operatorDefinition({ ...MOVE_PERMISSION, fixed: { subject: "this-unit" } })).toThrow(/supplied twice/u);
     const alternatives = operatorSpellings(operatorDefinition({
-      family_id: "act-after-move", family_version: 2, template: "**{a}** or **{b}** unit",
+      family_id: "act-after-move", family_version: MOVE_VERSION, template: "**{a}** or **{b}** unit",
       slots: { a: { parameter: "keywords", spellings: { infantry: "INFANTRY", mounted: "MOUNTED" } }, b: { parameter: "keywords", spellings: { mounted: "MOUNTED" } } },
     }));
     expect(alternatives.map((item) => item.parameters.keywords)).toEqual([["INFANTRY", "MOUNTED"], ["MOUNTED", "MOUNTED"]]);
     const listed = operatorSpellings(operatorDefinition({
-      family_id: "act-after-move", family_version: 2, template: "**{a}** or **{b}** unit",
+      family_id: "act-after-move", family_version: MOVE_VERSION, template: "**{a}** or **{b}** unit",
       slots: { a: { parameter: "keywords", spellings: { infantry: "INFANTRY", mounted: "MOUNTED" } }, b: { parameter: "keywords", spellings: { infantry: "INFANTRY", mounted: "MOUNTED" } } },
       combinations: [{ a: "infantry", b: "mounted" }],
     }));
     expect(listed.map((item) => [item.wording, item.parameters.keywords])).toEqual([["**infantry** or **mounted** unit", ["INFANTRY", "MOUNTED"]]]);
     expect(() => operatorDefinition({
-      family_id: "act-after-move", family_version: 2, template: "**{a}** or **{b}** unit",
+      family_id: "act-after-move", family_version: MOVE_VERSION, template: "**{a}** or **{b}** unit",
       slots: { a: { parameter: "keywords", spellings: { infantry: "INFANTRY" } }, b: { parameter: "keywords", spellings: { mounted: "MOUNTED" } } },
       combinations: [{ a: "infantry", b: "vehicle" }],
     })).toThrow(/declared spellings/u);

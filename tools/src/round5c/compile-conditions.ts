@@ -469,7 +469,8 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "visible": {
       const parameters: Node = {};
-      if (leaf.parameters.to !== undefined) parameters.to = closed(leaf, "to");
+      // Version 3: visible to the unit-filter right after it (compile-unit-filters.ts).
+      if (leaf.parameters.to !== undefined) parameters.to = leaf.parameters.to === "following-filter" ? followingFilter(leaf) : closed(leaf, "to");
       if (leaf.parameters.fully === true) parameters.fully = true;
       if (leaf.parameters.blocked_by !== undefined) parameters.blocked_by = closed(leaf, "blocked_by");
       return polarity(leaf, pred("visible", parameters, subjectOf(leaf)));

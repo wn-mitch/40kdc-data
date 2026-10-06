@@ -3,6 +3,7 @@ import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
+import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
@@ -211,7 +212,7 @@ export function postfixFilter(leaves: readonly CompileLeaf[], index: number): bo
 }
 
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
-function antecedentRole(leaves: readonly CompileLeaf[], index: number): string | null {
+function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null): string | null {
   if (postfixFilter(leaves, index)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   const momentUnit = onMomentUnit(leaves, index);
@@ -235,7 +236,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   // In a Stratagem's WHEN clause, "an enemy unit ends a move" + "within 8\" of …": the moment's
   // unit, not the Stratagem's target, which only the later clauses name.
   const inWhen = leaves[index]!.fragment === "WHEN" && moment?.fragment === "WHEN";
-  if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
+  // With several targets, the target in focus (compile-target-refs.ts bindTargetRefs) instead.
+  if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return focus?.(index) ?? "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
   // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
   if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) || filterNamesObject(leaves, leaves.indexOf(moment)) ? "event-object" : "event-subject";
@@ -285,6 +287,7 @@ function ownRole(leaves: readonly CompileLeaf[]): string {
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
 function boundValue(leaf: CompileLeaf, key: string, role: string): string | null {
+  if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
   if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
   if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key) ? role : null;
@@ -308,16 +311,16 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
  * Bind every `antecedent` to the unit an earlier leaf of the record introduced: the selected
  * unit when a selection precedes the leaf; else the units a unit-filter right before it matches
  * (an army-wide grant); else the unit a preceding aura reaches (its recipient); else, in a
- * Stratagem, its target (this-unit); else the unit of a preceding event whose moment names a unit
+ * Stratagem, its target (this-unit, or with several targets the one `focus` names for the leaf); else the unit of a preceding event whose moment names a unit
  * (the triggering unit); else, outside a Stratagem, the record's own unit (or model). A Stratagem leaf with none of these, or a leaf
  * whose family cannot name the unit it binds to, refuses compilation. Later lowering only sees
  * the bound roles.
  */
-export function bindAntecedents(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null): CompileLeaf[] {
   return leaves.map((leaf, index) => {
     const keys = antecedentKeys(leaf.family_id, leaf.parameters);
     if (keys.length === 0) return leaf;
-    const introduced = antecedentRole(leaves, index);
+    const introduced = antecedentRole(leaves, index, focus);
     if (introduced === null && isStratagem(leaves)) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
     }

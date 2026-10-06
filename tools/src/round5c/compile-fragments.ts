@@ -8,6 +8,7 @@ import { boardEffect } from "./compile-board-effects.js";
 import { containerEffect } from "./compile-containers.js";
 import { testEffect } from "./compile-test-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { isTargetRef } from "./compile-target-refs.js";
 
 export type CompileLeaf = {
   role: string;
@@ -100,6 +101,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       if (leaf.parameters.subject_filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
       return structuredClone(leaf.parameters.subject_filter as Node);
     }
+    // One of a Stratagem's several targets (compile-target-refs.ts), resolved once the entry is built.
+    if (isTargetRef(subject)) return subject;
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
     // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
