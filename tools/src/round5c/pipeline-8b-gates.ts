@@ -9,7 +9,7 @@ import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
-import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
+import { checkEntry, entryWithMechanics, resolveCheckedEntity, round5cDataRoot } from "./entries.js";
 
 /**
  * The compile+gate half of pipeline-8b: for every ability whose source is fully tiled by leaves,
@@ -148,7 +148,7 @@ async function gateCompiledAbility(
   const failures: GateFailure[] = [];
   let resolved;
   try {
-    resolved = resolveAbilityEntity(dataRoot, factionId, abilityId);
+    resolved = resolveCheckedEntity(dataRoot, factionId, abilityId);
   } catch {
     return { status: "no-data-entry" };
   }

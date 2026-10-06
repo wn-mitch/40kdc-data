@@ -101,6 +101,31 @@ export function resolveAbilityEntity(dataRoot: string, factionId: string, abilit
   return { file, entries, index: matches[0]!.index, entry: matches[0]!.entry };
 }
 
+/**
+ * The entry an ability's mechanics are checked against. A chapter's copy of a shared rule (its
+ * faction names a `parent_faction_id`, as Salamanders names adeptus-astartes) has no entry of its
+ * own; the parent's entry stands for it. Publication still resolves strictly per faction.
+ */
+export function resolveCheckedEntity(dataRoot: string, factionId: string, abilityId: string): ResolvedAbilityEntity {
+  try {
+    return resolveAbilityEntity(dataRoot, factionId, abilityId);
+  } catch (error) {
+    const parent = parentFaction(dataRoot, factionId);
+    if (parent === null) throw error;
+    return resolveAbilityEntity(dataRoot, parent, abilityId);
+  }
+}
+
+function parentFaction(dataRoot: string, factionId: string): string | null {
+  if (!ENTITY_ID.test(factionId)) return null;
+  const file = resolve(canonicalDataRoot(dataRoot), "core", factionId, "factions.json");
+  if (!existsSync(file)) return null;
+  const parsed: unknown = JSON.parse(readFileSync(file, "utf8"));
+  const own = Array.isArray(parsed) ? parsed.find((value) => (value as { id?: unknown } | null)?.id === factionId) as { parent_faction_id?: unknown } | undefined : undefined;
+  const parent = own?.parent_faction_id;
+  return typeof parent === "string" && parent !== factionId ? parent : null;
+}
+
 /** What one set of mechanics would become for an ability, without persisting anything. */
 export type MechanicsRender = { entry: Record<string, unknown> | null; rendered_text: string | null; errors: string[] };
 

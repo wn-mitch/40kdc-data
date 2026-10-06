@@ -7,7 +7,7 @@ import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
-import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
+import { checkEntry, entryWithMechanics, resolveCheckedEntity, round5cDataRoot } from "./entries.js";
 import { untiledRuns } from "./leaves.js";
 import { assertReviewer, requireHuman, type Actor } from "./authority.js";
 import { tiledSources } from "./leaf-view.js";
@@ -97,7 +97,7 @@ export type ShapeMember = {
 function render(factionId: string, abilityId: string, compiled: Compiled): { authored: string | null; compiled: string | null; errors: string[]; differs: boolean } {
   let original: Record<string, unknown>;
   try {
-    original = resolveAbilityEntity(round5cDataRoot(), factionId, abilityId).entry;
+    original = resolveCheckedEntity(round5cDataRoot(), factionId, abilityId).entry;
   } catch (error) {
     return { authored: null, compiled: null, errors: [error instanceof Error ? error.message : String(error)], differs: true };
   }
