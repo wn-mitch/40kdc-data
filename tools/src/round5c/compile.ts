@@ -93,6 +93,38 @@ const gated = (gate: Node[], body: Node): Node => {
 /** Leaves only a stratagem has: its phase window and its TARGET. */
 const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggering-target", "target-binding"]);
 
+/**
+ * Effects that keep changing the game until something ends them, so a duration bounds them. One-off
+ * results (mortal wounds, a move, a test, a set-up, regained wounds, CP) and effects that end by
+ * their own rule (a designation, a sticky objective, a state change, an activated option) are not.
+ */
+const LASTING_EFFECTS = new Set([
+  "ability-grant", "ability-modifier", "act-on-death", "borrow-weapons", "cost-modifier", "counts-as", "damage-reduction",
+  "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant", "leader-model-ability-grant",
+  "move-modifier", "named-region-state", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
+  "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-grant",
+]);
+
+/** Whether an effect tree holds a lasting effect. */
+function hasLastingEffect(node: unknown): boolean {
+  if (Array.isArray(node)) return node.some(hasLastingEffect);
+  if (node === null || typeof node !== "object") return false;
+  const record = node as Node;
+  return (typeof record.type === "string" && LASTING_EFFECTS.has(record.type)) || Object.values(record).some(hasLastingEffect);
+}
+
+/**
+ * The period a used or triggered ability's window names, which its effects last for when no
+ * duration is printed (core rule 01.02.02: "In the Shooting phase" with no duration lasts until the
+ * end of that Shooting phase). A window of phases is a phase; "in your turn" alone is the turn.
+ */
+function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
+  const windows = list.filter((leaf) => leaf.family_id === "use-window" || leaf.family_id === "activation-window"
+    || (leaf.family_id === "phase-window" && leaf.parameters.phase !== "any"));
+  if (windows.some((leaf) => leaf.family_id !== "phase-window" || leaf.parameters.phase !== undefined)) return "phase";
+  return windows.length ? "turn" : null;
+}
+
 /** Effects that forbid something; an "instead" after one says what happens in its place. */
 const PROHIBITIONS = new Set(["no-advance-roll"]);
 
@@ -525,6 +557,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   if (!body) return { ok: false, signature, errors };
   if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
+  const behavior = auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive";
+  // A used or triggered ability with no printed duration lasts for its window's period. A passive
+  // ability gated on a phase already holds only in that phase, and an aura only while in range.
+  const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body) ? windowPeriod(list) : null;
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
   const moments = triggers.map((node) => {
@@ -581,11 +617,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
     ...(target ? { core: { target_restrictions: target } } : {}),
     mechanics: {
       effect: gated(global, foldConditionalTestModifiers(body)),
-      scope: { duration: scopeDuration },
+      scope: { duration: period ?? scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
       // aura-range leaf always reads as an aura, ahead of any of those.
-      behavior: auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive",
+      behavior,
       trigger: entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
