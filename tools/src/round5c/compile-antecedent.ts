@@ -2,6 +2,7 @@ import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
+import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
@@ -93,16 +94,37 @@ export function momentOfFilter(leaves: readonly CompileLeaf[], filterIndex: numb
     && (moment.parameters.owner === undefined || (filter.parameters.side !== "any" && moment.parameters.owner === filter.parameters.side)) ? at : null;
 }
 
-/** Whether a condition sits between a bare filter and the moment they describe. */
-function onMomentUnit(leaves: readonly CompileLeaf[], index: number): boolean {
+/**
+ * The moment's unit a condition between a bare filter and the moment describes, or null: the
+ * subject, or, for a destruction the filter names (compile-unit-filters.ts), the destroyed object.
+ */
+function onMomentUnit(leaves: readonly CompileLeaf[], index: number): string | null {
   const leaf = leaves[index]!;
-  if (leaf.role !== "CONDITION") return false;
+  if (leaf.role !== "CONDITION") return null;
   // Back past the description to the filter it starts with (a filter a following-filter distance
   // measures to is part of the description, so the walk passes it).
   let at = index - 1;
   while (at >= 0 && describes(leaves, at, leaf.fragment)) at -= 1;
   const moment = momentOfFilter(leaves, at);
-  return moment !== null && moment > index;
+  if (moment === null || moment <= index) return null;
+  return destroyedObject(leaves[moment], leaves[at]) ? "event-object" : "event-subject";
+}
+
+/** "when a friendly X model … is destroyed": a destruction whose object a unit-filter before it names. */
+function filterNamesObject(leaves: readonly CompileLeaf[], momentIndex: number): boolean {
+  return leaves.some((leaf, at) => at < momentIndex && momentOfFilter(leaves, at) === momentIndex && destroyedObject(leaves[momentIndex], leaf));
+}
+
+/**
+ * "when a saving throw is failed for a" + "friendly X model": the last roll moment before the leaf
+ * whose roll a unit-filter right after it (past "from your army") names, so it introduces a unit.
+ */
+function rollOwnerBefore(leaves: readonly CompileLeaf[], index: number): boolean {
+  const at = leaves.slice(0, index).map((leaf) => leaf.family_id === "event").lastIndexOf(true);
+  if (at < 0) return false;
+  let next = at + 1;
+  while (leaves[next]?.family_id === "unit-owner") next += 1;
+  return next < index && rollOwnerEvent(leaves[at], leaves[next]);
 }
 
 /**
@@ -192,11 +214,14 @@ export function postfixFilter(leaves: readonly CompileLeaf[], index: number): bo
 function antecedentRole(leaves: readonly CompileLeaf[], index: number): string | null {
   if (postfixFilter(leaves, index)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
-  if (onMomentUnit(leaves, index)) return "event-subject";
+  const momentUnit = onMomentUnit(leaves, index);
+  if (momentUnit !== null) return momentUnit;
   // "a friendly model" + "that disembarked this turn" + "makes an attack": the attacking unit.
   if (onAttacker(leaves, index)) return "attacker";
   // "a friendly X unit" + "is within range of an objective" + "attacks that target that unit": the defender.
   if (onTargeted(leaves, index)) return "target";
+  // "when a saving throw is failed for a friendly X model within 6\" …, that attack": the model whose roll it is.
+  if (rollOwnerBefore(leaves, index)) return "event-subject";
   const earlier = leaves.slice(0, index);
   // "Friendly X units' attacks that target that unit": a filter right before an attack-property
   // scope names whose attacks, even after a selection the rest of the record points to.
@@ -213,7 +238,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
   // which the DSL's damage-allocated trigger holds as its object; its subject is the attacker.
-  if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) ? "event-object" : "event-subject";
+  if (moment) return OBJECT_MOMENTS.has(String(moment.parameters.kind)) || filterNamesObject(leaves, leaves.indexOf(moment)) ? "event-object" : "event-subject";
   return null;
 }
 
@@ -230,6 +255,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"], "ability-activate": ["subject"],
   "make-move": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
+  "damage-reduction": ["subject"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

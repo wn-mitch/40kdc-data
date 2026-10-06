@@ -17,9 +17,10 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
  * changes. The ability's own dice roll takes the change into its dice ("D6" + "+1" → "D6+1"),
  * so the result bands after it read the changed result; that leaf then says nothing more. A
  * change the dice cannot carry (a subtraction, a several-dice roll) refuses, as does a
- * modifier with no roll before it.
+ * modifier with no roll before it, and one a condition in its clause makes conditional (the
+ * condition would otherwise gate the whole roll).
  */
-export function bindPrecedingRolls(input: readonly CompileLeaf[]): CompileLeaf[] {
+export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   const leaves = bindTestTakers(foldTestModifiers(input));
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
@@ -36,6 +37,7 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[]): CompileLeaf[]
       return;
     }
     const dice = out[at]!;
+    if (conditionInClause(out, at, index, sourceText)) throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
     const value = leaf.parameters.value;
     if (leaf.parameters.operation !== "add" || typeof value !== "number" || value < 1) throw new CompileError("Only adding a number to this ability's own roll folds into its dice.");
     if (dice.parameters.count !== undefined || dice.parameters.per_model !== undefined) throw new CompileError("A change to a roll of several dice has no DSL shape.");
@@ -43,6 +45,16 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[]): CompileLeaf[]
     dropped.add(index);
   });
   return out.filter((_, index) => !dropped.has(index));
+}
+
+/** A condition (not a result band) beside the change to the dice: between them, or right after the change in its clause. */
+function conditionInClause(leaves: readonly CompileLeaf[], dice: number, change: number, sourceText: string | undefined): boolean {
+  const gate = (leaf: CompileLeaf | undefined) => leaf !== undefined && leaf.role === "CONDITION" && leaf.family_id !== "roll-result" && leaf.fragment === leaves[change]!.fragment;
+  if (leaves.slice(dice + 1, change).some(gate)) return true;
+  if (sourceText === undefined || !gate(leaves[change + 1])) return false;
+  // "with +1 to the result if a friendly X model is within 6\"": no sentence or colon break before the condition.
+  const between = Buffer.from(sourceText, "utf8").subarray(leaves[change]!.end_byte ?? leaves[change]!.start_byte, leaves[change + 1]!.start_byte).toString("utf8");
+  return !/[.:;]/u.test(between);
 }
 
 /**

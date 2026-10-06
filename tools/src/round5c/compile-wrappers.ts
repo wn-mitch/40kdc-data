@@ -169,6 +169,8 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
     type: "select-units",
     selector: {
       owner: selection.parameters.scope === "friendly" ? "friendly" : "enemy",
+      // "Select one friendly X model": a model, which the effects name as the selected unit.
+      ...(selection.parameters.target_kind === "model" ? { target_kind: "model" } : {}),
       // "Select up to 2/3/4 units by battle size" selects a number, not exactly one.
       ...count,
       ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
@@ -183,6 +185,7 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
 export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null): Node {
+  if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
   if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
     throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
   }

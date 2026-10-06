@@ -2,6 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { destroyedFilter, destroyedObject, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 
@@ -58,8 +59,9 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
   };
 }
 
-function side(filter: CompileLeaf, what: string): string {
-  if (filter.parameters.level === "model") throw new CompileError(`A unit-filter naming models has no DSL shape for ${what} yet.`);
+/** The filter's side; a model-level filter only where `models` says the fold can name models. */
+function side(filter: CompileLeaf, what: string, options: { models?: boolean } = {}): string {
+  if (filter.parameters.level === "model" && options.models !== true) throw new CompileError(`A unit-filter naming models has no DSL shape for ${what} yet.`);
   const value = String(filter.parameters.side);
   if (value === "any") throw new CompileError(`A unit-filter for ${what} must say friendly or enemy.`);
   return value;
@@ -244,7 +246,7 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       index += 1;
     } else if (openSelect(leaf) && isFilter(next)) {
       out.push({ ...leaf, parameters: {
-        ...leaf.parameters, scope: side(next!, "a selection"), filter: filterOf(next!),
+        ...leaf.parameters, scope: side(next!, "a selection", { models: true }), filter: filterOf(next!), ...modelSelection(next!, list),
         visible: leaf.parameters.visible === true || next!.parameters.visible === true,
       } });
       index += 1;
@@ -259,9 +261,19 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const condition = out.at(-1)!;
       out[out.length - 1] = { ...condition, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf) } };
       index = at - 1;
+    } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
+      // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
+      // "from your army" of the same side after it is the filter's own wording.
+      const at = pastOwners(list, index, leaf);
+      const event = out.at(-1)!;
+      out[out.length - 1] = { ...event, parameters: { ...event.parameters, subject_filter: dslUnitFilter(leaf) } };
+      index = at - 1;
     } else if (isFilter(leaf) && openAura(next)) {
       if (leaf.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
-      out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura"), filter: filterOf(leaf) } });
+      // "While a friendly WAR DOG model is within 9\" of this model": each such model is the
+      // recipient (compile-model-level.ts wrapModelAura), not the unit it belongs to.
+      const models = leaf.parameters.level === "model" ? { model_recipient: modelRecipientFilter(leaf, dslUnitFilter(leaf)) } : {};
+      out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura", { models: true }), filter: filterOf(leaf), ...models } });
       index += 1;
     } else if (openTarget(leaf) && isFilter(next)) {
       // "One" + "friendly ADEPTA SORORITAS unit" (+ "from your army"): a Stratagem's TARGET.
@@ -276,6 +288,12 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     } else if (isFilter(leaf) && ownerlessEvent(list[pastOwners(list, index, leaf)])) {
       // "each time a friendly AELDARI unit" (+ "from your army") + "makes an attack": the trigger's subject.
       const at = pastOwners(list, index, leaf);
+      // "when a friendly X model" + "is destroyed": what was destroyed, not who destroyed it.
+      if (destroyedObject(list[at], leaf)) {
+        out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, object_filter: destroyedFilter(list[at]!, leaf, dslUnitFilter(leaf)) } });
+        index = at;
+        continue;
+      }
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
       // "is selected to move" + "or" + "declares a charge": the alternative moment is the same unit's.
@@ -290,7 +308,9 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const at = momentOfFilter(list, index)!;
       const between = foldUnitFilters(list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
       out.push(...between);
-      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
+      // "a friendly X model" + "within 6\" of this unit" + "is destroyed": what was destroyed.
+      const named = destroyedObject(list[at], leaf) ? { object_filter: destroyedFilter(list[at]!, leaf, dslUnitFilter(leaf)) } : { subject_filter: dslUnitFilter(leaf) };
+      out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, ...named } });
       index = at;
     } else if (isFilter(leaf) && ownedBy(list[pastOwners(list, index, leaf)], leaf.parameters.side)) {
       // "just after an ADEPTUS CUSTODES unit" + "from your army Falls Back": the event's owner is

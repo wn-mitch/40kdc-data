@@ -14,6 +14,7 @@ import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
+import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
@@ -190,7 +191,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText, options.abilityId), sourceText)))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText, options.abilityId), sourceText)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -563,7 +564,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
   if (!body) return { ok: false, signature, errors };
-  if (auraLeaf) { const aura = auraLeaf; body = attempt(() => wrapAura(aura, body!)); }
+  if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
   if (!body) return { ok: false, signature, errors };
   if (rulesBundle) body = wrapRulesBundle(body);
@@ -584,7 +585,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       // of a friendly X unit") the Stratagem's unit is never that enemy: it is the moment's
       // object, or else this unit, which the keywords gate.
       const enemyActs = moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy";
-      if (enemyActs) {
+      // "When a friendly X unit is destroyed" + "that X unit": the destroyed unit, the moment's object.
+      if (destroyedFilterObject(moment)) moment.object = withKeywords(moment.object as Node);
+      else if (enemyActs) {
         if (moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy") moment.object = withKeywords(moment.object as Node);
         else {
           const gate: Node = { type: "has-keyword", parameters: { all_of: keywords } };

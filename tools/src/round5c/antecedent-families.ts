@@ -65,6 +65,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "target-is-selected": ["by", "target"],
   "ability-activate": ["subject"],
   "chosen-option-grant": ["holder"],
+  // "change the Damage of that attack to 0" for the model whose save an earlier roll moment names.
+  "damage-reduction": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */
