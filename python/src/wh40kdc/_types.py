@@ -2501,6 +2501,7 @@ class UnitFilter(TypedDict):
     any_of: NotRequired[KeywordList]
     none_of: NotRequired[KeywordList]
     not_all_of: NotRequired[KeywordList]
+    any_of_filters: NotRequired[list[UnitFilter]]
     designated: NotRequired[DesignationId]
     state: NotRequired[UnitState]
     not_states: NotRequired[list[UnitState]]

@@ -106,6 +106,15 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		out.unsupported = append(out.unsupported, unsup(reason, n))
 		return
 	}
+	// A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
+	// reaches the unit only when one alternative matches its keywords.
+	switch alternativesMatch(n, opts) {
+	case "false":
+		return
+	case "unknown":
+		out.unsupported = append(out.unsupported, unsup(alternativesReason, n))
+		return
+	}
 	// An `incoming` change modifies attacks made against its target. On the buffed unit it is the
 	// attacker's side of those attacks, which the `target: "attacker"` form already models; it never
 	// modifies the buffed unit's own attacks.
@@ -1724,6 +1733,117 @@ func containsAnyV(l []any, v any) bool {
 }
 
 const fidelityBindingReason = "selection/history/model/attack predicates are not resolved by the buff engine"
+
+const alternativesReason = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords"
+
+// alternativesMatch reports whether a node's unit-filter target with any_of_filters reaches the
+// unit crunched: "true" when any alternative matches, "false" when none can, "unknown" when the
+// keywords are missing or an alternative whose keywords hold also names something else (a
+// state). A friendly filter is read against the crunched side's own keywords; an enemy one
+// only from the target's perspective. Nodes without alternatives are left as before ("true").
+func alternativesMatch(node map[string]any, opts dslOpts) string {
+	target, ok := asMap(node["target"])
+	if !ok || target == nil {
+		return "true"
+	}
+	alternatives, ok := asList(target["any_of_filters"])
+	if !ok {
+		return "true"
+	}
+	key := ""
+	switch {
+	case target["owner"] == "friendly" && opts.perspective == "attacker":
+		key = "attackerKeywords"
+	case target["owner"] == "friendly", target["owner"] == "enemy" && opts.perspective == "target":
+		key = "targetKeywords"
+	default:
+		return "true"
+	}
+	have, ok := lowerKeywordSet(opts.context[key])
+	if !ok {
+		return "unknown"
+	}
+	sawUnknown := false
+	for _, raw := range alternatives {
+		switch alternativeMatches(raw, have) {
+		case "true":
+			return "true"
+		case "unknown":
+			sawUnknown = true
+		}
+	}
+	if sawUnknown {
+		return "unknown"
+	}
+	return "false"
+}
+
+// lowerKeywordSet is a keyword list as a lower-cased set; false when it is missing or malformed.
+func lowerKeywordSet(raw any) (map[string]bool, bool) {
+	list, ok := asList(raw)
+	if !ok {
+		return nil, false
+	}
+	set := map[string]bool{}
+	for _, item := range list {
+		keyword, ok := item.(string)
+		if !ok || keyword == "" {
+			return nil, false
+		}
+		set[strings.ToLower(keyword)] = true
+	}
+	return set, true
+}
+
+// alternativeMatches checks one any_of_filters alternative against a unit's keywords: "false"
+// when its keyword fields (all_of, any_of, none_of) fail, whatever else it names; "true" when they
+// hold and it names nothing else; "unknown" when they hold but it also names something else (a
+// state), or a keyword field is malformed.
+func alternativeMatches(raw any, have map[string]bool) string {
+	alternative, ok := asMap(raw)
+	if !ok || alternative == nil {
+		return "unknown"
+	}
+	fields := map[string]map[string]bool{}
+	other := false
+	for key, value := range alternative {
+		if key != "all_of" && key != "any_of" && key != "none_of" {
+			other = true
+			continue
+		}
+		set, ok := lowerKeywordSet(value)
+		if !ok {
+			return "unknown"
+		}
+		fields[key] = set
+	}
+	for keyword := range fields["all_of"] {
+		if !have[keyword] {
+			return "false"
+		}
+	}
+	if anyOf, ok := fields["any_of"]; ok {
+		found := false
+		for keyword := range anyOf {
+			if have[keyword] {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return "false"
+		}
+	}
+	for keyword := range fields["none_of"] {
+		if have[keyword] {
+			return "false"
+		}
+	}
+	if other {
+		return "unknown"
+	}
+	return "true"
+}
 
 func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	selector, _ := getMap(n, "selector")

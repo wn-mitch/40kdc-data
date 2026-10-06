@@ -88,13 +88,34 @@ const ROLE_PHRASES: Record<string, string> = {
   "ability-unit": "this unit",
 };
 
+/**
+ * A filter's `any_of_filters` as keyword spellings ("LEGIO CYBERNETICA", "ADEPTUS MECHANICUS
+ * VEHICLE") when each alternative is only its keywords and the filter requires none of its own,
+ * so "an A or B C unit" says it; else null.
+ */
+export function keywordAlternatives(f: P): string[] | null {
+  if (!Array.isArray(f.any_of_filters) || Array.isArray(f.all_of)) return null;
+  const alts = f.any_of_filters as P[];
+  const plain = alts.every((a) => a != null && typeof a === "object" && Array.isArray(a.all_of) && (a.all_of as unknown[]).length > 0 && Object.keys(a).every((k) => k === "all_of"));
+  return plain ? alts.map((a) => (a.all_of as unknown[]).map(str).join(" ")) : null;
+}
+
+/** Each alternative of `any_of_filters` as a filter of the outer filter's level (models or units). */
+export function alternativeFilters(f: P): P[] {
+  return (f.any_of_filters as P[]).map((a) => (f.level != null ? { ...a, level: f.level } : a));
+}
+
 /** A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit". */
 export function unitFilterPhrase(f: P): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
   const noun = f.level === "model" ? "model" : "unit";
-  let s = `${owner}${all}${noun}`;
+  // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+  const compact = keywordAlternatives(f);
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
   s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
+  // Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+  if (Array.isArray(f.any_of_filters) && !compact) s += ` that is ${orList(alternativeFilters(f).map(unitFilterPhrase))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;

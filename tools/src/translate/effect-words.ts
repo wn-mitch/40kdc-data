@@ -4,7 +4,7 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { andList, designationPhrase, dekebab, idLabel, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
@@ -297,7 +297,11 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(jstr).join(" ")} ` : "";
   const noun = f.level === "model" ? "models" : "units";
-  let s = `${owner}${all}${noun}`;
+  // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+  const compact = keywordAlternatives(f);
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
+  // Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+  if (Array.isArray(f.any_of_filters) && !compact) s += ` that are ${orList(alternativeFilters(f).map((a) => filterSubject(a, ctx).replace(/^all /, "")))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(jstr).join(" ")} ${noun})`;

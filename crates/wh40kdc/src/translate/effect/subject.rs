@@ -5,7 +5,8 @@ use serde_json::Value;
 
 use super::words::*;
 use crate::translate::condition::{
-    and_list, article, designation_phrase, nn, obj, or_list, range_phrase, state_phrase, P,
+    alternative_filters, and_list, article, designation_phrase, keyword_alternatives, nn, obj,
+    or_list, range_phrase, state_phrase, P,
 };
 use crate::translate::dekebab;
 
@@ -38,7 +39,26 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     } else {
         "units"
     };
-    let mut s = format!("{owner}{all}{noun}");
+    // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+    let compact = keyword_alternatives(f);
+    let mut s = match &compact {
+        Some(alts) => format!("{owner}{} {noun}", or_list(alts)),
+        None => format!("{owner}{all}{noun}"),
+    };
+    // Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+    if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
+        let alts: Vec<String> = alternative_filters(f)
+            .iter()
+            .map(|a| {
+                let phrase = filter_subject(a, ctx);
+                phrase
+                    .strip_prefix("all ")
+                    .map(str::to_string)
+                    .unwrap_or(phrase)
+            })
+            .collect();
+        s.push_str(&format!(" that are {}", or_list(&alts)));
+    }
     if let Some(any) = map_arr(f, "any_of", jv) {
         s.push_str(&format!(" with the {} keyword", or_list(&any)));
     }

@@ -116,6 +116,34 @@ const MODEL_SCOPED_REASON: &str =
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)";
 const FIDELITY_BINDING_REASON: &str =
     "selection/history/model/attack predicates are not resolved by the buff engine";
+const ALTERNATIVES_REASON: &str = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";
+
+/// Whether a node's unit-filter target with `any_of_filters` reaches the unit crunched (`None`:
+/// unknown). A friendly filter is read against the crunched side's own keywords; an enemy one
+/// only from the target's perspective, since the attacker's perspective drops it anyway. Nodes
+/// without alternatives are left to the target classification (`Some(true)`).
+fn alternatives_match(node: &Obj, opts: &WalkOpts) -> Option<bool> {
+    let Some(target) = node.get("target").and_then(Value::as_object) else {
+        return Some(true);
+    };
+    let Some(alternatives) = target.get("any_of_filters").and_then(Value::as_array) else {
+        return Some(true);
+    };
+    let keywords = match (
+        target.get("owner").and_then(Value::as_str),
+        opts.perspective,
+    ) {
+        (Some("friendly"), TranslationPerspective::Attacker) => {
+            opts.context.attacker_keywords.as_deref()
+        }
+        (Some("friendly"), TranslationPerspective::Target)
+        | (Some("enemy"), TranslationPerspective::Target) => {
+            opts.context.target_keywords.as_deref()
+        }
+        _ => return Some(true),
+    };
+    conditions::evaluate_alternatives(alternatives, keywords)
+}
 
 /// Walk an ability DSL `effect` tree and produce the buff stack it contributes against
 /// `context` from `perspective`, plus the fragments the buff layer cannot express.
@@ -201,6 +229,15 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     if let Some(reason) = unsized_value_reason(current) {
         out.unsupported(reason, current);
         return;
+    }
+    // A target filter of alternatives reaches the unit only when one alternative matches it.
+    match alternatives_match(current, opts) {
+        Some(false) => return,
+        None => {
+            out.unsupported(ALTERNATIVES_REASON, current);
+            return;
+        }
+        Some(true) => {}
     }
     // An `incoming` change modifies attacks made against its target: the attacker's side of them.
     let modifier = object(current.get("modifier"));

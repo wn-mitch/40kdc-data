@@ -65471,6 +65471,14 @@ pub struct UnitDetachmentPricingItem {
 ///    "any_of": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "any_of_filters": {
+///      "description": "Only units matching at least one of these filters, as well as every other listed property (\"LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit\"; \"PSYKER or Battle-shocked unit\"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-filter"
+///      },
+///      "minItems": 2
+///    },
 ///    "designated": {
 ///      "description": "The unit carries this designation (a tag an effect applied).",
 ///      "$ref": "#/$defs/designation-id"
@@ -65585,6 +65593,9 @@ pub struct UnitFilter {
     pub all_of: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub any_of: ::std::option::Option<KeywordList>,
+    ///Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub any_of_filters: ::std::vec::Vec<UnitFilter>,
     ///The unit carries this designation (a tag an effect applied).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub designated: ::std::option::Option<DesignationId>,
@@ -65641,6 +65652,7 @@ impl ::std::default::Default for UnitFilter {
         Self {
             all_of: Default::default(),
             any_of: Default::default(),
+            any_of_filters: Default::default(),
             designated: Default::default(),
             designated_by: Default::default(),
             embarked_in: Default::default(),

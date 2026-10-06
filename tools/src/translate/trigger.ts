@@ -4,7 +4,7 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
-import { rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
+import { alternativeFilters, rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
 
 type P = Record<string, unknown>;
 
@@ -86,6 +86,8 @@ function actorKeywords(ref: unknown): string {
   const noun = f.level === "model" ? "model" : "unit";
   let s = "";
   if (Array.isArray(f.all_of)) s += ` (the triggering ${noun} must have ${andList((f.all_of as unknown[]).map(str))})`;
+  // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
+  if (Array.isArray(f.any_of_filters)) s += ` (the triggering ${noun} must be ${orList(alternativeFilters(f).map(unitFilterPhrase))})`;
   if (Array.isArray(f.none_of)) s += ` (the triggering ${noun} must not have ${orList((f.none_of as unknown[]).map(str))})`;
   if (Array.isArray(f.not_all_of)) s += ` (the triggering ${noun} must not have all of ${andList((f.not_all_of as unknown[]).map(str))})`;
   return s;

@@ -7,8 +7,10 @@
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
-import { abilityChecks, stateCheck } from "./compile-wrappers.js";
+import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
 import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
+import { dslAlternatives } from "./compile-filter-alternatives.js";
+import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
 type Node = Record<string, unknown>;
@@ -171,6 +173,8 @@ export function attackTypeCondition(leaf: CompileLeaf): Node | null {
 function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
   return {
     owner: closed(leaf, "of_side"), ...(leaf.parameters.of_keywords !== undefined ? { all_of: closed(leaf, "of_keywords") } : {}),
+    // "of one or more friendly X VEHICLE or Y units": any one alternative.
+    ...dslAlternatives(leaf.parameters.of_alternatives as FilterAlternative[] | undefined),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
   };
 }
@@ -315,11 +319,12 @@ export function condition(leaf: CompileLeaf): Node {
       } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
-      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true };
+      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[] };
       if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
       const checks: Node[] = [
         ...(filter.all_of ? [pred("has-keyword", { all_of: filter.all_of }, "defender")] : []),
         ...(filter.any_of ? [pred("has-keyword", { any_of: filter.any_of }, "defender")] : []),
+        ...(filter.any_of_filters ? [alternativesCheck(leaf.parameters.alternatives as FilterAlternative[], "defender")!] : []),
         ...(filter.none_of ?? []).map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, "defender"))),
         ...(filter.state ? [pred("unit-state", { state: filter.state }, "defender")] : []),
         ...(filter.excluding ? [negate(pred("same-unit", { as: filter.excluding }, "defender"))] : []),
@@ -627,13 +632,14 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   const bound = triggering ? (attacked ? "attacked-unit" : "triggering-unit") : bindings[0]?.parameters.bound_to;
   if (bound) restrictions.bound_to = bound;
   // A folded unit-filter's checks beyond all-of keywords (compile-unit-filters.ts) go to eligibility.
-  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean };
+  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean; alternatives?: FilterAlternative[] };
   if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
   const filtered: Node[] = [
     ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
+    ...(filter.alternatives?.length ? [alternativesCheck(filter.alternatives)!] : []),
     // Version 3: "That ADEPTUS ASTARTES INFANTRY/MOUNTED unit" also has one of these.
     ...(Array.isArray(selector.parameters.any_keywords) ? [{ type: "has-keyword", parameters: { any_of: selector.parameters.any_keywords } }] : []),
-    ...(filter.states ?? []).map(stateCheck),
+    ...(filter.states ?? []).map((state) => stateCheck(state)),
     ...(filter.excluded_all_keywords?.length ? [negate({ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } })] : []),
     ...abilityChecks(filter.excluded_abilities),
     ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),

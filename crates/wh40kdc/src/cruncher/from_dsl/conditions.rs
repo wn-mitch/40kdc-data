@@ -175,6 +175,66 @@ fn keyword_list(v: Option<&Value>) -> Option<Vec<&str>> {
         .collect()
 }
 
+/// One `any_of_filters` alternative against a unit's keywords: false when its keyword fields
+/// (all_of, any_of, none_of) fail, whatever else it names; true when they hold and it names
+/// nothing else; `None` when they hold but it also names something else (a state), or a keyword
+/// field is malformed.
+fn alternative_matches(alternative: &Value, keywords: &[String]) -> Option<bool> {
+    let a = alternative.as_object()?;
+    let mut other = false;
+    for (key, value) in a {
+        if key == "all_of" || key == "any_of" || key == "none_of" {
+            keyword_list(Some(value))?;
+        } else {
+            other = true;
+        }
+    }
+    let includes = |k: &str| {
+        let lower = k.to_lowercase();
+        keywords.iter().any(|c| c.to_lowercase() == lower)
+    };
+    let all = keyword_list(a.get("all_of")).unwrap_or_default();
+    let none = keyword_list(a.get("none_of")).unwrap_or_default();
+    let any_ok = match keyword_list(a.get("any_of")) {
+        Some(any) => any.iter().any(|k| includes(k)),
+        None => true,
+    };
+    if !(all.iter().all(|k| includes(k)) && any_ok && !none.iter().any(|k| includes(k))) {
+        return Some(false);
+    }
+    if other {
+        None
+    } else {
+        Some(true)
+    }
+}
+
+/// Whether a unit-filter target with `any_of_filters` reaches a unit with `keywords`: true when
+/// any alternative matches, false when none can, `None` when the keywords are missing or an
+/// alternative whose keywords hold also names something else (Kleene or).
+pub(super) fn evaluate_alternatives(
+    alternatives: &[Value],
+    keywords: Option<&[String]>,
+) -> Option<bool> {
+    let keywords = keywords?;
+    if keywords.iter().any(String::is_empty) {
+        return None;
+    }
+    let mut unknown = false;
+    for alternative in alternatives {
+        match alternative_matches(alternative, keywords) {
+            Some(true) => return Some(true),
+            None => unknown = true,
+            Some(false) => {}
+        }
+    }
+    if unknown {
+        None
+    } else {
+        Some(false)
+    }
+}
+
 /// A recipient keyword filter against `keywords`; `None` when the filter is malformed or the
 /// keywords are unavailable. Emitter identity is not part of the context.
 pub(super) fn evaluate_keyword_filter(filter: &Value, keywords: Option<&[String]>) -> Option<bool> {

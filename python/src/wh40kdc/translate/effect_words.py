@@ -18,8 +18,10 @@ from wh40kdc.translate.condition_refs import (
 from wh40kdc.translate.condition_refs import (
     _designation_phrase,
     _state_phrase,
+    alternative_filters,
     dekebab,
     id_label,
+    keyword_alternatives,
     range_phrase,
     title_case,
 )
@@ -389,7 +391,15 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     all_of = f.get("all_of")
     all_s = f"{' '.join(jstr(x) for x in all_of)} " if isinstance(all_of, list) else ""
     noun = "models" if f.get("level") == "model" else "units"
-    s = f"{owner}{all_s}{noun}"
+    # "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+    compact = keyword_alternatives(f)
+    s = f"{owner}{or_list(compact)} {noun}" if compact is not None else f"{owner}{all_s}{noun}"
+    # Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+    if isinstance(f.get("any_of_filters"), list) and compact is None:
+        alts = [
+            re.sub(r"^all ", "", filter_subject(a, ctx), count=1) for a in alternative_filters(f)
+        ]
+        s += f" that are {or_list(alts)}"
     if isinstance(f.get("any_of"), list):
         s += f" with the {or_list([jstr(x) for x in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):

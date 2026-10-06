@@ -204,6 +204,33 @@ _ROLE_PHRASES: dict[str, str] = {
 }
 
 
+def keyword_alternatives(f: Any) -> list[str] | None:
+    """A filter's ``any_of_filters`` as keyword spellings when each alternative is only its
+    keywords and the filter requires none of its own, so "an A or B C unit" says it; else None."""
+    f = _obj(f)
+    alts = f.get("any_of_filters")
+    if not isinstance(alts, list) or isinstance(f.get("all_of"), list):
+        return None
+    out: list[str] = []
+    for a in alts:
+        if not isinstance(a, dict):
+            return None
+        all_of = a.get("all_of")
+        if not isinstance(all_of, list) or not all_of or any(k != "all_of" for k in a):
+            return None
+        out.append(" ".join(_str(k) for k in all_of))
+    return out
+
+
+def alternative_filters(f: Any) -> list[P]:
+    """Each alternative of ``any_of_filters`` as a filter of the outer filter's level."""
+    f = _obj(f)
+    level = f.get("level")
+    return [
+        {**_obj(a), "level": level} if level is not None else _obj(a) for a in f["any_of_filters"]
+    ]
+
+
 def unit_filter_phrase(f: Any) -> str:
     """A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit"."""
     f = _obj(f)
@@ -217,9 +244,14 @@ def unit_filter_phrase(f: Any) -> str:
     all_of = f.get("all_of")
     all_ = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
     noun = "model" if f.get("level") == "model" else "unit"
-    s = f"{owner}{all_}{noun}"
+    # "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+    compact = keyword_alternatives(f)
+    s = f"{owner}{_or_list(compact)} {noun}" if compact is not None else f"{owner}{all_}{noun}"
     article = "an" if re.match(r"(?:[aeio]|u(?!ni))", s, re.IGNORECASE) else "a"
     s = f"{article} {s}"
+    # Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+    if isinstance(f.get("any_of_filters"), list) and compact is None:
+        s += f" that is {_or_list([unit_filter_phrase(a) for a in alternative_filters(f)])}"
     if isinstance(f.get("any_of"), list):
         s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):

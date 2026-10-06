@@ -1049,6 +1049,12 @@ export interface UnitFilter {
   none_of?: KeywordList;
   not_all_of?: KeywordList1;
   /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
    * The unit carries this designation (a tag an effect applied).
    */
   designated?: string;
@@ -1216,6 +1222,12 @@ export interface UnitFilter1 {
   none_of?: KeywordList;
   not_all_of?: KeywordList1;
   /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
    * The unit carries this designation (a tag an effect applied).
    */
   designated?: string;
@@ -1382,6 +1394,12 @@ export interface UnitFilter2 {
   any_of?: KeywordList;
   none_of?: KeywordList;
   not_all_of?: KeywordList1;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
    * The unit carries this designation (a tag an effect applied).
    */
@@ -5528,6 +5546,12 @@ export interface UnitFilter3 {
   none_of?: KeywordList;
   not_all_of?: KeywordList1;
   /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
    * The unit carries this designation (a tag an effect applied).
    */
   designated?: string;
@@ -5694,6 +5718,12 @@ export interface UnitFilter4 {
   any_of?: KeywordList;
   none_of?: KeywordList;
   not_all_of?: KeywordList1;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
    * The unit carries this designation (a tag an effect applied).
    */

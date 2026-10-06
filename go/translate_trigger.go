@@ -101,6 +101,14 @@ func actorKeywords(ref any) string {
 	if isList(f["all_of"]) {
 		s += " (the triggering " + noun + " must have " + andList(cstrList(f["all_of"])) + ")"
 	}
+	// Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
+	if isList(f["any_of_filters"]) {
+		alts := []string{}
+		for _, a := range alternativeFilters(f) {
+			alts = append(alts, unitFilterPhrase(a))
+		}
+		s += " (the triggering " + noun + " must be " + orList(alts) + ")"
+	}
 	if isList(f["none_of"]) {
 		s += " (the triggering " + noun + " must not have " + orList(cstrList(f["none_of"])) + ")"
 	}

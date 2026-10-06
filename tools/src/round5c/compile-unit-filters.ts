@@ -2,6 +2,8 @@ import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
+import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -31,14 +33,17 @@ const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategi
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
 export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string };
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[] };
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
+  if (p.any_keywords?.length && p.alternatives?.length) throw new CompileError("A unit-filter holds one any-of; it cannot also hold alternatives.");
   return {
     owner: p.side,
     ...(p.keywords?.length ? { all_of: p.keywords } : {}),
     ...(p.any_keywords?.length ? { any_of: p.any_keywords } : {}),
+    // "A or B C unit": any one alternative, each with its own keywords, exclusions and states.
+    ...dslAlternatives(p.alternatives),
     ...(p.excluded_keywords?.length ? { none_of: p.excluded_keywords } : {}),
     ...(p.states?.includes("battle-shocked") ? { state: "battle-shocked" } : {}),
     ...(held !== undefined ? { state: held } : {}),
@@ -64,7 +69,8 @@ function side(filter: CompileLeaf, what: string): string {
  * held unit ("that is in Reserves") is one more state there, its DSL Reserves unit-state.
  */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
-  const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = filter.parameters;
+  // Alternatives that are each one keyword are the any-of the eligibility checks already read.
+  const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -85,7 +91,10 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
   return true;
 }
 
-type FilterParameters = { side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string; held_in?: string; excluded_abilities?: string[] };
+type FilterParameters = {
+  side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
+  held_in?: string; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
+};
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
 
@@ -102,6 +111,9 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if ((a.level ?? "unit") !== (b.level ?? "unit")) return null;
   if (a.any_keywords?.length && b.any_keywords?.length) return null;
   if (a.held_in !== undefined && b.held_in !== undefined && a.held_in !== b.held_in) return null;
+  // One filter holds one set of alternatives (or one any-of), and one all-of exclusion.
+  if ([a.any_keywords, b.any_keywords, a.alternatives, b.alternatives].filter((list) => list?.length).length > 1) return null;
+  if (a.excluded_all_keywords !== undefined && b.excluded_all_keywords !== undefined && JSON.stringify(a.excluded_all_keywords) !== JSON.stringify(b.excluded_all_keywords)) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const keywords = union(a.keywords, b.keywords);
   const excluded = union(a.excluded_keywords, b.excluded_keywords);
@@ -120,6 +132,17 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (held !== undefined) parameters.held_in = held;
   const abilities = union(a.excluded_abilities, b.excluded_abilities);
   if (abilities.length) parameters.excluded_abilities = abilities;
+  const allOf = a.excluded_all_keywords ?? b.excluded_all_keywords;
+  if (allOf !== undefined) parameters.excluded_all_keywords = allOf;
+  // "A or B C unit" + "(excluding D units)": the narrowing holds for every alternative.
+  const alternatives = a.alternatives ?? b.alternatives;
+  if (alternatives !== undefined) {
+    try {
+      parameters.alternatives = normalizeAlternatives(alternatives, "alternatives", { keywords, excluded_keywords: excluded, states });
+    } catch (error) {
+      throw new CompileError(`A unit-filter narrowing alternatives contradicts or repeats one of them (${(error as Error).message}).`);
+    }
+  }
   return { ...first, parameters };
 }
 
@@ -191,32 +214,6 @@ const ALTERNATIVE_JOINERS = new Set(["or", ",", ",or"]);
 function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right: CompileLeaf): string | null {
   if (sourceText === undefined || left.end_byte === undefined || right.start_byte < left.end_byte) return null;
   return Buffer.from(sourceText, "utf8").subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
-}
-
-/**
- * One unit-filter for alternatives ("**HERETIC ASTARTES VEHICLE** or **VASHTORR THE ARKIFANE**
- * unit"): the keywords every alternative names stay required, and each alternative's one other
- * keyword joins the any-of. Alternatives that differ in anything else (side, level, an exclusion
- * on one of them, two extra keywords) have no single DSL unit-filter, so they fail rather than
- * narrow to units that are both.
- */
-function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf {
-  const params = filters.map((filter) => filter.parameters as FilterParameters);
-  const fail = (why: string): never => { throw new CompileError(`Alternative unit-filters (A or B) ${why}; one DSL unit-filter cannot say them.`); };
-  const same = (pick: (p: FilterParameters) => unknown) => params.every((p) => JSON.stringify(pick(p) ?? null) === JSON.stringify(pick(params[0]!) ?? null));
-  const sides = new Set(params.map((p) => p.side).filter((value) => value !== "any"));
-  if (sides.size > 1) fail("are on different sides");
-  if (!same((p) => p.level ?? "unit")) fail("name both models and units");
-  if (!same((p) => [...(p.excluded_keywords ?? [])].sort())) fail("exclude different keywords");
-  if (!same((p) => [...(p.states ?? [])].sort()) || !same((p) => p.held_in) || !same((p) => p.visible === true) || !same((p) => p.other === true)) fail("carry different states");
-  if (params.some((p) => p.any_keywords?.length)) fail("already hold an any-of");
-  const common = (params[0]!.keywords ?? []).filter((keyword) => params.every((p) => (p.keywords ?? []).includes(keyword)));
-  const alternatives = params.map((p) => (p.keywords ?? []).filter((keyword) => !common.includes(keyword)));
-  if (alternatives.some((rest) => rest.length !== 1)) fail("differ by more than one keyword");
-  const { keywords: _keywords, ...rest } = params[0]!;
-  const parameters: Record<string, unknown> = { ...rest, side: [...sides][0] ?? "any", any_keywords: [...new Set(alternatives.map((one) => one[0]!))].sort() };
-  if (common.length) parameters.keywords = [...common].sort();
-  return { ...filters[0]!, end_byte: filters.at(-1)!.end_byte, parameters };
 }
 
 export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {

@@ -2,6 +2,7 @@ import { ANTECEDENT } from "./antecedent-families.js";
 import { activitiesExtension, type FamilyExtension, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
+import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "./unit-filter-alternatives.js";
 
 /**
  * The eleventh round of family extensions. As in the earlier rounds, a version checks only its own
@@ -157,6 +158,36 @@ const TARGETING_ACTIVITIES: FamilyExtension = {
       throw new TypeError("unit-activity made-attacks-targeting-this-phase: the attacks targeted this unit, so their maker is another unit, not this unit or its model.");
     }
     return normalized;
+  },
+};
+
+const UNIT_FILTER_ALTERNATIVES: FamilyExtension = {
+  // "LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit", "PSYKER or Battle-shocked unit": any
+  // one of two or more alternatives, each with its own keywords, exclusions and states.
+  family: "unit-filter",
+  description: "As the previous version, plus alternatives: two or more {keywords, excluded_keywords, states}, any one of which a unit matches (\"LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit\" is [LEGIO CYBERNETICA] and [ADEPTUS MECHANICUS, VEHICLE]; \"PSYKER or Battle-shocked unit\" is [PSYKER] and states [battle-shocked]). Each alternative keeps its own exclusions and states; side, level and the filter's own keywords, exclusions and states hold for every alternative. Not with any_keywords.",
+  schema: (previous) => withProperties(previous, { alternatives: optional({ type: "array", minItems: 2, items: ALTERNATIVE_SCHEMA }) }),
+  normalize: (input, previous) => {
+    if (input.alternatives === undefined) return previous(input);
+    const { alternatives, ...rest } = input;
+    if (rest.any_keywords !== undefined) throw new TypeError("unit-filter.alternatives replaces any_keywords; a one-keyword alternative is one item of alternatives.");
+    const normalized = previous(rest);
+    const shared = { keywords: normalized.keywords as string[] | undefined, excluded_keywords: normalized.excluded_keywords as string[] | undefined, states: normalized.states as string[] | undefined };
+    return { ...normalized, alternatives: normalizeAlternatives(alternatives, "unit-filter.alternatives", shared) };
+  },
+};
+
+const UNIT_POSITION_OF_ALTERNATIVES: FamilyExtension = {
+  // "within 3\" of one or more friendly LEAGUES OF VOTANN VEHICLE or IRONKIN STEELJACKS units".
+  family: "unit-position",
+  description: "As the previous version, plus of_alternatives on of matching-unit: two or more {keywords, excluded_keywords, states}, any one of which the unit measured to matches (\"of one or more friendly X VEHICLE or Y units\" is [X, VEHICLE] and [Y]); of_keywords, if given, hold for every alternative.",
+  schema: (previous) => withProperties(previous, { of_alternatives: optional({ type: "array", minItems: 2, items: ALTERNATIVE_SCHEMA, "x-only-when": { of: ["matching-unit"] } }) }),
+  normalize: (input, previous) => {
+    if (input.of_alternatives === undefined) return previous(input);
+    const { of_alternatives: alternatives, ...rest } = input;
+    if (rest.of !== "matching-unit") throw new TypeError("unit-position.of_alternatives goes with of: matching-unit.");
+    const normalized = previous(rest);
+    return { ...normalized, of_alternatives: normalizeAlternatives(alternatives, "unit-position.of_alternatives", { keywords: normalized.of_keywords as string[] | undefined }) };
   },
 };
 
@@ -352,6 +383,8 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   TARGET_IS_SELECTED_PARTIES,
   HIT_THIS_PHASE,
   TARGETING_ACTIVITIES,
+  UNIT_FILTER_ALTERNATIVES,
+  UNIT_POSITION_OF_ALTERNATIVES,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

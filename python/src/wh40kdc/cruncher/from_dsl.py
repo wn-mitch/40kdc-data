@@ -175,6 +175,14 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     if unsized is not None:
         out["unsupported"].append({"reason": unsized, "effectFragment": node})
         return
+    # A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
+    # reaches the unit only when one alternative matches its keywords.
+    alternatives = _alternatives_match(node, opts)
+    if alternatives is False:
+        return
+    if alternatives == "unknown":
+        out["unsupported"].append({"reason": _ALTERNATIVES_REASON, "effectFragment": node})
+        return
     # An `incoming` change modifies attacks made against its target. On the buffed unit it is the
     # attacker's side of those attacks, which the `target: "attacker"` form already models; it never
     # modifies the buffed unit's own attacks.
@@ -1863,6 +1871,71 @@ def _to_kebab_case(s: str) -> str:
 _FIDELITY_BINDING_REASON = (
     "selection/history/model/attack predicates are not resolved by the buff engine"
 )
+
+_ALTERNATIVES_REASON = (
+    "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable "
+    "or an alternative names more than keywords"
+)
+
+
+def _keyword_list(value: Any) -> bool:
+    return isinstance(value, list) and all(isinstance(k, str) and k for k in value)
+
+
+def _alternatives_match(node: dict[str, Any], opts: dict[str, Any]) -> bool | str:
+    """Whether a unit-filter target with ``any_of_filters`` reaches the unit crunched.
+
+    True when any alternative matches, False when none can, "unknown" when the keywords are
+    missing or an alternative whose keywords hold also names something else (a state). A
+    friendly filter is read against the crunched side's own keywords; an enemy one only from the
+    target's perspective. Nodes without alternatives are left to the target classification.
+    """
+    target = node.get("target")
+    if not _is_object(target) or not isinstance(target.get("any_of_filters"), list):
+        return True
+    if target.get("owner") == "friendly":
+        key = "attackerKeywords" if opts["perspective"] == "attacker" else "targetKeywords"
+    elif target.get("owner") == "enemy" and opts["perspective"] == "target":
+        key = "targetKeywords"
+    else:
+        return True
+    keywords = opts["context"].get(key)
+    if not _keyword_list(keywords):
+        return "unknown"
+    have = {keyword.lower() for keyword in keywords}
+    saw_unknown = False
+    for alternative in target["any_of_filters"]:
+        matched = _alternative_matches(alternative, have)
+        if matched is True:
+            return True
+        if matched == "unknown":
+            saw_unknown = True
+    return "unknown" if saw_unknown else False
+
+
+def _alternative_matches(alternative: Any, have: set[str]) -> bool | str:
+    """One alternative: False when its keyword fields fail, whatever else it names; True when they
+    hold and it names nothing else; "unknown" when they hold but it also names something else (a
+    state), or a keyword field is malformed."""
+    if not _is_object(alternative):
+        return "unknown"
+    other = False
+    for key, value in alternative.items():
+        if key in ("all_of", "any_of", "none_of"):
+            if not _keyword_list(value):
+                return "unknown"
+        else:
+            other = True
+    any_of = alternative.get("any_of")
+    holds = (
+        all(k.lower() in have for k in alternative.get("all_of", []))
+        and (any_of is None or any(k.lower() in have for k in any_of))
+        and not any(k.lower() in have for k in alternative.get("none_of", []))
+    )
+    if not holds:
+        return False
+    return "unknown" if other else True
+
 
 _SELECTOR_FIDELITY_FIELDS = (
     "eligibility",

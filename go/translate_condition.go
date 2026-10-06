@@ -149,6 +149,46 @@ func idLabelList(v any) []string {
 
 // unitFilterPhrase renders a unit filter as a noun phrase: "a friendly ADEPTUS
 // MECHANICUS BATTLELINE unit".
+// keywordAlternatives is a filter's any_of_filters as keyword spellings when each alternative is
+// only its keywords and the filter requires none of its own, so "an A or B C unit" says it.
+func keywordAlternatives(f map[string]any) ([]string, bool) {
+	alts, ok := asList(f["any_of_filters"])
+	if !ok || isList(f["all_of"]) {
+		return nil, false
+	}
+	out := []string{}
+	for _, a := range alts {
+		m, ok := asMap(a)
+		if !ok || m == nil {
+			return nil, false
+		}
+		all, ok := asList(m["all_of"])
+		if !ok || len(all) == 0 || len(m) != 1 {
+			return nil, false
+		}
+		out = append(out, strings.Join(cstrList(m["all_of"]), " "))
+	}
+	return out, true
+}
+
+// alternativeFilters is each alternative of any_of_filters as a filter of the outer filter's level.
+func alternativeFilters(f map[string]any) []map[string]any {
+	alts, _ := asList(f["any_of_filters"])
+	out := []map[string]any{}
+	for _, a := range alts {
+		m, _ := asMap(a)
+		copied := map[string]any{}
+		for k, v := range m {
+			copied[k] = v
+		}
+		if level, ok := f["level"]; ok && level != nil {
+			copied["level"] = level
+		}
+		out = append(out, copied)
+	}
+	return out
+}
+
 func unitFilterPhrase(f map[string]any) string {
 	owner := ""
 	switch f["owner"] {
@@ -165,12 +205,25 @@ func unitFilterPhrase(f map[string]any) string {
 	if f["level"] == "model" {
 		noun = "model"
 	}
+	// "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+	compact, isCompact := keywordAlternatives(f)
 	s := owner + all + noun
+	if isCompact {
+		s = owner + orList(compact) + " " + noun
+	}
 	lower := strings.ToLower(s)
 	if strings.ContainsRune("aeio", rune(lower[0])) || (lower[0] == 'u' && !strings.HasPrefix(lower, "uni")) {
 		s = "an " + s
 	} else {
 		s = "a " + s
+	}
+	// Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+	if isList(f["any_of_filters"]) && !isCompact {
+		alts := []string{}
+		for _, a := range alternativeFilters(f) {
+			alts = append(alts, unitFilterPhrase(a))
+		}
+		s += " that is " + orList(alts)
 	}
 	if isList(f["any_of"]) {
 		s += " with the " + orList(cstrList(f["any_of"])) + " keyword"

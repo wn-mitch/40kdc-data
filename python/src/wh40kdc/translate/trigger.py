@@ -26,7 +26,12 @@ from wh40kdc.translate.condition import (
     title_case,
     unit_filter_phrase,
 )
-from wh40kdc.translate.condition_refs import _state_phrase, roll_word, used_ability_phrase
+from wh40kdc.translate.condition_refs import (
+    _state_phrase,
+    alternative_filters,
+    roll_word,
+    used_ability_phrase,
+)
 
 AbilityTrigger = dict[str, Any]
 
@@ -95,6 +100,10 @@ def _actor_keywords(ref: Any) -> str:
     s = ""
     if isinstance(ref.get("all_of"), list):
         s += f" (the triggering {noun} must have {_and_list([_str(k) for k in ref['all_of']])})"
+    # Alternatives: "(the triggering model must be an A model or a B C model)".
+    if isinstance(ref.get("any_of_filters"), list):
+        alts = [unit_filter_phrase(a) for a in alternative_filters(ref)]
+        s += f" (the triggering {noun} must be {_or_list(alts)})"
     if isinstance(ref.get("none_of"), list):
         s += f" (the triggering {noun} must not have {_or_list([_str(k) for k in ref['none_of']])})"
     if isinstance(ref.get("not_all_of"), list):

@@ -401,6 +401,14 @@
           "$ref": "#/$defs/keyword-list",
           "description": "Not units that have every listed keyword (\"excluding MONSTER CHARACTER units\" excludes only units that are both)."
         },
+        "any_of_filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unit-filter"
+          },
+          "minItems": 2,
+          "description": "Only units matching at least one of these filters, as well as every other listed property (\"LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit\"; \"PSYKER or Battle-shocked unit\"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement."
+        },
         "designated": {
           "$ref": "#/$defs/designation-id",
           "description": "The unit carries this designation (a tag an effect applied)."

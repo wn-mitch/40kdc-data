@@ -149,20 +149,29 @@ describe("stacked unit-filters", () => {
     expect(merged[0]!.parameters).toEqual({ side: "friendly", keywords: ["HERETIC ASTARTES"], any_keywords: ["MUTILATORS", "OBLITERATORS", "TERMINATOR"] });
   });
 
-  it("keeps an exclusion's own parentheses as narrowing, and refuses it when only one alternative has it", () => {
+  it("keeps an exclusion's own parentheses as narrowing of its own alternative only", () => {
     const text = "One **HERETIC ASTARTES INFANTRY** (excluding **DAMNED** units) or **HERETIC ASTARTES MOUNTED** unit";
-    expect(() => mergeStackedFilters(placed(text,
+    const merged = mergeStackedFilters(placed(text,
       ["HERETIC ASTARTES INFANTRY", { keywords: ["HERETIC ASTARTES", "INFANTRY"] }],
       ["excluding **DAMNED** units", { excluded_keywords: ["DAMNED"] }],
-      ["HERETIC ASTARTES MOUNTED** unit", { keywords: ["HERETIC ASTARTES", "MOUNTED"] }]), text)).toThrow(/exclude different keywords/u);
+      ["HERETIC ASTARTES MOUNTED** unit", { keywords: ["HERETIC ASTARTES", "MOUNTED"] }]), text);
+    expect(merged).toHaveLength(1);
+    // The exclusion stays with INFANTRY; a MOUNTED unit is not checked for DAMNED.
+    expect(merged[0]!.parameters).toEqual({
+      side: "friendly", keywords: ["HERETIC ASTARTES"],
+      alternatives: [{ keywords: ["INFANTRY"], excluded_keywords: ["DAMNED"] }, { keywords: ["MOUNTED"] }],
+    });
   });
 
-  it("refuses alternatives that share no keyword prefix, rather than narrowing to both", () => {
-    // (HERETIC ASTARTES and VEHICLE) or VASHTORR THE ARKIFANE: no single any-of says it.
+  it("keeps alternatives that share no keyword prefix as alternatives, never their union", () => {
+    // (HERETIC ASTARTES and VEHICLE) or VASHTORR THE ARKIFANE.
     const text = "One **HERETIC ASTARTES VEHICLE** or **VASHTORR THE ARKIFANE** unit";
-    expect(() => mergeStackedFilters(placed(text,
+    const merged = mergeStackedFilters(placed(text,
       ["HERETIC ASTARTES VEHICLE", { keywords: ["HERETIC ASTARTES", "VEHICLE"] }],
-      ["VASHTORR THE ARKIFANE** unit", { keywords: ["VASHTORR THE ARKIFANE"] }]), text)).toThrow(/more than one keyword/u);
+      ["VASHTORR THE ARKIFANE** unit", { keywords: ["VASHTORR THE ARKIFANE"] }]), text);
+    expect(merged[0]!.parameters).toEqual({
+      side: "friendly", alternatives: [{ keywords: ["HERETIC ASTARTES", "VEHICLE"] }, { keywords: ["VASHTORR THE ARKIFANE"] }],
+    });
   });
 
   it("still narrows a comma list with no \"or\", and filters with no source text", () => {

@@ -4,8 +4,8 @@
 use serde_json::Value;
 
 use crate::translate::condition::{
-    and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list, st, state_phrase,
-    strs, truthy, unit_filter_phrase, P,
+    alternative_filters, and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list,
+    st, state_phrase, strs, truthy, unit_filter_phrase, P,
 };
 use crate::translate::condition::{roll_word, used_ability_phrase};
 use crate::translate::dekebab;
@@ -83,6 +83,17 @@ pub(crate) fn actor_keywords(r: Option<&Value>) -> String {
         s.push_str(&format!(
             " (the triggering {noun} must have {})",
             and_list(&all)
+        ));
+    }
+    // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
+    if f.get("any_of_filters").is_some_and(Value::is_array) {
+        let alts: Vec<String> = alternative_filters(f)
+            .iter()
+            .map(unit_filter_phrase)
+            .collect();
+        s.push_str(&format!(
+            " (the triggering {noun} must be {})",
+            or_list(&alts)
         ));
     }
     if let Some(none) = strs(f.get("none_of")) {

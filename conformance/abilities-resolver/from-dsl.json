@@ -390,6 +390,166 @@
           }
         ]
       }
+    },
+    {
+      "_comment": "Unit-filter alternatives (any_of_filters): a BETA GAMMA unit matches the second alternative, so the +1 to hit applies.",
+      "abilityId": "fabricated-any-of-filters-match",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-match",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "BETA",
+          "GAMMA",
+          "INFANTRY"
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Unit-filter alternatives: a BETA unit matches no alternative (pooling the keywords would wrongly match it), and the DELTA alternative needs DELTA before its state matters, so the +1 to hit is dropped without an unsupported reason.",
+      "abilityId": "fabricated-any-of-filters-no-match",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-no-match",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "BETA",
+          "INFANTRY"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Unit-filter alternatives: a DELTA unit matches the third alternative's keywords, but its Battle-shocked state is not in the context, so the +1 to hit is reported as unsupported.",
+      "abilityId": "fabricated-any-of-filters-unknown",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-unknown",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "DELTA"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords"
+        ],
+        "activatable": []
+      }
     }
   ]
 }

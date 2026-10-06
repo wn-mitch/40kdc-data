@@ -206,6 +206,14 @@ function walk(
     out.unsupported.push({ reason: unsized, effectFragment: currentNode });
     return;
   }
+  // A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
+  // reaches the unit only when one alternative matches its keywords.
+  const alternatives = alternativesMatch(currentNode, opts);
+  if (alternatives === false) return;
+  if (alternatives === "unknown") {
+    out.unsupported.push({ reason: ALTERNATIVES_REASON, effectFragment: currentNode });
+    return;
+  }
   // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
   // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
   // modifies the buffed unit's own attacks.
@@ -1769,6 +1777,59 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
 function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
   if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
   return isObject(trigger) && ((isObject(trigger.filter) && trigger.filter.by != null) || trigger.source_ability != null);
+}
+
+const ALTERNATIVES_REASON = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";
+
+/**
+ * Whether a node's unit-filter target with `any_of_filters` reaches the unit crunched: true when
+ * any alternative matches, false when none can, "unknown" when the keywords are missing or an
+ * alternative whose keywords hold also names something else (a state). A friendly
+ * filter is read against the crunched side's own keywords; an enemy one only from the target's
+ * perspective (against the target), since the attacker's perspective drops it anyway. Nodes
+ * without alternatives are left to the target classification as before (true).
+ */
+function alternativesMatch(node: Record<string, unknown>, opts: WalkOpts): boolean | "unknown" {
+  const target = node.target;
+  if (!isObject(target) || !Array.isArray(target.any_of_filters)) return true;
+  let keywords: readonly string[] | undefined;
+  if (target.owner === "friendly") keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
+  else if (target.owner === "enemy" && opts.perspective === "target") keywords = opts.context.targetKeywords;
+  else return true;
+  if (!isKeywordList(keywords)) return "unknown";
+  let sawUnknown = false;
+  for (const alternative of target.any_of_filters) {
+    const matched = alternativeMatches(alternative, keywords);
+    if (matched === true) return true;
+    if (matched === "unknown") sawUnknown = true;
+  }
+  return sawUnknown ? "unknown" : false;
+}
+
+/**
+ * One alternative against a unit's keywords: false when its keyword fields (all_of, any_of,
+ * none_of) fail, whatever else it names; true when they hold and it names nothing else;
+ * "unknown" when they hold but it also names something the context lacks (a state), or a keyword
+ * field is malformed.
+ */
+function alternativeMatches(alternative: unknown, keywords: readonly string[]): boolean | "unknown" {
+  if (!isObject(alternative)) return "unknown";
+  let other = false;
+  for (const key in alternative) {
+    if (key === "all_of" || key === "any_of" || key === "none_of") {
+      if (!isKeywordList(alternative[key])) return "unknown";
+    } else {
+      other = true;
+    }
+  }
+  const all = (alternative.all_of ?? []) as string[];
+  const any = alternative.any_of as string[] | undefined;
+  const none = (alternative.none_of ?? []) as string[];
+  const keywordsHold = all.every((keyword) => includesKeyword(keywords, keyword))
+    && (any === undefined || any.some((keyword) => includesKeyword(keywords, keyword)))
+    && !none.some((keyword) => includesKeyword(keywords, keyword));
+  if (!keywordsHold) return false;
+  return other ? "unknown" : true;
 }
 
 /** Filters the recipient unit; emitter identity is not part of EngineContext. */

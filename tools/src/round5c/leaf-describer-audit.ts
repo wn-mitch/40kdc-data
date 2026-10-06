@@ -16,7 +16,7 @@ import { previewLeaf } from "./leaf-preview.js";
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
+  items?: Schema; properties?: Record<string, Schema>; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
 
 export type FamilyAudit = {
@@ -37,6 +37,10 @@ function domain(name: string, schema: Schema): unknown[] {
   if (schema.type === "boolean") return [false, true];
   if (schema.type === "array") {
     if (schema.items?.enum) return [...schema.items.enum.map((value) => [value]), schema.items.enum.slice(0, 2)];
+    // Unit-filter alternatives (unit-filter-alternatives.ts): keywords only, and one with a state.
+    if (schema.items?.properties?.keywords && schema.items.properties.states) {
+      return [[{ keywords: ["CHARACTER"] }, { keywords: ["MONSTER", "VEHICLE"] }], [{ keywords: ["CHARACTER"] }, { states: ["battle-shocked"] }]];
+    }
     return [["CHARACTER"], ["MONSTER", "VEHICLE"]];
   }
   if (schema.anyOf) {

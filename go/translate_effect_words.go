@@ -460,7 +460,20 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["level"] == "model" {
 		noun = "models"
 	}
+	// "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+	compact, isCompact := keywordAlternatives(f)
 	s := owner + all + noun
+	if isCompact {
+		s = owner + orList(compact) + " " + noun
+	}
+	// Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+	if isList(f["any_of_filters"]) && !isCompact {
+		alts := []string{}
+		for _, a := range alternativeFilters(f) {
+			alts = append(alts, strings.TrimPrefix(filterSubject(a, ctx), "all "))
+		}
+		s += " that are " + orList(alts)
+	}
 	if l, ok := asList(f["any_of"]); ok {
 		s += " with the " + orList(jstrList(l)) + " keyword"
 	}

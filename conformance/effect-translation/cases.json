@@ -21948,6 +21948,227 @@
     }
   },
   {
+    "caseId": "fidelity/filter-any-of-filters-keywords",
+    "effect": {
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "DELTA"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA or BETA GAMMA units gain the DELTA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-state",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": {
+        "owner": "enemy",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "state": "battle-shocked"
+          },
+          {
+            "all_of": [
+              "BETA"
+            ],
+            "not_states": [
+              "engaged"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all enemy units that are ALPHA units, units that are Battle-shocked or BETA units that are unengaged suffer 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-shared-keywords",
+    "effect": {
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ],
+        "any_of_filters": [
+          {
+            "all_of": [
+              "BETA"
+            ],
+            "none_of": [
+              "DELTA"
+            ]
+          },
+          {
+            "all_of": [
+              "GAMMA",
+              "EPSILON"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "ZETA"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units gain the ZETA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-models",
+    "effect": {
+      "type": "re-roll",
+      "target": {
+        "owner": "friendly",
+        "level": "model",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll the Hit roll for attacks made by all friendly ALPHA or BETA GAMMA models."
+    }
+  },
+  {
+    "caseId": "fidelity/within-any-of-filters",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "level": "model",
+            "any_of_filters": [
+              {
+                "all_of": [
+                  "ALPHA"
+                ]
+              },
+              {
+                "all_of": [
+                  "BETA"
+                ],
+                "state": "battle-shocked"
+              }
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is within 3\" of a friendly model that is an ALPHA model or a BETA model that is Battle-shocked, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-subject-any-of-filters",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "level": "model",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly model destroys a unit (the triggering model must be an ALPHA model or a BETA GAMMA model), when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
     "caseId": "fidelity/trigger-subject-not-states",
     "trigger": {
       "event": "move-ended",
