@@ -140,7 +140,8 @@ export function bindDesignationSubjects(leaves: readonly CompileLeaf[]): Compile
     if (!effect || effect.fragment !== leaf.fragment) return leaf;
     // "While a unit is scanned, ranged attacks that target that unit …": the attacks' target.
     const attack = after.slice(0, after.indexOf(effect)).find((other) => other.family_id === "attack");
-    const who = attack ? (attack.parameters.direction === "targeted" ? "defender" : undefined) : effect.parameters.subject ?? effect.parameters.target;
+    // "When an X unit targets that unit": an attack on the designated unit makes it the defender too.
+    const who = attack ? (attack.parameters.direction === "targeted" || attack.parameters.target === "that-unit" ? "defender" : undefined) : effect.parameters.subject ?? effect.parameters.target;
     return typeof who === "string" && DESIGNATED_SUBJECTS.has(who) ? { ...leaf, parameters: { ...leaf.parameters, subject: who } } : leaf;
   });
 }
@@ -328,6 +329,9 @@ export function condition(leaf: CompileLeaf): Node {
         ...(filter.none_of ?? []).map((keyword) => negate(pred("has-keyword", { all_of: [keyword] }, "defender"))),
         ...(filter.state ? [pred("unit-state", { state: filter.state }, "defender")] : []),
         ...(filter.excluding ? [negate(pred("same-unit", { as: filter.excluding }, "defender"))] : []),
+        // A filter that names the defender itself ("attacks that target that unit" after "a friendly
+        // X unit") says its side as well; after an attack this unit makes, an enemy target is implied.
+        ...(leaf.parameters.owner_explicit === true && filter.owner !== "any" ? [pred("owned-by", { owner: filter.owner }, "defender")] : []),
       ];
       if (checks.length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
       return checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };

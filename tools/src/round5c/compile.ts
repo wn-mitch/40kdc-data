@@ -1,6 +1,7 @@
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, UNIT_EVENT_KINDS } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
+import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
@@ -185,7 +186,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves)))))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -359,9 +360,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
       }
       else if (leaf.role === "EVENT") {
         if (leaf.family_id === "attack") {
-          // An attack whose properties compile-attack-properties.ts framed has its type on each of them.
-          const gate = leaf.parameters.framed === true ? null : attackTypeCondition(leaf);
+          // An attack whose properties compile-attack-properties.ts framed has its type on each of them;
+          // a back-reference repeats its antecedent's type only where that one's gate does not reach.
+          const gate = addsAttackGate(leaf) ? attackTypeCondition(leaf) : null;
           if (gate) scope(gate);
+          // "targets that unit": the designation's unit needs nothing more; the selected unit scopes as a selection.
+          if (leaf.parameters.target === "that-unit" && attackTargetBinding(list, index) === "selected") scope("selected");
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
@@ -389,8 +393,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
     if (leaf.role !== "EFFECT") return;
     const { sentence, clause } = places[index]!;
     const node = containerNodes.has(index) ? containerNodes.get(index)! : attempt(() => {
-      // The nearest attack before this effect says who attacks and which way.
-      const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack");
+      // The nearest attack before this effect says who attacks and which way; a back-reference
+      // ("that attack") is its antecedent, which still carries the attacker's filter.
+      const attack = list.slice(0, index).reverse().find((item) => item.family_id === "attack" && !isBackref(item));
       return effect(leaf, {
         attached,
         attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack, thatUnit) : null,

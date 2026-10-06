@@ -118,8 +118,44 @@ export function attackOfFilter(leaves: readonly CompileLeaf[], filterIndex: numb
   let at = filterIndex + 1;
   while (describes(leaves, at, filter.fragment) && leaves[at]!.family_id !== "unit-filter") at += 1;
   const attack = leaves[at];
+  // A back-reference ("If that attack …") is an earlier attack again; a filter before it is never its attacker.
   return at > filterIndex + 1 && attack?.family_id === "attack" && attack.fragment === filter.fragment && attack.parameters.direction === "makes"
+    && attack.parameters.backref !== true && attack.parameters.refers === undefined
     && leaves.slice(filterIndex + 1, at).some((leaf) => leaf.role === "CONDITION") ? at : null;
+}
+
+/** Leaves after which "that unit" is a selected unit, a for-each pass's unit or an aura's recipient, not a bare filter's. */
+const UNIT_INTRODUCERS = new Set(["select-unit", "for-each-unit-select", "aura-range"]);
+
+/**
+ * "While a friendly X unit" + "is within range of an objective" + "attacks that target that unit":
+ * the index of the attack on that unit a bare filter and the conditions after it describe, or null.
+ * The filter is the defender (compile-unit-filters.ts), and each condition is on it. At least one
+ * condition about the filter's unit sits between them (still pointing back, or already bound to the
+ * target); without one, or after a selection, aura or for-each, "that unit" is that leaf's unit.
+ */
+export function targetedAttackOfFilter(leaves: readonly CompileLeaf[], filterIndex: number): number | null {
+  const filter = leaves[filterIndex];
+  if (filter?.family_id !== "unit-filter") return null;
+  const before = leaves[filterIndex - 1];
+  if (before && before.fragment === filter.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter")) return null;
+  if (leaves.slice(0, filterIndex).some((leaf) => UNIT_INTRODUCERS.has(leaf.family_id))) return null;
+  let at = filterIndex + 1;
+  while (describes(leaves, at, filter.fragment) && leaves[at]!.family_id !== "unit-filter") at += 1;
+  const attack = leaves[at];
+  const onUnit = (leaf: CompileLeaf) => leaf.role === "CONDITION" && (hasAntecedent(leaf) || Object.values(leaf.parameters).includes("target"));
+  return attack?.family_id === "attack" && attack.fragment === filter.fragment && attack.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
+    && leaves.slice(filterIndex + 1, at).some(onUnit) ? at : null;
+}
+
+/** Whether a condition sits between a bare filter and the attack on that filter's unit. */
+function onTargeted(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  if (leaf.role !== "CONDITION") return false;
+  let at = index - 1;
+  while (at >= 0 && describes(leaves, at, leaf.fragment) && leaves[at]!.family_id !== "unit-filter") at -= 1;
+  const attack = targetedAttackOfFilter(leaves, at);
+  return attack !== null && attack > index;
 }
 
 /** Whether a condition sits between a bare filter and the attack they describe. */
@@ -159,6 +195,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number): string |
   if (onMomentUnit(leaves, index)) return "event-subject";
   // "a friendly model" + "that disembarked this turn" + "makes an attack": the attacking unit.
   if (onAttacker(leaves, index)) return "attacker";
+  // "a friendly X unit" + "is within range of an objective" + "attacks that target that unit": the defender.
+  if (onTargeted(leaves, index)) return "target";
   const earlier = leaves.slice(0, index);
   // "Friendly X units' attacks that target that unit": a filter right before an attack-property
   // scope names whose attacks, even after a selection the rest of the record points to.

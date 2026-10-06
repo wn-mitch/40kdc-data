@@ -1,5 +1,5 @@
 import { exactSpan } from "./contracts.js";
-import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
+import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
@@ -307,6 +307,16 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(leaf, list[at]!) } });
       index = at;
+    } else if (isFilter(leaf) && targetedAttackOfFilter(list, index) !== null) {
+      // "While a friendly X unit" + "is within range of an objective" + "attacks that target that
+      // unit": the filter is the defender. The conditions between (bound to the target by
+      // compile-antecedent.ts) stay ahead of the attack; the filter follows it as the attack's
+      // target, its side checked too, since its keywords alone can match either army's units.
+      const at = targetedAttackOfFilter(list, index)!;
+      out.push(...list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
+      out.push(list[at]!);
+      out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true } });
+      index = at;
     } else if (isFilter(leaf) && subjectlessRoll(list[pastOwners(list, index, leaf)]) && !out.some((before) => before.role === "EVENT" && before.fragment === leaf.fragment)) {
       // "Friendly Adeptus Astartes Dreadnought units" + "can re-roll hit rolls of 1": the units
       // whose rolls it is. After an attack or a moment in its fragment the filter belongs to that
@@ -426,6 +436,8 @@ function ownedBy(leaf: CompileLeaf | undefined, side: unknown): boolean {
  */
 function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   if (leaf?.family_id !== "attack" || leaf.parameters.direction !== "makes" || leaf.parameters.attacker_filter !== undefined) return false;
+  // "If that attack targets a" + filter: an earlier attack named again; the filter is its target.
+  if (leaf.parameters.backref === true || leaf.parameters.refers !== undefined) return false;
   if (leaf.parameters.unit === "friendly-unit") return filter.parameters.side === "friendly";
   if (leaf.parameters.unit === "enemy-unit") return filter.parameters.side === "enemy";
   return leaf.parameters.unit === "this-unit" && filter.parameters.level === "model" && filter.parameters.side === "friendly";

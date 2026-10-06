@@ -26,7 +26,9 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
   leaves.forEach((leaf, index) => {
     const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
     sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
-    andBefore.push(gap.and && !gap.sentence);
+    // A player's pick between two effects ("re-roll one Hit roll or one Wound roll") is a leaf on
+    // its "or", so the "or" is not in a gap: the choice leaf itself starts the clause.
+    andBefore.push((gap.and || (leaf.role === "COMBINATOR" && leaf.parameters.choice === true)) && !gap.sentence);
   });
   // A sentence without an effect ("While this model is leading a unit.") only sets conditions
   // for what follows, so it joins the next sentence; the last one joins the one before.
@@ -66,7 +68,7 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
 }
 
 function signaturePart(leaf: CompileLeaf): string {
-  if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.direction)})`;
+  if (leaf.family_id === "attack") return `EVENT(attack:${String(leaf.parameters.refers !== undefined && leaf.parameters.direction === undefined ? "refers" : leaf.parameters.direction)})`;
   if (leaf.role !== "EVENT") return `${leaf.role}(${leaf.family_id})`;
   if (leaf.family_id === "select-unit") return "EVENT(select-unit)";
   if (leaf.family_id === "dice-roll") return "EVENT(dice-roll)";
