@@ -118,6 +118,13 @@ unless it is needed to operate.
   units. Source-backed clause binding folds it into `return-models.modifier.exclude_model_keyword`;
   count, wounds and placement remain separate. Compilation rejects orphaned or ambiguous
   exclusions rather than applying a whole-unit keyword condition.
+- **What a model comes back with qualifies its placement, not the ability.** `wounds-remaining`
+  ("with 3 wounds remaining"), `starting-strength` ("its unit has a Starting Strength of 1") and
+  `leaves-attached-unit` ("that model is not part of an attached unit") are separate leaves that
+  fold into the nearest effect before them in their fragment (`compile-model-state.ts`): a
+  set-up, a return-models (wounds only) or a split-unit (Starting Strength only). They never gate.
+  Compilation refuses one with no such effect before it, one past a new moment, and one that
+  contradicts the effect's own value.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.

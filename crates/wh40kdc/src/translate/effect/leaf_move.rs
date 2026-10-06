@@ -8,6 +8,34 @@ use super::words::*;
 use crate::translate::condition::{and_list, describe_condition_value, nn, obj, range_phrase, P};
 use crate::translate::dekebab;
 
+/// "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a
+/// set-up or returned model has left.
+pub(super) fn wounds_left(value: Option<&Value>) -> String {
+    match value {
+        None | Some(Value::Null) => "its full wounds".to_string(),
+        Some(x) if x.as_str() == Some("full") => "its full wounds".to_string(),
+        Some(x) if x.as_str() == Some("half-starting") => {
+            "half of its starting number of wounds".to_string()
+        }
+        Some(x) if is_literal(Some(x)) => {
+            let n = dice_case(Some(x));
+            format!("{n} {}", if n == "1" { "wound" } else { "wounds" })
+        }
+        Some(x) => amount_of(Some(x), "wound", "wounds"),
+    }
+}
+
+/// ", as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)".
+pub(super) fn detach_phrase(m: &P) -> String {
+    if !is_true(m, "detach") {
+        return String::new();
+    }
+    let strength = nn(m, "starting_strength")
+        .map(|s| format!(" with a Starting Strength of {}", jv(s)))
+        .unwrap_or_default();
+    format!(", as a separate unit{strength} (it is no longer part of its attached unit)")
+}
+
 pub(super) fn move_verb(t: &str) -> String {
     match t {
         "normal" => "make a Normal move",
@@ -366,6 +394,21 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
             fnum(n.abs()),
             if n < 0.0 { "lower" } else { "higher" }
         ));
+    }
+    if nn(m, "wounds_remaining").is_some() {
+        s.push_str(&format!(
+            ", with {} remaining",
+            wounds_left(m.get("wounds_remaining"))
+        ));
+    }
+    s.push_str(&detach_phrase(m));
+    if let Some(strength) = nn(m, "starting_strength") {
+        if !is_true(m, "detach") {
+            s.push_str(&format!(
+                "; its unit has a Starting Strength of {}",
+                jv(strength)
+            ));
+        }
     }
     if is_true(m, "allow_engagement") {
         s.push_str("; it can be set up within Engagement Range of enemy units");

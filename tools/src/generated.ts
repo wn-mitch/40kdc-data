@@ -4788,7 +4788,10 @@ export interface ReturnModelsEffect {
   target: UnitRef;
   modifier: {
     count: Quantity | "all";
-    wounds_remaining?: Quantity | "full";
+    /**
+     * Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+     */
+    wounds_remaining?: Quantity | "full" | "half-starting";
     placement?:
       | (
           | "closest-to-destruction"
@@ -4885,7 +4888,7 @@ export interface ActOnDeathEffect {
   scaling?: Scaling;
 }
 /**
- * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.
+ * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.
  */
 export interface SplitUnitEffect {
   type: "split-unit";
@@ -5122,7 +5125,7 @@ export interface MoveModifierEffect {
   scaling?: Scaling;
 }
 /**
- * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
  */
 export interface SetUpEffect {
   type: "set-up";
@@ -5223,6 +5226,12 @@ export interface SetUpEffect {
       | "remain-stationary";
     arrives?: "next-movement-phase";
     allow_first_round?: true;
+    /**
+     * Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+     */
+    wounds_remaining?: Quantity | "full" | "half-starting";
+    detach?: true;
+    starting_strength?: number;
     /**
      * @minItems 1
      */

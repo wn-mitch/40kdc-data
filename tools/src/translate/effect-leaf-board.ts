@@ -43,11 +43,22 @@ const FNP_AGAINST: Record<string, string> = {
   mortal: " against mortal wounds", psychic: " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
 };
 
+/** "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a set-up or returned model has left. */
+function woundsLeft(value: unknown): string {
+  if (value == null || value === "full") return "its full wounds";
+  if (value === "half-starting") return "half of its starting number of wounds";
+  return isLiteral(value) ? `${diceCase(value)} ${wounds(diceCase(value), "wound")}` : amountOf(value, "wound", "wounds");
+}
+
+/** ", as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)". */
+function detachPhrase(m: Record<string, unknown>): string {
+  return m.detach === true ? `, as a separate unit${m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : ""} (it is no longer part of its attached unit)` : "";
+}
+
 function returnModels(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const w = m.wounds_remaining == null || m.wounds_remaining === "full" ? "its full wounds"
-    : isLiteral(m.wounds_remaining) ? `${diceCase(m.wounds_remaining)} ${wounds(diceCase(m.wounds_remaining), "wound")}` : amountOf(m.wounds_remaining, "wound", "wounds");
+  const w = woundsLeft(m.wounds_remaining);
   const where = `${placementPhrase(m)}${placementLimits(m, ctx)}`;
-  const detach = m.detach === true ? `, as a separate unit${m.starting_strength != null ? ` with a Starting Strength of ${jstr(m.starting_strength)}` : ""} (it is no longer part of its attached unit)` : "";
+  const detach = detachPhrase(m);
   if (e.target === "this-model") return `${subj} is set up again${where} with ${w} remaining${detach}`;
   const kw = m.model_keyword != null ? `${jstr(m.model_keyword)} ` : m.bodyguard_only === true ? "Bodyguard " : "";
   const kind = `destroyed ${kw}model`;
@@ -199,6 +210,9 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const md = m.min_distance_from as P | undefined;
   if (md != null) s += ` ${m.allow === false ? "within" : "more than"} ${rangePhrase(md.range)}${m.allow === false ? " of" : " away from"} ${md.of != null ? effectSubject(md.of, ctx) : "this model"}`;
   if (m.round_offset != null) s += `, treating the battle round as ${Math.abs(Number(m.round_offset))} ${Number(m.round_offset) < 0 ? "lower" : "higher"} than it is`;
+  if (m.wounds_remaining != null) s += `, with ${woundsLeft(m.wounds_remaining)} remaining`;
+  s += detachPhrase(m);
+  if (m.starting_strength != null && m.detach !== true) s += `; its unit has a Starting Strength of ${jstr(m.starting_strength)}`;
   if (m.allow_engagement === true) s += "; it can be set up within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; it counts as having made ${movedPhrase(m.counts_as_move)} this turn`;
   return s + limits;
@@ -385,11 +399,12 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "destroy-models": return destroyModels(m, subj);
     case "act-on-death": return actOnDeath(e, m, subj, ctx);
     case "split-unit": {
-      if (m.by === "model") return `split ${subj} into units of one model each`;
+      const strength = m.starting_strength != null ? `, each with a Starting Strength of ${jstr(m.starting_strength)}` : "";
+      if (m.by === "model") return `split ${subj} into units of one model each${strength}`;
       const by = m.by as { model_keyword?: unknown[] } | undefined;
-      if (by?.model_keyword) return `split ${subj} into one unit of each of its ${andList(by.model_keyword.map(jstr))} models`;
+      if (by?.model_keyword) return `split ${subj} into one unit of each of its ${andList(by.model_keyword.map(jstr))} models${strength}`;
       const counts = Array.isArray(m.model_counts) ? (m.model_counts as unknown[]).map(jstr) : [];
-      return `split ${subj} into ${counts.length} units of ${andList(counts)} models`;
+      return `split ${subj} into ${counts.length} units of ${andList(counts)} models${strength}`;
     }
     case "add-unit": return addUnit(m, ctx);
     case "destruction-rule": return `${subj} ${v(subj, "is")} not destroyed until ${effectSubject(m.also, ctx)} is also destroyed`;

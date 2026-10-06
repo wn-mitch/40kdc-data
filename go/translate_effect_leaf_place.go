@@ -12,25 +12,39 @@ import (
 
 var dieDiceSuffixRe = regexp.MustCompile(`\b(die|dice)$`)
 
+// woundsLeft is what a set-up or returned model has left: "its full wounds",
+// "half of its starting number of wounds", "3 wounds", "D3 wounds".
+func woundsLeft(wr any) string {
+	if wr == nil || wr == "full" {
+		return "its full wounds"
+	}
+	if wr == "half-starting" {
+		return "half of its starting number of wounds"
+	}
+	if isLiteral(wr) {
+		n := diceCase(wr)
+		return n + " " + woundsNoun(n, "wound")
+	}
+	return amountOf(wr, "wound", "wounds")
+}
+
+// detachPhrase is ", as a separate unit with a Starting Strength of 1 (it is
+// no longer part of its attached unit)".
+func detachPhrase(m map[string]any) string {
+	if m["detach"] != true {
+		return ""
+	}
+	strength := ""
+	if m["starting_strength"] != nil {
+		strength = " with a Starting Strength of " + ejstr(m["starting_strength"])
+	}
+	return ", as a separate unit" + strength + " (it is no longer part of its attached unit)"
+}
+
 func returnModelsLeaf(e, m map[string]any, subj string, ctx effCtx) string {
-	w := "its full wounds"
-	if wr := m["wounds_remaining"]; wr != nil && wr != "full" {
-		if isLiteral(wr) {
-			n := diceCase(wr)
-			w = n + " " + woundsNoun(n, "wound")
-		} else {
-			w = amountOf(wr, "wound", "wounds")
-		}
-	}
+	w := woundsLeft(m["wounds_remaining"])
 	where := placementPhrase(m) + placementLimits(m, ctx)
-	detach := ""
-	if m["detach"] == true {
-		strength := ""
-		if m["starting_strength"] != nil {
-			strength = " with a Starting Strength of " + ejstr(m["starting_strength"])
-		}
-		detach = ", as a separate unit" + strength + " (it is no longer part of its attached unit)"
-	}
+	detach := detachPhrase(m)
 	if e["target"] == "this-model" {
 		return subj + " is set up again" + where + " with " + w + " remaining" + detach
 	}

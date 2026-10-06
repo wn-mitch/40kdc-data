@@ -28,6 +28,13 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
   if (leaf.family_id === "weapon-property-scope") return { kind: "implicit", note: "No separate text: identifies the recipient and weapon scope of the following property; grants nothing by itself." };
   if (leaf.family_id === "returned-model-exclusion") return { kind: "implicit", note: `Exclude individual returned models with any of these keywords: ${(leaf.parameters.keywords as string[]).join(", ")}; do not exclude their whole unit.` };
+  if (leaf.family_id === "wounds-remaining") {
+    const value = leaf.parameters.value;
+    const wounds = value === "full" ? "its full wounds" : value === "half-starting" ? "half of its starting number of wounds" : `${String(value)} ${value === 1 ? "wound" : "wounds"}`;
+    return { kind: "implicit", note: `No separate text: the set-up or returned model before it has ${wounds} remaining.` };
+  }
+  if (leaf.family_id === "starting-strength") return { kind: "implicit", note: `No separate text: the unit the set-up or split before it produces has a Starting Strength of ${String(leaf.parameters.value)}.` };
+  if (leaf.family_id === "leaves-attached-unit") return { kind: "implicit", note: "No separate text: the model the set-up before it places is no longer part of an attached unit; it is set up as a unit of its own." };
   if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: its reviewed weapon scope or ability-grant frame grants ${String(leaf.parameters.keyword)}.` };
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
     return { kind: "implicit", note: "No separate text: grants the weapon-ability-keyword leaves of its sentence (or the nearest earlier ones)." };

@@ -19,6 +19,9 @@ export const RETURN_COUNTS = ["1", "2", "3", "D3", "D3+1", "D3+3", "D6", "all"] 
 /** wounds_remaining is either "full" or a quantity (a plain number or dice expression); "half" is not a valid quantity. */
 export const WOUNDS_REMAINING = ["full", "1", "D3", "D6"] as const;
 
+/** What a wounds-remaining qualifier names besides a whole number: full, half of the starting wounds, or a roll. */
+export const WOUNDS_REMAINING_WORDS = ["full", "half-starting", "D3", "D6"] as const;
+
 export const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit"] as const;
 export const DESTROY_COUNTS = ["1", "2", "3", "D3", "D6", "all"] as const;
 
@@ -63,6 +66,46 @@ export const UNIT_STATE_EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { keywords: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 } } },
       additionalProperties: false,
     },
+  },
+  {
+    // "with its full wounds remaining", "with half of its starting number of wounds remaining", "with 3 wounds remaining".
+    id: "wounds-remaining",
+    version: 1,
+    role: "CONDITION",
+    label: "Wounds remaining on a returned model",
+    description: "How many wounds a model set back up or returned has: its full wounds, half of its starting number of wounds, a whole number, or D3/D6 (\"with 3 wounds remaining\"). It qualifies the set-up or return-models effect before it and gates nothing.",
+    starter: { value: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["value"],
+      properties: { value: { anyOf: [{ enum: WOUNDS_REMAINING_WORDS }, { type: "integer", minimum: 1, maximum: 30 }] } },
+      additionalProperties: false,
+    },
+  },
+  {
+    // "These new units each have a Starting Strength of 1", "its unit has a starting strength of 1".
+    id: "starting-strength",
+    version: 1,
+    role: "CONDITION",
+    label: "Starting Strength of a new unit",
+    description: "The Starting Strength of the unit a set-up or split-unit effect before it produces (\"These new units each have a Starting Strength of 1\"). It gates nothing.",
+    starter: { value: 1 },
+    parameterSchema: {
+      type: "object",
+      required: ["value"],
+      properties: { value: { type: "integer", minimum: 1, maximum: 30 } },
+      additionalProperties: false,
+    },
+  },
+  {
+    // "That model is not part of an attached unit".
+    id: "leaves-attached-unit",
+    version: 1,
+    role: "CONDITION",
+    label: "Set up apart from its attached unit",
+    description: "The model a set-up effect before it places is no longer part of an attached unit: it is set up as a unit of its own (\"That model is not part of an attached unit\"). It gates nothing.",
+    starter: {},
+    parameterSchema: { type: "object", properties: {}, additionalProperties: false },
   },
   {
     id: "destroy-models",
@@ -145,6 +188,18 @@ function modelKeyword(value: unknown, label: string): string {
 
 export function normalizeUnitStateParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
   switch (family) {
+    case "wounds-remaining": {
+      exactKeys(input, ["value"], family);
+      const value = typeof input.value === "string" && /^\d+$/u.test(input.value) ? Number(input.value) : input.value;
+      if (typeof value === "number") return { value: boundedInteger(value, 1, 30, "wounds-remaining.value") };
+      return { value: enumValue(value, WOUNDS_REMAINING_WORDS, "wounds-remaining.value") };
+    }
+    case "starting-strength":
+      exactKeys(input, ["value"], family);
+      return { value: boundedInteger(input.value, 1, 30, "starting-strength.value") };
+    case "leaves-attached-unit":
+      exactKeys(input, [], family);
+      return {};
     case "returned-model-exclusion":
       exactKeys(input, ["keywords"], family);
       return { keywords: normalizeUnitKeywords(input.keywords, "returned-model-exclusion.keywords") };

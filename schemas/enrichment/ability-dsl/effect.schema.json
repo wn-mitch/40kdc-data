@@ -2486,8 +2486,12 @@
                     },
                     {
                       "const": "full"
+                    },
+                    {
+                      "const": "half-starting"
                     }
-                  ]
+                  ],
+                  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds)."
                 },
                 "placement": {
                   "oneOf": [
@@ -2700,7 +2704,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "split-unit effect",
-          "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.",
+          "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.",
           "required": [
             "type",
             "target",
@@ -2759,6 +2763,11 @@
                   "minItems": 2,
                   "uniqueItems": true,
                   "description": "Names each resulting unit, in model_counts order, for later {selection_var} references."
+                },
+                "starting_strength": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Each resulting unit's Starting Strength."
                 }
               },
               "oneOf": [
@@ -3360,7 +3369,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
           "required": [
             "type",
             "target",
@@ -3539,6 +3548,27 @@
                 },
                 "allow_first_round": {
                   "const": true
+                },
+                "wounds_remaining": {
+                  "oneOf": [
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/quantity"
+                    },
+                    {
+                      "const": "full"
+                    },
+                    {
+                      "const": "half-starting"
+                    }
+                  ],
+                  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds)."
+                },
+                "detach": {
+                  "const": true
+                },
+                "starting_strength": {
+                  "type": "integer",
+                  "minimum": 1
                 },
                 "near": {
                   "type": "array",

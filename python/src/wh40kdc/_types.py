@@ -1682,6 +1682,7 @@ class Modifier28(TypedDict):
     model_counts: list[ModelCount1]
     by: NotRequired[Literal["model"] | By]
     bind_as: NotRequired[list[BindA]]
+    starting_strength: NotRequired[int]
 
 
 class By1(TypedDict):
@@ -1692,6 +1693,7 @@ class Modifier29(TypedDict):
     model_counts: NotRequired[list[ModelCount1]]
     by: Literal["model"] | By1
     bind_as: NotRequired[list[BindA]]
+    starting_strength: NotRequired[int]
 
 
 class Passthrough(TypedDict):
@@ -3484,7 +3486,7 @@ class SingleEffect21(TypedDict):
 
 class Modifier25(TypedDict):
     count: Quantity | Literal["all"]
-    wounds_remaining: NotRequired[Quantity | Literal["full"]]
+    wounds_remaining: NotRequired[Quantity | Literal["full"] | Literal["half-starting"]]
     placement: NotRequired[
         Literal[
             "closest-to-destruction",
@@ -3835,6 +3837,9 @@ Modifier35 = TypedDict(
         ],
         "arrives": NotRequired[Literal["next-movement-phase"]],
         "allow_first_round": NotRequired[Literal[True]],
+        "wounds_remaining": NotRequired[Quantity | Literal["full"] | Literal["half-starting"]],
+        "detach": NotRequired[Literal[True]],
+        "starting_strength": NotRequired[int],
         "near": NotRequired[list[PlacementNear]],
         "away_from": NotRequired[list[PlacementAway]],
         "in_region": NotRequired[PlacementRegion],

@@ -43667,12 +43667,16 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///      "minimum": 1.0
 ///    },
 ///    "wounds_remaining": {
+///      "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
 ///      "oneOf": [
 ///        {
 ///          "$ref": "#/$defs/quantity"
 ///        },
 ///        {
 ///          "const": "full"
+///        },
+///        {
+///          "const": "half-starting"
 ///        }
 ///      ]
 ///    }
@@ -43705,6 +43709,7 @@ pub struct ReturnModelsEffectModifier {
     pub range: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
+    ///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wounds_remaining: ::std::option::Option<
         ReturnModelsEffectModifierWoundsRemaining,
@@ -44138,18 +44143,22 @@ for ReturnModelsEffectModifierPlacementVariant1Item {
         value.parse()
     }
 }
-///`ReturnModelsEffectModifierWoundsRemaining`
+///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
 ///  "oneOf": [
 ///    {
 ///      "$ref": "#/$defs/quantity"
 ///    },
 ///    {
 ///      "const": "full"
+///    },
+///    {
+///      "const": "half-starting"
 ///    }
 ///  ]
 ///}
@@ -44160,16 +44169,11 @@ for ReturnModelsEffectModifierPlacementVariant1Item {
 pub enum ReturnModelsEffectModifierWoundsRemaining {
     Variant0(Quantity),
     Variant1(::serde_json::Value),
+    Variant2(::serde_json::Value),
 }
 impl ::std::convert::From<Quantity> for ReturnModelsEffectModifierWoundsRemaining {
     fn from(value: Quantity) -> Self {
         Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<::serde_json::Value>
-for ReturnModelsEffectModifierWoundsRemaining {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self::Variant1(value)
     }
 }
 ///`RiskRewardEffect`
@@ -52569,6 +52573,9 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///        "remain-stationary"
 ///      ]
 ///    },
+///    "detach": {
+///      "const": true
+///    },
 ///    "from": {
 ///      "enum": [
 ///        "strategic-reserves",
@@ -52678,6 +52685,10 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "type": "integer",
 ///      "minimum": 1.0
 ///    },
+///    "starting_strength": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
 ///    "subject": {
 ///      "oneOf": [
 ///        {
@@ -52711,6 +52722,20 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///    },
 ///    "within_edge": {
 ///      "type": "number"
+///    },
+///    "wounds_remaining": {
+///      "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/quantity"
+///        },
+///        {
+///          "const": "full"
+///        },
+///        {
+///          "const": "half-starting"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -52733,6 +52758,8 @@ pub struct SetUpEffectModifier {
     ///Being set up this way counts as having made this move this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<SetUpEffectModifierCountsAsMove>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub detach: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub from: ::std::option::Option<SetUpEffectModifierFrom>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -52758,6 +52785,8 @@ pub struct SetUpEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sections: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<SetUpEffectModifierSubject>,
     pub to: SetUpEffectModifierTo,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -52767,6 +52796,9 @@ pub struct SetUpEffectModifier {
     pub via: ::std::option::Option<SetUpEffectModifierVia>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within_edge: ::std::option::Option<f64>,
+    ///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wounds_remaining: ::std::option::Option<SetUpEffectModifierWoundsRemaining>,
 }
 ///Being set up this way counts as having made this move this turn.
 ///
@@ -53542,6 +53574,39 @@ impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierVia {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/quantity"
+///    },
+///    {
+///      "const": "full"
+///    },
+///    {
+///      "const": "half-starting"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum SetUpEffectModifierWoundsRemaining {
+    Variant0(Quantity),
+    Variant1(::serde_json::Value),
+    Variant2(::serde_json::Value),
+}
+impl ::std::convert::From<Quantity> for SetUpEffectModifierWoundsRemaining {
+    fn from(value: Quantity) -> Self {
+        Self::Variant0(value)
     }
 }
 ///Which player a zone or territory belongs to.
@@ -55083,7 +55148,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "split-unit effect",
-///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.",
+///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -55208,7 +55273,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "set-up effect",
-///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).",
+///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -55905,7 +55970,7 @@ pub enum SingleEffect {
     },
     /**split-unit effect
 
-[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.*/
+[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.*/
     #[serde(rename = "split-unit")]
     SplitUnit {
         modifier: SplitUnitEffectModifier,
@@ -55955,7 +56020,7 @@ pub enum SingleEffect {
     },
     /**set-up effect
 
-[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).*/
+[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
     #[serde(rename = "set-up")]
     SetUp {
         modifier: SetUpEffectModifier,
@@ -56289,6 +56354,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///        "minimum": 1.0
 ///      },
 ///      "minItems": 2
+///    },
+///    "starting_strength": {
+///      "description": "Each resulting unit's Starting Strength.",
+///      "type": "integer",
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -56303,12 +56373,18 @@ pub enum SplitUnitEffectModifier {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant0BindAsItem>>,
         model_counts: ::std::vec::Vec<::std::num::NonZeroU64>,
+        ///Each resulting unit's Starting Strength.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
     },
     Variant1 {
         ///Names each resulting unit, in model_counts order, for later {selection_var} references.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant1BindAsItem>>,
         by: SplitUnitEffectModifierVariant1By,
+        ///Each resulting unit's Starting Strength.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
     },
 }
 ///`SplitUnitEffectModifierVariant0BindAsItem`

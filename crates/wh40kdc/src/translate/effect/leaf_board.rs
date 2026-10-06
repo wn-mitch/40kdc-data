@@ -92,25 +92,9 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
 }
 
 fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let wr = m.get("wounds_remaining");
-    let w = match wr {
-        None | Some(Value::Null) => "its full wounds".to_string(),
-        Some(x) if x.as_str() == Some("full") => "its full wounds".to_string(),
-        Some(x) if is_literal(Some(x)) => {
-            let n = dice_case(Some(x));
-            format!("{n} {}", wounds(&n, "wound"))
-        }
-        Some(x) => amount_of(Some(x), "wound", "wounds"),
-    };
+    let w = wounds_left(m.get("wounds_remaining"));
     let place = format!("{}{}", placement_phrase(m), placement_limits(m, ctx));
-    let detach = if is_true(m, "detach") {
-        let strength = nn(m, "starting_strength")
-            .map(|s| format!(" with a Starting Strength of {}", jv(s)))
-            .unwrap_or_default();
-        format!(", as a separate unit{strength} (it is no longer part of its attached unit)")
-    } else {
-        String::new()
-    };
+    let detach = detach_phrase(m);
     if target.and_then(Value::as_str) == Some("this-model") {
         return format!("{subj} is set up again{place} with {w} remaining{detach}");
     }
@@ -398,8 +382,11 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         Some("destroy-models") => destroy_models(m, subj),
         Some("act-on-death") => act_on_death(target, m, subj, ctx),
         Some("split-unit") => {
+            let strength = nn(m, "starting_strength")
+                .map(|s| format!(", each with a Starting Strength of {}", jv(s)))
+                .unwrap_or_default();
             if sv(m, "by") == Some("model") {
-                return format!("split {subj} into units of one model each");
+                return format!("split {subj} into units of one model each{strength}");
             }
             let by = m.get("by").and_then(Value::as_object);
             if let Some(kws) = by.and_then(|b| b.get("model_keyword")) {
@@ -409,14 +396,14 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                         .map(|a| a.iter().map(jv).collect())
                         .unwrap_or_default();
                     return format!(
-                        "split {subj} into one unit of each of its {} models",
+                        "split {subj} into one unit of each of its {} models{strength}",
                         and_list(&names)
                     );
                 }
             }
             let counts = map_arr(m, "model_counts", jv).unwrap_or_default();
             format!(
-                "split {subj} into {} units of {} models",
+                "split {subj} into {} units of {} models{strength}",
                 counts.len(),
                 and_list(&counts)
             )

@@ -3694,6 +3694,14 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/trigger-after-roll-save-failed-for-model", trigger: { event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-after-roll-successful-charge", trigger: { event: "after-roll", filter: { roll: "charge", result: "success" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-destroyed-by-this-unit", trigger: { event: "destroyed", subject: "this-unit", object: { owner: "enemy" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
+    // What a model set back up, a returned model or a split unit comes back with.
+    { caseId: "fidelity/set-up-wounds-remaining-full", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", wounds_remaining: "full" } } },
+    { caseId: "fidelity/set-up-wounds-remaining-number", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", via: "deep-strike", wounds_remaining: 3 } } },
+    { caseId: "fidelity/set-up-wounds-remaining-dice", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", wounds_remaining: "D3" } } },
+    { caseId: "fidelity/set-up-half-starting-detach", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: ["closest-to-destruction", "unengaged"], wounds_remaining: "half-starting", detach: true, starting_strength: 1 } } },
+    { caseId: "fidelity/set-up-starting-strength", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", starting_strength: 1 } } },
+    { caseId: "fidelity/return-models-half-starting", effect: { type: "return-models", target: "this-unit", modifier: { count: 1, wounds_remaining: "half-starting" } } },
+    { caseId: "fidelity/split-unit-starting-strength", effect: { type: "split-unit", target: "this-unit", modifier: { by: "model", starting_strength: 1 } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

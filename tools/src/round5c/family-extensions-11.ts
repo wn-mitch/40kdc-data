@@ -64,6 +64,19 @@ const EVENT_MODEL_DESTROYER: FamilyExtension = {
   },
 };
 
+/** Wounds a returned model can come back with beyond return-models@1's: 3, and half of its starting wounds. */
+const RETURN_WOUNDS_ADDED = ["3", "half-starting"] as const;
+
+const RETURN_MODELS_WOUNDS: FamilyExtension = {
+  // "with 3 wounds remaining", "with half of its starting number of wounds remaining".
+  family: "return-models",
+  description: "As the previous version, plus wounds_remaining 3 and half-starting (half of the model's starting number of wounds).",
+  schema: (previous) => withProperties(previous, { wounds_remaining: widenedEnum(previous, "wounds_remaining", RETURN_WOUNDS_ADDED) }),
+  normalize: (input, previous) => (RETURN_WOUNDS_ADDED as readonly unknown[]).includes(input.wounds_remaining)
+    ? standIn(input, "wounds_remaining", "1", previous)
+    : previous(input),
+};
+
 /** The unit-state families a hidden unit and a bearer's Transport extend (see FAMILY_EXTENSIONS_11). */
 const UNIT_STATE_HIDDEN: FamilyExtension = {
   // "if that friendly unit is hidden": the core state, not a designation.
@@ -390,6 +403,7 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   STANCE_SELECT_ADDITIVE,
   CHOSEN_OPTION_HOLDER_ANTECEDENT,
   STANCE_CAPACITY_SHARED_OPTIONS,
+  RETURN_MODELS_WOUNDS,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

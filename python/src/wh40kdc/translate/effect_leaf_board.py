@@ -114,23 +114,33 @@ _FNP_AGAINST = {
 }
 
 
+def _wounds_left(value: Any) -> str:
+    """What a set-up or returned model has left: "its full wounds", "3 wounds", ..."""
+    if value is None or value == "full":
+        return "its full wounds"
+    if value == "half-starting":
+        return "half of its starting number of wounds"
+    if is_literal(value):
+        return f"{dice_case(value)} {_wounds(dice_case(value), 'wound')}"
+    return amount_of(value, "wound", "wounds")
+
+
+def _detach_phrase(m: dict[str, Any]) -> str:
+    """ ", as a separate unit with a Starting Strength of 1 (it is no longer part of ...)"."""
+    if m.get("detach") is not True:
+        return ""
+    strength = (
+        f" with a Starting Strength of {jstr(m['starting_strength'])}"
+        if m.get("starting_strength") is not None
+        else ""
+    )
+    return f", as a separate unit{strength} (it is no longer part of its attached unit)"
+
+
 def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    wr = m.get("wounds_remaining")
-    if wr is None or wr == "full":
-        w = "its full wounds"
-    elif is_literal(wr):
-        w = f"{dice_case(wr)} {_wounds(dice_case(wr), 'wound')}"
-    else:
-        w = amount_of(wr, "wound", "wounds")
+    w = _wounds_left(m.get("wounds_remaining"))
     where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
-    detach = ""
-    if m.get("detach") is True:
-        strength = (
-            f" with a Starting Strength of {jstr(m['starting_strength'])}"
-            if m.get("starting_strength") is not None
-            else ""
-        )
-        detach = f", as a separate unit{strength} (it is no longer part of its attached unit)"
+    detach = _detach_phrase(m)
     if e.get("target") == "this-model":
         return f"{subj} is set up again{where} with {w} remaining{detach}"
     if m.get("model_keyword") is not None:
@@ -522,6 +532,11 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f", treating the battle round as {num_str(abs(off))} "
             f"{'lower' if off < 0 else 'higher'} than it is"
         )
+    if m.get("wounds_remaining") is not None:
+        s += f", with {_wounds_left(m['wounds_remaining'])} remaining"
+    s += _detach_phrase(m)
+    if m.get("starting_strength") is not None and m.get("detach") is not True:
+        s += f"; its unit has a Starting Strength of {jstr(m['starting_strength'])}"
     if m.get("allow_engagement") is True:
         s += "; it can be set up within Engagement Range of enemy units"
     if m.get("counts_as_move") is not None:
@@ -618,16 +633,21 @@ def _heal(m: dict[str, Any], subj: str) -> str:
 
 
 def _split_unit(m: dict[str, Any], subj: str) -> str:
+    strength = (
+        f", each with a Starting Strength of {jstr(m['starting_strength'])}"
+        if m.get("starting_strength") is not None
+        else ""
+    )
     if m.get("by") == "model":
-        return f"split {subj} into units of one model each"
+        return f"split {subj} into units of one model each{strength}"
     by = m.get("by")
     if isinstance(by, dict) and by.get("model_keyword") is not None:
         return (
             f"split {subj} into one unit of each of its "
-            f"{and_list([jstr(k) for k in by['model_keyword']])} models"
+            f"{and_list([jstr(k) for k in by['model_keyword']])} models{strength}"
         )
     counts = [jstr(c) for c in m["model_counts"]] if isinstance(m.get("model_counts"), list) else []
-    return f"split {subj} into {len(counts)} units of {and_list(counts)} models"
+    return f"split {subj} into {len(counts)} units of {and_list(counts)} models{strength}"
 
 
 def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:

@@ -390,6 +390,13 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		s += ", treating the battle round as " + numStr(math.Abs(n)) + " " + dir + " than it is"
 	}
+	if m["wounds_remaining"] != nil {
+		s += ", with " + woundsLeft(m["wounds_remaining"]) + " remaining"
+	}
+	s += detachPhrase(m)
+	if m["starting_strength"] != nil && m["detach"] != true {
+		s += "; its unit has a Starting Strength of " + ejstr(m["starting_strength"])
+	}
 	if m["allow_engagement"] == true {
 		s += "; it can be set up within Engagement Range of enemy units"
 	}
@@ -478,14 +485,18 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "act-on-death":
 		return actOnDeathLeaf(e, m, subj, ctx)
 	case "split-unit":
+		strength := ""
+		if m["starting_strength"] != nil {
+			strength = ", each with a Starting Strength of " + ejstr(m["starting_strength"])
+		}
 		if m["by"] == "model" {
-			return "split " + subj + " into units of one model each"
+			return "split " + subj + " into units of one model each" + strength
 		}
 		if by, ok := asMap(m["by"]); ok && by != nil && jsTruthy(by["model_keyword"]) {
-			return "split " + subj + " into one unit of each of its " + andList(jstrList(by["model_keyword"])) + " models"
+			return "split " + subj + " into one unit of each of its " + andList(jstrList(by["model_keyword"])) + " models" + strength
 		}
 		counts := jstrList(m["model_counts"])
-		return "split " + subj + " into " + numStr(float64(len(counts))) + " units of " + andList(counts) + " models"
+		return "split " + subj + " into " + numStr(float64(len(counts))) + " units of " + andList(counts) + " models" + strength
 	case "add-unit":
 		return addUnitLeaf(m, ctx)
 	case "destruction-rule":

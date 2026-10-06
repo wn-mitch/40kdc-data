@@ -17,6 +17,7 @@ import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
+import { foldModelState } from "./compile-model-state.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -152,7 +153,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

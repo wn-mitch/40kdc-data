@@ -40,6 +40,10 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
       if (leaf.parameters.via !== undefined) modifier.via = closed(leaf, "via");
       if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { inches: closed(leaf, "marker_inches"), ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
+      // Folded from wounds-remaining, starting-strength and leaves-attached-unit (compile-model-state.ts).
+      if (leaf.parameters.wounds_remaining !== undefined) modifier.wounds_remaining = countValue(closed(leaf, "wounds_remaining"));
+      if (leaf.parameters.detach === true) modifier.detach = true;
+      if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
       return { type: "set-up", target: unitOf(leaf, "subject"), modifier };
     }
     case "battlefield-marker": {
@@ -151,6 +155,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
         mode === "model" ? { by: "model" }
           : mode === "counts" ? { model_counts: closed(leaf, "model_counts") }
             : { by: { model_keyword: closed(leaf, "model_keywords") } };
+      // Folded from a starting-strength qualifier (compile-model-state.ts): each resulting unit's.
+      if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
       return { type: "split-unit", target: "this-unit", modifier };
     }
     case "add-unit": {

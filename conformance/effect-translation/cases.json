@@ -22546,6 +22546,135 @@
     }
   },
   {
+    "caseId": "fidelity/set-up-wounds-remaining-full",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "wounds_remaining": "full"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed, with its full wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-wounds-remaining-number",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "via": "deep-strike",
+        "wounds_remaining": 3
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield using the Deep Strike rules, with 3 wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-wounds-remaining-dice",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "wounds_remaining": "D3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed, with D3 wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-half-starting-detach",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": [
+          "closest-to-destruction",
+          "unengaged"
+        ],
+        "wounds_remaining": "half-starting",
+        "detach": true,
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with half of its starting number of wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-starting-strength",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed; its unit has a Starting Strength of 1."
+    }
+  },
+  {
+    "caseId": "fidelity/return-models-half-starting",
+    "effect": {
+      "type": "return-models",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "wounds_remaining": "half-starting"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, return 1 destroyed model to the unit, each with half of its starting number of wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/split-unit-starting-strength",
+    "effect": {
+      "type": "split-unit",
+      "target": "this-unit",
+      "modifier": {
+        "by": "model",
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, split the unit into units of one model each, each with a Starting Strength of 1."
+    }
+  },
+  {
     "caseId": "model-destroyed-by-destroyer",
     "effect": {
       "type": "stat-modifier",
