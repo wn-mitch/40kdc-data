@@ -19380,105 +19380,7 @@ pub enum Footprint {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
 ///    "selector": {
-///      "type": "object",
-///      "required": [
-///        "owner"
-///      ],
-///      "properties": {
-///        "bind_as": {
-///          "type": "string",
-///          "minLength": 1
-///        },
-///        "eligibility": {
-///          "$ref": "#/$defs/condition"
-///        },
-///        "engagement_relation": {
-///          "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///          "type": "string",
-///          "enum": [
-///            "engaged-with-bearer",
-///            "not-engaged-with-bearer"
-///          ]
-///        },
-///        "excluded_keywords": {
-///          "description": "A candidate with any listed keyword is excluded.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1,
-///          "uniqueItems": true
-///        },
-///        "keyword_match": {
-///          "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///          "default": "all",
-///          "type": "string",
-///          "enum": [
-///            "all",
-///            "any"
-///          ]
-///        },
-///        "keywords": {
-///          "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1
-///        },
-///        "member_of": {
-///          "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///          "type": "string",
-///          "enum": [
-///            "bearer-unit"
-///          ]
-///        },
-///        "model_names": {
-///          "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1,
-///          "uniqueItems": true
-///        },
-///        "owner": {
-///          "type": "string",
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
-///        },
-///        "reference": {
-///          "description": "Origin of the engagement_relation gate.",
-///          "type": "string",
-///          "enum": [
-///            "bearer",
-///            "bearer-unit",
-///            "bearer-transport"
-///          ]
-///        },
-///        "target_kind": {
-///          "description": "Whether each iteration binds a whole unit or one matching model.",
-///          "default": "unit",
-///          "type": "string",
-///          "enum": [
-///            "unit",
-///            "model"
-///          ]
-///        },
-///        "within_inches": {
-///          "type": "number",
-///          "exclusiveMinimum": 0.0
-///        },
-///        "within_objective": {
-///          "$ref": "#/$defs/selection-reference"
-///        }
-///      },
-///      "additionalProperties": false
+///      "$ref": "#/$defs/unit-selector"
 ///    },
 ///    "type": {
 ///      "type": "string",
@@ -19496,939 +19398,9 @@ pub enum Footprint {
 #[serde(deny_unknown_fields)]
 pub struct ForEachUnitEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
-    pub selector: ForEachUnitEffectSelector,
+    pub selector: UnitSelector,
     #[serde(rename = "type")]
     pub type_: ForEachUnitEffectType,
-}
-///`ForEachUnitEffectSelector`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "owner"
-///  ],
-///  "properties": {
-///    "bind_as": {
-///      "type": "string",
-///      "minLength": 1
-///    },
-///    "eligibility": {
-///      "$ref": "#/$defs/condition"
-///    },
-///    "engagement_relation": {
-///      "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///      "type": "string",
-///      "enum": [
-///        "engaged-with-bearer",
-///        "not-engaged-with-bearer"
-///      ]
-///    },
-///    "excluded_keywords": {
-///      "description": "A candidate with any listed keyword is excluded.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1,
-///      "uniqueItems": true
-///    },
-///    "keyword_match": {
-///      "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///      "default": "all",
-///      "type": "string",
-///      "enum": [
-///        "all",
-///        "any"
-///      ]
-///    },
-///    "keywords": {
-///      "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1
-///    },
-///    "member_of": {
-///      "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///      "type": "string",
-///      "enum": [
-///        "bearer-unit"
-///      ]
-///    },
-///    "model_names": {
-///      "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1,
-///      "uniqueItems": true
-///    },
-///    "owner": {
-///      "type": "string",
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
-///    },
-///    "reference": {
-///      "description": "Origin of the engagement_relation gate.",
-///      "type": "string",
-///      "enum": [
-///        "bearer",
-///        "bearer-unit",
-///        "bearer-transport"
-///      ]
-///    },
-///    "target_kind": {
-///      "description": "Whether each iteration binds a whole unit or one matching model.",
-///      "default": "unit",
-///      "type": "string",
-///      "enum": [
-///        "unit",
-///        "model"
-///      ]
-///    },
-///    "within_inches": {
-///      "type": "number",
-///      "exclusiveMinimum": 0.0
-///    },
-///    "within_objective": {
-///      "$ref": "#/$defs/selection-reference"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ForEachUnitEffectSelector {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub bind_as: ::std::option::Option<ForEachUnitEffectSelectorBindAs>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub eligibility: ::std::option::Option<Condition>,
-    ///Candidate engagement relation to the bearer or bearer-unit.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub engagement_relation: ::std::option::Option<
-        ForEachUnitEffectSelectorEngagementRelation,
-    >,
-    ///A candidate with any listed keyword is excluded.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub excluded_keywords: ::std::option::Option<
-        Vec<ForEachUnitEffectSelectorExcludedKeywordsItem>,
-    >,
-    ///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-    #[serde(default = "defaults::for_each_unit_effect_selector_keyword_match")]
-    pub keyword_match: ForEachUnitEffectSelectorKeywordMatch,
-    ///Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub keywords: ::std::vec::Vec<ForEachUnitEffectSelectorKeywordsItem>,
-    ///Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub member_of: ::std::option::Option<ForEachUnitEffectSelectorMemberOf>,
-    ///Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub model_names: ::std::option::Option<Vec<ForEachUnitEffectSelectorModelNamesItem>>,
-    pub owner: ForEachUnitEffectSelectorOwner,
-    ///Origin of the engagement_relation gate.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub reference: ::std::option::Option<ForEachUnitEffectSelectorReference>,
-    ///Whether each iteration binds a whole unit or one matching model.
-    #[serde(default = "defaults::for_each_unit_effect_selector_target_kind")]
-    pub target_kind: ForEachUnitEffectSelectorTargetKind,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub within_inches: ::std::option::Option<f64>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub within_objective: ::std::option::Option<SelectionReference>,
-}
-///`ForEachUnitEffectSelectorBindAs`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorBindAs(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorBindAs {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorBindAs> for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorBindAs) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorBindAs {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorBindAs {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Candidate engagement relation to the bearer or bearer-unit.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///  "type": "string",
-///  "enum": [
-///    "engaged-with-bearer",
-///    "not-engaged-with-bearer"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorEngagementRelation {
-    #[serde(rename = "engaged-with-bearer")]
-    EngagedWithBearer,
-    #[serde(rename = "not-engaged-with-bearer")]
-    NotEngagedWithBearer,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorEngagementRelation {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::EngagedWithBearer => f.write_str("engaged-with-bearer"),
-            Self::NotEngagedWithBearer => f.write_str("not-engaged-with-bearer"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorEngagementRelation {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "engaged-with-bearer" => Ok(Self::EngagedWithBearer),
-            "not-engaged-with-bearer" => Ok(Self::NotEngagedWithBearer),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`ForEachUnitEffectSelectorExcludedKeywordsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorExcludedKeywordsItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorExcludedKeywordsItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorExcludedKeywordsItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///  "default": "all",
-///  "type": "string",
-///  "enum": [
-///    "all",
-///    "any"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorKeywordMatch {
-    #[serde(rename = "all")]
-    All,
-    #[serde(rename = "any")]
-    Any,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorKeywordMatch {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::All => f.write_str("all"),
-            Self::Any => f.write_str("any"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorKeywordMatch {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "all" => Ok(Self::All),
-            "any" => Ok(Self::Any),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for ForEachUnitEffectSelectorKeywordMatch {
-    fn default() -> Self {
-        ForEachUnitEffectSelectorKeywordMatch::All
-    }
-}
-///`ForEachUnitEffectSelectorKeywordsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorKeywordsItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorKeywordsItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorKeywordsItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorKeywordsItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorKeywordsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorKeywordsItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///  "type": "string",
-///  "enum": [
-///    "bearer-unit"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorMemberOf {
-    #[serde(rename = "bearer-unit")]
-    BearerUnit,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorMemberOf {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::BearerUnit => f.write_str("bearer-unit"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorMemberOf {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "bearer-unit" => Ok(Self::BearerUnit),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`ForEachUnitEffectSelectorModelNamesItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorModelNamesItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorModelNamesItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorModelNamesItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorModelNamesItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorModelNamesItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorModelNamesItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`ForEachUnitEffectSelectorOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Origin of the engagement_relation gate.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Origin of the engagement_relation gate.",
-///  "type": "string",
-///  "enum": [
-///    "bearer",
-///    "bearer-unit",
-///    "bearer-transport"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorReference {
-    #[serde(rename = "bearer")]
-    Bearer,
-    #[serde(rename = "bearer-unit")]
-    BearerUnit,
-    #[serde(rename = "bearer-transport")]
-    BearerTransport,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorReference {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Bearer => f.write_str("bearer"),
-            Self::BearerUnit => f.write_str("bearer-unit"),
-            Self::BearerTransport => f.write_str("bearer-transport"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorReference {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "bearer" => Ok(Self::Bearer),
-            "bearer-unit" => Ok(Self::BearerUnit),
-            "bearer-transport" => Ok(Self::BearerTransport),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Whether each iteration binds a whole unit or one matching model.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Whether each iteration binds a whole unit or one matching model.",
-///  "default": "unit",
-///  "type": "string",
-///  "enum": [
-///    "unit",
-///    "model"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorTargetKind {
-    #[serde(rename = "unit")]
-    Unit,
-    #[serde(rename = "model")]
-    Model,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorTargetKind {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Unit => f.write_str("unit"),
-            Self::Model => f.write_str("model"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorTargetKind {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "unit" => Ok(Self::Unit),
-            "model" => Ok(Self::Model),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for ForEachUnitEffectSelectorTargetKind {
-    fn default() -> Self {
-        ForEachUnitEffectSelectorTargetKind::Unit
-    }
 }
 ///`ForEachUnitEffectType`
 ///
@@ -26579,6 +25551,14 @@ pub struct ModelProfileConditionParameters {
 ///        "threshold"
 ///      ],
 ///      "properties": {
+///        "comparison": {
+///          "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///          "default": "gte",
+///          "enum": [
+///            "gte",
+///            "lte"
+///          ]
+///        },
 ///        "dice": {
 ///          "oneOf": [
 ///            {
@@ -26591,6 +25571,10 @@ pub struct ModelProfileConditionParameters {
 ///            }
 ///          ]
 ///        },
+///        "for_each": {
+///          "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
+///          "$ref": "#/$defs/unit-selector"
+///        },
 ///        "per_model": {
 ///          "enum": [
 ///            "target",
@@ -26598,9 +25582,10 @@ pub struct ModelProfileConditionParameters {
 ///          ]
 ///        },
 ///        "threshold": {
+///          "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\").",
 ///          "type": "integer",
 ///          "maximum": 6.0,
-///          "minimum": 2.0
+///          "minimum": 1.0
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -26713,6 +25698,14 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///    "threshold"
 ///  ],
 ///  "properties": {
+///    "comparison": {
+///      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///      "default": "gte",
+///      "enum": [
+///        "gte",
+///        "lte"
+///      ]
+///    },
 ///    "dice": {
 ///      "oneOf": [
 ///        {
@@ -26725,6 +25718,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///        }
 ///      ]
 ///    },
+///    "for_each": {
+///      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
+///      "$ref": "#/$defs/unit-selector"
+///    },
 ///    "per_model": {
 ///      "enum": [
 ///        "target",
@@ -26732,9 +25729,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///      ]
 ///    },
 ///    "threshold": {
+///      "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\").",
 ///      "type": "integer",
 ///      "maximum": 6.0,
-///      "minimum": 2.0
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -26744,10 +25742,101 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct MortalWoundsEffectModifierRoll {
+    ///gte: a die at or above threshold succeeds ("for each 5+"); lte: a die at or below it ("for each 1").
+    #[serde(default = "defaults::mortal_wounds_effect_modifier_roll_comparison")]
+    pub comparison: MortalWoundsEffectModifierRollComparison,
     pub dice: MortalWoundsEffectModifierRollDice,
+    ///One die (dice per candidate) for each unit or model the selector matches ("one D6 for each WRACKS model in your unit"); per_model names the two fixed sets.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_each: ::std::option::Option<UnitSelector>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per_model: ::std::option::Option<MortalWoundsEffectModifierRollPerModel>,
-    pub threshold: i64,
+    ///The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: "for each 1").
+    pub threshold: ::std::num::NonZeroU64,
+}
+///gte: a die at or above threshold succeeds ("for each 5+"); lte: a die at or below it ("for each 1").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///  "default": "gte",
+///  "enum": [
+///    "gte",
+///    "lte"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MortalWoundsEffectModifierRollComparison {
+    #[serde(rename = "gte")]
+    Gte,
+    #[serde(rename = "lte")]
+    Lte,
+}
+impl ::std::fmt::Display for MortalWoundsEffectModifierRollComparison {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Gte => f.write_str("gte"),
+            Self::Lte => f.write_str("lte"),
+        }
+    }
+}
+impl ::std::str::FromStr for MortalWoundsEffectModifierRollComparison {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "gte" => Ok(Self::Gte),
+            "lte" => Ok(Self::Lte),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for MortalWoundsEffectModifierRollComparison {
+    fn default() -> Self {
+        MortalWoundsEffectModifierRollComparison::Gte
+    }
 }
 ///`MortalWoundsEffectModifierRollDice`
 ///
@@ -67120,6 +66209,933 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitRole {
         value.parse()
     }
 }
+///Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.",
+///  "type": "object",
+///  "required": [
+///    "owner"
+///  ],
+///  "properties": {
+///    "bind_as": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "eligibility": {
+///      "$ref": "#/$defs/condition"
+///    },
+///    "engagement_relation": {
+///      "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///      "type": "string",
+///      "enum": [
+///        "engaged-with-bearer",
+///        "not-engaged-with-bearer"
+///      ]
+///    },
+///    "excluded_keywords": {
+///      "description": "A candidate with any listed keyword is excluded.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "keyword_match": {
+///      "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
+///      "default": "all",
+///      "type": "string",
+///      "enum": [
+///        "all",
+///        "any"
+///      ]
+///    },
+///    "keywords": {
+///      "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1
+///    },
+///    "member_of": {
+///      "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
+///      "type": "string",
+///      "enum": [
+///        "bearer-unit",
+///        "embarked-in-bearer",
+///        "target"
+///      ]
+///    },
+///    "model_names": {
+///      "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "owner": {
+///      "type": "string",
+///      "enum": [
+///        "friendly",
+///        "enemy",
+///        "any"
+///      ]
+///    },
+///    "reference": {
+///      "description": "Origin of the engagement_relation gate.",
+///      "type": "string",
+///      "enum": [
+///        "bearer",
+///        "bearer-unit",
+///        "bearer-transport"
+///      ]
+///    },
+///    "target_kind": {
+///      "description": "Whether each iteration binds a whole unit or one matching model.",
+///      "default": "unit",
+///      "type": "string",
+///      "enum": [
+///        "unit",
+///        "model"
+///      ]
+///    },
+///    "within_inches": {
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "within_objective": {
+///      "$ref": "#/$defs/selection-reference"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitSelector {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bind_as: ::std::option::Option<UnitSelectorBindAs>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligibility: ::std::option::Option<Condition>,
+    ///Candidate engagement relation to the bearer or bearer-unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub engagement_relation: ::std::option::Option<UnitSelectorEngagementRelation>,
+    ///A candidate with any listed keyword is excluded.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_keywords: ::std::option::Option<Vec<UnitSelectorExcludedKeywordsItem>>,
+    ///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+    #[serde(default = "defaults::unit_selector_keyword_match")]
+    pub keyword_match: UnitSelectorKeywordMatch,
+    ///Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keywords: ::std::vec::Vec<UnitSelectorKeywordsItem>,
+    ///Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub member_of: ::std::option::Option<UnitSelectorMemberOf>,
+    ///Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model_names: ::std::option::Option<Vec<UnitSelectorModelNamesItem>>,
+    pub owner: UnitSelectorOwner,
+    ///Origin of the engagement_relation gate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reference: ::std::option::Option<UnitSelectorReference>,
+    ///Whether each iteration binds a whole unit or one matching model.
+    #[serde(default = "defaults::unit_selector_target_kind")]
+    pub target_kind: UnitSelectorTargetKind,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub within_inches: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub within_objective: ::std::option::Option<SelectionReference>,
+}
+///`UnitSelectorBindAs`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorBindAs(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorBindAs {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorBindAs> for ::std::string::String {
+    fn from(value: UnitSelectorBindAs) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorBindAs {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Candidate engagement relation to the bearer or bearer-unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///  "type": "string",
+///  "enum": [
+///    "engaged-with-bearer",
+///    "not-engaged-with-bearer"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorEngagementRelation {
+    #[serde(rename = "engaged-with-bearer")]
+    EngagedWithBearer,
+    #[serde(rename = "not-engaged-with-bearer")]
+    NotEngagedWithBearer,
+}
+impl ::std::fmt::Display for UnitSelectorEngagementRelation {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EngagedWithBearer => f.write_str("engaged-with-bearer"),
+            Self::NotEngagedWithBearer => f.write_str("not-engaged-with-bearer"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorEngagementRelation {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "engaged-with-bearer" => Ok(Self::EngagedWithBearer),
+            "not-engaged-with-bearer" => Ok(Self::NotEngagedWithBearer),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`UnitSelectorExcludedKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorExcludedKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorExcludedKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorExcludedKeywordsItem> for ::std::string::String {
+    fn from(value: UnitSelectorExcludedKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorExcludedKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorExcludedKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
+///  "default": "all",
+///  "type": "string",
+///  "enum": [
+///    "all",
+///    "any"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorKeywordMatch {
+    #[serde(rename = "all")]
+    All,
+    #[serde(rename = "any")]
+    Any,
+}
+impl ::std::fmt::Display for UnitSelectorKeywordMatch {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::All => f.write_str("all"),
+            Self::Any => f.write_str("any"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorKeywordMatch {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "all" => Ok(Self::All),
+            "any" => Ok(Self::Any),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for UnitSelectorKeywordMatch {
+    fn default() -> Self {
+        UnitSelectorKeywordMatch::All
+    }
+}
+///`UnitSelectorKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorKeywordsItem> for ::std::string::String {
+    fn from(value: UnitSelectorKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
+///  "type": "string",
+///  "enum": [
+///    "bearer-unit",
+///    "embarked-in-bearer",
+///    "target"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorMemberOf {
+    #[serde(rename = "bearer-unit")]
+    BearerUnit,
+    #[serde(rename = "embarked-in-bearer")]
+    EmbarkedInBearer,
+    #[serde(rename = "target")]
+    Target,
+}
+impl ::std::fmt::Display for UnitSelectorMemberOf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BearerUnit => f.write_str("bearer-unit"),
+            Self::EmbarkedInBearer => f.write_str("embarked-in-bearer"),
+            Self::Target => f.write_str("target"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorMemberOf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer-unit" => Ok(Self::BearerUnit),
+            "embarked-in-bearer" => Ok(Self::EmbarkedInBearer),
+            "target" => Ok(Self::Target),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`UnitSelectorModelNamesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorModelNamesItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorModelNamesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorModelNamesItem> for ::std::string::String {
+    fn from(value: UnitSelectorModelNamesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorModelNamesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorModelNamesItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitSelectorOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "friendly",
+///    "enemy",
+///    "any"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorOwner {
+    #[serde(rename = "friendly")]
+    Friendly,
+    #[serde(rename = "enemy")]
+    Enemy,
+    #[serde(rename = "any")]
+    Any,
+}
+impl ::std::fmt::Display for UnitSelectorOwner {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Friendly => f.write_str("friendly"),
+            Self::Enemy => f.write_str("enemy"),
+            Self::Any => f.write_str("any"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorOwner {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "friendly" => Ok(Self::Friendly),
+            "enemy" => Ok(Self::Enemy),
+            "any" => Ok(Self::Any),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Origin of the engagement_relation gate.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Origin of the engagement_relation gate.",
+///  "type": "string",
+///  "enum": [
+///    "bearer",
+///    "bearer-unit",
+///    "bearer-transport"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorReference {
+    #[serde(rename = "bearer")]
+    Bearer,
+    #[serde(rename = "bearer-unit")]
+    BearerUnit,
+    #[serde(rename = "bearer-transport")]
+    BearerTransport,
+}
+impl ::std::fmt::Display for UnitSelectorReference {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Bearer => f.write_str("bearer"),
+            Self::BearerUnit => f.write_str("bearer-unit"),
+            Self::BearerTransport => f.write_str("bearer-transport"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorReference {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer" => Ok(Self::Bearer),
+            "bearer-unit" => Ok(Self::BearerUnit),
+            "bearer-transport" => Ok(Self::BearerTransport),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Whether each iteration binds a whole unit or one matching model.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whether each iteration binds a whole unit or one matching model.",
+///  "default": "unit",
+///  "type": "string",
+///  "enum": [
+///    "unit",
+///    "model"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorTargetKind {
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "model")]
+    Model,
+}
+impl ::std::fmt::Display for UnitSelectorTargetKind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+            Self::Model => f.write_str("model"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorTargetKind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            "model" => Ok(Self::Model),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for UnitSelectorTargetKind {
+    fn default() -> Self {
+        UnitSelectorTargetKind::Unit
+    }
+}
 ///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
 ///
 /// <details><summary>JSON schema</summary>
@@ -70261,11 +70277,8 @@ pub mod defaults {
     pub(super) fn faction_keyword_limits_item_mode() -> super::FactionKeywordLimitsItemMode {
         super::FactionKeywordLimitsItemMode::Units
     }
-    pub(super) fn for_each_unit_effect_selector_keyword_match() -> super::ForEachUnitEffectSelectorKeywordMatch {
-        super::ForEachUnitEffectSelectorKeywordMatch::All
-    }
-    pub(super) fn for_each_unit_effect_selector_target_kind() -> super::ForEachUnitEffectSelectorTargetKind {
-        super::ForEachUnitEffectSelectorTargetKind::Unit
+    pub(super) fn mortal_wounds_effect_modifier_roll_comparison() -> super::MortalWoundsEffectModifierRollComparison {
+        super::MortalWoundsEffectModifierRollComparison::Gte
     }
     pub(super) fn named_objective_state_clears() -> super::NamedObjectiveStateClears {
         super::NamedObjectiveStateClears::Never
@@ -70296,6 +70309,12 @@ pub mod defaults {
     }
     pub(super) fn select_units_effect_selector_variant1_target_kind() -> super::SelectUnitsEffectSelectorVariant1TargetKind {
         super::SelectUnitsEffectSelectorVariant1TargetKind::Unit
+    }
+    pub(super) fn unit_selector_keyword_match() -> super::UnitSelectorKeywordMatch {
+        super::UnitSelectorKeywordMatch::All
+    }
+    pub(super) fn unit_selector_target_kind() -> super::UnitSelectorTargetKind {
+        super::UnitSelectorTargetKind::Unit
     }
 }
 /// Deserializes by the node's `type` tag: only the matching variant is attempted.

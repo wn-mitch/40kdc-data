@@ -181,7 +181,10 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const held = leaf.parameters.held_in === undefined ? {} : { placement: closed(leaf, "held_in") };
       // "… and set it up anywhere on the battlefield": the set-up folded in (compile-set-up-placement.ts).
       const placed = foldedPlacement(leaf, leaf.parameters.set_up_placement);
-      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...copy, ...held, ...placed } };
+      // Folded from a unit-size qualifier (compile-model-state.ts): how many models the new unit contains.
+      const size = leaf.parameters.model_count;
+      if (size !== undefined && (join || source !== "datasheet")) throw new CompileError("Only a new unit of a named datasheet takes a size; a copy or models joining a unit already say how many.");
+      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...(size !== undefined ? { model_count: structuredClone(size) } : {}), ...copy, ...held, ...placed } };
     }
     case "battle-shock-state": {
       const recipient = String(closed(leaf, "recipient"));

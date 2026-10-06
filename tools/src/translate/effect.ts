@@ -385,7 +385,14 @@ function referenceOrigin(reference: unknown): string {
   return reference === "bearer-unit" ? "this model's unit" : "the bearer";
 }
 
-function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
+/** Where a selector's member_of puts its models. */
+const MEMBER_OF: Record<string, string> = {
+  "bearer-unit": " in this model's unit",
+  "embarked-in-bearer": " embarked within this model",
+  target: " in the target unit",
+};
+
+export function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
   const keywordList = Array.isArray(sel.keywords)
     ? sel.keywords.map((keyword) => titleCase(jstr(keyword)))
     : [];
@@ -408,7 +415,9 @@ function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
         : "";
   const noun = sel.target_kind === "model" ? "model" : "unit";
   const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
-  return `${jstr(sel.owner)} ${keywords}${noun}${selectionModelFilters(sel)}${sel.member_of === "bearer-unit" ? " in this model's unit" : ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
+  // owner any: "each unit within 6\" of …", with no side word.
+  const owner = sel.owner === "any" ? "" : `${jstr(sel.owner)} `;
+  return `${owner}${keywords}${noun}${selectionModelFilters(sel)}${MEMBER_OF[String(sel.member_of)] ?? ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
 }
 
 /**

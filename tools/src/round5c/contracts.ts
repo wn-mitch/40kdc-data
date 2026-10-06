@@ -23,6 +23,7 @@ import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-famil
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
+import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
@@ -97,6 +98,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
   ...GRANTED_FAMILIES,
+  ...COUNT_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
 ]));
@@ -169,7 +171,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeGapContainerParameters(family, input, version)
     ?? normalizeMissionPredicateParameters(family, input)
     ?? normalizeNamedAbilityParameters(family, input)
-    ?? normalizeGrantedParameters(family, input);
+    ?? normalizeGrantedParameters(family, input)
+    ?? normalizeCountParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

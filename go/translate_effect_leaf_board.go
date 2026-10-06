@@ -49,12 +49,33 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 			each = " for each model in the target unit"
 		case "this":
 			each = " for each model in this unit"
+		default:
+			if selector, ok := asMap(roll["for_each"]); ok && selector != nil {
+				each = " for each " + forEachUnitSubject(selector)
+			}
 		}
+		// A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
 		dice := diceCase(roll["dice"])
 		if each != "" {
 			dice = "one " + dice
 		}
-		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
+		if count := ejstr(roll["dice"]); plainCountRe.MatchString(count) {
+			if each != "" && count == "1" {
+				dice = "one D6"
+			} else {
+				dice = count + " D6"
+			}
+		}
+		// "for each 1": a die at or under the threshold succeeds.
+		band := ejstr(roll["threshold"]) + "+"
+		if roll["comparison"] == "lte" {
+			if f, ok := roll["threshold"].(float64); ok && f == 1 {
+				band = "1"
+			} else {
+				band = "result of " + ejstr(roll["threshold"]) + " or less"
+			}
+		}
+		return "roll " + dice + each + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -66,6 +87,9 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 	}
 	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic + cap
 }
+
+// plainCountRe matches a plain number of dice ("7"), which are that many D6.
+var plainCountRe = regexp.MustCompile(`^\d+$`)
 
 var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",

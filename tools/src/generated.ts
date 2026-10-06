@@ -3742,52 +3742,59 @@ export interface SelectUnitsEffect {
  */
 export interface ForEachUnitEffect {
   type: "for-each-unit";
-  selector: {
-    owner: "friendly" | "enemy";
-    /**
-     * Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
-     *
-     * @minItems 1
-     */
-    keywords?: [string, ...string[]];
-    /**
-     * Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-     */
-    keyword_match?: "all" | "any";
-    /**
-     * Whether each iteration binds a whole unit or one matching model.
-     */
-    target_kind?: "unit" | "model";
-    within_inches?: number;
-    /**
-     * Candidate engagement relation to the bearer or bearer-unit.
-     */
-    engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
-    /**
-     * Origin of the engagement_relation gate.
-     */
-    reference?: "bearer" | "bearer-unit" | "bearer-transport";
-    /**
-     * Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-     */
-    member_of?: "bearer-unit";
-    /**
-     * Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
-     *
-     * @minItems 1
-     */
-    model_names?: [string, ...string[]];
-    /**
-     * A candidate with any listed keyword is excluded.
-     *
-     * @minItems 1
-     */
-    excluded_keywords?: [string, ...string[]];
-    bind_as?: string;
-    eligibility?: AbilityDSLCondition2;
-    within_objective?: SelectionReference;
-  };
+  selector: UnitSelector;
   effect: EffectNode;
+}
+/**
+ * Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "unit-selector".
+ */
+export interface UnitSelector {
+  owner: "friendly" | "enemy" | "any";
+  /**
+   * Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
+   *
+   * @minItems 1
+   */
+  keywords?: [string, ...string[]];
+  /**
+   * Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+   */
+  keyword_match?: "all" | "any";
+  /**
+   * Whether each iteration binds a whole unit or one matching model.
+   */
+  target_kind?: "unit" | "model";
+  within_inches?: number;
+  /**
+   * Candidate engagement relation to the bearer or bearer-unit.
+   */
+  engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
+  /**
+   * Origin of the engagement_relation gate.
+   */
+  reference?: "bearer" | "bearer-unit" | "bearer-transport";
+  /**
+   * Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+   */
+  member_of?: "bearer-unit" | "embarked-in-bearer" | "target";
+  /**
+   * Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * A candidate with any listed keyword is excluded.
+   *
+   * @minItems 1
+   */
+  excluded_keywords?: [string, ...string[]];
+  bind_as?: string;
+  eligibility?: AbilityDSLCondition2;
+  within_objective?: SelectionReference;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4706,9 +4713,7 @@ export interface MortalWoundsEffect {
     max?: number;
     per?: "model" | "success";
     roll?: {
-      dice: number | string;
-      threshold: number;
-      per_model?: "target" | "this";
+      [k: string]: unknown;
     };
     range?: RangeRef;
     psychic?: true;

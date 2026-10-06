@@ -14,6 +14,7 @@ import {
   abilityLabel,
 } from "./effect-words.js";
 import { expiryTrail } from "./expiry.js";
+import { forEachUnitSubject } from "./effect.js";
 import { placePhrase, placementLimits, placementPhrase } from "./effect-placement.js";
 
 function wounds(n: string, noun = "mortal wound"): string {
@@ -31,9 +32,14 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   const cap = m.max != null ? ` (to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"})` : "";
   const roll = m.roll as P | undefined;
   if (roll != null) {
-    const each = roll.per_model === "target" ? " for each model in the target unit" : roll.per_model === "this" ? " for each model in this unit" : "";
-    const dice = each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
-    return `roll ${dice}${each}: for each ${jstr(roll.threshold)}+, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
+    const each = roll.per_model === "target" ? " for each model in the target unit" : roll.per_model === "this" ? " for each model in this unit"
+      : roll.for_each != null ? ` for each ${forEachUnitSubject(roll.for_each as Record<string, unknown>)}` : "";
+    // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
+    const many = /^\d+$/u.test(jstr(roll.dice)) ? Number(roll.dice) : null;
+    const dice = many !== null ? (each && many === 1 ? "one D6" : `${many} D6`) : each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
+    // "for each 1": a die at or under the threshold succeeds.
+    const band = roll.comparison !== "lte" ? `${jstr(roll.threshold)}+` : Number(roll.threshold) === 1 ? "1" : `result of ${jstr(roll.threshold)} or less`;
+    return `roll ${dice}${each}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
   return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}${cap}`;

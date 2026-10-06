@@ -12,6 +12,8 @@ const QUALIFIERS: Record<string, { owners: readonly string[]; key: string }> = {
   "wounds-remaining": { owners: ["set-up", "return-models"], key: "wounds_remaining" },
   "starting-strength": { owners: ["set-up", "split-unit"], key: "starting_strength" },
   "leaves-attached-unit": { owners: ["set-up"], key: "detach" },
+  // "contains 1 model" (and "for each model in this unit", compile-count-scale.ts): the added unit's size.
+  "unit-size": { owners: ["add-unit"], key: "model_count" },
 };
 
 const isQualifier = (leaf: CompileLeaf) => leaf.role === "CONDITION" && leaf.family_id in QUALIFIERS;
@@ -19,12 +21,13 @@ const isQualifier = (leaf: CompileLeaf) => leaf.role === "CONDITION" && leaf.fam
 /** The value a qualifier sets on its effect; a return-models leaf keeps its wounds as count strings. */
 function valueFor(qualifier: CompileLeaf, owner: CompileLeaf): unknown {
   if (qualifier.family_id === "leaves-attached-unit") return true;
+  if (qualifier.family_id === "unit-size") return qualifier.parameters.count ?? qualifier.parameters.models;
   const value = qualifier.parameters.value;
   if (value === undefined) throw new CompileError(`A ${qualifier.family_id} qualifier needs a reviewed value.`);
   return owner.family_id === "return-models" && typeof value === "number" ? String(value) : value;
 }
 
-/** Fold every wounds-remaining, starting-strength and leaves-attached-unit leaf into its effect. */
+/** Fold every wounds-remaining, starting-strength, leaves-attached-unit and unit-size leaf into its effect. */
 export function foldModelState(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] {
   if (!leaves.some(isQualifier)) return leaves;
   const result = [...leaves];
@@ -38,6 +41,8 @@ export function foldModelState(leaves: readonly CompileLeaf[]): readonly Compile
       if ((other.fragment ?? null) !== (leaf.fragment ?? null)) break;
       // A new moment between them starts another rule; the qualifier cannot reach back past it.
       if (other.role === "EVENT") break;
+      // "Add a new X unit … set it up … It contains 1 model": the size is the added unit's, past its own set-up.
+      if (leaf.family_id === "unit-size" && other.family_id === "set-up") continue;
       if (other.role === "EFFECT") { ownerAt = index; break; }
     }
     if (ownerAt === -1) throw new CompileError(`A ${leaf.family_id} qualifier needs a ${owners.join(" or ")} effect before it in its fragment.`);

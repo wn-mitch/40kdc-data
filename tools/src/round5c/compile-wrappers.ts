@@ -115,11 +115,27 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
   if (leaf.parameters.scope === undefined) throw new CompileError("A bare for-each-unit-select (\"each\") needs a unit-filter right after it, in its fragment.");
   // A bare quantifier's folded unit-filter (compile-unit-filters.ts) narrows the units as select-unit's does.
   const filter = (leaf.parameters.filter ?? {}) as UnitFilter;
-  const eligibility = filterEligibility(filter);
+  const scope = closed(leaf, "scope");
+  // "within 6\" of it", measured to a unit other than the bearer (compile-unit-filters.ts).
+  const near = leaf.parameters.near as { of: string; inches: number } | undefined;
+  if (near && leaf.parameters.distance === "within") throw new CompileError("A for-each's units are within one range; this one names two.");
+  const within: Node | null = near ? { type: "within", parameters: { of: near.of, range: { inches: near.inches } } } : null;
+  let eligibility: Node | null;
+  if (leaf.parameters.including === "target") {
+    // "For the target unit and one D6 for each other enemy unit within 6\" of it": the target, or
+    // any unit the rest names. "Other" there is other than the target, which the target branch holds.
+    const { other: _other, ...rest } = filter;
+    if (leaf.parameters.distance === "within" || leaf.parameters.engaged_with !== undefined) throw new CompileError("A for-each that also takes the target cannot range from the bearer; the range would narrow the target too.");
+    if (rest.keywords?.length || rest.excluded_keywords?.length) throw new CompileError("A for-each that also takes the target cannot narrow by keyword; the keywords would narrow the target too.");
+    const others = filterEligibility(rest, within);
+    if (!others) throw new CompileError("A for-each that also takes the target needs a range or a filter naming the other units.");
+    eligibility = { operator: "or", operands: [{ type: "same-unit", parameters: { as: "defender" } }, others] };
+  } else eligibility = filterEligibility(filter, within);
   return {
     type: "for-each-unit",
     selector: {
-      owner: closed(leaf, "scope") === "friendly" ? "friendly" : "enemy",
+      // A quantifier over "each unit" of either side takes any unit.
+      owner: scope === "friendly" ? "friendly" : scope === "any" ? "any" : "enemy",
       ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
       ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
       ...(eligibility ? { eligibility } : {}),

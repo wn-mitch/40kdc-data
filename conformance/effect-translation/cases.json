@@ -6253,7 +6253,7 @@
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Select one enemy unit within 8\" visible to the bearer: roll 7: for each 4+, that unit suffers 1 mortal wound.\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, NURGLE (excluding MONSTER)."
+      "text": "Until the end of the phase:\n  -> Select one enemy unit within 8\" visible to the bearer: roll 7 D6: for each 4+, that unit suffers 1 mortal wound.\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, NURGLE (excluding MONSTER)."
     }
   },
   {
@@ -23744,6 +23744,268 @@
     },
     "expected": {
       "text": "Add 1 to this model's Objective Control characteristic.\n-> Pale Shroud: the unit has a 5+ invulnerable save.\n-> When the unit is selected to fight, you may use this ability, once per battle per army, use Rallying Cry, until the end of the phase: add 1 to the Attacks characteristic of melee weapons equipped by models in this unit."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-member-keyword",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "max": 6,
+        "roll": {
+          "dice": 1,
+          "threshold": 3,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "keywords": [
+              "ALPHA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly ALPHA model in this model's unit: for each 3+, the selected unit suffers 1 mortal wound (to a maximum of 6 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-embarked",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 5,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "embarked-in-bearer"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly model embarked within this model: for each 5+, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-engaged",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged",
+                "with": "selected-unit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly model in this model's unit that is engaged with the selected unit: for each 4+, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-one",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 1,
+          "comparison": "lte",
+          "per_model": "target"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each model in the target unit: for each 1, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-two",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 3,
+          "threshold": 2,
+          "comparison": "lte"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll 3 D6: for each result of 2 or less, the unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "for-each-unit-any-side-including-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "any",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": "defender"
+              }
+            },
+            {
+              "type": "within",
+              "parameters": {
+                "of": "defender",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "designate",
+          "target": "recipient",
+          "modifier": {
+            "tag": "struck-by-explosive-debris"
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  For each unit that is the same unit as the target unit or that is within 6\" of the target unit:\n    -> Roll one D6: on a 4+, the unit is struck by explosive debris."
+    }
+  },
+  {
+    "caseId": "for-each-unit-models-in-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "enemy",
+        "target_kind": "model",
+        "member_of": "target"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  For each enemy model in the target unit:\n    -> Roll one D6: on a 6+, the target suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-arcing-energies",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-arcing-energies"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by arcing energies."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-concussive-wave",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-concussive-wave"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by concussive wave."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-spores",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-spores"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by spores."
     }
   }
 ]

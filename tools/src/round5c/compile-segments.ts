@@ -17,8 +17,8 @@ type Node = Record<string, unknown>;
  * target lines) are the ability's header: they are compiled into every part. A header holding a
  * moment, a usage limit or a choice belongs to the whole ability only once, so such an ability
  * is not split. Sentences after a colon ("While …:" and its bullets) are the items it introduces,
- * so none of them opens a new part, and neither does a sentence naming "that unit" or "such a
- * weapon" from an earlier one.
+ * so none of them opens a new part (a colon before a roll's result band does not end its
+ * sentence), and neither does a sentence naming "that unit" or "such a weapon" from an earlier one.
  */
 
 const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*)?(?:each time|whenever|when|after|at the (?:start|end) of)\b/iu;
@@ -71,8 +71,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const listed: boolean[] = [];
   leaves.forEach((leaf, index) => {
     // Before the first leaf, a colon ("While … near a beacon:") still introduces what follows.
-    const ending = index > 0 ? sentenceBreak(leaves[index - 1]!, leaf, sourceText)
+    const found = index > 0 ? sentenceBreak(leaves[index - 1]!, leaf, sourceText)
       : between(sourceText, 0, leaf.start_byte).includes(":") ? "list" : "stop";
+    // "Roll one D6: on a 4+, …": a colon before a roll's result band continues the roll's sentence.
+    const ending = found === "list" && index > 0 && leaf.family_id === "roll-result" ? null : found;
     if (ending) {
       sentences.push([]);
       starts.push(index);

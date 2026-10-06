@@ -59,12 +59,27 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
   };
 }
 
-/** The filter's side; a model-level filter only where `models` says the fold can name models. */
-function side(filter: CompileLeaf, what: string, options: { models?: boolean } = {}): string {
+/** The filter's side; a model-level filter only where `models` says the fold can name models, "any" only where `anySide` allows it. */
+function side(filter: CompileLeaf, what: string, options: { models?: boolean; anySide?: boolean } = {}): string {
   if (filter.parameters.level === "model" && options.models !== true) throw new CompileError(`A unit-filter naming models has no DSL shape for ${what} yet.`);
   const value = String(filter.parameters.side);
-  if (value === "any") throw new CompileError(`A unit-filter for ${what} must say friendly or enemy.`);
+  if (value === "any" && options.anySide !== true) throw new CompileError(`A unit-filter for ${what} must say friendly or enemy.`);
   return value;
+}
+
+/** Units a distance after a quantifier's filter can be measured to, as the DSL's unit-refs. */
+const NEAR_REFS: Record<string, string> = { target: "defender", "selected-unit": "selected-unit", "event-subject": "event-subject", "event-object": "event-object", attacker: "attacker" };
+
+/**
+ * "within 6\" of it" after "each other enemy unit", measured to a unit other than the bearer
+ * (the attack's target, a selected unit): which units each pass takes.
+ */
+function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): Record<string, unknown> | null {
+  if (leaf?.family_id !== "unit-position" || leaf.fragment !== quantifier.fragment) return null;
+  const p = leaf.parameters;
+  if (p.kind !== "within" || p.subject !== AURA_RECIPIENT || p.negated === true || p.wholly === true) return null;
+  const of = NEAR_REFS[String(p.of)];
+  return of === undefined ? null : { of, inches: p.inches };
 }
 
 /**
@@ -233,9 +248,13 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.
-      out.push({ ...leaf, parameters: { scope: side(next!, "a for-each"), distance: "any", filter: filterOf(next!) } });
+      out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { anySide: true }), distance: "any", filter: filterOf(next!) } });
       index += 1;
       if (reach(out, list[index + 1])) index += 1;
+      else if (nearOther(list[index + 1], leaf)) {
+        out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, near: nearOther(list[index + 1], leaf) } };
+        index += 1;
+      }
       else if (engagedWithOwnUnit(list[index + 1], leaf)) {
         out[out.length - 1] = { ...out.at(-1)!, parameters: { ...out.at(-1)!.parameters, engaged_with: list[index + 1]!.parameters.with } };
         index += 1;
@@ -433,7 +452,7 @@ function pastOwners(list: readonly CompileLeaf[], index: number, filter: Compile
 }
 
 /** A for-each-unit-select with no parameters: the bare "each" whose units the next leaves name. */
-const bareForEach = (leaf: CompileLeaf) => leaf.family_id === "for-each-unit-select" && Object.keys(leaf.parameters).length === 0;
+const bareForEach = (leaf: CompileLeaf) => leaf.family_id === "for-each-unit-select" && Object.keys(leaf.parameters).every((key) => key === "including");
 
 /** "Engaged with your unit" about each pass's unit (bound to the recipient), in the quantifier's fragment. */
 function engagedWithOwnUnit(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): boolean {

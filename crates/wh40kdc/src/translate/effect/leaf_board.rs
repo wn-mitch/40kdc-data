@@ -7,6 +7,7 @@ use serde_json::{Map, Value};
 use super::leaf_move::*;
 use super::leaf_rules::*;
 use super::placement::{placement_limits, placement_phrase};
+use super::select::for_each_unit_subject;
 use super::words::*;
 use crate::translate::condition::{
     and_list, condition_lead_in_value, nn, obj, or_list, range_phrase, P,
@@ -60,19 +61,37 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
     };
     if let Some(roll) = nn(m, "roll") {
         let roll = obj(Some(roll));
-        let each = match sv(roll, "per_model") {
-            Some("target") => " for each model in the target unit",
-            Some("this") => " for each model in this unit",
-            _ => "",
+        let each = match (sv(roll, "per_model"), nn(roll, "for_each")) {
+            (Some("target"), _) => " for each model in the target unit".to_string(),
+            (Some("this"), _) => " for each model in this unit".to_string(),
+            (_, Some(selector)) => {
+                format!(" for each {}", for_each_unit_subject(obj(Some(selector))))
+            }
+            _ => String::new(),
         };
-        let dice = if each.is_empty() {
-            dice_case(roll.get("dice"))
+        // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
+        let count = jstr(roll.get("dice"));
+        let many = if !count.is_empty() && count.chars().all(|c| c.is_ascii_digit()) {
+            Some(count)
         } else {
-            format!("one {}", dice_case(roll.get("dice")))
+            None
+        };
+        let dice = match many {
+            Some(n) if !each.is_empty() && n == "1" => "one D6".to_string(),
+            Some(n) => format!("{n} D6"),
+            None if each.is_empty() => dice_case(roll.get("dice")),
+            None => format!("one {}", dice_case(roll.get("dice"))),
+        };
+        // "for each 1": a die at or under the threshold succeeds.
+        let band = if sv(roll, "comparison") != Some("lte") {
+            format!("{}+", jstr(roll.get("threshold")))
+        } else if roll.get("threshold").and_then(|t| t.as_f64()) == Some(1.0) {
+            "1".to_string()
+        } else {
+            format!("result of {} or less", jstr(roll.get("threshold")))
         };
         return format!(
-            "roll {dice}{each}: for each {}+, {who} {} {suffered}{psychic}{cap}",
-            jstr(roll.get("threshold")),
+            "roll {dice}{each}: for each {band}, {who} {} {suffered}{psychic}{cap}",
             v(&who, "suffers")
         );
     }

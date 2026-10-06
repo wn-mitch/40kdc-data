@@ -37,7 +37,7 @@ const body = (items: Planned[]): Node => {
  * that unit suffers 1 mortal wound", or one D6 for each model in this unit). The DSL expresses this only for mortal wounds, as a count
  * per success of a roll of `count` D6; anything else rolled per die has no DSL shape yet.
  */
-function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string): Node[] {
+function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
   for (const item of banded) {
@@ -45,11 +45,20 @@ function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: 
     if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
     const band = markers[0]!;
     if (Number(band.from) > 6) throw new CompileError("A per-die success band starts beyond a D6.");
-    if (Number(band.to ?? 6) !== 6) throw new CompileError("A per-die success band must reach 6 (\"for each 5+\").");
+    const to = Number(band.to ?? 6);
+    if (to > 6) throw new CompileError("A per-die success band reaches beyond a D6.");
+    // "for each 1": a band from the bottom face up to below the top is a success at or under its top.
+    const low = Number(band.from) === 1 && to < 6;
+    if (!low && to !== 6) throw new CompileError("A per-die success band must reach 6 (\"for each 5+\") or start at 1 (\"for each 1\").");
     if (item.leaf.family_id !== "mortal-wounds") throw new CompileError(`Rolling several dice folds only into mortal wounds per success; ${item.leaf.family_id} has no per-die DSL shape.`);
     const modifier = item.node.modifier as Node;
     modifier.per = "success";
-    modifier.roll = { dice: count, threshold: Number(band.from), ...(perModel ? { per_model: perModel === "target" ? "target" : "this" } : {}) };
+    modifier.roll = {
+      dice: count, threshold: low ? to : Number(band.from), ...(low ? { comparison: "lte" } : {}),
+      ...(perModel ? { per_model: perModel === "target" ? "target" : "this" } : {}),
+      // One die for each model the selector matches (compile-count-scale.ts).
+      ...(forEach ? { for_each: structuredClone(forEach) } : {}),
+    };
     item.gate = item.gate.filter((node) => !isRollMarker(node));
   }
   return planned.map((item) => gated(item.gate, item.node));
@@ -74,7 +83,11 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
   const die = String(rolls[0]!.parameters.dice);
   const count = rolls[0]!.parameters.count as number | undefined;
   const perModel = rolls[0]!.parameters.per_model as string | undefined;
-  if (count !== undefined || perModel !== undefined) return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel);
+  const forEach = rolls[0]!.parameters.for_each as Node | undefined;
+  if ((count !== undefined || perModel !== undefined || forEach !== undefined) && rolls[0]!.parameters.bonus !== undefined) {
+    throw new CompileError("Several dice rolled at once each read their own face; a bonus added to the result has no per-die DSL shape.");
+  }
+  if (count !== undefined || perModel !== undefined || forEach !== undefined) return perSuccess(planned, banded, die, count ?? 1, rolls[0]!.parameters.roll_var !== undefined, perModel, forEach);
   // "adding 1 to the result" (compile-preceding-roll.ts): the bands read the roll plus the bonus.
   const bonus = Number(rolls[0]!.parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${die}+${bonus}` : die;

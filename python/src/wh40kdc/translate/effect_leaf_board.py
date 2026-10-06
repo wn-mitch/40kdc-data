@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_leaf_army import (
 )
 from wh40kdc.translate.effect_placement import place_phrase, placement_limits, placement_phrase
 from wh40kdc.translate.effect_quantity import amount_of, is_literal, moved_phrase
+from wh40kdc.translate.effect_select import for_each_unit_subject
 from wh40kdc.translate.effect_words import (
     Ctx,
     and_list,
@@ -91,11 +92,25 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
             if per_model == "target"
             else " for each model in this unit"
             if per_model == "this"
+            else f" for each {for_each_unit_subject(_obj(roll['for_each']))}"
+            if roll.get("for_each") is not None
             else ""
         )
-        dice = f"one {dice_case(roll.get('dice'))}" if each else dice_case(roll.get("dice"))
+        # A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
+        count = jstr(roll.get("dice"))
+        if re.fullmatch(r"\d+", count):
+            dice = "one D6" if each and count == "1" else f"{count} D6"
+        else:
+            dice = f"one {dice_case(roll.get('dice'))}" if each else dice_case(roll.get("dice"))
+        # "for each 1": a die at or under the threshold succeeds.
+        if roll.get("comparison") != "lte":
+            band = f"{jstr(roll.get('threshold'))}+"
+        elif roll.get("threshold") == 1:
+            band = "1"
+        else:
+            band = f"result of {jstr(roll.get('threshold'))} or less"
         return (
-            f"roll {dice}{each}: for each {jstr(roll.get('threshold'))}+, {who} "
+            f"roll {dice}{each}: for each {band}, {who} "
             f"{v(who, 'suffers')} "
             f"{suffered}{psychic}{cap}"
         )

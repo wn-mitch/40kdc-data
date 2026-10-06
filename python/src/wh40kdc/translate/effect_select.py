@@ -199,6 +199,14 @@ def selected_context(ctx: Ctx, sel: Any) -> Ctx:
     }
 
 
+# Where a selector's member_of puts its models.
+_MEMBER_OF = {
+    "bearer-unit": " in this model's unit",
+    "embarked-in-bearer": " embarked within this model",
+    "target": " in the target unit",
+}
+
+
 def for_each_unit_subject(sel: Any) -> str:
     """ "enemy unit within 6\\"" — the ``for-each-unit`` selector phrase."""
     sel = _obj(sel)
@@ -236,9 +244,11 @@ def for_each_unit_subject(sel: Any) -> str:
         if sel.get("eligibility") is not None
         else ""
     )
-    member = " in this model's unit" if sel.get("member_of") == "bearer-unit" else ""
+    member = _MEMBER_OF.get(sel.get("member_of"), "")
+    # owner any: "each unit within 6\" of …", with no side word.
+    owner = "" if sel.get("owner") == "any" else f"{jstr(sel.get('owner'))} "
     return (
-        f"{jstr(sel.get('owner'))} "
+        f"{owner}"
         f"{keywords}{noun}{selection_model_filters(sel)}{member}{within}{engagement}"
         f"{eligibility}{selection_binding(sel)}"
     )

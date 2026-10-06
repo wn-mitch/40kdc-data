@@ -25,6 +25,7 @@ import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
 import { foldModelState } from "./compile-model-state.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
+import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
@@ -210,7 +211,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   try {
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(refs.leaves, refs.focus))), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
+    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(refs.leaves), refs.focus))), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

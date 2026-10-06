@@ -2190,19 +2190,63 @@
                     },
                     "threshold": {
                       "type": "integer",
-                      "minimum": 2,
-                      "maximum": 6
+                      "minimum": 1,
+                      "maximum": 6,
+                      "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\")."
                     },
                     "per_model": {
                       "enum": [
                         "target",
                         "this"
                       ]
+                    },
+                    "comparison": {
+                      "enum": [
+                        "gte",
+                        "lte"
+                      ],
+                      "default": "gte",
+                      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\")."
+                    },
+                    "for_each": {
+                      "$ref": "#/$defs/unit-selector",
+                      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets."
                     }
                   },
                   "required": [
                     "dice",
                     "threshold"
+                  ],
+                  "allOf": [
+                    {
+                      "not": {
+                        "required": [
+                          "per_model",
+                          "for_each"
+                        ]
+                      }
+                    },
+                    {
+                      "if": {
+                        "not": {
+                          "required": [
+                            "comparison"
+                          ],
+                          "properties": {
+                            "comparison": {
+                              "const": "lte"
+                            }
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "threshold": {
+                            "minimum": 2
+                          }
+                        }
+                      }
+                    }
                   ]
                 },
                 "range": {
@@ -5960,156 +6004,7 @@
           "const": "for-each-unit"
         },
         "selector": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "owner": {
-              "type": "string",
-              "enum": [
-                "friendly",
-                "enemy"
-              ]
-            },
-            "keywords": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them."
-            },
-            "keyword_match": {
-              "type": "string",
-              "enum": [
-                "all",
-                "any"
-              ],
-              "default": "all",
-              "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction."
-            },
-            "target_kind": {
-              "type": "string",
-              "enum": [
-                "unit",
-                "model"
-              ],
-              "default": "unit",
-              "description": "Whether each iteration binds a whole unit or one matching model."
-            },
-            "within_inches": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            },
-            "engagement_relation": {
-              "type": "string",
-              "enum": [
-                "engaged-with-bearer",
-                "not-engaged-with-bearer"
-              ],
-              "description": "Candidate engagement relation to the bearer or bearer-unit."
-            },
-            "reference": {
-              "type": "string",
-              "enum": [
-                "bearer",
-                "bearer-unit",
-                "bearer-transport"
-              ],
-              "description": "Origin of the engagement_relation gate."
-            },
-            "member_of": {
-              "type": "string",
-              "enum": [
-                "bearer-unit"
-              ],
-              "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
-            },
-            "model_names": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1,
-              "uniqueItems": true,
-              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
-            },
-            "excluded_keywords": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1,
-              "uniqueItems": true,
-              "description": "A candidate with any listed keyword is excluded."
-            },
-            "bind_as": {
-              "type": "string",
-              "minLength": 1
-            },
-            "eligibility": {
-              "$ref": "condition.schema.json"
-            },
-            "within_objective": {
-              "$ref": "#/$defs/selection-reference"
-            }
-          },
-          "required": [
-            "owner"
-          ],
-          "allOf": [
-            {
-              "if": {
-                "required": [
-                  "member_of"
-                ]
-              },
-              "then": {
-                "properties": {
-                  "target_kind": {
-                    "const": "model"
-                  },
-                  "owner": {
-                    "const": "friendly"
-                  }
-                },
-                "required": [
-                  "target_kind"
-                ]
-              }
-            },
-            {
-              "if": {
-                "required": [
-                  "model_names"
-                ]
-              },
-              "then": {
-                "required": [
-                  "target_kind"
-                ],
-                "properties": {
-                  "target_kind": {
-                    "const": "model"
-                  }
-                }
-              }
-            },
-            {
-              "if": {
-                "required": [
-                  "engagement_relation"
-                ]
-              },
-              "then": {
-                "required": [
-                  "reference"
-                ]
-              }
-            }
-          ]
+          "$ref": "#/$defs/unit-selector"
         },
         "effect": {
           "$ref": "#/$defs/effect-node"
@@ -6119,6 +6014,181 @@
         "type",
         "selector",
         "effect"
+      ]
+    },
+    "unit-selector": {
+      "type": "object",
+      "description": "Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.",
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "type": "string",
+          "enum": [
+            "friendly",
+            "enemy",
+            "any"
+          ]
+        },
+        "keywords": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them."
+        },
+        "keyword_match": {
+          "type": "string",
+          "enum": [
+            "all",
+            "any"
+          ],
+          "default": "all",
+          "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction."
+        },
+        "target_kind": {
+          "type": "string",
+          "enum": [
+            "unit",
+            "model"
+          ],
+          "default": "unit",
+          "description": "Whether each iteration binds a whole unit or one matching model."
+        },
+        "within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "engagement_relation": {
+          "type": "string",
+          "enum": [
+            "engaged-with-bearer",
+            "not-engaged-with-bearer"
+          ],
+          "description": "Candidate engagement relation to the bearer or bearer-unit."
+        },
+        "reference": {
+          "type": "string",
+          "enum": [
+            "bearer",
+            "bearer-unit",
+            "bearer-transport"
+          ],
+          "description": "Origin of the engagement_relation gate."
+        },
+        "member_of": {
+          "type": "string",
+          "enum": [
+            "bearer-unit",
+            "embarked-in-bearer",
+            "target"
+          ],
+          "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
+        },
+        "model_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+        },
+        "excluded_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "A candidate with any listed keyword is excluded."
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eligibility": {
+          "$ref": "condition.schema.json"
+        },
+        "within_objective": {
+          "$ref": "#/$defs/selection-reference"
+        }
+      },
+      "required": [
+        "owner"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "member_of"
+            ]
+          },
+          "then": {
+            "required": [
+              "target_kind"
+            ],
+            "properties": {
+              "target_kind": {
+                "const": "model"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "member_of"
+            ],
+            "properties": {
+              "member_of": {
+                "enum": [
+                  "bearer-unit",
+                  "embarked-in-bearer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "friendly"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "model_names"
+            ]
+          },
+          "then": {
+            "required": [
+              "target_kind"
+            ],
+            "properties": {
+              "target_kind": {
+                "const": "model"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "engagement_relation"
+            ]
+          },
+          "then": {
+            "required": [
+              "reference"
+            ]
+          }
+        }
       ]
     },
     "aura-effect": {

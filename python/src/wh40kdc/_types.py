@@ -1617,12 +1617,6 @@ class Modifier20(TypedDict):
     attacks: NotRequired[EventBoundReference]
 
 
-class Roll(TypedDict):
-    dice: int | str
-    threshold: int
-    per_model: NotRequired[Literal["target", "this"]]
-
-
 class WeaponRef22(TypedDict):
     weapon_var: str
 
@@ -2365,15 +2359,6 @@ class Modifier15(TypedDict):
     select: NotRequired[Select]
     ignore_consumed: NotRequired[Literal[True]]
     override: NotRequired[Override]
-
-
-class Modifier21(TypedDict):
-    count: Quantity
-    max: NotRequired[int]
-    per: NotRequired[Literal["model", "success"]]
-    roll: NotRequired[Roll]
-    range: NotRequired[RangeRef]
-    psychic: NotRequired[Literal[True]]
 
 
 class Modifier25(TypedDict):
@@ -3458,6 +3443,23 @@ class SingleEffect16(TypedDict):
     scaling: NotRequired[Scaling]
 
 
+class Roll(TypedDict):
+    dice: int | str
+    threshold: int
+    per_model: NotRequired[Literal["target", "this"]]
+    comparison: NotRequired[Literal["gte", "lte"]]
+    for_each: NotRequired[UnitSelector]
+
+
+class Modifier21(TypedDict):
+    count: Quantity
+    max: NotRequired[int]
+    per: NotRequired[Literal["model", "success"]]
+    roll: NotRequired[Roll]
+    range: NotRequired[RangeRef]
+    psychic: NotRequired[Literal[True]]
+
+
 class SingleEffect17(TypedDict):
     type: Literal["mortal-wounds"]
     target: UnitRef
@@ -4238,26 +4240,26 @@ class SelectUnitsEffect(TypedDict):
     effect: EffectNode
 
 
-class Selector2(TypedDict):
-    owner: Literal["friendly", "enemy"]
+class ForEachUnitEffect(TypedDict):
+    type: Literal["for-each-unit"]
+    selector: UnitSelector
+    effect: EffectNode
+
+
+class UnitSelector(TypedDict):
+    owner: Literal["friendly", "enemy", "any"]
     keywords: NotRequired[list[Keyword2]]
     keyword_match: NotRequired[Literal["all", "any"]]
     target_kind: NotRequired[Literal["unit", "model"]]
     within_inches: NotRequired[float]
     engagement_relation: NotRequired[Literal["engaged-with-bearer", "not-engaged-with-bearer"]]
     reference: NotRequired[Literal["bearer", "bearer-unit", "bearer-transport"]]
-    member_of: NotRequired[Literal["bearer-unit"]]
+    member_of: NotRequired[Literal["bearer-unit", "embarked-in-bearer", "target"]]
     model_names: NotRequired[list[ModelName]]
     excluded_keywords: NotRequired[list[ExcludedKeyword]]
     bind_as: NotRequired[str]
     eligibility: NotRequired[Condition]
     within_objective: NotRequired[SelectionReference]
-
-
-class ForEachUnitEffect(TypedDict):
-    type: Literal["for-each-unit"]
-    selector: Selector2
-    effect: EffectNode
 
 
 class Modifier58(TypedDict):

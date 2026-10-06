@@ -5,6 +5,7 @@
 
 import { activationModifier } from "./compile-activation.js";
 import { boardEffect } from "./compile-board-effects.js";
+import { applyCounts } from "./compile-scaling.js";
 import { containerEffect } from "./compile-containers.js";
 import { printedGrantEffect } from "./compile-granted.js";
 import { testEffect } from "./compile-test-effects.js";
@@ -96,6 +97,13 @@ function pickOne(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node
  * target this unit, where the attacker's rolls are modified.
  */
 export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean }): Node {
+  // A count folded onto the leaf (compile-count-scale.ts) applies to the whole node it lowers to.
+  const { scaling, per_item: perItem, ...parameters } = leaf.parameters;
+  if (scaling === undefined && perItem === undefined) return leafEffect(leaf, context);
+  return applyCounts({ scaling, per_item: perItem }, leafEffect({ ...leaf, parameters }, context));
+}
+
+function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node {
   const target = (subject: unknown): Node | string => {
     // Every unit a folded unit-filter matches (compile-unit-filters.ts): an army-wide grant.
     if (subject === "filtered-units") {

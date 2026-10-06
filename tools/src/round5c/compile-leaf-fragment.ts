@@ -41,6 +41,15 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     return { kind: "implicit", note: `No separate text: the set-up or returned model before it has ${wounds} remaining.` };
   }
   if (leaf.family_id === "starting-strength") return { kind: "implicit", note: `No separate text: the unit the set-up or split before it produces has a Starting Strength of ${String(leaf.parameters.value)}.` };
+  if (leaf.family_id === "count-scale") {
+    const per = leaf.parameters.per === 1 ? "once for each" : `once for every ${String(leaf.parameters.per)}`;
+    return { kind: "implicit", note: leaf.parameters.counts === "following-items"
+      ? "No separate text: the effect in its sentence applies once for each bulleted item after it whose conditions hold."
+      : `No separate text: the amount of the effect in its sentence applies ${per} of the units or models the unit-filter after it counts.` };
+  }
+  if (leaf.family_id === "scale-cap") return { kind: "implicit", note: `No separate text: the amount the count-scale in its sentence multiplies is at most ${String(leaf.parameters.max)}.` };
+  if (leaf.family_id === "membership") return { kind: "implicit", note: `No separate text: the counted models are ${String(leaf.parameters.relation).replaceAll("-", " ")} ${leaf.parameters.of === "this-model" ? "this model" : "this unit"}.` };
+  if (leaf.family_id === "unit-size") return { kind: "implicit", note: `No separate text: the unit the add-unit before it adds contains ${String(leaf.parameters.models)} ${leaf.parameters.models === 1 ? "model" : "models"}.` };
   if (leaf.family_id === "leaves-attached-unit") return { kind: "implicit", note: "No separate text: the model the set-up before it places is no longer part of an attached unit; it is set up as a unit of its own." };
   if (leaf.family_id === "weapon-ability-keyword") return { kind: "implicit", note: `No separate text: its reviewed weapon scope or ability-grant frame grants ${String(leaf.parameters.keyword)}.` };
   if (leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword === undefined) {
