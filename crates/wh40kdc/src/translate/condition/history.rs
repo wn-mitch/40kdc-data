@@ -303,6 +303,21 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             )
         }
         "used" => {
+            // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+            if window.and_then(Value::as_str) == Some("event")
+                && nn(f, "ability_keyword").is_none()
+                && nn(f, "same_rule_as").is_none()
+            {
+                let kind = nn(f, "kind").map_or("ability".to_string(), |k| st(Some(k)));
+                let rule = named_use_phrase(f).unwrap_or_else(|| in_progress_phrase(&kind));
+                let verb = if kind == "ability" || kind == "stratagem" {
+                    "using"
+                } else {
+                    "performing"
+                };
+                let not = if negated { "not " } else { "" };
+                return format!("{who} is {not}{verb} {rule}");
+            }
             if is(f, "kind", "action") {
                 let mut s = format!("{neg}{n}+ actions completed");
                 if let Some(id) = nn(f, "id") {

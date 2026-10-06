@@ -67,11 +67,28 @@ function triggerRoll(leaf: CompileLeaf): unknown {
   return closed(leaf, "roll");
 }
 
+/**
+ * "When this model uses its Foo ability", "each time a friendly unit performs the Bar Agile
+ * Manoeuvre": which rule was used (filter.id) and who used it. This unit is the DSL's default.
+ */
+function usedTrigger(leaf: CompileLeaf): Node {
+  const subject = leaf.parameters.subject;
+  if (subject !== undefined && leaf.parameters.subject_filter !== undefined) throw new CompileError("A used moment names who used the rule twice: by its subject and by the unit-filter before it.");
+  // An aura's recipient is no unit outside the aura: compile-named-ability.ts folds that moment into the trigger's proximity.
+  if (subject === "recipient") throw new CompileError("A used moment of an aura's recipient must follow its aura-range directly, in the same sentence, to become the trigger's subject and proximity.");
+  return {
+    event: "used",
+    filter: { kind: closed(leaf, "activity"), ...(leaf.parameters.id !== undefined ? { id: closed(leaf, "id") } : {}) },
+    ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
+    ...(subject !== undefined && subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
+  };
+}
+
 /** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
 const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
   "step-started": (leaf) => withTurn({ event: "step-started", filter: { step: closed(leaf, "step") } }, leaf),
-  used: (leaf) => ({ event: "used", filter: { kind: closed(leaf, "activity") }, ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}) }),
+  used: usedTrigger,
   "state-changed": (leaf) => ({ event: "state-changed", filter: { state: closed(leaf, "state") } }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
@@ -103,7 +120,19 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
   // Version 17: where a set-up moment brings the unit from ("set up … from Reserves").
   if (leaf.parameters.from !== undefined) filter.from = closed(leaf, "from");
+  // "Each time you target this unit with the Foo Stratagem": which Stratagem.
+  if (leaf.parameters.id !== undefined) {
+    if (filter.kind !== "stratagem") throw new CompileError("A targeting names its ability through a by-ability leaf, with the unit whose ability it is.");
+    filter.id = closed(leaf, "id");
+  }
   if (Object.keys(filter).length) node.filter = filter;
+  // "Selected by a friendly X unit's Foo ability" (compile-named-ability.ts): the selecting ability
+  // and its user; the trigger's subject is the selected unit, any unit unless the moment names one.
+  if (filter.kind === "ability") {
+    if (leaf.parameters.source_ability === undefined) throw new CompileError("A unit selected by an ability needs a by-ability leaf naming that ability and the unit whose ability it is.");
+    node.source_ability = structuredClone(leaf.parameters.source_ability);
+    node.subject ??= { owner: "any" };
+  }
   // "Each time you target the bearer with a Stratagem": what the moment was done to.
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
@@ -115,6 +144,17 @@ export function trigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.binds_event_variable !== undefined && leaf.family_id === "event") node.binds_event_variable = closed(leaf, "binds_event_variable");
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
   if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
+  // An aura's recipient's moment (compile-named-ability.ts): within the aura's range of its holder.
+  if (leaf.parameters.proximity !== undefined) {
+    const { of, inches } = leaf.parameters.proximity as { of: string; inches: number };
+    node.proximity = { of, range: { inches } };
+  }
+  // "Using its Foo ability" (compile-named-ability.ts): the moment's unit used that ability in it.
+  if (leaf.parameters.by_ability !== undefined) {
+    const subject = typeof node.subject === "string" ? node.subject : node.subject === undefined ? undefined : "event-subject";
+    const used: Node = { type: "happened", parameters: { event: "used", ...(subject !== undefined && subject !== "this-unit" ? { subject } : {}), filter: { kind: "ability", id: leaf.parameters.by_ability }, window: "event" } };
+    node.condition = node.condition === undefined ? used : { operator: "and", operands: [node.condition, used] };
+  }
   // A folded unit-filter after it ("allocated to an ADEPTA SORORITAS unit") names what it happens to.
   if (leaf.parameters.object_filter !== undefined) {
     node.object = structuredClone(leaf.parameters.object_filter as Node);

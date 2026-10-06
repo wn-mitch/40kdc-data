@@ -70,6 +70,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (family-extensions-w8-multi.ts).
   "act-after-move": ["subject"],
   "no-advance-roll": ["subject"],
+  // "in a turn in which it used its Foo ability": a family whose own enum lists antecedent.
+  "ability-used": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

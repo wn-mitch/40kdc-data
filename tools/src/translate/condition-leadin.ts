@@ -92,6 +92,8 @@ export function conditionLeadIn(c: Condition): string {
         if (types[0] === "remain-stationary") return "if the unit Remained Stationary this turn";
       }
       if (p.event === "disembarked" && p.subject == null && f.transport == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
+      // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+      if (p.event === "used" && p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) return `while ${describeHappened(p, false)}`;
       if ((p.event === "destroyed" || p.event === "model-destroyed") && p.object === "event-object" && p.window === "event")
         return `when ${describeHappened(p, false)}`;
       return `if ${describeHappened(p, false)}`;

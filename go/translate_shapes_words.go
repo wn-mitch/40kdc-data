@@ -105,6 +105,29 @@ func rollWord(roll any) string {
 
 // usedAbilityPhrase names which ability a `used` filter means: every ability
 // with a bracketed keyword, or the same one as a bound use; "" otherwise.
+// namedUsePhrase is one named rule a used filter names by id ("Reanimation Protocols", "the
+// Swift as the Wind Agile Manoeuvre"), or "". An ability is its name alone; the other kinds add
+// their noun.
+func namedUsePhrase(f map[string]any) string {
+	if f["id"] == nil {
+		return ""
+	}
+	if f["kind"] == "ability" {
+		return idLabel(f["id"])
+	}
+	noun, ok := map[string]string{"manoeuvre": "Agile Manoeuvre", "stratagem": "Stratagem", "action": "action"}[cstr(f["kind"])]
+	if !ok {
+		return ""
+	}
+	return "the " + idLabel(f["id"]) + " " + noun
+}
+
+// inProgressPhrases is a rule of one kind being used now, when the filter names none.
+var inProgressPhrases = map[string]string{
+	"ability": "an ability", "stratagem": "a Stratagem", "manoeuvre": "an Agile Manoeuvre", "action": "an action", "order": "an Order",
+	"ritual": "a Ritual", "dark-pact": "a Dark Pact", "act-of-faith": "an Act of Faith", "doctrine": "a Combat Doctrine", "contract": "a contract",
+}
+
 func usedAbilityPhrase(f map[string]any) string {
 	if f["ability_keyword"] != nil {
 		return "a " + titleCase(strings.ToLower(cstr(f["ability_keyword"]))) + " ability"

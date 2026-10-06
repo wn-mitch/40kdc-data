@@ -12,6 +12,7 @@ import { attackedChecks, namesSelection, targetingCondition } from "./compile-ta
 import { dslAlternatives } from "./compile-filter-alternatives.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
+import { abilityUsedCondition } from "./compile-named-ability.js";
 
 type Node = Record<string, unknown>;
 
@@ -296,6 +297,9 @@ export function condition(leaf: CompileLeaf): Node {
       }
       return pred("has-keyword", keywords.length === 1 ? { all_of: keywords } : { any_of: keywords }, subject);
     }
+    // "In a turn in which it used its Foo ability", "while it is performing a Bar" (compile-named-ability.ts).
+    case "ability-used":
+      return abilityUsedCondition(leaf);
     case "unit-activity": {
       // Version 3 (batch 6) widens subject beyond this-unit/target.
       const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;

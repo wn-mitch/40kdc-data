@@ -110,6 +110,10 @@ func conditionLeadIn(c map[string]any) string {
 		if p["event"] == "disembarked" && p["subject"] == nil && f["transport"] == nil {
 			return trimEnd("if the unit disembarked from a Transport " + windowPhrase(p["window"]))
 		}
+		// "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+		if p["event"] == "used" && p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
+			return "while " + describeHappened(p, false)
+		}
 		if (p["event"] == "destroyed" || p["event"] == "model-destroyed") && p["object"] == "event-object" && p["window"] == "event" {
 			return "when " + describeHappened(p, false)
 		}

@@ -29,6 +29,7 @@ from wh40kdc.translate.condition import (
 from wh40kdc.translate.condition_refs import (
     _state_phrase,
     alternative_filters,
+    named_use_phrase,
     roll_word,
     used_ability_phrase,
 )
@@ -371,14 +372,21 @@ def _event_phrase(t: AbilityTrigger) -> str:
         if which is not None:
             return f"each time {'your opponent' if opponent else who} uses {which}"
         kind = f.get("kind")
+        # One named rule: who used it, else you (the holder) for an ability or Stratagem.
+        named = named_use_phrase(f)
+        if named is not None:
+            verb = "performs" if kind == "manoeuvre" else "uses"
+            if opponent:
+                return f"each time your opponent {verb} {named}"
+            if t.get("subject") is None and kind in ("ability", "stratagem"):
+                return f"when you use {named}"
+            return f"each time {who} {verb} {named}"
         if kind == "stratagem":
             if opponent:
                 return "each time your opponent uses a Stratagem"
             return "each time you use a Stratagem"
         if opponent and kind == "ability" and f.get("id") is None:
             return "each time your opponent uses an ability"
-        if kind == "ability" and f.get("id") is not None:
-            return f"when you use {title_case(_str(f['id']))}"
         if kind == "ritual" and f.get("result") == "success":
             return f"each time {who} manifests a Ritual"
         if kind == "act-of-faith":

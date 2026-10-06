@@ -22546,6 +22546,235 @@
     }
   },
   {
+    "caseId": "fidelity/trigger-used-named-ability-by-model",
+    "trigger": {
+      "event": "used",
+      "subject": "this-model",
+      "filter": {
+        "kind": "ability",
+        "id": "crude-surgery-orks"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model uses Crude Surgery, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-ability-holder",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "reanimation-protocols-necrons"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When you use Reanimation Protocols, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-manoeuvre",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "manoeuvre",
+        "id": "swift-as-the-wind"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly unit performs the Swift As the Wind Agile Manoeuvre, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-stratagem-by-opponent",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time your opponent uses the Fire Overwatch Stratagem, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-ability-aura-proximity",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "NECRONS"
+        ]
+      },
+      "filter": {
+        "kind": "ability",
+        "id": "reanimation-protocols-necrons"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 3
+        }
+      }
+    },
+    "effect": {
+      "type": "heal",
+      "target": "event-subject",
+      "modifier": {
+        "amount": "D3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly unit uses Reanimation Protocols (the triggering unit must have NECRONS) within 3\" of this model, when resolving this use, the triggering unit regains up to D3 lost wounds."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-manoeuvre-now",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "manoeuvre"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is performing an Agile Manoeuvre, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-named-ability-now-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "ability",
+                "id": "reanimation-protocols-necrons"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the triggering unit is using Reanimation Protocols, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-named-ability-turn",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "flickerjump-aeldari"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit used the Flickerjump ability this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
     "caseId": "fidelity/set-up-wounds-remaining-full",
     "effect": {
       "type": "set-up",

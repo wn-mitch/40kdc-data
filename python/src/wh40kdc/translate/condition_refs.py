@@ -478,6 +478,26 @@ def roll_word(roll: Any) -> str:
     return dekebab(_str(roll))
 
 
+# Kinds of rule a ``used`` filter can name one member of, as "the X <noun>" (an ability is its
+# name alone).
+_NAMED_USE_NOUNS: dict[str, str] = {
+    "manoeuvre": "Agile Manoeuvre",
+    "stratagem": "Stratagem",
+    "action": "action",
+}
+
+
+def named_use_phrase(f: P) -> str | None:
+    """One named rule a ``used`` filter names by id ("Reanimation Protocols", "the Swift as
+    the Wind Agile Manoeuvre"), or None."""
+    if f.get("id") is None:
+        return None
+    if f.get("kind") == "ability":
+        return id_label(f["id"])
+    noun = _NAMED_USE_NOUNS.get(_str(f.get("kind")))
+    return None if noun is None else f"the {id_label(f['id'])} {noun}"
+
+
 def used_ability_phrase(f: P) -> str | None:
     """Which ability a ``used`` filter names: every ability with a bracketed keyword, or
     the same one as a bound use."""

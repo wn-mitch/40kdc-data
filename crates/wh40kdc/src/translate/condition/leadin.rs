@@ -137,6 +137,14 @@ pub fn condition_lead_in_value(c: &Value) -> String {
                 .trim_end()
                 .to_string();
             }
+            // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+            if is(p, "event", "used")
+                && is(p, "window", "event")
+                && nn(f, "ability_keyword").is_none()
+                && nn(f, "same_rule_as").is_none()
+            {
+                return format!("while {}", describe_happened(p, false));
+            }
             if (is(p, "event", "destroyed") || is(p, "event", "model-destroyed"))
                 && is(p, "object", "event-object")
                 && is(p, "window", "event")

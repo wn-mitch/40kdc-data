@@ -1,5 +1,11 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { dekebab, designationPhrase, idLabel, moveKinds, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+import { dekebab, designationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+
+/** A rule of one kind being used now, when the filter names none. */
+const IN_PROGRESS: Record<string, string> = {
+  ability: "an ability", stratagem: "a Stratagem", manoeuvre: "an Agile Manoeuvre", action: "an action", order: "an Order",
+  ritual: "a Ritual", "dark-pact": "a Dark Pact", "act-of-faith": "an Act of Faith", doctrine: "a Combat Doctrine", contract: "a contract",
+};
 
 export function describeHappened(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
@@ -78,6 +84,12 @@ export function describeHappened(p: P, negated: boolean): string {
       return `${neg}${withWindow(`${n}+ ${owner}${kws}${noun}s${tagged} destroyed`, p.window)}`;
     }
     case "used": {
+      // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+      if (p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) {
+        const kind = str(f.kind ?? "ability");
+        const rule = namedUsePhrase(f) ?? IN_PROGRESS[kind] ?? `a ${dekebab(kind)}`;
+        return `${who} is ${negated ? "not " : ""}${kind === "ability" || kind === "stratagem" ? "using" : "performing"} ${rule}`;
+      }
       if (f.kind === "action") {
         let s = `${neg}${n}+ actions completed`;
         if (f.id != null) s += ` (${dekebab(str(f.id))})`;

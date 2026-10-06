@@ -1,5 +1,6 @@
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
-import { AURA_RECIPIENT, bindAntecedents, UNIT_EVENT_KINDS } from "./compile-antecedent.js";
+import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
+import { checkAbilityUsedWindows, foldAuraMoments, foldByAbility, namedAbilityChecks } from "./compile-named-ability.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
@@ -201,7 +202,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let list: CompileLeaf[];
   try {
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
-    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(refs.leaves, refs.focus))), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
@@ -269,7 +270,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const usageIndexes: number[] = [];
   const usageScopes = new Set<string>();
   let optional = false;
-  const checks: CoreCheck[] = [];
+  const checks: CoreCheck[] = namedAbilityChecks(list);
+  attempt(() => checkAbilityUsedWindows(list));
   const targetParts: CompileLeaf[] = [];
   const targetPartIndexes: number[] = [];
   const targetConditions: Array<{ index: number; node: Node; eachTarget: boolean }> = [];
@@ -412,7 +414,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
 
   // "a model in that unit makes an attack": the aura's recipient, else the selected unit, else the
   // unit of the moment the ability fires on, else this unit (a led unit).
-  const unitMoment = list.some((leaf) => leaf.family_id === "event" && UNIT_EVENT_KINDS.has(String(leaf.parameters.kind)) && !ATTACK_EVENTS.has(String(leaf.parameters.kind)));
+  const unitMoment = list.some((leaf, at) => momentNamesUnit(list, at) && !ATTACK_EVENTS.has(String(leaf.parameters.kind)));
   const thatUnit = auraLeaf ? AURA_RECIPIENT : selections.length ? "selected-unit" : unitMoment ? "event-subject" : "this-unit";
   const planned: PlannedEffect[] = [];
   list.forEach((leaf, index) => {

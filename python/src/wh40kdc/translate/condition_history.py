@@ -24,11 +24,26 @@ from wh40kdc.translate.condition_refs import (
     dekebab,
     id_label,
     move_kinds,
+    named_use_phrase,
     roll_word,
     title_case,
     unit_ref_phrase,
     used_ability_phrase,
 )
+
+# A rule of one kind being used now, when the filter names none.
+_IN_PROGRESS: dict[str, str] = {
+    "ability": "an ability",
+    "stratagem": "a Stratagem",
+    "manoeuvre": "an Agile Manoeuvre",
+    "action": "an action",
+    "order": "an Order",
+    "ritual": "a Ritual",
+    "dark-pact": "a Dark Pact",
+    "act-of-faith": "an Act of Faith",
+    "doctrine": "a Combat Doctrine",
+    "contract": "a contract",
+}
 
 
 def _describe_happened(p: P, negated: bool) -> str:
@@ -176,6 +191,13 @@ def _describe_happened(p: P, negated: bool) -> str:
         )
         return f"{neg}{_with_window(f'{_str(n)}+ {owner}{kws}{noun}s{tagged} destroyed', window)}"
     if event == "used":
+        # The use being resolved now: "the unit is performing the Swift as the Wind Agile
+        # Manoeuvre".
+        if window == "event" and f.get("ability_keyword") is None and f.get("same_rule_as") is None:
+            kind = _str(f.get("kind") if f.get("kind") is not None else "ability")
+            rule = named_use_phrase(f) or _IN_PROGRESS.get(kind, f"a {dekebab(kind)}")
+            verb = "using" if kind in ("ability", "stratagem") else "performing"
+            return f"{who} is {'not ' if negated else ''}{verb} {rule}"
         if f.get("kind") == "action":
             s = f"{neg}{_str(n)}+ actions completed"
             if f.get("id") is not None:

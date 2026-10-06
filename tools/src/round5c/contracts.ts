@@ -24,6 +24,7 @@ import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-c
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
+import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
@@ -93,6 +94,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...GAP_CONTAINER_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
+  ...NAMED_ABILITY_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
 ]));
@@ -163,7 +165,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeTestParameters(family, input, version)
     ?? normalizeTargetedParameters(family, input)
     ?? normalizeGapContainerParameters(family, input, version)
-    ?? normalizeMissionPredicateParameters(family, input);
+    ?? normalizeMissionPredicateParameters(family, input)
+    ?? normalizeNamedAbilityParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

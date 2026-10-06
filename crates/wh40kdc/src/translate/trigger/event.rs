@@ -7,7 +7,7 @@ use crate::translate::condition::{
     alternative_filters, and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list,
     st, state_phrase, strs, truthy, unit_filter_phrase, P,
 };
-use crate::translate::condition::{roll_word, used_ability_phrase};
+use crate::translate::condition::{named_use_phrase, roll_word, used_ability_phrase};
 use crate::translate::dekebab;
 use crate::translate::effect::title_case;
 
@@ -546,6 +546,23 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 };
                 return format!("each time {by} uses {which}");
             }
+            // One named rule: who used it, else you (the holder) for an ability or Stratagem.
+            if let Some(named) = named_use_phrase(f) {
+                let verb = if is(f, "kind", "manoeuvre") {
+                    "performs"
+                } else {
+                    "uses"
+                };
+                if opponent {
+                    return format!("each time your opponent {verb} {named}");
+                }
+                if nn(t, "subject").is_none()
+                    && (is(f, "kind", "ability") || is(f, "kind", "stratagem"))
+                {
+                    return format!("when you use {named}");
+                }
+                return format!("each time {who} {verb} {named}");
+            }
             if is(f, "kind", "stratagem") {
                 return if opponent {
                     "each time your opponent uses a Stratagem".to_string()
@@ -555,9 +572,6 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             if opponent && is(f, "kind", "ability") && nn(f, "id").is_none() {
                 return "each time your opponent uses an ability".to_string();
-            }
-            if is(f, "kind", "ability") && nn(f, "id").is_some() {
-                return format!("when you use {}", title_case(&st(f.get("id"))));
             }
             if is(f, "kind", "ritual") && is(f, "result", "success") {
                 return format!("each time {who} manifests a Ritual");

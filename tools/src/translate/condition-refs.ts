@@ -232,6 +232,17 @@ export function rollWord(roll: unknown): string {
   return dekebab(str(roll));
 }
 
+/** Kinds of rule a `used` filter can name one member of, as "the X <noun>" (an ability is its name alone). */
+const NAMED_USE_NOUNS: Record<string, string> = { manoeuvre: "Agile Manoeuvre", stratagem: "Stratagem", action: "action" };
+
+/** One named rule a `used` filter names by id ("Reanimation Protocols", "the Swift as the Wind Agile Manoeuvre"), or undefined. */
+export function namedUsePhrase(f: P): string | undefined {
+  if (f.id == null) return undefined;
+  if (f.kind === "ability") return idLabel(f.id);
+  const noun = NAMED_USE_NOUNS[str(f.kind)];
+  return noun == null ? undefined : `the ${idLabel(f.id)} ${noun}`;
+}
+
 /** Which ability a `used` filter names: one id, every ability with a bracketed keyword, or the same one as a bound use. */
 export function usedAbilityPhrase(f: P): string | undefined {
   if (f.ability_keyword != null) return `a ${titleCase(str(f.ability_keyword).toLowerCase())} ability`;

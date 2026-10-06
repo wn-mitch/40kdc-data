@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { expectedWindow } from "./restriction-families.js";
+import { namedAbilityProblem } from "./named-ability-checks.js";
 
 /**
  * Restriction leaves that describe what the core records already hold (a stratagem's phases, an
@@ -11,7 +12,9 @@ import { expectedWindow } from "./restriction-families.js";
 
 export type CoreCheck =
   | { kind: "use-window"; parameters: Record<string, unknown> }
-  | { kind: "bearer-eligibility"; parameters: Record<string, unknown> };
+  | { kind: "bearer-eligibility"; parameters: Record<string, unknown> }
+  /** An ability, Stratagem, manoeuvre or action a leaf names by id (named-ability-checks.ts). */
+  | { kind: "named-ability"; parameters: Record<string, unknown> };
 
 type CoreRecord = Record<string, unknown>;
 
@@ -161,7 +164,10 @@ function eligibleReading(parameters: Record<string, unknown>): string {
 export function coreCheckErrors(dataRoot: string, abilityId: string, checks: readonly CoreCheck[]): string[] {
   const errors: string[] = [];
   for (const check of checks) {
-    if (check.kind === "use-window") {
+    if (check.kind === "named-ability") {
+      const problem = namedAbilityProblem(dataRoot, abilityId, check.parameters);
+      if (problem) errors.push(`The named ${String(check.parameters.activity)} does not resolve: ${problem}`);
+    } else if (check.kind === "use-window") {
       const record = coreRecords(dataRoot, "stratagems.json").get(abilityId);
       if (!record) {
         errors.push("The WHEN leaf names phases, but there is no core stratagem record to check them against.");

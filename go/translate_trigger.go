@@ -463,6 +463,20 @@ func triggerEventPhrase(t map[string]any) string {
 			}
 			return "each time " + who + " uses " + which
 		}
+		// One named rule: who used it, else you (the holder) for an ability or Stratagem.
+		if named := namedUsePhrase(f); named != "" {
+			verb := "uses"
+			if f["kind"] == "manoeuvre" {
+				verb = "performs"
+			}
+			if opponent {
+				return "each time your opponent " + verb + " " + named
+			}
+			if t["subject"] == nil && (f["kind"] == "ability" || f["kind"] == "stratagem") {
+				return "when you use " + named
+			}
+			return "each time " + who + " " + verb + " " + named
+		}
 		switch {
 		case f["kind"] == "stratagem" && opponent:
 			return "each time your opponent uses a Stratagem"
@@ -470,8 +484,6 @@ func triggerEventPhrase(t map[string]any) string {
 			return "each time you use a Stratagem"
 		case opponent && f["kind"] == "ability" && f["id"] == nil:
 			return "each time your opponent uses an ability"
-		case f["kind"] == "ability" && f["id"] != nil:
-			return "when you use " + titleCase(cstr(f["id"]))
 		case f["kind"] == "ritual" && f["result"] == "success":
 			return "each time " + who + " manifests a Ritual"
 		case f["kind"] == "act-of-faith":

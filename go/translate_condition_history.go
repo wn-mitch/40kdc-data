@@ -244,6 +244,29 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		return neg + withWindow(nStr+"+ "+owner+kws+noun+"s"+tagged+" destroyed", p["window"])
 	case "used":
+		// The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+		if p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
+			kind := "ability"
+			if f["kind"] != nil {
+				kind = cstr(f["kind"])
+			}
+			rule := namedUsePhrase(f)
+			if rule == "" {
+				var ok bool
+				if rule, ok = inProgressPhrases[kind]; !ok {
+					rule = "a " + dekebab(kind)
+				}
+			}
+			verb := "performing"
+			if kind == "ability" || kind == "stratagem" {
+				verb = "using"
+			}
+			not := ""
+			if negated {
+				not = "not "
+			}
+			return who + " is " + not + verb + " " + rule
+		}
 		if f["kind"] == "action" {
 			s := neg + nStr + "+ actions completed"
 			if f["id"] != nil {

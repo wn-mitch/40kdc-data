@@ -457,6 +457,40 @@ pub(crate) fn roll_word(roll: Option<&Value>) -> String {
     dekebab(&st(roll))
 }
 
+/// One named rule a `used` filter names by id ("Reanimation Protocols", "the Swift as the Wind
+/// Agile Manoeuvre"), or None. An ability is its name alone; the other kinds add their noun.
+pub(crate) fn named_use_phrase(f: &P) -> Option<String> {
+    let id = nn(f, "id")?;
+    let kind = st(f.get("kind"));
+    if kind == "ability" {
+        return Some(id_label(Some(id)));
+    }
+    let noun = match kind.as_str() {
+        "manoeuvre" => "Agile Manoeuvre",
+        "stratagem" => "Stratagem",
+        "action" => "action",
+        _ => return None,
+    };
+    Some(format!("the {} {noun}", id_label(Some(id))))
+}
+
+/// A rule of one kind being used now, when the filter names none.
+pub(crate) fn in_progress_phrase(kind: &str) -> String {
+    match kind {
+        "ability" => "an ability".to_string(),
+        "stratagem" => "a Stratagem".to_string(),
+        "manoeuvre" => "an Agile Manoeuvre".to_string(),
+        "action" => "an action".to_string(),
+        "order" => "an Order".to_string(),
+        "ritual" => "a Ritual".to_string(),
+        "dark-pact" => "a Dark Pact".to_string(),
+        "act-of-faith" => "an Act of Faith".to_string(),
+        "doctrine" => "a Combat Doctrine".to_string(),
+        "contract" => "a contract".to_string(),
+        other => format!("a {}", dekebab(other)),
+    }
+}
+
 /// Which ability a `used` filter names: every ability with a bracketed keyword, or the same one
 /// as a bound use.
 pub(crate) fn used_ability_phrase(f: &P) -> Option<String> {

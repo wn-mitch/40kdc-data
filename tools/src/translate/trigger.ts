@@ -4,7 +4,7 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
-import { alternativeFilters, rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
+import { alternativeFilters, namedUsePhrase, rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
 
 type P = Record<string, unknown>;
 
@@ -255,9 +255,16 @@ function eventPhrase(t: AbilityTrigger): string {
       const opponent = typeof subj === "object" && subj !== null && subj.owner === "enemy" && Object.keys(subj).length === 1;
       const which = usedAbilityPhrase(f);
       if (which != null) return `each time ${opponent ? "your opponent" : who} uses ${which}`;
+      // One named rule: who used it, else you (the holder) for an ability or Stratagem.
+      const named = namedUsePhrase(f);
+      if (named != null) {
+        const verb = f.kind === "manoeuvre" ? "performs" : "uses";
+        if (opponent) return `each time your opponent ${verb} ${named}`;
+        if (t.subject == null && (f.kind === "ability" || f.kind === "stratagem")) return `when you use ${named}`;
+        return `each time ${who} ${verb} ${named}`;
+      }
       if (f.kind === "stratagem") return opponent ? "each time your opponent uses a Stratagem" : "each time you use a Stratagem";
       if (opponent && f.kind === "ability" && f.id == null) return "each time your opponent uses an ability";
-      if (f.kind === "ability" && f.id != null) return `when you use ${titleCase(str(f.id))}`;
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;
       if (f.kind === "act-of-faith") return f.result === "success" ? "after an Act of Faith is completed" : "when an Act of Faith is performed";
       if (f.kind === "order" && t.object != null) return "each time an Order is issued to the unit";

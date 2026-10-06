@@ -19,6 +19,23 @@ export const UNIT_EVENT_KINDS = new Set([
   "disembarked", "damage-allocated", "state-changed", "move-ended", "selected", "targets-selected", "attacks-resolved", "set-up",
 ]);
 
+/**
+ * Whether a moment names a unit "that unit" can be: a unit kind, or a rule used by a named unit
+ * ("each time that unit uses its Foo ability", "a unit from your army" + "performs the Bar
+ * manoeuvre"). A bare use ("each time an Order is issued") names none.
+ */
+export function momentNamesUnit(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  if (leaf.family_id !== "event") return false;
+  const kind = String(leaf.parameters.kind);
+  if (UNIT_EVENT_KINDS.has(kind)) return true;
+  if (kind !== "used" || leaf.parameters.owner !== undefined) return false;
+  if (leaf.parameters.subject !== undefined || leaf.parameters.subject_filter !== undefined) return true;
+  let at = index - 1;
+  while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at -= 1;
+  return leaves[at]?.family_id === "unit-filter" && leaves[at]!.fragment === leaf.fragment;
+}
+
 /** Moments whose only named unit is the one they happen to (the trigger's object). */
 const OBJECT_MOMENTS = new Set(["damage-allocated"]);
 
@@ -232,7 +249,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "aura-range")) return AURA_RECIPIENT;
-  const moment = earlier.filter((other) => other.family_id === "event" && UNIT_EVENT_KINDS.has(String(other.parameters.kind))).at(-1);
+  const moment = earlier.filter((_other, at) => momentNamesUnit(leaves, at)).at(-1);
   // In a Stratagem's WHEN clause, "an enemy unit ends a move" + "within 8\" of …": the moment's
   // unit, not the Stratagem's target, which only the later clauses name.
   const inWhen = leaves[index]!.fragment === "WHEN" && moment?.fragment === "WHEN";
@@ -261,7 +278,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],
-  "in-region": ["subject"],
+  "in-region": ["subject"], "ability-used": ["subject"],
   targeted: ["subject"], "target-is-selected": ["by", "target"],
   // An owned moment's subject, and who destroyed a unit, go into the trigger as is (compile-triggers.ts).
   event: ["subject", "by"],
