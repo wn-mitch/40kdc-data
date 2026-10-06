@@ -21,6 +21,7 @@ import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
 import { foldModelState } from "./compile-model-state.js";
+import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -113,7 +114,7 @@ function hasLastingEffect(node: unknown): boolean {
   if (Array.isArray(node)) return node.some(hasLastingEffect);
   if (node === null || typeof node !== "object") return false;
   const record = node as Node;
-  return (typeof record.type === "string" && LASTING_EFFECTS.has(record.type)) || Object.values(record).some(hasLastingEffect);
+  return (typeof record.type === "string" && LASTING_EFFECTS.has(record.type)) || isForbiddenSetUp(record) || Object.values(record).some(hasLastingEffect);
 }
 
 /**
@@ -191,7 +192,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText, options.abilityId), sourceText)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText, options.abilityId), sourceText)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

@@ -101,6 +101,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
   // Selected "to charge" is selected to declare a charge, which the DSL spells declare-charge.
   if (leaf.parameters.to !== undefined) filter.to = closed(leaf, "to") === "charge" ? "declare-charge" : closed(leaf, "to");
   if (leaf.parameters.action_kind !== undefined) filter.kind = closed(leaf, "action_kind");
+  // Version 17: where a set-up moment brings the unit from ("set up … from Reserves").
+  if (leaf.parameters.from !== undefined) filter.from = closed(leaf, "from");
   if (Object.keys(filter).length) node.filter = filter;
   // "Each time you target the bearer with a Stratagem": what the moment was done to.
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");

@@ -44,7 +44,13 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.wounds_remaining !== undefined) modifier.wounds_remaining = countValue(closed(leaf, "wounds_remaining"));
       if (leaf.parameters.detach === true) modifier.detach = true;
       if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
-      return { type: "set-up", target: unitOf(leaf, "subject"), modifier };
+      // Version 5: a forbidden ("cannot be set up") or required ("must be set up") set-up.
+      if (leaf.parameters.allow === false) modifier.allow = false;
+      if (leaf.parameters.mandatory === true) modifier.mandatory = true;
+      Object.assign(modifier, foldedPlacement(leaf, modifier.placement));
+      // A set-up restriction (compile-set-up-placement.ts): the side whose set-ups are forbidden.
+      const target_ = leaf.parameters.restricted_owner !== undefined ? { owner: closed(leaf, "restricted_owner") } : unitOf(leaf, "subject");
+      return { type: "set-up", target: target_, modifier };
     }
     case "battlefield-marker": {
       const modifier: Node = { label: closed(leaf, "label") };
@@ -173,7 +179,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (Object.keys(copy).length && source === "datasheet") throw new CompileError("Only a copy of a destroyed unit can leave models out, return at Starting Strength or reset [One Shot] weapons.");
       if (Object.keys(copy).length && join) throw new CompileError("Models joining an existing unit are not a copy: excluded keywords, Starting Strength and [One Shot] resets apply only to a new unit.");
       const held = leaf.parameters.held_in === undefined ? {} : { placement: closed(leaf, "held_in") };
-      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...copy, ...held } };
+      // "… and set it up anywhere on the battlefield": the set-up folded in (compile-set-up-placement.ts).
+      const placed = foldedPlacement(leaf, leaf.parameters.set_up_placement);
+      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...copy, ...held, ...placed } };
     }
     case "battle-shock-state": {
       const recipient = String(closed(leaf, "recipient"));
@@ -183,6 +191,21 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     default:
       return undefined;
   }
+}
+
+/**
+ * The placement limits folded onto a set-up or add-unit (compile-set-up-placement.ts) as DSL
+ * fields, with "not within Engagement Range of any enemy units" added to its placement keywords.
+ */
+function foldedPlacement(leaf: CompileLeaf, placement: unknown): Node {
+  const result: Node = {};
+  if (leaf.parameters.folded_near !== undefined) result.near = structuredClone(leaf.parameters.folded_near);
+  if (leaf.parameters.folded_away_from !== undefined) result.away_from = structuredClone(leaf.parameters.folded_away_from);
+  if (leaf.parameters.folded_in_region !== undefined) result.in_region = structuredClone(leaf.parameters.folded_in_region);
+  const keywords = placement === undefined ? [] : Array.isArray(placement) ? [...placement] : [placement];
+  if (leaf.parameters.folded_unengaged === true && !keywords.includes("unengaged")) keywords.push("unengaged");
+  if (keywords.length) result.placement = keywords.length === 1 ? keywords[0] : keywords;
+  return result;
 }
 
 /** A count/amount family value ("1", "D3", "all") as the DSL prefers it: a number when it is one. */
