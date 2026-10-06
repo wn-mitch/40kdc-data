@@ -335,7 +335,7 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "command"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
