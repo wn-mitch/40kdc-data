@@ -11,7 +11,8 @@ type Node = Record<string, unknown>;
  * "In addition," is its own part: the conditions, usage limit and duration of earlier sentences
  * do not reach it. A sentence tied back to the one before ("When doing so,", "If you do,")
  * opens no moment, so it stays in that sentence's part. A sentence whose effects are all
- * army-construction rules is a part of its own too, and so is the sentence after it.
+ * army-construction rules is a part of its own too, and so is the sentence after it, unless its
+ * rules point back to the group of a composition rule in the part before it.
  *
  * Leading sentences with no effect ("ADEPTUS CUSTODES model only.", a Stratagem's phase and
  * target lines) are the ability's header: they are compiled into every part. A header holding a
@@ -118,7 +119,11 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
     const opensPart = position > firstEffectful && !listed.slice(0, position + 1).includes(true) && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
       IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words))) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
-    if (opensPart || (position > firstEffectful && (armyOnly(sentence) || armyOnly(sentences[position - 1]!)))) parts.push([]);
+    // "None of these models can be your WARLORD" after a composition rule: the group it points back
+    // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
+    const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
+      && sentence.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.subject === "antecedent");
+    if (opensPart || (position > firstEffectful && !pointsBack && (armyOnly(sentence) || armyOnly(sentences[position - 1]!)))) parts.push([]);
     if (position >= firstEffectful) parts.at(-1)!.push(...sentence);
   });
   // A part with no effect (a moment sentence whose effects follow in the next one) joins the next.

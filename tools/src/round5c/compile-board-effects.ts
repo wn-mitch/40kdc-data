@@ -4,6 +4,7 @@
  * for any family it does not handle itself.
  */
 
+import { armyRuleEffect } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
@@ -119,22 +120,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
       return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
-    case "army-construction": {
-      const modifier: Node = { rule: closed(leaf, "rule") };
-      const withKeywords = leaf.parameters.with_keywords as string[] | undefined;
-      if (modifier.rule === "detachment-tag-exclusive") {
-        // "This Detachment has the COVENS tag": the tag is a name for detachments, not a unit filter.
-        if (withKeywords?.length !== 1) throw new CompileError("A detachment-tag-exclusive leaf names exactly one tag in with_keywords.");
-        modifier.tag = withKeywords[0];
-      } else if (withKeywords) modifier.with = { all_of: withKeywords };
-      if (leaf.parameters.max !== undefined) modifier.max = closed(leaf, "max");
-      if (leaf.parameters.led_by !== undefined) modifier.led_by = closed(leaf, "led_by");
-      // Version 2: allied inclusion counted in points or models, once per matching unit, or for one faction.
-      if (leaf.parameters.measure !== undefined && leaf.parameters.measure !== "units") modifier.measure = closed(leaf, "measure");
-      if (leaf.parameters.per_keywords !== undefined) modifier.per = { all_of: closed(leaf, "per_keywords") };
-      if (leaf.parameters.faction !== undefined) modifier.faction = closed(leaf, "faction");
-      return { type: "army-rule", target: "this-unit", modifier };
-    }
+    case "army-construction":
+      return armyRuleEffect(leaf);
     case "return-models": {
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.wounds_remaining !== undefined) {

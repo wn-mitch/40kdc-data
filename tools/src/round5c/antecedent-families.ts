@@ -72,6 +72,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "no-advance-roll": ["subject"],
   // "in a turn in which it used its Foo ability": a family whose own enum lists antecedent.
   "ability-used": ["subject"],
+  // "None of these models can be your WARLORD": the group of an earlier list-building rule or filter (compile-army.ts).
+  "army-construction": ["subject"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */
