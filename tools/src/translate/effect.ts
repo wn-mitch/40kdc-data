@@ -165,6 +165,7 @@ export interface Effect {
   duration?: string;
   // stance-select
   mode?: string;
+  additive?: boolean;
   scope?: string;
   // risk-reward
   reward?: Effect;
@@ -861,16 +862,21 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `${selectLead} one ${designationTargetSubject(sel)}${desig}; ${whenClause}, ${describeEffectInline(e.applies?.effect ?? {}, recipientCtx)}`;
     }
     case "stance-select":
-      return `${stancePick(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+      return `${stancePick(e)}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         stance_id?: unknown;
         option_id?: unknown;
+        option_ids?: unknown;
         additional_selections?: unknown;
         allocation?: unknown;
       };
       const n = Number(m.additional_selections) || 1;
       const times = n === 1 ? "one additional time" : `${jstr(n)} additional times`;
+      // A shared allowance narrowed to some options: spent on any one of them, not one of each.
+      if (m.allocation !== "fixed-option" && Array.isArray(m.option_ids)) {
+        return `you can select ${orList(m.option_ids.map((id) => titleCase(jstr(id))))} ${times} per battle, shared between them`;
+      }
       const subject =
         m.allocation === "fixed-option" && m.option_id != null
           ? titleCase(jstr(m.option_id))
@@ -912,6 +918,11 @@ function diceGate(e: Effect, ctx: Ctx): string {
 }
 
 /** "select one", "select two", "select up to two" — how many menu options are picked. */
+/** " (in addition to any already active)" when a stance pick joins the active options. */
+function stanceAdditive(e: Effect): string {
+  return e.additive === true ? " (in addition to any already active)" : "";
+}
+
 function stancePick(e: Effect): string {
   const min = e.min_choices ?? 1;
   const max = e.max_choices ?? 1;
@@ -1253,7 +1264,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "stance-select": {
       const when = typeof e.select === "string" ? capitalize(eventClause(e.select)) : "At the start of your turn";
       const consum = e.mode === "consumable" ? " (each may be chosen once per battle)" : "";
-      const lines = [`${indent}${arrow}${when}, ${stancePick(e)}${consum}:`];
+      const lines = [`${indent}${arrow}${when}, ${stancePick(e)}${consum}${stanceAdditive(e)}:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }

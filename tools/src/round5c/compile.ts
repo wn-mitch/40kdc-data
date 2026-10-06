@@ -1,3 +1,4 @@
+import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, UNIT_EVENT_KINDS } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
@@ -151,7 +152,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText);
+    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -313,9 +314,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
         else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size") { /* folded below */ }
-        // "this model has that ability": the menu before it already applies the chosen options.
+        // "this model has that ability": the menu before it already applies the chosen options;
+        // "that unit has that ability": they are about the holder, not this unit.
         else if (leaf.family_id === "chosen-option-grant") {
-          if (!list.slice(0, index).some((other) => isContainerOpener(other.family_id))) throw new CompileError("\"Has that ability\" names the options chosen from a menu, but no menu opens before it.");
+          const opener = list.slice(0, index).map((other) => isContainerOpener(other.family_id)).lastIndexOf(true);
+          if (opener < 0) throw new CompileError("\"Has that ability\" names the options chosen from a menu, but no menu opens before it.");
+          const holder = String(leaf.parameters.holder);
+          if (holder !== "this-unit" && holder !== "this-model" && containerNodes.has(opener)) containerNodes.set(opener, retargetMenu(containerNodes.get(opener), holder) as Node);
         }
         else throw new CompileError(`Restriction ${leaf.family_id} has no DSL fragment yet.`);
       }
@@ -592,6 +597,8 @@ function namesSelected(node: unknown): boolean {
   if (Array.isArray(node)) return node.some(namesSelected);
   if (node === null || typeof node !== "object") return false;
   const record = node as Node;
+  // A selection already compiled into a node (an option's own select-units) binds its own selected unit.
+  if (record.type === "select-units") return false;
   return record.target === "selected-unit" || Object.values(record).some(namesSelected);
 }
 

@@ -22752,5 +22752,256 @@
     "expected": {
       "text": "Unless the triggering unit has selected a friendly INFANTRY unit that is unengaged as a target of its ranged attacks this phase, the unit can make a Surge move of up to D6\"."
     }
+  },
+  {
+    "caseId": "activate-several-options-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "selected-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "zeal"
+        ],
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The Aegis and Zeal options of Rite of Wards are active for the selected unit (and no other option is)."
+    }
+  },
+  {
+    "caseId": "activate-several-options-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "ward",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The Aegis, Ward and Zeal options of Rite of Wards are active for the unit."
+    }
+  },
+  {
+    "caseId": "activate-all-options",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "all_options": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "expected": {
+      "text": "Until the start of your next Command phase, every option of Rite of Wards is active for the unit."
+    }
+  },
+  {
+    "caseId": "activate-player-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "from": [
+            "aegis",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one of the Aegis or Zeal options of Rite of Wards for the unit, in place of any already active."
+    }
+  },
+  {
+    "caseId": "activate-player-pick-count-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "count": 2
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select 2 options of Rite of Wards for the unit, in addition to any already active."
+    }
+  },
+  {
+    "caseId": "activate-roll-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "roll",
+          "count": 2,
+          "from": [
+            "aegis",
+            "ward",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Make a new Rite of Wards roll and activate 2 results it allows among the Aegis, Ward or Zeal options for the unit, in place of any already active."
+    }
+  },
+  {
+    "caseId": "stance-select-additive-inline",
+    "effect": {
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "options": [
+        {
+          "name": "Doubled",
+          "effect": {
+            "type": "stance-select",
+            "mode": "re-selectable",
+            "additive": true,
+            "options": [
+              {
+                "name": "Aegis",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "save",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "name": "Zeal",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Plain",
+          "effect": {
+            "type": "ability-activate",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "rite-of-wards",
+              "all_options": true
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of your turn, select one:\n  - Doubled: select one (in addition to any already active): Aegis (the unit gets +1 to saving throw rolls) / Zeal (the unit gets +1 to Hit rolls).\n  - Plain: every option of Rite of Wards is active for the unit."
+    }
+  },
+  {
+    "caseId": "stance-select-additive-block",
+    "effect": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "scope": "unit",
+      "additive": true,
+      "options": [
+        {
+          "name": "Aegis",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "save",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "Zeal",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of your turn, select one (each may be chosen once per battle) (in addition to any already active):\n  - Aegis: the unit gets +1 to saving throw rolls.\n  - Zeal: the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "stance-capacity-shared-options",
+    "effect": {
+      "type": "stance-selection-capacity",
+      "modifier": {
+        "stance_id": "rite-of-wards",
+        "additional_selections": 1,
+        "allocation": "choose-one-option",
+        "option_ids": [
+          "aegis",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "You can select Aegis or Zeal one additional time per battle, shared between them."
+    }
   }
 ]

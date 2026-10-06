@@ -43,6 +43,8 @@ export function containerEffect(leaf: CompileLeaf): Node | undefined {
     allocation: closed(leaf, "allocation"),
   };
   if (leaf.parameters.option_id !== undefined) modifier.option_id = closed(leaf, "option_id");
+  // One shared allowance over these options only ("the assault doctrine or tactical doctrine").
+  if (leaf.parameters.option_ids !== undefined) modifier.option_ids = [...(closed(leaf, "option_ids") as string[])];
   const node: Node = { type: "stance-selection-capacity", modifier };
   if (leaf.parameters.scope !== undefined) node.scope = closed(leaf, "scope");
   return node;
@@ -127,6 +129,8 @@ function buildStanceSelect(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   });
   const node: Node = { type: "stance-select", mode: closed(head, "mode"), options };
   if (head.parameters.scope !== undefined) node.scope = closed(head, "scope");
+  // "in addition to any other combat doctrine": the pick joins the active options instead of replacing them.
+  if (head.parameters.additive === true) node.additive = true;
   const min = head.parameters.min_choices;
   const max = head.parameters.max_choices;
   if (min !== undefined || max !== undefined) {

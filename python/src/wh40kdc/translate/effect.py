@@ -34,6 +34,7 @@ from wh40kdc.translate.effect_inline import (
     part_inline,
     pool_text,
     roll_with_rider,
+    stance_additive,
     stance_pick,
     usage_clause,
 )
@@ -221,7 +222,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         )
         consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
         return "\n".join(
-            [f"{indent}{arrow}{when}, {stance_pick(e)}{consum}:", *_option_lines(e, indent, ctx)]
+            [
+                f"{indent}{arrow}{when}, {stance_pick(e)}{consum}{stance_additive(e)}:",
+                *_option_lines(e, indent, ctx),
+            ]
         )
     if t == "risk-reward":
         risk = _obj(e.get("risk"))

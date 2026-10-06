@@ -360,7 +360,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 			om := mapOr(o)
 			opts = append(opts, ejstr(om["name"])+" ("+describeEffectInline(mapOr(om["effect"]), ctx)+")")
 		}
-		return stancePick(e) + ": " + strings.Join(opts, " / ")
+		return stancePick(e) + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
 	case "stance-selection-capacity":
 		n := jsNumber(m["additional_selections"])
 		if n != n || n == 0 {
@@ -369,6 +369,14 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		times := numStr(n) + " additional times"
 		if n == 1 {
 			times = "one additional time"
+		}
+		// A shared allowance narrowed to some options: spent on any one of them, not one of each.
+		if ids, ok := m["option_ids"].([]any); ok && m["allocation"] != "fixed-option" {
+			names := make([]string, 0, len(ids))
+			for _, id := range ids {
+				names = append(names, titleCase(ejstr(id)))
+			}
+			return "you can select " + orList(names) + " " + times + " per battle, shared between them"
 		}
 		subject := "one option of " + titleCase(ejstr(m["stance_id"]))
 		if m["allocation"] == "fixed-option" && m["option_id"] != nil {
@@ -408,6 +416,14 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 var smallNumberWords = []string{"zero", "one", "two", "three", "four"}
 
 // stancePick renders how many menu options are picked ("select one", "select up to two").
+// stanceAdditive is " (in addition to any already active)" when a stance pick joins the active options.
+func stanceAdditive(e map[string]any) string {
+	if e["additive"] == true {
+		return " (in addition to any already active)"
+	}
+	return ""
+}
+
 func stancePick(e map[string]any) string {
 	min, max := 1.0, 1.0
 	if v, ok := e["min_choices"].(float64); ok {
@@ -607,7 +623,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if e["mode"] == "consumable" {
 			consum = " (each may be chosen once per battle)"
 		}
-		lines := []string{indent + arrow + when + ", " + stancePick(e) + consum + ":"}
+		lines := []string{indent + arrow + when + ", " + stancePick(e) + consum + stanceAdditive(e) + ":"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")

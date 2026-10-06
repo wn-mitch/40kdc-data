@@ -63,6 +63,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "if that unit targeted this unit"; "if one or more units with this ability are selected as a target of that charge".
   targeted: ["subject"],
   "target-is-selected": ["by", "target"],
+  "ability-activate": ["subject"],
+  "chosen-option-grant": ["holder"],
 };
 
 /** Values an antecedent stands in for while the previous version's normalizer checks the rest. */

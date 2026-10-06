@@ -9,7 +9,8 @@ use super::menu::{duration_clauses, menu_block};
 use super::select::*;
 use super::words::*;
 use super::{
-    child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_pick, ty,
+    child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
+    stance_pick, ty,
 };
 use crate::translate::condition::{condition_lead_in_value, nn, obj, truthy};
 use crate::translate::event_clause;
@@ -212,8 +213,9 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 ""
             };
             let mut lines = vec![format!(
-                "{indent}{arrow}{when}, {}{consumable}:",
-                stance_pick(e)
+                "{indent}{arrow}{when}, {}{consumable}{}:",
+                stance_pick(e),
+                stance_additive(e)
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));

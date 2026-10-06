@@ -3,6 +3,7 @@ import { activitiesExtension, type FamilyExtension, keywordList, optional, prope
 import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "./unit-filter-alternatives.js";
+import { ABILITY_ACTIVATE_OPTIONS, CHOSEN_OPTION_HOLDER_ANTECEDENT, STANCE_CAPACITY_SHARED_OPTIONS, STANCE_SELECT_ADDITIVE } from "./activation-families.js";
 
 /**
  * The eleventh round of family extensions. As in the earlier rounds, a version checks only its own
@@ -385,6 +386,10 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
   TARGETING_ACTIVITIES,
   UNIT_FILTER_ALTERNATIVES,
   UNIT_POSITION_OF_ALTERNATIVES,
+  ABILITY_ACTIVATE_OPTIONS,
+  STANCE_SELECT_ADDITIVE,
+  CHOSEN_OPTION_HOLDER_ANTECEDENT,
+  STANCE_CAPACITY_SHARED_OPTIONS,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

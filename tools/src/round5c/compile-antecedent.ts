@@ -190,7 +190,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
-  "roll-modifier": ["subject"], reroll: ["subject"],
+  "roll-modifier": ["subject"], reroll: ["subject"], "ability-activate": ["subject"],
   "make-move": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
@@ -200,6 +200,9 @@ const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   // An owned moment's subject, and who destroyed a unit, go into the trigger as is (compile-triggers.ts).
   event: ["subject", "by"],
 };
+
+/** Units a chosen-option-grant holder can bind to: the menu's own-unit effects are retargeted to it. */
+const MENU_HOLDERS = new Set(["this-unit", "this-model", "selected-unit", "event-subject", AURA_RECIPIENT]);
 
 /** Subject-like keys whose values say which of the record's own unit or model it talks about. */
 const SELF_KEYS = ["subject", "recipient", "target", "unit", "who", "of", "with", "to"];
@@ -218,6 +221,8 @@ function ownRole(leaves: readonly CompileLeaf[]): string {
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
 function boundValue(leaf: CompileLeaf, key: string, role: string): string | null {
+  // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
+  if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
   if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key) ? role : null;
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;

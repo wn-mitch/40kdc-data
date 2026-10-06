@@ -356,15 +356,27 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
 function abilityActivate(m: Record<string, unknown>, subj: string): string {
   const label = abilityLabel(m.ability);
   const consumed = m.ignore_consumed === true ? ", even if it has already been selected this battle" : "";
-  const sel = m.select as { by?: unknown } | undefined;
+  const sel = m.select as { by?: unknown; count?: unknown; from?: unknown } | undefined;
+  const exclusive = m.exclusive === true ? " (and no other option is)" : "";
   if (sel != null) {
-    const how = sel.by === "roll" ? `make a new ${label} roll and activate one result it allows` : `select one option of ${label}`;
-    return `${how} for ${subj}, in addition to any already active${consumed}`;
+    const n = Number(sel.count ?? 1) || 1;
+    const from = optionNames(sel.from);
+    const how = sel.by === "roll"
+      ? `make a new ${label} roll and activate ${n === 1 ? "one result" : `${n} results`} it allows${from.length ? ` among the ${orList(from)} options` : ""}`
+      : `select ${n === 1 ? "one" : String(n)} ${from.length ? `of the ${orList(from)} options` : n === 1 ? "option" : "options"} of ${label}`;
+    return `${how} for ${subj}, ${m.exclusive === true ? "in place of" : "in addition to"} any already active${consumed}`;
   }
   const override = m.override as { amount?: unknown } | undefined;
   const instead = override != null ? `, using ${diceCase(override.amount)} in place of its usual amount` : "";
+  if (m.all_options === true) return `every option of ${label} is active for ${subj}${consumed}`;
+  if (Array.isArray(m.options)) return `the ${andList(optionNames(m.options))} options of ${label} are active for ${subj}${exclusive}${consumed}`;
   if (m.option == null) return `${subj} ${v(subj, "resolves")} the ${label} ability now${instead}`;
-  return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${m.exclusive === true ? " (and no other option is)" : ""}${consumed}`;
+  return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${exclusive}${consumed}`;
+}
+
+/** Option ids as their display names. */
+function optionNames(list: unknown): string[] {
+  return Array.isArray(list) ? list.map((option) => titleCase(jstr(option))) : [];
 }
 
 /** One single effect as a lowercase-initial clause. */

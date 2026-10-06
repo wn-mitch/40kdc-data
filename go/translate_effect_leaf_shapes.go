@@ -100,23 +100,72 @@ func abilityActivateLeaf(m map[string]any, subj string) string {
 	if m["ignore_consumed"] == true {
 		consumed = ", even if it has already been selected this battle"
 	}
+	excl := ""
+	if m["exclusive"] == true {
+		excl = " (and no other option is)"
+	}
 	if sel, ok := asMap(m["select"]); ok && sel != nil {
-		how := "select one option of " + label
-		if sel["by"] == "roll" {
-			how = "make a new " + label + " roll and activate one result it allows"
+		count := sel["count"]
+		if count == nil {
+			count = 1.0
 		}
-		return how + " for " + subj + ", in addition to any already active" + consumed
+		n := jsNumber(count)
+		if n != n || n == 0 {
+			n = 1
+		}
+		from := optionNames(sel["from"])
+		var how string
+		if sel["by"] == "roll" {
+			results := "one result"
+			if n != 1 {
+				results = numStr(n) + " results"
+			}
+			among := ""
+			if len(from) > 0 {
+				among = " among the " + orList(from) + " options"
+			}
+			how = "make a new " + label + " roll and activate " + results + " it allows" + among
+		} else {
+			countWord := "one"
+			if n != 1 {
+				countWord = numStr(n)
+			}
+			what := "option"
+			if len(from) > 0 {
+				what = "of the " + orList(from) + " options"
+			} else if n != 1 {
+				what = "options"
+			}
+			how = "select " + countWord + " " + what + " of " + label
+		}
+		join := "in addition to"
+		if m["exclusive"] == true {
+			join = "in place of"
+		}
+		return how + " for " + subj + ", " + join + " any already active" + consumed
 	}
 	instead := ""
 	if override, ok := asMap(m["override"]); ok && override != nil {
 		instead = ", using " + diceCase(override["amount"]) + " in place of its usual amount"
 	}
+	if m["all_options"] == true {
+		return "every option of " + label + " is active for " + subj + consumed
+	}
+	if _, ok := m["options"].([]any); ok {
+		return "the " + andList(optionNames(m["options"])) + " options of " + label + " are active for " + subj + excl + consumed
+	}
 	if m["option"] == nil {
 		return subj + " " + ev(subj, "resolves") + " the " + label + " ability now" + instead
 	}
-	excl := ""
-	if m["exclusive"] == true {
-		excl = " (and no other option is)"
-	}
 	return "the " + titleCase(ejstr(m["option"])) + " option of " + label + " is active for " + subj + excl + consumed
+}
+
+// optionNames renders option ids as their display names.
+func optionNames(options any) []string {
+	list, _ := options.([]any)
+	names := make([]string, 0, len(list))
+	for _, o := range list {
+		names = append(names, titleCase(ejstr(o)))
+	}
+	return names
 }

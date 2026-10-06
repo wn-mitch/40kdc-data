@@ -1472,7 +1472,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-activate effect",
-          "description": "[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+          "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
           "required": [
             "type",
             "target",
@@ -1496,6 +1496,18 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 2,
+                  "uniqueItems": true
+                },
+                "all_options": {
+                  "const": true
+                },
                 "exclusive": {
                   "const": true
                 },
@@ -1508,6 +1520,19 @@
                         "roll",
                         "player"
                       ]
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 2
+                    },
+                    "from": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "minItems": 2,
+                      "uniqueItems": true
                     }
                   },
                   "required": [
@@ -1542,8 +1567,68 @@
                   },
                   "then": {
                     "not": {
-                      "required": [
-                        "option"
+                      "anyOf": [
+                        {
+                          "required": [
+                            "option"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "options"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "all_options"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "option"
+                    ]
+                  },
+                  "then": {
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "options"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "all_options"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "all_options"
+                    ]
+                  },
+                  "then": {
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "options"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "exclusive"
+                          ]
+                        }
                       ]
                     }
                   }
@@ -6373,7 +6458,7 @@
     "stance-select-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. Each option carries a `name` and a bundle `effect` (often a sequence).",
+      "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. A pick replaces the option already active for the unit unless `additive` keeps both. Each option carries a `name` and a bundle `effect` (often a sequence).",
       "properties": {
         "type": {
           "const": "stance-select"
@@ -6394,6 +6479,10 @@
         },
         "select": {
           "type": "string"
+        },
+        "additive": {
+          "const": true,
+          "description": "The picked options join the options already active for the unit, instead of replacing them."
         },
         "options": {
           "type": "array",
@@ -6436,7 +6525,7 @@
     "stance-selection-capacity-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`. The stance's own menu and effects are unchanged.",
+      "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`; `option_ids` narrows the pooled allowance to those options (one shared extra selection over the assault or tactical doctrine). The stance's own menu and effects are unchanged.",
       "properties": {
         "type": {
           "const": "stance-selection-capacity"
@@ -6468,6 +6557,15 @@
             },
             "option_id": {
               "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+            },
+            "option_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+              },
+              "minItems": 2,
+              "uniqueItems": true,
+              "description": "With choose-one-option: the shared extra selections may go only to these options."
             }
           },
           "required": [
@@ -6505,7 +6603,12 @@
               "modifier": {
                 "required": [
                   "option_id"
-                ]
+                ],
+                "not": {
+                  "required": [
+                    "option_ids"
+                  ]
+                }
               }
             }
           }

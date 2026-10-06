@@ -3449,6 +3449,10 @@ export interface StanceSelectEffect {
   scope?: "army" | "unit";
   select?: string;
   /**
+   * The picked options join the options already active for the unit, instead of replacing them.
+   */
+  additive?: true;
+  /**
    * @minItems 2
    */
   options: [
@@ -3486,6 +3490,12 @@ export interface StanceSelectionCapacityEffect {
     additional_selections: number;
     allocation: "choose-one-option" | "fixed-option";
     option_id?: EntityId;
+    /**
+     * With choose-one-option: the shared extra selections may go only to these options.
+     *
+     * @minItems 2
+     */
+    option_ids?: [EntityId, EntityId, ...EntityId[]];
   };
 }
 /**
@@ -4471,7 +4481,7 @@ export interface AbilityUsageLimit {
   per?: "army" | "unit" | "model";
 }
 /**
- * [ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
+ * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
  */
 export interface AbilityActivateEffect {
   type: "ability-activate";
@@ -4479,9 +4489,19 @@ export interface AbilityActivateEffect {
   modifier: {
     ability: EntityId;
     option?: string;
+    /**
+     * @minItems 2
+     */
+    options?: [string, string, ...string[]];
+    all_options?: true;
     exclusive?: true;
     select?: {
       by: "roll" | "player";
+      count?: number;
+      /**
+       * @minItems 2
+       */
+      from?: [string, string, ...string[]];
     };
     ignore_consumed?: true;
     override?: {

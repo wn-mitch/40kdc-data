@@ -1592,8 +1592,20 @@ class CapPer(TypedDict):
     period: Literal["phase", "turn", "battle-round"]
 
 
-class Select(TypedDict):
-    by: Literal["roll", "player"]
+Option: TypeAlias = str
+
+
+FromItem: TypeAlias = str
+
+
+Select = TypedDict(
+    "Select",
+    {
+        "by": Literal["roll", "player"],
+        "count": NotRequired[int],
+        "from": NotRequired[list[FromItem]],
+    },
+)
 
 
 class WeaponRef20(TypedDict):
@@ -1879,6 +1891,7 @@ class Modifier58(TypedDict):
     additional_selections: int
     allocation: Literal["choose-one-option", "fixed-option"]
     option_id: NotRequired[EntityId]
+    option_ids: NotRequired[list[EntityId]]
 
 
 class StanceSelectionCapacityEffect(TypedDict):
@@ -2349,6 +2362,8 @@ class Override(TypedDict):
 class Modifier14(TypedDict):
     ability: EntityId
     option: NotRequired[str]
+    options: NotRequired[list[Option]]
+    all_options: NotRequired[Literal[True]]
     exclusive: NotRequired[Literal[True]]
     select: NotRequired[Select]
     ignore_consumed: NotRequired[Literal[True]]
@@ -4142,7 +4157,7 @@ class ConditionalEffect(TypedDict):
     effect: EffectNode
 
 
-class Option(TypedDict):
+class Option1(TypedDict):
     name: str
     requirement: DiceRequirementSpec
     effect: EffectNode
@@ -4152,7 +4167,7 @@ class DicePoolAllocationEffect(TypedDict):
     type: Literal["dice-pool-allocation"]
     pool: Pool
     max_activations: int
-    options: list[Option]
+    options: list[Option1]
 
 
 class Selector(TypedDict):
@@ -4285,7 +4300,7 @@ class DesignateTargetEffect(TypedDict):
     duration: NotRequired[ScopeDuration]
 
 
-class Option1(TypedDict):
+class Option2(TypedDict):
     name: str
     effect: EffectNode
 
@@ -4295,7 +4310,8 @@ class StanceSelectEffect(TypedDict):
     mode: Literal["re-selectable", "consumable"]
     scope: NotRequired[Literal["army", "unit"]]
     select: NotRequired[str]
-    options: list[Option1]
+    additive: NotRequired[Literal[True]]
+    options: list[Option2]
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
 
@@ -4316,7 +4332,7 @@ class IssueOrdersEffect(TypedDict):
     count: NotRequired[int]
     range: NotRequired[float]
     eligible: NotRequired[Eligible1]
-    options: list[Option1]
+    options: list[Option2]
 
 
 class NamedRegionStateEffect(TypedDict):

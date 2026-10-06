@@ -368,6 +368,9 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "ability": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "all_options": {
+///      "const": true
+///    },
 ///    "exclusive": {
 ///      "const": true
 ///    },
@@ -377,6 +380,15 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "option": {
 ///      "type": "string",
 ///      "minLength": 1
+///    },
+///    "options": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
 ///    },
 ///    "override": {
 ///      "type": "object",
@@ -401,6 +413,19 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///            "roll",
 ///            "player"
 ///          ]
+///        },
+///        "count": {
+///          "type": "integer",
+///          "minimum": 2.0
+///        },
+///        "from": {
+///          "type": "array",
+///          "items": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -415,11 +440,15 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 pub struct AbilityActivateEffectModifier {
     pub ability: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub all_options: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exclusive: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_consumed: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option: ::std::option::Option<AbilityActivateEffectModifierOption>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub options: ::std::option::Option<Vec<AbilityActivateEffectModifierOptionsItem>>,
     #[serde(
         rename = "override",
         default,
@@ -504,6 +533,81 @@ impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierOption {
             })
     }
 }
+///`AbilityActivateEffectModifierOptionsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityActivateEffectModifierOptionsItem(::std::string::String);
+impl ::std::ops::Deref for AbilityActivateEffectModifierOptionsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityActivateEffectModifierOptionsItem>
+for ::std::string::String {
+    fn from(value: AbilityActivateEffectModifierOptionsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityActivateEffectModifierOptionsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierOptionsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`AbilityActivateEffectModifierOverride`
 ///
 /// <details><summary>JSON schema</summary>
@@ -544,6 +648,19 @@ pub struct AbilityActivateEffectModifierOverride {
 ///        "roll",
 ///        "player"
 ///      ]
+///    },
+///    "count": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    },
+///    "from": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -554,6 +671,10 @@ pub struct AbilityActivateEffectModifierOverride {
 #[serde(deny_unknown_fields)]
 pub struct AbilityActivateEffectModifierSelect {
     pub by: AbilityActivateEffectModifierSelectBy,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub from: ::std::option::Option<Vec<AbilityActivateEffectModifierSelectFromItem>>,
 }
 ///`AbilityActivateEffectModifierSelectBy`
 ///
@@ -630,6 +751,81 @@ for AbilityActivateEffectModifierSelectBy {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`AbilityActivateEffectModifierSelectFromItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityActivateEffectModifierSelectFromItem(::std::string::String);
+impl ::std::ops::Deref for AbilityActivateEffectModifierSelectFromItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityActivateEffectModifierSelectFromItem>
+for ::std::string::String {
+    fn from(value: AbilityActivateEffectModifierSelectFromItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityActivateEffectModifierSelectFromItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierSelectFromItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`AbilityAppliesTo`
@@ -54562,7 +54758,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-activate effect",
-///      "description": "[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -55579,7 +55775,7 @@ pub enum SingleEffect {
     },
     /**ability-activate effect
 
-[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
+[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
     #[serde(rename = "ability-activate")]
     AbilityActivate {
         modifier: AbilityActivateEffectModifier,
@@ -56400,6 +56596,10 @@ for SplitUnitEffectModifierVariant1ByModelKeywordItem {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "additive": {
+///      "description": "The picked options join the options already active for the unit, instead of replacing them.",
+///      "const": true
+///    },
 ///    "max_choices": {
 ///      "description": "Most options picked at once; defaults to one.",
 ///      "type": "integer",
@@ -56456,13 +56656,16 @@ for SplitUnitEffectModifierVariant1ByModelKeywordItem {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. Each option carries a `name` and a bundle `effect` (often a sequence)."
+///  "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. A pick replaces the option already active for the unit unless `additive` keeps both. Each option carries a `name` and a bundle `effect` (often a sequence)."
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StanceSelectEffect {
+    ///The picked options join the options already active for the unit, instead of replacing them.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub additive: ::std::option::Option<::serde_json::Value>,
     ///Most options picked at once; defaults to one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
@@ -56839,6 +57042,15 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectType {
 ///        "option_id": {
 ///          "$ref": "#/$defs/entity-id"
 ///        },
+///        "option_ids": {
+///          "description": "With choose-one-option: the shared extra selections may go only to these options.",
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        },
 ///        "stance_id": {
 ///          "$ref": "#/$defs/entity-id"
 ///        }
@@ -56860,7 +57072,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectType {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`. The stance's own menu and effects are unchanged."
+///  "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`; `option_ids` narrows the pooled allowance to those options (one shared extra selection over the assault or tactical doctrine). The stance's own menu and effects are unchanged."
 ///}
 /// ```
 /// </details>
@@ -56900,6 +57112,15 @@ pub struct StanceSelectionCapacityEffect {
 ///    "option_id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "option_ids": {
+///      "description": "With choose-one-option: the shared extra selections may go only to these options.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    },
 ///    "stance_id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    }
@@ -56915,6 +57136,9 @@ pub struct StanceSelectionCapacityEffectModifier {
     pub allocation: StanceSelectionCapacityEffectModifierAllocation,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option_id: ::std::option::Option<EntityId>,
+    ///With choose-one-option: the shared extra selections may go only to these options.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub option_ids: ::std::option::Option<Vec<EntityId>>,
     pub stance_id: EntityId,
 }
 ///`StanceSelectionCapacityEffectModifierAllocation`

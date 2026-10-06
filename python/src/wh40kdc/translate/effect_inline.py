@@ -11,6 +11,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.condition_refs import _or_list
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_quantity import (
@@ -412,11 +413,15 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             f"{jstr(_obj(o).get('name'))} ({inline(_obj(o).get('effect'), ctx)})"
             for o in (e.get("options") or [])
         )
-        return f"{stance_pick(e)}: {opts}"
+        return f"{stance_pick(e)}{stance_additive(e)}: {opts}"
     if t == "stance-selection-capacity":
         n = num(m.get("additional_selections"))
         n = 1.0 if n != n or n == 0 else n
         times = "one additional time" if n == 1 else f"{num_str(n)} additional times"
+        # A shared allowance narrowed to some options: spent on any one of them, not one of each.
+        if m.get("allocation") != "fixed-option" and isinstance(m.get("option_ids"), list):
+            names = _or_list([title_case(jstr(i)) for i in m["option_ids"]])
+            return f"you can select {names} {times} per battle, shared between them"
         if m.get("allocation") == "fixed-option" and m.get("option_id") is not None:
             subject = title_case(jstr(m["option_id"]))
         else:
@@ -452,6 +457,11 @@ def pool_text(e: Effect) -> str:
 
 
 _NUMBER_WORDS = ["zero", "one", "two", "three", "four"]
+
+
+def stance_additive(e: Effect) -> str:
+    """ " (in addition to any already active)" when a stance pick joins the active options."""
+    return " (in addition to any already active)" if e.get("additive") is True else ""
 
 
 def stance_pick(e: Effect) -> str:

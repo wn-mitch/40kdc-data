@@ -9,7 +9,7 @@ use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
 use super::leaf_shapes::describe_shape_leaf;
 use super::words::*;
-use crate::translate::condition::{and_list, nn, obj, P};
+use crate::translate::condition::{and_list, nn, obj, or_list, P};
 
 /// Every single-effect type; anything else is a container.
 pub(crate) const LEAF_TYPES: &[&str] = &[
@@ -482,13 +482,45 @@ fn ability_activate(m: &P, subj: &str) -> String {
     } else {
         ""
     };
+    let exclusive = if is_true(m, "exclusive") {
+        " (and no other option is)"
+    } else {
+        ""
+    };
     if let Some(sel) = nn(m, "select") {
-        let how = if sv(obj(Some(sel)), "by") == Some("roll") {
-            format!("make a new {label} roll and activate one result it allows")
+        let sel = obj(Some(sel));
+        let n = num(sel.get("count"));
+        let n = if n.is_nan() || n == 0.0 { 1.0 } else { n };
+        let from = option_names(sel, "from");
+        let how = if sv(sel, "by") == Some("roll") {
+            let results = if n == 1.0 {
+                "one result".to_string()
+            } else {
+                format!("{} results", fnum(n))
+            };
+            let among = if from.is_empty() {
+                String::new()
+            } else {
+                format!(" among the {} options", or_list(&from))
+            };
+            format!("make a new {label} roll and activate {results} it allows{among}")
         } else {
-            format!("select one option of {label}")
+            let count = if n == 1.0 { "one".to_string() } else { fnum(n) };
+            let what = if !from.is_empty() {
+                format!("of the {} options", or_list(&from))
+            } else if n == 1.0 {
+                "option".to_string()
+            } else {
+                "options".to_string()
+            };
+            format!("select {count} {what} of {label}")
         };
-        return format!("{how} for {subj}, in addition to any already active{consumed}");
+        let join = if is_true(m, "exclusive") {
+            "in place of"
+        } else {
+            "in addition to"
+        };
+        return format!("{how} for {subj}, {join} any already active{consumed}");
     }
     let instead = nn(m, "override")
         .map(|o| {
@@ -498,19 +530,30 @@ fn ability_activate(m: &P, subj: &str) -> String {
             )
         })
         .unwrap_or_default();
+    if is_true(m, "all_options") {
+        return format!("every option of {label} is active for {subj}{consumed}");
+    }
+    if arr(m, "options").is_some() {
+        return format!(
+            "the {} options of {label} are active for {subj}{exclusive}{consumed}",
+            and_list(&option_names(m, "options"))
+        );
+    }
     match nn(m, "option") {
         None => format!(
             "{subj} {} the {label} ability now{instead}",
             v(subj, "resolves")
         ),
         Some(opt) => format!(
-            "the {} option of {label} is active for {subj}{}{consumed}",
-            title_case(&jv(opt)),
-            if is_true(m, "exclusive") {
-                " (and no other option is)"
-            } else {
-                ""
-            }
+            "the {} option of {label} is active for {subj}{exclusive}{consumed}",
+            title_case(&jv(opt))
         ),
     }
+}
+
+/// Option ids as their display names.
+fn option_names(m: &P, k: &str) -> Vec<String> {
+    arr(m, k)
+        .map(|list| list.iter().map(|o| title_case(&jv(o))).collect())
+        .unwrap_or_default()
 }

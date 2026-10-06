@@ -3,6 +3,7 @@
  * fragments combine; nothing here depends on the other leaves of an ability.
  */
 
+import { activationModifier } from "./compile-activation.js";
 import { boardEffect } from "./compile-board-effects.js";
 import { containerEffect } from "./compile-containers.js";
 import { testEffect } from "./compile-test-effects.js";
@@ -273,14 +274,8 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
         },
       };
     }
-    case "ability-activate": {
-      const option = leaf.parameters.option;
-      const exclusive = leaf.parameters.exclusive;
-      return {
-        type: "ability-activate", target: target(leaf.parameters.subject),
-        modifier: { ability: closed(leaf, "ability"), ...(option !== undefined ? { option } : {}), ...(exclusive === true ? { exclusive: true } : {}) },
-      };
-    }
+    case "ability-activate":
+      return { type: "ability-activate", target: target(leaf.parameters.subject), modifier: activationModifier(leaf) };
     case "feel-no-pain": {
       const against = closed(leaf, "against");
       return { type: "feel-no-pain", target: models(leaf, target(leaf.parameters.subject)), modifier: { threshold: closed(leaf, "threshold"), ...(against !== "all" ? { against } : {}) } };

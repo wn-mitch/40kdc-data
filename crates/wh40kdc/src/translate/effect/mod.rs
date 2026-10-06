@@ -223,6 +223,15 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     format!("while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}")
 }
 
+/// " (in addition to any already active)" when a stance pick joins the active options.
+fn stance_additive(e: &P) -> &'static str {
+    if is_true(e, "additive") {
+        " (in addition to any already active)"
+    } else {
+        ""
+    }
+}
+
 /// "select one", "select two", "select up to two" — how many menu options are picked.
 fn stance_pick(e: &P) -> String {
     let min = num(Some(nn(e, "min_choices").unwrap_or(&Value::from(1))));
@@ -405,8 +414,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         }
         "designate-target" => designate_target_inline(e, ctx),
         "stance-select" => format!(
-            "{}: {}",
+            "{}{}: {}",
             stance_pick(e),
+            stance_additive(e),
             items(e, "options")
                 .iter()
                 .map(|o| {
@@ -428,6 +438,17 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             } else {
                 format!("{} additional times", fnum(n))
             };
+            // A shared allowance narrowed to some options: spent on any one of them, not one of each.
+            if sv(m, "allocation") != Some("fixed-option") {
+                if let Some(ids) = arr(m, "option_ids") {
+                    let names: Vec<String> =
+                        ids.iter().map(|id| title_case(&jstr(Some(id)))).collect();
+                    return format!(
+                        "you can select {} {times} per battle, shared between them",
+                        crate::translate::condition::or_list(&names)
+                    );
+                }
+            }
             let subject = match nn(m, "option_id") {
                 Some(opt) if sv(m, "allocation") == Some("fixed-option") => title_case(&jv(opt)),
                 _ => format!("one option of {}", title_case(&jstr(m.get("stance_id")))),
