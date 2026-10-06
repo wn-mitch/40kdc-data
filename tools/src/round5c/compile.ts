@@ -11,6 +11,7 @@ import { designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, w
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
+import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
@@ -150,7 +151,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldAlternativeConditions(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText);
+    list = foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(ordered(leaves))))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -296,7 +297,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
       else if (leaf.role === "CONDITION" && perRecipient && effectSentences.has(sentence) && Object.values(leaf.parameters).includes("recipient")) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
-      else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
+      else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" && !namesSelection(leaf) ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
       else if (leaf.role === "DURATION") durations.push(duration(leaf));
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {

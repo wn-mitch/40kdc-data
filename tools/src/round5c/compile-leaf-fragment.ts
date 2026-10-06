@@ -5,6 +5,8 @@ import { effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger } from "./compile-triggers.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { usageFor } from "./restriction-families.js";
+import { awaitsFollowingFilter } from "./family-extensions-11.js";
+import { namesSelection } from "./compile-targeting-history.js";
 
 type Node = Record<string, unknown>;
 
@@ -56,8 +58,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
           : leaf.family_id === "move-must-end" ? "No separate text: the conditions after it become where the move before it must end."
             : "No separate text: checked against the core record, which already holds it." };
   }
-  if ((leaf.parameters.of === "following-filter" || leaf.parameters.with === "following-filter") && leaf.parameters.following_filter === undefined) {
-    return { kind: "implicit", note: `No separate text: ${leaf.family_id === "unit-state" ? "engaged with" : "measured to"} any unit the unit-filter right after it names.` };
+  if (awaitsFollowingFilter(leaf.parameters) && leaf.parameters.following_filter === undefined) {
+    const relation = leaf.family_id === "unit-state" ? "engaged with" : leaf.family_id === "hit-by-attacks" ? "hit by attacks made by" : leaf.family_id === "unit-position" ? "measured to" : "targeting";
+    return { kind: "implicit", note: `No separate text: ${relation} any unit the unit-filter right after it names.` };
   }
   if (leaf.family_id === "unit-position" && leaf.parameters.objective === "selected" && leaf.parameters.selection_var === undefined) {
     return { kind: "implicit", note: "No separate text: within range of the objective marker this record's select-objective chose." };
@@ -65,7 +68,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "phase-window" && leaf.parameters.phase === "any" && (leaf.parameters.turn === undefined || leaf.parameters.turn === "either")) {
     return { kind: "implicit", note: "No separate text: in any phase, so the ability is not limited to a phase." };
   }
-  if (leaf.family_id === "target-is-selected") return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
+  if (leaf.family_id === "target-is-selected" && !namesSelection(leaf)) return { kind: "implicit", note: "No separate text: the effects it gates apply to attacks against the selected unit." };
   if (leaf.family_id === "dice-roll") return { kind: "implicit", note: `No separate text: roll one ${String(leaf.parameters.dice)}; the result bands after it say what each result does.` };
   if (leaf.family_id === "roll-result") return { kind: "implicit", note: leaf.parameters.to === undefined
     ? `No separate text: the effects in its clause happen on at least ${String(leaf.parameters.from)}; the dice roll supplies the upper bound.`

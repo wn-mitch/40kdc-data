@@ -11,6 +11,14 @@ import { DESIGNATION_IDS } from "../translate/designations.js";
 /** A distance or engagement whose other unit is the unit-filter right after the leaf. */
 export const FOLLOWING_FILTER = "following-filter";
 
+/** Keys whose value following-filter names the unit-filter right after the leaf. */
+const FOLLOWING_FILTER_KEYS = ["of", "with", "object", "target", "by"] as const;
+
+/** Whether a leaf names the unit-filter right after it (a distance's, engagement's or targeting's other unit). */
+export function awaitsFollowingFilter(parameters: Record<string, unknown>): boolean {
+  return FOLLOWING_FILTER_KEYS.some((key) => parameters[key] === FOLLOWING_FILTER);
+}
+
 /** States the DSL's unit-state can read at the start of the phase or turn (strength and carrying are other predicates). */
 const STATES_AT = ["engaged", "battle-shocked", "on-battlefield", "in-reserves", "in-strategic-reserves", "in-cult-ambush"] as const;
 
@@ -94,6 +102,61 @@ const CHARACTERISTIC_FLOOR: FamilyExtension = {
     const normalized = previous(rest);
     if (normalized.operation !== "subtract" && normalized.operation !== "worsen") throw new TypeError("characteristic-modifier.minimum floors only a subtract or worsen.");
     return { ...normalized, minimum };
+  },
+};
+
+/** Who selected the target, and which unit was selected, in a target-is-selected leaf that names them. */
+const SELECTION_BY = ["event-subject", "this-unit", "selected-unit", ANTECEDENT] as const;
+const SELECTION_TARGETS = ["this-unit", "this-model", "selected-unit", FOLLOWING_FILTER, ANTECEDENT] as const;
+
+const TARGET_IS_SELECTED_PARTIES: FamilyExtension = {
+  // "if one or more units with this ability are selected as a target of that charge".
+  family: "target-is-selected",
+  description: "As the previous version, plus by and target, always together: target was selected as a target by by in the moment the ability names (\"if one or more units with this ability are selected as a target of that charge\" = by antecedent, target this-unit). target following-filter is any unit the unit-filter right after this leaf matches. Without them, the attack targets the selected unit, as before.",
+  schema: (previous) => withProperties(previous, { by: optional({ enum: SELECTION_BY }), target: optional({ enum: SELECTION_TARGETS }) }),
+  normalize: (input, previous) => {
+    if (input.by === undefined && input.target === undefined) return previous(input);
+    const { by, target, ...rest } = input;
+    if (by === undefined || target === undefined) throw new TypeError("target-is-selected names by and target together, or neither.");
+    const normalized = previous(rest);
+    const who = enumValue(by, SELECTION_BY, "target-is-selected.by");
+    const what = enumValue(target, SELECTION_TARGETS, "target-is-selected.target");
+    if (who === what && who !== ANTECEDENT) throw new TypeError("target-is-selected: a unit does not select itself as a target.");
+    return { ...normalized, by: who, target: what };
+  },
+};
+
+const HIT_THIS_PHASE: FamilyExtension = {
+  // "that was hit by one or more Psychic Attacks made by a" + "THOUSAND SONS PSYKER model" + "this phase".
+  family: "hit-by-attacks",
+  description: "As the previous version, plus window phase: hit at any time this phase, not only by the attacks of the ability's moment; and by following-filter (only with window phase): the attacks were made by any unit or model the unit-filter right after this leaf matches. Without by, the attacker is the unit of the ability's moment, as before.",
+  schema: (previous) => withProperties(previous, {
+    window: optional({ enum: ["phase"] }),
+    by: optional({ enum: [FOLLOWING_FILTER], "x-only-when": { window: ["phase"] } }),
+  }),
+  normalize: (input, previous) => {
+    if (input.window === undefined && input.by === undefined) return previous(input);
+    const { window, by, ...rest } = input;
+    if (window === undefined) throw new TypeError("hit-by-attacks.by names who made the attacks of a window phase hit.");
+    const normalized = { ...previous(rest), window: enumValue(window, ["phase"], "hit-by-attacks.window") };
+    return by === undefined ? normalized : { ...normalized, by: enumValue(by, [FOLLOWING_FILTER], "hit-by-attacks.by") };
+  },
+};
+
+const TARGETING_ACTIVITY_LIST = activitiesExtension(
+  ["targeted-by-attacks-this-phase", "made-attacks-targeting-this-phase"],
+  "targeted-by-attacks-this-phase (the subject was selected as the target of one or more attacks this phase, by any unit) and made-attacks-targeting-this-phase (the subject made one or more attacks this phase that targeted this unit; the subject is never this unit or its model)",
+);
+
+const TARGETING_ACTIVITIES: FamilyExtension = {
+  // "that was selected as the target of one or more attacks this phase"; "that made one or more attacks that targeted your unit this phase".
+  ...TARGETING_ACTIVITY_LIST,
+  normalize: (input, previous) => {
+    const normalized = TARGETING_ACTIVITY_LIST.normalize(input, previous);
+    if ((normalized.activities as string[]).includes("made-attacks-targeting-this-phase") && (normalized.subject === "this-unit" || normalized.subject === "this-model")) {
+      throw new TypeError("unit-activity made-attacks-targeting-this-phase: the attacks targeted this unit, so their maker is another unit, not this unit or its model.");
+    }
+    return normalized;
   },
 };
 
@@ -286,6 +349,9 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
     "a unit's moves and moments this phase (fell back, charged, made a Normal move, disembarked, was set up, made a Dark Pact), made a Normal move this turn, lost models this phase, and destroyed an enemy model this phase or turn",
   ),
   EVENT_MODEL_DESTROYER,
+  TARGET_IS_SELECTED_PARTIES,
+  HIT_THIS_PHASE,
+  TARGETING_ACTIVITIES,
 ];
 
 /** A version whose subject also accepts antecedent: an earlier leaf's unit, bound when the record compiles. */

@@ -22377,5 +22377,159 @@
     "expected": {
       "text": "When a model in the unit is destroyed by an enemy unit, add 1 to the unit's Leadership characteristic."
     }
+  },
+  {
+    "caseId": "targeted-ranged-attacks-this-unit",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "ranged"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "After an enemy unit shoots, if the triggering unit has selected the unit as a target of its ranged attacks, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-melee-attacks-no-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If the selected unit has selected targets for its melee attacks this phase, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-by-any-unit-this-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": {
+            "owner": "any"
+          },
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If a unit has selected the unit as a target this phase, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-not-ranged-filter-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "INFANTRY"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "filter": {
+                "kind": "attack",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the triggering unit has selected a friendly INFANTRY unit that is unengaged as a target of its ranged attacks this phase, the unit can make a Surge move of up to D6\"."
+    }
   }
 ]

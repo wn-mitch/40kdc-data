@@ -1,6 +1,7 @@
 import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { awaitsFollowingFilter } from "./family-extensions-11.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
@@ -69,7 +70,7 @@ function describes(leaves: readonly CompileLeaf[], at: number, fragment: string 
   if (leaf.family_id === "unit-owner") return true;
   if (leaf.family_id === "unit-filter") {
     const before = leaves[at - 1];
-    return before !== undefined && (before.parameters.of === "following-filter" || before.parameters.with === "following-filter");
+    return before !== undefined && awaitsFollowingFilter(before.parameters);
   }
   return leaf.role === "CONDITION";
 }
@@ -195,6 +196,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],
   "in-region": ["subject"],
+  targeted: ["subject"], "target-is-selected": ["by", "target"],
   // An owned moment's subject, and who destroyed a unit, go into the trigger as is (compile-triggers.ts).
   event: ["subject", "by"],
 };

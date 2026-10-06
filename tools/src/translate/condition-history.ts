@@ -24,8 +24,12 @@ export function describeHappened(p: P, negated: boolean): string {
       const from: Record<string, string> = { "deep-strike": " using Deep Strike", "strategic-reserves": " from Strategic Reserves", "cult-ambush": " from Cult Ambush", transport: " from a Transport" };
       return withWindow(`${who} ${negated ? "was not" : "was"} set up${from[str(f.from)] ?? ""}`, p.window);
     }
-    case "targets-selected":
-      return withWindow(`${who} ${negated ? "has not" : "has"} selected ${p.object != null ? `${unitRefPhrase(p.object)} as a target` : "targets"}`, p.window);
+    case "targets-selected": {
+      // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+      const atk = f.attack_type ? str(f.attack_type) : "";
+      const what = p.object != null ? `${unitRefPhrase(p.object)} as a target${atk ? ` of its ${atk} attacks` : ""}` : `targets${atk ? ` for its ${atk} attacks` : ""}`;
+      return withWindow(`${who} ${negated ? "has not" : "has"} selected ${what}`, p.window);
+    }
     case "disembarked": {
       const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : unitRefPhrase(f.transport);
       return withWindow(`${who} ${didNot("disembark")} from ${from}`, p.window);

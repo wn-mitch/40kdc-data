@@ -96,9 +96,20 @@ func describeHappened(p map[string]any, negated bool) string {
 		if negated {
 			has = "has not"
 		}
+		// Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+		atk := ""
+		if truthy(f["attack_type"]) {
+			atk = cstr(f["attack_type"])
+		}
 		what := "targets"
+		if atk != "" {
+			what += " for its " + atk + " attacks"
+		}
 		if p["object"] != nil {
 			what = unitRefPhrase(p["object"], "the unit") + " as a target"
+			if atk != "" {
+				what += " of its " + atk + " attacks"
+			}
 		}
 		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":

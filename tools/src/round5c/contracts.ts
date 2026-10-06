@@ -19,6 +19,7 @@ import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-fa
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
 import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
 import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
+import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
@@ -88,6 +89,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...PREDICATE_FAMILIES_2,
   ...PREDICATE_SUBJECT_FAMILIES,
   ...TEST_FAMILIES,
+  ...TARGETED_FAMILIES,
   ...GAP_CONTAINER_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
@@ -159,6 +161,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizePredicateParameters2(family, input)
     ?? normalizePredicateSubjectParameters(family, input, version)
     ?? normalizeTestParameters(family, input, version)
+    ?? normalizeTargetedParameters(family, input)
     ?? normalizeGapContainerParameters(family, input, version)
     ?? normalizeMissionPredicateParameters(family, input);
   if (normalized) return normalized;

@@ -102,9 +102,22 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             )
         }
         "targets-selected" => {
+            // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+            let atk = if truthy(f.get("attack_type")) {
+                st(f.get("attack_type"))
+            } else {
+                String::new()
+            };
             let what = match nn(p, "object") {
-                Some(o) => format!("{} as a target", unit_ref_phrase(Some(o), "the unit")),
-                None => "targets".to_string(),
+                Some(o) if atk.is_empty() => {
+                    format!("{} as a target", unit_ref_phrase(Some(o), "the unit"))
+                }
+                Some(o) => format!(
+                    "{} as a target of its {atk} attacks",
+                    unit_ref_phrase(Some(o), "the unit")
+                ),
+                None if atk.is_empty() => "targets".to_string(),
+                None => format!("targets for its {atk} attacks"),
             };
             with_window(
                 &format!(

@@ -66,11 +66,14 @@ def _describe_happened(p: P, negated: bool) -> str:
         return _with_window(f"{who} {'was not' if negated else 'was'} set up{source}", window)
     if event == "targets-selected":
         has = "has not" if negated else "has"
-        what = (
-            f"{unit_ref_phrase(p['object'])} as a target"
-            if p.get("object") is not None
-            else "targets"
-        )
+        # Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+        atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
+        if p.get("object") is not None:
+            what = f"{unit_ref_phrase(p['object'])} as a target" + (
+                f" of its {atk} attacks" if atk else ""
+            )
+        else:
+            what = "targets" + (f" for its {atk} attacks" if atk else "")
         return _with_window(f"{who} {has} selected {what}", window)
     if event == "disembarked":
         transport = f.get("transport")

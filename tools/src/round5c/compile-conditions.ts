@@ -8,6 +8,7 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { abilityChecks, stateCheck } from "./compile-wrappers.js";
+import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 
 type Node = Record<string, unknown>;
@@ -69,6 +70,12 @@ const HISTORY: Record<string, (subject: string | undefined) => Node> = {
     event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
     filter: { by: "event-subject" }, window: "event",
   }),
+  // Past targeting: targeted by any unit's attacks this phase, and attacks the subject made at this unit.
+  "targeted-by-attacks-this-phase": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "attack" }, window: "phase" }),
+  "made-attacks-targeting-this-phase": (subject) => {
+    if (subject === undefined) throw new CompileError("unit-activity made-attacks-targeting-this-phase names the unit that attacked this unit; this unit cannot be it.");
+    return { event: "targets-selected", subject, object: "this-unit", filter: { kind: "attack" }, window: "phase" };
+  },
 };
 
 /** A unit-state leaf's states that are not core-rules unit states. */
@@ -300,7 +307,12 @@ export function condition(leaf: CompileLeaf): Node {
       // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
       // attacks of the ability's moment ("after this model has shot"), during that moment.
       // `hit_filter` is the attack-filter foldHitFilters folded in ("… made with its Plague Wind").
-      return { type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) }, window: "event" } };
+      // Window phase: any hit this phase, by the moment's unit or by the units of the unit-filter after it.
+      return { type: "happened", parameters: {
+        event: "after-roll", subject: leaf.parameters.by === "following-filter" ? followingFilter(leaf) : "event-subject",
+        object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) },
+        window: leaf.parameters.window === "phase" ? "phase" : "event",
+      } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
       const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true };
@@ -358,7 +370,10 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("within", { of: { objective }, range: "objective-control" }, subject));
     }
     case "target-is-selected":
+      if (namesSelection(leaf)) return targetingCondition(leaf);
       throw new CompileError("target-is-selected only compiles with a select-unit leaf; the compiler resolves it there.");
+    case "targeted":
+      return targetingCondition(leaf);
     case "army-faction":
       return polarity(leaf, { type: "army-faction", parameters: { faction: closed(leaf, "faction") } });
     case "battle-size":
@@ -589,7 +604,8 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   // binding names (the triggering or the attacked unit); the WHEN's own filter says which units qualify.
   if (selectors.length === 0 && bindings.length === 1) {
     const restrictions: Node = { count: "one", selects: "unit", bound_to: bindings[0]!.parameters.bound_to };
-    const eligibilityCondition = allOf([...eligibility]);
+    // The attacked unit's filter (compile-targeting-history.ts bindTargetedTarget) says which attacked unit.
+    const eligibilityCondition = allOf([...attackedChecks(bindings[0]!.parameters.attacked_filter as Node | undefined), ...eligibility]);
     if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
     return restrictions;
   }
@@ -606,7 +622,9 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
     ...(keywords.length ? { [selector.parameters.match === "any" ? "required_keywords_any" : "required_keywords"]: keywords } : {}),
     ...(excluded.length ? { excluded_keywords: excluded } : {}),
   };
-  const bound = triggering ? "triggering-unit" : bindings[0]?.parameters.bound_to;
+  // "That X unit" after an enemy unit that targeted a friendly X unit: the unit it attacked.
+  const attacked = selector.parameters.attacked_filter as Node | undefined;
+  const bound = triggering ? (attacked ? "attacked-unit" : "triggering-unit") : bindings[0]?.parameters.bound_to;
   if (bound) restrictions.bound_to = bound;
   // A folded unit-filter's checks beyond all-of keywords (compile-unit-filters.ts) go to eligibility.
   const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean };
@@ -620,7 +638,9 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
     ...abilityChecks(filter.excluded_abilities),
     ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
   ];
-  const eligibilityCondition = allOf([...filtered, ...eligibility]);
+  const anyRequired = selector.parameters.match === "any" ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];
+  const attackedFilter = attackedChecks(attacked, selector.parameters.match === "any" ? [] : keywords, anyRequired);
+  const eligibilityCondition = allOf([...filtered, ...attackedFilter, ...eligibility]);
   if (eligibilityCondition) restrictions.eligibility = eligibilityCondition;
   return restrictions;
 }

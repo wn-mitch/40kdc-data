@@ -1,6 +1,7 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { sameRun } from "./compile-attack-properties.js";
+import { namesSelection } from "./compile-targeting-history.js";
 
 const SCOPE = "weapon-property-scope";
 const KEYWORD = "weapon-ability-keyword";
@@ -40,7 +41,7 @@ const TARGET_CONDITIONS = new Set(["target-is-selected", "designated-filter", "u
 const TARGET_SUBJECTS = new Set(["target", "defender"]);
 
 function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
-  if (leaf.role !== "CONDITION" || leaf.fragment !== scope.fragment || !TARGET_CONDITIONS.has(leaf.family_id)) return false;
+  if (leaf.role !== "CONDITION" || leaf.fragment !== scope.fragment || !TARGET_CONDITIONS.has(leaf.family_id) || namesSelection(leaf)) return false;
   const subject = leaf.parameters.subject;
   // A designation with no subject in this position names the attacks' target ("that target a busted unit").
   return leaf.family_id === "target-is-selected" || leaf.family_id === "unit-filter-target" || (leaf.family_id === "designated-filter" && subject === undefined)

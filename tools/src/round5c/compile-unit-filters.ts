@@ -1,6 +1,6 @@
 import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter } from "./compile-antecedent.js";
-import { FOLLOWING_FILTER } from "./family-extensions-11.js";
+import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
@@ -390,7 +390,7 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
 /** A distance or engagement in the filter's fragment whose other unit is the filter right after it. */
 function followedBy(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   return leaf !== undefined && leaf.fragment === filter.fragment && leaf.parameters.following_filter === undefined
-    && (leaf.parameters.of === FOLLOWING_FILTER || leaf.parameters.with === FOLLOWING_FILTER);
+    && awaitsFollowingFilter(leaf.parameters);
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */
