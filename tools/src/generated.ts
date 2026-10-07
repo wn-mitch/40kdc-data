@@ -3319,15 +3319,13 @@ export interface EndAttackSequenceEffect {
   scaling?: Scaling;
 }
 /**
- * [ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6", Firing Deck 2).
+ * [ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6", Firing Deck 2).
  */
 export interface AbilityGrantEffect {
   type: "ability-grant";
   target: UnitRef;
   modifier: {
-    ability: EntityId;
-    value?: number | UnitRating;
-    rules_bundle?: true;
+    [k: string]: unknown;
   };
   scaling?: Scaling;
 }
@@ -3593,7 +3591,7 @@ export interface AbilityPart {
     | RollEffect
     | SelectObjectiveEffect;
   /**
-   * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+   * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
    */
   duration?:
     | "phase"

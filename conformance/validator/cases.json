@@ -538,5 +538,111 @@
       ]
     },
     "expected_errors": []
+  },
+  {
+    "name": "ability: grant printed with its definition",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-shade-pact",
+      "name": "Shade Pact",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "ability": "shade-ward",
+          "definition": {
+            "type": "ability-part",
+            "name": "Shade Ward",
+            "effect": {
+              "type": "aura",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "range": 6,
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "stat": "WS",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapon_type": "melee"
+                  }
+                },
+                "eligible": {
+                  "required_keywords": [
+                    "GLOOM HOUND"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: unnamed grant printed with its definition",
+    "target": "ability",
+    "input": {
+      "ability_id": "warden-dusk-pact",
+      "name": "Dusk Pact",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "ironclad-sentinels"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "definition": {
+            "type": "ability-part",
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "subset": "ones"
+              }
+            }
+          }
+        }
+      }
+    },
+    "expected_errors": []
   }
 ]

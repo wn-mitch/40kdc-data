@@ -204,8 +204,16 @@ func partHead(e map[string]any) string {
 	if e["kind"] == "psychic" && e["level"] != nil {
 		level = " (Psychic level " + ejstr(e["level"]) + ")"
 	}
+	moment := strings.Join(moments, " or ")
+	// A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+	label := ""
+	if jsTruthy(e["name"]) && moment == "" && !jsTruthy(e["optional"]) {
+		label = ejstr(e["name"]) + level
+	}
 	named := ""
-	if jsTruthy(e["name"]) {
+	if label != "" {
+		named = ""
+	} else if jsTruthy(e["name"]) {
 		use := "use "
 		if jsTruthy(e["optional"]) {
 			use = "you can use "
@@ -223,7 +231,7 @@ func partHead(e map[string]any) string {
 		usage = usageClause(e["usage"])
 	}
 	_, trail := durationClauses(e["duration"])
-	return joinNonEmpty([]string{strings.Join(moments, " or "), usage, named, cost, trail}, ", ")
+	return joinNonEmpty([]string{label, moment, usage, named, cost, trail}, ", ")
 }
 
 // partInline renders a part on one line: its head, then its effect.
@@ -355,7 +363,7 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 		}
 		return assembleSentence([]string{trig, lead, leadIn, trail, describeEffectInline(inner, ctx)})
 	}
-	if containerTypes[ejstrType(e)] {
+	if containerTypes[ejstrType(e)] || isDefinedGrant(e) {
 		ownDuration := (e["type"] == "designate-target" || e["type"] == "persistent-designation") && e["duration"] != nil
 		t := trail
 		if ownDuration {

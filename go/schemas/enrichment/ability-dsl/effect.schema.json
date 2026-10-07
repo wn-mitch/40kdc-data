@@ -1052,7 +1052,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-grant effect",
-          "description": "[ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6\", Firing Deck 2).",
+          "description": "[ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6\", Firing Deck 2).",
           "required": [
             "type",
             "target",
@@ -1084,11 +1084,45 @@
                 },
                 "rules_bundle": {
                   "const": true
+                },
+                "definition": {
+                  "$ref": "#/$defs/ability-part",
+                  "description": "The granted ability itself, when the rules print it after the grant (\"X units have the following ability: Name: …\") instead of naming a separate ability record. It is the holder's own ability: inside it, this-unit, this-model and ability-unit name the unit (model) it is granted to, each unit `target` matches, and it works only while that holder is on the battlefield (not while it is in Reserves, nor once it is destroyed). An aura in it is centred on the holder, and a usage in it counts per holder. A model-level `target` gives each unit with one or more such models one copy, not one per model. `ability` is the printed name's id; it is absent for an unnamed body (\"have the following:\")."
                 }
               },
-              "required": [
-                "ability"
-              ]
+              "anyOf": [
+                {
+                  "required": [
+                    "ability"
+                  ]
+                },
+                {
+                  "required": [
+                    "definition"
+                  ]
+                }
+              ],
+              "if": {
+                "required": [
+                  "definition"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "rules_bundle"
+                      ]
+                    }
+                  ]
+                }
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"

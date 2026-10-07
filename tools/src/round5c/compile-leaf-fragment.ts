@@ -26,6 +26,10 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (isContainerOpener(leaf.family_id)) {
     return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
   }
+  if (leaf.family_id === "granted-ability-name") return { kind: "implicit", note: "No separate text: its label names one ability a printed grant gives; the leaves after it, to the end of its paragraph, are that ability's own." };
+  if (leaf.family_id === "ability-record-grant" && leaf.parameters.printed !== undefined) {
+    return { kind: "implicit", note: "No separate text: gives its holder the abilities printed after it; each compiles alone, as the holder's own ability." };
+  }
   if (leaf.family_id === "named-option") return { kind: "implicit", note: "No separate text: its label names the option; the effects after it are that option's own." };
   if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
   if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };

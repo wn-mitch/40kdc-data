@@ -648,7 +648,7 @@
     }
    }
   ],
-  "out": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Use Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
+  "out": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
  },
  {
   "fn": "describeAbility",

@@ -285,7 +285,15 @@ fn part_head(e: &P) -> String {
         _ => String::new(),
     };
     let optional = truthy_key(e, "optional");
-    let named = if truthy_key(e, "name") {
+    // A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+    let label = if truthy_key(e, "name") && moment.is_empty() && !optional {
+        format!("{}{level}", jstr(e.get("name")))
+    } else {
+        String::new()
+    };
+    let named = if !label.is_empty() {
+        String::new()
+    } else if truthy_key(e, "name") {
         format!(
             "{}{}{level}",
             if optional { "you can use " } else { "use " },
@@ -305,7 +313,7 @@ fn part_head(e: &P) -> String {
         None => String::new(),
     };
     let (_, trail) = duration_clauses(e.get("duration"));
-    join_nonempty(&[&moment, &usage, &named, &cost, trail], ", ")
+    join_nonempty(&[&label, &moment, &usage, &named, &cost, trail], ", ")
 }
 
 fn part_inline(e: &P, ctx: &Ctx) -> String {

@@ -332,7 +332,51 @@ func unmodifiedWord(m map[string]any) string {
 	return ""
 }
 
-func abilityGrantLeaf(m map[string]any, subj string) string {
+// isDefinedGrant reports a grant that prints the ability it gives (modifier.definition).
+func isDefinedGrant(e map[string]any) bool {
+	if e["type"] != "ability-grant" {
+		return false
+	}
+	_, ok := mod(e)["definition"].(map[string]any)
+	return ok
+}
+
+// definedGrantHead renders who holds a printed ability and its name ("Friendly X units gain the
+// Shade Ward ability"), or "the following rules" for an unnamed one. A model-level target holds
+// one copy per unit.
+func definedGrantHead(e map[string]any, ctx effCtx) string {
+	m := mod(e)
+	def, _ := m["definition"].(map[string]any)
+	base := effectSubject(e["target"], ctx)
+	subj := base
+	if t, ok := e["target"].(map[string]any); ok && t["level"] == "model" {
+		subj = "units with one or more " + strings.TrimPrefix(base, "all ")
+	}
+	if name, ok := def["name"].(string); ok {
+		return subj + " " + ev(subj, "gains") + " the " + name + " ability"
+	}
+	if m["ability"] != nil {
+		return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + " ability"
+	}
+	return subj + " " + ev(subj, "gains") + " the following rules"
+}
+
+// definitionPart is the printed ability as a part without its name, which the grant's head says.
+func definitionPart(e map[string]any) map[string]any {
+	def, _ := mod(e)["definition"].(map[string]any)
+	part := make(map[string]any, len(def))
+	for k, v := range def {
+		if k != "name" {
+			part[k] = v
+		}
+	}
+	return part
+}
+
+func abilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
+	if isDefinedGrant(e) {
+		return definedGrantHead(e, ctx) + " (" + describeEffectInline(definitionPart(e), ctx) + ")"
+	}
 	// Cover is a state a unit has, not an ability it gains.
 	if m["ability"] == "benefit-of-cover" {
 		return subj + " " + ev(subj, "has") + " the Benefit of Cover"
@@ -611,7 +655,7 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "end-attack-sequence":
 		return "the attack sequence ends"
 	case "ability-grant":
-		return abilityGrantLeaf(m, subj)
+		return abilityGrantLeaf(e, m, subj, ctx)
 	case "keyword-grant":
 		return keywordGrantLeaf(m, subj)
 	case "weapon-ability-grant":

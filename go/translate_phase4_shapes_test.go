@@ -156,7 +156,7 @@ func TestPhase4BlessingsOfKhorneRender(t *testing.T) {
 		{"type":"ability-part","name":"Total Carnage","effect":{"type":"dice-gated","from":{"roll_var":"bok"},"requirement":{"any_of":[{"type":"pair","min_value":6},{"type":"triple","min_value":3}]},"on_success":{"type":"no-effect"}}}]}}`, "")
 	for _, want := range []string{
 		"Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:",
-		"Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.",
+		"- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.",
 		"using a pair of 6+ or triple of 3+ from that roll's unused dice",
 	} {
 		if !strings.Contains(text, want) {

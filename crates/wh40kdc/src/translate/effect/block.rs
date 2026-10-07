@@ -52,6 +52,12 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             }
             format!("{indent}-> {}.", capitalize(&part_inline(e, ctx)))
         }
+        // A grant printed with its ability: the holder and name, then the ability one level deeper.
+        "ability-grant" if super::leaf_ability::is_defined_grant(e) => format!(
+            "{indent}{arrow}{}:\n{}",
+            capitalize(&super::leaf_ability::defined_grant_head(e, ctx)),
+            block(&super::leaf_ability::definition_part(e), depth + 1, ctx)
+        ),
         "choice" => {
             let mut out = format!("{indent}{}:\n", capitalize(&choice_prompt(e)));
             out.push_str(

@@ -38,6 +38,7 @@ from wh40kdc.translate.effect_inline import (
     stance_pick,
     usage_clause,
 )
+from wh40kdc.translate.effect_leaf import definition_part, defined_grant_head, is_defined_grant
 from wh40kdc.translate.effect_region import (
     capacity_clause,
     describe_menu_action,
@@ -149,6 +150,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
                 inner, depth + 1, ctx
             )
         return f"{indent}-> {capitalize(part_inline(e, ctx))}."
+    if t == "ability-grant" and is_defined_grant(e):
+        # A grant printed with its ability: the holder and name, then the ability one level deeper.
+        head = capitalize(defined_grant_head(e, ctx))
+        return f"{indent}{arrow}{head}:\n" + describe_effect(definition_part(e), depth + 1, ctx)
     if t == "choice":
         lines = [f"{indent}  - {capitalize(inline(o, ctx))}." for o in (e.get("options") or [])]
         return f"{indent}{capitalize(choice_prompt(e))}:\n" + "\n".join(lines)
@@ -396,7 +401,7 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
             header = ", ".join(p for p in (trig, lead, lead_in, trail) if p)
             return capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)
         return _assemble_sentence([trig, lead, lead_in, trail, describe_effect_inline(inner, ctx)])
-    if _is_container(e):
+    if _is_container(e) or is_defined_grant(e):
         # A designation carrying its own duration renders it itself; don't repeat it in the head.
         own = (
             e.get("type") in ("designate-target", "persistent-designation")

@@ -446,7 +446,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "re-roll" => re_roll(target, m, subj, ctx),
         "roll-result" => roll_result(m, subj),
         "end-attack-sequence" => "the attack sequence ends".to_string(),
-        "ability-grant" => ability_grant(m, subj),
+        "ability-grant" => ability_grant(e, m, subj, ctx),
         "keyword-grant" => keyword_grant(m, subj),
         "weapon-ability-grant" => weapon_ability_grant(target, m, subj, ctx),
         "weapon-grant" => {

@@ -506,7 +506,12 @@ def part_head(e: Effect) -> str:
         if e.get("kind") == "psychic" and e.get("level") is not None
         else ""
     )
-    if e.get("name"):
+    # A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+    passive_name = e.get("name") and not moment and not e.get("optional")
+    label = f"{jstr(e['name'])}{level}" if passive_name else ""
+    if label:
+        named = ""
+    elif e.get("name"):
         named = f"{'you can use ' if e.get('optional') else 'use '}{jstr(e['name'])}{level}"
     else:
         named = "you can" if e.get("optional") else ""
@@ -515,7 +520,7 @@ def part_head(e: Effect) -> str:
     )
     usage = usage_clause(e["usage"]) if e.get("usage") else ""
     _, trail = duration_clauses(e.get("duration"))
-    return ", ".join(p for p in (moment, usage, named, cost, trail) if p)
+    return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
 
 
 def part_inline(e: Effect, ctx: Ctx) -> str:

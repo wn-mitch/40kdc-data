@@ -19,6 +19,7 @@ import { FAMILY_EXTENSIONS_W8_HASAB } from "./family-extensions-w8-hasab.js";
 import { FAMILY_EXTENSIONS_W8_MULTI } from "./family-extensions-w8-multi.js";
 import { FAMILY_EXTENSIONS_W8_HIDDEN } from "./family-extensions-w8-hidden.js";
 import { FAMILY_EXTENSIONS_W8_NAMED } from "./family-extensions-w8-named.js";
+import { FAMILY_EXTENSIONS_W8_GRANTED } from "./family-extensions-w8-granted.js";
 import { ROLL_KINDS } from "./dice-families.js";
 import { enumValue } from "./family-validation.js";
 
@@ -182,7 +183,7 @@ const FAMILY_EXTENSIONS_1: readonly FamilyExtension[] = [
 ];
 
 /** Every extension in order; a family listed twice gains two versions, the later on top of the earlier. */
-export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3, ...FAMILY_EXTENSIONS_4, ...FAMILY_EXTENSIONS_5, ...FAMILY_EXTENSIONS_6, ...FAMILY_EXTENSIONS_7, ...FAMILY_EXTENSIONS_8, ...FAMILY_EXTENSIONS_9, ...FAMILY_EXTENSIONS_10, ...FAMILY_EXTENSIONS_11, ...FAMILY_EXTENSIONS_12, ...FAMILY_EXTENSIONS_W8_BACKREF, ...FAMILY_EXTENSIONS_W8_HASAB, ...FAMILY_EXTENSIONS_W8_MODEL, ...FAMILY_EXTENSIONS_W8_SETUP, ...FAMILY_EXTENSIONS_W8_MULTI, ...FAMILY_EXTENSIONS_W8_HIDDEN, ...FAMILY_EXTENSIONS_W8_NAMED];
+export const FAMILY_EXTENSIONS: readonly FamilyExtension[] = [...FAMILY_EXTENSIONS_1, ...FAMILY_EXTENSIONS_2, ...FAMILY_EXTENSIONS_3, ...FAMILY_EXTENSIONS_4, ...FAMILY_EXTENSIONS_5, ...FAMILY_EXTENSIONS_6, ...FAMILY_EXTENSIONS_7, ...FAMILY_EXTENSIONS_8, ...FAMILY_EXTENSIONS_9, ...FAMILY_EXTENSIONS_10, ...FAMILY_EXTENSIONS_11, ...FAMILY_EXTENSIONS_12, ...FAMILY_EXTENSIONS_W8_BACKREF, ...FAMILY_EXTENSIONS_W8_HASAB, ...FAMILY_EXTENSIONS_W8_MODEL, ...FAMILY_EXTENSIONS_W8_SETUP, ...FAMILY_EXTENSIONS_W8_MULTI, ...FAMILY_EXTENSIONS_W8_HIDDEN, ...FAMILY_EXTENSIONS_W8_NAMED, ...FAMILY_EXTENSIONS_W8_GRANTED];
 
 const extensionVersions = new Map<string, { extension: FamilyExtension; version: number }>();
 

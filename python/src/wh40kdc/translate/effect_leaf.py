@@ -324,7 +324,45 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
     return f"{lead}{whose}{counts} as {unmod}{jstr(result)}"
 
 
-def _ability_grant(m: dict[str, Any], subj: str) -> str:
+def is_defined_grant(e: Any) -> bool:
+    """A grant that prints the ability it gives (``modifier.definition``)."""
+    m = e.get("modifier") if isinstance(e, dict) else None
+    return (
+        isinstance(e, dict)
+        and e.get("type") == "ability-grant"
+        and isinstance(m, dict)
+        and isinstance(m.get("definition"), dict)
+    )
+
+
+def defined_grant_head(e: Leaf, ctx: Ctx) -> str:
+    """Who holds a printed ability and its name, or "the following rules" for an unnamed one.
+
+    A model-level target holds one copy per unit.
+    """
+    m = e.get("modifier") or {}
+    definition = m.get("definition") or {}
+    target = e.get("target")
+    base = effect_subject(target, ctx)
+    model_level = isinstance(target, dict) and target.get("level") == "model"
+    subj = f"units with one or more {base.removeprefix('all ')}" if model_level else base
+    name = definition.get("name")
+    if not isinstance(name, str):
+        name = ability_label(m.get("ability")) if m.get("ability") is not None else None
+    if name is None:
+        return f"{subj} {v(subj, 'gains')} the following rules"
+    return f"{subj} {v(subj, 'gains')} the {name} ability"
+
+
+def definition_part(e: Leaf) -> dict[str, Any]:
+    """The printed ability as a part without its name, which the grant's head already says."""
+    definition = (e.get("modifier") or {}).get("definition") or {}
+    return {k: val for k, val in definition.items() if k != "name"}
+
+
+def _ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
+    if is_defined_grant(e):
+        return f"{defined_grant_head(e, ctx)} ({inline(definition_part(e), ctx)})"
     # Cover is a state a unit has, not an ability it gains.
     if m.get("ability") == "benefit-of-cover":
         return f"{subj} {v(subj, 'has')} the Benefit of Cover"
@@ -547,7 +585,7 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "end-attack-sequence":
         return "the attack sequence ends"
     if t == "ability-grant":
-        return _ability_grant(m, subj)
+        return _ability_grant(e, m, subj, ctx, inline)
     if t == "keyword-grant":
         return _keyword_grant(m, subj)
     if t == "weapon-ability-grant":

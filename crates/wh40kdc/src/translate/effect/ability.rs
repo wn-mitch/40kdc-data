@@ -101,7 +101,7 @@ pub(super) fn render_top_level(
         return assemble_sentence(&[&trig, &lead, &lead_in, trail, &inline(inner, &ctx)]);
     }
 
-    if is_container(e_map) {
+    if is_container(e_map) || super::leaf_ability::is_defined_grant(e_map) {
         // A designation carrying its own `duration` renders that duration itself.
         let own_duration = matches!(ty(e_map), "designate-target" | "persistent-designation")
             && nn(e_map, "duration").is_some();

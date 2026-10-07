@@ -825,7 +825,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // A root without the catalog (a partial fixture tree) has no core abilities to resolve against.
   const coreCatalogFile = resolve(root, "core/unit-keywords.json");
   const coreCatalog = existsSync(coreCatalogFile) ? readArray<{ id: string }>(coreCatalogFile) : [];
-  const allAbilityIds = new Set<string>([...coreAbilities, ...coreCatalog.map((k) => k.id)]);
+  const coreCatalogIds = new Set(coreCatalog.map((k) => k.id));
+  const allAbilityIds = new Set<string>([...coreAbilities, ...coreCatalogIds]);
   const abilityIdsByFaction = new Map<string, Set<string>>();
   const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
   const abilityFiles = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
@@ -893,14 +894,14 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   };
 
   /** Collect every ability grant's named ability, and whether it grants a reusable rules bundle. */
-  const collectAbilityGrantRefs = (node: unknown, out: Array<{ abilityId: string; bundle: boolean }>): void => {
+  const collectAbilityGrantRefs = (node: unknown, out: Array<{ abilityId: string; bundle: boolean; defined: boolean }>): void => {
     if (Array.isArray(node)) {
       for (const value of node) collectAbilityGrantRefs(value, out);
     } else if (node !== null && typeof node === "object") {
       const effect = node as Record<string, unknown>;
       if (effect.type === "ability-grant" && effect.modifier !== null && typeof effect.modifier === "object") {
         const modifier = effect.modifier as Record<string, unknown>;
-        if (typeof modifier.ability === "string") out.push({ abilityId: modifier.ability, bundle: modifier.rules_bundle === true });
+        if (typeof modifier.ability === "string") out.push({ abilityId: modifier.ability, bundle: modifier.rules_bundle === true, defined: modifier.definition !== undefined });
       }
       for (const value of Object.values(effect)) collectAbilityGrantRefs(value, out);
     }
@@ -924,7 +925,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       collectSourceAbilityRefs(a, sourceAbilityRefs);
       const refs: Array<{ kind: string; rule: string }> = [];
       collectRuleStateRefs(a.effect, refs);
-      const abilityGrantRefs: Array<{ abilityId: string; bundle: boolean }> = [];
+      const abilityGrantRefs: Array<{ abilityId: string; bundle: boolean; defined: boolean }> = [];
       collectAbilityGrantRefs(a.effect, abilityGrantRefs);
       const diceTableErrors: string[] = [];
       collectDiceTableErrors(a.effect, diceTableErrors);
@@ -963,7 +964,16 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         });
       }
 
-      for (const { abilityId, bundle } of abilityGrantRefs) {
+      for (const { abilityId, bundle, defined } of abilityGrantRefs) {
+        // A grant printed with its definition is that ability; its id names no separate record,
+        // but a core ability's id is core-ability-grant's to name.
+        if (defined) {
+          if (coreCatalogIds.has(abilityId)) errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": ability-grant "${abilityId}" defines a core ability's id; a printed definition names its own ability`,
+          });
+          continue;
+        }
         if (!bundle) {
           // A plain grant names a core ability or any ability record.
           if (!allAbilityIds.has(abilityId)) errs.push({

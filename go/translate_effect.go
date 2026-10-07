@@ -542,6 +542,12 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			return indent + "-> " + capitalize(partHead(e)) + ":\n" + describeEffect(inner, depth+1, ctx)
 		}
 		return indent + "-> " + capitalize(partInline(e, ctx)) + "."
+	case "ability-grant":
+		// A grant printed with its ability: the holder and name, then the ability one level deeper.
+		if isDefinedGrant(e) {
+			return indent + arrow + capitalize(definedGrantHead(e, ctx)) + ":\n" + describeEffect(definitionPart(e), depth+1, ctx)
+		}
+		return indent + arrow + capitalize(describeEffectInline(e, ctx)) + "."
 	case "choice":
 		lines := []string{indent + capitalize(choicePrompt(e)) + ":"}
 		for _, o := range getList(e, "options") {

@@ -112,7 +112,7 @@ describe("describer: dice", () => {
         { type: "ability-part", name: "Total Carnage", effect: { type: "dice-gated", from: { roll_var: "bok" }, requirement: { any_of: [{ type: "pair", min_value: 6 }, { type: "triple", min_value: 3 }] }, on_success: { type: "no-effect" } } }] } };
     const text = render(effect);
     expect(text).toContain("Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:");
-    expect(text).toContain("Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.");
+    expect(text).toContain("- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.");
     expect(text).toContain("using a pair of 6+ or triple of 3+ from that roll's unused dice");
   });
 

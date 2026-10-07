@@ -118,12 +118,14 @@ describe("referential integrity", () => {
     const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-ability-grant"));
     const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message));
 
-    // A core catalog entry and another faction's record both resolve; only the
-    // unknown name (nested under a conditional) is flagged.
+    // A core catalog entry and another faction's record both resolve, and a printed
+    // definition needs no record; the unknown name (nested under a conditional) and a
+    // definition reusing a core ability's id are flagged.
     expect(messages).toEqual([
+      'ability "grants-printed-core-id": ability-grant "scouts" defines a core ability\'s id; a printed definition names its own ability',
       'ability "grants-unknown-ability": ability-grant "fights-first-typo" names neither a core ability nor an ability record',
     ]);
-    expect(result.passed).toBe(2);
+    expect(result.passed).toBe(3);
   });
 
   it("requires dice tables to cover each face exactly once", () => {

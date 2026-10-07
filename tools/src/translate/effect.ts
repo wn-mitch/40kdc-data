@@ -18,7 +18,7 @@ import { dekebab, describeCondition, titleCase, type Condition } from "./conditi
 import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadin.js";
 import { describeTiming, eventClause } from "./timing.js";
 import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
-import { describeLeaf, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
 import { rollHead, selectObjectiveBlock, selectObjectiveInline } from "./effect-bind.js";
 import {
@@ -1113,9 +1113,11 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
 function partHead(e: Effect): string {
   const moment = normalizeTriggers(e.trigger).map(describeTrigger).filter(Boolean).join(" or ");
   const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
-  const named = e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
+  // A named part that always applies is a labelled rule ("Kine Shield: …"), not one to use.
+  const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
+  const named = label ? "" : e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
   const cost = e.cost ? `by paying this cost (${describeEffectInline(e.cost)})` : "";
-  return [moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
+  return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
 }
 
 /** A part on one line: its head, then its effect. */
@@ -1153,6 +1155,10 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       if (CONTAINER_TYPES.has(inner.type ?? "")) return `${indent}-> ${capitalize(partHead(e))}:\n` + describeEffect(inner, depth + 1, ctx);
       return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
     }
+    case "ability-grant":
+      // A grant printed with its ability: the holder and name, then the ability one level deeper.
+      if (isDefinedGrant(e)) return `${indent}${arrow}${capitalize(definedGrantHead(e as Leaf, ctx))}:\n` + describeEffect(definitionPart(e as Leaf) as Effect, depth + 1, ctx);
+      return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
     case "choice": {
       const prompt = choicePrompt(e);
       return (
@@ -1396,7 +1402,7 @@ function renderTopLevel(
     return assembleSentence([trig, lead, leadIn, trail, describeEffectInline(inner, ctx)]);
   }
 
-  if (CONTAINER_TYPES.has(e.type ?? "")) {
+  if (CONTAINER_TYPES.has(e.type ?? "") || isDefinedGrant(e)) {
     // Containers render block; a trigger/duration lead-in prefixes the block when
     // present. A designate-target carrying its own `duration` renders that
     // duration itself — repeating the scope duration in the head would double it.

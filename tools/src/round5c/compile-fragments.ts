@@ -6,6 +6,7 @@
 import { activationModifier } from "./compile-activation.js";
 import { boardEffect } from "./compile-board-effects.js";
 import { containerEffect } from "./compile-containers.js";
+import { printedGrantEffect } from "./compile-granted.js";
 import { testEffect } from "./compile-test-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { isTargetRef } from "./compile-target-refs.js";
@@ -246,6 +247,7 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: closed(leaf, "ability"), ...(value !== undefined ? { value } : {}) } };
     }
     case "ability-record-grant": {
+      if (leaf.parameters.printed !== undefined) return printedGrantEffect(leaf, target(leaf.parameters.subject));
       const value = leaf.parameters.value;
       const rulesBundle = leaf.parameters.rules_bundle;
       return {

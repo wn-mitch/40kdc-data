@@ -23459,5 +23459,291 @@
     "expected": {
       "text": "You can select Aegis or Zeal one additional time per battle, shared between them."
     }
+  },
+  {
+    "caseId": "granted/definition-named-aura",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "ability": "shade-ward",
+        "definition": {
+          "type": "ability-part",
+          "name": "Shade Ward",
+          "effect": {
+            "type": "aura",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "range": 6,
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapon_type": "melee"
+                }
+              },
+              "eligible": {
+                "required_keywords": [
+                  "GLOOM HOUND"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the Shade Ward ability:\n  -> While a friendly GLOOM HOUND unit is within 6\" of this model, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1."
+    }
+  },
+  {
+    "caseId": "granted/definition-unnamed",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the following rules:\n  -> You can re-roll a Hit roll of 1."
+    }
+  },
+  {
+    "caseId": "granted/definition-reactive-several",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "dark-step",
+            "definition": {
+              "type": "ability-part",
+              "name": "Dark Step",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "ranged"
+                }
+              },
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "to": "shoot"
+                }
+              },
+              "usage": {
+                "frequency": "once-per-turn",
+                "per": "unit"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "pale-shroud",
+            "definition": {
+              "type": "ability-part",
+              "name": "Pale Shroud",
+              "effect": {
+                "type": "invulnerable-save",
+                "target": "this-unit",
+                "modifier": {
+                  "invuln_sv": 5
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the Dark Step ability:\n  -> When the unit is selected to shoot, once per turn per unit: add 1 to the Strength characteristic of ranged weapons equipped by models in this unit.\nAll friendly GLOOM WARDENS units gain the Pale Shroud ability:\n  -> The unit has a 5+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "granted/definition-inline-under-condition",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "ability": "pale-shroud",
+          "definition": {
+            "type": "ability-part",
+            "name": "Pale Shroud",
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "During the Fight phase, all friendly GLOOM WARDENS units gain the Pale Shroud ability (the unit has a 5+ invulnerable save)."
+    }
+  },
+  {
+    "caseId": "granted/definition-model-level-target",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM HOUND"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "ability": "pale-shroud",
+        "definition": {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Units with one or more friendly GLOOM HOUND models gain the Pale Shroud ability:\n  -> The unit has a 5+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "granted/self-held-named-passive-part",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Rallying Cry",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapon_type": "melee"
+            }
+          },
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          },
+          "duration": "phase"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to this model's Objective Control characteristic.\n-> Pale Shroud: the unit has a 5+ invulnerable save.\n-> When the unit is selected to fight, you may use this ability, once per battle per army, use Rallying Cry, until the end of the phase: add 1 to the Attacks characteristic of melee weapons equipped by models in this unit."
+    }
   }
 ]

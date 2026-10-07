@@ -8,7 +8,60 @@ use super::words::*;
 use crate::translate::condition::{and_list, article, nn, obj, or_list, range_phrase, P};
 use crate::translate::dekebab;
 
-pub(super) fn ability_grant(m: &P, subj: &str) -> String {
+/// A grant that prints the ability it gives (`modifier.definition`).
+pub(super) fn is_defined_grant(e: &P) -> bool {
+    sv(e, "type") == Some("ability-grant")
+        && obj(e.get("modifier"))
+            .get("definition")
+            .is_some_and(Value::is_object)
+}
+
+/// "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
+/// "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+pub(super) fn defined_grant_head(e: &P, ctx: &Ctx) -> String {
+    let m = obj(e.get("modifier"));
+    let def = obj(m.get("definition"));
+    let target = e.get("target");
+    let base = effect_subject(target, ctx);
+    let model_level = target
+        .and_then(Value::as_object)
+        .is_some_and(|t| t.get("level").and_then(Value::as_str) == Some("model"));
+    let subj = if model_level {
+        format!(
+            "units with one or more {}",
+            base.strip_prefix("all ").unwrap_or(&base)
+        )
+    } else {
+        base
+    };
+    let name = match def.get("name").and_then(Value::as_str) {
+        Some(name) => Some(name.to_string()),
+        None => m
+            .get("ability")
+            .filter(|a| !a.is_null())
+            .map(|a| ability_label(Some(a))),
+    };
+    match name {
+        Some(name) => format!("{subj} {} the {name} ability", v(&subj, "gains")),
+        None => format!("{subj} {} the following rules", v(&subj, "gains")),
+    }
+}
+
+/// The printed ability as a part without its name, which the grant's head already says.
+pub(super) fn definition_part(e: &P) -> Value {
+    let mut part = obj(obj(e.get("modifier")).get("definition")).clone();
+    part.remove("name");
+    Value::Object(part)
+}
+
+pub(super) fn ability_grant(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String {
+    if is_defined_grant(e) {
+        return format!(
+            "{} ({})",
+            defined_grant_head(e, ctx),
+            super::inline(&definition_part(e), ctx)
+        );
+    }
     // Cover is a state a unit has, not an ability it gains.
     if sv(m, "ability") == Some("benefit-of-cover") {
         return format!("{subj} {} the Benefit of Cover", v(subj, "has"));

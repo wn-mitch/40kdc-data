@@ -26,6 +26,7 @@ import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions
 import { foldModelState } from "./compile-model-state.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
+import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -181,7 +182,13 @@ function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
 export type CompileOptions = { abilityId?: string };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
-export function compileLeaves(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
+  // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
+  return compileGranted(leaves, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
+}
+
+function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   const leaves = nameBoundAttacks(given);
   const segments = sentenceSegments(ordered(leaves), sourceText);

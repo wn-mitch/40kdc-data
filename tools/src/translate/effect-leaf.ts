@@ -162,7 +162,33 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
   return `${lead}${whose}${lead ? " counts" : `${weaponRollScope(m)} count`} as ${unmod}${jstr(m.result)}`;
 }
 
-function abilityGrant(m: Record<string, unknown>, subj: string): string {
+/** A grant that prints the ability it gives (`modifier.definition`). */
+export function isDefinedGrant(e: { type?: string; modifier?: Record<string, unknown> }): boolean {
+  return e.type === "ability-grant" && e.modifier?.definition != null && typeof e.modifier.definition === "object";
+}
+
+/**
+ * "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
+ * "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+ */
+export function definedGrantHead(e: Leaf, ctx: Ctx): string {
+  const m = e.modifier ?? {};
+  const def = m.definition as P;
+  const base = effectSubject(e.target, ctx);
+  const modelLevel = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
+  const subj = modelLevel ? `units with one or more ${base.replace(/^all /, "")}` : base;
+  const name = typeof def.name === "string" ? def.name : m.ability != null ? abilityLabel(m.ability) : null;
+  return name ? `${subj} ${v(subj, "gains")} the ${name} ability` : `${subj} ${v(subj, "gains")} the following rules`;
+}
+
+/** The printed ability as a part without its name, which the grant's head already says. */
+export function definitionPart(e: Leaf): Record<string, unknown> {
+  const { name: _name, ...part } = (e.modifier?.definition ?? {}) as P;
+  return part;
+}
+
+function abilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx, inline: Inline): string {
+  if (isDefinedGrant(e)) return `${definedGrantHead(e, ctx)} (${inline(definitionPart(e), ctx)})`;
   // Cover is a state a unit has, not an ability it gains.
   if (m.ability === "benefit-of-cover") return `${subj} ${v(subj, "has")} the Benefit of Cover`;
   const inch = m.ability === "scouts" || m.ability === "deep-strike" ? '"' : "";
@@ -392,7 +418,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "re-roll": return reRoll(e, m, subj, ctx);
     case "roll-result": return rollResult(m, subj);
     case "end-attack-sequence": return "the attack sequence ends";
-    case "ability-grant": return abilityGrant(m, subj);
+    case "ability-grant": return abilityGrant(e, m, subj, ctx, inline);
     case "keyword-grant": return keywordGrant(m, subj);
     case "weapon-ability-grant": return weaponAbilityGrant(e, m, subj, ctx);
     case "weapon-grant": {

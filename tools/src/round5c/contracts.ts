@@ -26,6 +26,7 @@ import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILT
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
+import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./family-extensions-w8-granted.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -95,6 +96,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...MISSION_PREDICATE_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
+  ...GRANTED_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
 ]));
@@ -166,7 +168,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeTargetedParameters(family, input)
     ?? normalizeGapContainerParameters(family, input, version)
     ?? normalizeMissionPredicateParameters(family, input)
-    ?? normalizeNamedAbilityParameters(family, input);
+    ?? normalizeNamedAbilityParameters(family, input)
+    ?? normalizeGrantedParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }
