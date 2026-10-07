@@ -3702,6 +3702,11 @@ function genEffectTranslation(): void {
     { caseId: "fidelity/set-up-starting-strength", effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: "closest-to-destruction", starting_strength: 1 } } },
     { caseId: "fidelity/return-models-half-starting", effect: { type: "return-models", target: "this-unit", modifier: { count: 1, wounds_remaining: "half-starting" } } },
     { caseId: "fidelity/split-unit-starting-strength", effect: { type: "split-unit", target: "this-unit", modifier: { by: "model", starting_strength: 1 } } },
+    // "Those attacks": a hidden suppression naming the attacks a shooting trigger bound, against
+    // the same suppression unbound.
+    { caseId: "fidelity/rule-state-hidden-bound-attacks-resolved", trigger: { event: "attacks-resolved", subject: { owner: "friendly", all_of: ["ALPHA"] }, filter: { kind: "shoot" }, binds_event_variable: "those-attacks" }, effect: { type: "rule-state", target: "this-unit", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden", attacks: { event_var: "those-attacks" } } } },
+    { caseId: "fidelity/rule-state-hidden-bound-selected-to-shoot", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["BETA"] }, filter: { to: "shoot" }, binds_event_variable: "those-attacks" }, effect: { type: "rule-state", target: "event-subject", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden", attacks: { event_var: "those-attacks" } } } },
+    { caseId: "fidelity/rule-state-hidden-unbound", trigger: { event: "selected", subject: { owner: "friendly", all_of: ["BETA"] }, filter: { to: "shoot" } }, effect: { type: "rule-state", target: "event-subject", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden" } } },
   ];
   for (const example of fidelityBoundaryCases) {
     const scope = { duration: "resolution" };

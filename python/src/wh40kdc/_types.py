@@ -1620,6 +1620,7 @@ class Modifier19(TypedDict):
     direction: Literal["granted", "suppressed"]
     rule_kind: Literal["core-rule", "keyword", "ability", "faction-rule"]
     rule: str
+    attacks: NotRequired[EventBoundReference]
 
 
 class Roll(TypedDict):

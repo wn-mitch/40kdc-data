@@ -22675,6 +22675,104 @@
     }
   },
   {
+    "caseId": "fidelity/rule-state-hidden-bound-attacks-resolved",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "filter": {
+        "kind": "shoot"
+      },
+      "binds_event_variable": "those-attacks"
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a friendly unit shoots (the triggering unit must have ALPHA), when resolving this use, those attacks do not stop the unit from being hidden."
+    }
+  },
+  {
+    "caseId": "fidelity/rule-state-hidden-bound-selected-to-shoot",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BETA"
+        ]
+      },
+      "filter": {
+        "to": "shoot"
+      },
+      "binds_event_variable": "those-attacks"
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "event-subject",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly unit is selected to shoot (the triggering unit must have BETA), when resolving this use, those attacks do not stop the triggering unit from being hidden."
+    }
+  },
+  {
+    "caseId": "fidelity/rule-state-hidden-unbound",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BETA"
+        ]
+      },
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "event-subject",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly unit is selected to shoot (the triggering unit must have BETA), when resolving this use, the triggering unit does not stop being hidden when it attacks."
+    }
+  },
+  {
     "caseId": "model-destroyed-by-destroyer",
     "effect": {
       "type": "stat-modifier",

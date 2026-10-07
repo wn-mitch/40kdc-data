@@ -111,6 +111,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
 
 export function trigger(leaf: CompileLeaf): Node {
   const node = eventTrigger(leaf);
+  // "Those attacks": the moment's attacks, which a later effect names (compile-bound-attacks.ts).
+  if (leaf.parameters.binds_event_variable !== undefined && leaf.family_id === "event") node.binds_event_variable = closed(leaf, "binds_event_variable");
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.
   if (leaf.parameters.subject_filter !== undefined) node.subject = structuredClone(leaf.parameters.subject_filter as Node);
   // A folded unit-filter after it ("allocated to an ADEPTA SORORITAS unit") names what it happens to.

@@ -537,6 +537,10 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
             if granted { "can" } else { "cannot" }
         );
     }
+    // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+    if m.get("attacks").is_some_and(|a| !a.is_null()) && rule == "attacking-ends-hidden" {
+        return format!("those attacks do not stop {subj} from being hidden");
+    }
     if let (Some("core-rule"), Some(core)) = (kind, core_rule(&rule)) {
         let phrase = if granted { core.0 } else { core.1 };
         if phrase.starts_with("cannot ") {

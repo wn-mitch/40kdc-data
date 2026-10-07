@@ -20,6 +20,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (hasAntecedent(leaf)) {
     return { kind: "implicit", note: "No separate text: points back to the unit an earlier leaf introduced (the selected unit, else the triggering unit), bound when the record compiles." };
   }
+  if (leaf.family_id === "attack-filter" && leaf.parameters.of === "antecedent") {
+    return { kind: "implicit", note: "No separate text: the attacks of the shooting moment before it, which the hidden suppression right after it names; bound when the record compiles." };
+  }
   if (isContainerOpener(leaf.family_id)) {
     return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
   }

@@ -252,10 +252,10 @@ describe("Sub-shape B: an inline either/or between two effects", () => {
   });
 
   it("still refuses a choice leaf with no effect after it in its sentence", () => {
-    // With no effect after it, the choice leaf starts no clause and finds nothing earlier to pick against.
+    // With no effect after it, the choice leaf has nothing earlier to replace and no group after it to offer.
     const own = "When this unit is selected to shoot, you can re-roll one Hit roll or not.";
     expect(errorsOf(own, ["When this unit is selected to shoot", "event", { kind: "selected", to: "shoot" }], ["you can", "optional-use", { who: "you" }],
       ["re-roll one Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all", count: 1 }], ["or", "instead", { choice: true }]))
-      .toEqual(["\"Instead\" has no earlier reroll effect to replace."]);
+      .toEqual(["\"Or:\" needs an effect on each side to choose between."]);
   });
 });

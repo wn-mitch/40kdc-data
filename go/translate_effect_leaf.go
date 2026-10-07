@@ -558,6 +558,10 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 		}
 		return "your opponent " + can + " target " + subj + " with Overwatch"
 	}
+	// The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+	if m["attacks"] != nil && rule == "attacking-ends-hidden" {
+		return "those attacks do not stop " + subj + " from being hidden"
+	}
 	if core, ok := coreRules[rule]; ok && m["rule_kind"] == "core-rule" {
 		phrase := core[1]
 		if granted {

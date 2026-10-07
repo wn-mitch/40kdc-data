@@ -495,6 +495,9 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
         )
     if rule == "overwatch-against-bearer":
         return f"your opponent {'can' if granted else 'cannot'} target {subj} with Overwatch"
+    # The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+    if m.get("attacks") is not None and rule == "attacking-ends-hidden":
+        return f"those attacks do not stop {subj} from being hidden"
     core = _CORE_RULES.get(rule)
     if m.get("rule_kind") == "core-rule" and core:
         phrase = core[0] if granted else core[1]

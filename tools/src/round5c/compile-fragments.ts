@@ -391,7 +391,14 @@ export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker
     case "counts-as":
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier: { within: { inches: closed(leaf, "within") } } };
     case "rule-state":
-      return { type: "rule-state", target: target(leaf.parameters.subject), modifier: { direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"), rule: closed(leaf, "rule") } };
+      return {
+        type: "rule-state", target: target(leaf.parameters.subject),
+        modifier: {
+          direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"), rule: closed(leaf, "rule"),
+          // The attacks a shooting moment bound ("those attacks"), folded by compile-bound-attacks.ts.
+          ...(leaf.parameters.attacks_var !== undefined ? { attacks: { event_var: closed(leaf, "attacks_var") } } : {}),
+        },
+      };
     case "damage-reduction": {
       const reductionRaw = String(closed(leaf, "reduction"));
       const reduction = /^\d+$/u.test(reductionRaw) ? Number(reductionRaw) : reductionRaw;

@@ -155,7 +155,7 @@
       ]
     },
     "rule-state-core-rule-slug": {
-      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set).",
+      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event.",
       "type": "string",
       "enum": [
         "benefit-of-cover",
@@ -2068,13 +2068,35 @@
                 "rule": {
                   "type": "string",
                   "minLength": 1
+                },
+                "attacks": {
+                  "$ref": "condition.schema.json#/$defs/event-bound-reference",
+                  "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this."
                 }
               },
               "required": [
                 "direction",
                 "rule_kind",
                 "rule"
-              ]
+              ],
+              "if": {
+                "required": [
+                  "attacks"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "direction": {
+                    "const": "suppressed"
+                  },
+                  "rule_kind": {
+                    "const": "core-rule"
+                  },
+                  "rule": {
+                    "const": "attacking-ends-hidden"
+                  }
+                }
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"

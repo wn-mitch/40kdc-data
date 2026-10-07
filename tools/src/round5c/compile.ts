@@ -1,6 +1,8 @@
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, UNIT_EVENT_KINDS } from "./compile-antecedent.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
+import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
+import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
@@ -178,7 +180,9 @@ function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
 export type CompileOptions = { abilityId?: string };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
-export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+export function compileLeaves(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
+  const leaves = nameBoundAttacks(given);
   const segments = sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
@@ -198,7 +202,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   try {
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(refuseBareTarget(bindAntecedents(refs.leaves, refs.focus)), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
+    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(refs.leaves, refs.focus))), sourceText)), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText)))];
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -455,6 +459,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     (move.node.modifier as Node).ends_when = rule.cannot ? { operator: "not", operands: [where] } : where;
   }
 
+  // Where an "Or:" group ends: another combinator, or a moment after the first effect (a later part).
+  const leadingEffect = list.findIndex((leaf) => leaf.role === "EFFECT");
+  const choiceBoundaries = [...combinators, ...triggerIndexes.filter((index) => leadingEffect !== -1 && index > leadingEffect)];
   for (const combinator of combinators) {
     const clause = places[combinator]!.clause;
     const own = planned.filter((item) => places[item.index]!.clause === clause);
@@ -471,6 +478,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) {
       if (isAdvanceInPlace(replacement.node)) planned.splice(planned.indexOf(replacement), 1);
       else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6 to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
+      continue;
+    }
+    // "X. Or: Y and Z" with no earlier effect of Y's kind: the player picks one group of effects.
+    if (!replaced && list[combinator]!.parameters.choice === true) {
+      const problem = chooseBetweenGroups(planned, combinator, choiceBoundaries.filter((index) => index !== combinator));
+      if (problem) errors.push(problem);
       continue;
     }
     if (!replaced) {
