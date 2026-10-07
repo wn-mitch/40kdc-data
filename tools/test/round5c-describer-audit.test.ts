@@ -40,7 +40,8 @@ describe("Round 5C leaf describer audit", () => {
       "stratagem-cost": { unrendered: [], colliding: ["id"], problems: 0 },
       // with_keywords and max render only for the composition and enhancement-slot rules. A
       // detachment-tag-exclusive rule needs exactly one keyword, its tag; with none or two it refuses.
-      "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 2 },
+      // A faction-forbidden rule names one Army Faction; two keywords are two rules, so it refuses.
+      "army-construction": { unrendered: [], colliding: ["with_keywords", "max"], problems: 4 },
       // Models that join an existing unit are not a copy, so a join carrying copy fields (excluded
       // keywords, Starting Strength, a [One Shot] reset) refuses to compile.
       "add-unit": { unrendered: [], colliding: [], problems: 165 },

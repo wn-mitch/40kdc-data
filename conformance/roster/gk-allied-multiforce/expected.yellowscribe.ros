@@ -126,7 +126,7 @@
             <profile name="Shadow Assignment" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">This model cannot be your Warlord.
-Your army can include only one of all friendly units.</characteristic>
+Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Reign of Confusion" typeName="Abilities">

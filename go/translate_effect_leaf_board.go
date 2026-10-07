@@ -594,7 +594,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "designate":
 		return designateLeaf(m, subj, ctx)
 	case "army-rule":
-		return armyRuleLeaf(m, subj, ctx)
+		return armyRuleLeaf(m, subj, ctx, e["target"])
 	}
 	t := "unknown"
 	if e["type"] != nil {

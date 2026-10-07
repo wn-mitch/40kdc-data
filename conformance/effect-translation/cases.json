@@ -4700,7 +4700,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your army cannot include AGENTS OF THE IMPERIUM units."
+      "text": "Your army can include AGENTS OF THE IMPERIUM units."
     }
   },
   {
@@ -5197,7 +5197,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your army can include at most 0 EPIC HERO units (excluding YNNARI units)."
+      "text": "Your army cannot include EPIC HERO units (excluding YNNARI units)."
     }
   },
   {
@@ -24006,6 +24006,614 @@
     },
     "expected": {
       "text": "When resolving this use, the unit is struck by spores."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-permission",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include friendly ALPHA units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-forbidden",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "none_of": [
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include friendly ALPHA units (excluding BETA units)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "datasheets": [
+          "alpha-squad",
+          "beta-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include Alpha Squad or Beta Squad units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 2,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "datasheets": [
+          "alpha-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include at most 2 friendly ALPHA units (Alpha Squad only)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-unique-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "unique",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "level": "model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include only one friendly ALPHA model."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-warlord-forbidden-group",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "any_of": [
+          "ALPHA",
+          "BETA"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "rule": "warlord-forbidden"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly models with the ALPHA or BETA keyword cannot be your Warlord."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-enhancement-source",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "enhancement-source"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units can only be given Enhancements from this Detachment."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements from this Detachment do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-unit-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements on all friendly ALPHA units do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-reserves",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "strategic-reserves-points"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units do not count toward the points limit for Strategic Reserves."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "CHARACTER"
+          ],
+          "none_of": [
+            "EPIC HERO"
+          ],
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly CHARACTER unit (excluding EPIC HERO units) with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer-models",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS"
+          ],
+          "level": "model",
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly ADEPTUS model with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-can-lead",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-model",
+      "modifier": {
+        "rule": "attachment",
+        "can_lead": {
+          "owner": "friendly",
+          "any_of": [
+            "ALPHA",
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can also be attached to friendly units with the ALPHA or BETA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ],
+            "none_of": [
+              "BETA"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes an ALPHA unit (excluding BETA units), when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-min",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "min": 2
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes 2 or more ALPHA units, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "any_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA or BETA keyword, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-all",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA and BETA keywords, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your army includes an ALPHA unit, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ],
+                "level": "model"
+              },
+              "every": true
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless every model in your army has the ALPHA keyword, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-faction-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "alpha-legion"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          },
+          "per": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "exempt_from": [
+            "retinue-limit"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your Army Faction is ALPHA LEGION, when resolving this use, your army can include at most 1 friendly GAMMA unit for each friendly ALPHA unit in your army; they do not count toward the Retinue limit."
     }
   }
 ]

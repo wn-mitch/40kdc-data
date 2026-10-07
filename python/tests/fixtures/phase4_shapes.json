@@ -5031,7 +5031,7 @@
     }
    }
   ],
-  "out": "Your army cannot include ASSASSIN units; they do not count toward the Retinue limit."
+  "out": "Your army can include ASSASSIN units; they do not count toward the Retinue limit."
  },
  {
   "fn": "describeAbility",

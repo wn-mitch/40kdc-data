@@ -56,6 +56,8 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     // "units with this ability" (compile-holder-abilities.ts) and "(excluding units with X)".
     ...(Array.isArray(filter.parameters.abilities) ? { has_ability: filter.parameters.abilities } : {}),
     ...(Array.isArray(filter.parameters.excluded_abilities) ? { lacks_ability: filter.parameters.excluded_abilities } : {}),
+    // A list-building group's datasheets (unit-filter@6): only army construction takes them (compile-army.ts).
+    ...(Array.isArray(filter.parameters.datasheets) ? { datasheets: filter.parameters.datasheets } : {}),
   };
 }
 
@@ -112,7 +114,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
 
 type FilterParameters = {
   side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
-  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
+  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[];
 };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
@@ -133,6 +135,7 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   // One filter holds one set of alternatives (or one any-of), and one all-of exclusion.
   if ([a.any_keywords, b.any_keywords, a.alternatives, b.alternatives].filter((list) => list?.length).length > 1) return null;
   if (a.excluded_all_keywords !== undefined && b.excluded_all_keywords !== undefined && JSON.stringify(a.excluded_all_keywords) !== JSON.stringify(b.excluded_all_keywords)) return null;
+  if (a.datasheets !== undefined && b.datasheets !== undefined) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const keywords = union(a.keywords, b.keywords);
   const excluded = union(a.excluded_keywords, b.excluded_keywords);
@@ -156,6 +159,8 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (required.length) parameters.abilities = required;
   const allOf = a.excluded_all_keywords ?? b.excluded_all_keywords;
   if (allOf !== undefined) parameters.excluded_all_keywords = allOf;
+  const datasheets = a.datasheets ?? b.datasheets;
+  if (datasheets !== undefined) parameters.datasheets = datasheets;
   // "A or B C unit" + "(excluding D units)": the narrowing holds for every alternative.
   const alternatives = a.alternatives ?? b.alternatives;
   if (alternatives !== undefined) {
@@ -241,6 +246,9 @@ function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right:
 export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select")) return [...input];
   const list = mergeStackedFilters(input, sourceText);
+  if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
+    throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
+  }
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
@@ -436,6 +444,14 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
   const quantifier = out.findIndex((leaf) => leaf.family_id === "for-each-unit-select");
   return quantifier < 0 ? out : out.map((leaf, at) => at > quantifier && leaf.family_id === "mortal-wounds" && leaf.parameters.recipient === "that-unit"
     ? { ...leaf, parameters: { ...leaf.parameters, recipient: AURA_RECIPIENT } } : leaf);
+}
+
+/** Whether a filter is a list-building rule's group: the filter after its rule, or the filter its rule points back to. */
+function armyGroup(list: readonly CompileLeaf[], index: number): boolean {
+  const before = list[index - 1];
+  if (before?.family_id === "army-construction" && followedBy(before, list[index]!)) return true;
+  const after = filteredAfter(list, index);
+  return after !== null && list[after]!.family_id === "army-construction";
 }
 
 /** A distance or engagement in the filter's fragment whose other unit is the filter right after it. */

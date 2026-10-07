@@ -14,7 +14,9 @@ export type CoreCheck =
   | { kind: "use-window"; parameters: Record<string, unknown> }
   | { kind: "bearer-eligibility"; parameters: Record<string, unknown> }
   /** An ability, Stratagem, manoeuvre or action a leaf names by id (named-ability-checks.ts). */
-  | { kind: "named-ability"; parameters: Record<string, unknown> };
+  | { kind: "named-ability"; parameters: Record<string, unknown> }
+  | { kind: "datasheets"; parameters: { ids: string[] } }
+  | { kind: "army-factions"; parameters: { ids: string[] } };
 
 type CoreRecord = Record<string, unknown>;
 
@@ -67,6 +69,37 @@ function coreRecords(dataRoot: string, file: "stratagems.json" | "enhancements.j
   }
   cache.set(key, records);
   return records;
+}
+
+const unitIdCache = new Map<string, Set<string>>();
+
+/** Every core unit id, across faction directories. */
+function coreUnitIds(dataRoot: string): Set<string> {
+  const cached = unitIdCache.get(dataRoot);
+  if (cached) return cached;
+  const core = join(dataRoot, "core");
+  const ids = new Set(existsSync(core) ? readdirSync(core).flatMap((faction) => factionUnits(dataRoot, faction).map((unit) => unit.id)) : []);
+  unitIdCache.set(dataRoot, ids);
+  return ids;
+}
+
+const factionIdCache = new Map<string, Set<string>>();
+
+/** Every core faction id (each faction directory's factions.json). */
+function coreFactionIds(dataRoot: string): Set<string> {
+  const cached = factionIdCache.get(dataRoot);
+  if (cached) return cached;
+  const core = join(dataRoot, "core");
+  const ids = new Set<string>();
+  if (existsSync(core)) {
+    for (const dir of readdirSync(core)) {
+      const file = join(core, dir, "factions.json");
+      if (!existsSync(file)) continue;
+      for (const record of JSON.parse(readFileSync(file, "utf8")) as Array<{ id?: unknown }>) if (typeof record.id === "string") ids.add(record.id);
+    }
+  }
+  factionIdCache.set(dataRoot, ids);
+  return ids;
 }
 
 const nonCharacterCache = new Map<string, Map<string, boolean> | null>();
@@ -178,6 +211,16 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
       if (phases.join() !== [...expected.phases].sort().join() || record.player_turn !== expected.player_turn) {
         errors.push(`WHEN reads as ${expected.phases.join(", ")} in ${expected.player_turn}, but core says ${phases.join(", ")} in ${String(record.player_turn)}.`);
       }
+    } else if (check.kind === "army-factions") {
+      // "You cannot select X as your Army Faction": X must be a faction, not a unit keyword or a Detachment.
+      const known = coreFactionIds(dataRoot);
+      const missing = check.parameters.ids.filter((id) => !known.has(id));
+      if (missing.length) errors.push(`A faction-forbidden rule names no core Army Faction: ${missing.join(", ")}. A ban on units is a composition rule with max 0.`);
+    } else if (check.kind === "datasheets") {
+      // A list-building group names datasheets by unit id; each must be a core unit of some faction.
+      const known = coreUnitIds(dataRoot);
+      const missing = check.parameters.ids.filter((id) => !known.has(id));
+      if (missing.length) errors.push(`The list-building group names datasheets with no core unit: ${missing.join(", ")}.`);
     } else {
       const record = coreRecords(dataRoot, "enhancements.json").get(abilityId);
       if (!record) {

@@ -615,8 +615,8 @@ describe("Round 5C turn and faction leaves", () => {
       for (const turn of ["battle-round", "player-turn", "opponent-turn"]) {
         expect(validateFingerprint(value.db, "turn-start", { turn }, 1)).toMatch(/^fp_/);
       }
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, source)).toMatch(/^fp_/);
-      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 2, source)).toThrow(/exact source span/i);
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, source)).toMatch(/^fp_/);
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 3, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);
     } finally {
       value.db.close();
@@ -628,16 +628,16 @@ describe("Round 5C turn and faction leaves", () => {
     const value = fixture([{ abilityId: "reference-rule", source }]);
     try {
       // Elsewhere in the ability's own source text: accepted even though it's outside the span.
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, "gain a point", {
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, "gain a point", {
         wholeSourceText: source,
       })).toMatch(/^fp_/);
       // A same-response binding reference: accepted even though it names no literal quote at all.
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "that faction" } }, 2, "gain a point", {
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "that faction" } }, 3, "gain a point", {
         wholeSourceText: source,
         bindingSurfaces: new Set(["that faction"]),
       })).toMatch(/^fp_/);
       // Found nowhere — not the span, not the ability's own text, not a binding — still rejected.
-      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Nonexistent Guard" } }, 2, "gain a point", {
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Nonexistent Guard" } }, 3, "gain a point", {
         wholeSourceText: source,
         bindingSurfaces: new Set(["that faction"]),
       })).toThrow(/must occur in the exact source span/i);

@@ -5,7 +5,7 @@ import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
-import { bindArmyAntecedents, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
+import { bindArmyAntecedents, armyCoreChecks, foldArmyAttachments, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
@@ -212,7 +212,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   try {
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(refs.leaves)), refs.focus))), sourceText)), sourceText);
+    const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus))), sourceText)), sourceText);
     const scoped = foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bound, sourceText), sourceText), sourceText)), sourceText);
     const filtered = resolveArmyGroups(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText));
     list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))];
@@ -694,7 +694,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       trigger: resolved.trigger as typeof entryTrigger,
       ...(usages.length ? { usage: usages[0] } : {}),
     },
-    checks,
+    checks: [...checks, ...armyCoreChecks(list)],
   };
 }
 

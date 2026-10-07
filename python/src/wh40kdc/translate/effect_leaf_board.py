@@ -735,5 +735,5 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "designate":
         return _designate(m, subj, ctx)
     if t == "army-rule":
-        return army_rule(m, subj, ctx)
+        return army_rule(m, subj, ctx, e.get("target"))
     return f"[{t if t is not None else 'unknown'}]"

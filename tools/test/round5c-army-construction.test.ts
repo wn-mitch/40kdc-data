@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { sentenceSegments } from "../src/round5c/compile-segments.js";
+import { coreCheckErrors } from "../src/round5c/core-checks.js";
+import { round5cDataRoot } from "../src/round5c/entries.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 
 // Fabricated wording throughout: ALPHA/BETA/GAMMA keywords, not rules text.
@@ -60,6 +62,18 @@ describe("army-construction family, wave 8", () => {
   it("refuses a group on a rule about the whole list", () => {
     expect(() => normalize({ rule: "single-chapter", with: "following-filter" })).toThrow(/list as a whole/);
     expect(() => normalize({ rule: "faction-forbidden", subject: "antecedent" })).toThrow(/list as a whole/);
+  });
+
+  it("widens unit-filter, army-faction and leading-unit by optional parameters", () => {
+    const at = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
+    expect(at("unit-filter", { side: "friendly", datasheets: ["beta-squad", "alpha-squad"] })).toEqual({ side: "friendly", datasheets: ["alpha-squad", "beta-squad"] });
+    expect(() => at("unit-filter", { side: "friendly", datasheets: ["Alpha Squad"] })).toThrow(/kebab-case/);
+    expect(at("army-faction", { faction: "alpha-legion", negated: true })).toEqual({ faction: "alpha-legion", negated: true });
+    expect(at("leading-unit", { subject: "antecedent", attachment: "can-attach", object: "following-filter" })).toEqual({ subject: "antecedent", attachment: "can-attach", object: "following-filter" });
+    expect(() => at("leading-unit", { subject: "this-model", attachment: "can-attach" })).toThrow(/object: following-filter/);
+    expect(() => at("leading-unit", { subject: "this-model", attachment: "leading", object: "following-filter" })).toThrow(/can-attach/);
+    expect(() => normalize({ rule: "attachment", subject: "antecedent", object: "this-unit", max: 1 })).toThrow(/takes no max/);
+    expect(() => normalize({ rule: "attachment", subject: "antecedent", object: "this-unit", led_by: "Alpha" })).toThrow(/takes no led_by/);
   });
 
   it("ties exemptions, objects and Enhancement kinds to their rules", () => {
@@ -171,10 +185,185 @@ describe("army-construction refusals", () => {
       filter("Battle-shocked ALPHA units", { side: "friendly", keywords: ["ALPHA"], states: ["battle-shocked"] })), shocked)).toMatch(/nothing when mustering/);
   });
 
-  it("does not yet lower the new rule values or Leader attachment objects", () => {
-    const text = "ALPHA units do not count towards the points limit for Strategic Reserves.";
-    expect(errorsOf(placed(text,
+});
+
+describe("army-construction limit exemptions and Enhancement sourcing (sub-shape C)", () => {
+  it("exempts the units of the filter before the rule from the Strategic Reserves points limit", () => {
+    const text = "Friendly ALPHA units do not count towards the points limit for Strategic Reserves.";
+    const [rule] = armyRules(effectOf(placed(text,
+      filter("Friendly ALPHA units", { side: "friendly", keywords: ["ALPHA"] }),
+      ["do not count towards the points limit for Strategic Reserves", army, { rule: "limit-exemption", subject: "antecedent", exempt_from: ["strategic-reserves-points"] }]), text));
+    expect(rule).toEqual({ type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "limit-exemption", exempt_from: ["strategic-reserves-points"] } });
+  });
+
+  it("keeps this Detachment's Enhancements out of the Enhancement limit", () => {
+    const text = "Enhancements from this Detachment do not count towards your Enhancement limit.";
+    const [rule] = armyRules(effectOf(placed(text,
+      ["Enhancements from this Detachment do not count towards your Enhancement limit", army, { rule: "limit-exemption", exempt_from: ["enhancement-limit"] }]), text));
+    expect(rule).toEqual({ type: "army-rule", target: "this-unit", modifier: { rule: "limit-exemption", exempt_from: ["enhancement-limit"] } });
+  });
+
+  it("restricts the units of a composition group to this Detachment's Enhancements", () => {
+    const text = "You can include up to 2 ALPHA units. They can only be given Enhancements from this Detachment.";
+    const rules = armyRules(effectOf(placed(text,
+      ["include up to 2", army, { rule: "composition", max: 2, with: "following-filter" }],
       filter("ALPHA units", { side: "friendly", keywords: ["ALPHA"] }),
-      ["do not count towards the points limit for Strategic Reserves", army, { rule: "limit-exemption", subject: "antecedent", exempt_from: ["strategic-reserves-points"] }]), text)).toMatch(/no DSL army-rule value yet/);
+      ["They can only be given Enhancements from this Detachment", army, { rule: "enhancement-source", subject: "antecedent" }]), text));
+    expect(rules[1]).toEqual({ type: "army-rule", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { rule: "enhancement-source" } });
+  });
+});
+
+describe("army-construction datasheet lists (sub-shape B)", () => {
+  it("counts units of the listed datasheets, with the core check on their ids", () => {
+    const text = "Your army cannot include the following datasheets: Alpha Squad, Beta Squad.";
+    const result = compileLeaves(placed(text,
+      ["cannot include the following datasheets", army, { rule: "composition", max: 0, with: "following-filter" }],
+      filter("Alpha Squad, Beta Squad", { side: "friendly", datasheets: ["alpha-squad", "beta-squad"] })), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(armyRules(result.mechanics.effect)[0].modifier).toEqual({ rule: "composition", max: 0, datasheets: ["alpha-squad", "beta-squad"] });
+    expect(result.checks).toContainEqual({ kind: "datasheets", parameters: { ids: ["alpha-squad", "beta-squad"] } });
+  });
+
+  it("keeps a keyword filter beside the datasheets", () => {
+    const text = "You can include up to 2 ALPHA Alpha Squad units.";
+    const [rule] = armyRules(effectOf(placed(text,
+      ["include up to 2", army, { rule: "composition", max: 2, with: "following-filter" }],
+      filter("ALPHA Alpha Squad units", { side: "friendly", keywords: ["ALPHA"], datasheets: ["alpha-squad"] })), text));
+    expect(rule.modifier).toEqual({ rule: "composition", max: 2, with: { owner: "friendly", all_of: ["ALPHA"] }, datasheets: ["alpha-squad"] });
+  });
+
+  it("refuses a datasheet list outside a list-building group, and as a Warlord subject", () => {
+    const select = "Select one Alpha Squad unit. That unit can make a Normal move.";
+    expect(errorsOf(placed(select,
+      ["Select one", "select-unit", { count: 1 }],
+      filter("Alpha Squad unit", { side: "friendly", datasheets: ["alpha-squad"] }),
+      ["That unit can make a Normal move", "make-move", { subject: "antecedent", move_type: "normal" }]), select)).toMatch(/outside army construction/);
+    const warlord = "You cannot select an Alpha Squad model to be your Warlord.";
+    expect(errorsOf(placed(warlord,
+      ["You cannot select", army, { rule: "warlord-forbidden", with: "following-filter" }],
+      filter("Alpha Squad model", { side: "friendly", datasheets: ["alpha-squad"] })), warlord)).toMatch(/cannot name its subject by datasheets/);
+  });
+});
+
+describe("army-construction core checks", () => {
+  it("checks a faction-forbidden rule's Army Faction and a group's datasheets against core", () => {
+    const compiled = (text: string, ...leaves: Array<[string, string, Record<string, unknown>]>) => {
+      const result = compileLeaves(placed(text, ...leaves), text);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      return coreCheckErrors(round5cDataRoot(), "fabricated-ability", result.checks);
+    };
+    const faction = "You cannot select DEATH GUARD as your Army Faction.";
+    expect(compiled(faction, ["You cannot select DEATH GUARD as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["DEATH GUARD"] }])).toEqual([]);
+    // A unit keyword is not an Army Faction: the ban is a composition rule with max 0.
+    const unit = "You cannot select ALPHA as your Army Faction.";
+    expect(compiled(unit, ["You cannot select ALPHA as your Army Faction", army, { rule: "faction-forbidden", with_keywords: ["ALPHA"] }]).join()).toMatch(/no core Army Faction: alpha/);
+    const sheets = "Your army cannot include the following datasheets: Intercessor Squad, Alpha Squad.";
+    expect(compiled(sheets,
+      ["cannot include the following datasheets", army, { rule: "composition", max: 0, with: "following-filter" }],
+      filter("Intercessor Squad, Alpha Squad", { side: "friendly", datasheets: ["intercessor-squad", "alpha-squad"] })).join()).toMatch(/no core unit: alpha-squad\.$/);
+  });
+});
+
+describe("army contents as a condition (sub-shape D)", () => {
+  it("gates a ban on the army including a filtered group", () => {
+    const text = "If your army includes any ALPHA units (excluding BETA units), it cannot include GAMMA.";
+    const effect = effectOf(placed(text,
+      ["If your army includes any", "army-includes", { quantifier: "some", with: "following-filter" }],
+      filter("ALPHA units", { side: "friendly", keywords: ["ALPHA"] }),
+      filter("excluding BETA units", { side: "friendly", excluded_keywords: ["BETA"] }),
+      ["it cannot include GAMMA", army, { rule: "composition", max: 0, with_keywords: ["GAMMA"] }]), text);
+    expect(effect).toEqual({
+      type: "conditional",
+      condition: { type: "army-includes", parameters: { filter: { owner: "friendly", all_of: ["ALPHA"], none_of: ["BETA"] } } },
+      effect: { type: "army-rule", target: "this-unit", modifier: { rule: "composition", max: 0, with: { all_of: ["GAMMA"] } } },
+    });
+  });
+
+  it("reads \"every model has the keyword\" inline, and \"more than one\" as a minimum", () => {
+    const every = "If every model in your army has the ALPHA or BETA keyword, you can include one GAMMA unit.";
+    const gated = effectOf(placed(every,
+      ["If every model in your army has the ALPHA or BETA keyword", "army-includes", { quantifier: "every", any_keywords: ["ALPHA", "BETA"], level: "model" }],
+      ["include one", army, { rule: "composition", max: 1, with: "following-filter" }],
+      filter("GAMMA unit", { side: "friendly", keywords: ["GAMMA"] })), every);
+    expect(gated.condition).toEqual({ type: "army-includes", parameters: { filter: { owner: "friendly", any_of: ["ALPHA", "BETA"], level: "model" }, every: true } });
+    const more = "If your army includes more than one ALPHA unit, it cannot include GAMMA.";
+    const counted = effectOf(placed(more,
+      ["If your army includes more than one", "army-includes", { quantifier: "some", with: "following-filter", min: 2 }],
+      filter("ALPHA unit", { side: "friendly", keywords: ["ALPHA"] }),
+      ["it cannot include GAMMA", army, { rule: "composition", max: 0, with_keywords: ["GAMMA"] }]), more);
+    expect(counted.condition.parameters).toEqual({ filter: { owner: "friendly", all_of: ["ALPHA"] }, min: 2 });
+  });
+
+  it("negates an Army Faction", () => {
+    const text = "If your Army Faction is not ALPHA LEGION, you can include one GAMMA unit.";
+    const effect = effectOf(placed(text,
+      ["If your Army Faction is not ALPHA LEGION", "army-faction", { faction: "alpha-legion", negated: true }],
+      ["include one", army, { rule: "composition", max: 1, with: "following-filter" }],
+      filter("GAMMA unit", { side: "friendly", keywords: ["GAMMA"] })), text);
+    expect(effect.condition).toEqual({ operator: "not", operands: [{ type: "army-faction", parameters: { faction: "alpha-legion" } }] });
+  });
+
+  it("refuses a some-condition with no filter, and keyword or count misuse", () => {
+    const text = "If your army includes any, it cannot include GAMMA.";
+    expect(errorsOf(placed(text,
+      ["If your army includes any", "army-includes", { quantifier: "some", with: "following-filter" }],
+      ["it cannot include GAMMA", army, { rule: "composition", max: 0, with_keywords: ["GAMMA"] }]), text)).toMatch(/unit-filter right after it/);
+    const includes = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("army-includes", parameters, currentFamilyVersion("army-includes"));
+    expect(() => includes({ quantifier: "some", keywords: ["ALPHA"] })).toThrow(/unit-filter after it/);
+    expect(() => includes({ quantifier: "every", keywords: ["ALPHA"] })).toThrow(/level model/);
+    expect(() => includes({ quantifier: "every", keywords: ["ALPHA"], level: "model", min: 2 })).toThrow(/no min/);
+  });
+});
+
+describe("Leader attachment eligibility (sub-shape E)", () => {
+  const leaderGroup: Array<[string, string, Record<string, unknown>]> = [
+    filter("CHARACTER unit", { side: "friendly", keywords: ["CHARACTER"] }),
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["with the Leader ability", "unit-has-ability", { subject: "antecedent", ability: "leader" }],
+    filter("excluding EPIC HEROES", { side: "friendly", excluded_keywords: ["EPIC HERO"] }),
+  ];
+
+  it("folds \"a Leader that can be attached to X can be attached to this unit instead\" into one rule", () => {
+    const text = "If a CHARACTER unit from your army with the Leader ability (excluding EPIC HEROES) can be attached to an ALPHA unit, it can be attached to this unit instead.";
+    const [rule] = armyRules(effectOf(placed(text,
+      ...leaderGroup,
+      ["can be attached to an", "leading-unit", { subject: "antecedent", attachment: "can-attach", object: "following-filter" }],
+      filter("ALPHA unit", { side: "friendly", keywords: ["ALPHA"] }),
+      ["it can be attached to this unit", army, { rule: "attachment", subject: "antecedent", object: "this-unit" }],
+      ["instead", "instead", {}]), text));
+    expect(rule).toEqual({ type: "army-rule", target: "this-unit", modifier: {
+      rule: "attachment",
+      with: { owner: "friendly", all_of: ["CHARACTER"], none_of: ["EPIC HERO"], has_ability: ["leader"] },
+      attach_as: { owner: "friendly", all_of: ["ALPHA"] },
+    } });
+  });
+
+  it("lets the bearer join a filtered unit, absorbing the Declare Battle Formations step", () => {
+    const text = "In the Declare Battle Formations step, the bearer can be attached to an ALPHA or BETA unit.";
+    const [rule] = armyRules(effectOf(placed(text,
+      ["In the Declare Battle Formations step", "event", { kind: "battle-formations-declared" }],
+      ["the bearer can be attached to an", army, { rule: "attachment", subject: "this-model", object: "following-filter" }],
+      filter("ALPHA or BETA unit", { side: "friendly", any_keywords: ["ALPHA", "BETA"] })), text));
+    expect(rule).toEqual({ type: "army-rule", target: "this-model", modifier: { rule: "attachment", can_lead: { owner: "friendly", any_of: ["ALPHA", "BETA"] } } });
+  });
+
+  it("refuses a can-attach outside the pattern, and an attachment antecedent without it", () => {
+    const stray = "While this model can be attached to an ALPHA unit, add 1 to the Hit roll.";
+    expect(errorsOf(placed(stray,
+      ["can be attached to an", "leading-unit", { subject: "this-model", attachment: "can-attach", object: "following-filter" }],
+      filter("ALPHA unit", { side: "friendly", keywords: ["ALPHA"] }),
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), stray)).toMatch(/can-attach/);
+    const bare = "A CHARACTER unit can be attached to this unit.";
+    expect(errorsOf(placed(bare,
+      filter("CHARACTER unit", { side: "friendly", keywords: ["CHARACTER"] }),
+      ["can be attached to this unit", army, { rule: "attachment", subject: "antecedent", object: "this-unit" }]), bare)).toMatch(/points back to a Leader/);
+  });
+
+  it("does not absorb an instead that follows anything else", () => {
+    const text = "Your army cannot include ALPHA units instead.";
+    expect(compileLeaves(placed(text,
+      ["cannot include", army, { rule: "composition", max: 0, with: "following-filter" }],
+      filter("ALPHA units", { side: "friendly", keywords: ["ALPHA"] }),
+      ["instead", "instead", {}]), text).ok).toBe(false);
   });
 });

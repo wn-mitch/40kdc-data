@@ -3063,23 +3063,34 @@ class SimpleCondition27(TypedDict):
 
 
 class Parameters40(TypedDict):
-    subject: NotRequired[UnitRef]
-    by: UnitRef
-    window: NotRequired[HistoryWindow]
+    filter: UnitFilter
+    min: NotRequired[int]
+    every: NotRequired[Literal[True]]
 
 
 class SimpleCondition35(TypedDict):
-    type: Literal["moved-over"]
+    type: Literal["army-includes"]
     parameters: Parameters40
 
 
 class Parameters41(TypedDict):
     subject: NotRequired[UnitRef]
+    by: UnitRef
+    window: NotRequired[HistoryWindow]
 
 
 class SimpleCondition36(TypedDict):
-    type: Literal["guided"]
+    type: Literal["moved-over"]
     parameters: Parameters41
+
+
+class Parameters42(TypedDict):
+    subject: NotRequired[UnitRef]
+
+
+class SimpleCondition37(TypedDict):
+    type: Literal["guided"]
+    parameters: Parameters42
 
 
 SimpleCondition: TypeAlias = (
@@ -3119,6 +3130,7 @@ SimpleCondition: TypeAlias = (
     | SimpleCondition34
     | SimpleCondition35
     | SimpleCondition36
+    | SimpleCondition37
 )
 
 
@@ -3971,13 +3983,19 @@ Modifier51 = TypedDict(
             "single-chapter",
             "detachment-forbidden",
             "detachment-tag-exclusive",
+            "enhancement-source",
+            "limit-exemption",
         ],
         "with": NotRequired[UnitFilter],
+        "datasheets": NotRequired[list[EntityId]],
         "max": NotRequired[int | BattleSizeValue],
         "measure": NotRequired[Literal["units", "models", "points"]],
         "per": NotRequired[UnitFilter],
-        "exempt_from": NotRequired[list[Literal["retinue-limit"]]],
+        "exempt_from": NotRequired[
+            list[Literal["retinue-limit", "enhancement-limit", "strategic-reserves-points"]]
+        ],
         "attach_as": NotRequired[UnitFilter],
+        "can_lead": NotRequired[UnitFilter],
         "detachment": NotRequired[EntityId],
         "tag": NotRequired[str],
         "led_by": NotRequired[str],

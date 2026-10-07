@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -523,6 +524,8 @@ func describePredicate(c map[string]any, negated bool) string {
 		return "the battle size is " + neg + titleCase(cstr(p["size"]))
 	case "army-faction":
 		return "your Army Faction is " + neg + strings.ToUpper(strings.ReplaceAll(cstr(p["faction"]), "-", " "))
+	case "army-includes":
+		return armyIncludesPhrase(p, neg != "")
 	case "moved-over":
 		window := windowPhrase(p["window"])
 		if p["window"] == nil || p["window"] == "event" {
@@ -606,3 +609,58 @@ func describeWithin(p map[string]any, neg string) string {
 
 // conditionOperands returns (operands, true) when c carries an operator and an
 // operands array (`c.operator === op && c.operands`).
+
+var firstUnitOrModelRe = regexp.MustCompile(`\b(unit|model)\b`)
+
+// armyIncludesPhrase renders "your army includes a CHARACTER unit", "your army
+// includes 2 or more X units", "every model in your army has the IMPERIUM
+// keyword". The army is yours, so the filter's owner is not repeated.
+func armyIncludesPhrase(p map[string]any, negated bool) string {
+	src, _ := p["filter"].(map[string]any)
+	f := make(map[string]any, len(src))
+	for k, v := range src {
+		if k != "owner" {
+			f[k] = v
+		}
+	}
+	noun := "unit"
+	if f["level"] == "model" {
+		noun = "model"
+	}
+	if p["every"] == true {
+		all := cstrList(f["all_of"])
+		anyOf := cstrList(f["any_of"])
+		words := andList(all)
+		if len(anyOf) > 0 {
+			words = orList(anyOf)
+		}
+		plural := ""
+		if len(all) > 1 && len(anyOf) == 0 {
+			plural = "s"
+		}
+		not := ""
+		if negated {
+			not = "not "
+		}
+		return not + "every " + noun + " in your army has the " + words + " keyword" + plural
+	}
+	one := unitFilterPhrase(f)
+	what := one
+	if min, ok := p["min"].(float64); ok && min > 1 {
+		bare := one
+		if strings.HasPrefix(one, "an ") {
+			bare = strings.TrimPrefix(one, "an ")
+		} else if strings.HasPrefix(one, "a ") {
+			bare = strings.TrimPrefix(one, "a ")
+		}
+		loc := firstUnitOrModelRe.FindStringIndex(bare)
+		if loc != nil {
+			bare = bare[:loc[1]] + "s" + bare[loc[1]:]
+		}
+		what = strconv.Itoa(int(min)) + " or more " + bare
+	}
+	if negated {
+		return "your army does not include " + what
+	}
+	return "your army includes " + what
+}

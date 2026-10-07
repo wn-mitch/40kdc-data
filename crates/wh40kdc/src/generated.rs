@@ -4814,6 +4814,41 @@ impl ::std::default::Default for ArmyCompositionPredicateUnitFilter {
 pub struct ArmyFactionConditionParameters {
     pub faction: EntityId,
 }
+///`ArmyIncludesConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "filter"
+///  ],
+///  "properties": {
+///    "every": {
+///      "const": true
+///    },
+///    "filter": {
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "min": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ArmyIncludesConditionParameters {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub every: ::std::option::Option<::serde_json::Value>,
+    pub filter: UnitFilter,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min: ::std::option::Option<::std::num::NonZeroU64>,
+}
 ///`ArmyRuleEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -4829,6 +4864,19 @@ pub struct ArmyFactionConditionParameters {
 ///      "description": "attachment: a Leader that can join a unit matching this filter can join this unit.",
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
+///    "can_lead": {
+///      "description": "attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists.",
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "datasheets": {
+///      "description": "composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "detachment": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -4837,10 +4885,13 @@ pub struct ArmyFactionConditionParameters {
 ///      "minLength": 1
 ///    },
 ///    "exempt_from": {
+///      "description": "Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).",
 ///      "type": "array",
 ///      "items": {
 ///        "enum": [
-///          "retinue-limit"
+///          "retinue-limit",
+///          "enhancement-limit",
+///          "strategic-reserves-points"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -4891,7 +4942,9 @@ pub struct ArmyFactionConditionParameters {
 ///        "faction-forbidden",
 ///        "single-chapter",
 ///        "detachment-forbidden",
-///        "detachment-tag-exclusive"
+///        "detachment-tag-exclusive",
+///        "enhancement-source",
+///        "limit-exemption"
 ///      ]
 ///    },
 ///    "tag": {
@@ -4912,10 +4965,17 @@ pub struct ArmyRuleEffectModifier {
     ///attachment: a Leader that can join a unit matching this filter can join this unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attach_as: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub can_lead: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub datasheets: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub detachment: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub enhancement_kind: ::std::option::Option<ArmyRuleEffectModifierEnhancementKind>,
+    ///Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exempt_from: ::std::option::Option<Vec<ArmyRuleEffectModifierExemptFromItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -5020,7 +5080,9 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierEnhancementKind {
 /// ```json
 ///{
 ///  "enum": [
-///    "retinue-limit"
+///    "retinue-limit",
+///    "enhancement-limit",
+///    "strategic-reserves-points"
 ///  ]
 ///}
 /// ```
@@ -5040,11 +5102,17 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierEnhancementKind {
 pub enum ArmyRuleEffectModifierExemptFromItem {
     #[serde(rename = "retinue-limit")]
     RetinueLimit,
+    #[serde(rename = "enhancement-limit")]
+    EnhancementLimit,
+    #[serde(rename = "strategic-reserves-points")]
+    StrategicReservesPoints,
 }
 impl ::std::fmt::Display for ArmyRuleEffectModifierExemptFromItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::RetinueLimit => f.write_str("retinue-limit"),
+            Self::EnhancementLimit => f.write_str("enhancement-limit"),
+            Self::StrategicReservesPoints => f.write_str("strategic-reserves-points"),
         }
     }
 }
@@ -5055,6 +5123,8 @@ impl ::std::str::FromStr for ArmyRuleEffectModifierExemptFromItem {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
             "retinue-limit" => Ok(Self::RetinueLimit),
+            "enhancement-limit" => Ok(Self::EnhancementLimit),
+            "strategic-reserves-points" => Ok(Self::StrategicReservesPoints),
             _ => Err("invalid value".into()),
         }
     }
@@ -5289,7 +5359,9 @@ impl ::std::convert::TryFrom<::std::string::String> for ArmyRuleEffectModifierMe
 ///    "faction-forbidden",
 ///    "single-chapter",
 ///    "detachment-forbidden",
-///    "detachment-tag-exclusive"
+///    "detachment-tag-exclusive",
+///    "enhancement-source",
+///    "limit-exemption"
 ///  ]
 ///}
 /// ```
@@ -5329,6 +5401,10 @@ pub enum ArmyRuleEffectModifierRule {
     DetachmentForbidden,
     #[serde(rename = "detachment-tag-exclusive")]
     DetachmentTagExclusive,
+    #[serde(rename = "enhancement-source")]
+    EnhancementSource,
+    #[serde(rename = "limit-exemption")]
+    LimitExemption,
 }
 impl ::std::fmt::Display for ArmyRuleEffectModifierRule {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -5344,6 +5420,8 @@ impl ::std::fmt::Display for ArmyRuleEffectModifierRule {
             Self::SingleChapter => f.write_str("single-chapter"),
             Self::DetachmentForbidden => f.write_str("detachment-forbidden"),
             Self::DetachmentTagExclusive => f.write_str("detachment-tag-exclusive"),
+            Self::EnhancementSource => f.write_str("enhancement-source"),
+            Self::LimitExemption => f.write_str("limit-exemption"),
         }
     }
 }
@@ -5364,6 +5442,8 @@ impl ::std::str::FromStr for ArmyRuleEffectModifierRule {
             "single-chapter" => Ok(Self::SingleChapter),
             "detachment-forbidden" => Ok(Self::DetachmentForbidden),
             "detachment-tag-exclusive" => Ok(Self::DetachmentTagExclusive),
+            "enhancement-source" => Ok(Self::EnhancementSource),
+            "limit-exemption" => Ok(Self::LimitExemption),
             _ => Err("invalid value".into()),
         }
     }
@@ -53412,6 +53492,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "army-includes condition",
+///      "description": "[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/army-includes-condition-parameters"
+///        },
+///        "type": {
+///          "const": "army-includes"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "moved-over condition",
 ///      "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
 ///      "type": "object",
@@ -53639,6 +53737,11 @@ pub enum SimpleCondition {
 [army] Your Army Faction is this faction.*/
     #[serde(rename = "army-faction")]
     ArmyFaction { parameters: ArmyFactionConditionParameters },
+    /**army-includes condition
+
+[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.*/
+    #[serde(rename = "army-includes")]
+    ArmyIncludes { parameters: ArmyIncludesConditionParameters },
     /**moved-over condition
 
 [history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.*/

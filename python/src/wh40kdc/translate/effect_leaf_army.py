@@ -18,9 +18,11 @@ from wh40kdc.translate.effect_words import (
     jstr,
     num,
     num_str,
+    or_list,
     resource_noun,
     roll_name,
     title_case,
+    v,
 )
 
 
@@ -95,19 +97,40 @@ def resource_die(m: dict[str, Any]) -> str:
     return f"add {'a die' if cnt == '1' else f'{cnt} dice'} showing {shown} to your {pool}"
 
 
-def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+def _group_what(m: dict[str, Any], with_f: str | None) -> str | None:
+    """A list-building group: its unit-filter, its datasheets ("Alpha Squad or Beta Squad
+    units"), or both."""
+    if not isinstance(m.get("datasheets"), list):
+        return with_f
+    sheets = or_list([title_case(jstr(d)) for d in m["datasheets"]])
+    return f"{with_f} ({sheets} only)" if with_f is not None else f"{sheets} units"
+
+
+def _singular(group: str) -> str:
+    """"CHARACTER unit", "ADEPTUS CUSTODES model": the singular of a plural group."""
+    return re.sub(r" models\b", " model", re.sub(r" units\b", " unit", group, count=1), count=1)
+
+
+def army_rule(m: dict[str, Any], subj: str, ctx: Ctx, target: Any = None) -> str:
     with_f = (
         re.sub(r"^all ", "", effect_subject(m["with"], ctx)) if m.get("with") is not None else None
     )
+    group = _group_what(m, with_f)
     rule = m.get("rule")
     if rule == "warlord-required":
         return f"{subj} must be your Warlord"
     if rule == "warlord-forbidden":
         return f"{subj} cannot be your Warlord"
     if rule == "unique":
+        if group is not None:
+            return f"your army can include only one {_singular(group)}"
         return f"your army can include only one of {subj}"
     if rule == "enhancement-forbidden":
         return f"{subj} cannot be given Enhancements"
+    if rule == "enhancement-source":
+        return f"{subj} can only be given Enhancements from this Detachment"
+    if rule == "limit-exemption":
+        return _limit_exemption(m, subj, target)
     if rule == "enhancement-slot":
         each = re.sub(r" units\b", " unit", with_f, count=1) if with_f is not None else "such unit"
         up_to = f"up to {jstr(m['max'])} " if m.get("max") is not None else ""
@@ -132,9 +155,17 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if rule == "attachment":
         if m.get("mandatory") is True:
             return f"{subj} must be attached to a Leader, or it counts as destroyed"
+        if m.get("can_lead") is not None:
+            joins = re.sub(r"^all ", "", effect_subject(m["can_lead"], ctx), count=1)
+            return f"{subj} can also be attached to {joins}"
         if m.get("attach_as") is not None:
             host = re.sub(r"^all ", "", effect_subject(m["attach_as"], ctx), count=1)
-            return f"a Leader that can be attached to {host} can also be attached to {subj}"
+            if with_f is not None:
+                one = _singular(with_f)
+                leader = f"{'an' if re.match(r'[aeiou]', one, re.I) else 'a'} {one}"
+            else:
+                leader = "a Leader"
+            return f"{leader} that can be attached to {host} can also be attached to {subj}"
         led = (
             f" led by a {title_case(jstr(m['led_by']))} model"
             if m.get("led_by") is not None
@@ -145,7 +176,29 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"unit{led}, "
             "becoming part of that Bodyguard unit"
         )
-    return _composition(m, with_f, ctx)
+    return _composition(m, group, ctx)
+
+
+def _limit_exemption(m: dict[str, Any], subj: str, target: Any) -> str:
+    """Limits the rule's units (or this Detachment's Enhancements) are left out of."""
+    items = m.get("exempt_from") if isinstance(m.get("exempt_from"), list) else []
+    parts = []
+    for item in items:
+        if item == "enhancement-limit":
+            whose = (
+                "Enhancements from this Detachment"
+                if target is None or target == "this-unit"
+                else f"Enhancements on {subj}"
+            )
+            parts.append(f"{whose} do not count toward your army's Enhancement limit")
+        else:
+            limit = (
+                "the points limit for Strategic Reserves"
+                if item == "strategic-reserves-points"
+                else "the Retinue limit"
+            )
+            parts.append(f"{subj} {v(subj, 'does')} not count toward {limit}")
+    return "; ".join(parts)
 
 
 def _composition(m: dict[str, Any], with_f: str | None, ctx: Ctx) -> str:
@@ -162,7 +215,11 @@ def _composition(m: dict[str, Any], with_f: str | None, ctx: Ctx) -> str:
         if isinstance(m.get("exempt_from"), list)
         else ""
     )
+    # No limit is a permission; a limit of 0 forbids.
     if m.get("max") is None:
+        return f"your army can include {what}{exempt}"
+    literal = is_literal(m["max"])
+    if literal and num(m["max"]) == 0:
         return f"your army cannot include {what}{exempt}"
     measure = (
         "points of"
@@ -171,7 +228,6 @@ def _composition(m: dict[str, Any], with_f: str | None, ctx: Ctx) -> str:
         if m.get("measure") == "models"
         else ""
     )
-    literal = is_literal(m["max"])
     top = jstr(m["max"]) if literal else dice_case(m["max"])
     # "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
     one = literal and num(m["max"]) == 1 and not measure

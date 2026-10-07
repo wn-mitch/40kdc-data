@@ -72,8 +72,7 @@ describe("unit-filter alternatives (family)", () => {
     expect(refuse({ alternatives: [{ keywords: ["ALPHA"], excluded_keywords: ["ALPHA"] }, { keywords: ["BETA"] }] })).toThrow(/requires and excludes/u);
   });
 
-  it("is a new version: the previous unit-filter version has no alternatives", () => {
-    // Version 5 added alternatives (family-extensions-11.ts); version 4 has none.
+  it("is a new version: unit-filter@4, before alternatives (@5), has none", () => {
     expect(() => normalize("unit-filter", { side: "friendly", alternatives: ALPHA_OR_BETA_GAMMA }, 4)).toThrow();
   });
 

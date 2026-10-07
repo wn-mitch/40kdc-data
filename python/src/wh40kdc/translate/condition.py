@@ -505,6 +505,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
     if ctype == "army-faction":
         faction = _str(p.get("faction")).replace("-", " ").upper()
         return f"your Army Faction is {nt}{faction}"
+    if ctype == "army-includes":
+        return _army_includes(p, negated)
     if ctype == "moved-over":
         who = _subject_of(p, "the unit")
         win = p.get("window")
@@ -548,3 +550,27 @@ def describe_condition(c: Condition) -> str:
             return describe_condition(only["operands"][0])
         return f"not ({', '.join(describe_condition(o) for o in operands)})"
     return _describe_predicate(c, False)
+
+
+def _army_includes(p: P, negated: bool) -> str:
+    """"your army includes a CHARACTER unit", "your army includes 2 or more X units", "every
+    model in your army has the IMPERIUM keyword". The army is yours, so the filter's owner is
+    not repeated."""
+    f = dict(p.get("filter") or {})
+    f.pop("owner", None)
+    noun = "model" if f.get("level") == "model" else "unit"
+    if p.get("every") is True:
+        all_ = [_str(x) for x in f.get("all_of") or []] if isinstance(f.get("all_of"), list) else []
+        any_ = [_str(x) for x in f.get("any_of") or []] if isinstance(f.get("any_of"), list) else []
+        words = _or_list(any_) if any_ else _and_list(all_)
+        plural = "s" if len(all_) > 1 and not any_ else ""
+        return f"{'not ' if negated else ''}every {noun} in your army has the {words} keyword{plural}"
+    one = unit_filter_phrase(f)
+    minimum = p.get("min") if p.get("min") is not None else 1
+    if minimum > 1:
+        bare = re.sub(r"^an? ", "", one, count=1)
+        plural_noun = re.sub(r"\b(unit|model)\b", r"\1s", bare, count=1)
+        what = f"{minimum} or more {plural_noun}"
+    else:
+        what = one
+    return f"your army {'does not include' if negated else 'includes'} {what}"

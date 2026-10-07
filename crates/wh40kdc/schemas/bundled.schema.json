@@ -6323,6 +6323,40 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "army-includes condition",
+          "description": "[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-includes"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter": {
+                  "$ref": "#/$defs/unit-filter"
+                },
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "every": {
+                  "const": true
+                }
+              },
+              "required": [
+                "filter"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "moved-over condition",
           "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
           "required": [
@@ -10600,11 +10634,22 @@
                     "faction-forbidden",
                     "single-chapter",
                     "detachment-forbidden",
-                    "detachment-tag-exclusive"
+                    "detachment-tag-exclusive",
+                    "enhancement-source",
+                    "limit-exemption"
                   ]
                 },
                 "with": {
                   "$ref": "#/$defs/unit-filter"
+                },
+                "datasheets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/entity-id"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "description": "composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both."
                 },
                 "max": {
                   "oneOf": [
@@ -10633,15 +10678,22 @@
                   "type": "array",
                   "items": {
                     "enum": [
-                      "retinue-limit"
+                      "retinue-limit",
+                      "enhancement-limit",
+                      "strategic-reserves-points"
                     ]
                   },
                   "minItems": 1,
-                  "uniqueItems": true
+                  "uniqueItems": true,
+                  "description": "Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves)."
                 },
                 "attach_as": {
                   "$ref": "#/$defs/unit-filter",
                   "description": "attachment: a Leader that can join a unit matching this filter can join this unit."
+                },
+                "can_lead": {
+                  "$ref": "#/$defs/unit-filter",
+                  "description": "attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists."
                 },
                 "detachment": {
                   "$ref": "#/$defs/entity-id"

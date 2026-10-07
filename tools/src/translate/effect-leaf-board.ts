@@ -292,13 +292,34 @@ function designate(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   return m.clear === true ? `${what} ${v(what, "is")} no longer ${tag}` : `${what} ${v(what, "is")} ${tag}${by}${until}`;
 }
 
-function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+/** A list-building group: its unit-filter, its datasheets ("Alpha Squad or Beta Squad units"), or both. */
+function groupWhat(m: Record<string, unknown>, withF: string | null): string | null {
+  const sheets = Array.isArray(m.datasheets) ? orList((m.datasheets as unknown[]).map((d) => titleCase(jstr(d)))) : null;
+  if (sheets == null) return withF;
+  return withF != null ? `${withF} (${sheets} only)` : `${sheets} units`;
+}
+
+/** "CHARACTER unit", "ADEPTUS CUSTODES model": the singular of a plural group. */
+function singular(group: string): string {
+  return group.replace(/ units\b/, " unit").replace(/ models\b/, " model");
+}
+
+/** "a CHARACTER unit", "an ADEPTUS CUSTODES model": one of a plural group. */
+function oneOf(group: string): string {
+  const one = singular(group);
+  return `${/^[aeiou]/i.test(one) ? "an" : "a"} ${one}`;
+}
+
+function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx, target?: unknown): string {
   const withF = m.with != null ? effectSubject(m.with, ctx).replace(/^all /, "") : null;
+  const group = groupWhat(m, withF);
   switch (m.rule) {
     case "warlord-required": return `${subj} must be your Warlord`;
     case "warlord-forbidden": return `${subj} cannot be your Warlord`;
-    case "unique": return `your army can include only one of ${subj}`;
+    case "unique": return group != null ? `your army can include only one ${singular(group)}` : `your army can include only one of ${subj}`;
     case "enhancement-forbidden": return `${subj} cannot be given Enhancements`;
+    case "enhancement-source": return `${subj} can only be given Enhancements from this Detachment`;
+    case "limit-exemption": return limitExemption(m, subj, target);
     case "enhancement-slot":
       return `each ${withF?.replace(/ units\b/, " unit") ?? "such unit"} can be given ${m.max != null ? `up to ${jstr(m.max)} ` : ""}${m.enhancement_kind != null ? `${titleCase(jstr(m.enhancement_kind))} ` : ""}Enhancement${m.max === 1 ? "" : "s"}`;
     case "faction-forbidden": return `you cannot select ${titleCase(jstr(m.faction))} as your Army Faction`;
@@ -307,10 +328,24 @@ function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     case "detachment-tag-exclusive": return `you cannot select this Detachment together with another ${titleCase(jstr(m.tag))} Detachment`;
     case "attachment":
       if (m.mandatory === true) return `${subj} must be attached to a Leader, or it counts as destroyed`;
-      if (m.attach_as != null) return `a Leader that can be attached to ${effectSubject(m.attach_as, ctx).replace(/^all /, "")} can also be attached to ${subj}`;
+      if (m.can_lead != null) return `${subj} can also be attached to ${effectSubject(m.can_lead, ctx).replace(/^all /, "")}`;
+      if (m.attach_as != null) return `${withF != null ? oneOf(withF) : "a Leader"} that can be attached to ${effectSubject(m.attach_as, ctx).replace(/^all /, "")} can also be attached to ${subj}`;
       return `at the start of the Declare Battle Formations step, ${subj} can join one friendly unit${m.led_by != null ? ` led by a ${titleCase(jstr(m.led_by))} model` : ""}, becoming part of that Bodyguard unit`;
-    default: return composition(m, withF, ctx);
+    default: return composition(m, group, ctx);
   }
+}
+
+/** Limits the rule's units (or this Detachment's Enhancements) are left out of. */
+function limitExemption(m: Record<string, unknown>, subj: string, target: unknown): string {
+  const items = Array.isArray(m.exempt_from) ? (m.exempt_from as unknown[]) : [];
+  return items.map((item) => {
+    if (item === "enhancement-limit") {
+      const whose = target == null || target === "this-unit" ? "Enhancements from this Detachment" : `Enhancements on ${subj}`;
+      return `${whose} do not count toward your army's Enhancement limit`;
+    }
+    const limit = item === "strategic-reserves-points" ? "the points limit for Strategic Reserves" : "the Retinue limit";
+    return `${subj} ${v(subj, "does")} not count toward ${limit}`;
+  }).join("; ");
 }
 
 /** A composition limit: at most N units / models / points of X, per matching unit, outside the Retinue limit. */
@@ -319,7 +354,9 @@ function composition(m: Record<string, unknown>, withF: string | null, ctx: Ctx)
   const allied = m.faction != null ? titleCase(jstr(m.faction)) : null;
   const what = withF != null ? `${withF}${allied ? ` from the ${allied} faction` : ""}` : allied ? `${allied} units` : "such units";
   const exempt = Array.isArray(m.exempt_from) ? "; they do not count toward the Retinue limit" : "";
-  if (m.max == null) return `your army cannot include ${what}${exempt}`;
+  // No limit is a permission; a limit of 0 forbids.
+  if (m.max == null) return `your army can include ${what}${exempt}`;
+  if (isLiteral(m.max) && Number(m.max) === 0) return `your army cannot include ${what}${exempt}`;
   const measure = m.measure === "points" ? "points of" : m.measure === "models" ? "models from" : "";
   const max = isLiteral(m.max) ? jstr(m.max) : diceCase(m.max);
   // "at most 1 INQUISITORIAL AGENTS unit", "at most 3 units".
@@ -443,7 +480,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "objective-sticky":
       return `objective markers ${subj} ${v(subj, "controls")} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase`;
     case "designate": return designate(m, subj, ctx);
-    case "army-rule": return armyRule(m, subj, ctx);
+    case "army-rule": return armyRule(m, subj, ctx, e.target);
     default: {
       void inline;
       return `[${e.type ?? "unknown"}]`;

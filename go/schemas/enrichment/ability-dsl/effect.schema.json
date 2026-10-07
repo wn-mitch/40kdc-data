@@ -4566,11 +4566,22 @@
                     "faction-forbidden",
                     "single-chapter",
                     "detachment-forbidden",
-                    "detachment-tag-exclusive"
+                    "detachment-tag-exclusive",
+                    "enhancement-source",
+                    "limit-exemption"
                   ]
                 },
                 "with": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+                },
+                "datasheets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "description": "composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both."
                 },
                 "max": {
                   "oneOf": [
@@ -4599,15 +4610,22 @@
                   "type": "array",
                   "items": {
                     "enum": [
-                      "retinue-limit"
+                      "retinue-limit",
+                      "enhancement-limit",
+                      "strategic-reserves-points"
                     ]
                   },
                   "minItems": 1,
-                  "uniqueItems": true
+                  "uniqueItems": true,
+                  "description": "Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves)."
                 },
                 "attach_as": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-filter",
                   "description": "attachment: a Leader that can join a unit matching this filter can join this unit."
+                },
+                "can_lead": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-filter",
+                  "description": "attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists."
                 },
                 "detachment": {
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
@@ -4687,11 +4705,6 @@
                       },
                       {
                         "required": [
-                          "exempt_from"
-                        ]
-                      },
-                      {
-                        "required": [
                           "measure"
                         ]
                       }
@@ -4701,6 +4714,68 @@
                     "properties": {
                       "rule": {
                         "const": "composition"
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "exempt_from"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "enum": [
+                          "composition",
+                          "limit-exemption"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "rule": {
+                        "const": "limit-exemption"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "exempt_from"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "datasheets"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "enum": [
+                          "composition",
+                          "unique"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "can_lead"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "const": "attachment"
                       }
                     }
                   }

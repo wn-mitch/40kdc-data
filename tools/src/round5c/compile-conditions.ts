@@ -5,6 +5,7 @@
  * here is CONDITION- and EVENT-role composition, used only from `compile.ts`.
  */
 
+import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
@@ -390,6 +391,8 @@ export function condition(leaf: CompileLeaf): Node {
       return targetingCondition(leaf);
     case "army-faction":
       return polarity(leaf, { type: "army-faction", parameters: { faction: closed(leaf, "faction") } });
+    case "army-includes":
+      return armyIncludesCondition(leaf);
     case "battle-size":
       return polarity(leaf, { type: "battle-size", parameters: { size: closed(leaf, "size") } });
     case "guided":

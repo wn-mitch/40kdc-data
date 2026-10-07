@@ -272,6 +272,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
     case "army-faction":
       return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
+    case "army-includes":
+      return armyIncludes(p, negated);
     case "moved-over": {
       const who = subjectOf(p, "the unit");
       const window = p.window == null || p.window === "event" ? "during that move" : windowPhrase(p.window);
@@ -282,6 +284,25 @@ export function describePredicate(c: Condition, negated: boolean): string {
     default:
       return `${neg}${dekebab(c.type ?? "unknown")}`;
   }
+}
+
+/**
+ * "your army includes a CHARACTER unit", "your army includes 2 or more X units", "every model in
+ * your army has the IMPERIUM keyword". The army is yours, so the filter's owner is not repeated.
+ */
+function armyIncludes(p: P, negated: boolean): string {
+  const { owner: _owner, ...f } = (p.filter ?? {}) as P;
+  const noun = f.level === "model" ? "model" : "unit";
+  if (p.every === true) {
+    const all = Array.isArray(f.all_of) ? (f.all_of as unknown[]).map(str) : [];
+    const any = Array.isArray(f.any_of) ? (f.any_of as unknown[]).map(str) : [];
+    const words = any.length ? orList(any) : andList(all);
+    return `${negated ? "not " : ""}every ${noun} in your army has the ${words} keyword${all.length > 1 && !any.length ? "s" : ""}`;
+  }
+  const one = unitFilterPhrase(f);
+  const min = Number(p.min ?? 1);
+  const what = min > 1 ? `${min} or more ${one.replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s")}` : one;
+  return `your army ${negated ? "does not include" : "includes"} ${what}`;
 }
 
 /** A condition as a predicate phrase ("the unit is below starting strength and during your turn"). */

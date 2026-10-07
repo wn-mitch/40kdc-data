@@ -1,7 +1,7 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { FOLLOWING_FILTER } from "./family-extensions-11.js";
-import { enumValue } from "./family-validation.js";
+import { booleanValue, enumValue } from "./family-validation.js";
 
 /**
  * Wave-8 family extensions for list-building rules (army construction). As in the earlier rounds,
@@ -21,6 +21,7 @@ const OBJECTS = ["this-unit", FOLLOWING_FILTER] as const;
 /** Limits a unit or Enhancement can be left out of: the Retinue cap, the Enhancement cap, the Strategic Reserves points cap. */
 export const ARMY_EXEMPTIONS = ["retinue-limit", "enhancement-limit", "strategic-reserves-points"] as const;
 const ENHANCEMENT_KIND = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/u;
+const DATASHEET_ID = ENHANCEMENT_KIND;
 
 export const FAMILY_EXTENSIONS_W8_ARMY: readonly FamilyExtension[] = [
   {
@@ -60,6 +61,8 @@ export const FAMILY_EXTENSIONS_W8_ARMY: readonly FamilyExtension[] = [
       }
       if (object !== undefined) {
         if (rule !== "attachment") throw new TypeError("army-construction.object goes with rule: attachment.");
+        // Attachment eligibility names its Leaders by its pattern (or is the bearer itself), never by inline keywords, a cap or a led-by.
+        for (const key of ["with_keywords", "max", "led_by"]) if (result[key] !== undefined) throw new TypeError(`army-construction.object (attachment eligibility) takes no ${key}.`);
         result.object = enumValue(object, OBJECTS, "army-construction.object");
         if (result.object === FOLLOWING_FILTER && result.with !== undefined) throw new TypeError("army-construction takes one following filter: with or object, not both.");
       }
@@ -80,6 +83,53 @@ export const FAMILY_EXTENSIONS_W8_ARMY: readonly FamilyExtension[] = [
         result.enhancement_kind = kind;
       }
       return result;
+    },
+  },
+  {
+    // "cannot include the following datasheets: Alpha Squad, Beta Squad": units no keyword names.
+    family: "unit-filter",
+    description: "As the previous version, plus datasheets: units of any of these datasheets (kebab-case unit ids), for a list-building group whose units no keyword names. Only a list-building rule's group can hold it.",
+    schema: (previous) => withProperties(previous, {
+      datasheets: optional({ type: "array", items: { type: "string", pattern: DATASHEET_ID.source }, minItems: 1, uniqueItems: true }),
+    }),
+    normalize: (input, previous) => {
+      if (!("datasheets" in input)) return previous(input);
+      const { datasheets, ...rest } = input;
+      if (!Array.isArray(datasheets) || datasheets.length === 0) throw new TypeError("unit-filter.datasheets lists at least one datasheet id.");
+      for (const id of datasheets) if (typeof id !== "string" || !DATASHEET_ID.test(id)) throw new TypeError("unit-filter.datasheets lists kebab-case unit ids.");
+      if (new Set(datasheets).size !== datasheets.length) throw new TypeError("unit-filter.datasheets lists a datasheet twice.");
+      return { ...previous(rest), datasheets: [...(datasheets as string[])].sort() };
+    },
+  },
+  {
+    // "If your Army Faction is not X".
+    family: "army-faction",
+    description: "As the previous version, plus negated: your Army Faction is not this faction.",
+    schema: (previous) => withProperties(previous, { negated: optional({ type: "boolean" }) }),
+    normalize: (input, previous) => {
+      if (!("negated" in input)) return previous(input);
+      const { negated, ...rest } = input;
+      return { ...previous(rest), ...(booleanValue(negated, "army-faction.negated") ? { negated: true } : {}) };
+    },
+  },
+  {
+    // "a CHARACTER unit with the Leader ability" + "can be attached to a" + "X unit": which units
+    // a Leader can join, read at muster (compile-army.ts folds it into an attachment rule).
+    family: "leading-unit",
+    description: "As the previous version, plus attachment can-attach: the subject can be attached to the unit-filter right after the leaf (object following-filter, required). It says which units a Leader may join when mustering, so it lowers only inside a list-building attachment rule.",
+    schema: (previous) => withProperties(previous, {
+      attachment: widenedEnum(previous, "attachment", ["can-attach"]),
+      object: optional({ enum: [FOLLOWING_FILTER], "x-only-when": { attachment: ["can-attach"] } }),
+    }),
+    normalize: (input, previous) => {
+      const { object, ...rest } = input;
+      if (rest.attachment !== "can-attach") {
+        if (object !== undefined) throw new TypeError("leading-unit.object goes with attachment: can-attach.");
+        return previous(input);
+      }
+      if (object !== FOLLOWING_FILTER) throw new TypeError("leading-unit attachment can-attach names the unit by object: following-filter.");
+      if (rest.negated === true || rest.leader_keywords !== undefined) throw new TypeError("leading-unit attachment can-attach takes no negation or leader keywords.");
+      return { ...standIn(rest, "attachment", "leading", previous), object: FOLLOWING_FILTER };
     },
   },
 ];

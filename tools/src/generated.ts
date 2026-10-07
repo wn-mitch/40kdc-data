@@ -487,6 +487,7 @@ export type SimpleCondition =
   | DestroyedInTaggedTerrainCondition
   | BattleSizeCondition
   | ArmyFactionCondition
+  | ArmyIncludesCondition
   | MovedOverCondition
   | GuidedCondition;
 /**
@@ -3024,6 +3025,17 @@ export interface ArmyFactionCondition {
   };
 }
 /**
+ * [army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.
+ */
+export interface ArmyIncludesCondition {
+  type: "army-includes";
+  parameters: {
+    filter: UnitFilter;
+    min?: number;
+    every?: true;
+  };
+}
+/**
  * [history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.
  */
 export interface MovedOverCondition {
@@ -5553,8 +5565,16 @@ export interface ArmyRuleEffect {
       | "faction-forbidden"
       | "single-chapter"
       | "detachment-forbidden"
-      | "detachment-tag-exclusive";
+      | "detachment-tag-exclusive"
+      | "enhancement-source"
+      | "limit-exemption";
     with?: UnitFilter;
+    /**
+     * composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.
+     *
+     * @minItems 1
+     */
+    datasheets?: [EntityId, ...EntityId[]];
     max?: number | BattleSizeValue;
     /**
      * What max counts (default units).
@@ -5562,10 +5582,16 @@ export interface ArmyRuleEffect {
     measure?: "units" | "models" | "points";
     per?: UnitFilter3;
     /**
+     * Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
+     *
      * @minItems 1
      */
-    exempt_from?: ["retinue-limit", ..."retinue-limit"[]];
+    exempt_from?: [
+      "retinue-limit" | "enhancement-limit" | "strategic-reserves-points",
+      ...("retinue-limit" | "enhancement-limit" | "strategic-reserves-points")[]
+    ];
     attach_as?: UnitFilter4;
+    can_lead?: UnitFilter5;
     detachment?: EntityId;
     tag?: string;
     led_by?: string;
@@ -5752,6 +5778,179 @@ export interface UnitFilter3 {
  * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
  */
 export interface UnitFilter4 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied).
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Only units visible to the subject of the enclosing predicate.
+   */
+  visible?: true;
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: UnitRef;
+    wholly?: true;
+  };
+  /**
+   * Not this unit ("another friendly unit").
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * The designation was applied by this unit (their Spotted unit). Requires `designated`.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * The unit does not carry this designation.
+   */
+  not_designated?: string;
+  /**
+   * Units embarked within this Transport.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Models (level: model) or units that are part of this unit, attached units included.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  engaged_with?: UnitFilter1;
+  not_engaged_with?: UnitFilter2;
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
+}
+/**
+ * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
+ */
+export interface UnitFilter5 {
   owner?: Owner;
   all_of?: KeywordList;
   any_of?: KeywordList;

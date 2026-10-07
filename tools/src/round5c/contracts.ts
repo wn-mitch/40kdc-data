@@ -22,6 +22,7 @@ import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
 import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
+import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
@@ -95,6 +96,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...TARGETED_FAMILIES,
   ...GAP_CONTAINER_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
+  ...ARMY_INCLUDES_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
   ...GRANTED_FAMILIES,
@@ -172,7 +174,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeMissionPredicateParameters(family, input)
     ?? normalizeNamedAbilityParameters(family, input)
     ?? normalizeGrantedParameters(family, input)
-    ?? normalizeCountParameters(family, input);
+    ?? normalizeCountParameters(family, input)
+    ?? normalizeArmyIncludesParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

@@ -1513,6 +1513,40 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "army-includes condition",
+          "description": "[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-includes"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+                },
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "every": {
+                  "const": true
+                }
+              },
+              "required": [
+                "filter"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "moved-over condition",
           "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
           "required": [

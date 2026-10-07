@@ -514,7 +514,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             v(subj, "controls")
         ),
         Some("designate") => designate(m, subj, ctx),
-        Some("army-rule") => army_rule(m, subj, ctx),
+        Some("army-rule") => army_rule(m, subj, ctx, e.get("target")),
         Some(t) => format!("[{t}]"),
         None => "[unknown]".to_string(),
     }
