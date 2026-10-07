@@ -40,6 +40,29 @@ function between(sourceText: string, start: number, end: number): string {
   return start < end && end <= length ? exactSpan(sourceText, start, end) : "";
 }
 
+/**
+ * Whether moments in a row, with no effect between, are alternatives. Moments joined by "or" or
+ * "and" ("selected to shoot or to fight"; "after a Hit roll, a Wound roll, or a saving throw")
+ * are alternatives: each gap is a comma or holds the conjunction, and the last gap holds it.
+ * Otherwise a later moment is nested in an earlier one ("each time this unit uses this ability,
+ * at the end of the phase"): a delayed moment that a DSL trigger list (any one of its events)
+ * cannot express. Leaves in different fragments, or with no source text, keep the alternative
+ * reading; one leaf listed twice (an event's `also` moment) is one alternative.
+ */
+export function alternativeMoments(moments: readonly CompileLeaf[], sourceText: string | undefined): boolean {
+  const run = moments.filter((leaf, index) => index === 0 || leaf !== moments[index - 1]);
+  if (sourceText === undefined || run.length < 2) return true;
+  const gaps: string[] = [];
+  for (let index = 1; index < run.length; index += 1) {
+    const previous = run[index - 1]!;
+    const next = run[index]!;
+    if ((previous.fragment ?? null) !== (next.fragment ?? null) || previous.end_byte === undefined || next.start_byte < previous.end_byte) return true;
+    gaps.push(between(sourceText, previous.end_byte, next.start_byte));
+  }
+  const joined = (gap: string) => /\b(?:or|and)\b/iu.test(gap);
+  return joined(gaps.at(-1)!) && gaps.every((gap) => joined(gap) || /^\s*,\s*$/u.test(gap));
+}
+
 /** Whether a sentence ends between two leaves: "fragment" for a new source fragment, "list" for a colon introducing what follows. */
 function sentenceBreak(previous: CompileLeaf, next: CompileLeaf, sourceText: string): "fragment" | "stop" | "list" | null {
   if (previous.fragment !== undefined && next.fragment !== undefined && previous.fragment !== next.fragment) return "fragment";

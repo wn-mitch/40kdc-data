@@ -26,7 +26,7 @@ import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions
 import { foldModelState } from "./compile-model-state.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
-import { joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
+import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -532,6 +532,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (last && !planned.some((item) => item.index > last.index && item.index < index)) last.moments.push(position);
     else partStarts.push({ index, moments: [position] });
   });
+  if (partStarts.some((part) => !alternativeMoments(part.moments.map((position) => list[triggerIndexes[position]!]!), sourceText))) {
+    errors.push("A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.");
+  }
   if (partStarts.some((part, position) => !planned.some((item) => item.index > part.index && (partStarts[position + 1] === undefined || item.index < partStarts[position + 1]!.index)))) {
     errors.push("A moment ends the ability with no effect after it.");
   }

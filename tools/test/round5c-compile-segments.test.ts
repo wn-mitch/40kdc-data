@@ -138,6 +138,41 @@ describe("Round 5C independent sentences", () => {
   });
 });
 
+describe("Round 5C moments in a row within a later part", () => {
+  const opening = "Each time this unit is selected to move, it can use this ability. If it does, until the end of the turn, models in it have a Move characteristic of 20.";
+  const head = (text: string) => placed(text,
+    ["Each time this unit is selected to move", "event", { kind: "selected", to: "move" }],
+    ["it can use this ability", "optional-use", { who: "this-unit" }],
+    ["until the end of the turn", "duration", { endpoint: "end-of-turn" }],
+    ["models in it have a Move characteristic of 20", "characteristic-set", { subject: "this-unit", characteristic: "M", value: 20 }]);
+  const wound = ["this unit suffers 1 mortal wound", "mortal-wounds", { recipient: "this-unit", count: "1" }] as [string, string, Record<string, unknown>];
+
+  it("refuses a moment nested in another, which a trigger list would fire on either", () => {
+    const text = `${opening} Each time this unit uses this ability, at the end of the phase, this unit suffers 1 mortal wound.`;
+    const list = [...head(text), ...placed(text,
+      ["Each time this unit uses this ability", "event", { kind: "used", activity: "ability" }],
+      ["at the end of the phase", "event", { kind: "phase-end", phase: "any", turn: "either" }], wound)];
+    const result = compileLeaves(list, text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/moment nested in another/u);
+  });
+
+  it("keeps moments joined by \"or\", or listed with a final \"or\", as alternatives", () => {
+    const text = `${opening} Each time this unit shoots, fights, or charges, this unit suffers 1 mortal wound.`;
+    const list = [...head(text), ...placed(text,
+      ["shoots", "event", { kind: "selected", to: "shoot" }],
+      ["fights", "event", { kind: "selected", to: "fight" }],
+      ["charges", "event", { kind: "targets-selected", action_kind: "charge" }], wound)];
+    const parts = mechanicsOf(list, text).effect.steps;
+    expect(parts.at(-1).trigger).toHaveLength(3);
+    const near = `${opening} Each time this unit shoots, fights, this unit suffers 1 mortal wound.`;
+    const loose = [...head(near), ...placed(near,
+      ["shoots", "event", { kind: "selected", to: "shoot" }],
+      ["fights", "event", { kind: "selected", to: "fight" }], wound)];
+    expect(compileLeaves(loose, near).ok).toBe(false);
+  });
+});
+
 describe("Round 5C crunch gate: effects off the damage path", () => {
   const unsupported = (effect: Record<string, unknown>) =>
     effectToBuffs(effect, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {}).unsupported;
