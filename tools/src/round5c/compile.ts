@@ -12,7 +12,8 @@ import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
-import { foldUnitFilters } from "./compile-unit-filters.js";
+import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
+import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
 import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
@@ -142,8 +143,8 @@ type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[
  * A container option that carries its own moment or conditions, compiled as a whole ability and
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
-function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined): Node {
-  const compiled = compileLeaves(group, sourceText);
+function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions): Node {
+  const compiled = compileLeaves(group, sourceText, options);
   if (!compiled.ok) throw new CompileError(compiled.errors[0]!);
   const { effect: body, trigger: moment, usage, scope } = compiled.mechanics;
   if (!moment && !usage && (scope.duration === undefined || scope.duration === "permanent")) return body;
@@ -167,26 +168,29 @@ function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
   });
 }
 
+/** What the compiler knows of the record: `abilityId` is the ability "this ability" names (own-abilities.ts). */
+export type CompileOptions = { abilityId?: string };
+
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
-export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
+export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   const segments = sentenceSegments(ordered(leaves), sourceText);
-  if (!segments) return compilePart(leaves, sourceText);
+  if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
   const signature = shapeSignature(ordered(leaves), sourceText);
-  const results = segments.map((part) => compilePart(part, sourceText));
+  const results = segments.map((part) => compilePart(part, sourceText, options));
   // A part that cannot stand alone ("such a unit", an "instead" of an earlier sentence's effect)
   // is still tied to the sentences before it: the ability compiles as one part.
-  if (results.some((result) => !result.ok)) return compilePart(leaves, sourceText);
+  if (results.some((result) => !result.ok)) return compilePart(leaves, sourceText, options);
   const joined = joinSegments(results.flatMap((result) => result.ok ? [result] : []), leaves.some((leaf) => STRATAGEM_HEADER.has(leaf.family_id)));
   if (joined.errors.length) return { ok: false, signature, errors: joined.errors };
   return { ok: true, signature, mechanics: joined.mechanics, checks: joined.checks, ...(joined.core ? { core: joined.core } : {}) };
 }
 
-function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compiled {
+function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
-    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves)))))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    list = foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(foldUnitFilters(foldWeaponKeywords(foldAttackProperties(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindDesignationSubjects(bindPrecedingRolls(bindAntecedents(mergeStackedFilters(foldHolderAbilities(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText, options.abilityId), sourceText)))), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText), sourceText)), sourceText));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -216,7 +220,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText, options)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -494,6 +498,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText?: string): Compi
   if (partStarts.length && selections.length && planned.some((item) => item.selected)) {
     errors.push("A unit is selected for attacks in an ability with parts; the compiler binds that only for one moment.");
   }
+  // "One or more units from your army with this ability": once for the army (compile-holder-abilities.ts).
+  applyHolderAllowance(list, triggers, options.abilityId, usages, usageScopes);
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   if (usageScopes.size > 1) errors.push("Conflicting usage scopes.");

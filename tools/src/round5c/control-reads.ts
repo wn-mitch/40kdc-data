@@ -7,6 +7,8 @@ import { compileLeaves } from "./compile.js";
 import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { tiledSources } from "./leaf-view.js";
+import { round5cDataRoot } from "./entries.js";
+import { ownAbilityIds } from "./own-abilities.js";
 import { evaluateStep, type RepairClass, type StepManifest } from "./pilot-report.js";
 
 /**
@@ -268,11 +270,12 @@ export function gapsReport(db: DatabaseSync, limit: number): Record<string, unkn
   const errors = new Map<string, { count: number; examples: string[] }>();
   const compiled = new Set<string>();
   let tiledTexts = 0;
+  const own = ownAbilityIds(db, round5cDataRoot());
   for (const source of tiledSources(db)) {
     if (compiled.has(source.source_hash)) continue;
     compiled.add(source.source_hash);
     tiledTexts += 1;
-    const result = compileLeaves(source.leaves, source.source_text);
+    const result = compileLeaves(source.leaves, source.source_text, { abilityId: own.get(source.id) });
     if (result.ok) continue;
     const key = result.errors[0] ?? "unknown";
     const entry = errors.get(key) ?? { count: 0, examples: [] };

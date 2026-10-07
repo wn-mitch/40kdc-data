@@ -10,7 +10,7 @@ import { dslAlternative, type FilterAlternative, normalizeAlternatives, singleKe
 
 type FilterParameters = {
   side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean;
-  level?: string; held_in?: string; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
+  level?: string; held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
 };
 
 const sorted = (list: readonly string[] | undefined) => [...(list ?? [])].sort();
@@ -23,7 +23,7 @@ const without = (list: readonly string[] | undefined, drop: readonly string[]) =
  * names stays the filter's own; the rest of each alternative, its exclusions and states included,
  * becomes one item of `alternatives`. Alternatives that are each one other keyword become an
  * any-of. Alternatives on different sides, of models and units, or differing in where a unit is
- * held, visibility, "other" or an all-of or ability exclusion have no one filter, so they fail
+ * held, visibility, "other", a required ability or an all-of or ability exclusion have no one filter, so they fail
  * rather than narrow to units that are both.
  */
 export function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf {
@@ -35,6 +35,7 @@ export function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf 
   if (!same((p) => p.level ?? "unit")) fail("name both models and units");
   if (!same((p) => p.held_in) || !same((p) => p.visible === true) || !same((p) => p.other === true)) fail("differ in where a unit is held, visibility or \"other\"");
   if (!same((p) => sorted(p.excluded_all_keywords)) || !same((p) => sorted(p.excluded_abilities))) fail("exclude different keyword sets or abilities");
+  if (!same((p) => sorted(p.abilities))) fail("require different abilities");
   if (params.some((p) => p.any_keywords?.length || p.alternatives?.length)) fail("already hold alternatives of their own");
   const common = {
     keywords: shared(params.map((p) => p.keywords)),

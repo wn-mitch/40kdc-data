@@ -5,6 +5,7 @@ import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import type { CoverageView } from "./coverage.js";
 import { tiledSources } from "./leaf-view.js";
+import { ownAbilityIds } from "./own-abilities.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
@@ -216,6 +217,7 @@ export async function runCompileGates(
 ): Promise<CompileGateReport> {
   const dataRoot = round5cDataRoot();
   const tiled = new Map(tiledSources(db, { ...view, abilityVersionIds }).map((source) => [source.id, source]));
+  const own = ownAbilityIds(db, dataRoot);
   const abilitiesTotal = abilityVersionIds
     ? abilityVersionIds.size
     : (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
@@ -228,7 +230,7 @@ export async function runCompileGates(
     report.compile_attempted += 1;
     const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
     report.abilities.push(row);
-    const compiled = compileLeaves(ability.leaves, ability.source_text);
+    const compiled = compileLeaves(ability.leaves, ability.source_text, { abilityId: own.get(ability.id) });
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;

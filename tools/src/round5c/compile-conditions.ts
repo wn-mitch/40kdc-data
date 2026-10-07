@@ -320,7 +320,7 @@ export function condition(leaf: CompileLeaf): Node {
       } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
-      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[] };
+      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[]; has_ability?: string[] };
       if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
       const checks: Node[] = [
         ...(filter.all_of ? [pred("has-keyword", { all_of: filter.all_of }, "defender")] : []),
@@ -332,6 +332,7 @@ export function condition(leaf: CompileLeaf): Node {
         // A filter that names the defender itself ("attacks that target that unit" after "a friendly
         // X unit") says its side as well; after an attack this unit makes, an enemy target is implied.
         ...(leaf.parameters.owner_explicit === true && filter.owner !== "any" ? [pred("owned-by", { owner: filter.owner }, "defender")] : []),
+        ...(filter.has_ability ?? []).map((ability) => pred("has-ability", { ability }, "defender")),
       ];
       if (checks.length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
       return checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
@@ -399,6 +400,8 @@ export function condition(leaf: CompileLeaf): Node {
     case "unit-owner":
       return polarity(leaf, pred("owned-by", { owner: closed(leaf, "owner") }, subjectOf(leaf)));
     case "unit-has-ability":
+      // compile.ts binds "this ability" to the record's id before lowering (compile-holder-abilities.ts).
+      if (leaf.parameters.own === true) throw new CompileError("unit-has-ability names this ability, which binds to an id only when its record compiles.");
       return polarity(leaf, pred("has-ability", { ability: closed(leaf, "ability") }, subjectOf(leaf)));
     case "same-unit":
       return polarity(leaf, pred("same-unit", { as: closed(leaf, "as") }, subjectOf(leaf)));
@@ -636,7 +639,7 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
   const bound = triggering ? (attacked ? "attacked-unit" : "triggering-unit") : bindings[0]?.parameters.bound_to;
   if (bound) restrictions.bound_to = bound;
   // A folded unit-filter's checks beyond all-of keywords (compile-unit-filters.ts) go to eligibility.
-  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean; alternatives?: FilterAlternative[] };
+  const filter = (selector.parameters.filter ?? {}) as { any_keywords?: string[]; excluded_all_keywords?: string[]; abilities?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; visible?: boolean; alternatives?: FilterAlternative[] };
   if (filter.visible) throw new CompileError("A Stratagem TARGET has no visibility requirement field.");
   const filtered: Node[] = [
     ...(filter.any_keywords?.length ? [{ type: "has-keyword", parameters: { any_of: filter.any_keywords } }] : []),
@@ -645,7 +648,7 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
     ...(Array.isArray(selector.parameters.any_keywords) ? [{ type: "has-keyword", parameters: { any_of: selector.parameters.any_keywords } }] : []),
     ...(filter.states ?? []).map((state) => stateCheck(state)),
     ...(filter.excluded_all_keywords?.length ? [negate({ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } })] : []),
-    ...abilityChecks(filter.excluded_abilities),
+    ...abilityChecks(filter.excluded_abilities, filter.abilities),
     ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
   ];
   const anyRequired = selector.parameters.match === "any" ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];

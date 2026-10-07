@@ -52,6 +52,8 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
+    // "units with this ability" (compile-holder-abilities.ts) and "(excluding units with X)".
+    ...(Array.isArray(filter.parameters.abilities) ? { has_ability: filter.parameters.abilities } : {}),
     ...(Array.isArray(filter.parameters.excluded_abilities) ? { lacks_ability: filter.parameters.excluded_abilities } : {}),
   };
 }
@@ -93,7 +95,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
 
 type FilterParameters = {
   side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
-  held_in?: string; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
+  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
 };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
@@ -132,6 +134,9 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (held !== undefined) parameters.held_in = held;
   const abilities = union(a.excluded_abilities, b.excluded_abilities);
   if (abilities.length) parameters.excluded_abilities = abilities;
+  const required = union(a.abilities, b.abilities);
+  if (required.some((ability) => abilities.includes(ability))) throw new CompileError("A unit-filter cannot both require and exclude the same ability.");
+  if (required.length) parameters.abilities = required;
   const allOf = a.excluded_all_keywords ?? b.excluded_all_keywords;
   if (allOf !== undefined) parameters.excluded_all_keywords = allOf;
   // "A or B C unit" + "(excluding D units)": the narrowing holds for every alternative.

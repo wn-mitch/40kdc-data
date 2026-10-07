@@ -19,11 +19,17 @@ export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
 // ---------------------------------------------------------------------------------------------
 
 /** A folded unit-filter's fields (compile-unit-filters.ts), as selectUnit and wrapAura read them. */
-type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; excluded_all_keywords?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; alternatives?: FilterAlternative[] };
+type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; excluded_all_keywords?: string[]; abilities?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; alternatives?: FilterAlternative[] };
 
-/** "(excluding units with the Lone Operative ability)": one negated has-ability check per ability. */
-export function abilityChecks(abilities: readonly string[] | undefined): Node[] {
-  return (abilities ?? []).map((ability) => ({ operator: "not", operands: [{ type: "has-ability", parameters: { ability } }] }));
+/**
+ * "(excluding units with the Lone Operative ability)": one negated has-ability check per excluded
+ * ability; "units with this ability": one has-ability check per required one.
+ */
+export function abilityChecks(excluded: readonly string[] | undefined, required: readonly string[] = []): Node[] {
+  return [
+    ...required.map((ability) => ({ type: "has-ability", parameters: { ability } })),
+    ...(excluded ?? []).map((ability) => ({ operator: "not", operands: [{ type: "has-ability", parameters: { ability } }] })),
+  ];
 }
 
 /**
@@ -69,6 +75,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (filter.states?.includes("not-battle-shocked")) throw new CompileError("An aura reaching only units that are not Battle-shocked has no DSL eligible field yet.");
   if (filter.excluded_all_keywords?.length) throw new CompileError("An aura excluding only units with every listed keyword has no DSL eligible field yet.");
   if (filter.excluded_abilities?.length) throw new CompileError("An aura excluding units by ability has no DSL eligible field yet.");
+  if (filter.abilities?.length) throw new CompileError("An aura reaching units by ability has no DSL eligible field yet.");
   if (filter.alternatives?.length) throw new CompileError("An aura reaching units of alternatives that differ by more than one keyword has no DSL eligible field yet.");
   if (filter.states?.some((state) => state.startsWith("in-"))) throw new CompileError("An aura cannot reach a unit held off the battlefield.");
   if (filter.states?.length) eligible.states = filter.states;
@@ -131,7 +138,7 @@ function filterEligibility(filter: UnitFilter, extra: Node | null = null): Node 
     ...(filter.alternatives?.length ? [alternativesCheck(filter.alternatives)!] : []),
     ...(filter.states ?? []).map((state) => stateCheck(state)),
     ...(filter.excluded_all_keywords?.length ? [{ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } }] }] : []),
-    ...abilityChecks(filter.excluded_abilities),
+    ...abilityChecks(filter.excluded_abilities, filter.abilities),
     ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
     ...(extra ? [extra] : []),
   ];

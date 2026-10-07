@@ -49,6 +49,9 @@ describe("Round 5C leaf describer audit", () => {
       // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads
       // the same as naming it explicitly, and "recipient" reads as "the unit" too.
       "unit-owner": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // Version 3's own ("this ability") gives the audit a value to try, which earlier versions'
+      // open ability id did not; its subject collides as unit-owner's does.
+      "unit-has-ability": { unrendered: [], colliding: ["subject"], problems: 0 },
       "same-unit": { unrendered: [], colliding: ["subject"], problems: 0 },
       "wounds-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "in-region": { unrendered: [], colliding: ["subject"], problems: 0 },
