@@ -211,7 +211,8 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
       if (between.some((owner) => owner.parameters.owner !== side)) break;
       const combined = mergedFilter(group.filter, candidate!);
       if (combined === null) break;
-      group.filter = combined;
+      // The merged filter's wording runs to the last filter it took in ("(excluding X)" included).
+      group.filter = { ...combined, end_byte: candidate!.end_byte };
       group.at = next + 1;
       owners.push(...between);
       last = candidate!;
@@ -293,7 +294,9 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // before it. A "from your army" after it is the filter's own wording.
       const at = pastOwners(list, index, leaf);
       const condition = out.at(-1)!;
-      out[out.length - 1] = { ...condition, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf) } };
+      // The condition's wording now runs through the filter it absorbed, so the words after it (an "or") sit between it and the next condition.
+      const end = list[at - 1]!.end_byte ?? condition.end_byte;
+      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf) } };
       index = at - 1;
     } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
       // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
