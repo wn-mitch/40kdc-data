@@ -118,6 +118,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "apply-mark": {
       const modifier: Node = { tag: closed(leaf, "tag") };
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
+      // apply-mark@4: who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
+      if (leaf.parameters.by !== undefined) modifier.by = closed(leaf, "by");
+      if (leaf.parameters.clears_on !== undefined) modifier.clears_on = leaf.parameters.clears_on;
       return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
     case "army-construction":

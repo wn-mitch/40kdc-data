@@ -8,6 +8,7 @@ import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs }
 import { bindArmyAntecedents, armyCoreChecks, foldArmyAttachments, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
+import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { trigger } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
@@ -222,7 +223,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus))), sourceText)), sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText));
-    list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))];
+    list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;

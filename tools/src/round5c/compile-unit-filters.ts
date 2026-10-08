@@ -38,7 +38,7 @@ const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategi
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
 export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[] };
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string };
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
@@ -57,6 +57,9 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
+    // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
+    ...(p.designated !== undefined ? { designated: p.designated } : {}),
+    ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
     // "units with this ability" (compile-holder-abilities.ts) and "(excluding units with X)".
     ...(Array.isArray(filter.parameters.abilities) ? { has_ability: filter.parameters.abilities } : {}),
     ...(Array.isArray(filter.parameters.excluded_abilities) ? { lacks_ability: filter.parameters.excluded_abilities } : {}),
@@ -96,6 +99,8 @@ function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): Reco
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
   // Alternatives that are each one keyword are the any-of the eligibility checks already read.
   const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
+  // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
+  if (rest.designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -118,7 +123,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
 
 type FilterParameters = {
   side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
-  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[];
+  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string;
 };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
@@ -165,6 +170,13 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (allOf !== undefined) parameters.excluded_all_keywords = allOf;
   const datasheets = a.datasheets ?? b.datasheets;
   if (datasheets !== undefined) parameters.datasheets = datasheets;
+  // "Bondsman-affected" from one filter and a unit from the other: the designation and its applier go together.
+  if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
+  if (a.designated_by !== undefined && b.designated_by !== undefined && a.designated_by !== b.designated_by) return null;
+  const designated = a.designated ?? b.designated;
+  if (designated !== undefined) parameters.designated = designated;
+  const designatedBy = a.designated_by ?? b.designated_by;
+  if (designatedBy !== undefined) parameters.designated_by = designatedBy;
   // "A or B C unit" + "(excluding D units)": the narrowing holds for every alternative.
   const alternatives = a.alternatives ?? b.alternatives;
   if (alternatives !== undefined) {
