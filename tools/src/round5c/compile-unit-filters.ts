@@ -6,7 +6,7 @@ import { destroyedFilter, destroyedObject, modelRecipientFilter, modelSelection,
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
-import { attackFrameRolls, foldAttackFrame, subjectlessRoll } from "./compile-attack-frame.js";
+import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -378,6 +378,12 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       out.push(list[at]!);
       out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true } });
       index = at;
+    } else if (isFilter(leaf) && (targetFrameBefore(list, index) || defenderCompareAfter(list, index))) {
+      // "Ranged attacks aimed at friendly X units where the attacker's power beats the target's resilience": the unit-filter
+      // names the attack's target. The attack-filter before it (if any) stays a condition on the attack,
+      // and the target condition is the filter's units, as "that targets a VEHICLE unit" folds.
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter naming an attack's target must say friendly or enemy.");
+      out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true } });
     } else if (isFilter(leaf) && subjectlessRoll(list[pastOwners(list, index, leaf)]) && !out.some((before) => before.role === "EVENT" && before.fragment === leaf.fragment)) {
       // "Friendly Adeptus Astartes Dreadnought units" + "can re-roll hit rolls of 1": the units
       // whose rolls it is. After an attack or a moment in its fragment the filter belongs to that
@@ -416,9 +422,10 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // "Friendly X units' ranged attacks can:" + "Re-roll one hit roll.": the attack-filter names the
       // rolls' attack type; each roll takes the filter's units and that type, and the frame is dropped.
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units re-roll or modify rolls must say friendly or enemy.");
-      const { frame, rolls } = attackFrameRolls(list, index, leaf)!;
-      out.push(...foldAttackFrame(dslUnitFilter(leaf), list[frame]!, rolls));
-      index = frame + rolls.length;
+      const { frame, gates, rolls, last } = attackFrameRolls(list, index, leaf)!;
+      // "aimed at a unit within 12\"": the target gates stay ahead of the rolls they condition.
+      out.push(...gates, ...foldAttackFrame(dslUnitFilter(leaf), list[frame]!, rolls));
+      index = last;
     } else if (isFilter(leaf) && filteredAfter(list, index) !== null) {
       // "Friendly **K** units (from your army)" + "have the Scouts ability": every unit it
       // matches receives the effect. A "from your army" between them is the filter's own wording.
