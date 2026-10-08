@@ -40,7 +40,11 @@ describe("wave-9 weapon-ability keywords", () => {
     const version = currentFamilyVersion("weapon-ability-grant");
     expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, version))
       .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
-    expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, version - 1)).toThrow();
+    // The wave-9 vocabulary version (8) takes these keywords and the version before it (7) refuses them.
+    // Later grant versions (weapon antecedent) sit above it, so "version - 1" is no longer the refusing one.
+    expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, 7)).toThrow();
+    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, 8))
+      .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
   });
 
   it("accepts a bold-marked Anti keyword whose printed span carries the bold markers", () => {

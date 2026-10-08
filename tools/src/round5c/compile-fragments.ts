@@ -245,6 +245,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(weaponName !== undefined ? { weapon_name: weaponName } : {}),
           ...(weaponKeyword !== undefined ? { weapon_keyword: weaponKeyword } : {}),
+          // "that weapon": the weapon the record's select-weapon bound (compile-weapon-antecedent.ts).
+          ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
           ...(ifPresent !== undefined ? { if_present: ifPresent } : {}),
           ...(incoming === true ? { incoming: true } : {}),
         },
