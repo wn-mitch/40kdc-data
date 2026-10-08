@@ -398,8 +398,13 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       }
       return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
     }
-    case "counts-as":
-      return { type: "counts-as", target: target(leaf.parameters.subject), modifier: { within: { inches: closed(leaf, "within") } } };
+    case "counts-as": {
+      // A region grant (family-extensions-15-named-region.ts) names the army rule's region instead of a range.
+      const modifier: Node = leaf.parameters.region !== undefined
+        ? { in_region: { rule_region: structuredClone(leaf.parameters.region as Node) } }
+        : { within: { inches: closed(leaf, "within") } };
+      return { type: "counts-as", target: target(leaf.parameters.subject), modifier };
+    }
     case "rule-state":
       return {
         type: "rule-state", target: target(leaf.parameters.subject),

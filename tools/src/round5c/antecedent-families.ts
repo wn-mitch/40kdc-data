@@ -60,6 +60,8 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "roll-modifier": ["subject"],
   reroll: ["subject"],
   "in-region": ["subject"],
+  // "that unit is within your army's Hallowed Ground": the unit an earlier leaf introduced (family-extensions-15-named-region.ts).
+  "counts-as": ["subject"],
   // "if that unit targeted this unit"; "if one or more units with this ability are selected as a target of that charge".
   targeted: ["subject"],
   "target-is-selected": ["by", "target"],

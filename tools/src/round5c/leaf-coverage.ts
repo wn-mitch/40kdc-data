@@ -158,6 +158,11 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
+  // counts-as@2 takes a range or a region; its region object is not sampled, so both forms are listed.
+  "counts-as@2": [
+    { subject: "this-unit", within: 6 },
+    { subject: "this-unit", region: { region_id: "hallowed-ground", owner_faction: "grey-knights" } },
+  ],
   // aura-range v3's side is optional (a unit-filter can carry it); alone, only a sided aura compiles.
   "aura-range": [{ side: "friendly", inches: 6 }, { side: "enemy", inches: 6, range_cap_inches: 9 }],
   "named-region-state": [
@@ -266,7 +271,7 @@ export function produceLiterals(): Produced {
     // A COMBINATOR ("instead") replaces an earlier effect of its own family; it owns no DSL type
     // of its own and only compiles inside a fuller ability (see the COMPOSED list).
     if (family.role === "COMBINATOR") continue;
-    const combos = FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
+    const combos = FIXED_PARAMETERS[`${family.id}@${family.version}`] ?? FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
     for (const parameters of combos) {
       let result: Compiled;
       try {
