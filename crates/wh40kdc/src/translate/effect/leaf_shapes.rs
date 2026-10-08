@@ -80,9 +80,15 @@ fn select_weapon(m: &P, subj: &str) -> String {
         m.get("count").filter(|c| !c.is_null()).unwrap_or(&1.into()),
     ));
     let one = n == 1.0;
-    let kind = nn(m, "weapon_type")
+    let named = nn(m, "weapon_name")
         .map(|k| format!("{} ", jv(k)))
         .unwrap_or_default();
+    let kind = format!(
+        "{named}{}",
+        nn(m, "weapon_type")
+            .map(|k| format!("{} ", jv(k)))
+            .unwrap_or_default()
+    );
     let kw = nn(m, "weapon_keyword")
         .map(|k| format!(" with [{}]", jv(k).to_uppercase()))
         .unwrap_or_default();

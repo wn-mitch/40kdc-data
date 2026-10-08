@@ -5047,6 +5047,10 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "weapon_name": {
+                  "type": "string",
+                  "minLength": 1
+                },
                 "bind_as": {
                   "type": "string",
                   "minLength": 1

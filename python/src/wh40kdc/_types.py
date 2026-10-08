@@ -1828,6 +1828,7 @@ class Modifier56(TypedDict):
     count: NotRequired[int]
     weapon_type: NotRequired[Literal["melee", "ranged"]]
     weapon_keyword: NotRequired[str]
+    weapon_name: NotRequired[str]
     bind_as: str
 
 

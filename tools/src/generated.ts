@@ -6198,6 +6198,7 @@ export interface SelectWeaponEffect {
     count?: number;
     weapon_type?: "melee" | "ranged";
     weapon_keyword?: string;
+    weapon_name?: string;
     bind_as: string;
   };
   scaling?: Scaling;

@@ -24615,5 +24615,22 @@
     "expected": {
       "text": "Unless your Army Faction is ALPHA LEGION, when resolving this use, your army can include at most 1 friendly GAMMA unit for each friendly ALPHA unit in your army; they do not count toward the Retinue limit."
     }
+  },
+  {
+    "caseId": "fidelity/select-weapon-named",
+    "effect": {
+      "type": "select-weapon",
+      "target": "this-model",
+      "modifier": {
+        "weapon_name": "plasma rifle",
+        "bind_as": "plasma-rifle-weapon"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, select one plasma rifle weapon equipped by this model; the effects below refer to it as the selected weapon."
+    }
   }
 ]

@@ -112,6 +112,11 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     const qualifier = !containsStat && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
     const run = list.slice(first, end);
+    // A scope for the bound weapon ("That weapon's attacks have") takes stat adjustments only: a keyword
+    // grant has no bound weapon to name, and would widen to every weapon of the type.
+    if (scope.parameters.weapon !== undefined && run.some((leaf) => !isStat(leaf))) {
+      throw new CompileError("A bound-weapon scope takes stat adjustments only; a keyword grant to that weapon is not compiled yet.");
+    }
     if (run.some(isChoiceMarker)) {
       // "can have: [CLEAVE 1]. Or: +1 AP": the keyword and the stat adjustment are the two options; the
       // stat adjustment takes the scope's recipient and weapon type, as it does in any scope.

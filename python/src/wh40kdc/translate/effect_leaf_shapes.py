@@ -83,7 +83,8 @@ def _borrow_weapons(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _select_weapon(m: dict[str, Any], subj: str) -> str:
     n = num(m["count"] if m.get("count") is not None else 1)
     one = n == 1
-    kind = f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else ""
+    named = f"{jstr(m['weapon_name'])} " if m.get("weapon_name") is not None else ""
+    kind = named + (f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else "")
     kw = (
         f" with [{jstr(m['weapon_keyword']).upper()}]"
         if m.get("weapon_keyword") is not None

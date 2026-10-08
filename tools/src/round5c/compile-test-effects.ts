@@ -69,6 +69,7 @@ export function testEffect(leaf: CompileLeaf): Node | undefined {
       if (leaf.parameters.count !== undefined) modifier.count = closed(leaf, "count");
       if (leaf.parameters.weapon_type !== undefined) modifier.weapon_type = closed(leaf, "weapon_type");
       if (leaf.parameters.weapon_keyword !== undefined) modifier.weapon_keyword = closed(leaf, "weapon_keyword");
+      if (leaf.parameters.weapon_name !== undefined) modifier.weapon_name = closed(leaf, "weapon_name");
       return { type: "select-weapon", target: closed(leaf, "target"), modifier };
     }
     default:

@@ -155,7 +155,7 @@
       ]
     },
     "rule-state-core-rule-slug": {
-      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set).",
+      "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event.",
       "type": "string",
       "enum": [
         "benefit-of-cover",
@@ -1052,7 +1052,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-grant effect",
-          "description": "[ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6\", Firing Deck 2).",
+          "description": "[ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6\", Firing Deck 2).",
           "required": [
             "type",
             "target",
@@ -1084,11 +1084,45 @@
                 },
                 "rules_bundle": {
                   "const": true
+                },
+                "definition": {
+                  "$ref": "#/$defs/ability-part",
+                  "description": "The granted ability itself, when the rules print it after the grant (\"X units have the following ability: Name: …\") instead of naming a separate ability record. It is the holder's own ability: inside it, this-unit, this-model and ability-unit name the unit (model) it is granted to, each unit `target` matches, and it works only while that holder is on the battlefield (not while it is in Reserves, nor once it is destroyed). An aura in it is centred on the holder, and a usage in it counts per holder. A model-level `target` gives each unit with one or more such models one copy, not one per model. `ability` is the printed name's id; it is absent for an unnamed body (\"have the following:\")."
                 }
               },
-              "required": [
-                "ability"
-              ]
+              "anyOf": [
+                {
+                  "required": [
+                    "ability"
+                  ]
+                },
+                {
+                  "required": [
+                    "definition"
+                  ]
+                }
+              ],
+              "if": {
+                "required": [
+                  "definition"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "value"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "rules_bundle"
+                      ]
+                    }
+                  ]
+                }
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
@@ -2068,13 +2102,35 @@
                 "rule": {
                   "type": "string",
                   "minLength": 1
+                },
+                "attacks": {
+                  "$ref": "condition.schema.json#/$defs/event-bound-reference",
+                  "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this."
                 }
               },
               "required": [
                 "direction",
                 "rule_kind",
                 "rule"
-              ]
+              ],
+              "if": {
+                "required": [
+                  "attacks"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "direction": {
+                    "const": "suppressed"
+                  },
+                  "rule_kind": {
+                    "const": "core-rule"
+                  },
+                  "rule": {
+                    "const": "attacking-ends-hidden"
+                  }
+                }
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
@@ -2134,19 +2190,63 @@
                     },
                     "threshold": {
                       "type": "integer",
-                      "minimum": 2,
-                      "maximum": 6
+                      "minimum": 1,
+                      "maximum": 6,
+                      "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\")."
                     },
                     "per_model": {
                       "enum": [
                         "target",
                         "this"
                       ]
+                    },
+                    "comparison": {
+                      "enum": [
+                        "gte",
+                        "lte"
+                      ],
+                      "default": "gte",
+                      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\")."
+                    },
+                    "for_each": {
+                      "$ref": "#/$defs/unit-selector",
+                      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets."
                     }
                   },
                   "required": [
                     "dice",
                     "threshold"
+                  ],
+                  "allOf": [
+                    {
+                      "not": {
+                        "required": [
+                          "per_model",
+                          "for_each"
+                        ]
+                      }
+                    },
+                    {
+                      "if": {
+                        "not": {
+                          "required": [
+                            "comparison"
+                          ],
+                          "properties": {
+                            "comparison": {
+                              "const": "lte"
+                            }
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "threshold": {
+                            "minimum": 2
+                          }
+                        }
+                      }
+                    }
                   ]
                 },
                 "range": {
@@ -2486,8 +2586,12 @@
                     },
                     {
                       "const": "full"
+                    },
+                    {
+                      "const": "half-starting"
                     }
-                  ]
+                  ],
+                  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds)."
                 },
                 "placement": {
                   "oneOf": [
@@ -2700,7 +2804,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "split-unit effect",
-          "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.",
+          "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.",
           "required": [
             "type",
             "target",
@@ -2759,6 +2863,11 @@
                   "minItems": 2,
                   "uniqueItems": true,
                   "description": "Names each resulting unit, in model_counts order, for later {selection_var} references."
+                },
+                "starting_strength": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Each resulting unit's Starting Strength."
                 }
               },
               "oneOf": [
@@ -3360,7 +3469,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
           "required": [
             "type",
             "target",
@@ -3539,6 +3648,27 @@
                 },
                 "allow_first_round": {
                   "const": true
+                },
+                "wounds_remaining": {
+                  "oneOf": [
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/quantity"
+                    },
+                    {
+                      "const": "full"
+                    },
+                    {
+                      "const": "half-starting"
+                    }
+                  ],
+                  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds)."
+                },
+                "detach": {
+                  "const": true
+                },
+                "starting_strength": {
+                  "type": "integer",
+                  "minimum": 1
                 },
                 "near": {
                   "type": "array",
@@ -4436,11 +4566,22 @@
                     "faction-forbidden",
                     "single-chapter",
                     "detachment-forbidden",
-                    "detachment-tag-exclusive"
+                    "detachment-tag-exclusive",
+                    "enhancement-source",
+                    "limit-exemption"
                   ]
                 },
                 "with": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+                },
+                "datasheets": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "description": "composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both."
                 },
                 "max": {
                   "oneOf": [
@@ -4469,15 +4610,22 @@
                   "type": "array",
                   "items": {
                     "enum": [
-                      "retinue-limit"
+                      "retinue-limit",
+                      "enhancement-limit",
+                      "strategic-reserves-points"
                     ]
                   },
                   "minItems": 1,
-                  "uniqueItems": true
+                  "uniqueItems": true,
+                  "description": "Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves)."
                 },
                 "attach_as": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-filter",
                   "description": "attachment: a Leader that can join a unit matching this filter can join this unit."
+                },
+                "can_lead": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-filter",
+                  "description": "attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists."
                 },
                 "detachment": {
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
@@ -4557,11 +4705,6 @@
                       },
                       {
                         "required": [
-                          "exempt_from"
-                        ]
-                      },
-                      {
-                        "required": [
                           "measure"
                         ]
                       }
@@ -4571,6 +4714,68 @@
                     "properties": {
                       "rule": {
                         "const": "composition"
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "exempt_from"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "enum": [
+                          "composition",
+                          "limit-exemption"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "rule": {
+                        "const": "limit-exemption"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "exempt_from"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "datasheets"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "enum": [
+                          "composition",
+                          "unique"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "can_lead"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "rule": {
+                        "const": "attachment"
                       }
                     }
                   }
@@ -4839,6 +5044,10 @@
                   ]
                 },
                 "weapon_keyword": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "weapon_name": {
                   "type": "string",
                   "minLength": 1
                 },
@@ -5874,156 +6083,7 @@
           "const": "for-each-unit"
         },
         "selector": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "owner": {
-              "type": "string",
-              "enum": [
-                "friendly",
-                "enemy"
-              ]
-            },
-            "keywords": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them."
-            },
-            "keyword_match": {
-              "type": "string",
-              "enum": [
-                "all",
-                "any"
-              ],
-              "default": "all",
-              "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction."
-            },
-            "target_kind": {
-              "type": "string",
-              "enum": [
-                "unit",
-                "model"
-              ],
-              "default": "unit",
-              "description": "Whether each iteration binds a whole unit or one matching model."
-            },
-            "within_inches": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            },
-            "engagement_relation": {
-              "type": "string",
-              "enum": [
-                "engaged-with-bearer",
-                "not-engaged-with-bearer"
-              ],
-              "description": "Candidate engagement relation to the bearer or bearer-unit."
-            },
-            "reference": {
-              "type": "string",
-              "enum": [
-                "bearer",
-                "bearer-unit",
-                "bearer-transport"
-              ],
-              "description": "Origin of the engagement_relation gate."
-            },
-            "member_of": {
-              "type": "string",
-              "enum": [
-                "bearer-unit"
-              ],
-              "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
-            },
-            "model_names": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1,
-              "uniqueItems": true,
-              "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
-            },
-            "excluded_keywords": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1,
-              "uniqueItems": true,
-              "description": "A candidate with any listed keyword is excluded."
-            },
-            "bind_as": {
-              "type": "string",
-              "minLength": 1
-            },
-            "eligibility": {
-              "$ref": "condition.schema.json"
-            },
-            "within_objective": {
-              "$ref": "#/$defs/selection-reference"
-            }
-          },
-          "required": [
-            "owner"
-          ],
-          "allOf": [
-            {
-              "if": {
-                "required": [
-                  "member_of"
-                ]
-              },
-              "then": {
-                "properties": {
-                  "target_kind": {
-                    "const": "model"
-                  },
-                  "owner": {
-                    "const": "friendly"
-                  }
-                },
-                "required": [
-                  "target_kind"
-                ]
-              }
-            },
-            {
-              "if": {
-                "required": [
-                  "model_names"
-                ]
-              },
-              "then": {
-                "required": [
-                  "target_kind"
-                ],
-                "properties": {
-                  "target_kind": {
-                    "const": "model"
-                  }
-                }
-              }
-            },
-            {
-              "if": {
-                "required": [
-                  "engagement_relation"
-                ]
-              },
-              "then": {
-                "required": [
-                  "reference"
-                ]
-              }
-            }
-          ]
+          "$ref": "#/$defs/unit-selector"
         },
         "effect": {
           "$ref": "#/$defs/effect-node"
@@ -6033,6 +6093,181 @@
         "type",
         "selector",
         "effect"
+      ]
+    },
+    "unit-selector": {
+      "type": "object",
+      "description": "Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.",
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "type": "string",
+          "enum": [
+            "friendly",
+            "enemy",
+            "any"
+          ]
+        },
+        "keywords": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them."
+        },
+        "keyword_match": {
+          "type": "string",
+          "enum": [
+            "all",
+            "any"
+          ],
+          "default": "all",
+          "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction."
+        },
+        "target_kind": {
+          "type": "string",
+          "enum": [
+            "unit",
+            "model"
+          ],
+          "default": "unit",
+          "description": "Whether each iteration binds a whole unit or one matching model."
+        },
+        "within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "engagement_relation": {
+          "type": "string",
+          "enum": [
+            "engaged-with-bearer",
+            "not-engaged-with-bearer"
+          ],
+          "description": "Candidate engagement relation to the bearer or bearer-unit."
+        },
+        "reference": {
+          "type": "string",
+          "enum": [
+            "bearer",
+            "bearer-unit",
+            "bearer-transport"
+          ],
+          "description": "Origin of the engagement_relation gate."
+        },
+        "member_of": {
+          "type": "string",
+          "enum": [
+            "bearer-unit",
+            "embarked-in-bearer",
+            "target"
+          ],
+          "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords."
+        },
+        "model_names": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords."
+        },
+        "excluded_keywords": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "A candidate with any listed keyword is excluded."
+        },
+        "bind_as": {
+          "type": "string",
+          "minLength": 1
+        },
+        "eligibility": {
+          "$ref": "condition.schema.json"
+        },
+        "within_objective": {
+          "$ref": "#/$defs/selection-reference"
+        }
+      },
+      "required": [
+        "owner"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "member_of"
+            ]
+          },
+          "then": {
+            "required": [
+              "target_kind"
+            ],
+            "properties": {
+              "target_kind": {
+                "const": "model"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "member_of"
+            ],
+            "properties": {
+              "member_of": {
+                "enum": [
+                  "bearer-unit",
+                  "embarked-in-bearer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "owner": {
+                "const": "friendly"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "model_names"
+            ]
+          },
+          "then": {
+            "required": [
+              "target_kind"
+            ],
+            "properties": {
+              "target_kind": {
+                "const": "model"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "engagement_relation"
+            ]
+          },
+          "then": {
+            "required": [
+              "reference"
+            ]
+          }
+        }
       ]
     },
     "aura-effect": {

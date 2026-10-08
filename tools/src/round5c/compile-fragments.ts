@@ -342,7 +342,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }
       if (leaf.parameters.subject === undefined) throw new CompileError("Stat adjustment needs a reviewed recipient.");
-      if (leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => stat === "Range" || (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
+      if (leaf.parameters.weapon_type === undefined && leaf.parameters.weapon_var === undefined && (leaf.parameters.characteristics as string[]).some((stat) => stat === "Range" || (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
         throw new CompileError("Stat adjustment needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks: the attacker when it targets this unit.
@@ -357,6 +357,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
           ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
+          // "That weapon's attacks have": the weapon select-weapon bound (compile-weapon-antecedent.ts).
+          ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
         },
       }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };

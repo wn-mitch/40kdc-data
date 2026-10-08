@@ -81,8 +81,11 @@ func selectWeaponLeaf(m map[string]any, subj string) string {
 	}
 	n := jsNumber(countV)
 	kind := ""
+	if m["weapon_name"] != nil {
+		kind = ejstr(m["weapon_name"]) + " "
+	}
 	if m["weapon_type"] != nil {
-		kind = ejstr(m["weapon_type"]) + " "
+		kind += ejstr(m["weapon_type"]) + " "
 	}
 	kw := ""
 	if m["weapon_keyword"] != nil {
