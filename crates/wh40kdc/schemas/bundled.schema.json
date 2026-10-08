@@ -1180,6 +1180,22 @@
       },
       "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
     },
+    "ends-nearest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of"
+      ],
+      "description": "Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/unit-ref"
+        },
+        "waives": {
+          "const": "closest-enemy-model"
+        }
+      }
+    },
     "game-version-ref": {
       "title": "Game Version Reference",
       "type": "object",
@@ -8194,6 +8210,12 @@
                 "consumes_shared_use": {
                   "const": false,
                   "description": "This use of the Stratagem does not count toward its once-per-phase limit for other units."
+                },
+                "engaged_with": {
+                  "enum": [
+                    "nearest-move-end"
+                  ],
+                  "description": "Despite being engaged (despite includes engaged), the permitted move may end within Engagement Range of the enemy unit that the same ability's move ends nearest (ends_nearest.of)."
                 }
               },
               "required": [
@@ -9518,6 +9540,10 @@
                 },
                 "keeps_eligible": {
                   "const": true
+                },
+                "ends_nearest": {
+                  "$ref": "#/$defs/ends-nearest",
+                  "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule)."
                 }
               },
               "required": [
@@ -9651,6 +9677,14 @@
                 },
                 "end_on_terrain": {
                   "const": true
+                },
+                "ends_nearest": {
+                  "$ref": "#/$defs/ends-nearest",
+                  "description": "Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance."
+                },
+                "ends_when": {
+                  "$ref": "#/$defs/condition",
+                  "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there."
                 }
               },
               "minProperties": 1

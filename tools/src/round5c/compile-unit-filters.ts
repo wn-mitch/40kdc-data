@@ -261,7 +261,7 @@ function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right:
 }
 
 export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select")) return [...input];
+  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select" || leaf.family_id === "move-end-nearest")) return [...input];
   const list = foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter);
   if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
     throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
@@ -270,7 +270,14 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
     const next = list[index + 1];
-    if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
+    if (leaf.family_id === "move-end-nearest") {
+      // "must end that move as close as possible to the closest enemy unit (excluding AIRCRAFT)": the
+      // filter after it names the unit the move ends nearest. The leaf takes the filter as `of`.
+      if (!isFilter(next) || next!.fragment !== leaf.fragment) throw new CompileError("A move-end nearest the closest unit needs a unit-filter right after it.");
+      if (next!.parameters.side === "any") throw new CompileError("A move-end nearest the closest unit must say friendly or enemy.");
+      out.push({ ...leaf, parameters: { ...leaf.parameters, of: dslUnitFilter(next!) } });
+      index += 1;
+    } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.
       out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { anySide: true }), distance: "any", filter: filterOf(next!) } });

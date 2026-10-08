@@ -784,6 +784,10 @@ export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
  */
 export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
 /**
+ * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
+ */
+export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "transport-occupancy-subject-kind".
  */
@@ -802,7 +806,7 @@ export type TransportEligibility1 = {
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
@@ -814,7 +818,7 @@ export type KeywordList9 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
 /**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
@@ -913,7 +917,7 @@ export type AbilityUsage = AbilityUsageLimit | [AbilityUsageLimit, AbilityUsageL
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition9 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -1808,6 +1812,16 @@ export interface PlacementRegion {
   wholly?: true;
 }
 /**
+ * Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ends-nearest".
+ */
+export interface EndsNearest {
+  of: UnitRef;
+  waives?: "closest-enemy-model";
+}
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "game-version-ref".
  */
@@ -2453,7 +2467,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition6;
+      restrictions?: AbilityDSLCondition7;
     },
     ...{
       /**
@@ -2487,7 +2501,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition6;
+      restrictions?: AbilityDSLCondition7;
     }[]
   ];
   /**
@@ -4629,6 +4643,10 @@ export interface PermissionEffect {
      * This use of the Stratagem does not count toward its once-per-phase limit for other units.
      */
     consumes_shared_use?: false;
+    /**
+     * Despite being engaged (despite includes engaged), the permitted move may end within Engagement Range of the enemy unit that the same ability's move ends nearest (ends_nearest.of).
+     */
+    engaged_with?: "nearest-move-end";
   };
   scaling?: Scaling;
 }
@@ -5061,8 +5079,16 @@ export interface MoveEffect {
     };
     ends_when?: AbilityDSLCondition5;
     keeps_eligible?: true;
+    ends_nearest?: EndsNearest1;
   };
   scaling?: Scaling;
+}
+/**
+ * Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
+ */
+export interface EndsNearest1 {
+  of: UnitRef;
+  waives?: "closest-enemy-model";
 }
 /**
  * [move] Change how the target's moves work.
@@ -5160,8 +5186,17 @@ export interface MoveModifierEffect {
     distance_bonus?: number | string;
     advance?: "fixed-6";
     end_on_terrain?: true;
+    ends_nearest?: EndsNearest2;
+    ends_when?: AbilityDSLCondition6;
   };
   scaling?: Scaling;
+}
+/**
+ * Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
+ */
+export interface EndsNearest2 {
+  of: UnitRef;
+  waives?: "closest-enemy-model";
 }
 /**
  * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
@@ -6252,7 +6287,7 @@ export interface StratagemTargetRestriction {
    * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
    */
   bound_to?: "triggering-unit" | "attacked-unit";
-  eligibility?: AbilityDSLCondition7;
+  eligibility?: AbilityDSLCondition8;
   notes?: string;
 }
 /**

@@ -1693,51 +1693,6 @@ class Passthrough(TypedDict):
     height: NotRequired[Literal["up-to-4", "over-4"]]
 
 
-class Modifier35(TypedDict):
-    applies_to_moves: NotRequired[
-        list[
-            Literal[
-                "normal",
-                "advance",
-                "fall-back",
-                "charge",
-                "pile-in",
-                "consolidation",
-                "surge",
-                "scout",
-                "ingress",
-                "disembark",
-                "embark",
-                "pulse-jet",
-            ]
-        ]
-    ]
-    passthrough: NotRequired[
-        list[
-            Literal[
-                "all-terrain",
-                "models",
-                "non-titanic-models",
-                "terrain-le-4",
-                "tall-terrain",
-                "friendly-vehicles",
-                "friendly-monsters",
-                "terrain",
-                "models-excluding-monster-vehicle",
-                "models-excluding-titanic",
-                "enemy-models-excluding-monster-vehicle",
-                "enemy-models",
-            ]
-            | Passthrough
-        ]
-    ]
-    ignore_vertical: NotRequired[Literal[True]]
-    no_end_in_engagement: NotRequired[Literal[True]]
-    distance_bonus: NotRequired[int | str]
-    advance: NotRequired[Literal["fixed-6"]]
-    end_on_terrain: NotRequired[Literal[True]]
-
-
 class MarkerRange(TypedDict):
     inches: int
     wholly: NotRequired[Literal[True]]
@@ -2623,6 +2578,11 @@ class PlacementAway(TypedDict):
     range: RangeRef
 
 
+class EndsNearest(TypedDict):
+    of: UnitRef
+    waives: NotRequired[Literal["closest-enemy-model"]]
+
+
 class Action(TypedDict):
     action_id: NotRequired[str]
     starts: NotRequired[Phase]
@@ -3407,6 +3367,7 @@ class Modifier16(TypedDict):
         ]
     ]
     consumes_shared_use: NotRequired[Literal[False]]
+    engaged_with: NotRequired[Literal["nearest-move-end"]]
 
 
 class SingleEffect13(TypedDict):
@@ -3784,6 +3745,7 @@ class Modifier34(TypedDict):
     ends_within: NotRequired[EndsWithin]
     ends_when: NotRequired[Condition]
     keeps_eligible: NotRequired[Literal[True]]
+    ends_nearest: NotRequired[EndsNearest]
 
 
 class SingleEffect28(TypedDict):
@@ -3791,6 +3753,53 @@ class SingleEffect28(TypedDict):
     target: UnitRef
     modifier: Modifier34
     scaling: NotRequired[Scaling]
+
+
+class Modifier35(TypedDict):
+    applies_to_moves: NotRequired[
+        list[
+            Literal[
+                "normal",
+                "advance",
+                "fall-back",
+                "charge",
+                "pile-in",
+                "consolidation",
+                "surge",
+                "scout",
+                "ingress",
+                "disembark",
+                "embark",
+                "pulse-jet",
+            ]
+        ]
+    ]
+    passthrough: NotRequired[
+        list[
+            Literal[
+                "all-terrain",
+                "models",
+                "non-titanic-models",
+                "terrain-le-4",
+                "tall-terrain",
+                "friendly-vehicles",
+                "friendly-monsters",
+                "terrain",
+                "models-excluding-monster-vehicle",
+                "models-excluding-titanic",
+                "enemy-models-excluding-monster-vehicle",
+                "enemy-models",
+            ]
+            | Passthrough
+        ]
+    ]
+    ignore_vertical: NotRequired[Literal[True]]
+    no_end_in_engagement: NotRequired[Literal[True]]
+    distance_bonus: NotRequired[int | str]
+    advance: NotRequired[Literal["fixed-6"]]
+    end_on_terrain: NotRequired[Literal[True]]
+    ends_nearest: NotRequired[EndsNearest]
+    ends_when: NotRequired[Condition]
 
 
 class SingleEffect29(TypedDict):

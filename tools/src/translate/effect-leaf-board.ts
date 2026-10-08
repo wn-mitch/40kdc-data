@@ -147,6 +147,18 @@ function passItem(x: P): string {
   return `${owner}${all}models${excl}`;
 }
 
+/**
+ * "must end that move as close as possible to the closest …": a waiver makes the closest-enemy-model
+ * end an alternative, so either end is legal.
+ */
+function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string {
+  // A filter names a plural group ("all enemy units"); the closest one is singular.
+  const named = effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(/ units$/, " unit");
+  const nearest = `as close as possible to the closest ${named}`;
+  const must = `${who} must end ${moveRef}`;
+  return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}`;
+}
+
 function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const verb = MOVE_VERBS[jstr(m.move_type)] ?? `make a ${dekebab(jstr(m.move_type))} move`;
   const upTo = m.distance != null ? (verb.startsWith("make ") ? ` of up to ${diceCase(m.distance)}"` : ` up to ${diceCase(m.distance)}"`) : "";
@@ -156,6 +168,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
   if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}`;
+  if (m.ends_nearest != null) s += `; ${endsNearestPhrase(m.ends_nearest as P, ctx, "it", "that move")}`;
   if (m.allow_engagement === true) s += "; it can end that move within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; that move counts as ${movedPhrase(m.counts_as_move)}`;
   if (m.keeps_eligible === true) s += "; doing so does not change what it is eligible to do this turn";
@@ -176,7 +189,7 @@ function modeClause(m: Record<string, unknown>): string {
   return ` using the ${m.move_type === "disembark" || m.from === "transport" ? `${mode} Disembarkation` : mode} rules`;
 }
 
-function moveModifier(m: Record<string, unknown>, subj: string): string {
+function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const kinds = Array.isArray(m.applies_to_moves) ? andList((m.applies_to_moves as unknown[]).map((x) => MOVE_NOUNS[jstr(x)] ?? dekebab(jstr(x)))) : null;
   const clauses: string[] = [];
   if (m.distance_bonus != null) {
@@ -187,6 +200,14 @@ function moveModifier(m: Record<string, unknown>, subj: string): string {
   if (m.advance === "fixed-6") clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add 6" to ${pronoun(subj)} Move characteristic instead`);
   if (Array.isArray(m.passthrough)) clauses.push(`${subj} can move over ${passthrough(m.passthrough)} as though they were not there`);
   if (m.no_end_in_engagement === true) clauses.push(`${subj} cannot end a move within Engagement Range of any enemy unit`);
+  if (m.ends_nearest != null) clauses.push(endsNearestPhrase(m.ends_nearest as P, ctx, subj, `${pronoun(subj)} move`));
+  // With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+  if (m.ends_when != null) {
+    const where = describeCondition(m.ends_when as Condition);
+    clauses.push(m.distance_bonus != null
+      ? `the extra distance applies only if ${subj} can end ${pronoun(subj)} move where ${where}, and must end it there`
+      : `${subj} must end ${pronoun(subj)} move where ${where}`);
+  }
   if (m.end_on_terrain === true) clauses.push(`${subj} can end ${pronoun(subj)} moves on top of terrain features`);
   if (m.ignore_vertical === true) clauses.push(`${subj} ${v(subj, "ignores")} vertical distances when ${pronoun(subj) === "their" ? "they move" : "it moves"}`);
   const s = clauses.join("; ");
@@ -452,7 +473,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "add-unit": return addUnit(m, ctx);
     case "destruction-rule": return `${subj} ${v(subj, "is")} not destroyed until ${effectSubject(m.also, ctx)} is also destroyed`;
     case "move": return move(m, subj, ctx);
-    case "move-modifier": return moveModifier(m, subj);
+    case "move-modifier": return moveModifier(m, subj, ctx);
     case "set-up": return setUp(m, subj, ctx);
     case "marker": return marker(m);
     case "transport-capacity": return transportCapacity(m);

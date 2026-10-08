@@ -35,6 +35,7 @@ import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
+import { attachMoveEndNearest, engagedBindingErrors, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -414,6 +415,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
         else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size") { /* folded below */ }
+        else if (leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver") { /* attached below */ }
         // "this model has that ability": the menu before it already applies the chosen options;
         // "that unit has that ability": they are about the holder, not this unit.
         else if (leaf.family_id === "chosen-option-grant") {
@@ -489,9 +491,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     modifier.arrives = "next-movement-phase";
     if (leaf.parameters.allow_first_round === true) modifier.allow_first_round = true;
   }
+  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence));
+  errors.push(...engagedBindingErrors(planned));
   for (const rule of moveEnds) {
     const move = planned.filter((item) => item.index < rule.index && item.node.type === "move").at(-1);
-    if (!move && rule.cannot) {
+    // "Models in it can move an additional 3\" as long as …, must end that move where …": a bonus move in the same sentence takes the end.
+    const bonus = move ? undefined : planned.filter((item) => item.index < rule.index && isBonusNode(item.node) && places[item.index]!.sentence === places[rule.index]!.sentence).at(-1);
+    if (bonus && rule.cannot) { errors.push("\"Cannot end that move\" after a move bonus has no DSL form."); continue; }
+    if (!move && !bonus && rule.cannot) {
       // "…, and cannot end that move within Engagement Range of them" after the trigger's move: no make-move in the ability.
       const bytes = sourceText === undefined ? null : Buffer.from(sourceText, "utf8");
       const stopBetween = (from: number, to: number) => bytes !== null && /[.;:]/u.test(bytes.subarray(list[from]!.end_byte!, list[to]!.start_byte).toString("utf8"));
@@ -503,14 +510,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (at === -1) planned.push(entry); else planned.splice(at, 0, entry);
       continue;
     }
-    if (!move) { errors.push("\"Must end that move\" has no move before it."); continue; }
+    if (!move && !bonus) { errors.push("\"Must end that move\" has no move before it."); continue; }
     if (rule.moveTypes) { errors.push("\"Must end that move\" with move types has no DSL form after a make-move."); continue; }
     if (rule.conditions.length === 0) { errors.push("\"Must end that move\" names no condition for where the move ends."); continue; }
     const nodes = rule.conditions.map((at) => attempt(() => condition(list[at]!))).filter((node): node is Node => node !== null);
     if (nodes.length !== rule.conditions.length) continue;
     const where: Node = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
     // "Cannot end that move …": the move ends anywhere the named place is not.
-    (move.node.modifier as Node).ends_when = rule.cannot ? { operator: "not", operands: [where] } : where;
+    // The bonus's own end condition is its feasibility proviso as well: the bonus is available only if
+    // a move can end there, and a move that takes it must end there.
+    ((move ?? bonus)!.node.modifier as Node).ends_when = rule.cannot ? { operator: "not", operands: [where] } : where;
   }
 
   // Where an "Or:" group ends: another combinator, or a moment after the first effect (a later part).

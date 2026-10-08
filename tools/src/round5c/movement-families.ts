@@ -241,6 +241,34 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "move-end-nearest",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Move must end nearest a unit",
+    description: "\"Must end that move as close as possible to the closest enemy unit\": the move before it ends as close as possible to the closest unit the unit-filter after it names. to names that filter (following-filter); the filter is folded into the leaf's of before compilation.",
+    starter: { to: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["to"],
+      properties: { to: { enum: ["following-filter"] } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "move-end-waiver",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Waives where a move must end",
+    description: "\"Does not need to end that move closer to the closest enemy model, provided it ends that move as close as possible to the closest enemy unit\": the move-end-nearest in the same sentence may end the move as close as possible to its unit instead of closer to the closest enemy model. rule names the waived requirement. It is never valid without a move-end-nearest.",
+    starter: { rule: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["rule"],
+      properties: { rule: { enum: ["closest-enemy-model"] } },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -262,6 +290,14 @@ export function normalizeMovementParameters(family: string, input: Record<string
       const keys = Object.keys(input);
       if (keys.length !== 1 || keys[0] !== "match") throw new TypeError("move-must-end parameters must be exactly: match.");
       return { match: enumValue(input.match, ["any", "all"], "move-must-end.match") };
+    }
+    case "move-end-nearest": {
+      if (Object.keys(input).join() !== "to") throw new TypeError("move-end-nearest parameters must be exactly: to.");
+      return { to: enumValue(input.to, ["following-filter"], "move-end-nearest.to") };
+    }
+    case "move-end-waiver": {
+      if (Object.keys(input).join() !== "rule") throw new TypeError("move-end-waiver parameters must be exactly: rule.");
+      return { rule: enumValue(input.rule, ["closest-enemy-model"], "move-end-waiver.rule") };
     }
     case "make-move": {
       const optional = version >= 2 ? ["distance", "ends_within_inches", "counts_as_move"] : ["distance", "ends_within_inches"];
