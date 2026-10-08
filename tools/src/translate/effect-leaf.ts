@@ -68,7 +68,9 @@ function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   if (m.stat === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
   const stat = `${statName(m.stat)} characteristic`;
   if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
-  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
+  // A weapon exclusion names the one weapon the change skips ("other than "Close combat weapon"").
+  const other = m.exclude_weapon_name != null ? ` other than "${jstr(m.exclude_weapon_name)}"` : "";
+  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)}${other} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
   return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
 }
 

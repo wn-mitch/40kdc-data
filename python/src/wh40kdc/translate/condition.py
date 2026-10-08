@@ -93,6 +93,7 @@ _VERB_NEGATED = frozenset(
         "model-count",
         "wounds",
         "loadout",
+        "equipped-weapon-count",
         "attachment",
         "has-ability",
         "controls",
@@ -259,6 +260,14 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("damaged") is True:
             parts.append("is Damaged")
         return f"{neg}{who} {_and_list(parts)}"
+    if ctype == "equipped-weapon-count":
+        count = p.get("count")
+        plural = "" if count == 1 else "s"
+        return (
+            f"{_subject_of(p, 'the model')} is {nt}equipped with a weapon named "
+            f"\"{_str(p.get('other_than'))}\" and exactly {_str(count)} other "
+            f"{_str(p.get('weapon_type'))} weapon{plural}"
+        )
     if ctype == "loadout":
         mk = f"{_str(p['model_keyword'])} " if _truthy(p.get("model_keyword")) else ""
         return (

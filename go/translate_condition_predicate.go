@@ -40,7 +40,7 @@ func notWord(negated bool) string {
 
 // verbNegated lists predicates whose phrase negates by turning its verb (see negatePhrase).
 var verbNegated = map[string]bool{
-	"strength": true, "model-count": true, "wounds": true, "loadout": true, "attachment": true, "has-ability": true,
+	"strength": true, "model-count": true, "wounds": true, "loadout": true, "equipped-weapon-count": true, "attachment": true, "has-ability": true,
 	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
 	"army-faction": true, "battle-size": true,
@@ -235,6 +235,12 @@ func describePredicate(c map[string]any, negated bool) string {
 			parts = append(parts, "is Damaged")
 		}
 		return neg + who + " " + andList(parts)
+	case "equipped-weapon-count":
+		plural := "s"
+		if n, ok := p["count"].(float64); ok && n == 1 {
+			plural = ""
+		}
+		return subjectOf(p, "the model") + " is " + neg + "equipped with a weapon named \"" + cstr(p["other_than"]) + "\" and exactly " + cstr(p["count"]) + " other " + cstr(p["weapon_type"]) + " weapon" + plural
 	case "loadout":
 		kw := ""
 		if jsTruthy(p["model_keyword"]) {

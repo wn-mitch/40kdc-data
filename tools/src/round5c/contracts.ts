@@ -25,6 +25,7 @@ import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from 
 import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
+import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } from "./equipped-weapon-families.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
@@ -101,6 +102,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...NAMED_ABILITY_FAMILIES,
   ...GRANTED_FAMILIES,
   ...COUNT_FAMILIES,
+  ...EQUIPPED_WEAPON_COUNT_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
 ]));
@@ -175,6 +177,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeNamedAbilityParameters(family, input)
     ?? normalizeGrantedParameters(family, input)
     ?? normalizeCountParameters(family, input)
+    ?? normalizeEquippedWeaponParameters(family, input)
     ?? normalizeArmyIncludesParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);

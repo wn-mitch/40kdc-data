@@ -16628,6 +16628,203 @@ impl<'de> ::serde::Deserialize<'de> for EntityId {
             })
     }
 }
+///`EquippedWeaponCountConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "other_than",
+///    "subject",
+///    "weapon_type"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "maximum": 12.0,
+///      "minimum": 1.0
+///    },
+///    "other_than": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "weapon_type": {
+///      "enum": [
+///        "melee",
+///        "ranged"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EquippedWeaponCountConditionParameters {
+    pub count: ::std::num::NonZeroU64,
+    pub other_than: EquippedWeaponCountConditionParametersOtherThan,
+    pub subject: UnitRef,
+    pub weapon_type: EquippedWeaponCountConditionParametersWeaponType,
+}
+///`EquippedWeaponCountConditionParametersOtherThan`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct EquippedWeaponCountConditionParametersOtherThan(::std::string::String);
+impl ::std::ops::Deref for EquippedWeaponCountConditionParametersOtherThan {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<EquippedWeaponCountConditionParametersOtherThan>
+for ::std::string::String {
+    fn from(value: EquippedWeaponCountConditionParametersOtherThan) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for EquippedWeaponCountConditionParametersOtherThan {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EquippedWeaponCountConditionParametersOtherThan {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`EquippedWeaponCountConditionParametersWeaponType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "melee",
+///    "ranged"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EquippedWeaponCountConditionParametersWeaponType {
+    #[serde(rename = "melee")]
+    Melee,
+    #[serde(rename = "ranged")]
+    Ranged,
+}
+impl ::std::fmt::Display for EquippedWeaponCountConditionParametersWeaponType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Melee => f.write_str("melee"),
+            Self::Ranged => f.write_str("ranged"),
+        }
+    }
+}
+impl ::std::str::FromStr for EquippedWeaponCountConditionParametersWeaponType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "melee" => Ok(Self::Melee),
+            "ranged" => Ok(Self::Ranged),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`EventBoundReference`
 ///
 /// <details><summary>JSON schema</summary>
@@ -53218,6 +53415,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "equipped-weapon-count condition",
+///      "description": "[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/equipped-weapon-count-condition-parameters"
+///        },
+///        "type": {
+///          "const": "equipped-weapon-count"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "unit-state condition",
 ///      "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
 ///      "type": "object",
@@ -53703,6 +53918,11 @@ pub enum SimpleCondition {
 [composition] Each model (with model_keyword, if given) carries identical weapons of this kind.*/
     #[serde(rename = "loadout")]
     Loadout { parameters: LoadoutConditionParameters },
+    /**equipped-weapon-count condition
+
+[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.*/
+    #[serde(rename = "equipped-weapon-count")]
+    EquippedWeaponCount { parameters: EquippedWeaponCountConditionParameters },
     /**unit-state condition
 
 [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.*/
@@ -56753,6 +56973,11 @@ for StanceSelectionCapacityEffectType {
 ///    "stat"
 ///  ],
 ///  "properties": {
+///    "exclude_weapon_name": {
+///      "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "incoming": {
 ///      "const": true
 ///    },
@@ -56855,6 +57080,11 @@ for StanceSelectionCapacityEffectType {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StatModifierEffectModifier {
+    ///With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude_weapon_name: ::std::option::Option<
+        StatModifierEffectModifierExcludeWeaponName,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -56873,6 +57103,82 @@ pub struct StatModifierEffectModifier {
     pub weapon_ref: ::std::option::Option<StatModifierEffectModifierWeaponRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_type: ::std::option::Option<StatModifierEffectModifierWeaponType>,
+}
+///With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StatModifierEffectModifierExcludeWeaponName(::std::string::String);
+impl ::std::ops::Deref for StatModifierEffectModifierExcludeWeaponName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StatModifierEffectModifierExcludeWeaponName>
+for ::std::string::String {
+    fn from(value: StatModifierEffectModifierExcludeWeaponName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StatModifierEffectModifierExcludeWeaponName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StatModifierEffectModifierExcludeWeaponName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`StatModifierEffectModifierOperation`
 ///

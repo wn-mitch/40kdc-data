@@ -33,7 +33,7 @@ function keywordList(p: P): string {
 
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
-  "strength", "model-count", "wounds", "loadout", "attachment", "has-ability", "controls", "resource", "attack-compare",
+  "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "has-ability", "controls", "resource", "attack-compare",
   "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
 ]);
 
@@ -118,6 +118,10 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (p.remaining_max != null) parts.push(`has ${rated ? "X" : Number(p.remaining_max)} or fewer wounds remaining${rated ? ", X being its rating" : ""}`);
       if (p.damaged === true) parts.push("is Damaged");
       return `${neg}${who} ${andList(parts)}`;
+    }
+    case "equipped-weapon-count": {
+      const count = Number(p.count);
+      return `${subjectOf(p, "the model")} is equipped with a weapon named "${str(p.other_than)}" and exactly ${count} other ${str(p.weapon_type)} weapon${count === 1 ? "" : "s"}`;
     }
     case "loadout":
       return `${neg}all ${str(p.uniform)} weapons equipped by each ${p.model_keyword ? `${str(p.model_keyword)} ` : ""}model in the unit are the same`;

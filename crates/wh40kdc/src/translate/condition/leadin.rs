@@ -187,7 +187,7 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
         }
         "attack-compare" => format!("when {}", pred()),
-        "model-count" | "loadout" => format!("if {}", pred()),
+        "model-count" | "loadout" | "equipped-weapon-count" => format!("if {}", pred()),
         "within" | "in-region" => format!("while {}", pred()),
         _ => format!("if {}", pred()),
     }

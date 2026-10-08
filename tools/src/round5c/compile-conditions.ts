@@ -521,6 +521,10 @@ export function condition(leaf: CompileLeaf): Node {
       if (leaf.parameters.model_keyword !== undefined) parameters.model_keyword = closed(leaf, "model_keyword");
       return polarity(leaf, pred("loadout", parameters, subjectOf(leaf)));
     }
+    case "equipped-weapon-count":
+      return polarity(leaf, pred("equipped-weapon-count", {
+        weapon_type: closed(leaf, "weapon_type"), count: closed(leaf, "count"), other_than: closed(leaf, "other_than"),
+      }, subjectOf(leaf)));
     case "eligible": {
       const parameters: Node = { to: closed(leaf, "to") };
       if (leaf.parameters.source_ability_id !== undefined) {

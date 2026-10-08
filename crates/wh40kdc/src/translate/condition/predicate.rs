@@ -18,6 +18,7 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "model-count"
             | "wounds"
             | "loadout"
+            | "equipped-weapon-count"
             | "attachment"
             | "has-ability"
             | "controls"
@@ -261,6 +262,20 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 parts.push("is Damaged".to_string());
             }
             format!("{neg}{who} {}", and_list(&parts))
+        }
+        "equipped-weapon-count" => {
+            format!(
+                "{} is {not_}equipped with a weapon named \"{}\" and exactly {} other {} weapon{}",
+                subject_of(p, "the model"),
+                st(p.get("other_than")),
+                st(p.get("count")),
+                st(p.get("weapon_type")),
+                if p.get("count").and_then(Value::as_f64) == Some(1.0) {
+                    ""
+                } else {
+                    "s"
+                }
+            )
         }
         "loadout" => {
             let kw = if truthy(p.get("model_keyword")) {

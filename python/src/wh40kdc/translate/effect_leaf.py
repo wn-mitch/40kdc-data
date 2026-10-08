@@ -156,7 +156,9 @@ def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"{_incoming_lead(m, subj)}{_stat_change(m, f'the {stat} of that attack')}{_bounds(m)}"
         )
     if has_weapon(m):
-        what = f"the {stat} of {weapon_noun(m)} equipped by {weapon_holder(e.get('target'), ctx)}"
+        # A weapon exclusion names the one weapon the change skips.
+        other = f" other than \"{jstr(m['exclude_weapon_name'])}\"" if m.get("exclude_weapon_name") is not None else ""
+        what = f"the {stat} of {weapon_noun(m)}{other} equipped by {weapon_holder(e.get('target'), ctx)}"
         return f"{_stat_change(m, what)}{_bounds(m)}"
     return f"{_stat_change(m, of_or_possessive(subj, stat))}{_bounds(m)}"
 

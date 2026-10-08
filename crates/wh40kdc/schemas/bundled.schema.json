@@ -5328,6 +5328,51 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "equipped-weapon-count condition",
+          "description": "[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "equipped-weapon-count"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "weapon_type": {
+                  "enum": [
+                    "melee",
+                    "ranged"
+                  ]
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "other_than": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "subject",
+                "weapon_type",
+                "count",
+                "other_than"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "unit-state condition",
           "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
           "required": [
@@ -6789,6 +6834,11 @@
                 "weapon_keyword": {
                   "type": "string",
                   "minLength": 1
+                },
+                "exclude_weapon_name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model)."
                 },
                 "weapon_ref": {
                   "oneOf": [

@@ -24632,5 +24632,37 @@
     "expected": {
       "text": "When resolving this use, select one plasma rifle weapon equipped by this model; the effects below refer to it as the selected weapon."
     }
+  },
+  {
+    "caseId": "fidelity/condition-equipped-weapon-count#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "equipped-weapon-count",
+        "parameters": {
+          "subject": "this-model",
+          "weapon_type": "melee",
+          "count": 2,
+          "other_than": "Close combat weapon"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee",
+          "exclude_weapon_name": "Close combat weapon"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with a weapon named \"Close combat weapon\" and exactly 2 other melee weapons, improve the Attacks characteristic of melee weapons other than \"Close combat weapon\" equipped by this model by 1."
+    }
   }
 ]

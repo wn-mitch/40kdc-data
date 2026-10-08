@@ -96,7 +96,12 @@ func statModifierLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return incomingLead(m, subj) + statChange(m, "the "+stat+" of that attack") + bounds(m)
 	}
 	if hasWeapon(m) {
-		return statChange(m, "the "+stat+" of "+weaponNoun(m)+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
+		// A weapon exclusion names the one weapon the change skips.
+		other := ""
+		if jsTruthy(m["exclude_weapon_name"]) {
+			other = " other than \"" + ejstr(m["exclude_weapon_name"]) + "\""
+		}
+		return statChange(m, "the "+stat+" of "+weaponNoun(m)+other+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
 	}
 	return statChange(m, ofOrPossessive(subj, stat)) + bounds(m)
 }

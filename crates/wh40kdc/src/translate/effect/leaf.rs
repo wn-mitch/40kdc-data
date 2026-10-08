@@ -5,6 +5,7 @@
 
 use serde_json::Value;
 
+use super::js::truthy_key;
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
 use super::leaf_shapes::describe_shape_leaf;
@@ -130,8 +131,14 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
         );
     }
     if has_weapon(m) {
+        // A weapon exclusion names the one weapon the change skips.
+        let other = if truthy_key(m, "exclude_weapon_name") {
+            format!(" other than \"{}\"", jstr(m.get("exclude_weapon_name")))
+        } else {
+            String::new()
+        };
         let what = format!(
-            "the {stat} of {} equipped by {}",
+            "the {stat} of {}{other} equipped by {}",
             weapon_noun(m),
             weapon_holder(target, ctx)
         );

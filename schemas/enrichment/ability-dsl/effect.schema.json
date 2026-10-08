@@ -294,6 +294,11 @@
                   "type": "string",
                   "minLength": 1
                 },
+                "exclude_weapon_name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model)."
+                },
                 "weapon_ref": {
                   "oneOf": [
                     {

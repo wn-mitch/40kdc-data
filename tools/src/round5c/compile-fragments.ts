@@ -359,6 +359,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
           // "That weapon's attacks have": the weapon select-weapon bound (compile-weapon-antecedent.ts).
           ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
+          ...(leaf.parameters.exclude_weapon_name !== undefined ? { exclude_weapon_name: closed(leaf, "exclude_weapon_name") } : {}),
         },
       }));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };

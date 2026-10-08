@@ -467,6 +467,7 @@ export type SimpleCondition =
   | ModelProfileCondition
   | WoundsCondition
   | LoadoutCondition
+  | EquippedWeaponCountCondition
   | UnitStateCondition
   | EligibleCondition
   | HappenedCondition
@@ -2677,6 +2678,18 @@ export interface LoadoutCondition {
   };
 }
 /**
+ * [composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.
+ */
+export interface EquippedWeaponCountCondition {
+  type: "equipped-weapon-count";
+  parameters: {
+    subject: UnitRef;
+    weapon_type: "melee" | "ranged";
+    count: number;
+    other_than: string;
+  };
+}
+/**
  * [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.
  */
 export interface UnitStateCondition {
@@ -3083,6 +3096,10 @@ export interface StatModifierEffect {
     weapon_type?: "melee" | "ranged";
     weapon_name?: string;
     weapon_keyword?: string;
+    /**
+     * With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+     */
+    exclude_weapon_name?: string;
     weapon_ref?:
       | {
           weapon_var: string;
