@@ -5,6 +5,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { destroyedFilter, destroyedObject, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
+import { foldSelectExclusions } from "./compile-select-exclusions.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -17,6 +18,8 @@ import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alt
 
 const isFilter = (leaf: CompileLeaf | undefined) => leaf?.family_id === "unit-filter";
 const openSelect = (leaf: CompileLeaf | undefined) => leaf?.family_id === "select-unit" && leaf.parameters.scope === undefined;
+/** A select-unit that is open (no side yet) or names a side; its fold is checked against the filter after it. */
+const selectOf = (leaf: CompileLeaf | undefined) => leaf?.family_id === "select-unit";
 const openAura = (leaf: CompileLeaf | undefined) => leaf?.family_id === "aura-range" && leaf.parameters.side === undefined;
 const openTarget = (leaf: CompileLeaf | undefined) => leaf?.family_id === "stratagem-target" && leaf.parameters.side === undefined;
 const ownerlessEvent = (leaf: CompileLeaf | undefined) => leaf?.family_id === "event" && leaf.parameters.owner === undefined && leaf.parameters.subject === undefined;
@@ -245,7 +248,7 @@ function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right:
 
 export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select")) return [...input];
-  const list = mergeStackedFilters(input, sourceText);
+  const list = foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter);
   if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
     throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
   }
@@ -271,7 +274,10 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // "Each enemy unit" + "within Engagement Range of your unit": the units each pass takes.
       out.push({ ...leaf, parameters: { ...leaf.parameters, engaged_with: next!.parameters.with } });
       index += 1;
-    } else if (openSelect(leaf) && isFilter(next)) {
+    } else if (selectOf(leaf) && isFilter(next) && (leaf.parameters.scope === undefined || leaf.parameters.scope === next!.parameters.side)) {
+      // A select that names a side ("select one enemy unit") takes the filter of that same side. A
+      // filter of the other side after it names the attacker or target instead ("friendly X units'
+      // attacks that target that unit"), so it is left to the attack that follows.
       out.push({ ...leaf, parameters: {
         ...leaf.parameters, scope: side(next!, "a selection", { models: true }), filter: filterOf(next!), ...modelSelection(next!, list),
         visible: leaf.parameters.visible === true || next!.parameters.visible === true,
@@ -295,7 +301,9 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const event = out.at(-1)!;
       out[out.length - 1] = { ...event, parameters: { ...event.parameters, subject_filter: dslUnitFilter(leaf) } };
       index = at - 1;
-    } else if (isFilter(leaf) && openAura(next)) {
+    } else if (isFilter(leaf) && next?.family_id === "aura-range") {
+      // An aura's side, when it names one, is the filter's own side ("enemy X unit" + "within 3\" of this unit").
+      if (next.parameters.side !== undefined && next.parameters.side !== leaf.parameters.side) throw new CompileError("An aura-range's side differs from the unit-filter before it.");
       if (leaf.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
       // "While a friendly WAR DOG model is within 9\" of this model": each such model is the
       // recipient (compile-model-level.ts wrapModelAura), not the unit it belongs to.

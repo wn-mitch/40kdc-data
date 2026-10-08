@@ -110,3 +110,110 @@ describe("Round 5C persistent designation with a filtered selection", () => {
     expect(result.ok).toBe(true);
   });
 });
+
+// A selection's side and its exclusion: "select one enemy X unit within 8\" (excluding Y units)".
+// Fabricated wording; each leaf sits on its own wording, as the parser would place it.
+const SELECT_TEXT = 'Command phase. Select one enemy Alpha unit within 8" of this unit (excluding Beta and Gamma units). That unit must take a test.';
+const SELECT_WINDOW: [string, string, Record<string, unknown>] = ["Command phase", "phase-window", { phase: "command", turn: "your" }];
+const SELECT_TEST: [string, string, Record<string, unknown>] = ["That unit must take a test", "test", { target: "selected-unit", test: "battle-shock" }];
+
+function selectionOf(text: string, ...items: Array<[string, string, Record<string, unknown>]>) {
+  return compileLeaves(placed(text, ...items), text);
+}
+
+/** The first `selector` object in the compiled mechanics (the select's own selector, under any conditional). */
+function selectorOf(result: ReturnType<typeof compileLeaves>): Record<string, unknown> {
+  if (!result.ok) throw new Error(result.errors.join("; "));
+  const find = (node: unknown): Record<string, unknown> | undefined => {
+    if (node === null || typeof node !== "object") return undefined;
+    if (!Array.isArray(node) && "selector" in node) return (node as { selector: Record<string, unknown> }).selector;
+    for (const child of Object.values(node)) { const hit = find(child); if (hit) return hit; }
+    return undefined;
+  };
+  return find(result.mechanics) ?? {};
+}
+
+// Sub-shapes A and D: the select's side and the exclusion that follows it fold into one selection.
+describe("Round 5C select-unit side and exclusion fold", () => {
+  it("folds an exclusion right after a select that names the same side", () => {
+    // The select's scope equals the exclusion's side; the selection keeps both.
+    const text = "Command phase. Select one enemy unit (excluding Beta units). That unit must take a test.";
+    const result = selectionOf(text, SELECT_WINDOW, ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["(excluding Beta units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA"] }], ["That unit must take a test", ...SELECT_TEST.slice(1)]);
+    expect(result.ok).toBe(true);
+    const selector = selectorOf(result);
+    expect(selector).toMatchObject({ owner: "enemy", count: 1, excluded_keywords: ["BETA"] });
+  });
+
+  it("folds an exclusion past a side-less distance, measured to the bearer's unit", () => {
+    // Fabricated copy of the enhancement shape: select, distance, then the exclusion of the same side.
+    const result = selectionOf(SELECT_TEXT, SELECT_WINDOW, ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ['within 8" of this unit', "aura-range", { inches: 8, of: "this-unit" }],
+      ["(excluding Beta and Gamma units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA", "GAMMA"] }], SELECT_TEST);
+    expect(result.ok).toBe(true);
+    expect(selectorOf(result)).toMatchObject({ owner: "enemy", excluded_keywords: ["BETA", "GAMMA"], within_inches: 8 });
+  });
+
+  it("folds an exclusion past a unit-position measured to the selected unit, into a scope-less select's filter", () => {
+    const text = "Command phase. Select one friendly Alpha unit within 12\" of this model (excluding Beta units). That unit must take a test.";
+    const result = selectionOf(text, SELECT_WINDOW, ["Select one", "select-unit", { distance: "any", visible: false }],
+      ["friendly Alpha unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ['within 12" of this model', "unit-position", { kind: "within", inches: 12, of: "this-model", subject: "selected-unit", negated: false }],
+      ["(excluding Beta units)", "unit-filter", { side: "friendly", excluded_keywords: ["BETA"] }], SELECT_TEST);
+    expect(result.ok).toBe(true);
+    const selector = selectorOf(result);
+    expect(selector).toMatchObject({ owner: "friendly", keywords: ["ALPHA"], excluded_keywords: ["BETA"] });
+  });
+
+  it("refuses an exclusion whose side differs from the select's scope", () => {
+    const result = selectionOf(SELECT_TEXT, SELECT_WINDOW, ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ['within 8" of this unit', "aura-range", { inches: 8, of: "this-unit" }],
+      ["(excluding Beta and Gamma units)", "unit-filter", { side: "friendly", excluded_keywords: ["BETA", "GAMMA"] }], SELECT_TEST);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/exclusion's side differs/);
+  });
+
+  it("leaves a filter of the other side after a scoped select to the attack it names", () => {
+    // "Friendly X units' attacks that target that enemy unit": the friendly filter is the attacker, not the select's own filter.
+    const text = "Shooting phase. Select one enemy unit. Friendly Alpha units' attacks that target that enemy unit have +1 to hit rolls.";
+    const result = selectionOf(text, ["Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["Friendly Alpha units'", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["attacks that target that enemy unit", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+      ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    expect(result.ok).toBe(true);
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"all_of":["ALPHA"]');
+  });
+
+  it("refuses an exclusion past two distances, which the fold does not read", () => {
+    const text = 'Command phase. Select one enemy Alpha unit within 8" of this unit within 3" of this model (excluding Beta and Gamma units). That unit must take a test.';
+    const result = selectionOf(text, SELECT_WINDOW, ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ['within 8" of this unit', "aura-range", { inches: 8, of: "this-unit" }],
+      ['within 3" of this model', "aura-range", { inches: 3, of: "this-model" }],
+      ["(excluding Beta and Gamma units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA", "GAMMA"] }], SELECT_TEST);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/aura-range without a side needs a unit-filter/);
+  });
+});
+
+// Sub-shape A's aura form: an aura-range may repeat the side of the unit-filter before it.
+describe("Round 5C aura-range side against the unit-filter before it", () => {
+  const AURA_TEXT = 'While an enemy Alpha unit (excluding Beta units) is within 3" of this unit, that enemy unit has -1 OC.';
+  const aura = (side: string) => placed(AURA_TEXT,
+    ["an enemy Alpha unit", "unit-filter", { side: "enemy" }],
+    ["(excluding Beta units)", "unit-filter", { side: "enemy", excluded_keywords: ["BETA"] }],
+    ['within 3" of this unit', "aura-range", { inches: 3, of: "this-unit", side }],
+    ["-1 OC", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "worsen", value: 1 }]);
+
+  it("folds an aura whose side equals the filter's side into the aura", () => {
+    const result = compileLeaves(aura("enemy"), AURA_TEXT);
+    expect(result.ok).toBe(true);
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"excluded_keywords":["BETA"]');
+  });
+
+  it("refuses an aura whose side differs from the filter's side", () => {
+    const result = compileLeaves(aura("friendly"), AURA_TEXT);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/aura-range's side differs/);
+  });
+});
