@@ -534,7 +534,7 @@ pub fn parse_keyword_grant(raw: &str) -> Option<WeaponKeywordRef> {
     })
 }
 
-/// `/^anti-([A-Z][A-Z\s-]*)\s+(\d+)\+?$/i`.
+/// `/^anti-(X(\/X)*)\s+(\d+)\+?$/i`, where each X is `[A-Z][A-Z\s-]*` (a `non-` prefix included).
 fn anti_parts(s: &str) -> Option<(&str, u64)> {
     if !s.get(..5)?.eq_ignore_ascii_case("anti-") {
         return None;
@@ -551,10 +551,13 @@ fn anti_parts(s: &str) -> Option<(&str, u64)> {
     if target.len() == head.len() || target.is_empty() {
         return None;
     }
-    let mut chars = target.chars();
-    let first_ok = chars.next().is_some_and(|c| c.is_ascii_alphabetic());
-    let rest_ok = chars.all(|c| c.is_ascii_alphabetic() || c.is_whitespace() || c == '-');
-    if !first_ok || !rest_ok {
+    // Slash-separated alternatives ("Monster/Vehicle"), each a keyword or a `non-` keyword.
+    let segment_ok = |segment: &str| {
+        let mut chars = segment.chars();
+        chars.next().is_some_and(|c| c.is_ascii_alphabetic())
+            && chars.all(|c| c.is_ascii_alphabetic() || c.is_whitespace() || c == '-')
+    };
+    if !target.split('/').all(segment_ok) {
         return None;
     }
     Some((target, digits.parse().ok()?))

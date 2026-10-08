@@ -543,7 +543,7 @@ const perRecipientCondition = (leaf: CompileLeaf | undefined, filter: CompileLea
 /** A condition on the attack's target ("that target that enemy unit"), which a scope's frame keeps in front of it. */
 function targetGate(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   if (leaf?.role !== "CONDITION" || leaf.fragment !== filter.fragment) return false;
-  return leaf.family_id === "target-is-selected" || leaf.parameters.subject === "defender" || leaf.parameters.subject === "target";
+  return leaf.family_id === "target-is-selected" || leaf.family_id === "unit-filter-target" || leaf.parameters.subject === "defender" || leaf.parameters.subject === "target";
 }
 
 function filteredAfter(list: readonly CompileLeaf[], index: number): number | null {

@@ -1698,7 +1698,8 @@ export function parseKeywordGrant(raw: string): WeaponKeywordRef | null {
   if (trimmed === "") return null;
 
   // Anti-X N+ → { anti, target_keyword: X, threshold: N }
-  const antiMatch = /^anti-([A-Z][A-Z\s-]*)\s+(\d+)\+?$/i.exec(trimmed);
+  // X may be "A/B" (one of several keywords) or "non-A" (a unit without A).
+  const antiMatch = /^anti-([A-Z][A-Z\s-]*(?:\/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$/i.exec(trimmed);
   if (antiMatch) {
     return {
       keyword_id: "anti",

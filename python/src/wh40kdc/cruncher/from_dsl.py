@@ -1840,8 +1840,8 @@ def parse_keyword_grant(raw: str) -> dict[str, Any] | None:
     if trimmed == "":
         return None
 
-    # Anti-X N+ → { anti, target_keyword: X, threshold: N }
-    anti_match = re.match(r"^anti-([A-Z][A-Z\s-]*)\s+(\d+)\+?$", trimmed, re.IGNORECASE)
+    # Anti-X N+ → { anti, target_keyword: X, threshold: N }; X may be "A/B" or "non-A".
+    anti_match = re.match(r"^anti-([A-Z][A-Z\s-]*(?:/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$", trimmed, re.IGNORECASE)
     if anti_match:
         return {
             "keyword_id": "anti",

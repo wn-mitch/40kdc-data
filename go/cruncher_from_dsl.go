@@ -1694,7 +1694,7 @@ func apDelta(modifier map[string]any) (float64, bool) {
 	return 0, false
 }
 
-var antiGrantRe = regexp.MustCompile(`(?i)^anti-([A-Za-z][A-Za-z\s-]*)\s+(\d+)\+?$`)
+var antiGrantRe = regexp.MustCompile(`(?i)^anti-([A-Za-z][A-Za-z\s-]*(?:/[A-Za-z][A-Za-z\s-]*)*)\s+(\d+)\+?$`)
 var valueGrantRe = regexp.MustCompile(`^(.+?)\s+(\d+)$`)
 
 func parseKeywordGrant(raw string) map[string]any {

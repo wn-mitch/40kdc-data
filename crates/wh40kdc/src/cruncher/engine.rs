@@ -359,7 +359,7 @@ pub fn crunch(
             .and_then(Value::as_str)
             .map(str::to_lowercase);
         if let Some(target_kw) = target_kw {
-            if target_keywords.iter().any(|k| k == &target_kw) {
+            if anti_target_matches(&target_kw, &target_keywords) {
                 if let Some(t) = parameter(anti, "threshold").and_then(Value::as_i64) {
                     anti_threshold = t;
                 }
@@ -590,6 +590,18 @@ pub fn crunch(
 // ---------------------------------------------------------------------------
 
 /// Lower-cased union of a unit's `keywords` + `faction_keywords`.
+/// Whether an Anti target matches a unit: one of its slash-separated alternatives. An alternative
+/// `non-X` matches a unit without keyword X. `target_keywords` are lower case.
+fn anti_target_matches(target: &str, target_keywords: &[String]) -> bool {
+    target.split('/').any(|alternative| {
+        let alternative = alternative.trim().to_lowercase();
+        match alternative.strip_prefix("non-") {
+            Some(keyword) => !target_keywords.iter().any(|k| k == keyword),
+            None => target_keywords.iter().any(|k| k == &alternative),
+        }
+    })
+}
+
 fn unit_keywords_lower(unit: &Unit) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     if let Some(KeywordList(kws)) = &unit.keywords {

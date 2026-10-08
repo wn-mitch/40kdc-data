@@ -28,6 +28,18 @@ fn keyword_grants_parse_like_ts() {
         anti.parameters,
         Some(json!({ "target_keyword": "INFANTRY", "threshold": 4 }))
     );
+    let slash = parse_keyword_grant("Anti-Monster/Vehicle 4+").unwrap();
+    assert_eq!(slash.keyword_id, "anti");
+    assert_eq!(
+        slash.parameters,
+        Some(json!({ "target_keyword": "Monster/Vehicle", "threshold": 4 }))
+    );
+    let negated = parse_keyword_grant("Anti-Non-Vehicle 4+").unwrap();
+    assert_eq!(
+        negated.parameters,
+        Some(json!({ "target_keyword": "Non-Vehicle", "threshold": 4 }))
+    );
+    assert!(parse_keyword_grant("Anti-Monster/ 4+").map_or(true, |r| r.keyword_id != "anti"));
     let sus = parse_keyword_grant(" Sustained Hits 1 ").unwrap();
     assert_eq!(
         (sus.keyword_id.as_str(), sus.parameters),

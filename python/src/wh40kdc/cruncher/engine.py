@@ -55,6 +55,19 @@ def profile_can_target(profile: dict[str, Any], target: dict[str, Any]) -> bool:
     )
 
 
+def _anti_target_matches(target: str, target_keywords: Any) -> bool:
+    """Whether an Anti target matches a unit: one of its slash-separated alternatives. An
+    alternative "non-X" matches a unit without keyword X. ``target_keywords`` are lower case."""
+    for alternative in target.split("/"):
+        alternative = alternative.strip().lower()
+        if alternative.startswith("non-"):
+            if alternative[4:] not in target_keywords:
+                return True
+        elif alternative in target_keywords:
+            return True
+    return False
+
+
 def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     """Compute the expected per-stage projection for one
     (attacker, target, buffs) triple.
@@ -194,7 +207,7 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         params = anti.get("parameters") or {}
         target_kw = params.get("target_keyword")
         target_kw = target_kw.lower() if isinstance(target_kw, str) else None
-        if target_kw and target_kw in target_keywords:
+        if target_kw and _anti_target_matches(target_kw, target_keywords):
             threshold = _js_number(params.get("threshold"))
             if math.isfinite(threshold):
                 anti_threshold = threshold

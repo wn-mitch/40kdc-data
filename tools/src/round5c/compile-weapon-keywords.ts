@@ -1,4 +1,5 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { blastRatingRefused } from "./contracts.js";
 
 /**
  * Keyword-less weapon-ability-grant frames ("ranged weapons equipped by models in this unit have
@@ -58,4 +59,20 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
   const unclaimed = runs.filter((run) => !claimed.has(run));
   if (unclaimed.length) throw new CompileError("A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it.");
   return list.flatMap((leaf, index) => (leaf.family_id === KEYWORD ? [] : [folded.get(index) ?? leaf]));
+}
+
+/**
+ * A Blast keyword whose printed span gives a rating other than 1 is a gap: the keyword has no
+ * rating, so plain Blast would drop the printed value. Spans are checked only where the bytes are known.
+ */
+export function refuseBlastRating(leaves: readonly CompileLeaf[], sourceText: string | undefined): void {
+  if (sourceText === undefined) return;
+  const bytes = Buffer.from(sourceText, "utf8");
+  for (const leaf of leaves) {
+    if ((leaf.family_id !== KEYWORD && leaf.family_id !== "weapon-ability-grant") || leaf.parameters.keyword !== "Blast") continue;
+    if (leaf.start_byte === undefined || leaf.end_byte === undefined || leaf.end_byte <= leaf.start_byte) continue;
+    if (blastRatingRefused(bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8"))) {
+      throw new CompileError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
+    }
+  }
 }

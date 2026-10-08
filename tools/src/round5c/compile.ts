@@ -20,7 +20,7 @@ import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js"
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
-import { foldWeaponKeywords } from "./compile-weapon-keywords.js";
+import { foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
@@ -210,6 +210,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const signature = shapeSignature(ordered(leaves), sourceText);
   let list: CompileLeaf[];
   try {
+    refuseBlastRating(leaves, sourceText);
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(ordered(leaves))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus))), sourceText)), sourceText);

@@ -48,6 +48,27 @@ function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
     || (typeof subject === "string" && TARGET_SUBJECTS.has(subject));
 }
 
+/** "[LETHAL HITS: CHARACTER/MONSTER/VEHICLE]": the target qualifier after one keyword, joined by a colon. */
+function qualifierOf(list: readonly CompileLeaf[], source: Buffer | undefined, keyword: number, scope: CompileLeaf): CompileLeaf | null {
+  const leaf = list[keyword + 1];
+  if (!leaf || leaf.family_id !== "unit-filter" || leaf.fragment !== scope.fragment || leaf.parameters.side !== "any") return null;
+  if (!Array.isArray(leaf.parameters.any_keywords) || Object.keys(leaf.parameters).some((key) => key !== "side" && key !== "any_keywords")) return null;
+  const gap = source === undefined || list[keyword]!.end_byte === undefined ? null : between(source, list[keyword]!, leaf);
+  return gap !== null && /^\s*:\s*$/u.test(gap) ? { ...leaf, family_id: "unit-filter-target" } : null;
+}
+
+/** "[CLEAVE 1]. Or: +1 AP": a choice marker between a keyword and the stat adjustment after it, with the sentence break a printed "Or:" starts. */
+function choiceMarkerAfter(list: readonly CompileLeaf[], source: Buffer | undefined, at: number): boolean {
+  const marker = list[at]!;
+  const keyword = list[at - 1];
+  const stat = list[at + 1];
+  if (!isChoiceMarker(marker) || keyword?.family_id !== KEYWORD || !stat || !isStat(stat) || stat.fragment !== marker.fragment) return false;
+  if (keyword.fragment !== marker.fragment) return false;
+  return (source === undefined || /^[\]*]*\.?\s*$/u.test(between(source, keyword, marker))) && sameRun(source, marker, stat);
+}
+
+const isChoiceMarker = (leaf: CompileLeaf) => leaf.family_id === "instead" && leaf.parameters.choice === true;
+
 export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === SCOPE)) return list;
   const source = sourceText === undefined ? undefined : Buffer.from(sourceText, "utf8");
@@ -71,15 +92,44 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     let end = first;
     let containsStat = false;
     let choice = false;
-    while (end < list.length && isProperty(list[end]!) && list[end]!.fragment === scope.fragment
-      && (end === first || sameRun(source, list[end - 1]!, list[end]!)) && !/[.;]/u.test(end === first ? between(source, list[end - 1]!, list[end]!) : "")) {
-      containsStat ||= isStat(list[end]!);
-      if (end > first && /\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, list[end]!))) choice = true;
+    while (end < list.length && list[end]!.fragment === scope.fragment) {
+      const leaf = list[end]!;
+      if (isChoiceMarker(leaf)) {
+        if (end === first || !choiceMarkerAfter(list, source, end)) break;
+      } else if (!isProperty(leaf)) {
+        break;
+      } else if (end === first) {
+        if (/[.;]/u.test(between(source, list[end - 1]!, leaf))) break;
+      } else if (!isChoiceMarker(list[end - 1]!)) {
+        // The stat after a choice marker was checked against the marker by choiceMarkerAfter.
+        if (!sameRun(source, list[end - 1]!, leaf)) break;
+        if (/\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, leaf))) choice = true;
+      }
+      containsStat ||= isStat(leaf);
       end += 1;
     }
+    // A qualifier after a single keyword with no stat adjustment ("[LETHAL HITS: CHARACTER]") gates the frame.
+    const qualifier = !containsStat && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
+    const run = list.slice(first, end);
+    if (run.some(isChoiceMarker)) {
+      // "can have: [CLEAVE 1]. Or: +1 AP": the keyword and the stat adjustment are the two options; the
+      // stat adjustment takes the scope's recipient and weapon type, as it does in any scope.
+      const [keyword, marker, stat] = run;
+      if (run.length !== 3 || keyword!.family_id !== KEYWORD || !isChoiceMarker(marker!) || !isStat(stat!)) {
+        throw new CompileError("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+      }
+      result.push(grantFrame(scope, keyword), keyword!, marker!, bindStat(stat!, scope));
+      index = end - 1;
+      continue;
+    }
     if (!containsStat) {
       // Preserve the existing keyword-menu composition rules.
+      if (qualifier) {
+        result.push(qualifier, grantFrame(scope, list[first]!), list[first]!);
+        index = end;
+        continue;
+      }
       result.push(grantFrame(scope));
       continue;
     }

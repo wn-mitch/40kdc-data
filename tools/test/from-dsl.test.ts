@@ -1472,6 +1472,14 @@ describe("parseKeywordGrant", () => {
       "Anti-INFANTRY 4+",
       { keyword_id: "anti", parameters: { target_keyword: "INFANTRY", threshold: 4 } },
     ],
+    [
+      "Anti-Monster/Vehicle 4+",
+      { keyword_id: "anti", parameters: { target_keyword: "Monster/Vehicle", threshold: 4 } },
+    ],
+    [
+      "Anti-Non-Vehicle 4+",
+      { keyword_id: "anti", parameters: { target_keyword: "Non-Vehicle", threshold: 4 } },
+    ],
   ])("%s → %j", (input, expected) => {
     expect(parseKeywordGrant(input)).toEqual(expected);
   });

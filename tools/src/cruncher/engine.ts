@@ -46,6 +46,17 @@ export type EngineInput = {
 
 export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
 
+/**
+ * Whether an Anti target matches a unit: one of its slash-separated alternatives. An alternative
+ * "non-X" matches a unit without keyword X. `targetKeywords` are lower case.
+ */
+function antiTargetMatches(target: string, targetKeywords: readonly string[]): boolean {
+  return target.split("/").some((alternative) => {
+    const keyword = alternative.trim();
+    return keyword.startsWith("non-") ? !targetKeywords.includes(keyword.slice(4)) : targetKeywords.includes(keyword);
+  });
+}
+
 /** Whether a weapon profile may select this target under profile-level restrictions such as Hunter. */
 export function profileCanTarget(profile: Weapon["profiles"][number], target: Unit): boolean {
   const restrictions = profile.target_restrictions;
@@ -163,7 +174,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   let antiThreshold = 7; // unreachable
   if (anti) {
     const targetKw = (anti.parameters?.target_keyword as string | undefined)?.toLowerCase();
-    if (targetKw && targetKeywords.includes(targetKw)) {
+    if (targetKw && antiTargetMatches(targetKw, targetKeywords)) {
       const threshold = Number(anti.parameters?.threshold);
       if (Number.isFinite(threshold)) antiThreshold = threshold;
     }

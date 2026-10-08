@@ -232,19 +232,31 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
 }
 
 /**
- * Source wording as a keyword comparison sees it: lower case, with the typographic hyphens the
+ * Source wording as a keyword comparison sees it: lower case, without the bold markers the printed
+ * text puts around part of a keyword ("ANTI-**NON-**VEHICLE"), with the typographic hyphens the
  * printed text uses ("ANTI‑MONSTER", U+2010–U+2012, en dash, minus) and no-break spaces folded to
  * their plain forms.
  */
 export function foldKeywordText(text: string): string {
-  return text.replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+  return text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
 }
 
 /** Require the granted ability name in the exact source-backed effect span. */
+/**
+ * Whether a printed Blast span gives a rating other than 1. Blast takes no rating in the keyword:
+ * plain [Blast] and [Blast 1] are the keyword Blast, and any other rating has no authored form yet.
+ */
+export function blastRatingRefused(text: string): boolean {
+  return [...foldKeywordText(text).matchAll(/blast\s*(\d+)/gu)].some((match) => match[1] !== "1");
+}
+
 export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
   if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword !== undefined
     && !foldKeywordText(exactText).includes(foldKeywordText(String(parameters.keyword)))) {
     throw new TypeError("The granted weapon ability must occur in the exact source span.");
+  }
+  if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword === "Blast" && blastRatingRefused(exactText)) {
+    throw new TypeError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
   }
 }
 
