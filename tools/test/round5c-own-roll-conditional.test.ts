@@ -182,3 +182,76 @@ describe("Round 5C own-roll conditional change, refusals", () => {
       ["on a 4+", "roll-result", { from: 4 }], GAIN(1))).toMatch(/conditional change to this ability's own roll has no DSL shape yet/u);
   });
 });
+
+describe("Round 5C own-roll conditional change, negative one-time roll", () => {
+  const SUBTRACT_TEXT = "Select one enemy unit. Roll one D6, subtracting 1 from the result if that unit is a VEHICLE unit";
+
+  it("raises a single band's threshold by one on the yes side, the no side keeping the written threshold", () => {
+    const effect = effectOf(`${SUBTRACT_TEXT}: on a 4+, that unit suffers 1 mortal wound.`,
+      SELECT, ROLL, SUBTRACT, ["if that unit is a VEHICLE unit", ...VEHICLE], ["on a 4+", "roll-result", { from: 4 }],
+      ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
+    const [yes, no] = effect.effect.steps;
+    // A modified 4 is a raw 5, so the yes side rolls a plain D6 at 5+; the no side reads the raw 4+.
+    expect(yes).toMatchObject({ type: "conditional", condition: { type: "has-keyword" }, effect: { type: "dice-gated", dice: "D6", threshold: 5 } });
+    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not" }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
+  });
+
+  it("refuses a single band whose raised threshold passes the top face, since no raw face can reach it", () => {
+    expect(errorOf(`${SUBTRACT_TEXT}: on a 6+, that unit suffers 1 mortal wound.`,
+      SELECT, ROLL, SUBTRACT, ["if that unit is a VEHICLE unit", ...VEHICLE], ["on a 6+", "roll-result", { from: 6 }],
+      ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }])).toMatch(/beyond the changed D6/u);
+  });
+
+  it("shifts each band of a table up by one on the yes side and keeps the written table on the no side", () => {
+    const effect = effectOf(`${SUBTRACT_TEXT}: on a 2-3, that unit suffers D3 mortal wounds; on a 4-5, that unit suffers 3 mortal wounds.`,
+      SELECT, ROLL, SUBTRACT, ["if that unit is a VEHICLE unit", ...VEHICLE], ["on a 2-3", "roll-result", { from: 2, to: 3 }],
+      ["that unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }], ["on a 4-5", "roll-result", { from: 4, to: 5 }],
+      ["that unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }]);
+    const [yes, no] = effect.effect.steps;
+    // A modified 2-3 is a raw 3-4 and a modified 4-5 is a raw 5-6; raw 1-2 matches no band.
+    expect(yes.effect.dice).toBe("D6");
+    expect(yes.effect.outcomes.map((row: any) => row.results)).toEqual([[1, 2], [3, 4], [5, 6]]);
+    expect(no.effect.outcomes.map((row: any) => row.results)).toEqual([[1], [2, 3], [4, 5], [6]]);
+  });
+
+  it("refuses a table band whose shifted range passes the top face", () => {
+    expect(errorOf(`${SUBTRACT_TEXT}: on a 2-3, that unit suffers D3 mortal wounds; on a 6, that unit suffers 3 mortal wounds.`,
+      SELECT, ROLL, SUBTRACT, ["if that unit is a VEHICLE unit", ...VEHICLE], ["on a 2-3", "roll-result", { from: 2, to: 3 }],
+      ["that unit suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }], ["on a 6", "roll-result", { from: 6 }],
+      ["that unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }])).toMatch(/beyond the changed D6/u);
+  });
+});
+
+describe("Round 5C own-roll conditional change, subject of the condition", () => {
+  it("binds a bearer condition to the bearer's model, as the change's condition", () => {
+    // Fabricated: "the bearer" is authored as this-model, as the bearer-subject records are.
+    const effect = effectOf("Roll one D6, adding 1 to the result if the bearer is within range of an objective marker you control: on a 4+, you gain 1CP.",
+      ROLL, ADD, ["if the bearer is within range of an objective marker you control", "unit-position", { kind: "objective-range", controlled_by: "you", subject: "this-model", negated: false }],
+      ["on a 4+", "roll-result", { from: 4 }], GAIN(1));
+    const [yes, no] = effect.steps;
+    expect(yes).toMatchObject({ type: "conditional", condition: { type: "within", parameters: { subject: "this-model" } }, effect: { type: "dice-gated", dice: "D6+1", threshold: 4 } });
+    expect(no).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "within", parameters: { subject: "this-model" } }] }, effect: { type: "dice-gated", dice: "D6", threshold: 4 } });
+  });
+
+  it("binds an 'it' condition to the selected unit it refers back to", () => {
+    const effect = effectOf("Select one enemy unit. Roll one D6, adding 1 to the result if it is a VEHICLE unit: on a 5+, that unit suffers 1 mortal wound.",
+      SELECT, ROLL, ADD, ["if it is a VEHICLE unit", "unit-keyword", { keywords: ["VEHICLE"], subject: "antecedent", negated: false }], ["on a 5+", "roll-result", { from: 5 }],
+      ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
+    const [yes] = effect.effect.steps;
+    expect(yes.condition).toMatchObject({ type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["VEHICLE"] } });
+  });
+
+  it("compiles an 'it' within-range condition with no subject, which is the ability's own unit (this-unit)", () => {
+    // Fabricated. "it" is authored as this-unit, which the schema defaults to, so the emitted subject is
+    // absent. An absent subject on an ability's own unit is the bearer's unit, the record's "it".
+    const effect = effectOf("Roll one D6, adding 1 if it is within range of one or more objectives: on a 4+, you gain 1CP.",
+      ROLL, ["adding 1", "roll-modifier", { roll: "preceding", operation: "add", value: 1 }], ["if it is within range of one or more objectives", "unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false }],
+      ["on a 4+", "roll-result", { from: 4 }], GAIN(1));
+    const [yes, no] = effect.steps;
+    const within = yes.condition;
+    expect(within.type).toBe("within");
+    expect(within.parameters.subject ?? "this-unit").toBe("this-unit");
+    expect(within.parameters.of).toEqual({ objective: {} });
+    expect(no.condition.operands[0]).toEqual(within);
+  });
+});
