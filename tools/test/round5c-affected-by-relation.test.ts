@@ -92,13 +92,18 @@ describe("apply-mark@4 by: a designation applied by a unit", () => {
 });
 
 describe("unit-filter@8 designated and designated_by", () => {
-  it("names the affected units of a Duty as a unit-filter's designation, and the Duty's permission reads them", () => {
-    const mechanics = mechanicsOf(duty(AFFECTED), DUTY_TEXT);
-    expect(JSON.stringify(mechanics.effect)).toContain('"target":{"owner":"friendly","level":"model","designated":"bondsman-affected","designated_by":"this-unit"}');
+  it("names the affected units of a Duty as the permission target, and refuses the Advanced test on them", () => {
+    const permissionOnly = placed(DUTY_TEXT,
+      ["While a model is affected by this ability", "unit-filter", AFFECTED],
+      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
+    );
+    expect(JSON.stringify(mechanicsOf(permissionOnly, DUTY_TEXT).effect)).toContain('"designated":"bondsman-affected","designated_by":"this-unit"');
+    // The Advanced test would be bound to the affected units as a group, so any one of them would satisfy it.
+    expect(() => mechanicsOf(duty(AFFECTED), DUTY_TEXT)).toThrow(/no leaf binds it to that/u);
   });
 
   it("keeps a plain unit-filter's permission target free of designation fields", () => {
-    expect(JSON.stringify(mechanicsOf(duty({ side: "friendly", level: "model" }), DUTY_TEXT).effect)).not.toContain("designated");
+    expect(JSON.stringify(mechanicsOf(placed(DUTY_TEXT, ["While a model is affected by this ability", "unit-filter", { side: "friendly", level: "model" }], ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }]), DUTY_TEXT).effect)).not.toContain("designated");
   });
 
   it("refuses designated_by without designated, an unregistered designation, and a non-unit applier", () => {

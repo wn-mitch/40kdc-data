@@ -342,6 +342,13 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     if (introduced === null && isStratagem(leaves)) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
     }
+    // An anaphor no adjacent leaf introduces, after a unit-filter that names designated units (the
+    // affected units of a Bondsman): "it" in "While a model is affected by this ability, it is eligible to
+    // declare a charge in a turn in which it Advanced" means one of those units, not this unit. Falling back
+    // to this unit would test the wrong unit, so refuse.
+    if (introduced === null && leaf.role !== "DURATION" && leaves.slice(0, index).some((other) => other.family_id === "unit-filter" && other.parameters.designated !== undefined)) {
+      throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a unit (${ANTECEDENT}), but the only unit it can mean is the one a designated unit-filter before it names, and no leaf binds it to that.`);
+    }
     // "While an enemy unit is within Engagement Range of this unit": a condition on the units a
     // bare filter matches holds when any of them meets it. When a later leaf also points back
     // ("If a friendly X unit is …, that unit …"), the condition is per recipient instead: each
