@@ -33,6 +33,7 @@ import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
 import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
+import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -441,7 +442,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       return effect(leaf, {
         attached,
         attacker: attack && attack.parameters.direction === "makes" ? attackerOf(attack, thatUnit) : null,
-        incoming: attack?.parameters.direction === "targeted",
+        // A defender-bound unit-filter before the roll makes the roll the attacker's, unless an
+        // attack this unit makes says otherwise.
+        incoming: attack?.parameters.direction === "targeted" || (attack?.parameters.direction !== "makes" && defenderBoundBefore(list, index)),
       });
     });
     if (!node) return;

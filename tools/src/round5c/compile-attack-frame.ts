@@ -67,6 +67,16 @@ export function targetFrameBefore(list: readonly CompileLeaf[], index: number): 
 }
 
 /**
+ * True when a unit-filter that binds an attack's defender (compile-unit-filters.ts) sits earlier in
+ * the leaf's fragment. The rolls after it are the attacker's: "attacks that target friendly X units
+ * have -1 to wound rolls" modifies the attacking unit's wound roll.
+ */
+export function defenderBoundBefore(list: readonly CompileLeaf[], index: number): boolean {
+  const fragment = list[index]!.fragment;
+  return list.slice(0, index).some((leaf) => leaf.fragment === fragment && leaf.family_id === "unit-filter-target" && leaf.parameters.binds_defender === true);
+}
+
+/**
  * "Attacks aimed at friendly X units where the attacker's power beats the target's resilience": a clause-initial
  * unit-filter with no attack-filter before it, followed in its fragment by an attack-compare
  * that names the defender. The attack-compare has no other frame, so the filter names the target.

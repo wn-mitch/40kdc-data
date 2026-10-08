@@ -42,6 +42,9 @@ describe("Round 5C attack-filter frame with a defender unit-filter", () => {
     expect(json).toContain('"attack_type":"ranged"');
     expect(json).toContain('"type":"attack-compare"');
     expect(json).not.toContain("unit-filter-target");
+    // The wound roll is the attacking unit's: the -1 lands on the attacker, not on this unit.
+    expect(json).toContain('"type":"roll-modifier","target":"attacker"');
+    expect(json).not.toContain('"target":"this-unit"');
   });
 
   it("refuses a target filter that is not friendly or enemy", () => {
@@ -93,6 +96,7 @@ describe("Round 5C defender unit-filter before an attack-compare", () => {
       , "Attacks aimed at friendly Omega/Sigma units where the attacker's power is above the target's resilience have -1 to wound rolls.");
     expect(result.ok).toBe(true);
     expect(mechanicsOf(result)).toContain('"subject":"defender","any_of":["OMEGA","SIGMA"]');
+    expect(mechanicsOf(result)).toContain('"type":"roll-modifier","target":"attacker"');
   });
 
   it("refuses when the attack-compare does not name the defender", () => {
@@ -121,7 +125,8 @@ describe("Round 5C attack frame with a target gate before its rolls", () => {
   const TEXT4 = "Friendly Echo units' ranged attacks aimed at a unit within 12\" have +1 to hit rolls.";
   const HIT_PLUS_ONE = { roll: "hit", operation: "add", value: 1 };
   const HERNKYN = ["Friendly Echo units'", "unit-filter", { side: "friendly", keywords: ["ECHO"] }] as const;
-  const TARGET_12 = ["aimed at a unit within 12\"", "unit-position", { kind: "within", inches: 12, of: "this-unit", subject: "target", negated: false }] as const;
+  // The distance is measured from the attacking unit, the unit the army-wide filter names.
+  const TARGET_12 = ["aimed at a unit within 12\"", "unit-position", { kind: "within", inches: 12, of: "attacker", subject: "target", negated: false }] as const;
 
   it("keeps the target distance as a gate and folds the attacker filter into the roll", () => {
     const result = compile(placed(TEXT4, HERNKYN,
@@ -129,7 +134,7 @@ describe("Round 5C attack frame with a target gate before its rolls", () => {
       ["have +1 to hit rolls.", "roll-modifier", HIT_PLUS_ONE]), TEXT4);
     expect(result.ok).toBe(true);
     const json = mechanicsOf(result);
-    expect(json).toContain('"subject":"defender","of":"this-unit","range":{"inches":12}');
+    expect(json).toContain('"subject":"defender","of":"attacker","range":{"inches":12}');
     expect(json).toContain('"owner":"friendly","all_of":["ECHO"]');
     expect(json).toContain('"weapon_type":"ranged"');
     expect(json).not.toContain("attack-filter");

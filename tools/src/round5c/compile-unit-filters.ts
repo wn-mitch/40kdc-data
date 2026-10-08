@@ -383,7 +383,8 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // names the attack's target. The attack-filter before it (if any) stays a condition on the attack,
       // and the target condition is the filter's units, as "that targets a VEHICLE unit" folds.
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter naming an attack's target must say friendly or enemy.");
-      out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true } });
+      // binds_defender: the rolls after it in this fragment are the attacker's (compile.ts reads it).
+      out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true, binds_defender: true } });
     } else if (isFilter(leaf) && subjectlessRoll(list[pastOwners(list, index, leaf)]) && !out.some((before) => before.role === "EVENT" && before.fragment === leaf.fragment)) {
       // "Friendly Adeptus Astartes Dreadnought units" + "can re-roll hit rolls of 1": the units
       // whose rolls it is. After an attack or a moment in its fragment the filter belongs to that
