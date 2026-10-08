@@ -13,7 +13,7 @@ import { trigger } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
-import { designation, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
+import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
@@ -566,6 +566,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
+  // "Select one enemy X unit" with the bearer's attacks not aimed at it: the filter would narrow the
+  // selection while the attacks stay unrestricted. An attack by the selected unit itself is the
+  // selection's own attacks, and a persistent designation's attacks name its mark, so only an attack
+  // by another unit with no target that unit leaves it.
+  if (selections.length === 1 && selected.length === 0 && selectionHasFilter(selections[0]!)
+    && !list.some((leaf) => leaf.family_id === "persistent-designation-open")
+    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes" && leaf.parameters.unit !== "that-unit")) {
+    errors.push("A selected unit's unit-filter narrows only the selection; the bearer's attacks must target that unit, or the filter has no effect on them.");
+  }
   if (forEachLeaf && selections.length > 0) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   if (errors.length > 0) return { ok: false, signature, errors };
 

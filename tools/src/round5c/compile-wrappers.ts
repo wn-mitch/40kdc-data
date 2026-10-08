@@ -199,12 +199,38 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
   };
 }
 
+/**
+ * Whether a selection carries a folded unit-filter. A select with no attack against it narrows
+ * only its own units, so a folded filter there is a restriction that no effect repeats.
+ */
+export function selectionHasFilter(selection: CompileLeaf): boolean {
+  return Object.values((selection.parameters.filter ?? {}) as Record<string, unknown>).some((value) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0));
+}
+
+/** Folded filter fields that designate-target's select can hold (its `keywords`, `keyword_match`, `excluded_keywords`). */
+const DESIGNATION_SELECT_KEYS = new Set(["keywords", "any_keywords", "excluded_keywords"]);
+
+/**
+ * A designated select's folded unit-filter as designate-target's select keyword fields. "**MONSTER**
+ * or **VEHICLE** unit" is `keywords` with `keyword_match: any`; "**MONSTER** unit" is `keywords` alone,
+ * whose default match is all. A filter with a field the select lacks has no designate-target shape.
+ */
+export function designationKeywords(filter: UnitFilter): Node {
+  const present = (value: unknown) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0);
+  const unmapped = Object.keys(filter).filter((key) => present((filter as Record<string, unknown>)[key]) && !DESIGNATION_SELECT_KEYS.has(key));
+  if (unmapped.length) throw new CompileError(`A selected unit whose attacks are designated cannot carry a unit-filter's ${unmapped.join(", ")} yet; designate-target's select has no field for them.`);
+  if (filter.keywords?.length && filter.any_keywords?.length) throw new CompileError("A designated select holds one keyword list, all-of or any-of; a unit-filter with both has no designate-target shape.");
+  return {
+    ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
+    ...(filter.any_keywords?.length ? { keywords: filter.any_keywords, keyword_match: "any" } : {}),
+    ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
+  };
+}
+
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
 export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null): Node {
   if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
-  if (selection.parameters.filter !== undefined && Object.keys(selection.parameters.filter as object).length) {
-    throw new CompileError("A selected unit whose attacks are designated cannot carry unit-filter keywords yet; designate-target's select has no keyword field.");
-  }
+  const keywords = designationKeywords((selection.parameters.filter ?? {}) as UnitFilter);
   if (selection.parameters.count !== undefined) throw new CompileError("A designated target is one unit; a selection of several has no designate-target shape yet.");
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
@@ -219,6 +245,7 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
     select: {
       scope: selection.parameters.scope === "friendly" ? "friendly-unit" : "enemy-unit",
       count: 1,
+      ...keywords,
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
       // "Select one enemy unit hit by those attacks": which units can be designated.
