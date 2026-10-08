@@ -80,6 +80,9 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     return planned.map((item) => gated(item.gate, item.node));
   }
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
+  // A change to the roll that holds only under a condition (compile-preceding-roll.ts): two rolls, one per side.
+  const conditional = rolls[0]!.parameters.conditional_bonus as ConditionalBonus | undefined;
+  if (conditional !== undefined) return resolveConditionalRolls(planned, global, banded, rolls[0]!, conditional);
   const die = String(rolls[0]!.parameters.dice);
   const count = rolls[0]!.parameters.count as number | undefined;
   const perModel = rolls[0]!.parameters.per_model as string | undefined;
@@ -183,4 +186,180 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     steps.push(gated(item.gate, item.node));
   }
   return steps;
+}
+
+/**
+ * A change to the ability's own roll that holds only under a condition ("adding 1 to the result if
+ * X"). `node` is the condition compiled (compile.ts); `value` is signed.
+ */
+export type ConditionalBonus = { value: number; node: Node };
+
+type Band = { from: number; to: number };
+type Row = { band: Band; items: Planned[] };
+
+/** The roll's name when a band reads it: its roll_var, or the test kind's roll. */
+type RollNames = { rollVar?: string; kind?: string };
+
+/** The one result band an effect is gated by, as the roll marker holds it. */
+function markerOf(item: Planned): Node {
+  const markers = item.gate.filter(isRollMarker);
+  if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
+  return markers[0]!;
+}
+
+/** An effect cloned for one side of the roll, with its band marker taken out of its gate. */
+const stripMarkers = (item: Planned): Planned => ({ ...item, node: structuredClone(item.node), gate: item.gate.filter((node) => !isRollMarker(node)) });
+
+/** A band as the marker writes it, with `to` defaulting to `top`. */
+const bandOfMarker = (marker: Node, top: number): Band => ({ from: Number(marker.from), to: Number(marker.to ?? top) });
+
+/** Rows of effects that share one band, in first-seen order. */
+function groupRows(entries: Array<{ band: Band; item: Planned }>): Row[] {
+  const rows: Row[] = [];
+  for (const { band, item } of entries) {
+    const row = rows.find((entry) => entry.band.from === band.from && entry.band.to === band.to);
+    if (row) row.items.push(item); else rows.push({ band, items: [item] });
+  }
+  return rows;
+}
+
+/**
+ * One roll over result bands, rolling `dice` with `faces` as its top face: a dice-gated when one
+ * band reaches that top, otherwise a dice-table (faces no band names do nothing). `dice` is a
+ * plain D3 or D6 for a table.
+ */
+function bandedRoll(rows: Row[], dice: string, faces: number, names: RollNames): Node {
+  const sorted = [...rows].sort((left, right) => left.band.from - right.band.from);
+  const wrap = (effect: Node): Node => names.rollVar ? { type: "roll", dice, ...(names.kind !== undefined ? { kind: names.kind } : {}), roll_var: names.rollVar, effect } : effect;
+  if (sorted.length === 1 && sorted[0]!.band.to === faces) {
+    const threshold = sorted[0]!.band.from;
+    const onSuccess = body(sorted[0]!.items);
+    return wrap(names.rollVar
+      ? { type: "dice-gated", from: { roll_var: names.rollVar }, threshold, comparison: "gte", on_success: onSuccess, on_fail: null }
+      : { type: "dice-gated", dice, threshold, comparison: "gte", on_success: onSuccess, on_fail: null });
+  }
+  const range = (from: number, to: number) => Array.from({ length: to - from + 1 }, (_, offset) => from + offset);
+  const outcomes: Array<{ results: number[]; effect: Node }> = [];
+  let next = 1;
+  for (const row of sorted) {
+    if (row.band.from < next) throw new CompileError("Two result bands overlap.");
+    if (row.band.from > next) outcomes.push({ results: range(next, row.band.from - 1), effect: { type: "no-effect" } });
+    outcomes.push({ results: range(row.band.from, row.band.to), effect: body(row.items) });
+    next = row.band.to + 1;
+  }
+  if (next <= faces) outcomes.push({ results: range(next, faces), effect: { type: "no-effect" } });
+  return wrap({ type: "dice-table", dice, outcomes });
+}
+
+/**
+ * A conditional change to this ability's own roll ("adding 1 to the result if X"). The roll is made
+ * in two forms, one for each side of X, and exactly one of them runs. Each form is wrapped in its
+ * side's condition, and only the roll is wrapped: the other effects in the part keep their order.
+ *
+ * Result bands are read on the modified result (the roll plus the change), so a band "on a 5+"
+ * with +1 means a modified 5 or more. A fight-on-death roll instead gives each destroyed model two
+ * act-on-death effects whose eligibility is the condition, since each model rolls on its own.
+ */
+function resolveConditionalRolls(planned: Planned[], global: Node[], banded: Planned[], roll: CompileLeaf, bonus: ConditionalBonus): Node[] {
+  if (roll.parameters.count !== undefined || roll.parameters.per_model !== undefined || roll.parameters.for_each !== undefined) {
+    throw new CompileError("A conditional change to a roll of several dice has no DSL shape.");
+  }
+  if (Number(roll.parameters.bonus ?? 0) !== 0) throw new CompileError("An unconditional and a conditional change to one roll have no DSL shape yet.");
+  const die = String(roll.parameters.dice);
+  if (die !== "D3" && die !== "D6") throw new CompileError(`A conditional change folds only into a D3 or D6 roll, not ${die}.`);
+  const faces = DICE_FACES[die]!;
+  const value = bonus.value;
+  const notCondition: Node = { operator: "not", operands: [bonus.node] };
+  const kind = roll.parameters.kind as string | undefined;
+  const rollVar = (roll.parameters.roll_var as string | undefined) ?? (kind !== undefined ? `${kind}-test` : undefined);
+  const names: RollNames = { rollVar, kind };
+
+  const fight = banded.find((item) => item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight");
+  if (fight) return fightOnDeathConditional(planned, global, fight, die, faces, value, bonus.node, notCondition);
+
+  const top = faces + value;
+  const entries = banded.map((item) => ({ item: stripMarkers(item), marker: markerOf(item) }));
+  // The written bands read the modified result, so the yes side reads the raw roll shifted by the change.
+  const modified = entries.map(({ item, marker }) => {
+    const band = bandOfMarker(marker, top);
+    if (band.from > top) throw new CompileError(`A result band starts at ${band.from}, beyond the changed ${die}.`);
+    if (band.to > top) throw new CompileError(`A result band reaches ${band.to}, beyond the changed ${die}.`);
+    return { band, item };
+  });
+  const modifiedRows = groupRows(modified);
+  let yes: Node;
+  if (modifiedRows.length === 1 && modifiedRows[0]!.band.to === top) {
+    const { from } = modifiedRows[0]!.band;
+    if (value > 0) {
+      // "D6+1" reads the changed result directly, so the threshold stays as written.
+      yes = bandedRoll([{ band: { from, to: top }, items: modifiedRows[0]!.items }], `${die}+${value}`, top, names);
+    } else {
+      if (from - value > faces) throw new CompileError(`A result band starts at ${from - value}, beyond the unchanged ${die}.`);
+      yes = bandedRoll([{ band: { from: from - value, to: faces }, items: modifiedRows[0]!.items }], die, faces, names);
+    }
+  } else {
+    const shifted: Row[] = [];
+    for (const row of modifiedRows) {
+      if (row.band.from - value > faces) throw new CompileError(`A result band starts at ${row.band.from - value}, beyond the unchanged ${die}.`);
+      const from = Math.max(1, row.band.from - value);
+      const to = Math.min(faces, row.band.to - value);
+      // A band the change moves wholly off the die has no raw result: its faces read as no effect.
+      if (to >= from) shifted.push({ band: { from, to }, items: row.items });
+    }
+    yes = bandedRoll(shifted, die, faces, names);
+  }
+
+  // The no side rolls the die unchanged, so a band reads the raw roll as written, its top clipped to the die.
+  const unchanged = groupRows(entries.map(({ item, marker }) => {
+    const band = bandOfMarker(marker, faces);
+    if (band.from > faces) throw new CompileError(`A result band starts at ${band.from}, beyond a ${die}.`);
+    return { band: { from: band.from, to: Math.min(faces, band.to) }, item };
+  }));
+  const no = structuredClone(bandedRoll(unchanged, die, faces, names));
+
+  const steps: Node[] = [];
+  let placed = false;
+  for (const item of planned) {
+    if (banded.includes(item)) {
+      if (!placed) {
+        steps.push({ type: "conditional", condition: bonus.node, effect: yes }, { type: "conditional", condition: notCondition, effect: no });
+        placed = true;
+      }
+      continue;
+    }
+    steps.push(gated(item.gate, item.node));
+  }
+  return steps;
+}
+
+/**
+ * Fight-on-death with a conditional change: one act-on-death effect for each side of the condition,
+ * each with its own per-model gate. Yes-side gate: the written threshold on the changed roll (a
+ * positive change, "D6+1") or, for a subtraction, the threshold raised by the amount ("D6" at 5+
+ * when 4+ is written and 1 is subtracted). Both sides keep the ability's conditions as eligibility.
+ */
+function fightOnDeathConditional(planned: Planned[], global: Node[], item: Planned, die: string, faces: number, value: number, condition: Node, notCondition: Node): Node[] {
+  if (planned.length !== 1) throw new CompileError("A conditional change to a fight-on-death roll needs its roll's effect to be the ability's only effect in its part.");
+  const top = faces + value;
+  const marker = markerOf(item);
+  const band = bandOfMarker(marker, top);
+  if (band.to !== top) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
+  if (band.from > top) throw new CompileError(`A result band starts at ${band.from}, beyond the changed ${die}.`);
+  const yesGate: Node = value > 0
+    ? { dice: `${die}+${value}`, threshold: band.from, comparison: "gte" }
+    : { dice: die, threshold: band.from - value, comparison: "gte" };
+  if (band.from - value > faces) throw new CompileError(`A fight-on-death threshold of ${band.from - value} is beyond a ${die}; the change cannot succeed.`);
+  if (band.from > faces) throw new CompileError(`A fight-on-death threshold of ${band.from} is beyond a ${die}; the unchanged roll cannot succeed.`);
+  const base = [...global, ...item.gate.filter((node) => !isRollMarker(node))];
+  global.splice(0, global.length);
+  const side = (gate: Node, eligibility: Node) => {
+    const node = structuredClone(item.node);
+    (node.modifier as Node).gate = gate;
+    (node.modifier as Node).eligibility = allOf([...base, eligibility])!;
+    return node;
+  };
+  return [
+    side(yesGate, condition),
+    side({ dice: die, threshold: band.from, comparison: "gte" }, notCondition),
+  ];
 }

@@ -37,24 +37,64 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
       return;
     }
     const dice = out[at]!;
-    if (conditionInClause(out, at, index, sourceText)) throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
     const value = leaf.parameters.value;
-    if (leaf.parameters.operation !== "add" || typeof value !== "number" || value < 1) throw new CompileError("Only adding a number to this ability's own roll folds into its dice.");
+    const adjacent = adjacentCondition(out, index, sourceText);
+    const attaches = adjacent === "attach";
+    // Two changes to one roll, at least one conditional, have no DSL shape. Checked before the
+    // condition between them, which is the first change's condition and still in the list here.
+    if (dice.parameters.conditional_bonus !== undefined && attaches) throw new CompileError("Two changes to one roll, at least one conditional, have no DSL shape (6891: nested deployment-zone bonuses).");
+    if (dice.parameters.conditional_bonus !== undefined || (attaches && dice.parameters.bonus !== undefined)) throw new CompileError("An unconditional and a conditional change to one roll have no DSL shape yet.");
+    // A condition between the roll and the change ("roll one D6 if X, adding 1") gates the roll itself.
+    if (conditionBetween(out, at, index)) throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
+    if (adjacent === "refuse") throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
     if (dice.parameters.count !== undefined || dice.parameters.per_model !== undefined) throw new CompileError("A change to a roll of several dice has no DSL shape.");
+    if (attaches) {
+      if (typeof value !== "number" || value < 1 || (leaf.parameters.operation !== "add" && leaf.parameters.operation !== "subtract")) {
+        throw new CompileError("Only adding or subtracting a number folds into this ability's own roll as a conditional bonus.");
+      }
+      // The condition right after the change joins the dice leaf; compile.ts turns it into the
+      // bonus's condition node, and compile-dice.ts places the rolls it makes.
+      const signed = leaf.parameters.operation === "subtract" ? -value : value;
+      out[at] = { ...dice, parameters: { ...dice.parameters, conditional_bonus: { value: signed, leaf: out[index + 1]! } } };
+      dropped.add(index);
+      dropped.add(index + 1);
+      return;
+    }
+    if (leaf.parameters.operation !== "add" || typeof value !== "number" || value < 1) throw new CompileError("Only adding a number to this ability's own roll folds into its dice.");
     out[at] = { ...dice, parameters: { ...dice.parameters, bonus: Number(dice.parameters.bonus ?? 0) + value } };
     dropped.add(index);
   });
   return out.filter((_, index) => !dropped.has(index));
 }
 
-/** A condition (not a result band) beside the change to the dice: between them, or right after the change in its clause. */
-function conditionInClause(leaves: readonly CompileLeaf[], dice: number, change: number, sourceText: string | undefined): boolean {
-  const gate = (leaf: CompileLeaf | undefined) => leaf !== undefined && leaf.role === "CONDITION" && leaf.family_id !== "roll-result" && leaf.fragment === leaves[change]!.fragment;
-  if (leaves.slice(dice + 1, change).some(gate)) return true;
-  if (sourceText === undefined || !gate(leaves[change + 1])) return false;
-  // "with +1 to the result if a friendly X model is within 6\"": no sentence or colon break before the condition.
-  const between = Buffer.from(sourceText, "utf8").subarray(leaves[change]!.end_byte ?? leaves[change]!.start_byte, leaves[change + 1]!.start_byte).toString("utf8");
-  return !/[.:;]/u.test(between);
+/** A condition leaf of the change's fragment that is not a result band. */
+const isClauseCondition = (leaf: CompileLeaf | undefined, change: CompileLeaf): boolean =>
+  leaf !== undefined && leaf.role === "CONDITION" && leaf.family_id !== "roll-result" && leaf.fragment === change.fragment;
+
+/** A condition between the roll and the change: it gates the whole roll. */
+function conditionBetween(leaves: readonly CompileLeaf[], dice: number, change: number): boolean {
+  return leaves.slice(dice + 1, change).some((leaf) => isClauseCondition(leaf, leaves[change]!));
+}
+
+/**
+ * The condition right after a change, with no sentence break before it. "with +1 to the result if
+ * a friendly X model is within 6\"" attaches to the change ("attach"), as one condition leaf. A
+ * comma before it ("adding 1 to the result, and if X"), or a second condition leaf with no break
+ * after the first (a condition of two leaves cannot be attached as one), is refused ("refuse").
+ * A sentence, colon, or semicolon break leaves the condition gating the ability as a whole (null),
+ * as does a missing source text.
+ */
+function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
+  if (sourceText === undefined || !isClauseCondition(leaves[change + 1], leaves[change]!)) return null;
+  const bytes = Buffer.from(sourceText, "utf8");
+  const text = (from: number, to: number) => bytes.subarray(from, to).toString("utf8");
+  const first = leaves[change + 1]!;
+  const between = text(leaves[change]!.end_byte ?? leaves[change]!.start_byte, first.start_byte);
+  if (/[.:;]/u.test(between)) return null;
+  if (/,/u.test(between)) return "refuse";
+  const second = leaves[change + 2];
+  if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) return "refuse";
+  return "attach";
 }
 
 /**

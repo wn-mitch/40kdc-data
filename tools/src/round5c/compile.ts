@@ -582,7 +582,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     planned.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
-    rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part),
+    // A conditional change's condition is compiled here, where its roll is resolved (compile-dice.ts).
+    rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
+      const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf } | undefined;
+      if (bonus === undefined) return leaf;
+      return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonus.leaf) } } };
+    }),
   )));
   if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
   // In a compound ability, a selection wraps only its own part's effects.
