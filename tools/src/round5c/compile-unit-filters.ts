@@ -2,7 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { destroyedFilter, destroyedObject, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
+import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
@@ -292,11 +292,15 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       // A select that names a side ("select one enemy unit") takes the filter of that same side. A
       // filter of the other side after it names the attacker or target instead ("friendly X units'
       // attacks that target that unit"), so it is left to the attack that follows.
+      // "select one CHARACTER model in your unit": the model's unit, folded into the selection's eligibility.
+      const membership = next!.parameters.level === "model" && list[index + 2]?.family_id === "membership" && list[index + 2]!.fragment === next!.fragment
+        ? list[index + 2] : undefined;
       out.push({ ...leaf, parameters: {
-        ...leaf.parameters, scope: side(next!, "a selection", { models: true }), filter: filterOf(next!), ...modelSelection(next!, list),
+        ...leaf.parameters, scope: side(next!, "a selection", { models: true }),
+        filter: { ...filterOf(next!), ...(membership ? { membership: membershipOf(membership, list) } : {}) }, ...modelSelection(next!, list),
         visible: leaf.parameters.visible === true || next!.parameters.visible === true,
       } });
-      index += 1;
+      index += membership ? 2 : 1;
       reach(out, list[index + 1]) && (index += 1);
     } else if (leaf.family_id === "select-unit" && openAura(next)) {
       out.push(leaf);

@@ -157,14 +157,22 @@ describe("Round 5C model-level selection", () => {
     expect(mechanics.effect.effect.selector.target_kind).toBeUndefined();
   });
 
-  it("refuses an other-model selection until the selector can exclude one model", () => {
-    expect(errorsOf(text, ...items({ ...VEHICLE, other: true }))).toContain("cannot exclude only the bearer model");
+  it("refuses an other-model selection when no bearer's unit size is known", () => {
+    expect(errorsOf(text, ...items({ ...VEHICLE, other: true }))).toContain("excludes only the bearer's unit");
   });
 
-  it("holds a model selection whose usage is per model, which has two readings", () => {
+  it("refuses a per-model usage-scope on a model selection, which has two readings", () => {
     const capped = `${text} Each model can only be selected once per turn.`;
     expect(errorsOf(capped, ...items(VEHICLE),
-      ["Each model can only be selected once per turn", "usage-limit", { frequency: "once-per-turn", per: "model" }])).toContain("no decided reading yet");
+      ["Each model can only be selected once per turn", "usage-scope", { per: "model" }])).toContain("no decided reading yet");
+  });
+
+  it("lowers a per-model usage on a model selection to that selection's selection_limit", () => {
+    const capped = `${text} Each model can only be selected once per turn.`;
+    const mechanics = mechanicsOf(capped, ...items(VEHICLE),
+      ["Each model can only be selected once per turn", "usage-limit", { frequency: "once-per-turn", per: "model" }]);
+    expect(JSON.stringify(mechanics.effect)).toContain('"selection_limit":{"count":1,"period":"turn"}');
+    expect(mechanics.usage).toBeUndefined();
   });
 
   it("refuses a designated target that is a model", () => {

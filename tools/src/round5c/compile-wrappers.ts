@@ -19,7 +19,7 @@ export const WRAP_CONDITION_FAMILIES = new Set(["aura-range", "leader-target"]);
 // ---------------------------------------------------------------------------------------------
 
 /** A folded unit-filter's fields (compile-unit-filters.ts), as selectUnit and wrapAura read them. */
-type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; excluded_all_keywords?: string[]; abilities?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; alternatives?: FilterAlternative[] };
+type UnitFilter = { keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; excluded_all_keywords?: string[]; abilities?: string[]; excluded_abilities?: string[]; states?: string[]; other?: boolean; alternatives?: FilterAlternative[]; membership?: "this-unit" | "stratagem-target" };
 
 /**
  * "(excluding units with the Lone Operative ability)": one negated has-ability check per excluded
@@ -156,6 +156,8 @@ function filterEligibility(filter: UnitFilter, extra: Node | null = null): Node 
     ...(filter.excluded_all_keywords?.length ? [{ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } }] }] : []),
     ...abilityChecks(filter.excluded_abilities, filter.abilities),
     ...(filter.other === true ? [{ operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] }] : []),
+    // "in your unit" on a selected model: the candidate's unit is the bearer's, or the Stratagem's target.
+    ...(filter.membership !== undefined ? [{ type: "same-unit", parameters: { as: filter.membership === "this-unit" ? "ability-unit" : "stratagem-target" } }] : []),
     ...(extra ? [extra] : []),
   ];
   return checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
@@ -172,7 +174,7 @@ export function wrapRulesBundle(body: Node): Node {
  * ceiling): a selection with no attack on it is only who "that unit" names, so it becomes a
  * `select-units` around the effects; one with an attack becomes a `designate-target`.
  */
-export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null } = {}): Node {
+export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount?: Node; eligibility?: Node | null; selectionLimit?: Node | null } = {}): Node {
   // select-unit v2 with a folded unit-filter (compile-unit-filters.ts): keywords all of which the
   // unit has, or (match any) one of which it has, which only an eligibility condition can say.
   const filter = (selection.parameters.filter ?? {}) as UnitFilter;
@@ -194,6 +196,12 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
       ...(eligibility ? { eligibility } : {}),
       ...(selection.parameters.distance === "within" ? { within_inches: selection.parameters.inches } : {}),
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
+      // "Each model can only be selected once per turn": the cap on each selected target.
+      ...(extra.selectionLimit ? { selection_limit: extra.selectionLimit } : {}),
+      // A bound selection: its name for a later selection, and the selection a later one measures from or sees.
+      ...(typeof selection.parameters.bind_as === "string" ? { bind_as: selection.parameters.bind_as } : {}),
+      ...(typeof selection.parameters.within_of === "string" ? { within_inches_from: { selection_var: selection.parameters.within_of } } : {}),
+      ...(typeof selection.parameters.visible_to === "string" ? { visible_to: { selection_var: selection.parameters.visible_to } } : {}),
     },
     effect: body,
   };

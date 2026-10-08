@@ -1,4 +1,5 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { severalTargets } from "./compile-target-groups.js";
 
 /**
  * Model-level unit-filters ("friendly **K** model") that name the individual models an aura
@@ -61,16 +62,36 @@ export function modelRecipientFilter(filter: CompileLeaf, dsl: Node): Node {
 
 /**
  * "select one friendly NECRONS model": the selector picks a model (select-units target_kind).
- * Refuses "other" (the selector can exclude only the bearer's unit) and a per-model usage, which
- * may cap each selected model or each bearer.
+ * "Other" is checked by the caller against the bearer's size (compile.ts), since it excludes only
+ * the bearer's unit. Refuses a per-model usage-scope, which may cap each selected model or each
+ * bearer. A per-model usage-limit is the selection's own cap (compile-selection-limit.ts).
  */
 export function modelSelection(filter: CompileLeaf, leaves: readonly CompileLeaf[]): Node {
   if (filter.parameters.level !== "model") return {};
-  if (filter.parameters.other === true) throw new CompileError("An other-model selection cannot exclude only the bearer model yet.");
-  if (leaves.some((leaf) => (leaf.family_id === "usage-limit" || leaf.family_id === "usage-scope") && leaf.parameters.per === "model")) {
-    throw new CompileError("A per-model usage on a model selection may limit each selected model or each bearer; it has no decided reading yet.");
+  if (leaves.some((leaf) => leaf.family_id === "usage-scope" && leaf.parameters.per === "model")) {
+    throw new CompileError("A per-model usage scope on a model selection may limit each selected model or each bearer; it has no decided reading yet.");
   }
   return { target_kind: "model" };
+}
+
+/** The families a Stratagem's leaves carry (the same set compile.ts reads as a Stratagem). */
+const STRATAGEM_LEAVES = new Set(["use-window", "stratagem-target", "triggering-target", "target-binding"]);
+
+/**
+ * "in your unit" after a model-level unit-filter ("select one CHARACTER model in your unit"): the
+ * unit the selected model must share, which compile-wrappers.ts reads as an eligibility. In an
+ * ability it is the bearer's unit. A Stratagem has no bearer, so there it names the target unit,
+ * and only a single-target Stratagem has a decided reading.
+ */
+export function membershipOf(membership: CompileLeaf, list: readonly CompileLeaf[]): "this-unit" | "stratagem-target" {
+  if (membership.parameters.relation !== "in") throw new CompileError("A selected model's membership is only being a model of its unit.");
+  if (list.some((leaf) => STRATAGEM_LEAVES.has(leaf.family_id))) {
+    if (membership.parameters.of !== "stratagem-target") throw new CompileError("A Stratagem's selected model is in its target unit; name the target, since a Stratagem has no bearer to say this unit.");
+    if (severalTargets(list)) throw new CompileError("A Stratagem with several targets has no decided target for a selected model's membership yet.");
+    return "stratagem-target";
+  }
+  if (membership.parameters.of !== "this-unit") throw new CompileError("A selected model's membership in an ability names this unit, the bearer's unit.");
+  return "this-unit";
 }
 
 /** Keys whose subtree tests a condition: a recipient there would become "any such model". */

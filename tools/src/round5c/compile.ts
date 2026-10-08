@@ -16,6 +16,9 @@ import { resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
+import { selectionLimitFor } from "./compile-selection-limit.js";
+import { boundSelectionPair } from "./compile-bound-selection.js";
+import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
@@ -296,6 +299,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const usages: Record<string, unknown>[] = [];
   const usageIndexes: number[] = [];
   const usageScopes = new Set<string>();
+  // Per-model usage-limits: on a model selection each caps the selected model (selection_limit); otherwise they stay usages.
+  const modelUsages: Array<{ leaf: CompileLeaf; index: number }> = [];
   let optional = false;
   // "You can spend YP …" read later as "if you spent YP during this use": the spend is the optional part, not the use.
   const optionalSpend = list.some((leaf) => leaf.family_id === "optional-cost-paid" && leaf.parameters.window === "use");
@@ -395,6 +400,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           usages.push(usageFor(leaf.parameters));
           usageIndexes.push(index);
           if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
+          if (leaf.parameters.per === "model") modelUsages.push({ leaf, index });
         } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
         else if (leaf.family_id === "optional-use") {
           // "You can also target one …": that later target is optional, not the Stratagem's use.
@@ -581,6 +587,24 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (partStarts.length && selections.length && planned.some((item) => item.selected)) {
     errors.push("A unit is selected for attacks in an ability with parts; the compiler binds that only for one moment.");
   }
+  // "Each model can only be selected for this ability once per turn": on a model selection the cap is
+  // the selection's own selection_limit, and the usage is not the ability's (compile-selection-limit.ts).
+  let selectionLimit: Node | null = null;
+  // A compound ability's first-part selection is dropped by the part assembly below, so a cap on it has no reading.
+  const modelSelected = selections.length === 1 && selections[0]!.parameters.target_kind === "model" && !planned.some((item) => item.selected)
+    && !list.some((leaf) => leaf.family_id === "persistent-designation-open") && partStarts.length === 0;
+  if (modelUsages.length && selections.some((leaf) => leaf.parameters.target_kind === "model")) {
+    if (!modelSelected) errors.push("A per-model usage on a model selection may limit each selected model or each bearer; it has no decided reading yet.");
+    else if (modelUsages.length > 1) errors.push("More than one per-model usage limit; the selection has one cap.");
+    else {
+      const { index } = modelUsages[0]!;
+      const at = usageIndexes.indexOf(index);
+      usages.splice(at, 1);
+      usageIndexes.splice(at, 1);
+      usageScopes.delete("model");
+      selectionLimit = attempt(() => selectionLimitFor(modelUsages[0]!.leaf, list)) as Node | null;
+    }
+  }
   // "One or more units from your army with this ability": once for the army (compile-holder-abilities.ts).
   applyHolderAllowance(list, triggers, options.abilityId, usages, usageScopes);
   if (new Set(durations).size > 1) errors.push("Conflicting durations.");
@@ -594,7 +618,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   const target = attempt(() => groupedTargetRestrictions(list, targetPartIndexes, targetConditions, optionalTargets, sourceText, targetRestrictions));
   const selected = planned.filter((item) => item.selected);
-  if (selections.length > 1) errors.push("More than one unit is selected; the compiler binds only one.");
+  // A model bound by name, and a unit measured from or visible to it (compile-bound-selection.ts), is the one pair.
+  const pair = attempt(() => boundSelectionPair(selections));
+  if (selections.length > 1 && pair === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
+  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || eligibilityIndexes.length > 0 || battleSizeCount)) {
+    errors.push("A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.");
+  }
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
   // mortal wounds, say); with it, every effect must be limited to those attacks.
   if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
@@ -608,6 +637,18 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     && !list.some((leaf) => leaf.family_id === "persistent-designation-open")
     && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes" && leaf.parameters.unit !== "that-unit")) {
     errors.push("A selected unit's unit-filter narrows only the selection; the bearer's attacks must target that unit, or the filter has no effect on them.");
+  }
+  // "Each time that VEHICLE model makes an attack": an attack gate on a model selection has no decided
+  // binding; compiled as-is the gate is dropped (the same drop a unit selection shows, pre-existing).
+  // A designated model's attacks ("that targets that model") keep their own refusal, below.
+  if (selections.some((leaf) => leaf.parameters.target_kind === "model") && !list.some((leaf) => leaf.family_id === "target-is-selected")
+    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes")) {
+    errors.push("An attack made by a selected model has no decided binding yet; compiling it would drop the attack gate.");
+  }
+  // "Select one other X model": the selector excludes only the bearer's unit, which is the selected model's only when it has one model.
+  if (selections.some((leaf) => leaf.parameters.target_kind === "model" && (leaf.parameters.filter as { other?: unknown } | undefined)?.other === true)
+    && bearerModelMax(options.abilityId) !== 1) {
+    errors.push("An other-model selection excludes only the bearer's unit; it selects only other models when the bearer has one model.");
   }
   if (forEachLeaf && selections.length > 0) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
   if (errors.length > 0) return { ok: false, signature, errors };
@@ -628,7 +669,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
   if (selectionPart !== null && selectionPart > 0) {
     const own = pieces[selectionPart]!;
-    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own })];
+    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit })];
   }
   const steps = pieces[0]!;
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
@@ -652,10 +693,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   else if (selections.length === 1 && body?.type === "persistent-designation") { /* its own select */ }
+  else if (pair && body) body = selectUnit(pair.outer, selectUnit(pair.inner, body, {}), {});
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
       eligibility,
+      selectionLimit,
     });
   }
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
