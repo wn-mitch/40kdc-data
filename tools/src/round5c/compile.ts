@@ -28,6 +28,7 @@ import { foldModelState } from "./compile-model-state.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
+import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -298,8 +299,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
 
   // "Your unit must end that move either …": the conditions after a move-must-end in its sentence
   // say where the preceding move ends, so they gate nothing and are taken out of clause binding.
-  const moveEnds = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" ? [{
+  const moveEnds: MoveEndRule[] = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" ? [{
     index, match: String(leaf.parameters.match), cannot: leaf.parameters.polarity === "cannot",
+    moveTypes: Array.isArray(leaf.parameters.move_types) ? leaf.parameters.move_types as string[] : null,
     conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && places[at]!.sentence === places[index]!.sentence ? [at] : []),
   }] : []);
   const endConditions = new Set(moveEnds.flatMap((rule) => rule.conditions));
@@ -468,7 +470,20 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   for (const rule of moveEnds) {
     const move = planned.filter((item) => item.index < rule.index && item.node.type === "move").at(-1);
+    if (!move && rule.cannot) {
+      // "…, and cannot end that move within Engagement Range of them" after the trigger's move: no make-move in the ability.
+      const bytes = sourceText === undefined ? null : Buffer.from(sourceText, "utf8");
+      const stopBetween = (from: number, to: number) => bytes !== null && /[.;:]/u.test(bytes.subarray(list[from]!.end_byte!, list[to]!.start_byte).toString("utf8"));
+      const end = triggerMoveEnd(list, rule, planned.map((item) => ({ index: item.index, node: item.node })), stopBetween);
+      if ("error" in end) { errors.push(end.error); continue; }
+      const { sentence, clause } = places[rule.index]!;
+      const at = planned.findIndex((item) => item.index > rule.index);
+      const entry = { index: rule.index, leaf: list[rule.index]!, node: end.node, gate: [...(sentenceGates.get(sentence) ?? []), ...(clauseGates.get(clause) ?? [])], selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause), replaces: false };
+      if (at === -1) planned.push(entry); else planned.splice(at, 0, entry);
+      continue;
+    }
     if (!move) { errors.push("\"Must end that move\" has no move before it."); continue; }
+    if (rule.moveTypes) { errors.push("\"Must end that move\" with move types has no DSL form after a make-move."); continue; }
     if (rule.conditions.length === 0) { errors.push("\"Must end that move\" names no condition for where the move ends."); continue; }
     const nodes = rule.conditions.map((at) => attempt(() => condition(list[at]!))).filter((node): node is Node => node !== null);
     if (nodes.length !== rule.conditions.length) continue;

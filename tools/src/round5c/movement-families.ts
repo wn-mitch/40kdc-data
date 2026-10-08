@@ -17,7 +17,7 @@ const MOVE_ACTOR_SUBJECTS = ["this-unit", "this-model"] as const;
 export const MOVE_TYPES = [
   "normal", "advance", "fall-back", "charge", "pile-in", "consolidation", "surge", "scout", "ingress", "disembark", "embark", "pulse-jet",
 ] as const;
-const MOVE_SUBSET = ["normal", "advance", "fall-back", "charge"] as const;
+export const MOVE_SUBSET = ["normal", "advance", "fall-back", "charge"] as const;
 const PASSTHROUGH_ITEMS = ["models", "all-terrain", "tall-terrain", "terrain-le-4", "non-titanic-models"] as const;
 const SETUP_TO = ["battlefield", "strategic-reserves"] as const;
 const SETUP_FROM = ["strategic-reserves", "transport", "battlefield"] as const;
