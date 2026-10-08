@@ -145,6 +145,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "wobbled",
   "worthy-foes",
   "wracked-with-agonies",
+  "yp-spent-this-use",
   "zapped",
 ]);
 
@@ -181,6 +182,7 @@ const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: st
   wobbled: { adjective: "wobbled" },
   "wracked-with-agonies": { adjective: "wracked with agonies" },
   zapped: { adjective: "zapped" },
+  "yp-spent-this-use": { adjective: "YP-spent this use" },
   unravelling: { adjective: "unravelling" },
   prey: { noun: "prey" },
   "slayers-oath": { noun: "Slayer's Oath" },

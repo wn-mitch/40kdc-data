@@ -17,6 +17,7 @@ import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-fa
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
 import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
+import { normalizeOptionalCostParameters, OPTIONAL_COST_FAMILIES } from "./optional-cost-families.js";
 import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
 import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
 import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
@@ -92,6 +93,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...NAMED_REGION_FAMILIES,
   ...PREDICATE_FAMILIES,
   ...PREDICATE_FAMILIES_2,
+  ...OPTIONAL_COST_FAMILIES,
   ...PREDICATE_SUBJECT_FAMILIES,
   ...TEST_FAMILIES,
   ...TARGETED_FAMILIES,
@@ -169,6 +171,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeNamedRegionParameters(family, input)
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)
+    ?? normalizeOptionalCostParameters(family, input)
     ?? normalizePredicateSubjectParameters(family, input, version)
     ?? normalizeTestParameters(family, input, version)
     ?? normalizeTargetedParameters(family, input)

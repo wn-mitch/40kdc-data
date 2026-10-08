@@ -39,6 +39,7 @@ import { usageFor } from "./restriction-families.js";
 import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
 import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
+import { checkOptionalCosts, wrapOptionalSpends } from "./compile-optional-cost.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -198,6 +199,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   const leaves = nameBoundAttacks(given);
+  // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
+  try { checkOptionalCosts(leaves); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
+  }
   const segments = sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.
@@ -291,8 +297,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const usageIndexes: number[] = [];
   const usageScopes = new Set<string>();
   let optional = false;
+  // "You can spend YP …" read later as "if you spent YP during this use": the spend is the optional part, not the use.
+  const optionalSpend = list.some((leaf) => leaf.family_id === "optional-cost-paid" && leaf.parameters.window === "use");
   const checks: CoreCheck[] = namedAbilityChecks(list);
   attempt(() => checkAbilityUsedWindows(list));
+  attempt(() => checkOptionalCosts(list));
   const targetParts: CompileLeaf[] = [];
   const targetPartIndexes: number[] = [];
   const targetConditions: Array<{ index: number; node: Node; eachTarget: boolean }> = [];
@@ -390,7 +399,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "optional-use") {
           // "You can also target one …": that later target is optional, not the Stratagem's use.
           const group = optionalTargetGroup(list, index);
-          if (group === null) optional = true;
+          if (group === null) optional = optional || !optionalSpend;
           else optionalTargets.add(group);
         }
         else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
@@ -654,6 +663,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
   if (!body) return { ok: false, signature, errors };
+  if (optionalSpend) body = attempt(() => wrapOptionalSpends(body!, list, durations[0] ?? "phase") as typeof body) ?? body;
   if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
   const behavior = auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive";

@@ -56,6 +56,8 @@ describe("Round 5C leaf describer audit", () => {
       "same-unit": { unrendered: [], colliding: ["subject"], problems: 0 },
       "wounds-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "in-region": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // window use names the subject that spent; its English says "you spent YP during this use" without the subject.
+      "optional-cost-paid": { unrendered: ["subject"], colliding: [], problems: 0 },
       guided: { unrendered: [], colliding: ["subject"], problems: 0 },
       "moved-over": { unrendered: [], colliding: ["subject", "by"], problems: 0 },
       // "to" omitted defaults to the attacker, which reads the same as naming it explicitly.

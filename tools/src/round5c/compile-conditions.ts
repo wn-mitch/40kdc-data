@@ -14,6 +14,7 @@ import { dslAlternatives } from "./compile-filter-alternatives.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import { abilityUsedCondition } from "./compile-named-ability.js";
+import { optionalCostCondition } from "./compile-optional-cost.js";
 
 type Node = Record<string, unknown>;
 
@@ -313,6 +314,9 @@ export function condition(leaf: CompileLeaf): Node {
         return pred("happened", { event, ...(Object.keys(filter).length ? { filter: structuredClone(filter) } : {}), window }, subject);
       })));
     }
+    // "If you spent YP during this use", "if you spent no YP in that turn" (compile-optional-cost.ts).
+    case "optional-cost-paid":
+      return optionalCostCondition(leaf);
     case "hit-by-attacks":
       // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
       // attacks of the ability's moment ("after this model has shot"), during that moment.

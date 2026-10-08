@@ -7,6 +7,9 @@ const IN_PROGRESS: Record<string, string> = {
   ritual: "a Ritual", "dark-pact": "a Dark Pact", "act-of-faith": "an Act of Faith", doctrine: "a Combat Doctrine", contract: "a contract",
 };
 
+/** The printed name of a resource pool a history condition reads. */
+const RESOURCE_TERMS: Record<string, string> = { "yp-pool": "YP" };
+
 export function describeHappened(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
   const didNot = (verb: string): string => (negated ? `did not ${verb}` : pastOf(verb));
@@ -107,6 +110,13 @@ export function describeHappened(p: P, negated: boolean): string {
       return `${neg}you newly control ${n}+ objectives ${windowPhrase(p.window)}`.trimEnd();
     case "designation-changed":
       return `${neg}${withWindow(`${n}+ ${unitRefPhrase(p.object, "units")} became ${designationPhrase(str(f.tag))}`, p.window)}`;
+    // "you spent YP in that turn" (optional-cost-paid window turn): a negated read is "you spent no YP".
+    case "resource-spent": {
+      const pool = str(f.pool);
+      const what = RESOURCE_TERMS[pool] ?? dekebab(pool);
+      const spent = negated ? `you spent no ${what}` : `you spent ${what}`;
+      return withWindow(spent, p.window);
+    }
     default:
       return `${neg}${withWindow(`${dekebab(event)} happened`, p.window)}`;
   }

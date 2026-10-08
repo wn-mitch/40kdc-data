@@ -26,8 +26,9 @@ const DISJUNCTIVE_GAPS = new Set(["or", "and/or"]);
 function between(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): string | null {
   if (left.end_byte === undefined || right.start_byte < left.end_byte) return null;
   // A parenthesised alternative ("on the battlefield (or any TRANSPORT it is embarked within …)")
-  // joins with "(or" as a bare "or" does.
-  return bytes.subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
+  // joins with "(or" as a bare "or" does. "and/or" joins alternatives too: either one, or both.
+  const joined = bytes.subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
+  return joined === "and/or" ? "or" : joined;
 }
 
 /**
