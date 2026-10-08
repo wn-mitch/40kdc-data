@@ -6,6 +6,7 @@ import { destroyedFilter, destroyedObject, modelRecipientFilter, modelSelection,
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
+import { attackFrameRolls, foldAttackFrame, subjectlessRoll } from "./compile-attack-frame.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -411,6 +412,13 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
       const effect = out.at(-1)!;
       out[out.length - 1] = { ...effect, parameters: { ...effect.parameters, subject_filter: dslUnitFilter(leaf) } };
       index = at - 1;
+    } else if (isFilter(leaf) && attackFrameRolls(list, index, leaf) !== null && !out.some((before) => before.role === "EVENT" && before.fragment === leaf.fragment)) {
+      // "Friendly X units' ranged attacks can:" + "Re-roll one hit roll.": the attack-filter names the
+      // rolls' attack type; each roll takes the filter's units and that type, and the frame is dropped.
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units re-roll or modify rolls must say friendly or enemy.");
+      const { frame, rolls } = attackFrameRolls(list, index, leaf)!;
+      out.push(...foldAttackFrame(dslUnitFilter(leaf), list[frame]!, rolls));
+      index = frame + rolls.length;
     } else if (isFilter(leaf) && filteredAfter(list, index) !== null) {
       // "Friendly **K** units (from your army)" + "have the Scouts ability": every unit it
       // matches receives the effect. A "from your army" between them is the filter's own wording.
@@ -524,9 +532,6 @@ function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string
   return { ...rest, member_of: "this-unit" };
 }
 
-/** Roll effects that carry no subject: whose rolls they are comes from an attack or a filter before them. */
-const SUBJECTLESS_ROLLS = new Set(["reroll", "roll-modifier", "roll-auto-result"]);
-const subjectlessRoll = (leaf: CompileLeaf | undefined) => leaf !== undefined && SUBJECTLESS_ROLLS.has(leaf.family_id) && leaf.parameters.subject === undefined;
 
 /** Moments that happen to a unit, whose object a unit-filter right after them can name. */
 function objectEvent(leaf: CompileLeaf | undefined): boolean {
