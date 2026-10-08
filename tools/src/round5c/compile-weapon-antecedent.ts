@@ -84,8 +84,8 @@ function bindAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): Compil
  * Plasma rifle weapons ... That weapon's attacks have: +2 S" binds the weapon with select-weapon,
  * and the adjustment carries `weapon: antecedent`, resolved here to the bind name as `weapon_var`.
  *
- * A record with a select-weapon refuses any weapon-scoped adjustment that names no weapon: the
- * compiler would otherwise apply it to every weapon of that type while the select binds one.
+ * A weapon-scoped adjustment that names no weapon beside a select-weapon is refused by
+ * refuseUnboundWeaponScope below.
  */
 const isAntecedent = (leaf: CompileLeaf) => leaf.parameters.weapon === "antecedent";
 
@@ -122,14 +122,6 @@ export function bindWeaponStatAntecedents(list: readonly CompileLeaf[]): Compile
     }
     const { weapon: _weapon, ...parameters } = leaf.parameters;
     result.push({ ...leaf, parameters: { ...parameters, weapon_var: String(binder.parameters.bind_as) } });
-  }
-  for (const leaf of result) {
-    if (leaf.family_id !== "characteristic-modifier" || leaf.parameters.weapon_var !== undefined) continue;
-    const weaponType = leaf.parameters.weapon_type;
-    const named = leaf.parameters.weapon_name !== undefined || leaf.parameters.weapon_keyword !== undefined;
-    if (weaponType !== undefined && weaponType !== "all" && !named) {
-      throw new CompileError("A weapon-scoped stat adjustment in a record that selects a weapon must name that weapon with weapon: antecedent.");
-    }
   }
   return result;
 }

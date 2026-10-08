@@ -89,7 +89,7 @@ describe("a stat adjustment with weapon: antecedent changes the selected weapon"
       ["select-weapon", { target: "this-model", weapon_name: "Plasma rifle", bind_as: "w" }],
       ["weapon-property-scope", { subject: "this-model", weapon_type: "ranged" }],
       ["characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2 }],
-    ))).toThrow(/must name that weapon/);
+    ))).toThrow(/sits beside a select-weapon.*must name its weapon/);
   });
 
   it("keeps a weapon-scoped stat adjustment with no select-weapon compiling as before", () => {
@@ -111,10 +111,12 @@ describe("a stat adjustment with weapon: antecedent changes the selected weapon"
 describe("characteristic-modifier v13 weapon: antecedent", () => {
   const version = () => currentFamilyVersion("characteristic-modifier");
 
-  it("takes weapon characteristics for this-model with no weapon_type, weapon_name or weapon_keyword", () => {
+  it("takes weapon characteristics for this-model with no weapon_name or weapon_keyword, and hands a weapon_type to the equipped-count form", () => {
     expect(normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent" }, version()))
       .toEqual({ characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent" });
-    expect(() => normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", weapon_type: "ranged" }, version())).toThrow();
+    // With a weapon_type it is the equipped-weapon-count form, which the previous version owns.
+    expect(normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", weapon_type: "ranged" }, version()))
+      .toMatchObject({ weapon: "antecedent", weapon_type: "ranged" });
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", weapon_name: "x" }, version())).toThrow();
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["Range"], operation: "improve", value: 2, weapon: "antecedent" }, version())).toThrow();
     expect(() => normalizeFingerprintParameters("characteristic-modifier", { characteristics: ["S"], operation: "improve", value: 2, weapon: "antecedent", subject: "this-unit" }, version())).toThrow();

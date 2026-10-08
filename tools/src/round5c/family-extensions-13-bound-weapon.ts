@@ -50,14 +50,16 @@ export const FAMILY_EXTENSIONS_13_BOUND_WEAPON: readonly FamilyExtension[] = [
   {
     // "+2 S" under "That weapon's attacks have:": the stat change lands on the bound weapon only.
     family: "characteristic-modifier",
-    description: "As the previous version, plus weapon: antecedent, the one weapon an earlier select-weapon bound. Only weapon characteristics (A, WS, BS, S, AP, D) and only this-model take it; it names no weapon_type, weapon_name or weapon_keyword.",
+    description: "As the previous version, plus weapon: antecedent, the one weapon an earlier select-weapon bound. Only weapon characteristics (A, WS, BS, S, AP, D) and only this-model take it; it names no weapon_name or weapon_keyword, and no weapon_type (with one, it is the previous version's equipped-weapon-count form).",
     schema: (previous) => withProperties(withoutRequired(previous, "weapon_type"), {
       weapon: optional({ enum: ["antecedent"] }),
     }),
     normalize: (input, previous) => {
       if (input.weapon === undefined) return previous(input);
       if (input.weapon !== "antecedent") throw new TypeError("characteristic-modifier.weapon takes only antecedent.");
-      for (const key of ["weapon_type", "weapon_name", "weapon_keyword"]) {
+      // With a weapon_type it is the previous version's form: the weapons an equipped-weapon count counted.
+      if ("weapon_type" in input) return previous(input);
+      for (const key of ["weapon_name", "weapon_keyword"]) {
         if (key in input) throw new TypeError(`characteristic-modifier.weapon antecedent is the bound weapon; it takes no ${key}.`);
       }
       // A stat adjustment under a scope takes its recipient from the scope; a stated one must be this-model.

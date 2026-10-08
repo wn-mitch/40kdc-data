@@ -1,8 +1,9 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 const COUNT = "equipped-weapon-count";
+// The equipped-weapon-count form carries a melee or ranged weapon_type; the select-weapon form carries none.
 const isAntecedentStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" && leaf.family_version >= 13
-  && leaf.parameters.weapon === "antecedent";
+  && leaf.parameters.weapon === "antecedent" && leaf.parameters.weapon_type !== undefined;
 
 /**
  * Binds "those two weapons" to the one equipped-weapon-count condition in the record. The stat
