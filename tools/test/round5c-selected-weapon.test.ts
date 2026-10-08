@@ -142,6 +142,32 @@ describe("selected weapon: attack-filter weapon antecedent", () => {
     expect(refusal([keywordGrant("ranged"), leaf("attack-filter", { weapon: "antecedent", attack_type: "melee" })])).toMatch(/conflicts with the granted ranged/);
   });
 
+  it("refuses to name the attacks of a grant already bound to one weapon, which would widen to its type", () => {
+    const bound = [
+      leaf("select-weapon", { target: "this-model", count: 1, weapon_type: "ranged", bind_as: "selected-weapon" }),
+      leaf("weapon-ability-grant", { subject: "this-model", weapon: "antecedent", keyword: "Lethal Hits" }),
+    ];
+    expect(refusal([...bound, leaf("attack-filter", { weapon: "antecedent" })])).toMatch(/also names weapon_var/);
+  });
+
+  it("refuses to name the attacks of a grant narrowed by name, keyword or incoming attacks", () => {
+    const narrowed = (extra: Record<string, unknown>) => refusal([
+      leaf("weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged", keyword: "Lethal Hits", ...extra }),
+      leaf("attack-filter", { weapon: "antecedent" }),
+    ]);
+    expect(narrowed({ weapon_name: "Blitzkannon" })).toMatch(/also names weapon_name/);
+    expect(narrowed({ weapon_keyword: "Assault" })).toMatch(/also names weapon_keyword/);
+    expect(narrowed({ incoming: true })).toMatch(/also names incoming/);
+  });
+
+  it("refuses when the nearest keyword grant is narrowed, even after a broad one", () => {
+    expect(refusal([
+      keywordGrant("ranged"),
+      leaf("weapon-ability-grant", { subject: "this-unit", weapon_type: "melee", keyword: "Lethal Hits", weapon_name: "Blitzkannon" }),
+      leaf("attack-filter", { weapon: "antecedent" }),
+    ])).toMatch(/also names weapon_name/);
+  });
+
   it("refuses the antecedent beside the attacks of an earlier moment, or a filter that narrows it, at the registry", () => {
     expect(() => leaf("attack-filter", { weapon: "antecedent", weapon_name: "Exitus rifle" })).toThrow(/cannot narrow them/);
     expect(() => leaf("attack-filter", { weapon: "antecedent", shooting_type: "ranged" })).toThrow(/cannot narrow them/);
@@ -179,5 +205,70 @@ describe("selected weapon: the bound weapon across a sentence break", () => {
     const leaves = [placedAt("that weapon has the [LETHAL HITS] ability", "weapon-ability-grant", { subject: "this-model", weapon: "antecedent", keyword: "Lethal Hits" })];
     const result = compileLeaves(leaves, text);
     expect(result.ok).toBe(false);
+  });
+});
+
+describe("selected weapon: the unbound weapon-scope guard", () => {
+  // Fabricated: "Once per battle, select one ranged weapon equipped by this model. Ranged weapons of this model have +2 A."
+  const select = () => leaf("select-weapon", { target: "this-model", count: 1, weapon_type: "ranged", bind_as: "selected-weapon" });
+
+  it("refuses a weapon-scoped stat with no weapon name beside a select-weapon, rather than widening it", () => {
+    expect(refusal([
+      select(),
+      leaf("characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "improve", value: 2, weapon_type: "ranged" }),
+    ])).toMatch(/sits beside a select-weapon.*must name its weapon/);
+  });
+
+  it("refuses a weapon-scoped grant with no weapon name beside a select-weapon", () => {
+    expect(refusal([
+      select(),
+      leaf("weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged", keyword: "Lethal Hits" }),
+    ])).toMatch(/sits beside a select-weapon/);
+  });
+
+  it("accepts the same stat once it names its weapon", () => {
+    const named = compiled([
+      select(),
+      leaf("characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "improve", value: 2, weapon_type: "ranged", weapon_name: "Test cannon" }),
+    ]);
+    expect(nodes(named).some((node) => node.type === "stat-modifier")).toBe(true);
+  });
+
+  it("leaves a record with no select-weapon unchanged: an unnamed weapon-type stat still compiles", () => {
+    expect(() => compiled([
+      leaf("characteristic-modifier", { subject: "this-unit", characteristics: ["A"], operation: "improve", value: 2, weapon_type: "ranged" }),
+    ])).not.toThrow();
+  });
+
+  it("does not touch the keyword-grant and granted-weapon anaphor shapes, which name no select", () => {
+    const grant = leaf("weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged", keyword: "Psychic" });
+    const filter = leaf("attack-filter", { weapon: "antecedent" });
+    expect(() => compiled([grant, filter, leaf("roll-modifier", { roll: "wound", operation: "add", value: 1 })])).not.toThrow();
+  });
+});
+
+describe("selected weapon: a bound grant with the usage, event and phase leaves around it", () => {
+  // Fabricated wording. Shape of the once-per-battle "select a weapon, then it gains a keyword until the end of the phase" ability.
+  const text = "Once per battle, when this unit is selected to shoot in your Shooting phase, select one ranged weapon equipped by this model. Until the end of the phase, that weapon has the [LETHAL HITS] ability.";
+  function at(wording: string, family: string, parameters: Record<string, unknown>): CompileLeaf {
+    const start = Buffer.byteLength(text.slice(0, text.indexOf(wording)));
+    return { ...leaf(family, parameters), start_byte: start, end_byte: start + Buffer.byteLength(wording) };
+  }
+
+  it("compiles to a phase-bound, once-per-battle grant to the selected weapon only", () => {
+    const leaves = [
+      at("Once per battle", "usage-limit", { frequency: "once-per-battle", per: "unit" }),
+      at("when this unit is selected to shoot", "event", { kind: "selected", to: "shoot" }),
+      at("in your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }),
+      at("select one ranged weapon equipped by this model", "select-weapon", { target: "this-model", count: 1, weapon_type: "ranged", bind_as: "selected-weapon" }),
+      at("Until the end of the phase", "duration", { endpoint: "end-of-phase" }),
+      at("that weapon has the [LETHAL HITS] ability", "weapon-ability-grant", { subject: "this-model", weapon: "antecedent", keyword: "Lethal Hits" }),
+    ];
+    const result = compileLeaves(leaves, text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(result.mechanics.scope).toEqual({ duration: "phase" });
+    expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" } });
+    const grants = nodes(result.mechanics.effect).filter((node) => node.type === "weapon-ability-grant");
+    expect(grants).toEqual([expect.objectContaining({ modifier: expect.objectContaining({ weapon_ref: { weapon_var: "selected-weapon" } }) })]);
   });
 });

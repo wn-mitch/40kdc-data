@@ -40,10 +40,12 @@ describe("wave-9 weapon-ability keywords", () => {
     const version = currentFamilyVersion("weapon-ability-grant");
     expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, version))
       .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
-    // The wave-9 vocabulary version (8) takes these keywords and the version before it (7) refuses them.
-    // Later grant versions (weapon antecedent) sit above it, so "version - 1" is no longer the refusing one.
-    expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, 7)).toThrow();
-    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, 8))
+    // The wave-9 vocabulary arrived at version 8; version 7 is the last that refuses these keywords.
+    // Both are fixed history: later grant versions build on 8, so they are pinned here rather than read from the registry.
+    const vocabularyVersion = 8;
+    const beforeVocabulary = 7;
+    expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, beforeVocabulary)).toThrow();
+    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, vocabularyVersion))
       .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
   });
 

@@ -22,7 +22,7 @@ import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
 import { foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes } from "./compile-weapon-scopes.js";
-import { bindWeaponAntecedents, bindWeaponStatAntecedents } from "./compile-weapon-antecedent.js";
+import { bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
 import { bindEquippedCounts } from "./compile-equipped-count.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
@@ -223,6 +223,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText));
     list = [...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))];
+    refuseUnboundWeaponScope(list);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

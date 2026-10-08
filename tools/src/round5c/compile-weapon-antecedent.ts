@@ -63,6 +63,12 @@ function bindAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): Compil
   if (leaf.parameters.of !== undefined) throw new CompileError("An attack-filter names either those attacks or the weapons a grant gave, not both.");
   const grant = [...earlier].reverse().find((item) => item.family_id === GRANT && typeof item.parameters.keyword === "string");
   if (!grant) throw new CompileError("\"Such a weapon\" has no earlier keyword grant to name the weapons it gave the keyword to.");
+  // "Such a weapon" is every weapon the grant gave the keyword to. A grant already narrowed to one
+  // bound weapon, or by name, keyword or incoming attacks, gave it to fewer weapons than its type
+  // selects, so an attack-is over the type would widen the reference.
+  for (const key of ["weapon_var", "weapon_name", "weapon_keyword", "incoming"]) {
+    if (grant.parameters[key] !== undefined) throw new CompileError(`"Such a weapon" cannot follow a keyword grant that also names ${key}; the attacks would widen past the granted weapons.`);
+  }
   const weaponType = grant.parameters.weapon_type;
   if (typeof weaponType !== "string") throw new CompileError("The keyword grant before \"such a weapon\" names no weapon type.");
   const attackType = weaponType === "all" ? undefined : weaponType;
@@ -126,4 +132,22 @@ export function bindWeaponStatAntecedents(list: readonly CompileLeaf[]): Compile
     }
   }
   return result;
+}
+
+/**
+ * A weapon-scoped stat or grant (`weapon_type` set) beside a select-weapon must name its weapons
+ * some other way. Without this, the compiler widens it to every weapon of that type while the
+ * select binds one. Named scopes (weapon_name, weapon_keyword), a bound form (weapon_ref,
+ * weapon_var) and the antecedent are the accepted forms. Records with no select-weapon are unchanged.
+ */
+const NAMED_WEAPON_KEYS = ["weapon_name", "weapon_keyword", "weapon_ref", "weapon_var", "weapon"] as const;
+const WEAPON_SCOPED = new Set(["characteristic-modifier", "weapon-ability-grant"]);
+
+export function refuseUnboundWeaponScope(list: readonly CompileLeaf[]): void {
+  if (!list.some((leaf) => leaf.family_id === SELECT)) return;
+  for (const leaf of list) {
+    if (!WEAPON_SCOPED.has(leaf.family_id) || leaf.parameters.weapon_type === undefined) continue;
+    if (NAMED_WEAPON_KEYS.some((key) => leaf.parameters[key] !== undefined)) continue;
+    throw new CompileError(`A ${leaf.family_id} scoped to ${String(leaf.parameters.weapon_type)} weapons sits beside a select-weapon, which binds one weapon; it must name its weapon (that weapon, or a weapon name or keyword).`);
+  }
 }
