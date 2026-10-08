@@ -271,7 +271,7 @@ export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: stri
     const leaf = list[index]!;
     const next = list[index + 1];
     if (leaf.family_id === "move-end-nearest") {
-      // "must end that move as close as possible to the closest enemy unit (excluding AIRCRAFT)": the
+      // A move-end nearest the closest unit names that unit with the unit-filter right after it: the
       // filter after it names the unit the move ends nearest. The leaf takes the filter as `of`.
       if (!isFilter(next) || next!.fragment !== leaf.fragment) throw new CompileError("A move-end nearest the closest unit needs a unit-filter right after it.");
       if (next!.parameters.side === "any") throw new CompileError("A move-end nearest the closest unit must say friendly or enemy.");

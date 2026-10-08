@@ -16294,6 +16294,36 @@ impl ::std::default::Default for EndAttackSequenceEffectModifier {
         Self {}
     }
 }
+///Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).",
+///  "type": "object",
+///  "required": [
+///    "of"
+///  ],
+///  "properties": {
+///    "of": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "waives": {
+///      "const": "closest-enemy-model"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EndsNearest {
+    pub of: UnitRef,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub waives: ::std::option::Option<::serde_json::Value>,
+}
 ///`EngagementFrontsConditionParameters`
 ///
 /// <details><summary>JSON schema</summary>
@@ -26394,6 +26424,10 @@ for MortalWoundsEffectModifierRollPerModel {
 ///    "distance": {
 ///      "$ref": "#/$defs/quantity"
 ///    },
+///    "ends_nearest": {
+///      "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).",
+///      "$ref": "#/$defs/ends-nearest"
+///    },
 ///    "ends_when": {
 ///      "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within.",
 ///      "$ref": "#/$defs/condition"
@@ -26415,6 +26449,12 @@ for MortalWoundsEffectModifierRollPerModel {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    "engaged_with": {
+///      "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.",
+///      "enum": [
+///        "nearest-move-end"
+///      ]
 ///    },
 ///    "keeps_eligible": {
 ///      "const": true
@@ -26513,11 +26553,17 @@ pub struct MoveEffectModifier {
     pub counts_as_move: ::std::option::Option<MoveEffectModifierCountsAsMove>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<Quantity>,
+    ///Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_nearest: ::std::option::Option<EndsNearest>,
     ///Where the moving unit must be when the move ends, as a condition on it: "your unit must end that move either wholly within your deployment zone or within range of an objective marker". For a single distance to a place, use ends_within.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_when: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_within: ::std::option::Option<MoveEffectModifierEndsWithin>,
+    ///allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub engaged_with: ::std::option::Option<MoveEffectModifierEngagedWith>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keeps_eligible: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -26761,6 +26807,77 @@ pub struct MoveEffectModifierEndsWithin {
     pub range: RangeRef,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wholly: ::std::option::Option<::serde_json::Value>,
+}
+///allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.",
+///  "enum": [
+///    "nearest-move-end"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierEngagedWith {
+    #[serde(rename = "nearest-move-end")]
+    NearestMoveEnd,
+}
+impl ::std::fmt::Display for MoveEffectModifierEngagedWith {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NearestMoveEnd => f.write_str("nearest-move-end"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierEngagedWith {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "nearest-move-end" => Ok(Self::NearestMoveEnd),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`MoveEffectModifierMoveType`
 ///
@@ -27420,6 +27537,14 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "end_on_terrain": {
 ///      "const": true
 ///    },
+///    "ends_nearest": {
+///      "description": "Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.",
+///      "$ref": "#/$defs/ends-nearest"
+///    },
+///    "ends_when": {
+///      "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.",
+///      "$ref": "#/$defs/condition"
+///    },
 ///    "ignore_vertical": {
 ///      "const": true
 ///    },
@@ -27501,6 +27626,12 @@ pub struct MoveModifierEffectModifier {
     pub distance_bonus: ::std::option::Option<MoveModifierEffectModifierDistanceBonus>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_on_terrain: ::std::option::Option<::serde_json::Value>,
+    ///Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_nearest: ::std::option::Option<EndsNearest>,
+    ///Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_when: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_vertical: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -27517,6 +27648,8 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             applies_to_moves: Default::default(),
             distance_bonus: Default::default(),
             end_on_terrain: Default::default(),
+            ends_nearest: Default::default(),
+            ends_when: Default::default(),
             ignore_vertical: Default::default(),
             no_end_in_engagement: Default::default(),
             passthrough: Default::default(),

@@ -375,8 +375,6 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         modifier: {
           activity: closed(leaf, "activity"), allow: closed(leaf, "allow"),
           ...(despite && despite.length > 0 ? { despite } : {}),
-          // "despite being engaged, … within Engagement Range of that enemy unit": the enemy unit the move ends nearest.
-          ...(leaf.parameters.engaged_with_move_end === true ? { engaged_with: "nearest-move-end" } : {}),
           ...(asIf ? { as_if: asIf } : {}),
           ...(stratagem ? { stratagem } : {}),
         },

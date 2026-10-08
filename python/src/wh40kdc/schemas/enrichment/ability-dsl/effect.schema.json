@@ -3247,6 +3247,12 @@
                 "allow_engagement": {
                   "const": true
                 },
+                "engaged_with": {
+                  "enum": [
+                    "nearest-move-end"
+                  ],
+                  "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest."
+                },
                 "counts_as_move": {
                   "enum": [
                     "normal",
@@ -3289,6 +3295,10 @@
                 },
                 "keeps_eligible": {
                   "const": true
+                },
+                "ends_nearest": {
+                  "$ref": "../../defs/common.schema.json#/$defs/ends-nearest",
+                  "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule)."
                 }
               },
               "required": [
@@ -3461,6 +3471,14 @@
                 },
                 "end_on_terrain": {
                   "const": true
+                },
+                "ends_nearest": {
+                  "$ref": "../../defs/common.schema.json#/$defs/ends-nearest",
+                  "description": "Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance."
+                },
+                "ends_when": {
+                  "$ref": "condition.schema.json",
+                  "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there."
                 }
               },
               "minProperties": 1

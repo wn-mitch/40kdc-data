@@ -1215,6 +1215,22 @@
         }
       },
       "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
+    },
+    "ends-nearest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of"
+      ],
+      "description": "Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/unit-ref"
+        },
+        "waives": {
+          "const": "closest-enemy-model"
+        }
+      }
     }
   }
 }

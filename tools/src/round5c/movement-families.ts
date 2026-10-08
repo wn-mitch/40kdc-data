@@ -246,7 +246,7 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "RESTRICTION",
     label: "Move must end nearest a unit",
-    description: "\"Must end that move as close as possible to the closest enemy unit\": the move before it ends as close as possible to the closest unit the unit-filter after it names. to names that filter (following-filter); the filter is folded into the leaf's of before compilation.",
+    description: "The move before it must end as close as possible to the closest unit that the unit-filter right after it names (to: following-filter); that filter is folded into the leaf's of before compilation.",
     starter: { to: "" },
     parameterSchema: {
       type: "object",
@@ -260,7 +260,7 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "RESTRICTION",
     label: "Waives where a move must end",
-    description: "\"Does not need to end that move closer to the closest enemy model, provided it ends that move as close as possible to the closest enemy unit\": the move-end-nearest in the same sentence may end the move as close as possible to its unit instead of closer to the closest enemy model. rule names the waived requirement. It is never valid without a move-end-nearest.",
+    description: "Waives the closest-enemy-model requirement of a move-end nearest in the same sentence: the move may instead end as close as possible to that unit. rule names the waived requirement. It is never valid without a move-end-nearest.",
     starter: { rule: "" },
     parameterSchema: {
       type: "object",

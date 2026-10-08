@@ -1799,12 +1799,6 @@
                 "consumes_shared_use": {
                   "const": false,
                   "description": "This use of the Stratagem does not count toward its once-per-phase limit for other units."
-                },
-                "engaged_with": {
-                  "enum": [
-                    "nearest-move-end"
-                  ],
-                  "description": "Despite being engaged (despite includes engaged), the permitted move may end within Engagement Range of the enemy unit that the same ability's move ends nearest (ends_nearest.of)."
                 }
               },
               "required": [
@@ -3252,6 +3246,12 @@
                 },
                 "allow_engagement": {
                   "const": true
+                },
+                "engaged_with": {
+                  "enum": [
+                    "nearest-move-end"
+                  ],
+                  "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest."
                 },
                 "counts_as_move": {
                   "enum": [

@@ -424,8 +424,14 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s += f", ending that move {wholly}within {range_phrase(ends.get('range'))} of {of}"
     if m.get("ends_when") is not None:
         s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}"
+    if m.get("ends_nearest") is not None:
+        s += f"; {_ends_nearest_phrase(m['ends_nearest'], ctx, 'it', 'that move')}"
     if m.get("allow_engagement") is True:
-        s += "; it can end that move within Engagement Range of enemy units"
+        s += (
+            "; it can end that move within Engagement Range of that enemy unit"
+            if m.get("engaged_with") == "nearest-move-end"
+            else "; it can end that move within Engagement Range of enemy units"
+        )
     if m.get("counts_as_move") is not None:
         s += f"; that move counts as {moved_phrase(m['counts_as_move'])}"
     if m.get("keeps_eligible") is True:
@@ -433,7 +439,19 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     return s
 
 
-def _move_modifier(m: dict[str, Any], subj: str) -> str:
+def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -> str:
+    """As endsNearestPhrase in the TypeScript describer: the closest unit's name, with the waiver's
+    alternative end when waives is closest-enemy-model."""
+    named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
+    named = named.replace(" units", " unit", 1).replace(" units)", ")")
+    nearest = f"as close as possible to the closest {named}"
+    must = f"{who} must end {move_ref}"
+    if e.get("waives") == "closest-enemy-model":
+        return f"{must} either closer to the closest enemy model or {nearest}"
+    return f"{must} {nearest}"
+
+
+def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     kinds = (
         and_list([_MOVE_NOUNS.get(jstr(x), dekebab(jstr(x))) for x in m["applies_to_moves"]])
         if isinstance(m.get("applies_to_moves"), list)
@@ -460,6 +478,17 @@ def _move_modifier(m: dict[str, Any], subj: str) -> str:
         )
     if m.get("no_end_in_engagement") is True:
         clauses.append(f"{subj} cannot end a move within Engagement Range of any enemy unit")
+    if m.get("ends_nearest") is not None:
+        clauses.append(_ends_nearest_phrase(m["ends_nearest"], ctx, subj, f"{pronoun(subj)} move"))
+    # With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+    if m.get("ends_when") is not None:
+        where = describe_condition(_obj(m["ends_when"]))
+        if m.get("distance_bonus") is not None:
+            clauses.append(
+                f"the extra distance applies only if {subj} can end {pronoun(subj)} move where {where}, and must end it there"
+            )
+        else:
+            clauses.append(f"{subj} must end {pronoun(subj)} move where {where}")
     if m.get("end_on_terrain") is True:
         clauses.append(f"{subj} can end {pronoun(subj)} moves on top of terrain features")
     if m.get("ignore_vertical") is True:
@@ -703,7 +732,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "move":
         return _move(m, subj, ctx)
     if t == "move-modifier":
-        return _move_modifier(m, subj)
+        return _move_modifier(m, subj, ctx)
     if t == "set-up":
         return _set_up(m, subj, ctx)
     if t == "marker":

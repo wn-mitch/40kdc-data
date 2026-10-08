@@ -136,6 +136,26 @@ fn mode_clause(m: &P) -> String {
 }
 
 /// A unit-ref keeps its effect-subject phrase; markers, objectives and edges read as places.
+/// As `endsNearestPhrase` in the TypeScript describer: the closest unit's name, with the waiver's
+/// alternative end when `waives` is closest-enemy-model.
+fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
+    let mut named = effect_subject(e.get("of"), ctx);
+    for article in ["an ", "a ", "the ", "all "] {
+        if let Some(rest) = named.strip_prefix(article) {
+            named = rest.to_string();
+            break;
+        }
+    }
+    named = named.replacen(" units", " unit", 1).replace(" units)", ")");
+    let nearest = format!("as close as possible to the closest {named}");
+    let must = format!("{who} must end {move_ref}");
+    if jstr(e.get("waives")) == "closest-enemy-model" {
+        format!("{must} either closer to the closest enemy model or {nearest}")
+    } else {
+        format!("{must} {nearest}")
+    }
+}
+
 fn ends_of(of: Option<&Value>, ctx: &Ctx) -> String {
     let Some(of) = of.filter(|o| !o.is_null()) else {
         return "this model".to_string();
@@ -188,8 +208,18 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
             describe_condition_value(c)
         ));
     }
+    if let Some(e) = nn(m, "ends_nearest") {
+        s.push_str(&format!(
+            "; {}",
+            ends_nearest_phrase(obj(Some(e)), ctx, "it", "that move")
+        ));
+    }
     if is_true(m, "allow_engagement") {
-        s.push_str("; it can end that move within Engagement Range of enemy units");
+        s.push_str(if jstr(m.get("engaged_with")) == "nearest-move-end" {
+            "; it can end that move within Engagement Range of that enemy unit"
+        } else {
+            "; it can end that move within Engagement Range of enemy units"
+        });
     }
     if let Some(c) = nn(m, "counts_as_move") {
         s.push_str(&format!("; that move counts as {}", moved_phrase(Some(c))));
@@ -200,7 +230,7 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
     s
 }
 
-pub(super) fn move_modifier(m: &P, subj: &str) -> String {
+pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     let kinds = map_arr(m, "applies_to_moves", |x| move_noun(&jv(x))).map(|k| and_list(&k));
     let mut clauses: Vec<String> = Vec::new();
     if let Some(bonus) = nn(m, "distance_bonus") {
@@ -240,6 +270,23 @@ pub(super) fn move_modifier(m: &P, subj: &str) -> String {
         clauses.push(format!(
             "{subj} cannot end a move within Engagement Range of any enemy unit"
         ));
+    }
+    if let Some(e) = nn(m, "ends_nearest") {
+        clauses.push(ends_nearest_phrase(
+            obj(Some(e)),
+            ctx,
+            subj,
+            &format!("{} move", pronoun(subj)),
+        ));
+    }
+    // With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+    if let Some(c) = nn(m, "ends_when") {
+        let where_ = describe_condition_value(c);
+        clauses.push(if nn(m, "distance_bonus").is_some() {
+            format!("the extra distance applies only if {subj} can end {} move where {where_}, and must end it there", pronoun(subj))
+        } else {
+            format!("{subj} must end {} move where {where_}", pronoun(subj))
+        });
     }
     if is_true(m, "end_on_terrain") {
         clauses.push(format!(

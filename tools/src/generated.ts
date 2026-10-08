@@ -4643,10 +4643,6 @@ export interface PermissionEffect {
      * This use of the Stratagem does not count toward its once-per-phase limit for other units.
      */
     consumes_shared_use?: false;
-    /**
-     * Despite being engaged (despite includes engaged), the permitted move may end within Engagement Range of the enemy unit that the same ability's move ends nearest (ends_nearest.of).
-     */
-    engaged_with?: "nearest-move-end";
   };
   scaling?: Scaling;
 }
@@ -5055,6 +5051,10 @@ export interface MoveEffect {
     ];
     mode?: MoveMode;
     allow_engagement?: true;
+    /**
+     * allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+     */
+    engaged_with?: "nearest-move-end";
     /**
      * The move counts as this kind of move for rules that check what the unit did this turn.
      */

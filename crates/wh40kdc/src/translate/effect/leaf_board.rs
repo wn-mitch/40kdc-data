@@ -434,7 +434,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             effect_subject(m.get("also"), ctx)
         ),
         Some("move") => movement(m, subj, ctx),
-        Some("move-modifier") => move_modifier(m, subj),
+        Some("move-modifier") => move_modifier(m, subj, ctx),
         Some("set-up") => set_up(m, subj, ctx),
         Some("marker") => marker(m),
         Some("transport-capacity") => transport_capacity(m),

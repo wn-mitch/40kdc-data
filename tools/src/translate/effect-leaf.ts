@@ -311,7 +311,6 @@ function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string 
     s += ` even if ${orList(clauses)}`;
   }
   if (m.as_if != null) s += AS_IF[jstr(m.as_if)] ?? ` as if ${jstr(m.as_if)}`;
-  if (m.engaged_with === "nearest-move-end") s += "; the enemy unit it is engaged with is the one its move must end nearest";
   if (m.next === true) s += `, and must be the next unit selected to ${act}`;
   if (m.counts_as_move != null) s += `; if ${it} ${it === "they" ? "do" : "does"}, ${it} ${it === "they" ? "count" : "counts"} as having made ${movedPhrase(m.counts_as_move)} this turn`;
   if (m.consumes_shared_use === false) s += "; this use does not count toward that Stratagem's once-per-phase limit for other units";

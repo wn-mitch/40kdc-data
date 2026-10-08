@@ -16,7 +16,9 @@ export function isBonusNode(node: Node): boolean {
  * move-distance bonus gets a new move-modifier of its own, so the bonus itself is never gated by
  * the end rule. Returns the refusals; nothing is attached when one is returned for that leaf.
  */
-export function attachMoveEndNearest<T extends PlannedNode>(list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number): string[] {
+export function attachMoveEndNearest<T extends PlannedNode>(
+  list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[],
+): string[] {
   const errors: string[] = [];
   const nearests = list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" ? [at] : []);
   const waivers = list.flatMap((leaf, at) => leaf.family_id === "move-end-waiver" ? [at] : []);
@@ -41,14 +43,28 @@ export function attachMoveEndNearest<T extends PlannedNode>(list: readonly Compi
     }
     const bonus = target.node.modifier as Node;
     const node: Node = { type: "move-modifier", target: target.node.target, modifier: { applies_to_moves: bonus.applies_to_moves, ends_nearest: endsNearest } };
-    planned.splice(planned.indexOf(target) + 1, 0, { ...target, index: at, leaf: list[at]!, node: node as T["node"] });
+    // The new node is the end rule's own effect: it takes the gates of the end leaf's clause, not the bonus's.
+    planned.splice(planned.indexOf(target) + 1, 0, { ...target, index: at, leaf: list[at]!, node: node as T["node"], gate: gateAt(at) });
   }
   return errors;
 }
 
-/** A permission "despite engaged, … that enemy unit" names the unit a move ends nearest: that move must exist. */
-export function engagedBindingErrors(planned: readonly PlannedNode[]): string[] {
-  const bound = planned.some((item) => (item.node.modifier as Node | undefined)?.engaged_with !== undefined);
-  const nearest = planned.some((item) => (item.node.modifier as Node | undefined)?.ends_nearest !== undefined);
-  return bound && !nearest ? ["A permission bound to the move-end's unit has no move-end nearest in its ability."] : [];
+/**
+ * A permission flagged engaged_with_move_end names the unit the ability's move ends nearest. It is
+ * not a permission of its own: it binds allow_engagement on the nearest earlier make-move that ends
+ * nearest, so the permission node is dropped from the plan. A bound permission with no such move is
+ * refused.
+ */
+export function bindEngagedPermissions(planned: PlannedNode[]): string[] {
+  const errors: string[] = [];
+  for (const item of [...planned]) {
+    if (item.leaf.family_id !== "eligibility-permission" || item.leaf.parameters.engaged_with_move_end !== true) continue;
+    const move = planned.filter((other) => other.index < item.index && other.node.type === "move" && (other.node.modifier as Node).ends_nearest !== undefined).at(-1);
+    if (!move) { errors.push("A permission bound to the move-end's unit has no move-end nearest in its ability."); continue; }
+    const modifier = move.node.modifier as Node;
+    modifier.allow_engagement = true;
+    modifier.engaged_with = "nearest-move-end";
+    planned.splice(planned.indexOf(item), 1);
+  }
+  return errors;
 }

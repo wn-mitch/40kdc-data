@@ -117,3 +117,29 @@ describe("move-must-end on a bonus move (feasibility proviso, 5746 shape)", () =
     expect(refused([mustEnd(), engaged()])).toMatch(/has no move before it/u);
   });
 });
+
+describe("a move-end's clause gate (6294 shape)", () => {
+  const righteous = () => leaf("CONDITION", "rule-active", { rule: "righteous" });
+
+  it("gates the end rule with the clause's condition and leaves the bonus ungated", () => {
+    const text = compiled([bonus(), righteous(), waiver(), nearest(), enemyFilter()]);
+    // The bonus is not inside the condition: it is a plain move-modifier at the top level.
+    expect(text).toMatch(/^\{"effect":\{"type":"sequence","steps":\[\{"type":"move-modifier","target":"this-unit","modifier":\{"applies_to_moves":\["pile-in","consolidation"\],"distance_bonus":3\}\},/u);
+    // The waiver's node is the one the condition wraps.
+    expect(text).toMatch(/\{"type":"conditional","condition":\{"type":"rule-active","parameters":\{"rule":"righteous"\}\},"effect":\{"type":"move-modifier","target":"this-unit","modifier":\{"applies_to_moves":\["pile-in","consolidation"\],"ends_nearest"/u);
+  });
+});
+
+describe("the 978 leaf sequence: a move-ended trigger on the bonus's moves", () => {
+  const trigger = () => leaf("EVENT", "event", { kind: "move-ended", move_types: ["pile-in", "consolidation"], subject: "antecedent" }, 18);
+  const leading = () => leaf("CONDITION", "leading-unit", { subject: "this-model", attachment: "leading" }, 6);
+
+  it("compiles the bonus with its trigger, and the waiver's end rule as a second effect of that trigger", () => {
+    const result = compileLeaves([leading(), trigger(), bonus(["pile-in", "consolidation"]), waiver(), nearest(), enemyFilter()]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"event":"move-ended"');
+    expect(text).toContain('"distance_bonus":3');
+    expect(text).toContain('"waives":"closest-enemy-model"');
+  });
+});

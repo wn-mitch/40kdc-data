@@ -24664,5 +24664,151 @@
     "expected": {
       "text": "If this model is equipped with a weapon named \"Close combat weapon\" and exactly 2 other melee weapons, improve the Attacks characteristic of melee weapons other than \"Close combat weapon\" equipped by this model by 1."
     }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-with-engagement",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy",
+            "none_of": [
+              "AIRCRAFT"
+            ]
+          }
+        },
+        "allow_engagement": true,
+        "engaged_with": "nearest-move-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest enemy unit (excluding AIRCRAFT); it can end that move within Engagement Range of that enemy unit."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-plain",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest enemy unit."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-waiver",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          },
+          "waives": "closest-enemy-model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move either closer to the closest enemy model or as close as possible to the closest enemy unit, during its Pile-in and Consolidation moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-plain",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move as close as possible to the closest enemy unit, during its Consolidation moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-proviso-ends-when",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "distance_bonus": 3,
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 3\" to the unit's Consolidation moves; the extra distance applies only if the unit can end its move where the unit is engaged, and must end it there."
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-no-bonus",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "advance"
+        ],
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move where the unit is engaged, during its Advance moves."
+    }
   }
 ]

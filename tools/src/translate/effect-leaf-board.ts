@@ -148,12 +148,12 @@ function passItem(x: P): string {
 }
 
 /**
- * "must end that move as close as possible to the closest …": a waiver makes the closest-enemy-model
+ * A move-end nearest the closest unit: a waiver makes the closest-enemy-model
  * end an alternative, so either end is legal.
  */
 function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string {
   // A filter names a plural group ("all enemy units"); the closest one is singular.
-  const named = effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(/ units$/, " unit");
+  const named = effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")");
   const nearest = `as close as possible to the closest ${named}`;
   const must = `${who} must end ${moveRef}`;
   return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}`;
@@ -169,7 +169,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
   if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}`;
   if (m.ends_nearest != null) s += `; ${endsNearestPhrase(m.ends_nearest as P, ctx, "it", "that move")}`;
-  if (m.allow_engagement === true) s += "; it can end that move within Engagement Range of enemy units";
+  if (m.allow_engagement === true) s += m.engaged_with === "nearest-move-end" ? "; it can end that move within Engagement Range of that enemy unit" : "; it can end that move within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; that move counts as ${movedPhrase(m.counts_as_move)}`;
   if (m.keeps_eligible === true) s += "; doing so does not change what it is eligible to do this turn";
   return s;

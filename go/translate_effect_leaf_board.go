@@ -251,8 +251,15 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if when, ok := asMap(m["ends_when"]); ok && when != nil {
 		s += "; it must end that move where " + describeCondition(when)
 	}
+	if en, ok := asMap(m["ends_nearest"]); ok && en != nil {
+		s += "; " + endsNearestPhrase(en, ctx, "it", "that move")
+	}
 	if m["allow_engagement"] == true {
-		s += "; it can end that move within Engagement Range of enemy units"
+		if m["engaged_with"] == "nearest-move-end" {
+			s += "; it can end that move within Engagement Range of that enemy unit"
+		} else {
+			s += "; it can end that move within Engagement Range of enemy units"
+		}
 	}
 	if m["counts_as_move"] != nil {
 		s += "; that move counts as " + movedPhrase(m["counts_as_move"])
@@ -263,7 +270,27 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	return s
 }
 
-func moveModifierLeaf(m map[string]any, subj string) string {
+// endsNearestPhrase mirrors endsNearestPhrase in the TypeScript describer: the closest unit's name,
+// with the waiver's alternative end when waives is closest-enemy-model.
+func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string {
+	named := effectSubject(e["of"], ctx)
+	for _, article := range []string{"an ", "a ", "the ", "all "} {
+		if strings.HasPrefix(named, article) {
+			named = strings.TrimPrefix(named, article)
+			break
+		}
+	}
+	named = strings.Replace(named, " units", " unit", 1)
+	named = strings.ReplaceAll(named, " units)", ")")
+	nearest := "as close as possible to the closest " + named
+	must := who + " must end " + moveRef
+	if e["waives"] == "closest-enemy-model" {
+		return must + " either closer to the closest enemy model or " + nearest
+	}
+	return must + " " + nearest
+}
+
+func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	kinds := ""
 	if l, ok := asList(m["applies_to_moves"]); ok {
 		parts := make([]string, len(l))
@@ -297,6 +324,17 @@ func moveModifierLeaf(m map[string]any, subj string) string {
 	}
 	if m["no_end_in_engagement"] == true {
 		clauses = append(clauses, subj+" cannot end a move within Engagement Range of any enemy unit")
+	}
+	if en, ok := asMap(m["ends_nearest"]); ok && en != nil {
+		clauses = append(clauses, endsNearestPhrase(en, ctx, subj, pronoun(subj)+" move"))
+	}
+	// With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+	if when, ok := asMap(m["ends_when"]); ok && when != nil {
+		if m["distance_bonus"] != nil {
+			clauses = append(clauses, "the extra distance applies only if "+subj+" can end "+pronoun(subj)+" move where "+describeCondition(when)+", and must end it there")
+		} else {
+			clauses = append(clauses, subj+" must end "+pronoun(subj)+" move where "+describeCondition(when))
+		}
 	}
 	if m["end_on_terrain"] == true {
 		clauses = append(clauses, subj+" can end "+pronoun(subj)+" moves on top of terrain features")
@@ -528,7 +566,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "move":
 		return moveLeaf(m, subj, ctx)
 	case "move-modifier":
-		return moveModifierLeaf(m, subj)
+		return moveModifierLeaf(m, subj, ctx)
 	case "set-up":
 		return setUpLeaf(m, subj, ctx)
 	case "marker":

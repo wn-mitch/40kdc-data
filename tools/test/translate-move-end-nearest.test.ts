@@ -39,11 +39,20 @@ describe("move-end nearest describer", () => {
     expect(text).toContain("and must end it there");
   });
 
-  it("binds the engaged permission to the unit the move ends nearest", () => {
+  it("binds a make-move's engagement to the enemy unit its move ends nearest", () => {
     const text = render({
-      type: "permission", target: "this-unit",
-      modifier: { activity: "move", allow: true, despite: ["engaged"], engaged_with: "nearest-move-end" },
+      type: "move", target: "this-unit",
+      modifier: { move_type: "normal", distance: 6, ends_nearest: { of: { owner: "enemy" } }, allow_engagement: true, engaged_with: "nearest-move-end" },
     } as Effect);
-    expect(text).toContain("the one its move must end nearest");
+    expect(text).toContain("it can end that move within Engagement Range of that enemy unit");
+    expect(text).not.toContain("enemy units");
+  });
+
+  it("keeps the untargeted engagement wording when the move has no engaged_with binding", () => {
+    const text = render({
+      type: "move", target: "this-unit",
+      modifier: { move_type: "normal", distance: 6, allow_engagement: true },
+    } as Effect);
+    expect(text).toContain("it can end that move within Engagement Range of enemy units");
   });
 });

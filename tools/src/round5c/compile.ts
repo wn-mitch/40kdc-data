@@ -35,7 +35,7 @@ import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
-import { attachMoveEndNearest, engagedBindingErrors, isBonusNode } from "./compile-move-end-nearest.js";
+import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
@@ -341,6 +341,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const sizeRows = new Set(list.filter((leaf) => leaf.family_id === "battle-size").map((leaf) => String(leaf.parameters.size))).size >= 2;
 
   // Outside an aura or a for-each, a condition about the recipient is about each unit an effect's filter matches.
+  // A clause that states a move-end and a condition: the condition gates the end rule, not a move
+  // bonus in the same clause, which is available regardless.
+  const endClauses = new Set(list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver" ? [places[at]!.clause] : []));
   const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
   list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
@@ -475,7 +478,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!node) return;
     planned.push({
       index, leaf, node,
-      gate: [...(sentenceGates.get(sentence) ?? []), ...(clauseGates.get(clause) ?? [])],
+      gate: [...(sentenceGates.get(sentence) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
       selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause),
       replaces: false,
     });
@@ -491,11 +494,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     modifier.arrives = "next-movement-phase";
     if (leaf.parameters.allow_first_round === true) modifier.allow_first_round = true;
   }
-  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence));
-  errors.push(...engagedBindingErrors(planned));
+  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence, (at) => [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])]));
+  errors.push(...bindEngagedPermissions(planned));
   for (const rule of moveEnds) {
     const move = planned.filter((item) => item.index < rule.index && item.node.type === "move").at(-1);
-    // "Models in it can move an additional 3\" as long as …, must end that move where …": a bonus move in the same sentence takes the end.
+    // A bonus move in the same sentence takes a move-end or a feasibility proviso that follows it.
     const bonus = move ? undefined : planned.filter((item) => item.index < rule.index && isBonusNode(item.node) && places[item.index]!.sentence === places[rule.index]!.sentence).at(-1);
     if (bonus && rule.cannot) { errors.push("\"Cannot end that move\" after a move bonus has no DSL form."); continue; }
     if (!move && !bonus && rule.cannot) {

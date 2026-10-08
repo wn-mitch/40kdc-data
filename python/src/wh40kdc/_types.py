@@ -3367,7 +3367,6 @@ class Modifier16(TypedDict):
         ]
     ]
     consumes_shared_use: NotRequired[Literal[False]]
-    engaged_with: NotRequired[Literal["nearest-move-end"]]
 
 
 class SingleEffect13(TypedDict):
@@ -3725,6 +3724,7 @@ class Modifier34(TypedDict):
     ]
     mode: NotRequired[MoveMode]
     allow_engagement: NotRequired[Literal[True]]
+    engaged_with: NotRequired[Literal["nearest-move-end"]]
     counts_as_move: NotRequired[
         Literal[
             "normal",
