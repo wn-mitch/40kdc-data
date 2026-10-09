@@ -47,6 +47,7 @@ const S1_TEXT = "Your Shooting phase. One ORBITAL unit from your army. Each time
   + "If you spent YP during this use of this Stratagem, until the end of the phase, those weapons have the SUSTAINED HITS 2 ability instead.";
 
 function s1Leaves(text: string, read: Record<string, unknown> = { pool: "yp-pool", window: "use", subject: "this-unit" }): CompileLeaf[] {
+  // Version 1 leaves: a use that names no tag reads the legacy designation (version 2 names its own).
   return placed(text,
     ["Your Shooting phase", "use-window", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
     ["One", "stratagem-target", { count: "one" }],
@@ -59,7 +60,7 @@ function s1Leaves(text: string, read: Record<string, unknown> = { pool: "yp-pool
     ["If you spent YP during this use of this Stratagem", "optional-cost-paid", read],
     ...grant("those weapons have the", "SUSTAINED HITS 2"),
     ["instead", "instead", {}],
-  );
+  ).map((leaf) => leaf.family_id === "optional-cost-paid" ? { ...leaf, family_version: 1 } : leaf);
 }
 
 describe("optional-cost-paid parameters", () => {
@@ -101,9 +102,9 @@ describe("use-time spend, gated clause later in the same use (S1)", () => {
     // "instead": the base grant holds only while the designation is absent; the replacement holds when it is set.
     const [base, replacement] = steps as [Record<string, any>, Record<string, any>];
     expect(base.effect.modifier.abilities).toEqual(["Sustained Hits 1"]);
-    expect(base.condition).toEqual({ operator: "not", operands: [{ type: "designated-filter", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } }] });
+    expect(base.condition).toEqual({ operator: "not", operands: [{ type: "designated", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } }] });
     expect(replacement.effect.modifier.abilities).toEqual(["Sustained Hits 2"]);
-    expect(replacement.condition).toEqual({ type: "designated-filter", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } });
+    expect(replacement.condition).toEqual({ type: "designated", parameters: { subject: "this-unit", tag: "yp-spent-this-use" } });
   });
 
   it("refuses a read whose pool has no spend in the same ability", () => {

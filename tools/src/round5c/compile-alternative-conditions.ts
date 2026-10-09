@@ -46,7 +46,9 @@ function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf
   const gap = between(bytes, left, right);
   // A condition that absorbed a following filter joins only a condition of its own subject. Other
   // subjects are refused below.
-  if (gap !== null && DISJUNCTIVE_GAPS.has(gap)) return !absorbsFilter(left, right) || left.parameters.subject === right.parameters.subject;
+  // "…, or if you spend YP": a comma before "or" joins a trigger read's spend alternative (compile-optional-cost.ts).
+  const commaOr = gap === ",or" && (left.family_id === "optional-cost-paid" || right.family_id === "optional-cost-paid");
+  if (gap !== null && (DISJUNCTIVE_GAPS.has(gap) || commaOr)) return !absorbsFilter(left, right) || left.parameters.subject === right.parameters.subject;
   return gap === "and" && attackKindOrAttacker(bytes, left, right);
 }
 

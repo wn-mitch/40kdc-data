@@ -50,7 +50,7 @@ import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target
 import { refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
 import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
-import { checkOptionalCosts, wrapOptionalSpends } from "./compile-optional-cost.js";
+import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -226,7 +226,7 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
   const leaves = nameBoundAttacks(given);
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
-  try { checkOptionalCosts(leaves); } catch (error) {
+  try { checkOptionalCosts(leaves, sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
@@ -341,11 +341,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // Per-model usage-limits: on a model selection each caps the selected model (selection_limit); otherwise they stay usages.
   const modelUsages: Array<{ leaf: CompileLeaf; index: number }> = [];
   let optional = false;
-  // "You can spend YP …" read later as "if you spent YP during this use": the spend is the optional part, not the use.
-  const optionalSpend = list.some((leaf) => leaf.family_id === "optional-cost-paid" && leaf.parameters.window === "use");
+  // "You can spend YP …" read later as "if you spent YP during this use", or by a trigger later in the ability: the spend is the optional part, not the use.
+  const optionalSpend = flatLeaves(list).some(isSpendRead);
+  // An optional spend is offered by its own part, so it takes no clause gate and no instead clause's place (compile-optional-cost.ts).
+  const optionalSpends = optionalSpendLeaves(list);
   const checks: CoreCheck[] = namedAbilityChecks(list);
   attempt(() => checkAbilityUsedWindows(list));
-  attempt(() => checkOptionalCosts(list));
+  attempt(() => checkOptionalCosts(list, sourceText));
   const targetParts: CompileLeaf[] = [];
   const targetPartIndexes: number[] = [];
   const targetConditions: Array<{ index: number; node: Node; eachTarget: boolean }> = [];
@@ -517,7 +519,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!node) return;
     planned.push({
       index, leaf, node,
-      gate: [...(sentenceGates.get(sentence) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
+      gate: optionalSpends.has(leaf) ? sentenceGates.get(sentence) ?? [] : [...(sentenceGates.get(sentence) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
       selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause),
       replaces: false,
     });
@@ -575,7 +577,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const choiceBoundaries = [...combinators, ...triggerIndexes.filter((index) => leadingEffect !== -1 && index > leadingEffect)];
   for (const combinator of combinators) {
     const clause = places[combinator]!.clause;
-    const own = planned.filter((item) => places[item.index]!.clause === clause);
+    const own = planned.filter((item) => places[item.index]!.clause === clause && !optionalSpends.has(item.leaf));
     if (own.length !== 1) {
       errors.push(`"Instead" needs exactly one effect in its clause; found ${own.length}.`);
       continue;
@@ -623,6 +625,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const band = replaced.gate.filter(isRollMarker);
     if (band.length === 1 && !replacement.gate.some(isRollMarker)) replacement.gate = [...band, ...replacement.gate];
     replacement.replaces = true;
+  }
+
+  // An optional spend comes before the effects of its ability, so a clause that reads its designation (an "instead") sees it set.
+  if (optionalSpends.size > 0) {
+    const spends = planned.filter((item) => optionalSpends.has(item.leaf));
+    planned.splice(0, planned.length, ...spends, ...planned.filter((item) => !optionalSpends.has(item.leaf)));
   }
 
   // Moments before the first effect are the ability's own (several are alternatives: "selected
@@ -771,7 +779,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
   if (!body) return { ok: false, signature, errors };
-  if (optionalSpend) body = attempt(() => wrapOptionalSpends(body!, list, durations[0] ?? "phase") as typeof body) ?? body;
+  // A refusal here returns at once: the errors list was already checked above, so a later attempt() error would be dropped.
+  if (optionalSpend) {
+    const wrapped = attempt(() => wrapOptionalSpends(body!, list, durations) as typeof body);
+    if (wrapped === null) return { ok: false, signature, errors };
+    body = wrapped;
+  }
   if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
   const behavior = auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive";
