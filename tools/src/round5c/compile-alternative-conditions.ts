@@ -41,6 +41,19 @@ function attackKindOrAttacker(bytes: Buffer, left: CompileLeaf, right: CompileLe
   return /^against\b/iu.test(bytes.subarray(left.start_byte, left.start_byte + 8).toString("utf8"));
 }
 
+/**
+ * "in your Shooting phase and the Fight phase": a unit is in one phase at a time, so two phase
+ * windows of different phases joined by "and" (with an optional "the") can only mean either one.
+ * Windows that name no phase, or the same phase, stack as before.
+ */
+function distinctPhaseWindows(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): boolean {
+  if (left.family_id !== "phase-window" || right.family_id !== "phase-window") return false;
+  const [a, b] = [left.parameters.phase, right.parameters.phase];
+  if (a === undefined || b === undefined || a === "any" || b === "any" || a === b) return false;
+  if (left.end_byte === undefined || right.start_byte < left.end_byte) return false;
+  return /^\s*and(?:\s+the)?\s*$/iu.test(bytes.subarray(left.end_byte, right.start_byte).toString("utf8"));
+}
+
 /** Whether `right` joins `left` as one alternative: an "or"/"and/or" gap, or the attack-kind pairing. */
 function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf): boolean {
   const gap = between(bytes, left, right);
@@ -49,6 +62,7 @@ function joinsAsAlternative(bytes: Buffer, left: CompileLeaf, right: CompileLeaf
   // "…, or if you spend YP": a comma before "or" joins a trigger read's spend alternative (compile-optional-cost.ts).
   const commaOr = gap === ",or" && (left.family_id === "optional-cost-paid" || right.family_id === "optional-cost-paid");
   if (gap !== null && (DISJUNCTIVE_GAPS.has(gap) || commaOr)) return !absorbsFilter(left, right) || left.parameters.subject === right.parameters.subject;
+  if (distinctPhaseWindows(bytes, left, right)) return true;
   return gap === "and" && attackKindOrAttacker(bytes, left, right);
 }
 

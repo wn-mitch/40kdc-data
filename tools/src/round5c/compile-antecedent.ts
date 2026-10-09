@@ -207,6 +207,25 @@ export function targetedAttackOfFilter(leaves: readonly CompileLeaf[], filterInd
     && leaves.slice(filterIndex + 1, at).some(onUnit) ? at : null;
 }
 
+/**
+ * "when an enemy unit makes a ranged attack that targets a friendly X unit …, one model … within 3\"
+ * of that target": a unit-position's `of` after an attack the record makes, with a unit-filter
+ * between them, names the unit that attack targets, not a unit a selection in between picked. The
+ * nearest earlier attack must be the one; a second attack in between stops the search.
+ */
+function attackedUnitBefore(leaves: readonly CompileLeaf[], index: number): boolean {
+  const leaf = leaves[index]!;
+  if (leaf.family_id !== "unit-position" || leaf.role !== "CONDITION") return false;
+  for (let at = index - 1; at >= 0; at -= 1) {
+    const other = leaves[at]!;
+    if (other.fragment !== leaf.fragment) continue;
+    if (other.family_id === "attack") {
+      return other.parameters.direction === "makes" && leaves.slice(at + 1, index).some((between) => between.family_id === "unit-filter" && between.fragment === leaf.fragment);
+    }
+  }
+  return false;
+}
+
 /** Whether a condition sits between a bare filter and the attack on that filter's unit. */
 function onTargeted(leaves: readonly CompileLeaf[], index: number): boolean {
   const leaf = leaves[index]!;
@@ -452,12 +471,15 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
       }
       // The record's own unit is the unit or its model, whichever the family can name here.
       const own = ownRole(leaves);
-      const role = introduced ?? (boundValue(leaf, key, own) === null ? (own === "this-unit" ? "this-model" : "this-unit") : own);
+      // "within 3\" of that target" after the attack that targets it: the attacked unit, whatever a selection picked.
+      const role = key === "of" && attackedUnitBefore(leaves, index) ? "target"
+        : introduced ?? (boundValue(leaf, key, own) === null ? (own === "this-unit" ? "this-model" : "this-unit") : own);
       const value = boundValue(leaf, key, role);
       if (value === null) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to the ${role}, which its ${key} cannot name.`);
       parameters[key] = value;
     }
-    return { ...leaf, parameters };
+    // The keys this binding filled in, so a later lowering can tell "that unit" from an authored subject.
+    return { ...leaf, parameters: { ...parameters, antecedent_keys: keys } };
   });
 }
 

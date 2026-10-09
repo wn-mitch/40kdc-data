@@ -26,6 +26,7 @@ import { selectionLimitFor } from "./compile-selection-limit.js";
 import { boundSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
+import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
 import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
@@ -288,6 +289,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
+    refuseSelectionAcrossMoment(list);
     refuseEmbarkDestination(list);
     // "This ability can be used even if this unit is embarked": the designation before it may be chosen while embarked (compile-embarked-permission.ts).
     list = foldEmbarkedPermission(list);
