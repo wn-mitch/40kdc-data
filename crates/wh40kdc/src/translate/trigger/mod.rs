@@ -184,6 +184,32 @@ fn disembark_battle_shock(c: Option<&Value>) -> bool {
         && param(&ops[1], "state").and_then(Value::as_str) == Some("battle-shocked")
 }
 
+/// The attacks a destruction's filter names: "with a quake cannon attack", "with a [PSYCHIC]
+/// weapon". A destroyed unit's melee already reads "in melee" in event_phrase, so a unit's attack
+/// type adds nothing here; a model's does ("in melee", "with a ranged attack").
+fn destroy_attack_phrase(event: Option<&str>, f: &P) -> String {
+    if !matches!(event, Some("destroyed") | Some("model-destroyed")) {
+        return String::new();
+    }
+    if truthy(f.get("weapon_name")) {
+        return format!(" with a {} attack", st(f.get("weapon_name")));
+    }
+    if truthy(f.get("weapon_keyword")) {
+        return format!(
+            " with a [{}] weapon",
+            st(f.get("weapon_keyword")).to_uppercase()
+        );
+    }
+    if event == Some("model-destroyed") && truthy(f.get("attack_type")) {
+        return if f.get("attack_type").and_then(Value::as_str) == Some("melee") {
+            " in melee".to_string()
+        } else {
+            format!(" with a {} attack", st(f.get("attack_type")))
+        };
+    }
+    String::new()
+}
+
 /// Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model").
 pub fn describe_trigger_value(trigger: &Value) -> String {
     let t = obj(Some(trigger));
@@ -232,6 +258,7 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
     };
     s.push_str(&actor_keywords(t.get("subject")));
     let f = obj(t.get("filter"));
+    s.push_str(&destroy_attack_phrase(event, f));
     if let Some(by) = nn(f, "by") {
         let source = if by.as_str() == Some("this-model") {
             "this model"

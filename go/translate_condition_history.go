@@ -247,9 +247,16 @@ func describeHappened(p map[string]any, negated bool) string {
 			owner = cstr(obj["owner"]) + " "
 		}
 		if f["by"] != nil {
+			// A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
+			atk := ""
+			if jsTruthy(f["attack_type"]) {
+				atk = cstr(f["attack_type"]) + " "
+			}
 			when := windowPhrase(p["window"])
 			if p["window"] == "event" {
-				when = "with its just-resolved attacks"
+				when = "with its just-resolved " + atk + "attacks"
+			} else if atk != "" {
+				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
 			return trimEnd(neg + unitRefPhrase(f["by"], "the unit") + " has destroyed " + nStr + "+ " + owner + kws + noun + "s " + when)
 		}

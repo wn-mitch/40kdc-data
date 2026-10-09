@@ -195,6 +195,11 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.by !== undefined) node.subject = leaf.parameters.by === "enemy" ? { owner: "enemy" } : closed(leaf, "by");
   // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
   if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner"), ...(node.event === "model-destroyed" ? { level: "model" } : {}) };
+  // "An attack made with this model's quake cannon destroys": the attacks that destroy (compile-weapon-qualified.ts).
+  if (leaf.parameters.destroy_filter !== undefined) {
+    if (node.filter !== undefined) throw new CompileError("A destruction already has a filter; it cannot also name its attacks.");
+    node.filter = structuredClone(leaf.parameters.destroy_filter as Node);
+  }
   // "Each time an attack is allocated to this model".
   if (leaf.parameters.object === "antecedent") throw new CompileError("A moment that names an earlier leaf's unit as its object needs that unit's aura, which names the unit and its range.");
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");

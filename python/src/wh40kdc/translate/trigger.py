@@ -547,6 +547,21 @@ def _disembark_battle_shock(c: Any) -> bool:
     )
 
 
+def _destroy_attack_phrase(t: AbilityTrigger, f: dict[str, Any]) -> str:
+    """The attacks a destruction's filter names: "with a quake cannon attack", "with a [PSYCHIC]
+    weapon". A destroyed unit's melee already reads "in melee" in _event_phrase, so a unit's
+    attack type adds nothing here; a model's does ("in melee", "with a ranged attack")."""
+    if t.get("event") not in ("destroyed", "model-destroyed"):
+        return ""
+    if _truthy(f.get("weapon_name")):
+        return f" with a {_str(f['weapon_name'])} attack"
+    if _truthy(f.get("weapon_keyword")):
+        return f" with a [{_str(f['weapon_keyword']).upper()}] weapon"
+    if t.get("event") == "model-destroyed" and _truthy(f.get("attack_type")):
+        return " in melee" if f["attack_type"] == "melee" else f" with a {_str(f['attack_type'])} attack"
+    return ""
+
+
 def describe_trigger(t: AbilityTrigger) -> str:
     """Reactive trigger -> front-of-sentence lead clause ("an enemy unit ends a move within
     9\\" of this model")."""
@@ -578,6 +593,7 @@ def describe_trigger(t: AbilityTrigger) -> str:
         s = f"at the {edge} of each phase"
     s += _actor_keywords(subject)
     f = _obj(t.get("filter"))
+    s += _destroy_attack_phrase(t, f)
     if f.get("by") is not None:
         source = "this model" if f["by"] == "this-model" else "this unit"
         atype = (

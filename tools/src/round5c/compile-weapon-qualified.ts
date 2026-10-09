@@ -1,0 +1,115 @@
+/**
+ * Attack qualifiers that name the weapon or attack type of a hit or a destruction, folded onto the
+ * leaf they qualify (the wave-10 weapon-qualified attack reference). Each fold needs the two leaves
+ * to touch: only spaces or emphasis between them, as the after-form hit fold requires.
+ */
+
+import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { HIT_ATTACK_TYPES, HIT_FILTER_KEYS } from "./compile-conditions.js";
+import { hasAntecedent } from "./compile-antecedent.js";
+
+const DESTROY_KINDS = new Set(["unit-destroyed", "model-destroyed"]);
+
+function touching(bytes: Buffer, before: CompileLeaf, after: CompileLeaf): boolean {
+  return /^[\s*]*$/u.test(bytes.subarray(before.end_byte, after.start_byte).toString("utf8"));
+}
+
+/** "after all of that attack's attacks have been resolved": an attacks-resolved moment with no subject or owner. */
+function isSameAttackResolved(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "event" && leaf.parameters.kind === "attacks-resolved"
+    && leaf.parameters.subject === undefined && leaf.parameters.owner === undefined;
+}
+
+function isDestroy(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "event" && DESTROY_KINDS.has(String(leaf.parameters.kind));
+}
+
+/**
+ * "Each time an attack made with this model's quake cannon destroys an enemy model": the
+ * attack-filter before a destruction picks the attacks that destroy. The destruction's destroyer
+ * (`by`) must be named, since the filter describes its attacks.
+ *
+ * "A melee attack that destroys an enemy unit": an attack leaf right before a destruction, with no
+ * destroyer named, makes the destroying attacks of that type, by the attack's unit. The attack's
+ * span ends at "that" in the source, so the two leaves touch.
+ *
+ * Both write the destruction's `destroy_filter`, which eventTrigger (compile-triggers.ts) sets as
+ * the trigger's filter. A destruction that already has a filter is refused.
+ */
+export function foldDestroyFilters(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined || !leaves.some(isDestroy)) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const before = out.at(-1);
+    if (before === undefined || !isDestroy(leaf) || !touching(bytes, before, leaf)) { out.push(leaf); continue; }
+    const attackFilter = before.family_id === "attack-filter";
+    const attackLeaf = before.family_id === "attack" && before.parameters.direction === "makes" && before.parameters.refers === undefined
+      && before.parameters.attack_type !== undefined && before.parameters.unit !== undefined;
+    if (!attackFilter && !attackLeaf) { out.push(leaf); continue; }
+    // "after all of that attack's attacks have been resolved" times the bonus by an attacks-resolved
+    // moment that names only the attack just made (no subject, no owner). That event cannot say the
+    // attack destroyed a model, so a destruction folded here would fire mid-attack instead.
+    if (leaves.some(isSameAttackResolved)) {
+      throw new CompileError("DSL gap: a destruction made by an attack cannot share a record with an \"after the attack's attacks are resolved\" moment; that event cannot say the attack destroyed a model.");
+    }
+    if (leaf.parameters.destroy_filter !== undefined) throw new CompileError("A destruction takes one attack qualifier, and this one already has one.");
+    if (attackFilter) {
+      const keys = Object.keys(before.parameters);
+      if (before.parameters.negated === true || keys.length === 0 || !keys.every((key) => HIT_FILTER_KEYS.has(key))) {
+        throw new CompileError(`A destruction's attack-filter can name only ${[...HIT_FILTER_KEYS].join(", ")}; drop the other fields.`);
+      }
+      if (leaf.parameters.by === undefined) throw new CompileError("A destruction qualified by its attacks names its destroyer (by).");
+      out[out.length - 1] = { ...leaf, start_byte: before.start_byte, parameters: { ...leaf.parameters, destroy_filter: { ...before.parameters } } };
+      continue;
+    }
+    if (!HIT_ATTACK_TYPES.has(String(before.parameters.attack_type))) throw new CompileError(`A destruction's attacks are melee, ranged or psychic, not ${String(before.parameters.attack_type)}.`);
+    if (leaf.parameters.by !== undefined && leaf.parameters.by !== before.parameters.unit) throw new CompileError("A destruction names a destroyer other than the attack's unit.");
+    out[out.length - 1] = { ...leaf, start_byte: before.start_byte, parameters: { ...leaf.parameters, by: before.parameters.unit, destroy_filter: { attack_type: before.parameters.attack_type } } };
+  }
+  return out;
+}
+
+/**
+ * "those attacks made with its doomweaver scored a hit against an enemy unit": an attack-filter
+ * right before a hit-by-attacks leaf that names the unit hit (object following-filter) says which
+ * hits count. It is the leading form of foldHitFilters, which folds the trailing form.
+ */
+export function foldLeadingHitFilters(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined || !leaves.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.parameters.object === "following-filter")) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  const out: CompileLeaf[] = [];
+  for (const leaf of leaves) {
+    const filter = out.at(-1);
+    if (filter?.family_id !== "attack-filter" || leaf.family_id !== "hit-by-attacks" || leaf.parameters.object !== "following-filter" || !touching(bytes, filter, leaf)) {
+      out.push(leaf);
+      continue;
+    }
+    const keys = Object.keys(filter.parameters);
+    if (filter.parameters.negated === true) throw new CompileError("A hit's attack-filter cannot be negated.");
+    if (keys.some((key) => !HIT_FILTER_KEYS.has(key))) {
+      const named = keys.find((key) => !HIT_FILTER_KEYS.has(key));
+      throw new CompileError(`A hit's attack-filter names ${named}; the DSL hit filter has no ${named}.`);
+    }
+    if (leaf.parameters.hit_filter !== undefined) throw new CompileError("A hit names one attack-filter, and this one already has one.");
+    if (filter.parameters.attack_type !== undefined && !HIT_ATTACK_TYPES.has(String(filter.parameters.attack_type))) throw new CompileError("A hit's attack_type is melee, ranged or psychic.");
+    out[out.length - 1] = { ...leaf, start_byte: filter.start_byte, parameters: { ...leaf.parameters, hit_filter: { ...filter.parameters } } };
+  }
+  return out;
+}
+
+/**
+ * "…scored a hit against an enemy unit, until the start of your next turn, that enemy unit is
+ * pinned": a before-form hit names its unit with the unit-filter after it, which a later leaf that
+ * points back to "that unit" cannot reach. The binder would give that leaf the attacking unit, so the
+ * record is refused. Only leaves in the hit's own fragment count.
+ */
+export function refuseBeforeFormAnaphors(leaves: readonly CompileLeaf[]): void {
+  leaves.forEach((hit, index) => {
+    if (hit.family_id !== "hit-by-attacks" || hit.parameters.object !== "following-filter") return;
+    const anaphor = leaves.slice(index + 1).find((other) => other.fragment === hit.fragment && hasAntecedent(other));
+    if (anaphor !== undefined) {
+      throw new CompileError(`A before-form hit names the unit it hit by the unit-filter after it; the ${anaphor.family_id} at byte ${anaphor.start_byte} points back to that unit, which cannot bind yet.`);
+    }
+  });
+}

@@ -87,7 +87,9 @@ export function describeHappened(p: P, negated: boolean): string {
       const kws = Array.isArray(obj.all_of) ? `${(obj.all_of as unknown[]).map(str).join(" ")} ` : "";
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";
       if (f.by != null) {
-        const when = p.window === "event" ? "with its just-resolved attacks" : windowPhrase(p.window);
+        // A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
+        const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
+        const when = p.window === "event" ? `with its just-resolved ${atk}attacks` : `${atk ? `with ${atk}attacks ` : ""}${windowPhrase(p.window)}`;
         return `${neg}${unitRefPhrase(f.by)} has destroyed ${n}+ ${owner}${kws}${noun}s ${when}`.trimEnd();
       }
       const tagged = obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";

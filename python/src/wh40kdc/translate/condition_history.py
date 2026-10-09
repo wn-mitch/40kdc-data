@@ -188,7 +188,12 @@ def _describe_happened(p: P, negated: bool) -> str:
         )
         owner = f"{_str(victim['owner'])} " if victim.get("owner") is not None else ""
         if f.get("by") is not None:
-            when = "with its just-resolved attacks" if window == "event" else _window_phrase(window)
+            # A destruction by one attack type says it: "with its just-resolved melee attacks".
+            atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
+            if window == "event":
+                when = f"with its just-resolved {atk}attacks"
+            else:
+                when = (f"with {atk}attacks " if atk else "") + _window_phrase(window)
             killer = unit_ref_phrase(f["by"])
             return f"{neg}{killer} has destroyed {_str(n)}+ {owner}{kws}{noun}s {when}".rstrip()
         tagged = (

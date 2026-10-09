@@ -698,6 +698,28 @@ func disembarkBattleShock(c map[string]any) bool {
 		second["type"] == "unit-state" && paramsOf(second)["state"] == "battle-shocked"
 }
 
+// destroyAttackPhrase names the attacks a destruction's filter names: "with a quake cannon attack",
+// "with a [PSYCHIC] weapon". A destroyed unit's melee already reads "in melee" in triggerEventPhrase,
+// so a unit's attack type adds nothing here; a model's does ("in melee", "with a ranged attack").
+func destroyAttackPhrase(event any, f map[string]any) string {
+	if event != "destroyed" && event != "model-destroyed" {
+		return ""
+	}
+	if jsTruthy(f["weapon_name"]) {
+		return " with a " + cstr(f["weapon_name"]) + " attack"
+	}
+	if jsTruthy(f["weapon_keyword"]) {
+		return " with a [" + strings.ToUpper(cstr(f["weapon_keyword"])) + "] weapon"
+	}
+	if event == "model-destroyed" && jsTruthy(f["attack_type"]) {
+		if f["attack_type"] == "melee" {
+			return " in melee"
+		}
+		return " with a " + cstr(f["attack_type"]) + " attack"
+	}
+	return ""
+}
+
 // describeReactiveTrigger renders a reactive trigger as a front-of-sentence
 // lead clause ("an enemy unit ends a move within 9\" of this model").
 func describeReactiveTrigger(t map[string]any) string {
@@ -748,6 +770,7 @@ func describeReactiveTrigger(t map[string]any) string {
 	}
 	s += actorKeywords(subject)
 	f := mapOr(t["filter"])
+	s += destroyAttackPhrase(event, f)
 	if f["by"] != nil {
 		source := "this unit"
 		if f["by"] == "this-model" {

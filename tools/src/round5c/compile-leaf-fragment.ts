@@ -87,6 +87,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
             : "No separate text: checked against the core record, which already holds it." };
   }
   if (awaitsFollowingFilter(leaf.parameters) && leaf.parameters.following_filter === undefined) {
+    if (leaf.family_id === "hit-by-attacks" && leaf.parameters.object === "following-filter") return { kind: "implicit", note: "No separate text: scored a hit against any unit the unit-filter right after it names." };
     const relation = leaf.family_id === "unit-state" ? "engaged with" : leaf.family_id === "hit-by-attacks" ? "hit by attacks made by" : leaf.family_id === "unit-position" ? "measured to" : "targeting";
     return { kind: "implicit", note: `No separate text: ${relation} any unit the unit-filter right after it names.` };
   }

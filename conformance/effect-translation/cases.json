@@ -25597,5 +25597,134 @@
     "expected": {
       "text": "When a friendly LEAGUES OF VOTANN unit within 6\" of this model is targeted with a Stratagem, you gain 1CP."
     }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-name",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "subject": "this-model",
+        "object": {
+          "owner": "enemy",
+          "level": "model"
+        },
+        "filter": {
+          "weapon_name": "quake cannon"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> Each time this model destroys an enemy model with a quake cannon attack: you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-keyword",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "destroyed",
+        "subject": "this-unit",
+        "object": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "weapon_keyword": "PSYCHIC"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> Each time the unit destroys an enemy unit with a [PSYCHIC] weapon: you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-event",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with its just-resolved melee attacks, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, you gain 1 Blood Tithe point."
+    }
   }
 ]

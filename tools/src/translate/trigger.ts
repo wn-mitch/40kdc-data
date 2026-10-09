@@ -345,6 +345,19 @@ function disembarkBattleShock(c: Condition | undefined): boolean {
   return first?.type === "happened" && first.parameters?.event === "disembarked" && second?.type === "unit-state" && second.parameters?.state === "battle-shocked";
 }
 
+/**
+ * The attacks a destruction's filter names: "with a quake cannon attack", "with a [PSYCHIC] weapon".
+ * A destroyed unit's melee already reads "in melee" in eventPhrase, so a unit's attack type adds
+ * nothing here; a model's does ("in melee", "with a ranged attack").
+ */
+function destroyAttackPhrase(t: AbilityTrigger, f: P): string {
+  if (t.event !== "destroyed" && t.event !== "model-destroyed") return "";
+  if (f.weapon_name) return ` with a ${str(f.weapon_name)} attack`;
+  if (f.weapon_keyword) return ` with a [${str(f.weapon_keyword).toUpperCase()}] weapon`;
+  if (t.event === "model-destroyed" && f.attack_type) return f.attack_type === "melee" ? " in melee" : ` with a ${str(f.attack_type)} attack`;
+  return "";
+}
+
 /** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
 export function describeTrigger(t: AbilityTrigger): string {
   const clock = t.event === "phase-started" || t.event === "phase-ended";
@@ -359,6 +372,7 @@ export function describeTrigger(t: AbilityTrigger): string {
       : `at the ${edge} of each phase`;
   s += actorKeywords(t.subject);
   const f = (t.filter ?? {}) as P;
+  s += destroyAttackPhrase(t, f);
   if (f.by != null) {
     const source = f.by === "this-model" ? "this model" : "this unit";
     const type = f.attack_type && t.event !== "destroyed" ? `${str(f.attack_type)} ` : "";

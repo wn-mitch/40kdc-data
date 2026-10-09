@@ -126,10 +126,14 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     return context.attached && !OTHER_UNITS.has(found) ? "this-unit" : found;
   };
   // A unit-filter folded onto a subjectless roll ("Friendly X units can re-roll …") names whose rolls.
-  const rollTarget = (roll: unknown): Node | string => leaf.parameters.subject_filter !== undefined ? structuredClone(leaf.parameters.subject_filter as Node)
-    : typeof leaf.parameters.test_taker === "string" ? leaf.parameters.test_taker
-    : typeof leaf.parameters.subject === "string" && (leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") ? target(leaf.parameters.subject)
-    : context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
+  const rollTarget = (roll: unknown): Node | string => {
+    if (leaf.parameters.subject_filter !== undefined) return structuredClone(leaf.parameters.subject_filter as Node);
+    // A test taker that names the units of a unit-filter, with none folded onto this leaf, has no unit to name.
+    if (leaf.parameters.test_taker === "filtered-units") throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
+    return typeof leaf.parameters.test_taker === "string" ? leaf.parameters.test_taker
+      : typeof leaf.parameters.subject === "string" && (leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") ? target(leaf.parameters.subject)
+      : context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
+  };
   switch (leaf.family_id) {
     case "reroll": {
       // Version 3: a pick of one from several rolls is a choice of one re-roll each.

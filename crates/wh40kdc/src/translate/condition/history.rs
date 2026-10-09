@@ -297,10 +297,18 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 .map(|v| format!("{} ", st(Some(v))))
                 .unwrap_or_default();
             if let Some(by) = nn(f, "by") {
-                let when = if window.and_then(Value::as_str) == Some("event") {
-                    "with its just-resolved attacks".to_string()
+                // A destruction by one attack type says it: "with its just-resolved melee attacks".
+                let atk = if truthy(f.get("attack_type")) {
+                    format!("{} ", st(f.get("attack_type")))
                 } else {
+                    String::new()
+                };
+                let when = if window.and_then(Value::as_str) == Some("event") {
+                    format!("with its just-resolved {atk}attacks")
+                } else if atk.is_empty() {
                     window_phrase(window)
+                } else {
+                    format!("with {atk}attacks {}", window_phrase(window))
                 };
                 return format!(
                     "{neg}{} has destroyed {n}+ {owner}{kws}{noun}s {when}",

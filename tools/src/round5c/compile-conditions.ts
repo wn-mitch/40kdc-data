@@ -61,9 +61,10 @@ const ACTIVITIES: Record<string, [string, Node, string]> = {
  * Version 8 history, whose subject is not the unit the event happens to: the unit that destroyed
  * enemy units (the DSL's filter.by), or the unit whose models the triggering attacks destroyed.
  */
-const HISTORY: Record<string, (subject: string | undefined) => Node> = {
-  "destroyed-enemy-unit-this-phase": (subject) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit" }, window: "phase" }),
-  "destroyed-enemy-unit-this-turn": (subject) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
+const HISTORY: Record<string, (subject: string | undefined, attackType?: string) => Node> = {
+  // Version 15: "whose melee attacks destroyed an enemy unit"; attackType narrows the destroying attacks.
+  "destroyed-enemy-unit-this-phase": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "phase" }),
+  "destroyed-enemy-unit-this-turn": (subject, attackType) => ({ event: "destroyed", object: { owner: "enemy" }, filter: { by: subject ?? "this-unit", ...(attackType ? { attack_type: attackType } : {}) }, window: "turn" }),
   "set-up-by-deep-strike-this-phase": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "phase" }),
   "set-up-by-deep-strike-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "set-up", filter: { from: "deep-strike" }, window: "turn" }),
   // Version 9: "that disembarked from this TRANSPORT this turn"; the Transport is this unit.
@@ -104,8 +105,8 @@ export const ATTACK_EVENTS = new Set(["attack-made", "hit-roll", "wound-roll"]);
 
 /** Several alternatives are any one of them. */
 /** The attack-filter fields a hit's event filter can carry. */
-const HIT_FILTER_KEYS = new Set(["attack_type", "weapon_name", "weapon_keyword"]);
-const HIT_ATTACK_TYPES = new Set(["ranged", "melee", "psychic"]);
+export const HIT_FILTER_KEYS = new Set(["attack_type", "weapon_name", "weapon_keyword"]);
+export const HIT_ATTACK_TYPES = new Set(["ranged", "melee", "psychic"]);
 
 /**
  * "Hit by one or more of those attacks made with Arcane Fire", "hit by those ranged attacks": an
@@ -335,7 +336,7 @@ export function condition(leaf: CompileLeaf): Node {
       if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
       return polarity(leaf, anyOf(activities.map((activity) => {
         const history = HISTORY[activity];
-        if (history) return { type: "happened", parameters: history(subject) };
+        if (history) return { type: "happened", parameters: history(subject, leaf.parameters.attack_type as string | undefined) };
         const [event, filter, window] = ACTIVITIES[activity]!;
         return pred("happened", { event, ...(Object.keys(filter).length ? { filter: structuredClone(filter) } : {}), window }, subject);
       })));
@@ -346,11 +347,13 @@ export function condition(leaf: CompileLeaf): Node {
     case "hit-by-attacks":
       // "Hit by those attacks": a successful Hit roll against the subject by whoever made the
       // attacks of the ability's moment ("after this model has shot"), during that moment.
-      // `hit_filter` is the attack-filter foldHitFilters folded in ("… made with its Plague Wind").
+      // `hit_filter` is the attack-filter foldHitFilters or foldLeadingHitFilters folded in ("… made with its Plague Wind").
       // Window phase: any hit this phase, by the moment's unit or by the units of the unit-filter after it.
+      // Version 4: object following-filter names the unit hit as the unit-filter after it ("scored a hit against an enemy unit").
       return { type: "happened", parameters: {
         event: "after-roll", subject: leaf.parameters.by === "following-filter" ? followingFilter(leaf) : "event-subject",
-        object: widenedWho(closed(leaf, "subject")) ?? "this-unit", filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) },
+        object: leaf.parameters.object === "following-filter" ? followingFilter(leaf) : widenedWho(closed(leaf, "subject")) ?? "this-unit",
+        filter: { roll: "hit", result: "success", ...(leaf.parameters.hit_filter as Node | undefined) },
         window: leaf.parameters.window === "phase" ? "phase" : "event",
       } };
     case "unit-filter-target": {
