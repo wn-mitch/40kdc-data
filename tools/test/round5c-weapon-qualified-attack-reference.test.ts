@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { foldDestroyFilters } from "../src/round5c/compile-weapon-qualified.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
@@ -240,5 +241,42 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
     const melee = describeTrigger({ event: "destroyed", object: { owner: "enemy" }, filter: { attack_type: "melee" } } as never);
     expect(melee).toContain("in melee");
     expect(melee.match(/in melee/gu)).toHaveLength(1);
+  });
+
+  it("an attack-filter after a hit names the attack type of the hits (S2, the Psychic Attack shape)", () => {
+    const text = "Each time this model makes a ranged attack that targets a unit that was hit by one or more Psychic Attacks made by a PSYKER unit this phase, add 1 to the Wound roll.";
+    const out = compiled(placed(text,
+      ["Each time this model makes a ranged attack", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" }],
+      ["that targets a unit", "unit-filter", { side: "enemy" }],
+      ["that was hit by one or more", "hit-by-attacks", { subject: "target", window: "phase", by: "following-filter" }],
+      ["Psychic Attacks made by a", "attack-filter", { attack_type: "psychic" }],
+      ["PSYKER unit", "unit-filter", { side: "friendly", keywords: ["PSYKER"] }],
+      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
+    ), text);
+    expect(out).toContain('"filter":{"roll":"hit","result":"success","attack_type":"psychic"}');
+  });
+
+  it("an attack-filter with no hit-by leaf beside it stays a standalone attack condition", () => {
+    // "those attacks made with its Gloomhound cannon" with no hit after it: the filter is not folded into a hit.
+    const text = "Each time this model makes a ranged attack, if one or more of those attacks made with its Gloomhound cannon, add 1 to the Wound roll.";
+    const out = compiled(placed(text,
+      ["Each time this model makes a ranged attack", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" }],
+      ["one or more of those attacks made with its Gloomhound cannon", "attack-filter", { weapon_name: "Gloomhound cannon" }],
+      ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
+    ), text);
+    expect(out).toContain('"weapon_name":"Gloomhound cannon"');
+    expect(out).not.toContain('"roll":"hit"');
+  });
+
+  it("refuses a destruction that already carries a destroy filter (fold-level check)", () => {
+    const text = "Each time an attack made with this model's quake cannon destroys an enemy model, add 1 to the Wound roll.";
+    const leaves = placed(text,
+      ["Each time an attack made with this model's quake cannon", "attack-filter", { weapon_name: "quake cannon" }],
+      ["destroys an enemy model", "event", { kind: "model-destroyed", by: "this-model", object_owner: "enemy" }],
+    );
+    const already = [leaves[0]!, { ...leaves[1]!, parameters: { ...leaves[1]!.parameters, destroy_filter: { attack_type: "ranged" } } }];
+    expect(() => foldDestroyFilters(already, text)).toThrow(/already has one/u);
+    // Without the prior filter the same pair folds into the destruction.
+    expect(foldDestroyFilters(leaves, text)).toHaveLength(1);
   });
 });
