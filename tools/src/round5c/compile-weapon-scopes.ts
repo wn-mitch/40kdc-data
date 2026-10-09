@@ -54,6 +54,10 @@ function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   }
   checkScopeConflict(leaf, scope, ["subject", "weapon_type"]);
   checkScopeKeyword(scope);
+  // A stat change under a list of named weapons takes the list; a weapon name of its own would name a weapon outside it.
+  if (scope.parameters.weapon_names !== undefined && leaf.parameters.weapon_name !== undefined) {
+    throw new CompileError(`${leaf.family_id} weapon_name conflicts with the reviewed named-weapon scope.`);
+  }
   return { ...leaf, parameters: { ...leaf.parameters, ...scope.parameters } };
 }
 
@@ -65,6 +69,7 @@ function bindRoll(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   if (scope.parameters.weapon_keyword !== undefined) {
     throw new CompileError("A roll modifier cannot be scoped to weapons by a keyword; the DSL roll modifier has no weapon_keyword.");
   }
+  if (scope.parameters.weapon_names !== undefined) throw new CompileError("A roll modifier cannot be scoped to named weapons; the DSL roll modifier takes no weapon name.");
   checkScopeConflict(leaf, scope, ["subject", "weapon_type"]);
   return { ...leaf, parameters: { ...leaf.parameters, subject: scope.parameters.subject, weapon_type: scope.parameters.weapon_type } };
 }
@@ -76,6 +81,7 @@ function bindRoll(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
 function bindRemoval(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   if (scope.parameters.subject === undefined) throw new CompileError("A weapon ability removal has no recipient; it needs a weapon-property scope before it.");
   checkScopeKeyword(scope);
+  if (scope.parameters.weapon_names !== undefined) throw new CompileError("A weapon ability removal cannot be scoped to named weapons; the DSL removal takes no weapon name.");
   const keyword = scope.parameters.weapon_keyword;
   return {
     ...leaf,
@@ -91,7 +97,24 @@ function bindRemoval(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
 const TARGET_CONDITIONS = new Set(["target-is-selected", "designated-filter", "unit-mark", "unit-keyword", "unit-position", "unit-state", "unit-filter-target"]);
 const TARGET_SUBJECTS = new Set(["target", "defender"]);
 
+/**
+ * "weapons that targeted an enemy unit within 12\"": the attack the scope's own unit makes, which the
+ * target gate after it describes. The attack names no weapon and no target of its own, so it is
+ * admitted by family alone, whatever role the record gives it.
+ */
+function attackGate(leaf: CompileLeaf, scope: CompileLeaf): boolean {
+  return leaf.family_id === "attack" && leaf.fragment === scope.fragment && leaf.parameters.direction === "makes"
+    && leaf.parameters.unit === scope.parameters.subject;
+}
+
+/** "an enemy unit" in a scope's gate: a side-only unit-filter that says nothing the gate after it does not. */
+function sideOnlyEnemy(leaf: CompileLeaf, scope: CompileLeaf): boolean {
+  return leaf.family_id === "unit-filter" && leaf.fragment === scope.fragment && leaf.parameters.side === "enemy"
+    && Object.keys(leaf.parameters).length === 1;
+}
+
 export function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
+  if (attackGate(leaf, scope) || sideOnlyEnemy(leaf, scope)) return true;
   if (leaf.role !== "CONDITION" || leaf.fragment !== scope.fragment || !TARGET_CONDITIONS.has(leaf.family_id) || namesSelection(leaf)) return false;
   const subject = leaf.parameters.subject;
   // A designation with no subject in this position names the attacks' target ("that target a busted unit").
@@ -253,7 +276,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
  * its weapons' bearers, and the fold would find a filter where it needs a property.
  */
 const isOpenScope = (leaf: CompileLeaf) => leaf.family_id === SCOPE && leaf.role === "CONDITION"
-  && ["weapon", "weapon_name", "weapon_keyword", "incoming"].every((key) => leaf.parameters[key] === undefined);
+  && ["weapon", "weapon_name", "weapon_names", "weapon_keyword", "incoming"].every((key) => leaf.parameters[key] === undefined);
 
 /**
  * The index of the last leaf of the recipient chain after the scope at `at`, when the run right

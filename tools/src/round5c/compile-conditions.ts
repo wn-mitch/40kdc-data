@@ -433,9 +433,11 @@ export function condition(leaf: CompileLeaf): Node {
         const engagement = leaf.parameters.range_ref === "engagement";
         const named = leaf.parameters.range_ref !== undefined && !engagement;
         if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
-        const range: unknown = engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : { inches: closed(leaf, "inches") };
+        // A weapon distance (distance half-weapon, family-extensions-16-multi-weapon-name.ts) is the attacking weapon's half range: a range string, not inches.
+        const weaponDistance = leaf.parameters.distance !== undefined;
+        const range = (engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : weaponDistance ? "half-weapon" : { inches: closed(leaf, "inches") }) as unknown as Node;
         const inchesOnly = (): Node => {
-          if (named || engagement) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range.`);
+          if (named || engagement || weaponDistance) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range or a weapon distance.`);
           return { inches: closed(leaf, "inches") };
         };
         const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};

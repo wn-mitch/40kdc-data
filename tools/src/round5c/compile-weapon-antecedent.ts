@@ -51,7 +51,7 @@ function bindGrant(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): CompileL
   if (select.parameters.target !== "this-model") throw new CompileError("\"That weapon\" needs a select-weapon on this model: the bound weapon is this model's.");
   if (leaf.parameters.subject !== "this-model") throw new CompileError("A grant to \"that weapon\" takes subject this-model.");
   if (typeof leaf.parameters.keyword !== "string") throw new CompileError("A grant to \"that weapon\" names one keyword.");
-  for (const key of ["weapon_name", "weapon_keyword", "incoming"]) {
+  for (const key of ["weapon_name", "weapon_names", "weapon_keyword", "incoming"]) {
     if (leaf.parameters[key] !== undefined) throw new CompileError(`A grant to \"that weapon\" cannot also name ${key}.`);
   }
   const bound = select.parameters.weapon_type;
@@ -71,7 +71,7 @@ function bindAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): Compil
   // "Such a weapon" is every weapon the grant gave the keyword to. A grant already narrowed to one
   // bound weapon, or by name, keyword or incoming attacks, gave it to fewer weapons than its type
   // selects, so an attack-is over the type would widen the reference.
-  for (const key of ["weapon_var", "weapon_name", "weapon_keyword", "incoming"]) {
+  for (const key of ["weapon_var", "weapon_name", "weapon_names", "weapon_keyword", "incoming"]) {
     if (grant.parameters[key] !== undefined) throw new CompileError(`"Such a weapon" cannot follow a keyword grant that also names ${key}; the attacks would widen past the granted weapons.`);
   }
   const weaponType = grant.parameters.weapon_type;
@@ -138,7 +138,7 @@ export function bindWeaponStatAntecedents(list: readonly CompileLeaf[]): Compile
  * select binds one. Named scopes (weapon_name, weapon_keyword), a bound form (weapon_ref,
  * weapon_var) and the antecedent are the accepted forms. Records with no select-weapon are unchanged.
  */
-const NAMED_WEAPON_KEYS = ["weapon_name", "weapon_keyword", "weapon_ref", "weapon_var", "weapon"] as const;
+const NAMED_WEAPON_KEYS = ["weapon_name", "weapon_names", "weapon_keyword", "weapon_ref", "weapon_var", "weapon"] as const;
 const WEAPON_SCOPED = new Set(["characteristic-modifier", "weapon-ability-grant"]);
 
 export function refuseUnboundWeaponScope(list: readonly CompileLeaf[]): void {
@@ -188,7 +188,7 @@ function scopeAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): { fil
   const frameAt = lastIndexOf(earlier, (item) => item.family_id === GRANT && (Array.isArray(item.parameters.keywords) || typeof item.parameters.keyword === "string"));
   const frame = frameAt < 0 ? undefined : earlier[frameAt];
   if (!frame) throw new CompileError("\"Such a weapon\" has no earlier keyword grant to name the weapons it gave the keyword to.");
-  for (const key of ["weapon_var", "weapon_name", "weapon_keyword", "incoming"]) {
+  for (const key of ["weapon_var", "weapon_name", "weapon_names", "weapon_keyword", "incoming"]) {
     if (frame.parameters[key] !== undefined) throw new CompileError(`"Such a weapon" cannot follow a keyword grant that also names ${key}; the attacks would widen past the granted weapons.`);
   }
   let keyword: string;

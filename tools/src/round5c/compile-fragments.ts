@@ -267,6 +267,12 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         if (leaf.parameters.choice_label !== undefined) menu.choice_label = closed(leaf, "choice_label");
         return menu;
       }
+      // A list of named weapons (compile-weapon-names.ts): the same grant to each weapon, one step per name.
+      if (Array.isArray(leaf.parameters.weapon_names)) {
+        const { weapon_names: names, ...rest } = leaf.parameters as Record<string, unknown> & { weapon_names: string[] };
+        const steps = names.map((name) => effect({ ...leaf, parameters: { ...rest, weapon_name: name } }, context));
+        return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
+      }
       // Version 7: "that attack has the [X] ability" — the attack's weapon, whoever makes the attack.
       const holder = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
       return {
@@ -405,20 +411,23 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const bearerWeapons = leaf.parameters.subject === "this-model" && authoredBearer && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat));
       const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
       const weaponType = closed(leaf, "weapon_type") ?? "all";
-      const steps = (leaf.parameters.characteristics as string[]).map((stat) => ({
+      // A list of named weapons (compile-weapon-names.ts) changes each characteristic for each weapon: one step per pair.
+      const named = Array.isArray(leaf.parameters.weapon_names) ? leaf.parameters.weapon_names as string[] : undefined;
+      const names: Array<string | undefined> = named ?? [leaf.parameters.weapon_name === undefined ? undefined : closed(leaf, "weapon_name") as string];
+      const steps = (leaf.parameters.characteristics as string[]).flatMap((stat) => names.map((weaponName) => ({
         type: "stat-modifier", target: owner,
         modifier: {
           stat, operation: closed(leaf, "operation"),
           // Version 11: halve takes no value.
           ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}), ...(weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
-          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
+          ...(weaponName !== undefined ? { weapon_name: weaponName } : {}),
           ...(leaf.parameters.minimum !== undefined ? { minimum: closed(leaf, "minimum") } : {}),
           // "That weapon's attacks have": the weapon select-weapon bound (compile-weapon-antecedent.ts).
           ...(leaf.parameters.weapon_var !== undefined ? { weapon_ref: { weapon_var: String(leaf.parameters.weapon_var) } } : {}),
           ...(leaf.parameters.exclude_weapon_name !== undefined ? { exclude_weapon_name: closed(leaf, "exclude_weapon_name") } : {}),
         },
-      }));
+      })));
       return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
     }
     case "eligibility-permission": {

@@ -36,6 +36,7 @@ import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.
 import { dropRedundantMenuOpeners, foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes, hoistWeaponRecipients } from "./compile-weapon-scopes.js";
 import { bindFrameAntecedents, bindScopeAttacks, bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
+import { bindEarlierNamed, refuseDistanceWithoutWeapon, resolveAuthoredNames, type WeaponNameContext } from "./compile-weapon-names.js";
 import { bindEquippedCounts } from "./compile-equipped-count.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
@@ -227,6 +228,8 @@ export type CompileOptions = {
   menuActions?: (die: string) => ManoeuvreMenus | null;
   /** The objective a select-objective container around this ability bound, when the ability is that container's body (compile-containers.ts effectsOf). Only a move-end nearest reads it. */
   selectedObjective?: string;
+  /** The faction's weapons by printed name (compile-weapon-names.ts), so a named weapon resolves to its id. */
+  weapons?: WeaponNameContext;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -295,7 +298,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseBlastRating(leaves, sourceText);
     // "that weapon" names the weapon an earlier select-weapon bound, or the attacks an earlier keyword grant gave (compile-weapon-antecedent.ts).
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
-    const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(leaves)));
+    const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldByAbility(foldAuraMoments(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText))), sourceText)), sourceText);
@@ -305,6 +308,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);
+    refuseDistanceWithoutWeapon(list);
     refuseEmbarkDestination(list);
     // "This ability can be used even if this unit is embarked": the designation before it may be chosen while embarked (compile-embarked-permission.ts).
     list = foldEmbarkedPermission(list);
