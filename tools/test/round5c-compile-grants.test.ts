@@ -327,3 +327,151 @@ describe("Round 5C grant and activation shapes from the wave-10 records (fabrica
     expect(result.mechanics.effect).toEqual({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["FOO"], level: "model" }, modifier: { abilities: ["Ignores Cover"], weapon_keyword: "Psychic" } });
   });
 });
+
+describe("Round 5C keyword menus under a one-of opener (fabricated wording)", () => {
+  // A one-of opener over keywords: its frame is keyword-less, and the menu's keywords follow or precede it.
+  const menu = ["select either the", "choice-open", { min_choices: 1, max_choices: 1, choice_label: "Alpha or Beta ability" }] as const;
+  const alpha = ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }] as const;
+  const beta = ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }] as const;
+  const until = ["Until those attacks are resolved", "duration", { endpoint: "end-of-attack-sequence" }] as const;
+  const frame = ["ranged weapons equipped by the bearer have the selected ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged" }] as const;
+  // A phase-window leaf wraps the choice in a condition; the choice is what the menu compiles to.
+  const choiceOf = (effect: unknown) => (effect as { type: string; effect?: unknown }).type === "conditional" ? (effect as { effect: unknown }).effect : effect;
+
+  it("folds a one-of opener over an or-joined pair into a choice of two grants (the 9637 shape)", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], [...until], [...frame]), text);
+    expect(result.ok).toBe(true);
+    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-model", modifier: { abilities: [ability], weapon_type: "ranged" } });
+    expect(result.mechanics.effect).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Alpha or Beta ability" });
+    expect(result.mechanics.scope).toEqual({ duration: "attack-sequence" });
+  });
+
+  it("splits a semicolon-joined menu into options rather than granting every keyword", () => {
+    const text = "In your Shooting phase, select one of the following abilities: Ignores Cover; Lethal Hits; Sustained Hits 3. Until the end of the phase, this model's Bolt of Change has that ability.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["this model's Bolt of Change has that ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged", weapon_name: "Bolt of Change" }]), text);
+    expect(result.ok).toBe(true);
+    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { abilities: string[] } }> }).options;
+    expect(options.map((option) => option.modifier.abilities)).toEqual([["Ignores Cover"], ["Lethal Hits"], ["Sustained Hits 3"]]);
+  });
+
+  it("folds a bulleted menu under an opener across a duration, and drops the attacks-resolved event (the 6878 and 3470 shapes)", () => {
+    const text = "Each time a unit is selected to fight, select one of the abilities below. While resolving those attacks, melee weapons equipped by models in that unit have that ability:\n■ Lethal Hits\n■ Sustained Hits 1";
+    const result = compileLeaves(placed(text,
+      ["Each time a unit is selected to fight", "event", { kind: "selected", to: "fight" }],
+      ["select one of the abilities below", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["While resolving those attacks", "duration", { endpoint: "end-of-attack-sequence" }],
+      ["melee weapons equipped by models in that unit have that ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee" }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }]), text);
+    expect(result.ok).toBe(true);
+    expect(result.mechanics.effect).toMatchObject({ type: "choice", options: [{ type: "weapon-ability-grant" }, { type: "weapon-ability-grant" }] });
+    expect(JSON.stringify(result.mechanics.trigger)).not.toContain("attacks-resolved");
+    expect(result.mechanics.scope).toEqual({ duration: "attack-sequence" });
+    expect(result.mechanics.trigger).toMatchObject({ event: "selected", filter: { to: "fight" } });
+  });
+
+  it("compiles the 8269 shape: a ';' menu under an opener, and a this-unit frame that spans to 'that selected ability' after a duration", () => {
+    const text = "In your Shooting phase, select one of the following abilities: Ignores Cover; Lethal Hits; Sustained Hits 3. Until the end of the phase, weapons equipped by models in that unit have that selected ability.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["weapons equipped by models in that unit have that selected ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }]), text);
+    expect(result.ok).toBe(true);
+    const options = (choiceOf(result.mechanics.effect) as { options: Array<{ modifier: { abilities: string[] } }> }).options;
+    expect(options.map((option) => option.modifier.abilities)).toEqual([["Ignores Cover"], ["Lethal Hits"], ["Sustained Hits 3"]]);
+  });
+
+  it("refuses a menu opener whose minimum is not one", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, ["select either the", "choice-open", { min_choices: 0, max_choices: 1 }], [...alpha], [...beta], [...until], [...frame]), text);
+    expect(result.ok).toBe(false);
+  });
+
+  it("refuses a one-keyword menu, which has no second option", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, [...menu], [...alpha], [...until], [...frame]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("choice-open needs at least two options");
+  });
+
+  it("refuses a menu whose region also holds a second effect", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability and regain 1 wound. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], ["and regain 1 wound", "regain-wounds", { subject: "this-model", amount: "1" }, "EFFECT"], [...until], [...frame]), text);
+    expect(result.ok).toBe(false);
+  });
+
+  it("refuses a menu joined by \"and\", since a menu cannot grant both", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits and Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], [...until], [...frame]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("joined by \"and\"");
+  });
+
+  it("refuses a keyword-less frame before the menu that would take the menu's keywords", () => {
+    const text = "Ranged weapons equipped by ZORN models select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const earlier = ["Ranged weapons equipped by", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged" }] as const;
+    const result = compileLeaves(placed(text, [...earlier], ["ZORN models", "unit-filter", { side: "friendly", keywords: ["ZORN"], level: "model" }], [...menu], [...alpha], [...beta], [...until], [...frame]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("that frame would take the menu's keywords");
+  });
+
+  it("keys the menu by identity, so a leaf before the opener does not shift the menu's run", () => {
+    const text = "In your Shooting phase, select one of the following abilities: Ignores Cover; Lethal Hits; Sustained Hits 3. Until the end of the phase, this model's Bolt of Change has that ability.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["Sustained Hits 3", "weapon-ability-keyword", { keyword: "Sustained Hits 3" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["this model's Bolt of Change has that ability", "weapon-ability-grant", { subject: "this-model", weapon_type: "ranged", weapon_name: "Bolt of Change" }]), text);
+    expect(result.ok).toBe(true);
+    expect((choiceOf(result.mechanics.effect) as { options: unknown[] }).options).toHaveLength(3);
+  });
+
+  it("names the choice with the opener's choice_label", () => {
+    const text = "Each time the bearer is selected to shoot, select either the Lethal Hits or Sustained Hits 1 ability. Until those attacks are resolved, ranged weapons equipped by the bearer have the selected ability.";
+    const result = compileLeaves(placed(text, [...menu], [...alpha], [...beta], [...until], [...frame]), text);
+    expect(result.ok ? (result.mechanics.effect as { choice_label?: string }).choice_label : undefined).toBe("Alpha or Beta ability");
+  });
+
+  it("pins the 620 shape: a one-of opener, two keywords, a duration, and a frame that spans to the selected ability", () => {
+    const text = "In your Shooting phase, pick either the Lethal Hits or Sustained Hits 1 ability. Until the end of the phase, ranged weapons equipped by models in your unit have the picked ability.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["pick either the", "choice-open", { min_choices: 1, max_choices: 1, choice_label: "Lethal Hits or Sustained Hits 1 ability" }],
+      [...alpha], [...beta],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["ranged weapons equipped by models in your unit have the picked ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }]), text);
+    expect(result.ok).toBe(true);
+    const grant = (ability: string) => ({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: [ability], weapon_type: "ranged" } });
+    expect(result.mechanics.effect).toMatchObject({ type: "conditional" });
+    expect(choiceOf(result.mechanics.effect)).toEqual({ type: "choice", options: [grant("Lethal Hits"), grant("Sustained Hits 1")], choice_label: "Lethal Hits or Sustained Hits 1 ability" });
+    expect(result.mechanics.scope).toEqual({ duration: "phase" });
+  });
+
+  it("pins the 10121 shape: a menu with a target-qualified option per keyword is refused as an unclaimed keyword run", () => {
+    const text = "Select one of the following for these attacks to have\n[Lethal Hits: ZORN models].\nOr: [Sustained Hits 1: non-ZORN models].";
+    const result = compileLeaves(placed(text,
+      ["Select one of the following", "choice-open", { min_choices: 1, max_choices: 1, choice_label: "attacks ability" }],
+      ["for these attacks to have", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+      ["ZORN models", "unit-keyword", { keywords: ["ZORN"], subject: "target", negated: false }],
+      ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+      ["non-ZORN models", "unit-keyword", { keywords: ["ZORN"], subject: "target", negated: true }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toBe("A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it.");
+  });
+});
