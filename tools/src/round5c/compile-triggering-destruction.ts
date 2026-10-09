@@ -106,8 +106,19 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
       throw new CompileError("A unit-filter after a destroyed unit's filter names another unit the activity does not account for.");
     }
     if (!units && positioned) throw new CompileError("A distance after a destroyed model has no DSL shape; a destroyed unit takes one.");
-    replaced.set(index, { ...leaf, parameters: { ...leaf.parameters, destruction: { object, ...(proximity ? { proximity } : {}) } } });
-    dropped.add(at);
+    // The folded leaf covers the words of the filter it took, so the gap to a neighbouring leaf is the
+    // text between the two halves: "or" there joins them as alternatives (compile-alternative-conditions.ts).
+    const covered = [leaf, filter, ...(proximity ? [following!] : [])];
+    replaced.set(index, {
+      ...leaf,
+      start_byte: Math.min(...covered.map((item) => item.start_byte)),
+      end_byte: Math.max(...covered.map((item) => item.end_byte ?? item.start_byte)),
+      parameters: { ...leaf.parameters, destruction: { object, ...(proximity ? { proximity } : {}) } },
+    });
+    // A container filter stays in the list when the leaf after it binds to it ("that unit"); the
+    // activity still names the same unit. Otherwise the filter is consumed here.
+    const bindsIt = following !== undefined && Object.values(following.parameters).includes(FILTERED_UNITS);
+    if (!(container === "after" && bindsIt)) dropped.add(at);
   });
   return input.flatMap((leaf, index) => dropped.has(index) ? [] : [replaced.get(index) ?? leaf]);
 }

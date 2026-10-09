@@ -176,9 +176,22 @@ describe("destroyed by the triggering attacks: models", () => {
       { event: "model-destroyed", object: { owner: "enemy", all_of: ["CHARACTER"], level: "model" }, filter: { by: "this-unit" }, window: "event" },
     ]);
     const negative = compiled(placed("After this unit has resolved its attacks, if those attacks destroyed an enemy CHARACTER model, this unit has the Feel No Pain 6+ ability.", parts(true)));
-    const wrapped = nodes(negative, (node) => node.type === "happened");
-    expect(wrapped.length).toBe(1);
-    expect(JSON.stringify(negative)).toMatch(/"not"|"negate"|"negated"/u);
+    const happened = { type: "happened", parameters: { event: "model-destroyed", object: { owner: "enemy", all_of: ["CHARACTER"], level: "model" }, filter: { by: "this-unit" }, window: "event" } };
+    expect(nodes(negative, (node) => node.operator === "not").map((node) => node.operands)).toEqual([[happened]]);
+    expect(nodes(positive, (node) => node.operator === "not")).toEqual([]);
+  });
+
+  it("negates the destruction of an enemy model with a not wrapping that happened node alone (8370 shape)", () => {
+    const mechanics = compiled(placed("When this unit has fought, if those attacks did not destroy an enemy model, this unit has the Feel No Pain 6+ ability.", [
+      ["When this unit has fought", "event", { kind: "attacks-resolved" }],
+      ["those attacks did not destroy", "unit-activity", { activities: [MODELS], named: "after", container: "none", destroyer: "this-unit", negated: true }],
+      ["an enemy model", "unit-filter", { side: "enemy", level: "model" }],
+      FNP_PART,
+    ]));
+    expect(nodes(mechanics, (node) => node.operator === "not").map((node) => node.operands)).toEqual([[
+      { type: "happened", parameters: { event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: "this-unit" }, window: "event" } },
+    ]]);
+    expect(schemaErrors(mechanics)).toEqual([]);
   });
 
   it("reads the enemy models before the verb by the attacks of the triggering moment", () => {
@@ -308,7 +321,7 @@ describe("destroyed by the triggering attacks: leaf checks", () => {
 });
 
 describe("destroyed by the triggering attacks: paired halves", () => {
-  it("pairs each half of 'a unit or a model' with its own filter, one event each", () => {
+  it("joins the two halves of 'an enemy unit or an enemy model' as an or, not an and", () => {
     const mechanics = compiled(placed("When a friendly KILLER unit has attacked, if those attacks destroyed an enemy unit or those attacks destroyed an enemy CHARACTER model, this unit has the Feel No Pain 6+ ability.", [
       ["When a friendly KILLER unit has attacked", "event", { kind: "attacks-resolved" }],
       ["those attacks destroyed", "unit-activity", { activities: [UNITS], named: "after", container: "none", destroyer: "event-subject", negated: false }],
@@ -317,10 +330,25 @@ describe("destroyed by the triggering attacks: paired halves", () => {
       ["an enemy CHARACTER model", "unit-filter", { side: "enemy", keywords: ["CHARACTER"], level: "model" }],
       FNP_PART,
     ]));
-    expect(destroyedNodes(mechanics).map((node) => node.parameters)).toEqual([
-      { event: "destroyed", object: { owner: "enemy" }, filter: { by: "event-subject" }, window: "event" },
-      { event: "model-destroyed", object: { owner: "enemy", all_of: ["CHARACTER"], level: "model" }, filter: { by: "event-subject" }, window: "event" },
-    ]);
+    const halves = [
+      { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "event-subject" }, window: "event" } },
+      { type: "happened", parameters: { event: "model-destroyed", object: { owner: "enemy", all_of: ["CHARACTER"], level: "model" }, filter: { by: "event-subject" }, window: "event" } },
+    ];
+    expect(nodes(mechanics, (node) => node.operator === "or").map((node) => node.operands)).toEqual([halves]);
+    expect(nodes(mechanics, (node) => node.operator === "and")).toEqual([]);
+  });
+
+  it("joins the halves with and when the source joins them with and", () => {
+    const mechanics = compiled(placed("When a friendly KILLER unit has attacked, if those attacks destroyed an enemy unit and those attacks destroyed an enemy CHARACTER model, this unit has the Feel No Pain 6+ ability.", [
+      ["When a friendly KILLER unit has attacked", "event", { kind: "attacks-resolved" }],
+      ["those attacks destroyed", "unit-activity", { activities: [UNITS], named: "after", container: "none", destroyer: "event-subject", negated: false }],
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      ["those attacks destroyed", "unit-activity", { activities: [MODELS], named: "after", container: "none", destroyer: "event-subject", negated: false }],
+      ["an enemy CHARACTER model", "unit-filter", { side: "enemy", keywords: ["CHARACTER"], level: "model" }],
+      FNP_PART,
+    ]));
+    expect(nodes(mechanics, (node) => node.operator === "or")).toEqual([]);
+    expect(nodes(mechanics, (node) => node.operator === "and").length).toBe(1);
   });
 
   it("refuses the halves when the unit-filter sits in another fragment", () => {
@@ -330,5 +358,46 @@ describe("destroyed by the triggering attacks: paired halves", () => {
       ["an enemy unit", "unit-filter", { side: "enemy" }, "B"],
       FNP_PART,
     ]))).toMatch(/names no unit-filter after/);
+  });
+});
+
+describe("destroyed by the triggering attacks: later antecedents", () => {
+  // 10148 shape: the container filter sits right before the effect's "that unit" antecedent. The
+  // antecedent must bind to that filter whether or not the destruction activity sits between them.
+  const ANCESTOR = "When an enemy unit has shot, ";
+  const effectText = "that unit has the Feel No Pain 6+ ability.";
+  const text = `${ANCESTOR}if those attacks destroyed a model in a friendly ADEPTUS ASTARTES unit, ${effectText}`;
+  const EFFECT: Part = ["that unit has the Feel No Pain 6+ ability", "feel-no-pain", { subject: "antecedent", threshold: 6, against: "all" }];
+  const EVENT: Part = ["When an enemy unit has shot", "event", { kind: "enemy-has-shot" }];
+  const CONTAINER: Part = ["in a friendly ADEPTUS ASTARTES unit", "unit-filter", { side: "friendly", keywords: ["ADEPTUS ASTARTES"] }];
+  const ACTIVITY: Part = ["those attacks destroyed a model", "unit-activity", { activities: [MODELS], named: "none", container: "after", destroyer: "event-subject", negated: false }];
+
+  it("binds the later antecedent to the container filter with and without the destruction activity", () => {
+    const withActivity = compiled(placed(text, [EVENT, ACTIVITY, CONTAINER, EFFECT]));
+    const withoutActivity = compiled(placed(text, [EVENT, CONTAINER, EFFECT]));
+    const effectOf = (mechanics: unknown) => nodes(mechanics, (node) => node.type === "feel-no-pain");
+    expect(effectOf(withActivity)).toEqual(effectOf(withoutActivity));
+    expect(effectOf(withActivity).length).toBe(1);
+    expect(JSON.stringify(effectOf(withActivity))).not.toMatch(/"this-unit"/u);
+  });
+
+  it("names the container in the destroyed-model object and leaves the effect's antecedent intact", () => {
+    const mechanics = compiled(placed(text, [EVENT, ACTIVITY, CONTAINER, EFFECT]));
+    expect(destroyedNodes(mechanics).map((node) => node.parameters)).toEqual([
+      { event: "model-destroyed", object: { level: "model", member_of: { owner: "friendly", all_of: ["ADEPTUS ASTARTES"] } }, filter: { by: "event-subject" }, window: "event" },
+    ]);
+  });
+
+  it("keeps the enemy filter of a condition apart from an effect's own enemy filter", () => {
+    const fiveSeven = "After this unit has resolved its attacks, if one or more enemy units were destroyed by those attacks, each enemy unit within 6\" of this model has the Feel No Pain 6+ ability.";
+    const mechanics = compiled(placed(fiveSeven, [
+      MOMENT,
+      ["enemy units", "unit-filter", { side: "enemy" }],
+      ["were destroyed by those attacks", "unit-activity", { activities: [UNITS], named: "before", container: "none", destroyer: "this-unit", negated: false }],
+      ["each enemy unit", "unit-filter", { side: "enemy" }],
+      ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
+      ["has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
+    ]));
+    expect(destroyedNodes(mechanics).map((node) => (node.parameters as Record<string, unknown>).object)).toEqual([{ owner: "enemy" }]);
   });
 });
