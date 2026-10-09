@@ -44,3 +44,34 @@ function precedingUnitFilter(leaves: readonly CompileLeaf[], index: number): Com
   }
   return undefined;
 }
+
+/**
+ * Whether a compiled tree gates a trigger-based ability on the Warlord. "If a friendly X model is
+ * your Warlord, friendly Y units have: A. When a friendly Z unit is selected to shoot, …": the
+ * sentence with a trigger is a separate rule, and the list-building gate on the army must not
+ * reach it. Sentence segmentation keeps the list's colon header on every part, so this refuses the
+ * tree rather than let the gate cover the trigger.
+ */
+export function gatesTriggerOnWarlord(mechanics: unknown): boolean {
+  const visit = (node: unknown): boolean => {
+    if (Array.isArray(node)) return node.some(visit);
+    if (node === null || typeof node !== "object") return false;
+    const record = node as Record<string, unknown>;
+    if (record.type === "conditional" && isWarlordArmyCondition(record.condition) && containsAbilityPart(record.effect)) return true;
+    return Object.values(record).some(visit);
+  };
+  return visit(mechanics);
+}
+
+function isWarlordArmyCondition(condition: unknown): boolean {
+  if (condition === null || typeof condition !== "object") return false;
+  const record = condition as { type?: unknown; parameters?: { filter?: { designated?: unknown } } };
+  return record.type === "army-includes" && record.parameters?.filter?.designated === "warlord";
+}
+
+function containsAbilityPart(node: unknown): boolean {
+  if (Array.isArray(node)) return node.some(containsAbilityPart);
+  if (node === null || typeof node !== "object") return false;
+  const record = node as Record<string, unknown>;
+  return record.type === "ability-part" || Object.values(record).some(containsAbilityPart);
+}

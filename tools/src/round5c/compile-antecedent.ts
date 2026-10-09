@@ -73,8 +73,9 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
   while (at >= 0 && leaves[at]!.fragment === leaf.fragment
     && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!))
-      // "Friendly X units have: Battleline. +1 OC.": each effect of one list takes the same filter.
-      || (leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
+      // "Friendly X units have: Battleline. +1 OC.": each effect of one list takes the same filter. Only an
+      // effect passes over another effect; a condition does not skip the effects that precede it.
+      || (leaf.role === "EFFECT" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
   const filter = leaves[at];
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
   const before = leaves[at - 1];

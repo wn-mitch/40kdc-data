@@ -22,7 +22,7 @@ import { boundSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
-import { foldWarlordTests } from "./compile-warlord-test.js";
+import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
@@ -215,7 +215,11 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   }
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
-  return compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
+  const compiled = compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
+  if (compiled.ok && gatesTriggerOnWarlord(compiled.mechanics)) {
+    return { ok: false, signature: compiled.signature, errors: ["A Warlord gate on an army list covers a trigger-based ability; the trigger sentence is a separate rule and this record cannot be split here."] };
+  }
+  return compiled;
 }
 
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {

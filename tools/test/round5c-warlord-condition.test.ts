@@ -209,3 +209,68 @@ describe("Attack named again by its attacker (S4 refusal, 7087 shape)", () => {
     expect(errors.join()).toMatch(/named again by its attacker/);
   });
 });
+
+describe("Warlord test refused on an aura, a for-each and a unit-filter target (T2, T3)", () => {
+  const warlordRefusal = /Warlord|designat/iu;
+
+  it("refuses a Warlord unit-filter on an aura's range", () => {
+    const text = "Friendly ALPHA units within 6 inches that are your Warlord have Battleline.";
+    expect(errorsOf(placed(text,
+      ["Friendly ALPHA units within 6 inches", "aura-range", { side: "friendly", inches: 6 }],
+      ["that are your Warlord", "unit-filter", { side: "friendly", keywords: ["ALPHA"], designated: "warlord" }],
+      ["have Battleline", "keyword-grant", { subject: "antecedent", keywords: ["BATTLELINE"] }]), text).join()).toMatch(warlordRefusal);
+  });
+
+  it("refuses a Warlord unit-filter on a for-each's units", () => {
+    const text = "For each friendly ALPHA unit that is your Warlord, add 1 to the Hit roll.";
+    expect(errorsOf(placed(text,
+      ["For each", "for-each-unit-select", {}],
+      ["friendly ALPHA unit that is your Warlord", "unit-filter", { side: "friendly", keywords: ["ALPHA"], designated: "warlord" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text).join()).toMatch(warlordRefusal);
+  });
+
+  it("refuses a Warlord unit-filter as an attack's target through the unit-filter-target path", () => {
+    const text = "Each time a model in this unit makes an attack that targets the enemy WARLORD, add 1 to the Hit roll.";
+    const [attack, roll] = placed(text,
+      ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    // unit-filter-target is derived by the folds, not a reviewed family, so the leaf is built directly.
+    const wording = "that targets the enemy WARLORD";
+    const start = text.indexOf(wording);
+    const target: CompileLeaf = { role: "CONDITION", family_id: "unit-filter-target", family_version: 1, parameters: { side: "enemy", designated: "warlord" }, start_byte: start, end_byte: start + wording.length, fragment: "RAW_TEXT" };
+    expect(errorsOf([attack!, target, roll!], text).join()).toMatch(/Warlord/);
+  });
+});
+
+describe("Army construction names no designation but the Warlord (T4)", () => {
+  it("refuses a Warlord filter in a composition rule, since composition has no designation shape", () => {
+    const text = "You must include one ALPHA model that is your Warlord.";
+    expect(errorsOf(placed(text,
+      ["You must include", "army-construction", { rule: "composition", max: 1, with: "following-filter" }],
+      ["one ALPHA model that is your Warlord", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model", designated: "warlord" }]), text).join()).toMatch(/Warlord/);
+  });
+
+  it("refuses a composition group that names a battle-time designation", () => {
+    const text = "You must include one ALPHA model that is afflicted.";
+    expect(errorsOf(placed(text,
+      ["You must include", "army-construction", { rule: "composition", max: 1, with: "following-filter" }],
+      ["one ALPHA model that is afflicted", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model", designated: "afflicted" }]), text).join()).toMatch(/designation/);
+  });
+});
+
+describe("A trigger sentence after a Warlord-gated list (7163 shape)", () => {
+  it("refuses the record instead of gating the trigger's ability-part on the Warlord", () => {
+    const text = "If a friendly Alpha Officer model is your Warlord, friendly Beta units have:\rBattleline.\r+1 OC.\rWhen a friendly Alpha unit is selected to shoot, that unit's attacks have +1 to hit rolls.";
+    const list = placed(text,
+      ["If a", "army-includes", { quantifier: "some", with: "following-filter" }],
+      ["friendly Alpha Officer model", "unit-filter", { side: "friendly", keywords: ["ALPHA", "OFFICER"], level: "model" }],
+      warlordTest("is your Warlord"),
+      ["friendly Beta units", "unit-filter", { side: "friendly", keywords: ["BETA"] }],
+      ["Battleline", "keyword-grant", { subject: "antecedent", keywords: ["BATTLELINE"] }],
+      ["+1 OC", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "improve", value: 1 }],
+      ["friendly Alpha unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["is selected to shoot", "event", { kind: "selected", to: "shoot" }],
+      ["+1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+    expect(errorsOf(list, text).join()).toMatch(/separate rule/);
+  });
+});

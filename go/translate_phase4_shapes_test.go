@@ -192,3 +192,13 @@ func TestPhase4ConditionAndTriggerRenders(t *testing.T) {
 		}
 	}
 }
+
+// Warlord is the model chosen at mustering; its label is the definite noun phrase in both plural forms.
+func TestWarlordDesignationTerm(t *testing.T) {
+	for _, plural := range []bool{false, true} {
+		term, ok := designationTerm("warlord", plural)
+		if !ok || term != "the Warlord" {
+			t.Fatalf("designationTerm(warlord, %v) = %q, %v; want \"the Warlord\", true", plural, term, ok)
+		}
+	}
+}
