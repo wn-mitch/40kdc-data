@@ -1,5 +1,6 @@
 import { slug } from "../pack-blocks.js";
 import type { Compiled } from "./compile.js";
+import type { CoreCheck } from "./core-checks.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { ordered, shapeSignature } from "./compile-placement.js";
 import { GRANTED_ABILITY_NAME } from "./family-extensions-w8-granted.js";
@@ -15,8 +16,9 @@ import { GRANTED_ABILITY_NAME } from "./family-extensions-w8-granted.js";
  * Where a body ends is computed, not guessed: at the next marker, the next printed header, a
  * change of source fragment, or the end of the marker's paragraph, whichever comes first. A
  * paragraph ends at a line break, except that it continues onto the next line when it ends with
- * ":" (ignoring bold markers and spacing) or the next line opens with "■". Leaves after the last
- * body go back to the host.
+ * ":" (ignoring bold markers and spacing) or the next line opens with "■". A body's paragraph also
+ * continues over a directly following line that opens with "Or:", so that line's leaves belong to
+ * the body. Leaves after the last body go back to the host.
  */
 
 type Node = Record<string, unknown>;
@@ -51,6 +53,24 @@ function paragraphs(sourceText: string): Array<[number, number]> {
 
 function paragraphEnd(spans: ReadonlyArray<[number, number]>, byte: number): number {
   return spans.find(([from, to]) => byte >= from && byte <= to)?.[1] ?? Number.POSITIVE_INFINITY;
+}
+
+/** A body's paragraph extends over an "Or:" line that directly follows it (the line break is one byte). */
+function orEnd(spans: ReadonlyArray<[number, number]>, bytes: Buffer, end: number): number {
+  if (!Number.isFinite(end)) return end;
+  const next = spans.find(([from]) => from === end + 1);
+  if (!next) return end;
+  return /^[\s*]*Or:/u.test(bytes.subarray(next[0], next[1]).toString("utf8")) ? next[1] : end;
+}
+
+/**
+ * A body's own Stratagem check: the Stratagem its trigger names (`event` with activity stratagem and
+ * an id) and no subject. The check only restates that id; it does not restrict who holds the ability.
+ */
+function ownStratagemCheck(check: CoreCheck, trigger: unknown): boolean {
+  const filter = (trigger as { filter?: { kind?: unknown; id?: unknown } } | null | undefined)?.filter;
+  return check.kind === "named-ability" && check.parameters.activity === "stratagem" && check.parameters.subject === undefined
+    && filter?.kind === "stratagem" && filter.id !== undefined && filter.id === check.parameters.id;
 }
 
 /** A body's mechanics as one ability-part: the holder's own moment, usage, duration and choice. */
@@ -100,7 +120,7 @@ function splitBodies(list: readonly CompileLeaf[], sourceText: string | undefine
     starts.forEach((start, index) => {
       const opener = list[start]!;
       const limit = starts[index + 1] ?? next;
-      const end = paragraphEnd(spans, opener.start_byte);
+      const end = orEnd(spans, Buffer.from(sourceText, "utf8"), paragraphEnd(spans, opener.start_byte));
       const leaves: CompileLeaf[] = [];
       let cursor = start + 1;
       while (cursor < limit && list[cursor]!.start_byte < end && list[cursor]!.fragment === opener.fragment) leaves.push(list[cursor++]!);
@@ -144,12 +164,15 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
   }
   const granted = new Map<CompileLeaf, GrantedBody[]>();
   const behaviors: string[] = [];
+  const bodyChecks: CoreCheck[] = [];
   const errors: string[] = [];
   for (const body of fold.bodies) {
     const name = body.label ?? "The unnamed granted ability";
     const compiled = compileBody(body.leaves, sourceText);
     if (!compiled.ok) { errors.push(...compiled.errors.map((error) => `${name}: ${error}`)); continue; }
-    if (compiled.core || compiled.checks.length) { errors.push(`${name}: a granted ability cannot hold a Stratagem target or a bearer restriction.`); continue; }
+    const refused = compiled.core || compiled.checks.some((check) => !ownStratagemCheck(check, compiled.mechanics.trigger));
+    if (refused) { errors.push(`${name}: a granted ability cannot hold a Stratagem target or a bearer restriction.`); continue; }
+    bodyChecks.push(...compiled.checks);
     if (selfHeld(body.header) && compiled.mechanics.behavior) behaviors.push(compiled.mechanics.behavior);
     const list = granted.get(body.header) ?? [];
     list.push({ ...(body.label ? { ability: slug(body.label) } : {}), part: bodyPart(body.label, compiled) });
@@ -163,7 +186,8 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
   if (!result.ok) return { ...result, signature };
   // A self-held ability is part of the record's own: the record reads as its liveliest part.
   const rank = Math.max(...[result.mechanics.behavior ?? "passive", ...behaviors].map((behavior) => BEHAVIOR_RANK.indexOf(behavior)));
-  return { ...result, signature, mechanics: { ...result.mechanics, behavior: BEHAVIOR_RANK[rank] ?? result.mechanics.behavior } };
+  // A body's own Stratagem check belongs to the record: its id is checked against the core Stratagem.
+  return { ...result, signature, checks: [...result.checks, ...bodyChecks], mechanics: { ...result.mechanics, behavior: BEHAVIOR_RANK[rank] ?? result.mechanics.behavior } };
 }
 
 /**

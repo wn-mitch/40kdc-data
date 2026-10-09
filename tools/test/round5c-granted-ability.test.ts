@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { leafFragment } from "../src/round5c/compile-leaf-fragment.js";
+import { coreCheckErrors } from "../src/round5c/core-checks.js";
+import { round5cDataRoot } from "../src/round5c/entries.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 
@@ -166,6 +168,53 @@ describe("Round 5C printed granted abilities", () => {
     expect(effect.steps[0].modifier.definition.effect.type).toBe("invulnerable-save");
   });
 
+  it("continues a body onto an Or: line that follows it", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nOr: This unit has Feel No Pain 5+.";
+    const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+      ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+      ["Or: This unit has Feel No Pain 5+", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }]), text);
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.type).toBe("ability-grant");
+    expect(effect.modifier.definition.effect.steps.map((step: any) => step.type)).toEqual(["invulnerable-save", "feel-no-pain"]);
+  });
+
+  it("does not extend a host paragraph over an Or: line", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nThis model has Feel No Pain 5+.\nOr: This unit has a 4+ invulnerable save.";
+    const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+      ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+      ["This model has Feel No Pain 5+", "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }],
+      ["Or: This unit has a 4+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 4 }]), text);
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.type).toBe("sequence");
+    expect(effect.steps[0].type).toBe("ability-grant");
+    expect(effect.steps[0].modifier.definition.effect.type).toBe("invulnerable-save");
+    expect(effect.steps.slice(1).map((step: any) => step.type)).toEqual(["feel-no-pain", "invulnerable-save"]);
+  });
+
+  it("carries a body's own Stratagem event as a check the record makes", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Dusk Veil:** When you use the Shade Step stratagem, this unit has a 5+ invulnerable save.";
+    const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
+      ["When you use the Shade Step stratagem", "event", { kind: "used", activity: "stratagem", id: "shade-step-stratagem" }],
+      ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]), text);
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.type).toBe("ability-grant");
+    expect(effect.modifier.definition.trigger.filter).toEqual({ kind: "stratagem", id: "shade-step-stratagem" });
+    expect(result.checks).toEqual([{ kind: "named-ability", parameters: { id: "shade-step-stratagem", activity: "stratagem" } }]);
+  });
+
+  it("resolves a body's Stratagem check against the core Stratagem it names", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Dusk Veil:** When you use the Into Darkness stratagem, this unit has a 5+ invulnerable save.";
+    const list = (id: string) => placed(text, WARDENS, header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
+      ["When you use the Into Darkness stratagem", "event", { kind: "used", activity: "stratagem", id }],
+      ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]);
+    const good = compiled(list("into-darkness-shadowmark-talon-raven-guard"), text);
+    expect(coreCheckErrors(round5cDataRoot(), "fabricated-ability", good.checks)).toEqual([]);
+    const typo = compiled(list("into-darkness"), text);
+    const errors = coreCheckErrors(round5cDataRoot(), "fabricated-ability", typo.checks);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatch(/into-darkness/u);
+  });
+
   it("continues a body onto the next line after a colon", () => {
     const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save and:\nThis unit has Feel No Pain 5+.";
     const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
@@ -221,6 +270,28 @@ describe("Round 5C printed granted abilities: refusals", () => {
       ["friendly GLOOM HOUND units", "unit-filter", { side: "friendly", keywords: ["GLOOM HOUND"] }],
       header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
       ["Feel No Pain 5+", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }]), text)[0]).toMatch(/nested grants/u);
+  });
+
+  it("refuses a body Stratagem check its trigger does not name", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Dusk Veil:** When you use the Shade Step stratagem, this unit has a 5+ invulnerable save.";
+    expect(errorsOf(placed(text, WARDENS, header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
+      ["When you use the Shade Step stratagem", "event", { kind: "used", activity: "stratagem", id: "shade-step-stratagem", subject: "this-unit" }],
+      ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]), text)[0]).toMatch(/Dusk Veil: a granted ability cannot hold/u);
+  });
+
+  it("refuses a body Stratagem check that names another Stratagem than its trigger", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Dusk Veil:** When you use the Shade Step stratagem, and only if this unit used the Veil Dance stratagem this turn, this unit has a 5+ invulnerable save.";
+    expect(errorsOf(placed(text, WARDENS, header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
+      ["When you use the Shade Step stratagem", "event", { kind: "used", activity: "stratagem", id: "shade-step-stratagem" }],
+      ["this unit used the Veil Dance stratagem this turn", "ability-used", { subject: "this-unit", activity: "stratagem", id: "veil-dance-stratagem", window: "turn", negated: false }],
+      ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]), text)[0]).toMatch(/Dusk Veil: a granted ability cannot hold/u);
+  });
+
+  it("refuses a body that targets a Stratagem target", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Dusk Veil:** One unit from your army is chosen as the target, and this unit has a 5+ invulnerable save.";
+    expect(errorsOf(placed(text, WARDENS, header("have the following ability", "one"), label("Dusk Veil", "Dusk Veil"),
+      ["One unit from your army is chosen as the target", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["INFANTRY"], match: "all", excluded_keywords: [] }],
+      ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]), text)[0]).toMatch(/Dusk Veil: a granted ability cannot hold/u);
   });
 
   it("refuses a body holding a bearer restriction", () => {
