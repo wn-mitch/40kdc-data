@@ -42,6 +42,17 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
   return entry;
 }
 
+describe("Round 5C characteristic-amount parameter values", () => {
+  it("takes a whole amount from 1 and a dice amount, and refuses zero, a text number and a fraction", () => {
+    for (const value of [2, 10, "D6+1"]) {
+      expect(normalizeFingerprintParameters("characteristic-amount", { value }, 1)).toEqual({ value });
+    }
+    for (const value of [0, "2", 1.5]) {
+      expect(() => normalizeFingerprintParameters("characteristic-amount", { value }, 1)).toThrow();
+    }
+  });
+});
+
 describe("Round 5C characteristic amounts after a recipient filter", () => {
   it("gives the amount to the change before the recipient filter", () => {
     const result = compileLeaves(placedIn(text, [...change], [...recipient], [...owner], [...amount("by 2", 2)]), text);
