@@ -131,3 +131,26 @@ describe("an attack on a designated defender", () => {
     expect(unscoped).toContain('"target":{"owner":"friendly"}');
   });
 });
+
+// "That enemy unit is marked ... subtract 2 from Charge rolls made for it": a roll change on the marked unit
+// targets that unit, not the bearer's unit. The shape a Stratagem's marked unit takes when it has one target.
+describe("a roll change on the unit a mark was applied to", () => {
+  const text = "Your Shooting phase. Select one enemy unit. That enemy unit is aflame. While a unit is aflame, subtract 2 from Charge rolls made for it.";
+  const leaves = (roll: Record<string, unknown>) => placed(text,
+    ["Your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+    ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+    ["That enemy unit is aflame", "apply-mark", { subject: "antecedent", tag: "aflame" }],
+    ["While a unit is aflame", "designated-filter", { tag: "aflame" }],
+    ["subtract 2 from Charge rolls made for it", "roll-modifier", roll]);
+
+  it("applies the roll change to the marked unit", () => {
+    const out = compiled(leaves({ subject: "antecedent", roll: "charge", operation: "subtract", value: 2 }), text);
+    expect(out).toContain('"type":"roll-modifier","target":"selected-unit","modifier":{"roll":"charge","operation":"subtract","value":2}');
+    expect(out).not.toContain('"type":"roll-modifier","target":"this-unit"');
+  });
+
+  it("keeps the bearer's unit as the target when the roll change names no subject", () => {
+    const out = compiled(leaves({ roll: "charge", operation: "subtract", value: 2 }), text);
+    expect(out).toContain('"type":"roll-modifier","target":"this-unit"');
+  });
+});
