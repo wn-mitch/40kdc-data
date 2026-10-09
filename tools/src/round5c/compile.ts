@@ -14,7 +14,7 @@ import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, b
 import { trigger, withDestroyedObject } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { refuseOtherwiseGates } from "./compile-otherwise.js";
-import { bindDurations, CONFLICTING_DURATIONS, durationPart, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
+import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
@@ -161,6 +161,9 @@ function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
 
 /** Effects that forbid something; an "instead" after one says what happens in its place. */
 const PROHIBITIONS = new Set(["no-advance-roll"]);
+
+/** A gate that tests an Advance already made ("if it Advanced this turn"): no moment where a roll can still be skipped. */
+const testsMadeAdvance = (gates: Node[]) => gates.some((gate) => /"type":"happened"[^]*"move_types":\[[^\]]*"advance"/.test(JSON.stringify(gate)));
 
 /** "Add 6 to Move": what a no-advance-roll's `advance: fixed-6` does in place of the roll. */
 function isAdvanceInPlace(node: Node): boolean {
@@ -619,7 +622,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         // The folded effect's duration is the no-roll's: equal to its own if it has one, else taken from the folded effect.
         const folded = boundDuration.get(replacement.index);
         const kept = boundDuration.get(previous.index);
-        if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
+        // Printed durations on a no-roll gated by an Advance already made would bind the lifetime of a roll that cannot be skipped.
+        if ((folded !== undefined || kept !== undefined) && triggerIndexes.length === 0 && testsMadeAdvance([...global, ...previous.gate])) errors.push(NO_ROLL_AFTER_ADVANCE);
+        else if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
         else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
         boundDuration.delete(replacement.index);
         planned.splice(planned.indexOf(replacement), 1);
@@ -669,8 +674,25 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     planned.splice(0, planned.length, ...spends, ...planned.filter((item) => !optionalSpends.has(item.leaf)));
   }
 
-  // A bound duration whose effect the fold removed has nothing left to lift.
-  if ([...boundDuration.keys()].some((index) => !planned.some((item) => item.index === index))) errors.push(CONFLICTING_DURATIONS);
+  // "Do not make an Advance roll" followed directly by "add 6\" to Move" (no moment between, no "instead"): the no-roll
+  // already moves 6 in place of the roll, so the +6 is that same 6 and folds into it. The fold needs the same unit and
+  // gate on both; otherwise the +6 would stack on the no-roll's move (its own move on another unit, or a gated +6).
+  for (const previous of planned.filter((item) => PROHIBITIONS.has(item.leaf.family_id))) {
+    const next = planned.filter((item) => item.index > previous.index).at(0);
+    if (!next || !isAdvanceInPlace(next.node)) continue;
+    if (triggerIndexes.some((moment) => moment > previous.index && moment < next.index)) continue;
+    if (combinators.some((combinator) => places[combinator]!.clause === places[next.index]!.clause)) continue;
+    if (next.node.target !== previous.node.target || next.gate.length > 0 || next.selected !== previous.selected) {
+      errors.push(NO_ROLL_PLUS_SIX);
+      continue;
+    }
+    const folded = boundDuration.get(next.index);
+    const kept = boundDuration.get(previous.index);
+    if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
+    else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
+    boundDuration.delete(next.index);
+    planned.splice(planned.indexOf(next), 1);
+  }
 
   // Moments before the first effect are the ability's own (several are alternatives: "selected
   // to shoot or to fight"). A moment after an effect starts a part of a compound ability: the

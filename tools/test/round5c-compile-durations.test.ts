@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { CONFLICTING_DURATIONS, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX } from "../src/round5c/compile-durations.js";
 import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
@@ -52,15 +53,30 @@ const MOVE_SIX = { subject: "this-unit", characteristics: ["M"], operation: "add
 const ASSAULT = { subject: "this-unit", keyword: "Assault", weapon_type: "ranged" };
 
 describe("bound durations on the stored records", () => {
-  it("3746: the no-roll is bare, the modifier lasts the phase, the grant lasts the turn", () => {
+  it("3746: the no-roll's +6 folds into it (one move, not two), the grant lasts the turn", () => {
     const mechanics = mechanicsOf(3746);
-    const [noRoll, modifier, grant] = mechanics.effect.steps;
-    expect(noRoll.type).toBe("move-modifier");
-    expect(noRoll.duration).toBeUndefined();
-    expect(modifier).toMatchObject({ type: "ability-part", duration: "phase", effect: { type: "stat-modifier" } });
+    const [noRoll, grant] = mechanics.effect.steps;
+    expect(noRoll).toMatchObject({ type: "ability-part", duration: "phase", effect: { type: "move-modifier", modifier: { advance: "fixed-6" } } });
     expect(grant).toMatchObject({ type: "ability-part", duration: "turn", effect: { type: "weapon-ability-grant" } });
+    expect(JSON.stringify(mechanics.effect)).not.toContain('"stat":"M"');
     expect(mechanics.trigger.event).toBe("move-started");
     expect(mechanics.scope.duration).toBe("permanent");
+  });
+
+  it("3746 with its stored leaves (move-ended, antecedent subject) refuses: the +6 is on another unit than the no-roll", () => {
+    const { leaves, source_text } = fixture(3746);
+    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, parameters: { ...leaf.parameters, kind: "move-ended" } } : leaf));
+    const result = compileLeaves(stored, source_text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NO_ROLL_PLUS_SIX);
+  });
+
+  it("1185 with its stored leaves (an Advance already happened) refuses: the no-roll cannot follow the Advance", () => {
+    const { leaves, source_text } = fixture(1185);
+    const stored = leaves.map((leaf) => (leaf.family_id === "event" ? { ...leaf, role: "CONDITION", family_id: "unit-activity", parameters: { activities: ["advanced-this-turn"], subject: "this-unit" } } : leaf));
+    const result = compileLeaves(stored, source_text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NO_ROLL_AFTER_ADVANCE);
   });
 
   it("1185: the window part carries the moment and the phase, and the turn part has no trigger", () => {
@@ -238,11 +254,86 @@ describe("bound durations on fabricated sentences", () => {
   });
 });
 
+describe("a no-roll and its add-6 fold into one move", () => {
+  it("in one sentence without an instead, the +6 is the no-roll's fixed 6 (one move), under the sentence's duration", () => {
+    const text = "Until the end of the phase, do not make an Advance roll, and add 6 to Move.";
+    const leaves = placed(text,
+      ["Until the end of the phase", "duration", DURATION_PHASE],
+      ["do not make an Advance roll", "no-advance-roll", { subject: "this-unit" }],
+      ["add 6 to Move", "characteristic-modifier", MOVE_SIX]);
+    const result = compileLeaves(leaves, text);
+    expect(result.ok).toBe(true);
+    const mechanics = result.ok ? (result.mechanics as any) : null;
+    expect(mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { advance: "fixed-6" } });
+    expect(mechanics.scope.duration).toBe("phase");
+  });
+});
+
+/** The fixture's leaves, then `tail` appended to its wording with `items` placed in it: two durations in an effectless sentence. */
+function withTail(id: number, tail: string, items: Array<[string, string, Record<string, unknown>]>): { leaves: CompileLeaf[]; text: string } {
+  const { leaves, source_text } = fixture(id);
+  const offset = Buffer.byteLength(source_text, "utf8");
+  const extra = placed(tail, ...items).map((leaf) => ({ ...leaf, start_byte: leaf.start_byte + offset, end_byte: leaf.end_byte + offset }));
+  return { leaves: [...leaves, ...extra], text: source_text + tail };
+}
+
+const TWO_DURATIONS: Array<[string, string, Record<string, unknown>]> = [
+  ["Until the end of the phase", "duration", DURATION_PHASE],
+  ["Until the end of the turn", "duration", DURATION_TURN],
+];
+const TWO_DURATIONS_TAIL = " Until the end of the phase. Until the end of the turn.";
+
+describe("kept refusals when an ability prints two durations", () => {
+  // Each base record compiles on its own; the appended durations make the split path run, and the refusal must hold.
+  it.each([
+    [7, "rolls"],
+    [41, "aura"],
+    [6239, "leader"],
+    [10099, "for-each"],
+    [10118, "designation (selected attacks)"],
+  ])("av %i (%s) refuses", (id) => {
+    const base = compileFixture(id);
+    expect(base.ok, `av ${id} alone`).toBe(true);
+    const { leaves, text } = withTail(id, TWO_DURATIONS_TAIL, TWO_DURATIONS);
+    const result = compileLeaves(leaves, text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
+  });
+
+  it("av 6228 (usage limit) refuses with the usage message", () => {
+    const { leaves, text } = withTail(6228, TWO_DURATIONS_TAIL, TWO_DURATIONS);
+    const result = compileLeaves(leaves, text);
+    expect(result.ok ? [] : result.errors).toContain("A usage limit in an ability with several durations has no reading yet.");
+  });
+
+  it("a rules bundle refuses with two durations, and compiles with none", () => {
+    const bundle: Array<[string, string, Record<string, unknown>]> = [["Bundle", "rules-bundle-marker", {}]];
+    const alone = withTail(7, " Bundle.", bundle);
+    expect(compileLeaves(alone.leaves, alone.text).ok).toBe(true);
+    const { leaves, text } = withTail(7, " Bundle. Until the end of the phase. Until the end of the turn.", [...bundle, ...TWO_DURATIONS]);
+    const result = compileLeaves(leaves, text);
+    expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
+  });
+
+  it("an optional spend read as this use refuses with two durations", () => {
+    const spend: Array<[string, string, Record<string, unknown>]> = [
+      ["Used", "event", { kind: "used" }],
+      ["Spend it", "resource-spend", { pool: "yp-pool", amount: 1 }],
+      ["Optional read", "optional-cost-paid", { window: "use", pool: "yp-pool" }],
+      ["You can use this", "optional-use", { who: "this-unit" }],
+    ];
+    const { leaves, text } = withTail(7, " Used. Spend it. Optional read. You can use this." + TWO_DURATIONS_TAIL, [...spend, ...TWO_DURATIONS]);
+    const result = compileLeaves(leaves, text);
+    expect(result.ok ? [] : result.errors).toContain(CONFLICTING_DURATIONS);
+  });
+});
+
 describe("a bound duration renders as its own clause", () => {
-  it("3746: the phase and turn parts each name their lifetime in the describer", () => {
+  it("3746: the folded phase part and the turn part each name their lifetime in the describer", () => {
     const mechanics = mechanicsOf(3746);
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
-    expect(text).toContain("Until the end of the phase: add 6 to the unit's Move characteristic.");
+    expect(text).toContain("-> Until the end of the phase: the unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
+    expect(text).not.toContain("Move characteristic.");
     expect(text).toContain("Until the end of the turn: ranged weapons equipped by models in this unit gain [ASSAULT].");
   });
 });

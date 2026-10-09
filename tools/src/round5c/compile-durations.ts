@@ -13,6 +13,12 @@ type Node = Record<string, unknown>;
 
 export const CONFLICTING_DURATIONS = "Conflicting durations.";
 
+/** An add-6 to Move right after a no-advance-roll that does not fold into it (another unit, or gated). */
+export const NO_ROLL_PLUS_SIX = "An add-6 to Move after a no-advance-roll folds only for the same unit and without a gate.";
+
+/** A no-advance-roll whose moment is an Advance that already happened (a move-ended or past-tense condition). */
+export const NO_ROLL_AFTER_ADVANCE = "A no-advance-roll cannot follow an Advance that already happened; the moment is the move start.";
+
 /** Lifetime order of the durations a window part can carry (earlier ends first). */
 const LIFETIME = ["phase", "turn", "until-start-next-turn"];
 

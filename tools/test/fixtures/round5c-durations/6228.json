@@ -1,0 +1,80 @@
+{
+ "id": 6228,
+ "source_text": "xxxxxx‑xxxxx xxxx of xxxx xxxxxxx xxxxx, xxxx xxxxxx xxx xxxx a **xxxxxx-xxxxx xxxx** for a xxxxxxxx xxxx.\nThat xxxx.\nThat **xxxxxx-xxxxx xxxx**, xx xxxxxxxxxxxxx xxxxxxxxxx\nxxx xxxxxx xxx this **xxxxxxxxx** xxxx xxxx xxxx xxx xxxxxx.",
+ "leaves": [
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "step-started",
+    "step": "battle-shock",
+    "turn": "your"
+   },
+   "start_byte": 0,
+   "end_byte": 41,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "before-roll",
+    "roll": "battle-shock"
+   },
+   "start_byte": 43,
+   "end_byte": 93,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly"
+   },
+   "start_byte": 94,
+   "end_byte": 107,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "triggering-target",
+   "family_version": 3,
+   "parameters": {
+    "selects": "unit",
+    "keywords": [],
+    "match": "all"
+   },
+   "start_byte": 109,
+   "end_byte": 118,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "roll-auto-result",
+   "family_version": 2,
+   "parameters": {
+    "roll": "battle-shock",
+    "outcome": "auto-pass"
+   },
+   "start_byte": 120,
+   "end_byte": 175,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "usage-limit",
+   "family_version": 4,
+   "parameters": {
+    "frequency": "once-per-battle",
+    "per": "army"
+   },
+   "start_byte": 176,
+   "end_byte": 235,
+   "fragment": "RESTRICTIONS"
+  }
+ ],
+ "edits": null
+}
