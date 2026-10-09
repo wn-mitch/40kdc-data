@@ -230,7 +230,7 @@ export async function runCompileGates(
     report.compile_attempted += 1;
     const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
     report.abilities.push(row);
-    const compiled = compileLeaves(ability.leaves, ability.source_text, { abilityId: own.get(ability.id) });
+    const compiled = compileLeaves(ability.leaves, ability.source_text, { abilityId: own.get(ability.id), name: ability.name ?? undefined });
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;

@@ -41,6 +41,7 @@ import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./com
 import { compileGranted } from "./compile-granted.js";
 import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
 import type { CoreCheck } from "./core-checks.js";
+import { compileWithName, NAME_FRAGMENT } from "./compile-name.js";
 import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./compile-psychic-cost.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -197,10 +198,14 @@ function splitIgnoreModifiers(list: readonly CompileLeaf[]): CompileLeaf[] {
 }
 
 /** What the compiler knows of the record: `abilityId` is the ability "this ability" names (own-abilities.ts). */
-export type CompileOptions = { abilityId?: string };
+export type CompileOptions = { abilityId?: string; /** The record's name: the text a NAME leaf indexes (compile-name.ts). */ name?: string };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // A span over the record's name compiles as its own part, beside the body (compile-name.ts).
+  if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
+    return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
+  }
   // A characteristic amount after its recipient filter is bound to its change first (compile-characteristic-amount.ts).
   let bound: CompileLeaf[];
   try { bound = bindCharacteristicAmounts(leaves); } catch (error) {

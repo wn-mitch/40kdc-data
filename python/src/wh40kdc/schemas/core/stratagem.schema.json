@@ -151,9 +151,12 @@
           "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost."
         }
       },
-      "dependentRequired": { "mode_cost": ["mode"] },
       "additionalProperties": false,
       "allOf": [
+        {
+          "if": { "required": ["mode_cost"] },
+          "then": { "required": ["mode"] }
+        },
         {
           "if": { "properties": { "count": { "const": "up-to" } }, "required": ["count"] },
           "then": { "required": ["count_max"] },

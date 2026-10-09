@@ -11211,11 +11211,12 @@
         "type": "rules-bundle",
         "steps": [
           {
-            "type": "resource-gain",
+            "type": "stat-modifier",
             "target": "this-model",
             "modifier": {
-              "pool": "psyker-level",
-              "amount": 2
+              "stat": "psyker-level",
+              "operation": "set",
+              "value": 2
             }
           },
           {
