@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { foldDestroyFilters } from "../src/round5c/compile-weapon-qualified.js";
+import { foldDestroyFilters, foldLeadingHitFilters } from "../src/round5c/compile-weapon-qualified.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
@@ -278,5 +278,48 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
     expect(() => foldDestroyFilters(already, text)).toThrow(/already has one/u);
     // Without the prior filter the same pair folds into the destruction.
     expect(foldDestroyFilters(leaves, text)).toHaveLength(1);
+  });
+
+  it("a selected unit hit by a named weapon's attacks takes that weapon as the hit filter (S1, the squig shape)", () => {
+    const text = "In your Shooting phase, when this unit has shot, select one enemy unit hit by this unit’s Sample Launcha weapons. That enemy unit is marked until the start of your next turn.";
+    const out = compiled(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["when this unit has shot", "event", { kind: "after-shooting" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by this unit’s", "hit-by-attacks", { subject: "selected-unit" }],
+      ["Sample Launcha weapons", "attack-filter", { weapon_name: "Sample Launcha" }],
+      ["That enemy unit is marked", "apply-mark", { subject: "antecedent", tag: "marked" }],
+      ["until the start of your next turn", "duration", { endpoint: "start-of-next-turn" }],
+    ), text);
+    expect(out).toContain('"weapon_name":"Sample Launcha"');
+    // The filter is folded onto the hit: the same leaves without it name no weapon.
+    const bare = compiled(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["when this unit has shot", "event", { kind: "after-shooting" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by this unit’s", "hit-by-attacks", { subject: "selected-unit" }],
+      ["That enemy unit is marked", "apply-mark", { subject: "antecedent", tag: "marked" }],
+      ["until the start of your next turn", "duration", { endpoint: "start-of-next-turn" }],
+    ), text);
+    expect(bare).not.toContain("weapon_name");
+  });
+
+  it("a before-form Indirect Fire hit followed by a that-unit anaphor is refused, as the span-1 shape is (S3)", () => {
+    const text = "In your Shooting phase, after this model has shot, if one or more of those attacks made with an Indirect Fire weapon scored a hit against an enemy unit, that unit must take a Sample test.";
+    const leaves = placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["after this model has shot", "event", { kind: "after-shooting" }],
+      ["one or more of those attacks made with an Indirect Fire weapon", "attack-filter", { weapon_keyword: "Indirect Fire" }],
+      ["scored a hit against an", "hit-by-attacks", { object: "following-filter" }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["that unit must take a Sample test", "test", { target: "antecedent", test: "leadership" }],
+    );
+    const refused = compileLeaves(leaves, text);
+    expect(refused.ok).toBe(false);
+    expect(refused.errors.join(" ")).toMatch(/points back to that unit, which cannot bind yet/u);
+    // The span alone folds the Indirect Fire filter onto the hit, and the filter leaf is gone.
+    const folded = foldLeadingHitFilters(leaves.slice(2, 5), text);
+    expect(folded).toHaveLength(2);
+    expect(folded[0]!.parameters).toEqual({ object: "following-filter", hit_filter: { weapon_keyword: "Indirect Fire" } });
   });
 });
