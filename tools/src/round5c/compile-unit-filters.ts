@@ -89,6 +89,8 @@ function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): Reco
   const p = leaf.parameters;
   if (p.kind !== "within" || p.subject !== AURA_RECIPIENT || p.negated === true || p.wholly === true) return null;
   const of = NEAR_REFS[String(p.of)];
+  // Folding would drop the named range (its inches are absent); the distance stays a condition instead.
+  if (of !== undefined && p.range_ref !== undefined) throw new CompileError("A distance to another unit by a named range has no quantifier shape yet.");
   return of === undefined ? null : { of, inches: p.inches };
 }
 

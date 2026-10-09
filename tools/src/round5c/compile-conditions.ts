@@ -15,6 +15,7 @@ import { dslAlternatives } from "./compile-filter-alternatives.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { DESIGNATION_IDS } from "../translate/designations.js";
 import { abilityUsedCondition } from "./compile-named-ability.js";
+import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
 
 type Node = Record<string, unknown>;
@@ -178,6 +179,8 @@ export function attackTypeCondition(leaf: CompileLeaf): Node | null {
 function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
   return {
     owner: closed(leaf, "of_side"), ...(leaf.parameters.of_keywords !== undefined ? { all_of: closed(leaf, "of_keywords") } : {}),
+    // "(excluding NEUROGAUNT units)": no unit that has any of these keywords.
+    ...(leaf.parameters.of_excluded_keywords !== undefined ? { none_of: closed(leaf, "of_excluded_keywords") } : {}),
     // "of one or more friendly X VEHICLE or Y units": any one alternative.
     ...dslAlternatives(leaf.parameters.of_alternatives as FilterAlternative[] | undefined),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
@@ -368,17 +371,27 @@ export function condition(leaf: CompileLeaf): Node {
       if (kind === "within" || kind === "beyond") {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
+        // A named range (range_ref, family-extensions-16-named-range-reference.ts) replaces inches:
+        // its aura carries the anchor, and `of` says whose units the distance is measured to.
+        const named = leaf.parameters.range_ref !== undefined;
+        if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
+        const range: Node = named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : { inches: closed(leaf, "inches") };
+        const inchesOnly = (): Node => {
+          if (named) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range.`);
+          return { inches: closed(leaf, "inches") };
+        };
+        const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
         const node = leaf.parameters.of === "marker"
-          ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "battlefield-edge"
-          ? pred("within", { of: "battlefield-edge", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "following-filter"
-          ? pred("within", { of: followingFilter(leaf), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          ? pred("within", { of: followingFilter(leaf), range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "matching-unit"
-          ? pred("within", { of: matchingUnit(leaf, subject), range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
+          ? pred("within", { of: matchingUnit(leaf, subject), range, ...wholly }, subject)
           : leaf.parameters.of !== undefined
-          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range: { inches: closed(leaf, "inches") }, ...(leaf.parameters.wholly === true ? { wholly: true } : {}) }, subject)
-          : pred("within", { of: "defender", range: { inches: closed(leaf, "inches") } });
+          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range, ...wholly }, subject)
+          : pred("within", { of: "defender", range: inchesOnly() });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
       const controlled = closed(leaf, "controlled_by");

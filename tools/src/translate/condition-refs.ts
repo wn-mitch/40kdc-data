@@ -155,7 +155,7 @@ export function subjectOf(p: P, fallback = "the unit"): string {
   return unitRefPhrase(p.subject, fallback);
 }
 
-const AURA_RANGES: Record<string, string> = { "nurgles-gift-death-guard": "Contagion Range" };
+const AURA_RANGES: Record<string, string> = { "nurgles-gift-death-guard": "Contagion Range", "synapse-tyranids": "Synapse Range" };
 
 /** A range-ref as a distance phrase ("6\"", "Engagement Range", "Contagion Range"). */
 export function rangePhrase(r: unknown): string {

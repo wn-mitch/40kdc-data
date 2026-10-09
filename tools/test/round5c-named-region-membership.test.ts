@@ -103,8 +103,8 @@ describe("Round 5C named army regions: counts-as region grant", () => {
     return result.mechanics.effect;
   };
 
-  it("is at version 2 and compiles a region grant to modifier.in_region", () => {
-    expect(currentFamilyVersion("counts-as")).toBe(2);
+  it("is at version 3 and compiles a region grant to modifier.in_region", () => {
+    expect(currentFamilyVersion("counts-as")).toBe(3);
     expect(grant({ subject: "this-unit", region: HALLOWED })).toEqual({
       type: "counts-as", target: "this-unit", modifier: { in_region: { rule_region: HALLOWED } },
     });

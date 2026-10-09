@@ -206,6 +206,8 @@ function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
   const anyEnemy = typeof of === "object" && Object.keys(of).length === 1 && of.owner === "enemy";
   // "More than 9\" away from all enemy units" on a permitted set-up is its min_enemy_distance.
   if (anyEnemy && isSetUp(owner) && owner.parameters.allow !== false) {
+    // min_enemy_distance is a fixed inch count; a named range (range_ref) has no such field.
+    if ("aura_of" in (found.range as Node)) throw new CompileError("A set-up's minimum distance from enemy units is a fixed inch count; a named range has no placement shape yet.");
     const inches = (found.range as Node).inches;
     if (parameters.min_enemy_distance !== undefined && parameters.min_enemy_distance !== inches) {
       throw new CompileError(`A set-up already sets up more than ${String(parameters.min_enemy_distance)}" from enemy units; its placement limit says ${String(inches)}".`);

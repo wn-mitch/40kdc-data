@@ -158,9 +158,10 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
-  // counts-as@2 takes a range or a region; its region object is not sampled, so both forms are listed.
-  "counts-as@2": [
+  // counts-as@3 takes a range, a named range or a region; its region object is not sampled, so all three forms are listed.
+  "counts-as@3": [
     { subject: "this-unit", within: 6 },
+    { subject: "antecedent", range_ref: "synapse", of_side: "friendly" },
     { subject: "this-unit", region: { region_id: "hallowed-ground", owner_faction: "grey-knights" } },
   ],
   // aura-range v3's side is optional (a unit-filter can carry it); alone, only a sided aura compiles.

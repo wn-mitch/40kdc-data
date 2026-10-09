@@ -314,6 +314,7 @@ pub(crate) fn range_phrase(r: Option<&Value>) -> String {
                 let id = st(Some(aura));
                 return match id.as_str() {
                     "nurgles-gift-death-guard" => "Contagion Range".to_string(),
+                    "synapse-tyranids" => "Synapse Range".to_string(),
                     _ => format!("the {} range", id_label(Some(aura))),
                 };
             }

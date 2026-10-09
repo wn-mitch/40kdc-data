@@ -11,6 +11,7 @@ import { printedGrantEffect } from "./compile-granted.js";
 import { testEffect } from "./compile-test-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { isTargetRef } from "./compile-target-refs.js";
+import { namedRange } from "./named-ranges.js";
 
 export type CompileLeaf = {
   role: string;
@@ -404,8 +405,11 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
     }
     case "counts-as": {
-      // A region grant (family-extensions-15-named-region.ts) names the army rule's region instead of a range.
-      const modifier: Node = leaf.parameters.region !== undefined
+      // A region grant (family-extensions-15-named-region.ts) names the army rule's region instead of a range;
+      // a named-range grant (family-extensions-16-named-range-reference.ts) names the range and whose units it is measured to.
+      const modifier: Node = leaf.parameters.range_ref !== undefined
+        ? { within: { aura_of: namedRange(leaf.parameters.range_ref).aura_of }, of: { owner: closed(leaf, "of_side") } }
+        : leaf.parameters.region !== undefined
         ? { in_region: { rule_region: structuredClone(leaf.parameters.region as Node) } }
         : { within: { inches: closed(leaf, "within") } };
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier };

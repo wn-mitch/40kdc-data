@@ -24838,5 +24838,26 @@
     "expected": {
       "text": "At the end of each phase, if this model was destroyed this phase, the first time this battle per model, nothing happens."
     }
+  },
+  {
+    "caseId": "fidelity/counts-as-synapse-range",
+    "effect": {
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "within": {
+          "aura_of": "synapse-tyranids"
+        },
+        "of": {
+          "owner": "friendly"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit counts as being within Synapse Range of all friendly units."
+    }
   }
 ]

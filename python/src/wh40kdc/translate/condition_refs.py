@@ -321,7 +321,7 @@ def _subject_of(p: P, fallback: str = "the unit") -> str:
     return unit_ref_phrase(p.get("subject"), fallback)
 
 
-_AURA_RANGES: dict[str, str] = {"nurgles-gift-death-guard": "Contagion Range"}
+_AURA_RANGES: dict[str, str] = {"nurgles-gift-death-guard": "Contagion Range", "synapse-tyranids": "Synapse Range"}
 
 _RANGE_WORDS: dict[str, str] = {
     "engagement": "Engagement Range",

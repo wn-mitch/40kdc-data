@@ -326,7 +326,7 @@ func subjectOf(p map[string]any, fallback string) string {
 	return unitRefPhrase(p["subject"], fallback)
 }
 
-var auraRanges = map[string]string{"nurgles-gift-death-guard": "Contagion Range"}
+var auraRanges = map[string]string{"nurgles-gift-death-guard": "Contagion Range", "synapse-tyranids": "Synapse Range"}
 
 var rangeSlugPhrases = map[string]string{
 	"engagement":        "Engagement Range",
