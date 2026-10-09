@@ -231,6 +231,12 @@ describe("family registry (wave 10)", () => {
     expect(familyRole("embarked-permission", currentFamilyVersion("embarked-permission"))).toBe("CONDITION");
   });
 
+  it("normalizes an embarked-permission leaf so a reviewer can save one", () => {
+    expect(normalize("embarked-permission", { subject: "this-unit" })).toEqual({ subject: "this-unit" });
+    expect(() => normalize("embarked-permission", { subject: "this-model" })).toThrow(/this-unit/);
+    expect(() => normalize("embarked-permission", { subject: "this-unit", within: 6 })).toThrow(/no parameter within/);
+  });
+
   it("keeps the wave-10 versions above the previous current ones", () => {
     expect(currentFamilyVersion("unit-state")).toBeGreaterThanOrEqual(13);
     expect(currentFamilyVersion("select-unit")).toBeGreaterThanOrEqual(5);

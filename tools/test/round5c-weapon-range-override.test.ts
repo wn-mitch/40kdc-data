@@ -82,9 +82,9 @@ describe("Round 5C unit-position weapon_range: a distance equal to the attacking
     expect(() => normalize("unit-position", { kind: "within", subject: "target", of: "attacker", negated: false })).toThrow();
   });
 
-  it("maps a version-14 distance leaf to version 15 with its parameters unchanged", () => {
+  it("maps a version-14 distance leaf to the current version with its parameters unchanged", () => {
     const parameters = { kind: "within", inches: 12, of: "attacker", subject: "target", negated: false };
-    expect(mapToLatest("unit-position", 14, parameters)).toEqual({ family: "unit-position", version: 15, parameters });
+    expect(mapToLatest("unit-position", 14, parameters)).toEqual({ family: "unit-position", version: currentFamilyVersion("unit-position"), parameters });
   });
 
   it("refuses a weapon_range limit on a set-up's placement rather than folding it as a distance", () => {

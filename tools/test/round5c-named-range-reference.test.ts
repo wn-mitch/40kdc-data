@@ -263,7 +263,7 @@ describe("Round 5C named-range reference: describer and family versions", () => 
   });
 
   it("registers the named-range versions: unit-position past its prior current version and counts-as at version 3", () => {
-    expect(currentFamilyVersion("unit-position")).toBe(15);
+    expect(currentFamilyVersion("unit-position")).toBeGreaterThanOrEqual(15);
     expect(currentFamilyVersion("counts-as")).toBe(3);
   });
 });

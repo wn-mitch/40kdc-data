@@ -21,3 +21,12 @@ export const EMBARKED_PERMISSION_FAMILIES: readonly SemanticFamilyDefinition[] =
     },
   },
 ];
+
+/** embarked-permission takes only its subject, which can only be this unit. */
+export function normalizeEmbarkedPermissionParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family !== "embarked-permission") return null;
+  const stray = Object.keys(input).filter((key) => key !== "subject");
+  if (stray.length) throw new TypeError(`embarked-permission has no parameter ${stray[0]}.`);
+  if (input.subject !== "this-unit") throw new TypeError("embarked-permission.subject can only be this-unit.");
+  return { subject: "this-unit" };
+}

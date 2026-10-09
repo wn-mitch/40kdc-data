@@ -33,7 +33,7 @@ import { NAMED_WARGEAR_LOADOUT_FAMILIES, normalizeNamedWargearParameters } from 
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
-import { EMBARKED_PERMISSION_FAMILIES } from "./embarked-permission-families.js";
+import { EMBARKED_PERMISSION_FAMILIES, normalizeEmbarkedPermissionParameters } from "./embarked-permission-families.js";
 import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./family-extensions-w8-granted.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
@@ -192,7 +192,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeCharacteristicAmountParameters(family, input)
     ?? normalizeEquippedWeaponParameters(family, input)
     ?? normalizeNamedWargearParameters(family, input)
-    ?? normalizeArmyIncludesParameters(family, input);
+    ?? normalizeArmyIncludesParameters(family, input)
+    ?? normalizeEmbarkedPermissionParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }
