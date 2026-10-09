@@ -1,0 +1,175 @@
+{
+ "id": 1185,
+ "source_text": "xxxx xxxxxxxx xxxxx.\nxxx **xxxxx xxxxxxxxx** xxxx xxxx xxxx xxxx xxxx xxx xxx xxxx xxxxxxxx xx xxxx xxxx xxxxx.\nxxxxx xxx xxx xx xxx xxxxx, wwww wwww xxxx xxxx xxxxxxxx, xx xxx xxxx xx xxxxxxx xxxx. xxxxxxx, xxxxx xxx xxx xx xxx xxxxx, xxx 6\" xx xxx xxxx xxxxxxxxxxxxxx xx xxxxxx xx xxxx xxxx. xxxxx xxx xxx xx xxx xxxx, xxxx xxxx xx xxxxxxxx xx xxxxx xxx xxxxxxx x xxxxxx xx x xxxx xx xxxxx xx xxxxxxxx.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "use-window",
+   "family_version": 1,
+   "parameters": {
+    "your_phases": [
+     "movement"
+    ],
+    "opponent_phases": [],
+    "either_phases": []
+   },
+   "start_byte": 0,
+   "end_byte": 19,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 21,
+   "end_byte": 24,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "STORM GUARDIANS"
+    ]
+   },
+   "start_byte": 27,
+   "end_byte": 49,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 50,
+   "end_byte": 64,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-activity",
+   "family_version": 14,
+   "parameters": {
+    "activities": [
+     "selected-to-move-this-phase"
+    ],
+    "subject": "antecedent",
+    "negated": true
+   },
+   "start_byte": 65,
+   "end_byte": 110,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 112,
+   "end_byte": 138,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-started",
+    "move_types": [
+     "advance"
+    ]
+   },
+   "start_byte": 150,
+   "end_byte": 168,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "no-advance-roll",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-unit"
+   },
+   "start_byte": 170,
+   "end_byte": 197,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "COMBINATOR",
+   "family_id": "instead",
+   "family_version": 2,
+   "parameters": {},
+   "start_byte": 199,
+   "end_byte": 206,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 208,
+   "end_byte": 234,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "this-unit",
+    "characteristics": [
+     "M"
+    ],
+    "operation": "add",
+    "value": 6,
+    "weapon_type": "all"
+   },
+   "start_byte": 236,
+   "end_byte": 292,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 294,
+   "end_byte": 319,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "act-after-move",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-unit",
+    "moves": [
+     "advance"
+    ],
+    "acts": [
+     "shoot",
+     "charge"
+    ]
+   },
+   "start_byte": 321,
+   "end_byte": 403,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": "C2: unit-activity advanced-this-turn -> event move-started, no owner (leaf 6)"
+}

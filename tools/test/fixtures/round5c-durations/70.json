@@ -1,0 +1,157 @@
+{
+ "id": 70,
+ "source_text": "xxxx xxxxxxxx xxxxx, wwww wwwwww w **xxxxxxxx** xxxx xxxx xxxx xxxx xxxxxxxx.\nxxxx **xxxxxxxx** xxxx.\nxxxxx xxx xxx xx xxx xxxx, xxxx xxxx xx xxxxxxxx xx xxxxxxx x xxxxxx xx x xxxx xx xxxxx xx xxxxxxxx. ww xxxx xxxx xxx xxx **xxxxxxxx xxxxxxx** xxxxxxx, xx xxx xxxx xx xxxxxxx xxxx xxx xx; xxxxxxx, xxxxx xxx xxx xx xxx xxxxx, xxx 6\" xx xxx xxxx xxxxxxxxxxxxxx xx xxxxxx xx xxxx xxxx.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "use-window",
+   "family_version": 1,
+   "parameters": {
+    "your_phases": [
+     "movement"
+    ],
+    "opponent_phases": [],
+    "either_phases": []
+   },
+   "start_byte": 0,
+   "end_byte": 19,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "PENITENT"
+    ]
+   },
+   "start_byte": 37,
+   "end_byte": 52,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-started",
+    "owner": "friendly",
+    "move_types": [
+     "advance"
+    ]
+   },
+   "start_byte": 53,
+   "end_byte": 76,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "triggering-target",
+   "family_version": 3,
+   "parameters": {
+    "selects": "unit",
+    "keywords": [
+     "PENITENT"
+    ],
+    "match": "all"
+   },
+   "start_byte": 78,
+   "end_byte": 100,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 102,
+   "end_byte": 127,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "act-after-move",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-unit",
+    "moves": [
+     "advance"
+    ],
+    "acts": [
+     "charge"
+    ]
+   },
+   "start_byte": 129,
+   "end_byte": 201,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-keyword",
+   "family_version": 4,
+   "parameters": {
+    "keywords": [
+     "PENITENT ENGINES"
+    ],
+    "subject": "this-unit",
+    "negated": false
+   },
+   "start_byte": 206,
+   "end_byte": 252,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "no-advance-roll",
+   "family_version": 3,
+   "parameters": {
+    "subject": "this-unit"
+   },
+   "start_byte": 254,
+   "end_byte": 288,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "COMBINATOR",
+   "family_id": "instead",
+   "family_version": 2,
+   "parameters": {},
+   "start_byte": 290,
+   "end_byte": 297,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 299,
+   "end_byte": 325,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "this-unit",
+    "characteristics": [
+     "M"
+    ],
+    "operation": "add",
+    "value": 6,
+    "weapon_type": "all"
+   },
+   "start_byte": 327,
+   "end_byte": 383,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null
+}

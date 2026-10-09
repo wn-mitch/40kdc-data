@@ -1,0 +1,129 @@
+{
+ "id": 3620,
+ "source_text": "xxxx xxxxxxxxxxxx xxxxxxxx xxxxx.\nxxx **xxxxxxxxxxx xxxxx xxxxxxxxxx** xxxx xxxx xxxx xxxx xx xxxx xxxxxx.\nxxxxx xxx xxx xx xxx xxxxx, xxxx xxxxxxx xxxx xxxx xx xxxxx x xxxx xxxxxx xxxxxx, xxx xxxx xxxx xx xxxxxxxx xx xxx xxxxxxxxxxx xxxxxx xxxxxx 6\" xx xxxx xxxx xxxxxx xxxxxx xxx xxx xxxxxx xxxxxxxxxx xxxxx xx xxx xx xxxx xxxxx xxxxx.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "use-window",
+   "family_version": 1,
+   "parameters": {
+    "your_phases": [],
+    "opponent_phases": [
+     "movement"
+    ],
+    "either_phases": []
+   },
+   "start_byte": 0,
+   "end_byte": 32,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 34,
+   "end_byte": 37,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "BATTLELINE",
+     "GENESTEALER CULTS"
+    ]
+   },
+   "start_byte": 40,
+   "end_byte": 75,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 76,
+   "end_byte": 90,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "held_in": "cult-ambush"
+   },
+   "start_byte": 91,
+   "end_byte": 105,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 107,
+   "end_byte": 133,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up"
+   },
+   "start_byte": 135,
+   "end_byte": 187,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "set-up",
+   "family_version": 5,
+   "parameters": {
+    "subject": "this-unit",
+    "to": "battlefield",
+    "via": "cult-ambush-marker",
+    "marker_inches": 6,
+    "marker_wholly": true
+   },
+   "start_byte": 189,
+   "end_byte": 336,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "set-up",
+   "target": "this-unit",
+   "modifier": {
+    "to": "battlefield",
+    "via": "cult-ambush-marker",
+    "marker_range": {
+     "inches": 6,
+     "wholly": true
+    }
+   }
+  },
+  "scope": {
+   "duration": "phase"
+  },
+  "behavior": "reactive",
+  "trigger": {
+   "event": "set-up"
+  }
+ }
+}

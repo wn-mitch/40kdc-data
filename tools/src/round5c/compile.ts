@@ -14,6 +14,7 @@ import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, b
 import { trigger, withDestroyedObject } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { refuseOtherwiseGates } from "./compile-otherwise.js";
+import { bindDurations, CONFLICTING_DURATIONS, durationPart, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
@@ -333,6 +334,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const triggers: Node[] = [];
   const triggerIndexes: number[] = [];
   const durations: string[] = [];
+  const durationAt: number[] = [];
   const selections: CompileLeaf[] = [];
   const rolls: CompileLeaf[] = [];
   const combinators: number[] = [];
@@ -444,7 +446,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" && !namesSelection(leaf) ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
-      else if (leaf.role === "DURATION") durations.push(duration(leaf));
+      else if (leaf.role === "DURATION") { durations.push(duration(leaf)); durationAt.push(index); }
       else if (leaf.role === "COMBINATOR") combinators.push(index);
       else if (leaf.role === "RESTRICTION") {
         if (leaf.family_id === "usage-limit") {
@@ -531,7 +533,25 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     });
   });
   if (list.every((leaf) => leaf.role !== "EFFECT")) errors.push("There is no effect leaf to compile.");
-
+  // Several printed durations: each effect takes its clause's duration, else its sentence's (compile-durations.ts).
+  // Bound before the "instead" fold below, which removes an effect and moves its duration to the one it folds into.
+  const split = new Set(durations).size > 1;
+  const firstEffectAt = list.findIndex((leaf) => leaf.role === "EFFECT");
+  const leadingAt = [...new Set(triggerIndexes.filter((index) => firstEffectAt === -1 || index < firstEffectAt))];
+  const binding = split ? bindDurations(list, places, durationAt, planned.map((item) => item.index), leadingAt) : null;
+  if (binding?.error) errors.push(binding.error);
+  const boundDuration = new Map<number, string>(binding?.effects ?? []);
+  const windows = binding?.windows ?? new Map<number, string>();
+  // A set-up moment beside another moment, scoping a set-up effect after it (the Deep Strike shape, 8879 and 994),
+  // has no reading: the effect's scope would be one of two moments. A set-up moment that is only a trigger stays as it was.
+  if (leadingAt.length >= 2 && leadingAt.some((index) => list[index]!.family_id === "event" && list[index]!.parameters.kind === "set-up"
+    && planned.some((item) => item.node.type === "set-up" && item.index > index))) {
+    errors.push("A set-up moment next to another moment has no reading yet.");
+  }
+  // A window (W1) is shared by every leading moment: each one has the same printed duration before it, or none does.
+  const windowDurations = [...new Set(leadingAt.map((index) => windows.get(index)))];
+  if (windows.size > 0 && (leadingAt.some((index) => !windows.has(index)) || windowDurations.length > 1)) errors.push(CONFLICTING_DURATIONS);
+  const window: string | null = windows.size > 0 && windowDurations.length === 1 ? windowDurations[0]! : null;
   // "Can make an ingress move in your next Movement phase": the set-up before it returns then. A set-up
   // earlier in the same sentence wins; failing that, the first set-up after it in its sentence (1339's
   // "Remove your unit from the battlefield" is a different sentence from its battlefield set-up).
@@ -595,7 +615,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // else in its place has no DSL fragment.
     const previous = planned.filter((item) => item.index < replacement.index).at(-1);
     if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) {
-      if (isAdvanceInPlace(replacement.node)) planned.splice(planned.indexOf(replacement), 1);
+      if (isAdvanceInPlace(replacement.node)) {
+        // The folded effect's duration is the no-roll's: equal to its own if it has one, else taken from the folded effect.
+        const folded = boundDuration.get(replacement.index);
+        const kept = boundDuration.get(previous.index);
+        if (folded !== undefined && kept !== undefined && folded !== kept) errors.push(CONFLICTING_DURATIONS);
+        else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
+        boundDuration.delete(replacement.index);
+        planned.splice(planned.indexOf(replacement), 1);
+      }
       else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6 to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);
       continue;
     }
@@ -615,6 +643,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // "Re-roll Hit rolls of 1. Or: if …, re-roll Hit rolls": the player picks one of the two, each
     // under its own conditions.
     if (list[combinator]!.parameters.choice === true) {
+      // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
+      if (boundDuration.has(replaced.index) || boundDuration.has(replacement.index)) { errors.push(CONFLICTING_DURATIONS); continue; }
       replaced.node = { type: "choice", options: [gated(replaced.gate, replaced.node), gated(replacement.gate, replacement.node)] };
       replaced.gate = [];
       planned.splice(planned.indexOf(replacement), 1);
@@ -638,6 +668,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const spends = planned.filter((item) => optionalSpends.has(item.leaf));
     planned.splice(0, planned.length, ...spends, ...planned.filter((item) => !optionalSpends.has(item.leaf)));
   }
+
+  // A bound duration whose effect the fold removed has nothing left to lift.
+  if ([...boundDuration.keys()].some((index) => !planned.some((item) => item.index === index))) errors.push(CONFLICTING_DURATIONS);
 
   // Moments before the first effect are the ability's own (several are alternatives: "selected
   // to shoot or to fight"). A moment after an effect starts a part of a compound ability: the
@@ -686,7 +719,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   // "One or more units from your army with this ability": once for the army (compile-holder-abilities.ts).
   applyHolderAllowance(list, triggers, options.abilityId, usages, usageScopes);
-  if (new Set(durations).size > 1) errors.push("Conflicting durations.");
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
   if (usageScopes.size > 1) errors.push("Conflicting usage scopes.");
   if (usages.length && usageScopes.size === 0) errors.push("Usage frequency needs a reviewed usage scope.");
@@ -730,9 +762,31 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     errors.push("An other-model selection excludes only the bearer's unit; it selects only other models when the bearer has one model.");
   }
   if (forEachLeaf && selections.length > 0) errors.push("A unit is selected and the ability also loops with for-each-unit-select; the compiler binds only one of them.");
+  // Several durations: the parts that take the durations' own wrapping, with the features that read one duration are refused.
+  if (split) {
+    const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
+    if (rolls.length || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
+    if (usages.length) errors.push("A usage limit in an ability with several durations has no reading yet.");
+    if (window !== null && partStarts.length) errors.push("A moment with a window in a compound ability has no reading yet.");
+    const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
+    if (testAfterMark) errors.push(testAfterMark);
+  }
   if (errors.length > 0) return { ok: false, signature, errors };
 
   const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;
+  // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
+  // lasts as long as the window is left bare (the window part carries it); a shorter one nests, a longer one is a sibling.
+  const windowInside = new Map<number, boolean>();
+  if (split) {
+    for (const item of planned) {
+      const bound = boundDuration.get(item.index);
+      if (window === null) { if (bound !== undefined) item.node = durationPart(bound, item.node); continue; }
+      const place = attempt(() => placeInWindow(bound, window));
+      if (place === null) return { ok: false, signature, errors };
+      windowInside.set(item.index, place !== "outside");
+      if (place !== "same") item.node = durationPart(bound!, item.node);
+    }
+  }
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     planned.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
@@ -750,9 +804,25 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const own = pieces[selectionPart]!;
     pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit })];
   }
-  const steps = pieces[0]!;
+  let steps = pieces[0]!;
+  // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
+  let windowHead: Node | null = null;
+  if (window !== null) {
+    const inside = planned.filter((item) => partOf(item.index) === 0).map((item) => windowInside.get(item.index) === true);
+    if (inside.length !== steps.length) { errors.push("A window's effects have no decided order yet."); return { ok: false, signature, errors }; }
+    const within = steps.filter((_, at) => inside[at]);
+    if (within.length === 0) { errors.push("A moment with a window has no effect inside the window."); return { ok: false, signature, errors }; }
+    const head: Node = { type: "ability-part", duration: window, effect: within.length === 1 ? within[0]! : { type: "sequence", steps: within } };
+    windowHead = head;
+    const merged: Node[] = [];
+    steps.forEach((step, at) => {
+      if (!inside[at]) merged.push(step);
+      else if (!merged.includes(head)) merged.push(head);
+    });
+    steps = merged;
+  }
   let body: Node | null = steps.length === 1 ? steps[0]! : { type: "sequence", steps };
-  const scopeDuration = durations[0] ?? "permanent";
+  const scopeDuration = split ? "permanent" : (durations[0] ?? "permanent");
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
   if (auraLeaf || forEachLeaf) {
@@ -830,6 +900,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
   const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
   let entryTrigger = asTrigger(leading);
+  // The window part is the moments' lifetime: its trigger is the leading moments, and the ability has no top-level trigger.
+  if (windowHead) { windowHead.trigger = entryTrigger; entryTrigger = null; }
   if (partStarts.length) {
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.
     const first = pieces[0]!;

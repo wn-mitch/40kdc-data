@@ -1,0 +1,141 @@
+{
+ "id": 6323,
+ "source_text": "xxxxx xxxxx.\nxxx **xxxxxx xxxxxxxxx** xxxx xxxx xxxx xxxx xxxx xxx xxx xxxx xxxxxxxx xx xxxxx xxxx xxxxx.\nxxxxx xxx xxx xx xxx xxxx, xxxxxxx xxx xxxxxxxx xxxxxxxxxxxxxx xx xxxxx xxxxxxx xxxxxxxx xx xxxxxx xx xxxx xxxx xx 1. xx xxxx xxxx xx xxxxxxxxx, xxxxx xxx xxx xx xxx xxxxx, xxxxxxx xxx xxxxxx xxxxxxxxxxx xxxxxxxxxxxxxx xx xxxxx xxxxxxx xxxxxxxx xx xxxxxx xx xxxx xxxx xx 1 ww wwww.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "use-window",
+   "family_version": 1,
+   "parameters": {
+    "your_phases": [],
+    "opponent_phases": [],
+    "either_phases": [
+     "fight"
+    ]
+   },
+   "start_byte": 0,
+   "end_byte": 11,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "stratagem-target",
+   "family_version": 4,
+   "parameters": {
+    "count": "one"
+   },
+   "start_byte": 13,
+   "end_byte": 16,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "keywords": [
+     "ADEPTA SORORITAS"
+    ]
+   },
+   "start_byte": 19,
+   "end_byte": 42,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 43,
+   "end_byte": 57,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-activity",
+   "family_version": 14,
+   "parameters": {
+    "activities": [
+     "fought-this-phase"
+    ],
+    "subject": "this-unit",
+    "negated": true
+   },
+   "start_byte": 58,
+   "end_byte": 104,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 106,
+   "end_byte": 131,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "this-unit",
+    "characteristics": [
+     "S"
+    ],
+    "operation": "improve",
+    "value": 1,
+    "weapon_type": "melee"
+   },
+   "start_byte": 133,
+   "end_byte": 222,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "rule-active",
+   "family_version": 1,
+   "parameters": {
+    "rule": "righteous",
+    "negated": false
+   },
+   "start_byte": 223,
+   "end_byte": 250,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-phase"
+   },
+   "start_byte": 251,
+   "end_byte": 277,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "characteristic-modifier",
+   "family_version": 14,
+   "parameters": {
+    "subject": "this-unit",
+    "characteristics": [
+     "AP"
+    ],
+    "operation": "improve",
+    "value": 1,
+    "weapon_type": "melee"
+   },
+   "start_byte": 279,
+   "end_byte": 378,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": "C6: rule-active righteous promoted from the draft (gate 'If your unit is Righteous')"
+}

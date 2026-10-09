@@ -1,0 +1,176 @@
+{
+ "id": 9605,
+ "source_text": "xxxxxx xxxx xxxxx xxxxxxxxx xx xxxxxxxx xxxxxxxxxx xxxxx xxxx.xxxx xxxx xxxx xxx xxxx, xxx xxx xxxxxx xxx xxxxx xxxx xxx xx xxxxx xxxxxxx. xxxx xxxxx xxxx xx **xxxxxxxxxx** xxxxx xxx xxxxx xx xxxx xxxx xxxx:xxxxx x xxxx xx **xxxxxxxxxx**, xxxx xxxxxxxx xxxxxxx xxxx -1 xx **xxx xxxxx**.wwww xxxx xxxx xxxxx xx **xxxxxxx xxxx**, xx xxx xx xxx xx xxxx xxxx 6\" xxxxxxxxxxxx xxxx xxx xxxxx xxxxx (xxxxxxx of wwww wwww 8\"). ww wwww wwww wwww, xx xxx **xxxxxxxx xx xxxxxxx x xxxxxx** xxxxx xxx xxx xx xxx xxxx.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "bearer-eligibility",
+   "family_version": 4,
+   "parameters": {
+    "keywords": [
+     "COMMANDER IN ENFORCER BATTLESUIT",
+     "SUDDEN DAWN CADRE"
+    ],
+    "match": "all",
+    "excluded_keywords": []
+   },
+   "start_byte": 0,
+   "end_byte": 61,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "after-shooting"
+   },
+   "start_byte": 62,
+   "end_byte": 85,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "optional-use",
+   "family_version": 2,
+   "parameters": {
+    "who": "you"
+   },
+   "start_byte": 87,
+   "end_byte": 94,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "select-unit",
+   "family_version": 4,
+   "parameters": {
+    "scope": "enemy",
+    "distance": "any",
+    "visible": false
+   },
+   "start_byte": 95,
+   "end_byte": 116,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "hit-by-attacks",
+   "family_version": 3,
+   "parameters": {
+    "subject": "selected-unit"
+   },
+   "start_byte": 117,
+   "end_byte": 137,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "apply-mark",
+   "family_version": 4,
+   "parameters": {
+    "subject": "antecedent",
+    "tag": "suppressed"
+   },
+   "start_byte": 139,
+   "end_byte": 170,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "start-of-next-turn"
+   },
+   "start_byte": 173,
+   "end_byte": 206,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "designated-filter",
+   "family_version": 1,
+   "parameters": {
+    "tag": "suppressed"
+   },
+   "start_byte": 207,
+   "end_byte": 235,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "roll-modifier",
+   "family_version": 5,
+   "parameters": {
+    "roll": "hit",
+    "operation": "subtract",
+    "value": 1
+   },
+   "start_byte": 239,
+   "end_byte": 283,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-ended",
+    "move_types": [
+     "ingress"
+    ]
+   },
+   "start_byte": 291,
+   "end_byte": 324,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "set-up",
+   "family_version": 5,
+   "parameters": {
+    "subject": "this-unit",
+    "to": "battlefield",
+    "min_enemy_distance": 6
+   },
+   "start_byte": 328,
+   "end_byte": 391,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "COMBINATOR",
+   "family_id": "instead",
+   "family_version": 2,
+   "parameters": {},
+   "start_byte": 393,
+   "end_byte": 400,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "eligibility-permission",
+   "family_version": 4,
+   "parameters": {
+    "subject": "this-unit",
+    "activity": "declare-charge",
+    "allow": false
+   },
+   "start_byte": 438,
+   "end_byte": 475,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 478,
+   "end_byte": 503,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": "C6: set-up subject antecedent -> this-unit (leaf 10)"
+}
