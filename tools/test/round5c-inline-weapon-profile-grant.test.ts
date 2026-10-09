@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
+import { weaponLabel } from "../src/translate/effect-words.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -46,5 +47,18 @@ describe("inline weapon profile grant shapes", () => {
     const mechanics = compiled(placed(text,
       ["The bearer is equipped with 1 fab cannon", "weapon-grant", { subject: "this-model", weapon_id: "fab-cannon-drone", count: 1 }]), text);
     expect(mechanics.effect.modifier).toEqual({ weapon_id: "fab-cannon-drone", count: 1 });
+  });
+});
+
+// Exported wording for a granted weapon: the printed profile name, never the "-drone" disambiguator.
+describe("granted weapon label", () => {
+  it("drops the drone disambiguator from a drone weapon id", () => {
+    expect(weaponLabel("twin-pulse-carbine-drone")).toBe("Twin Pulse Carbine");
+    expect(weaponLabel("drone-burst-cannon-drone")).toBe("Drone Burst Cannon");
+  });
+
+  it("title-cases an id without the suffix and keeps a curated printed name", () => {
+    expect(weaponLabel("missile-pod")).toBe("Missile Pod");
+    expect(weaponLabel("tl-4-9-lords-of-the-forge")).toBe("TL-4ø9");
   });
 });

@@ -248,10 +248,19 @@ export function abilityLabel(id: unknown): string {
   return ABILITY_LABELS[jstr(id)] ?? idLabel(jstr(id));
 }
 
-const WEAPON_LABELS: Record<string, string> = { "imperiums-sword": "Imperium's Sword" };
-/** The display name for a granted weapon id: a curated override, else Title Case. */
+const WEAPON_LABELS: Record<string, string> = {
+  "imperiums-sword": "Imperium's Sword",
+  "imperiums-sword-assault-brethren": "Imperium's Sword",
+  "tl-4-9-lords-of-the-forge": "TL-4ø9",
+  "eadbanger-wurrband": "'Eadbanger",
+};
+/**
+ * The display name for a granted weapon id: a curated override, else Title Case of the id. A
+ * trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
+ */
 export function weaponLabel(id: unknown): string {
-  return WEAPON_LABELS[jstr(id)] ?? titleCase(jstr(id));
+  const key = jstr(id);
+  return WEAPON_LABELS[key] ?? titleCase(key.replace(/-drone$/, ""));
 }
 
 /** "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a weapon filter as a noun. */

@@ -321,12 +321,21 @@ def ability_label(id: Any) -> str:
     return _ABILITY_LABELS.get(jstr(id), id_label(jstr(id)))
 
 
-_WEAPON_LABELS = {"imperiums-sword": "Imperium's Sword"}
+_WEAPON_LABELS = {
+    "imperiums-sword": "Imperium's Sword",
+    "imperiums-sword-assault-brethren": "Imperium's Sword",
+    "tl-4-9-lords-of-the-forge": "TL-4ø9",
+    "eadbanger-wurrband": "'Eadbanger",
+}
 
 
 def weapon_label(id: Any) -> str:
-    """The display name for a granted weapon id: a curated override, else Title Case."""
-    return _WEAPON_LABELS.get(jstr(id), title_case(jstr(id)))
+    """The display name for a granted weapon id: a curated override, else Title Case of the id.
+
+    A trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
+    """
+    key = jstr(id)
+    return _WEAPON_LABELS.get(key, title_case(re.sub(r"-drone$", "", key)))
 
 
 def weapon_noun(m: dict[str, Any]) -> str:

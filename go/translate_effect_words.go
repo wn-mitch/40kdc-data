@@ -374,14 +374,21 @@ func abilityLabel(id any) string {
 	return idLabel(ejstr(id))
 }
 
-var weaponLabels = map[string]string{"imperiums-sword": "Imperium's Sword"}
+var weaponLabels = map[string]string{
+	"imperiums-sword":                  "Imperium's Sword",
+	"imperiums-sword-assault-brethren": "Imperium's Sword",
+	"tl-4-9-lords-of-the-forge":        "TL-4ø9",
+	"eadbanger-wurrband":               "'Eadbanger",
+}
 
-// weaponLabel is the display name for a granted weapon id: a curated override, else Title Case.
+// weaponLabel is the display name for a granted weapon id: a curated override, else Title Case of
+// the id. A trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
 func weaponLabel(id any) string {
-	if l, ok := weaponLabels[ejstr(id)]; ok {
+	key := ejstr(id)
+	if l, ok := weaponLabels[key]; ok {
 		return l
 	}
-	return titleCase(ejstr(id))
+	return titleCase(strings.TrimSuffix(key, "-drone"))
 }
 
 var trailingWeaponsRe = regexp.MustCompile(`(?i)\s+weapons?$`)
