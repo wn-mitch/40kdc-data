@@ -41,6 +41,7 @@ import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./com
 import { compileGranted } from "./compile-granted.js";
 import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
 import type { CoreCheck } from "./core-checks.js";
+import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./compile-psychic-cost.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
 import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
@@ -219,6 +220,13 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
+  // A record of psychic abilities compiles each heading's ability as one part with its cost (compile-psychic-cost.ts).
+  let psychic: PsychicSegment[] | null;
+  try { psychic = psychicSegments(leaves, sourceText); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
+  }
+  if (psychic) return lowerPsychicRecord(psychic, shapeSignature(ordered(leaves), sourceText), (group) => compilePart(group, sourceText, options));
   const segments = sentenceSegments(ordered(leaves), sourceText);
   if (!segments) return compilePart(leaves, sourceText, options);
   // Independent sentences (compile-segments.ts) compile alone and join as parts of one ability.

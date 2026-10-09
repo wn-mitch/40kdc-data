@@ -10,6 +10,7 @@ import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restrict
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 import { MOVEMENT_FAMILIES, normalizeMovementParameters } from "./movement-families.js";
 import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families.js";
+import { normalizePsychicParameters, PSYCHIC_FAMILIES } from "./psychic-families.js";
 import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
 import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
 import { normalizeWeaponRangeParameters, WEAPON_RANGE_FAMILIES } from "./family-extensions-16-weapon-rule-range-override.js";
@@ -103,6 +104,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...TEST_FAMILIES,
   ...TARGETED_FAMILIES,
   ...GAP_CONTAINER_FAMILIES,
+  ...PSYCHIC_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
   ...ARMY_INCLUDES_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
@@ -171,6 +173,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeDiceParameters(family, input, version)
     ?? normalizeMovementParameters(family, input, version)
     ?? normalizeEconomyParameters(family, input)
+    ?? normalizePsychicParameters(family, input)
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
     ?? normalizeWeaponRangeParameters(family, input)
