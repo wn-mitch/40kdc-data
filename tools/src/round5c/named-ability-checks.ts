@@ -89,3 +89,62 @@ export function namedAbilityProblem(dataRoot: string, abilityId: string, paramet
   if (datasheets.length === 0 || datasheets.some((unit) => unit.ability_ids.includes(id))) return null;
   return `No datasheet that has ${abilityId} has ${id}.`;
 }
+
+/** Every action id of a faction's menus, and those whose own move rolls the die (a string distance such as "D6+1"). */
+export type ManoeuvreMenus = { actions: string[]; withDie: string[] };
+
+const DIE_DISTANCE = { D6: /^D6(\+\d+)?$/u };
+
+function moveDistances(node: unknown, into: unknown[]): void {
+  if (Array.isArray(node)) {
+    for (const item of node) moveDistances(item, into);
+    return;
+  }
+  if (node === null || typeof node !== "object") return;
+  const record = node as Entry;
+  if (record.type === "move" || record.type === "make-move") {
+    const modifier = record.modifier as Entry | undefined;
+    into.push(modifier?.distance ?? record.distance);
+  }
+  for (const value of Object.values(record)) moveDistances(value, into);
+}
+
+/**
+ * The menus of the faction whose enrichment holds one ability id: every action, and the actions
+ * whose own move gives the die as a distance. Null when no faction holds the id. Read from the
+ * enrichment file directly so the distances are visible (the factionRules cache keeps ids only).
+ */
+export function menuActionsForAbility(dataRoot: string, abilityId: string, die: keyof typeof DIE_DISTANCE): ManoeuvreMenus | null {
+  const enrichment = join(dataRoot, "enrichment");
+  if (!existsSync(enrichment)) return null;
+  const factions = readdirSync(enrichment).filter((name) => !name.startsWith("_") && existsSync(join(enrichment, name, "abilities.json")));
+  const faction = factions.find((name) => readArray(join(enrichment, name, "abilities.json")).some((entry) => entry.ability_id === abilityId));
+  if (faction === undefined) return null;
+  const actions: string[] = [];
+  const withDie: string[] = [];
+  for (const entry of readArray(join(enrichment, faction, "abilities.json"))) {
+    const found = new Set<string>();
+    menuActions(entry.effect, found);
+    for (const id of found) actions.push(id);
+    for (const menu of collectMenus(entry.effect)) {
+      for (const action of menu.actions as Entry[]) {
+        const distances: unknown[] = [];
+        moveDistances(action.effect, distances);
+        if (distances.some((distance) => typeof distance === "string" && DIE_DISTANCE[die].test(distance))) withDie.push(String(action.id));
+      }
+    }
+  }
+  return { actions: [...new Set(actions)].sort(), withDie: [...new Set(withDie)].sort() };
+}
+
+function collectMenus(node: unknown, into: Entry[] = []): Entry[] {
+  if (Array.isArray(node)) {
+    for (const item of node) collectMenus(item, into);
+    return into;
+  }
+  if (node === null || typeof node !== "object") return into;
+  const record = node as Entry;
+  if (record.type === "resource-action-menu" && Array.isArray(record.actions)) into.push(record);
+  for (const value of Object.values(record)) collectMenus(value, into);
+  return into;
+}

@@ -199,15 +199,32 @@ function boundEligibilityRequires(marker: CompileLeaf): Node[] {
   return requires;
 }
 
+/** The one bound state a menu action's selected unit must be in: engaged with the moment's enemy at the start of the phase. */
+function isBoundEngagedState(leaf: CompileLeaf): boolean {
+  const p = leaf.parameters;
+  return leaf.role === "CONDITION" && leaf.family_id === "unit-state" && p.subject === "selected-unit" && p.with === "event-subject"
+    && p.at === "phase-start" && p.negated !== true && Array.isArray(p.states) && p.states.length === 1 && p.states[0] === "engaged";
+}
+
+/** The one hit a menu action's selected unit must have taken from the moment's attacks, with no attack filter. */
+function isBoundHitLeaf(leaf: CompileLeaf): boolean {
+  return leaf.role === "CONDITION" && leaf.family_id === "hit-by-attacks" && leaf.parameters.subject === "selected-unit"
+    && Object.keys(leaf.parameters).length === 1;
+}
+
 /**
- * A menu-action's own eligibility, read from ordinary leaves in its group rather than flags: a
- * `unit-keyword` CONDITION leaf becomes `requires_keyword` (negated: `excludes_keyword`), and a
- * `select-unit` leaf's presence becomes `selector_count: 1` — the only count any authored record
- * needs so far. Returns the eligibility fields and how many leading leaves they consumed.
+ * A menu-action's own eligibility and triggers, read from ordinary leaves in its group rather than
+ * flags, in any order before the effect starts. A `unit-keyword` CONDITION becomes `requires_keyword`
+ * (negated: `excludes_keyword`); a `select-unit` becomes `selector_count: 1` with the keywords of the
+ * unit-filter folded into it (scope must be friendly or left out); a bound `unit-state` and a bound
+ * `hit-by-attacks` become `requires`. Every other EVENT leaf is a trigger. The first leaf of none of
+ * these starts the effect. Returns the eligibility, the trigger leaves and how many leaves they used.
  */
-function menuActionEligibility(group: readonly CompileLeaf[]): { eligibility: Node; consumed: number } {
+function menuActionHead(marker: CompileLeaf, group: readonly CompileLeaf[]): { eligibility: Node; triggers: CompileLeaf[]; consumed: number } {
   const requiresKeyword: string[] = [];
   const excludesKeyword: string[] = [];
+  const requires: Node[] = [];
+  const triggers: CompileLeaf[] = [];
   let selectorCount: number | undefined;
   let cursor = 0;
   while (group[cursor]) {
@@ -215,21 +232,35 @@ function menuActionEligibility(group: readonly CompileLeaf[]): { eligibility: No
     if (leaf.role === "CONDITION" && leaf.family_id === "unit-keyword") {
       const keywords = closed(leaf, "keywords") as string[];
       (leaf.parameters.negated === true ? excludesKeyword : requiresKeyword).push(...keywords);
-      cursor += 1;
-      continue;
-    }
-    if (leaf.role === "EVENT" && leaf.family_id === "select-unit") {
+    } else if (leaf.role === "EVENT" && leaf.family_id === "select-unit") {
+      if (selectorCount !== undefined) throw new CompileError("A menu-action selects one unit: give it one select-unit.");
+      if (leaf.parameters.scope !== undefined && leaf.parameters.scope !== "friendly") throw new CompileError("A menu-action's select-unit selects a friendly unit; an enemy select-unit has no eligibility shape.");
+      if (leaf.parameters.count !== undefined && leaf.parameters.count !== 1) throw new CompileError("A menu-action's select-unit selects one unit.");
       selectorCount = 1;
-      cursor += 1;
-      continue;
+      const filter = (leaf.parameters.filter ?? {}) as Record<string, unknown>;
+      const { keywords, excluded_keywords: excluded, ...others } = filter as { keywords?: string[]; excluded_keywords?: string[] } & Record<string, unknown>;
+      if (Object.keys(others).length) throw new CompileError(`A menu-action's selected unit is named only by its keywords; the DSL holds no ${Object.keys(others).join(", ")} for it.`);
+      requiresKeyword.push(...(keywords ?? []));
+      excludesKeyword.push(...(excluded ?? []));
+    } else if (isBoundEngagedState(leaf)) {
+      if (marker.parameters.binds_event_variable === undefined) throw new CompileError("A menu-action's bound state needs the event variable its moment binds.");
+      requires.push({ type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: { event_var: closed(marker, "binds_event_variable") }, at: "phase-start" } });
+    } else if (isBoundHitLeaf(leaf)) {
+      if (marker.parameters.binds_event_variable === undefined) throw new CompileError("A menu-action's bound hit needs the event variable its moment binds.");
+      requires.push({ type: "happened", parameters: { event: "after-roll", object: "selected-unit", filter: { roll: "hit", result: "success", by: { event_var: closed(marker, "binds_event_variable") } }, window: "event" } });
+    } else if (leaf.role === "EVENT") {
+      triggers.push(leaf);
+    } else {
+      break;
     }
-    break;
+    cursor += 1;
   }
   const eligibility: Node = {};
   if (requiresKeyword.length) eligibility.requires_keyword = requiresKeyword;
   if (excludesKeyword.length) eligibility.excludes_keyword = excludesKeyword;
   if (selectorCount !== undefined) eligibility.selector_count = selectorCount;
-  return { eligibility, consumed: cursor };
+  if (requires.length) eligibility.requires = requires;
+  return { eligibility, triggers, consumed: cursor };
 }
 
 /** resource-action-menu: each group is led by menu-action; the leaves after it (past eligibility) are its trigger(s) (`when`, one or several alternatives), then its effect. */
@@ -237,10 +268,8 @@ function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): No
   const actions = groups.map((group) => {
     const marker = group[0];
     if (!marker || marker.family_id !== "menu-action") throw new CompileError("Each resource-action-menu action needs a leading menu-action leaf.");
-    const { eligibility: keywordEligibility, consumed } = menuActionEligibility(group.slice(1));
+    const { eligibility: ownEligibility, triggers: whenLeaves, consumed } = menuActionHead(marker, group.slice(1));
     let cursor = 1 + consumed;
-    const whenLeaves: CompileLeaf[] = [];
-    while (group[cursor] && group[cursor]!.role === "EVENT") { whenLeaves.push(group[cursor]!); cursor += 1; }
     if (whenLeaves.length === 0) throw new CompileError("A menu-action needs its own trigger leaf (an EVENT leaf) after its marker and any eligibility leaves.");
     const triggers = whenLeaves.flatMap((leaf) => triggerLeaves(leaf).map((each) => trigger(each)));
     const when: Node | Node[] = triggers.length === 1 ? triggers[0]! : triggers;
@@ -248,9 +277,13 @@ function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): No
     const cost: Node = { pool_id: marker.parameters.cost_pool_id !== undefined ? closed(marker, "cost_pool_id") : closed(head, "pool_id"), amount: closed(marker, "cost_amount") };
     if (marker.parameters.cost_resource_label !== undefined) cost.resource_label = closed(marker, "cost_resource_label");
     const action: Node = { id: closed(marker, "action_id"), label: closed(marker, "label"), when, cost, effect: effectsOf(group.slice(cursor)) };
-    const eligibility: Node = { ...keywordEligibility };
-    const requires = boundEligibilityRequires(marker);
-    if (requires.length) eligibility.requires = requires;
+    const eligibility: Node = { ...ownEligibility };
+    const flagRequires = boundEligibilityRequires(marker);
+    if (flagRequires.length) {
+      // A leaf and a flag that state the same requirement would say it twice.
+      if (flagRequires.some((flag) => JSON.stringify(eligibility.requires ?? []).includes(JSON.stringify(flag)))) throw new CompileError("A menu-action states a bound requirement both as a leaf and as a flag; keep one.");
+      eligibility.requires = [...((eligibility.requires as Node[] | undefined) ?? []), ...flagRequires];
+    }
     if (Object.keys(eligibility).length) action.eligibility = eligibility;
     if (marker.parameters.duration !== undefined) action.duration = closed(marker, "duration");
     if (marker.parameters.repeatable_if_different_unit === true) action.usage = { repeatable_if_different_unit: true };

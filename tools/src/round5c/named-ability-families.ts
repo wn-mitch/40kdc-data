@@ -16,7 +16,29 @@ export const ABILITY_USED_SUBJECTS = ["this-unit", "this-model", ANTECEDENT, "ev
 /** now: the use is being resolved at this moment ("while it is performing"); phase and turn: earlier in the window. */
 export const ABILITY_USED_WINDOWS = ["now", "phase", "turn"] as const;
 
+/**
+ * "performs an Agile Manoeuvre that involves rolling a D6": the manoeuvres whose own effect rolls
+ * that die, derived from the faction's resource-action menus (compile-manoeuvre-own-roll.ts).
+ */
+export const MANOEUVRE_DIE_KINDS = ["D6"] as const;
+
+export const MANOEUVRE_OWN_ROLL_FAMILY: SemanticFamilyDefinition = {
+  id: "manoeuvre-own-roll",
+  version: 1,
+  role: "CONDITION",
+  label: "Manoeuvre that rolls a die",
+  description: "The used manoeuvre is one whose own effect rolls this die (\"an Agile Manoeuvre that involves rolling a D6\"). Folds into the used-manoeuvre moment before it and names the manoeuvres from the faction's menus.",
+  starter: { die: "" },
+  parameterSchema: {
+    type: "object",
+    required: ["die"],
+    properties: { die: { enum: MANOEUVRE_DIE_KINDS } },
+    additionalProperties: false,
+  },
+};
+
 export const NAMED_ABILITY_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  MANOEUVRE_OWN_ROLL_FAMILY,
   {
     id: "by-ability",
     version: 1,
@@ -58,6 +80,10 @@ export function normalizeNamedAbilityParameters(family: string, input: Record<st
   if (family === "by-ability") {
     exactKeys(input, ["id"], family);
     return { id: namedId(input.id, "by-ability.id") };
+  }
+  if (family === "manoeuvre-own-roll") {
+    exactKeys(input, ["die"], family);
+    return { die: enumValue(input.die, MANOEUVRE_DIE_KINDS, "manoeuvre-own-roll.die") };
   }
   if (family !== "ability-used") return null;
   exactKeys(input, ["subject", "activity", "window", "negated", ...("id" in input ? ["id"] : [])], family);

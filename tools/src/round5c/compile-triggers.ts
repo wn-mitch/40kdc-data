@@ -174,6 +174,14 @@ export function trigger(leaf: CompileLeaf): Node {
     const used: Node = { type: "happened", parameters: { event: "used", ...(subject !== undefined && subject !== "this-unit" ? { subject } : {}), filter: { kind: "ability", id: leaf.parameters.by_ability }, window: "event" } };
     node.condition = node.condition === undefined ? used : { operator: "and", operands: [node.condition, used] };
   }
+  // "an Agile Manoeuvre that involves rolling a D6" (compile-manoeuvre-own-roll.ts): one of the named manoeuvres was used.
+  if (leaf.parameters.manoeuvre_ids !== undefined) {
+    const subject = typeof node.subject === "string" ? node.subject : node.subject === undefined ? undefined : "event-subject";
+    const ids = closed(leaf, "manoeuvre_ids") as string[];
+    const used = ids.map((id): Node => ({ type: "happened", parameters: { event: "used", ...(subject !== undefined && subject !== "this-unit" ? { subject } : {}), filter: { kind: "manoeuvre", id }, window: "event" } }));
+    const either: Node = used.length === 1 ? used[0]! : { operator: "or", operands: used };
+    node.condition = node.condition === undefined ? either : { operator: "and", operands: [node.condition, either] };
+  }
   // A folded unit-filter after it ("allocated to an ADEPTA SORORITAS unit") names what it happens to.
   if (leaf.parameters.object_filter !== undefined) {
     node.object = structuredClone(leaf.parameters.object_filter as Node);
