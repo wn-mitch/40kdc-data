@@ -29,8 +29,14 @@ export function foldObjectRange(list: readonly CompileLeaf[], sourceText?: strin
     const moment = list[index]!;
     const filter = list[index + 1];
     const range = list[index + 2];
-    const isWithin = range?.family_id === "unit-position" && range.parameters.kind === "within" && range.parameters.subject === ANTECEDENT;
-    const pairs = isTargetMoment(moment) && filter?.family_id === "unit-filter" && isWithin
+    const isWithin = (leaf: CompileLeaf | undefined): leaf is CompileLeaf => leaf?.family_id === "unit-position" && leaf.parameters.kind === "within" && leaf.parameters.subject === ANTECEDENT;
+    // A range right after a targets-selected moment with no unit-filter naming the target between them:
+    // the range would measure the moment's subject, not the unit it targeted. Refused, not folded.
+    if (isTargetMoment(moment) && moment.parameters.object === undefined && moment.parameters.object_filter === undefined && isWithin(filter)
+      && moment.fragment === filter!.fragment && sameSentence(sourceText, moment.end_byte, filter!.start_byte)) {
+      throw new CompileError("A range from the unit a moment targets needs that unit's unit-filter between the moment and the range, in the same sentence.");
+    }
+    const pairs = isTargetMoment(moment) && filter?.family_id === "unit-filter" && isWithin(range)
       && moment.fragment === filter.fragment && filter.fragment === range!.fragment
       && sameSentence(sourceText, moment.end_byte, filter.start_byte)
       && sameSentence(sourceText, filter.end_byte, range!.start_byte);
@@ -67,7 +73,9 @@ export function foldStratagemTail(list: readonly CompileLeaf[], sourceText?: str
     const moment = out.at(-1);
     const tail = isTargetMoment(leaf) && leaf.parameters.action_kind === "stratagem" && leaf.parameters.owner === undefined
       && leaf.parameters.subject === undefined && leaf.parameters.object === undefined && leaf.parameters.id === undefined && leaf.parameters.object_filter === undefined;
-    if (!tail || !isTargetMoment(moment) || moment.fragment !== leaf.fragment || !sameSentence(sourceText, moment.end_byte, leaf.start_byte)) {
+    const merges = tail && isTargetMoment(moment) && moment.fragment === leaf.fragment && sameSentence(sourceText, moment.end_byte, leaf.start_byte);
+    if (tail && !merges) throw new CompileError("A Stratagem tail must directly follow a targets-selected moment in its sentence.");
+    if (!merges) {
       out.push(leaf);
       continue;
     }
