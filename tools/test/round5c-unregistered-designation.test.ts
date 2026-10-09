@@ -154,3 +154,41 @@ describe("a roll change on the unit a mark was applied to", () => {
     expect(out).toContain('"type":"roll-modifier","target":"this-unit"');
   });
 });
+
+// "each unit struck by X suffers D3 mortal wounds" after a for-each: the check names each iterated unit. No
+// lowering binds that yet, so the record is refused rather than checking the bearer's unit.
+describe("a designation check on each unit a for-each passes", () => {
+  const text = "Shooting phase. Roll one D6 for each enemy unit within 3\" of this model. On a 5+, the unit being rolled for is struck by spores. After resolving all of this model's attacks, each unit struck by spores suffers D3 mortal wounds.";
+  const leaves = (): CompileLeaf[] => placed(text,
+    ["Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+    ["Roll one D6", "dice-roll", { dice: "D6" }],
+    ["for each", "for-each-unit-select", {}],
+    ["enemy unit", "unit-filter", { side: "enemy" }],
+    ["within 3\" of this model", "unit-position", { kind: "within", inches: 3, of: "this-model", subject: "antecedent", negated: false }],
+    ["the unit being rolled for is struck by spores", "apply-mark", { subject: "antecedent", tag: "struck-by-spores" }],
+    ["After resolving all of this model's attacks", "event", { kind: "attacks-resolved" }],
+    ["each", "for-each-unit-select", {}],
+    ["unit struck", "unit-filter", { side: "any" }],
+    ["struck by spores", "designated-filter", { tag: "struck-by-spores" }],
+    ["suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }]);
+
+  it("refuses the record rather than checking the bearer's unit", () => {
+    const errors = errorsOf(leaves(), text);
+    expect(errors.join(" ")).toMatch(/designation check on each unit a for-each passes has no DSL shape yet/u);
+  });
+});
+
+// "One enemy unit hit by those attacks" on a Stratagem target: no lowering takes the hit into the target, so the
+// qualifier would be dropped. The record is refused.
+describe("a hit-by qualifier on a Stratagem target", () => {
+  const text = "Your Shooting phase. One ALPHA unit. One enemy unit hit by one or more of those attacks has +1 to Hit rolls.";
+  it("refuses the record rather than dropping the hit qualifier", () => {
+    const list = placed(text,
+      ["Your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["One", "stratagem-target", { count: "one" }],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["hit by one or more of those attacks", "hit-by-attacks", { subject: "antecedent" }],
+    ).map((leaf) => (leaf.family_id === "hit-by-attacks" ? { ...leaf, fragment: "TARGET" } : leaf));
+    expect(errorsOf(list, text).join(" ")).toMatch(/hit-by-attacks qualifier on a Stratagem target has no DSL shape yet/u);
+  });
+});

@@ -132,6 +132,8 @@ func TestPhase4ShapeRenders(t *testing.T) {
 			"The war dogs target counts as being within its aura range of the abhorrent target."},
 		{"select objective", `{"type":"select-objective","selector":{"count":1,"range":"objective-control","origin":"bearer-unit","controlled_by":"your-army","bind_as":"m"},"effect":{"type":"designate","target":"this-unit","modifier":{"subject":{"objective":{"selection_var":"m"}},"tag":"mutated","clears_on":"control-lost"}}}`, "",
 			"Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it."},
+		{"designation shaken", `{"type":"designate","target":"this-unit","modifier":{"tag":"shaken"}}`,
+			"The unit is shaken."},
 		{"aura cap", `{"type":"aura","target":"enemy-within-aura","modifier":{"range":3,"range_cap":12,"emitter_filter":{"required_keywords":["DEATH GUARD"]},"effect":{"type":"designate","target":"recipient","modifier":{"subject":"recipient","tag":"afflicted"}}}}`, "",
 			`While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.`},
 		{"the- stratagem target", `{"type":"counts-as","target":{"stratagem_target":"the-lure"},"modifier":{"within":"aura","of":"this-unit"}}`, "",

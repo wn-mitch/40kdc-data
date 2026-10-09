@@ -7735,5 +7735,31 @@
    "unsupported": [],
    "activatable": []
   }
+ },
+ {
+  "fn": "condition",
+  "input": {
+   "type": "designated",
+   "parameters": {
+    "tag": "shaken"
+   }
+  },
+  "output": "the unit is shaken"
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "designate",
+    "target": "this-unit",
+    "modifier": {
+     "tag": "shaken"
+    }
+   },
+   "scope": {
+    "duration": "permanent"
+   }
+  },
+  "output": "The unit is shaken."
  }
 ]

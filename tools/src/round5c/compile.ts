@@ -801,6 +801,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
   }
+  // forEachLeaf keeps only the last quantifier, so a second pass would replace the first one's selector.
+  if (list.filter((leaf) => leaf.family_id === "for-each-unit-select").length > 1) errors.push("A record with two for-each-unit-select passes is not lowered yet; the compiler binds only one pass's units, so it refuses the record.");
+  // "One enemy unit hit by those attacks" on a Stratagem target: only a select-unit's eligibility takes the hit, so it would be dropped.
+  if (list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
   const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;

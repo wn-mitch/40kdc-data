@@ -153,6 +153,12 @@ export function bindDesignationSubjects(leaves: readonly CompileLeaf[]): Compile
     const attack = after.slice(0, after.indexOf(effect)).find((other) => other.family_id === "attack");
     // "When an X unit targets that unit": an attack on the designated unit makes it the defender too.
     const who = attack ? (attack.parameters.direction === "targeted" || attack.parameters.target === "that-unit" ? "defender" : undefined) : effect.parameters.subject ?? effect.parameters.target;
+    // "each unit struck by X suffers D3 mortal wounds" after a for-each: the check belongs to each iterated unit, which
+    // no lowering binds yet. Left unbound it would check the bearer's unit, so the record is refused instead.
+    if (who === undefined && attack === undefined && effect.family_id === "mortal-wounds" && effect.parameters.recipient === "that-unit"
+      && leaves.some((other) => other.family_id === "for-each-unit-select")) {
+      throw new CompileError("A designation check on each unit a for-each passes has no DSL shape yet; it would check the bearer's unit.");
+    }
     // A named Stratagem target ("the second unit", minted by compile-target-refs) is a unit too; several targets are not one unit.
     return typeof who === "string" && (DESIGNATED_SUBJECTS.has(who) || isOneTargetRef(who)) ? { ...leaf, parameters: { ...leaf.parameters, subject: who } } : leaf;
   });
