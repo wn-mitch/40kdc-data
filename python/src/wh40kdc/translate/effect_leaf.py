@@ -391,23 +391,30 @@ def _keyword_grant(m: dict[str, Any], subj: str) -> str:
 
 
 def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    kws = (
-        " and ".join(bracket_keyword(a) for a in m["abilities"])
-        if isinstance(m.get("abilities"), list)
-        else "[?]"
-    )
+    # A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+    gained = " and ".join(bracket_keyword(a) for a in m["abilities"]) if isinstance(m.get("abilities"), list) else ""
+    lost = " and ".join(bracket_keyword(a) for a in m["removes"]) if isinstance(m.get("removes"), list) else ""
     increment = (
         " (a weapon that already has that ability adds the ratings together)"
         if m.get("if_present") == "increment"
         else ""
     )
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}the attacking weapon has {kws}{increment}"
+        return f"{_incoming_lead(m, subj)}the attacking weapon has {gained or '[?]'}{increment}"
     if has_weapon(m):
-        noun = weapon_noun(m)
-        gain = "gain" if re.search(r"weapons\b", noun) else "gains"
-        return f"{noun} equipped by {weapon_holder(e.get('target'), ctx)} {gain} {kws}{increment}"
-    return f"{of_or_possessive(subj, 'weapons')} gain {kws}{increment}"
+        noun = f"{weapon_noun(m)} equipped by {weapon_holder(e.get('target'), ctx)}"
+    else:
+        noun = of_or_possessive(subj, "weapons")
+    plural = not has_weapon(m) or re.search(r"weapons\b", weapon_noun(m)) is not None
+    gain, lose = ("gain", "lose") if plural else ("gains", "loses")
+    changes = []
+    if gained:
+        changes.append(f"{gain} {gained}{increment}")
+    if lost:
+        changes.append(f"{lose} {lost}")
+    if not changes:
+        changes.append(f"{gain} [?]")
+    return f"{noun} {' and '.join(changes)}"
 
 
 _ASPECTS = {

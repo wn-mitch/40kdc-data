@@ -550,6 +550,62 @@
         ],
         "activatable": []
       }
+    },
+    {
+      "_comment": "Fabricated weapon-ability removal: the cruncher does not model removing a weapon ability, so it is unsupported and not applied.",
+      "abilityId": "fabricated-removal-rule",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-removal-rule",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "removes": [
+            "Heavy"
+          ],
+          "weapon_type": "ranged"
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated grant selected by a weapon keyword: the cruncher cannot resolve the selector, so it refuses rather than applying to every weapon.",
+      "abilityId": "fabricated-selector-rule",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selector-rule",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Close-quarters"
+          ],
+          "weapon_keyword": "Torrent"
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve"
+        ]
+      }
     }
   ]
 }

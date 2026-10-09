@@ -1015,6 +1015,18 @@ func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effec
 	if !ok {
 		return
 	}
+	// A selector by keyword would apply the grant to every weapon of the unit: refuse it rather than over-apply it.
+	if modifier["weapon_keyword"] != nil {
+		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node))
+		return
+	}
+	if removes, ok := asList(modifier["removes"]); ok {
+		for _, k := range removes {
+			if keyword, ok := k.(string); ok {
+				out.unsupported = append(out.unsupported, unsup("weapon-ability-removal: the cruncher does not model removing a weapon ability (\""+keyword+"\")", map[string]any{"removes": []any{keyword}}))
+			}
+		}
+	}
 	raws := keywordGrantList(modifier)
 	if len(raws) == 0 {
 		return

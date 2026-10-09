@@ -253,6 +253,21 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         },
       };
     }
+    case "weapon-ability-removal": {
+      // "Do not have [Heavy]" under a scope (compile-weapon-scopes.ts bindRemoval): the scope's weapons lose it.
+      const subject = leaf.parameters.subject;
+      if (subject === undefined) throw new CompileError("A weapon ability removal has no recipient; it needs a weapon-property scope before it.");
+      const weaponType = leaf.parameters.weapon_type;
+      const weaponKeyword = leaf.parameters.weapon_keyword;
+      return {
+        type: "weapon-ability-grant", target: target(subject),
+        modifier: {
+          removes: [closed(leaf, "keyword")],
+          ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
+          ...(weaponKeyword !== undefined ? { weapon_keyword: weaponKeyword } : {}),
+        },
+      };
+    }
     case "core-ability-grant": {
       const value = leaf.parameters.value;
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: closed(leaf, "ability"), ...(value !== undefined ? { value } : {}) } };

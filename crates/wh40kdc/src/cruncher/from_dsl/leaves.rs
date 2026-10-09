@@ -344,6 +344,21 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
+    // A selector by keyword would apply the grant to every weapon of the unit: refuse it (as the
+    // TS cruncher does) rather than over-apply it.
+    if m.get("weapon_keyword")
+        .is_some_and(|value| !value.is_null())
+    {
+        out.unsupported("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node);
+        return;
+    }
+    for keyword in list(m.get("removes")).iter().filter_map(Value::as_str) {
+        let fragment = json!({ "removes": [keyword] });
+        out.unsupported.push((
+            format!("weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{keyword}\")"),
+            fragment,
+        ));
+    }
     let raws: Vec<&str> = list(m.get("abilities"))
         .iter()
         .filter_map(Value::as_str)

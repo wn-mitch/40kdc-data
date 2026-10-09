@@ -3,6 +3,13 @@ import { enumValue, exactKeys } from "./family-validation.js";
 import {
   BUFF_SUBJECTS, constTrue, nonEmptyString, parameterizedWeaponKeyword, SUBJECTS_WITH_BEARER, WEAPON_TYPES, weaponGrantKeywords,
 } from "./buff-families.js";
+import { WAVE9_KEYWORDS } from "./family-extensions-13-weapon-ability-vocabulary.js";
+
+/**
+ * Weapon abilities a weapon can lose ("Do not have [Heavy]"): every grantable value-less keyword, plus the
+ * wave-9 Close-quarters. Rated forms (Sustained Hits 1, Melta 2) are not here, so a removal of one is refused.
+ */
+export const WEAPON_REMOVAL_KEYWORDS: readonly string[] = [...weaponGrantKeywords, ...WAVE9_KEYWORDS];
 
 /**
  * `weapon-ability-grant` (and its keyword leaf) on its own file: at five versions plus its normalizer, it would push
@@ -113,6 +120,20 @@ export const WEAPON_BUFF_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    id: "weapon-ability-removal",
+    version: 1,
+    role: "EFFECT",
+    label: "Weapons lose an ability",
+    description: "The weapons in the scope of the weapon-property-scope before it lose one named weapon ability (\"Do not have [Heavy]\"). Not a unit keyword, and not a rated ability.",
+    starter: { keyword: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["keyword"],
+      properties: { keyword: { enum: WEAPON_REMOVAL_KEYWORDS } },
+      additionalProperties: false,
+    },
+  },
+  {
     id: "weapon-property-scope",
     version: 1,
     role: "CONDITION",
@@ -165,6 +186,10 @@ export function normalizeWeaponBuffParameters(
       subject: enumValue(input.subject, ["this-unit", "this-model", "selected-unit"], "weapon-property-scope.subject"),
       weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "weapon-property-scope.weapon_type"),
     };
+  }
+  if (family === "weapon-ability-removal") {
+    exactKeys(input, ["keyword"], family);
+    return { keyword: enumValue(input.keyword, WEAPON_REMOVAL_KEYWORDS, "weapon-ability-removal.keyword") };
   }
   if (family === "weapon-ability-keyword") {
     exactKeys(input, ["keyword"], family);

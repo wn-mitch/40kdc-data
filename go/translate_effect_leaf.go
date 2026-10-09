@@ -426,30 +426,53 @@ func keywordGrantLeaf(m map[string]any, subj string) string {
 }
 
 func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
-	kws := "[?]"
-	if l, ok := asList(m["abilities"]); ok {
+	// A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+	keywordList := func(v any) string {
+		l, ok := asList(v)
+		if !ok {
+			return ""
+		}
 		parts := make([]string, len(l))
 		for i, k := range l {
 			parts[i] = bracketKeyword(k)
 		}
-		kws = strings.Join(parts, " and ")
+		return strings.Join(parts, " and ")
 	}
+	gained := keywordList(m["abilities"])
+	lost := keywordList(m["removes"])
 	increment := ""
 	if m["if_present"] == "increment" {
 		increment = " (a weapon that already has that ability adds the ratings together)"
 	}
 	if m["incoming"] == true {
+		kws := gained
+		if kws == "" {
+			kws = "[?]"
+		}
 		return incomingLead(m, subj) + "the attacking weapon has " + kws + increment
 	}
+	noun := ofOrPossessive(subj, "weapons")
+	plural := true
 	if hasWeapon(m) {
-		noun := weaponNoun(m)
-		gain := "gains"
-		if weaponsWordRe.MatchString(noun) {
-			gain = "gain"
-		}
-		return noun + " equipped by " + weaponHolder(e["target"], ctx) + " " + gain + " " + kws + increment
+		kind := weaponNoun(m)
+		noun = kind + " equipped by " + weaponHolder(e["target"], ctx)
+		plural = weaponsWordRe.MatchString(kind)
 	}
-	return ofOrPossessive(subj, "weapons") + " gain " + kws + increment
+	gain, lose := "gains", "loses"
+	if plural {
+		gain, lose = "gain", "lose"
+	}
+	var changes []string
+	if gained != "" {
+		changes = append(changes, gain+" "+gained+increment)
+	}
+	if lost != "" {
+		changes = append(changes, lose+" "+lost)
+	}
+	if len(changes) == 0 {
+		changes = append(changes, gain+" [?]")
+	}
+	return noun + " " + strings.Join(changes, " and ")
 }
 
 var abilityAspects = map[string]string{

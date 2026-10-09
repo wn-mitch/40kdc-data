@@ -781,6 +781,22 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
+  // A selector by keyword would apply the grant to every weapon of the unit: refuse it, as the
+  // narrowing check does for other families, rather than over-apply it.
+  if (modifier.weapon_keyword != null) {
+    out.unsupported.push({
+      reason: `weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve`,
+      effectFragment: node,
+    });
+    return;
+  }
+  const removes = Array.isArray(modifier.removes) ? modifier.removes.filter((k): k is string => typeof k === "string") : [];
+  for (const keyword of removes) {
+    out.unsupported.push({
+      reason: `weapon-ability-removal: the cruncher does not model removing a weapon ability ("${keyword}")`,
+      effectFragment: { removes: [keyword] },
+    });
+  }
   const raws = Array.isArray(modifier.abilities) ? modifier.abilities.filter((k): k is string => typeof k === "string") : [];
   if (raws.length === 0) return;
   // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only

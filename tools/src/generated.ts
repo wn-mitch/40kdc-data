@@ -3391,24 +3391,7 @@ export interface WeaponAbilityGrantEffect {
   type: "weapon-ability-grant";
   target: UnitRef;
   modifier: {
-    /**
-     * @minItems 1
-     */
-    abilities: [string, ...string[]];
-    weapon_type?: "melee" | "ranged";
-    weapon_name?: string;
-    weapon_keyword?: string;
-    weapon_ref?:
-      | {
-          weapon_var: string;
-        }
-      | {
-          selected_by: {
-            ability: EntityId;
-          };
-        };
-    if_present?: "increment";
-    incoming?: true;
+    [k: string]: unknown;
   };
   scaling?: Scaling;
 }

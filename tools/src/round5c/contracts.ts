@@ -257,11 +257,12 @@ export function blastRatingRefused(text: string): boolean {
 }
 
 export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
-  if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword !== undefined
+  const keywordFamily = family === "weapon-ability-grant" || family === "weapon-ability-keyword" || family === "weapon-ability-removal";
+  if (keywordFamily && parameters.keyword !== undefined
     && !foldKeywordText(exactText).includes(foldKeywordText(String(parameters.keyword)))) {
     throw new TypeError("The granted weapon ability must occur in the exact source span.");
   }
-  if ((family === "weapon-ability-grant" || family === "weapon-ability-keyword") && parameters.keyword === "Blast" && blastRatingRefused(exactText)) {
+  if (keywordFamily && parameters.keyword === "Blast" && blastRatingRefused(exactText)) {
     throw new TypeError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
   }
 }

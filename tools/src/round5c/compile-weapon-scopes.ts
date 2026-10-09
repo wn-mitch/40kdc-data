@@ -2,12 +2,20 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { sameRun } from "./compile-attack-properties.js";
 import { namesSelection } from "./compile-targeting-history.js";
+import { WEAPON_KEYWORDS } from "./family-extensions-2.js";
 
 const SCOPE = "weapon-property-scope";
 const KEYWORD = "weapon-ability-keyword";
+const REMOVAL = "weapon-ability-removal";
 const isStat = (leaf: CompileLeaf) => (leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5)
   || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3);
-const isProperty = (leaf: CompileLeaf) => isStat(leaf) || leaf.family_id === KEYWORD;
+/** A roll the scope's recipient makes with its weapons: the Hit, Wound or Damage roll of a roll-modifier. */
+const isWeaponRoll = (leaf: CompileLeaf) => leaf.family_id === "roll-modifier" && leaf.parameters.rolls === undefined
+  && ["hit", "wound", "damage"].includes(String(leaf.parameters.roll));
+const isRemoval = (leaf: CompileLeaf) => leaf.family_id === REMOVAL;
+/** A leaf the scope binds in place: a stat change, a weapon roll, or a removal. Each takes the scope's recipient and weapons. */
+const isBound = (leaf: CompileLeaf) => isStat(leaf) || isWeaponRoll(leaf) || isRemoval(leaf);
+const isProperty = (leaf: CompileLeaf) => isBound(leaf) || leaf.family_id === KEYWORD;
 
 function between(source: Buffer | undefined, left: CompileLeaf, right: CompileLeaf): string {
   return source && left.end_byte !== undefined ? source.subarray(left.end_byte, right.start_byte).toString("utf8") : "";
@@ -20,6 +28,23 @@ function grantFrame(scope: CompileLeaf, firstKeyword?: CompileLeaf): CompileLeaf
   };
 }
 
+/** A scope's weapon_keyword must be one the bound leaves can carry; the scope version already limits it to these. */
+function checkScopeKeyword(scope: CompileLeaf): void {
+  const keyword = scope.parameters.weapon_keyword;
+  if (keyword !== undefined && !(WEAPON_KEYWORDS as readonly string[]).includes(String(keyword))) {
+    throw new CompileError(`A weapon scope cannot select weapons by ${String(keyword)}.`);
+  }
+}
+
+/** A leaf's own recipient or weapon type, when it names one, must match the scope it sits under. */
+function checkScopeConflict(leaf: CompileLeaf, scope: CompileLeaf, keys: readonly string[]): void {
+  for (const key of keys) {
+    if (leaf.parameters[key] !== undefined && leaf.parameters[key] !== scope.parameters[key]) {
+      throw new CompileError(`${leaf.family_id} ${key} conflicts with its reviewed attack-property scope.`);
+    }
+  }
+}
+
 function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   const characteristics = leaf.family_id === "characteristic-set"
     ? [leaf.parameters.characteristic as string]
@@ -27,12 +52,38 @@ function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   if (!characteristics.every((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
     throw new CompileError("An attack-property scope cannot modify a model characteristic.");
   }
-  for (const key of ["subject", "weapon_type"] as const) {
-    if (leaf.parameters[key] !== undefined && leaf.parameters[key] !== scope.parameters[key]) {
-      throw new CompileError(`Stat adjustment ${key} conflicts with its reviewed attack-property scope.`);
-    }
-  }
+  checkScopeConflict(leaf, scope, ["subject", "weapon_type"]);
+  checkScopeKeyword(scope);
   return { ...leaf, parameters: { ...leaf.parameters, ...scope.parameters } };
+}
+
+/**
+ * "Your unit's Hit rolls …" under a scope: the roll takes the scope's recipient and weapon type. The
+ * DSL's roll modifier has no weapon keyword, so a keyword scope cannot carry a roll.
+ */
+function bindRoll(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
+  if (scope.parameters.weapon_keyword !== undefined) {
+    throw new CompileError("A roll modifier cannot be scoped to weapons by a keyword; the DSL roll modifier has no weapon_keyword.");
+  }
+  checkScopeConflict(leaf, scope, ["subject", "weapon_type"]);
+  return { ...leaf, parameters: { ...leaf.parameters, subject: scope.parameters.subject, weapon_type: scope.parameters.weapon_type } };
+}
+
+/**
+ * "Do not have [Blast]" under a scope: the weapons the scope selects lose the ability. The recipient
+ * and weapon type come from the scope; a weapon_keyword selector is carried through for the DSL.
+ */
+function bindRemoval(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
+  if (scope.parameters.subject === undefined) throw new CompileError("A weapon ability removal has no recipient; it needs a weapon-property scope before it.");
+  checkScopeKeyword(scope);
+  const keyword = scope.parameters.weapon_keyword;
+  return {
+    ...leaf,
+    parameters: {
+      keyword: leaf.parameters.keyword, subject: scope.parameters.subject, weapon_type: scope.parameters.weapon_type,
+      ...(keyword !== undefined ? { weapon_keyword: keyword } : {}),
+    },
+  };
 }
 
 /** Bind a property's explicit recipient and weapon scope, without changing the reviewed operand. */
@@ -69,6 +120,16 @@ function choiceMarkerAfter(list: readonly CompileLeaf[], source: Buffer | undefi
 
 const isChoiceMarker = (leaf: CompileLeaf) => leaf.family_id === "instead" && leaf.parameters.choice === true;
 
+/** One run may not both remove and grant the same ability ("Do not have Blast. Have Blast" is a contradiction). */
+function refuseKeywordAndRemoval(run: readonly CompileLeaf[]): void {
+  const granted = run.filter((leaf) => leaf.family_id === KEYWORD).map((leaf) => leaf.parameters.keyword);
+  for (const removal of run.filter(isRemoval)) {
+    if (granted.includes(removal.parameters.keyword)) {
+      throw new CompileError(`A weapon ability is both removed and granted in one clause: ${String(removal.parameters.keyword)}.`);
+    }
+  }
+}
+
 export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === SCOPE)) return list;
   const source = sourceText === undefined ? undefined : Buffer.from(sourceText, "utf8");
@@ -90,7 +151,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     result.push(...gates);
     index = first - 1;
     let end = first;
-    let containsStat = false;
+    let containsBound = false;
     let choice = false;
     while (end < list.length && list[end]!.fragment === scope.fragment) {
       const leaf = list[end]!;
@@ -105,15 +166,15 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
         if (!sameRun(source, list[end - 1]!, leaf)) break;
         if (/\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, leaf))) choice = true;
       }
-      containsStat ||= isStat(leaf);
+      containsBound ||= isBound(leaf);
       end += 1;
     }
-    // A qualifier after a single keyword with no stat adjustment ("[LETHAL HITS: CHARACTER]") gates the frame.
-    const qualifier = !containsStat && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
+    // A qualifier after a single keyword with no bound leaf ("[LETHAL HITS: CHARACTER]") gates the frame.
+    const qualifier = !containsBound && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
     const run = list.slice(first, end);
     // A scope for the bound weapon ("That weapon's attacks have") takes stat adjustments only: a keyword
-    // grant has no bound weapon to name, and would widen to every weapon of the type.
+    // grant or a removal has no bound weapon to name, and a roll is not a weapon's stat.
     if (scope.parameters.weapon !== undefined && run.some((leaf) => !isStat(leaf))) {
       throw new CompileError("A bound-weapon scope takes stat adjustments only; a keyword grant to that weapon is not compiled yet.");
     }
@@ -128,7 +189,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
       index = end - 1;
       continue;
     }
-    if (!containsStat) {
+    if (!containsBound) {
       // Preserve the existing keyword-menu composition rules.
       if (qualifier) {
         result.push(qualifier, grantFrame(scope, list[first]!), list[first]!);
@@ -141,11 +202,18 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     if (choice) {
       throw new CompileError("An attack-property choice containing stat adjustments needs an explicit composition relation.");
     }
+    refuseKeywordAndRemoval(list.slice(first, end));
     let inKeywords = false;
     for (let at = first; at < end; at += 1) {
       const leaf = list[at]!;
       if (isStat(leaf)) {
         result.push(bindStat(leaf, scope));
+        inKeywords = false;
+      } else if (isRemoval(leaf)) {
+        result.push(bindRemoval(leaf, scope));
+        inKeywords = false;
+      } else if (isWeaponRoll(leaf)) {
+        result.push(bindRoll(leaf, scope));
         inKeywords = false;
       } else {
         if (!inKeywords) result.push(grantFrame(scope, leaf));

@@ -208,14 +208,18 @@ function keywordGrant(m: Record<string, unknown>, subj: string): string {
 }
 
 function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const kws = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : "[?]";
+  const gained = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : undefined;
+  const lost = Array.isArray(m.removes) ? (m.removes as unknown[]).map(bracketKeyword).join(" and ") : undefined;
   const increment = m.if_present === "increment" ? " (a weapon that already has that ability adds the ratings together)" : "";
-  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${kws}${increment}`;
-  if (hasWeapon(m)) {
-    const noun = weaponNoun(m);
-    return `${noun} equipped by ${weaponHolder(e.target, ctx)} ${/weapons\b/.test(noun) ? "gain" : "gains"} ${kws}${increment}`;
-  }
-  return `${ofOrPossessive(subj, "weapons")} gain ${kws}${increment}`;
+  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${gained ?? "[?]"}${increment}`;
+  const noun = hasWeapon(m) ? `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}` : ofOrPossessive(subj, "weapons");
+  const plural = !hasWeapon(m) || /weapons\b/.test(weaponNoun(m));
+  // A grant and a removal in one effect read "gain X and lose Y"; a neither-list shape keeps the old placeholder.
+  const changes = [
+    gained && `${plural ? "gain" : "gains"} ${gained}${increment}`,
+    lost && `${plural ? "lose" : "loses"} ${lost}`,
+  ].filter(Boolean);
+  return `${noun} ${changes.length ? changes.join(" and ") : `${plural ? "gain" : "gains"} [?]`}`;
 }
 
 const ASPECTS: Record<string, string> = {

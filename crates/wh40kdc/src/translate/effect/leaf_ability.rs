@@ -115,9 +115,13 @@ pub(super) fn keyword_grant(m: &P, subj: &str) -> String {
 }
 
 pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let kws = map_arr(m, "abilities", bracket_keyword)
+    // A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+    let gained = map_arr(m, "abilities", bracket_keyword)
         .map(|k| k.join(" and "))
-        .unwrap_or_else(|| "[?]".to_string());
+        .filter(|k| !k.is_empty());
+    let lost = map_arr(m, "removes", bracket_keyword)
+        .map(|k| k.join(" and "))
+        .filter(|k| !k.is_empty());
     let increment = if sv(m, "if_present") == Some("increment") {
         " (a weapon that already has that ability adds the ratings together)"
     } else {
@@ -125,26 +129,35 @@ pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ct
     };
     if is_true(m, "incoming") {
         return format!(
-            "{}the attacking weapon has {kws}{increment}",
-            incoming_lead(m, subj)
+            "{}the attacking weapon has {}{increment}",
+            incoming_lead(m, subj),
+            gained.as_deref().unwrap_or("[?]")
         );
     }
-    if has_weapon(m) {
-        let noun = weapon_noun(m);
-        let verb = if has_word_end(&noun, "weapons") {
-            "gain"
-        } else {
-            "gains"
-        };
-        return format!(
-            "{noun} equipped by {} {verb} {kws}{increment}",
-            weapon_holder(target, ctx)
-        );
-    }
-    format!(
-        "{} gain {kws}{increment}",
+    let weapon = has_weapon(m);
+    let noun = if weapon {
+        let kind = weapon_noun(m);
+        format!("{kind} equipped by {}", weapon_holder(target, ctx))
+    } else {
         of_or_possessive(subj, "weapons")
-    )
+    };
+    let plural = !weapon || has_word_end(&weapon_noun(m), "weapons");
+    let (gain, lose) = if plural {
+        ("gain", "lose")
+    } else {
+        ("gains", "loses")
+    };
+    let mut changes: Vec<String> = Vec::new();
+    if let Some(kws) = &gained {
+        changes.push(format!("{gain} {kws}{increment}"));
+    }
+    if let Some(kws) = &lost {
+        changes.push(format!("{lose} {kws}"));
+    }
+    if changes.is_empty() {
+        changes.push(format!("{gain} [?]"));
+    }
+    format!("{noun} {}", changes.join(" and "))
 }
 
 pub(super) fn aspect_name(aspect: &str) -> String {

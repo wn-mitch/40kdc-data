@@ -68938,9 +68938,6 @@ pub struct Weapon {
 /// ```json
 ///{
 ///  "type": "object",
-///  "required": [
-///    "abilities"
-///  ],
 ///  "properties": {
 ///    "abilities": {
 ///      "type": "array",
@@ -68956,6 +68953,16 @@ pub struct Weapon {
 ///    },
 ///    "incoming": {
 ///      "const": true
+///    },
+///    "removes": {
+///      "description": "Weapon abilities the weapons lose, as printed (\"Do not have [Heavy]\"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "weapon_keyword": {
 ///      "type": "string",
@@ -69017,11 +69024,17 @@ pub struct Weapon {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct WeaponAbilityGrantEffectModifier {
-    pub abilities: Vec<WeaponAbilityGrantEffectModifierAbilitiesItem>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub abilities: ::std::option::Option<
+        Vec<WeaponAbilityGrantEffectModifierAbilitiesItem>,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub if_present: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
+    ///Weapon abilities the weapons lose, as printed ("Do not have [Heavy]"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub removes: ::std::option::Option<Vec<WeaponAbilityGrantEffectModifierRemovesItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_keyword: ::std::option::Option<
         WeaponAbilityGrantEffectModifierWeaponKeyword,
@@ -69032,6 +69045,20 @@ pub struct WeaponAbilityGrantEffectModifier {
     pub weapon_ref: ::std::option::Option<WeaponAbilityGrantEffectModifierWeaponRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_type: ::std::option::Option<WeaponAbilityGrantEffectModifierWeaponType>,
+}
+impl ::std::default::Default for WeaponAbilityGrantEffectModifier {
+    fn default() -> Self {
+        Self {
+            abilities: Default::default(),
+            if_present: Default::default(),
+            incoming: Default::default(),
+            removes: Default::default(),
+            weapon_keyword: Default::default(),
+            weapon_name: Default::default(),
+            weapon_ref: Default::default(),
+            weapon_type: Default::default(),
+        }
+    }
 }
 ///`WeaponAbilityGrantEffectModifierAbilitiesItem`
 ///
@@ -69097,6 +69124,81 @@ for WeaponAbilityGrantEffectModifierAbilitiesItem {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for WeaponAbilityGrantEffectModifierAbilitiesItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`WeaponAbilityGrantEffectModifierRemovesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct WeaponAbilityGrantEffectModifierRemovesItem(::std::string::String);
+impl ::std::ops::Deref for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<WeaponAbilityGrantEffectModifierRemovesItem>
+for ::std::string::String {
+    fn from(value: WeaponAbilityGrantEffectModifierRemovesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for WeaponAbilityGrantEffectModifierRemovesItem {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

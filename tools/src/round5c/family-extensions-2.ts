@@ -14,7 +14,7 @@ const TEST_ROLLS = ["hazard", "psychic", "desperate-escape"] as const;
 const WEAPON_ROLLS = new Set(["hit", "wound", "damage"]);
 const WEAPON_TYPES = ["all", "melee", "ranged"] as const;
 /** Weapon abilities a characteristic change can be limited to ("Torrent weapons equipped by …"). */
-const WEAPON_KEYWORDS = [
+export const WEAPON_KEYWORDS = [
   "Assault", "Blast", "Devastating Wounds", "Hazardous", "Heavy", "Ignores Cover", "Indirect Fire", "Lance", "Lethal Hits",
   "Melta", "One Shot", "Pistol", "Precision", "Psychic", "Rapid Fire", "Sustained Hits", "Torrent", "Twin-linked",
 ] as const;

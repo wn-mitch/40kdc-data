@@ -24812,6 +24812,82 @@
     }
   },
   {
+    "caseId": "weapon-removal-ranged-heavy#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "removes": [
+          "Heavy"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Ranged weapons equipped by models in this unit lose [HEAVY]."
+    }
+  },
+  {
+    "caseId": "weapon-removal-keyword-scope-with-stat#0",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "removes": [
+              "Blast"
+            ],
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Ranged weapons with [BLAST] equipped by models in this unit lose [BLAST].\nAdd 1 to the Attacks characteristic of ranged weapons with [BLAST] equipped by models in this unit."
+    }
+  },
+  {
+    "caseId": "weapon-removal-and-grant#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "abilities": [
+          "Close-quarters"
+        ],
+        "removes": [
+          "Blast"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit's weapons gain [CLOSE QUARTERS] and lose [BLAST]."
+    }
+  },
+  {
     "caseId": "delayed-destruction-phase-end-this-model",
     "effect": {
       "type": "no-effect"
