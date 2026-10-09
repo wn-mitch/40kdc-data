@@ -279,6 +279,16 @@ describe("destroyed by the triggering attacks: moments and destroyers", () => {
   });
 });
 
+describe("destroyed by the triggering attacks: no moment", () => {
+  it("refuses a destruction with no attacks-resolved, enemy-has-shot, attack or Stratagem moment in the list", () => {
+    expect(refusal(placed("If those attacks destroyed an enemy unit, this unit has the Feel No Pain 6+ ability.", [
+      ["those attacks destroyed", "unit-activity", { activities: [UNITS], named: "after", container: "none", destroyer: "this-unit", negated: false }],
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      FNP_PART,
+    ]))).toMatch(/needs a moment/);
+  });
+});
+
 describe("destroyed by the triggering attacks: leaf checks", () => {
   it("refuses a subject on a destruction activity", () => {
     expect(() => placed("After this unit has resolved its attacks, if those attacks destroyed an enemy unit.", [
@@ -399,5 +409,20 @@ describe("destroyed by the triggering attacks: later antecedents", () => {
       ["has the Feel No Pain 6+ ability", "feel-no-pain", FNP],
     ]));
     expect(destroyedNodes(mechanics).map((node) => (node.parameters as Record<string, unknown>).object)).toEqual([{ owner: "enemy" }]);
+  });
+});
+
+describe("destroyed by the triggering attacks: any-owner models (8121 shape)", () => {
+  it("names destroyed Character models of any owner with no owner key on the object", () => {
+    const mechanics = compiled(placed("After the bearer's unit has fought, if one or more CHARACTER models were destroyed as a result of those attacks, this unit has the Feel No Pain 6+ ability.", [
+      ["After the bearer's unit has fought", "event", { kind: "attacks-resolved" }],
+      ["CHARACTER models", "unit-filter", { side: "any", keywords: ["CHARACTER"], level: "model" }],
+      ["were destroyed as a result of those attacks", "unit-activity", { activities: [MODELS], named: "before", container: "none", destroyer: "this-unit", negated: false }],
+      FNP_PART,
+    ]));
+    expect(destroyedNodes(mechanics).map((node) => node.parameters)).toEqual([
+      { event: "model-destroyed", object: { level: "model", all_of: ["CHARACTER"] }, filter: { by: "this-unit" }, window: "event" },
+    ]);
+    expect(schemaErrors(mechanics)).toEqual([]);
   });
 });
