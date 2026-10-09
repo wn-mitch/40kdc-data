@@ -69,9 +69,10 @@ describe("disembark then charge eligibility (fabricated wording)", () => {
   });
 
   it("refuses the same wording when the permission is written as a CONDITION (the mislabel)", () => {
-    const eligibleAsCondition: [string, string, Record<string, unknown>] = ["that unit is still eligible to declare a charge this turn", "eligible", { subject: "antecedent", activity: "declare-charge", allow: true }];
+    const eligibleAsCondition: [string, string, Record<string, unknown>] = ["that unit is still eligible to declare a charge this turn", "eligible", { subject: "antecedent", to: "declare-charge" }];
     const result = compiledOf(placed(PLAIN, EVENT, ORDER, eligibleAsCondition), PLAIN);
     expect(result.ok).toBe(false);
+    expect(result.errors).toEqual(["There is no effect leaf to compile."]);
   });
 });
 
