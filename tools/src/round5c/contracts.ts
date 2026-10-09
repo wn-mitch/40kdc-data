@@ -17,6 +17,7 @@ import { normalizeWeaponRangeParameters, WEAPON_RANGE_FAMILIES } from "./family-
 import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
 import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
+import { COUNTS_AS_MOVED_FAMILIES, normalizeCountsAsMovedParameters } from "./family-extensions-16-counts-as-moved.js";
 import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
 import { normalizeSetUpRestrictionParameters, SET_UP_RESTRICTION_FAMILIES } from "./family-extensions-16-set-up-restriction.js";
@@ -100,6 +101,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...ABILITY_MODIFIER_FAMILIES,
   ...CONTAINER_FAMILIES,
   ...NAMED_REGION_FAMILIES,
+  ...COUNTS_AS_MOVED_FAMILIES,
   ...PREDICATE_FAMILIES,
   ...PREDICATE_FAMILIES_2,
   ...SET_UP_RESTRICTION_FAMILIES,
@@ -204,7 +206,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeEquippedWeaponParameters(family, input)
     ?? normalizeNamedWargearParameters(family, input)
     ?? normalizeArmyIncludesParameters(family, input)
-    ?? normalizeEmbarkedPermissionParameters(family, input);
+    ?? normalizeEmbarkedPermissionParameters(family, input)
+    ?? normalizeCountsAsMovedParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }

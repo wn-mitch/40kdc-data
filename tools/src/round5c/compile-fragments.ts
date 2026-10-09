@@ -441,6 +441,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(despite && despite.length > 0 ? { despite } : {}),
           ...(asIf ? { as_if: asIf } : {}),
           ...(stratagem ? { stratagem } : {}),
+          // A folded counts-as-moved leaf (compile-counts-as-moved.ts): the units count as having made this move.
+          ...(leaf.parameters.counts_as_move !== undefined ? { counts_as_move: closed(leaf, "counts_as_move") } : {}),
         },
       };
     }

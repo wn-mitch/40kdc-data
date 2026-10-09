@@ -42,6 +42,10 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     const wounds = value === "full" ? "its full wounds" : value === "half-starting" ? "half of its starting number of wounds" : `${String(value)} ${value === 1 ? "wound" : "wounds"}`;
     return { kind: "implicit", note: `No separate text: the set-up or returned model before it has ${wounds} remaining.` };
   }
+  if (leaf.family_id === "counts-as-moved") {
+    const period = leaf.parameters.window === "phase" ? " that phase" : " this turn";
+    return { kind: "implicit", note: `No separate text: the permission before it, in its sentence, counts as having made a ${String(leaf.parameters.move_type)} move${period}.` };
+  }
   if (leaf.family_id === "starting-strength") return { kind: "implicit", note: `No separate text: the unit the set-up or split before it produces has a Starting Strength of ${String(leaf.parameters.value)}.` };
   if (leaf.family_id === "count-scale") {
     const per = leaf.parameters.per === 1 ? "once for each" : `once for every ${String(leaf.parameters.per)}`;
