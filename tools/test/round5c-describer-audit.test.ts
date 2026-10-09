@@ -86,7 +86,9 @@ describe("Round 5C leaf describer audit", () => {
       // that call for it, so those combinations read the same regardless of the filter's value.
       // owner and subject still collide on kinds whose wording names neither. A targeting with
       // action_kind ability refuses on its own: it needs a by-ability leaf naming the selecting ability.
-      event: { unrendered: [], colliding: ["object", "owner", "subject", "move_types", "action_kind"], problems: 6 },
+      // Version 19: an object antecedent (a targeted unit an aura named) and owner any refuse on a
+      // targeting without that aura, or without its selecting ability, as the ability values do.
+      event: { unrendered: [], colliding: ["object", "owner", "subject", "move_types", "action_kind"], problems: 24 },
       // An aura's recipient and this unit both read "the unit".
       "ability-used": { unrendered: [], colliding: ["subject"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and

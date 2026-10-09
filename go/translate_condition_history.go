@@ -96,6 +96,14 @@ func describeHappened(p map[string]any, negated bool) string {
 		if negated {
 			has = "has not"
 		}
+		// A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+		if cstr(f["kind"]) == "stratagem" && f["id"] != nil {
+			target := "the unit"
+			if p["object"] != nil {
+				target = unitRefPhrase(p["object"], "the unit")
+			}
+			return withWindow(target+" "+has+" been targeted with the "+idLabel(f["id"])+" Stratagem", p["window"])
+		}
 		// Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
 		atk := ""
 		if truthy(f["attack_type"]) {

@@ -18,6 +18,7 @@ import { abilityUsedCondition } from "./compile-named-ability.js";
 import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
 import { namedEquipmentPredicate } from "./compile-named-equipment.js";
+import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-opponent-stratagem.js";
 
 type Node = Record<string, unknown>;
 
@@ -330,6 +331,8 @@ export function condition(leaf: CompileLeaf): Node {
       const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;
       // Version 4 names several activities: any of them, and negated none of them.
       const activities = leaf.family_version >= 4 ? closed(leaf, "activities") as string[] : [String(closed(leaf, "activity"))];
+      // Version 15: "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
+      if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
       return polarity(leaf, anyOf(activities.map((activity) => {
         const history = HISTORY[activity];
         if (history) return { type: "happened", parameters: history(subject) };

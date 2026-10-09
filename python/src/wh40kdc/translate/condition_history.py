@@ -81,6 +81,10 @@ def _describe_happened(p: P, negated: bool) -> str:
         return _with_window(f"{who} {'was not' if negated else 'was'} set up{source}", window)
     if event == "targets-selected":
         has = "has not" if negated else "has"
+        # A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+        if _str(f.get("kind")) == "stratagem" and f.get("id") is not None:
+            target = unit_ref_phrase(p["object"]) if p.get("object") is not None else "the unit"
+            return _with_window(f"{target} {has} been targeted with the {id_label(f['id'])} Stratagem", window)
         # Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
         atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
         if p.get("object") is not None:

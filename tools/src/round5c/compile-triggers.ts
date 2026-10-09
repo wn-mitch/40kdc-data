@@ -76,6 +76,8 @@ function usedTrigger(leaf: CompileLeaf): Node {
   if (subject !== undefined && leaf.parameters.subject_filter !== undefined) throw new CompileError("A used moment names who used the rule twice: by its subject and by the unit-filter before it.");
   // An aura's recipient is no unit outside the aura: compile-named-ability.ts folds that moment into the trigger's proximity.
   if (subject === "recipient") throw new CompileError("A used moment of an aura's recipient must follow its aura-range directly, in the same sentence, to become the trigger's subject and proximity.");
+  // "When a unit chosen by a Gadget is used": the chosen unit is not who used the rule (compile-named-ability.ts).
+  if (leaf.parameters.object === "antecedent") throw new CompileError("A used moment's unit is the one that used the rule; an earlier leaf's unit as the object of a use is not who used it.");
   return {
     event: "used",
     filter: { kind: closed(leaf, "activity"), ...(leaf.parameters.id !== undefined ? { id: closed(leaf, "id") } : {}) },
@@ -134,6 +136,7 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
     node.subject ??= { owner: "any" };
   }
   // "Each time you target the bearer with a Stratagem": what the moment was done to.
+  if (leaf.parameters.object === "antecedent") throw new CompileError("A moment that names an earlier leaf's unit as its object needs that unit's aura, which names the unit and its range.");
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
 }
@@ -183,6 +186,7 @@ function eventTrigger(leaf: CompileLeaf): Node {
   // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
   if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner"), ...(node.event === "model-destroyed" ? { level: "model" } : {}) };
   // "Each time an attack is allocated to this model".
+  if (leaf.parameters.object === "antecedent") throw new CompileError("A moment that names an earlier leaf's unit as its object needs that unit's aura, which names the unit and its range.");
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
 }

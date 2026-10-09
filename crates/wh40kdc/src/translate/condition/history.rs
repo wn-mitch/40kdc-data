@@ -102,6 +102,15 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             )
         }
         "targets-selected" => {
+            // A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+            if st(f.get("kind")) == "stratagem" && f.get("id").is_some() {
+                let target = unit_ref_phrase(nn(p, "object"), "the unit");
+                let has = if negated { "has not" } else { "has" };
+                return with_window(
+                    &format!("{target} {has} been targeted with the {} Stratagem", id_label(f.get("id"))),
+                    window,
+                );
+            }
             // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
             let atk = if truthy(f.get("attack_type")) {
                 st(f.get("attack_type"))

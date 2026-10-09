@@ -15,7 +15,7 @@ type Node = Record<string, unknown>;
 const AURA_MOMENT_KINDS = new Set(["used", "after-roll"]);
 
 /** Whether the bytes between two leaves hold no sentence break. */
-function sameSentence(sourceText: string | undefined, from: number | undefined, to: number): boolean {
+export function sameSentence(sourceText: string | undefined, from: number | undefined, to: number): boolean {
   if (sourceText === undefined || from === undefined || to <= from) return true;
   return !/[.;:]/u.test(Buffer.from(sourceText, "utf8").subarray(from, to).toString("utf8"));
 }
@@ -35,25 +35,41 @@ export function foldAuraMoments(list: readonly CompileLeaf[], sourceText?: strin
     // Only a moment whose leaf says the recipient acts ("that unit uses", "that model Channels"):
     // in "when you target that unit with a Stratagem" the recipient is not who used it.
     const alternative = list[index + 3];
-    const fits = filter.family_id === "unit-filter" && aura?.family_id === "aura-range" && aura.parameters.side === undefined
-      && moment?.family_id === "event" && AURA_MOMENT_KINDS.has(String(moment.parameters.kind)) && moment.parameters.subject === ANTECEDENT
-      && filter.fragment === aura.fragment && aura.fragment === moment.fragment
+    const sameAura = filter.family_id === "unit-filter" && aura?.family_id === "aura-range" && aura.parameters.side === undefined
+      && moment?.family_id === "event" && filter.fragment === aura.fragment && aura.fragment === moment.fragment
       && sameSentence(sourceText, aura.end_byte, moment.start_byte)
       // "fails a Battle-shock test or is destroyed": the alternative moment's unit would stay unbound.
       && !(alternative?.family_id === "event" && alternative.fragment === moment.fragment && sameSentence(sourceText, moment.end_byte, alternative.start_byte));
-    if (!fits) {
+    const fits = sameAura && AURA_MOMENT_KINDS.has(String(moment!.parameters.kind)) && moment!.parameters.subject === ANTECEDENT;
+    // "chosen by a Gadget": the chosen unit is the moment's object, and any owner may choose it.
+    const targeted = sameAura && moment!.parameters.kind === "targets-selected" && moment!.parameters.object === ANTECEDENT
+      && moment!.parameters.action_kind === "stratagem" && moment!.parameters.subject === undefined;
+    if (!fits && !targeted) {
       out.push(filter);
       continue;
     }
-    if (moment.parameters.owner !== undefined) throw new CompileError("A moment of an aura's recipient names its unit by the aura's filter, not by an owner.");
-    if (aura.parameters.wholly === true || aura.parameters.range_cap_inches !== undefined) {
+    if (targeted) {
+      if (aura!.parameters.wholly === true || aura!.parameters.range_cap_inches !== undefined) {
+        throw new CompileError("A moment of an aura's recipient becomes a trigger's object range, which cannot say wholly within or cap the range.");
+      }
+      if (filter.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
+      const { object: _object, ...rest } = moment!.parameters;
+      out.push({
+        ...moment!,
+        parameters: { ...rest, owner: moment!.parameters.owner ?? "any", object_filter: { ...dslUnitFilter(filter), within: { of: aura!.parameters.of ?? "this-unit", range: { inches: aura!.parameters.inches } } } },
+      });
+      index += 2;
+      continue;
+    }
+    if (moment!.parameters.owner !== undefined) throw new CompileError("A moment of an aura's recipient names its unit by the aura's filter, not by an owner.");
+    if (aura!.parameters.wholly === true || aura!.parameters.range_cap_inches !== undefined) {
       throw new CompileError("A moment of an aura's recipient becomes a trigger's proximity, which cannot say wholly within or cap the range.");
     }
     if (filter.parameters.visible === true) throw new CompileError("An aura reaches units whether or not they are visible; drop visible from its unit-filter.");
-    const { subject: _subject, ...rest } = moment.parameters;
+    const { subject: _subject, ...rest } = moment!.parameters;
     out.push({
-      ...moment,
-      parameters: { ...rest, subject_filter: dslUnitFilter(filter), proximity: { of: aura.parameters.of ?? "this-unit", inches: aura.parameters.inches } },
+      ...moment!,
+      parameters: { ...rest, subject_filter: dslUnitFilter(filter), proximity: { of: aura!.parameters.of ?? "this-unit", inches: aura!.parameters.inches } },
     });
     index += 2;
   }

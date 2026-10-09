@@ -34,6 +34,11 @@ export function describeHappened(p: P, negated: boolean): string {
       return withWindow(`${who} ${negated ? "was not" : "was"} set up${from[str(f.from)] ?? ""}`, p.window);
     }
     case "targets-selected": {
+      // A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit is the one targeted, whoever targeted it.
+      if (f.kind === "stratagem" && f.id !== undefined) {
+        const target = p.object != null ? unitRefPhrase(p.object) : "the unit";
+        return withWindow(`${target} ${negated ? "has not" : "has"} been targeted with the ${idLabel(f.id)} Stratagem`, p.window);
+      }
       // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
       const atk = f.attack_type ? str(f.attack_type) : "";
       const what = p.object != null ? `${unitRefPhrase(p.object)} as a target${atk ? ` of its ${atk} attacks` : ""}` : `targets${atk ? ` for its ${atk} attacks` : ""}`;
