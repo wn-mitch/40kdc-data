@@ -64,6 +64,7 @@ import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
+import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -599,7 +600,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (list.every((leaf) => leaf.role !== "EFFECT") && !movesEnd) errors.push("There is no effect leaf to compile.");
   // Several printed durations: each effect takes its clause's duration, else its sentence's (compile-durations.ts).
   // Bound before the "instead" fold below, which removes an effect and moves its duration to the one it folds into.
-  const split = new Set(durations).size > 1;
+  // A per-attack duration inside a phase window folds into the phase when an attack moment ends it (compile-attack-window.ts).
+  let fold = attackFold(durations, triggerWindow(list), triggers.some(isAttackMoment));
+  if (fold === "refused") errors.push(CONFLICTING_DURATIONS);
+  const split = fold === null && new Set(durations).size > 1;
   const firstEffectAt = list.findIndex((leaf) => leaf.role === "EFFECT");
   const leadingAt = [...new Set(triggerIndexes.filter((index) => firstEffectAt === -1 || index < firstEffectAt))];
   const binding = split ? bindDurations(list, places, durationAt, planned.map((item) => item.index), leadingAt) : null;
@@ -785,6 +789,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // "The first time this model is destroyed, at the end of the phase": one moment (compile-delayed-destruction.ts).
   const delayed = planDelayedDestruction(list, triggerIndexes, partStarts, sourceText);
   errors.push(...delayed.errors);
+  // The attack-window fold applies to a single-part ability; with later parts the durations stay conflicting.
+  if (partStarts.length && fold !== null) { if (fold !== "refused") errors.push(CONFLICTING_DURATIONS); fold = null; }
   for (const [position, lowering] of delayed.lowered) triggers[position] = { ...lowering.trigger, condition: lowering.condition };
   if (partStarts.some((part) => !alternativeMoments(part.moments.map((position) => list[triggerIndexes[position]!]!), sourceText))) {
     errors.push("A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.");
@@ -1006,6 +1012,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
   const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
   let entryTrigger = asTrigger(leading);
+  let foldedPhase = false;
+  if (fold !== null && fold !== "refused") {
+    // The attack moments end at the attack sequence; the other moments and the phase stay on the entry.
+    // A delayed or dropped attack moment leaves nothing to end the effect, so the entry is refused.
+    const attacks = leading.filter(isAttackMoment);
+    if (attacks.length === 0) return { ok: false, signature, errors: ["Conflicting durations."] };
+    body = { type: "ability-part", trigger: asTrigger(attacks), effect: body, duration: "attack-sequence" };
+    entryTrigger = asTrigger(leading.filter((moment) => !isAttackMoment(moment)));
+    foldedPhase = true;
+  }
   // The window part is the moments' lifetime: its trigger is the leading moments, and the ability has no top-level trigger.
   if (windowHead) { windowHead.trigger = entryTrigger; entryTrigger = null; }
   if (partStarts.length) {
@@ -1040,7 +1056,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     ...(resolved.core ? { core: resolved.core } : {}),
     mechanics: {
       effect: resolved.effect,
-      scope: { duration: period ?? scopeDuration },
+      scope: { duration: foldedPhase ? "phase" : period ?? scopeDuration },
       // A choice with an event is an optional trigger; a choice without one is activated, as is a
       // stratagem (it has a phase window or a TARGET), which a player always chooses to use. An
       // aura-range leaf always reads as an aura, ahead of any of those.
