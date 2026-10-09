@@ -289,6 +289,8 @@ describe("a unit-filter after an attack without excluded_from is still the attac
       ["an enemy VEHICLE unit", "unit-filter", { side: "enemy", keywords: ["VEHICLE"] }],
       ["have [IGNORES COVER]", "weapon-ability-keyword", { keyword: "Ignores Cover" }]));
     expect(json).not.toContain('"member_of":"this-unit"');
+    // The filter is the attack's target: its keyword condition reads the defender, not the attacker.
+    expect(json).toContain('"defender"');
     expect(json).toContain('"VEHICLE"');
   });
 });
@@ -311,5 +313,16 @@ describe("refusals in the new family versions", () => {
     expect(() => normalizeFingerprintParameters("unit-filter",
       { side: "friendly", excluded_keywords: ["CHARACTER"], excluded_from: "attacks" }, version))
       .toThrow("unit-filter.excluded_from names models, so the filter must be level model.");
+  });
+});
+
+describe("a this-model effect after a membership-folded filter", () => {
+  it("refuses, naming the unit: the models' group has no single model to take", () => {
+    const text = "Friendly ALPHA models in this unit have +1 S.";
+    expect(errorsOf(text,
+      ["Friendly ALPHA models", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
+      member("in this unit", "this-unit"),
+      ["have +1 S", "characteristic-modifier", { subject: "this-model", characteristics: ["S"], operation: "add", value: 1 }]))
+      .toEqual(["characteristic-modifier limits this model to its models with keywords; name its unit instead."]);
   });
 });

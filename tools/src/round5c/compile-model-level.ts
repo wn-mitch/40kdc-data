@@ -166,8 +166,21 @@ export function groupMembership(input: readonly CompileLeaf[]): CompileLeaf[] {
     if (filter.parameters.member_of !== undefined) throw new CompileError("A unit-filter takes one membership; two are not decided.");
     if (filter.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
     const of = membershipOf(leaf, list);
+    // The effect after the pair names this model as its subject. The membership's group is the
+    // filter's units, which a this-model effect does not take (design 3.2 rule 7).
+    const effect = nextEffectAfter(list, Math.max(index, at));
+    if (effect?.parameters.subject === "this-model") throw new CompileError(`${effect.family_id} limits this model to its models with keywords; name its unit instead.`);
     list[at] = { ...filter, parameters: { ...filter.parameters, member_of: of } };
     drop.add(index);
   });
   return drop.size === 0 ? list : list.filter((_leaf, index) => !drop.has(index));
+}
+
+/** The first leaf after `index` in its fragment that is not a unit-owner, or undefined. */
+function nextEffectAfter(list: readonly CompileLeaf[], index: number): CompileLeaf | undefined {
+  const fragment = list[index]?.fragment;
+  let at = index + 1;
+  while (list[at]?.family_id === "unit-owner" && list[at]!.fragment === fragment) at += 1;
+  const leaf = list[at];
+  return leaf !== undefined && leaf.fragment === fragment ? leaf : undefined;
 }
