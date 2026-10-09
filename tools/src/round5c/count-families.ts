@@ -57,7 +57,7 @@ export const COUNT_FAMILIES: readonly SemanticFamilyDefinition[] = [
     version: 1,
     role: "CONDITION",
     label: "Counted model belongs to a unit",
-    description: "Which unit the models of the model-level unit-filter right before it belong to: \"in this unit\" / \"in your unit\" {in, this-unit}; \"embarked within this model\" {embarked-in, this-model}; \"embarked within this unit\" {embarked-in, this-unit}; \"in this unit (or embarked within this model)\" {in-or-embarked-in, this-unit}.",
+    description: "Which unit the models of the model-level unit-filter beside it belong to (right before or right after it, with only unit-owners between): \"in this unit\" / \"in your unit\" {in, this-unit}; \"embarked within this model\" {embarked-in, this-model}; \"embarked within this unit\" {embarked-in, this-unit}; \"in this unit (or embarked within this model)\" {in-or-embarked-in, this-unit}.",
     starter: { relation: "", of: "" },
     parameterSchema: {
       type: "object",

@@ -1,5 +1,6 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { severalTargets } from "./compile-target-groups.js";
+import { MOMENT_UNIT } from "./family-extensions-16-model-keyword-scope.js";
 
 /**
  * Model-level unit-filters ("friendly **K** model") that name the individual models an aura
@@ -83,8 +84,10 @@ const STRATAGEM_LEAVES = new Set(["use-window", "stratagem-target", "triggering-
  * ability it is the bearer's unit. A Stratagem has no bearer, so there it names the target unit,
  * and only a single-target Stratagem has a decided reading.
  */
-export function membershipOf(membership: CompileLeaf, list: readonly CompileLeaf[]): "this-unit" | "stratagem-target" {
+export function membershipOf(membership: CompileLeaf, list: readonly CompileLeaf[]): "this-unit" | "stratagem-target" | "antecedent" {
   if (membership.parameters.relation !== "in") throw new CompileError("A selected model's membership is only being a model of its unit.");
+  // "that unit's Character models": the moment's unit, bound by compile-antecedent.ts.
+  if (membership.parameters.of === MOMENT_UNIT) return MOMENT_UNIT;
   if (list.some((leaf) => STRATAGEM_LEAVES.has(leaf.family_id))) {
     if (membership.parameters.of !== "stratagem-target") throw new CompileError("A Stratagem's selected model is in its target unit; name the target, since a Stratagem has no bearer to say this unit.");
     if (severalTargets(list)) throw new CompileError("A Stratagem with several targets has no decided target for a selected model's membership yet.");
@@ -126,4 +129,45 @@ export function wrapModelAura(leaf: CompileLeaf, body: Node, triggers: readonly 
   const result = substitute(body, null) as Node;
   if (named === 0) throw new CompileError("A model-level aura's effects never name the model it reaches; author the range as a unit-position condition.");
   return result;
+}
+
+/** Whether a count, per-model roll or select-unit claims the model-level filter beside a membership (its own membership handling). */
+const COUNTING = new Set(["count-scale", "scale-cap", "for-each-unit-select", "unit-size"]);
+
+/** The unit-filter beside `index` (the next leaf, past any unit-owners of the same fragment), or -1. */
+function modelFilterBeside(list: readonly CompileLeaf[], index: number, step: -1 | 1): number {
+  const fragment = list[index]!.fragment;
+  let at = index + step;
+  while (list[at]?.family_id === "unit-owner" && list[at]!.fragment === fragment) at += step;
+  const leaf = list[at];
+  return leaf?.family_id === "unit-filter" && leaf.fragment === fragment && leaf.parameters.level === "model" ? at : -1;
+}
+
+/**
+ * "Character models in this unit" / "that unit's Character models": a membership leaf right after
+ * (or before) a model-level unit-filter, with only unit-owners between, becomes that filter's
+ * `member_of`, the unit its models belong to. A count, a per-model roll and a select-unit with
+ * its own membership keep their existing handling and are not folded. A filter with one
+ * membership takes no second; a membership on an any-side filter refuses, since its units
+ * receive an effect.
+ */
+export function groupMembership(input: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!input.some((leaf) => leaf.family_id === "membership")) return [...input];
+  const list = [...input];
+  const drop = new Set<number>();
+  list.forEach((leaf, index) => {
+    if (leaf.family_id !== "membership") return;
+    const after = modelFilterBeside(list, index, -1);
+    const at = after >= 0 ? after : modelFilterBeside(list, index, 1);
+    if (at < 0) return;
+    const filter = list[at]!;
+    if (list.some((other) => other.fragment === leaf.fragment && COUNTING.has(other.family_id))) return;
+    if (list[at - 1]?.family_id === "select-unit") return;
+    if (filter.parameters.member_of !== undefined) throw new CompileError("A unit-filter takes one membership; two are not decided.");
+    if (filter.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+    const of = membershipOf(leaf, list);
+    list[at] = { ...filter, parameters: { ...filter.parameters, member_of: of } };
+    drop.add(index);
+  });
+  return drop.size === 0 ? list : list.filter((_leaf, index) => !drop.has(index));
 }

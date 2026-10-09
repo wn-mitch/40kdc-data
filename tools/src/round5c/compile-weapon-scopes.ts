@@ -248,10 +248,12 @@ const isOpenScope = (leaf: CompileLeaf) => leaf.family_id === SCOPE && leaf.role
   && ["weapon", "weapon_name", "weapon_keyword", "incoming"].every((key) => leaf.parameters[key] === undefined);
 
 /**
- * The index of the last leaf of the recipient chain after the scope at `at`, when the keyword run
- * right after the chain can take the scope. The chain is one friendly or enemy unit-filter, then
- * unit-owners of the same side. The run is one or more keywords in the scope's fragment, with no
- * sentence break between the chain and the run or between its keywords. Anything else is undefined.
+ * The index of the last leaf of the recipient chain after the scope at `at`, when the run right
+ * after the chain can take the scope. The chain is one friendly or enemy unit-filter, then
+ * unit-owners of the same side, then at most one membership ("in this unit"). The run is either
+ * one or more keywords, or a weapon characteristic setter followed by any keywords; in the scope's
+ * fragment, with no sentence break between the chain and the run or between its keywords.
+ * Anything else is undefined.
  */
 function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buffer): number | undefined {
   const scope = list[at]!;
@@ -264,6 +266,15 @@ function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buf
     if (list[last + 1]!.parameters.owner !== side) return undefined;
     last += 1;
   }
+  const membered = inScope(last + 1) && list[last + 1]!.family_id === "membership";
+  if (membered) last += 1;
+  // A weapon characteristic setter first: "in this unit" + "have an Attacks characteristic of 3", or
+  // a setter with a keyword after it ("have an Attacks characteristic of 4 and the [HAZARDOUS] ability").
+  // The scope takes it, as bindStat merges the scope's recipient into the stat. A bare setter after a
+  // chain with no membership stays unhoisted.
+  const stat = inScope(last + 1) ? list[last + 1] : undefined;
+  const keywordAfter = stat !== undefined && inScope(last + 2) && list[last + 2]!.family_id === KEYWORD && sentenceJoined(source, stat, list[last + 2]!);
+  const statFirst = stat !== undefined && isStat(stat) && weaponStat(stat) && sentenceJoined(source, list[last]!, stat) && (membered || keywordAfter);
   let keywords = 0;
   for (let next = last + 1; next < list.length && list[next]!.family_id === KEYWORD; next += 1) {
     const previous = list[next - 1]!;
@@ -271,7 +282,18 @@ function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buf
     if (/[.;]/u.test(between(source, previous, list[next]!))) return undefined;
     keywords += 1;
   }
-  return keywords > 0 ? last : undefined;
+  return keywords > 0 || statFirst ? last : undefined;
+}
+
+/** A weapon characteristic setter's characteristics, all of them weapon characteristics. */
+function weaponStat(leaf: CompileLeaf): boolean {
+  const characteristics = leaf.family_id === "characteristic-set" ? [leaf.parameters.characteristic] : leaf.parameters.characteristics as unknown[];
+  return characteristics.every((stat) => (WEAPON_CHARACTERISTICS as readonly unknown[]).includes(stat));
+}
+
+/** Whether two leaves sit in one sentence: no full stop or semicolon between them. */
+function sentenceJoined(source: Buffer, left: CompileLeaf, right: CompileLeaf): boolean {
+  return left.end_byte !== undefined && right.start_byte !== undefined && !/[.;]/u.test(between(source, left, right));
 }
 
 /**

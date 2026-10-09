@@ -76,7 +76,9 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   const filter = leaves[at];
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
   const before = leaves[at - 1];
-  return !(before && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter"));
+  // A filter with a membership names models of a unit, so a target or attack before it does not make it the target.
+  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter");
+  return !anchored || filter.parameters.member_of !== undefined;
 }
 
 /**
@@ -393,6 +395,11 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
   const transport = isStratagem(leaves) ? leaves.find((leaf) => leaf.parameters.subject === "bearer-transport" || leaf.parameters.within_origin === "bearer-transport") : undefined;
   if (transport) throw new CompileError(`${transport.family_id} at byte ${transport.start_byte} names the Transport its bearer is embarked within, but a Stratagem has no bearer.`);
   return leaves.map((leaf, index) => {
+    // A filter's membership ("that unit's Character models", written by groupMembership) names the
+    // moment's unit, never the filter's own units, which bareFilter must still read as the filter.
+    if (leaf.family_id === "unit-filter" && leaf.parameters.member_of === ANTECEDENT) {
+      return { ...leaf, parameters: { ...leaf.parameters, member_of: momentUnitRole(leaves, index) } };
+    }
     const keys = antecedentKeys(leaf.family_id, leaf.parameters);
     if (keys.length === 0) return leaf;
     const introduced = antecedentRole(leaves, index, focus, sourceText);
@@ -435,6 +442,19 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     }
     return { ...leaf, parameters };
   });
+}
+
+/**
+ * The unit a moment names for a membership ("that unit's Character models"): the nearest earlier
+ * moment naming a unit. A destruction without a destroyer names the object; others name the subject.
+ */
+function momentUnitRole(leaves: readonly CompileLeaf[], index: number): string {
+  let at = -1;
+  for (let other = 0; other < index; other += 1) if (momentNamesUnit(leaves, other)) at = other;
+  if (at < 0) throw new CompileError(`${leaves[index]!.family_id} at byte ${leaves[index]!.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
+  const moment = leaves[at]!.parameters;
+  const object = OBJECT_MOMENTS.has(String(moment.kind)) || ((moment.kind === "unit-destroyed" || moment.kind === "model-destroyed") && moment.by === undefined);
+  return object ? "event-object" : "event-subject";
 }
 
 /** Whether any parameter of a leaf still points back to an earlier unit. */

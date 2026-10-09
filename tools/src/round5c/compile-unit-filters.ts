@@ -1,6 +1,7 @@
 import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
+import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scope.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
@@ -39,7 +40,7 @@ const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategi
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
 export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string };
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string };
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
@@ -58,6 +59,8 @@ export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
     ...(p.visible === true ? { visible: true } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
+    // "Character models in this unit" (groupMembership): the unit the models belong to.
+    ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),
     // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
     ...(p.designated !== undefined ? { designated: p.designated } : {}),
     ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
@@ -104,6 +107,7 @@ function filterOf(filter: CompileLeaf): Record<string, unknown> {
   const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
   // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
   if (rest.designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
+  if (rest.member_of !== undefined) throw new CompileError("A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.");
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -275,6 +279,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
     const next = list[index + 1];
+    if (isFilter(leaf) && leaf.parameters.excluded_from === EXCLUDED_FROM_ATTACKS) {
+      // "This unit's ranged attacks (excluding Character models' attacks)": the attack frame before it
+      // takes the filter's models as the attackers it leaves out, so the filter names no target.
+      const frame = out.at(-1);
+      if (frame?.family_id !== "attack" || frame.parameters.attacker_filter !== undefined) throw new CompileError("An attack exclusion needs an attack frame right before it with no attacker of its own.");
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
+      out[out.length - 1] = { ...frame, parameters: { ...frame.parameters, attacker_filter: attackerFilter(leaf, frame) } };
+      continue;
+    }
     if (leaf.family_id === "move-end-nearest") {
       // A move-end nearest the closest unit names that unit with the unit-filter right after it: the
       // filter after it names the unit the move ends nearest. The leaf takes the filter as `of`.
@@ -571,8 +584,9 @@ function madeBy(attack: CompileLeaf | undefined, filter: CompileLeaf, sourceText
 function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string, unknown> {
   const dsl = dslUnitFilter(filter);
   if (attack.parameters.unit !== "this-unit") return dsl;
+  // The filter's own membership (groupMembership) wins over the attack's unit.
   const { owner: _owner, ...rest } = dsl;
-  return { ...rest, member_of: "this-unit" };
+  return { member_of: "this-unit", ...rest };
 }
 
 
