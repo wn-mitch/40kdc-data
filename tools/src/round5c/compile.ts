@@ -183,8 +183,8 @@ type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[
  * A container option that carries its own moment or conditions, compiled as a whole ability and
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
-function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions): Node {
-  const compiled = compileLeaves(group, sourceText, options);
+function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string): Node {
+  const compiled = compileLeaves(group, sourceText, objective === undefined ? options : { ...options, selectedObjective: objective });
   if (!compiled.ok) throw new CompileError(compiled.errors[0]!);
   const { effect: body, trigger: moment, usage, scope } = compiled.mechanics;
   if (!moment && !usage && (scope.duration === undefined || scope.duration === "permanent")) return body;
@@ -215,6 +215,8 @@ export type CompileOptions = {
   name?: string;
   /** The faction menus a manoeuvre die names (compile-manoeuvre-own-roll.ts). Default: read from the record's faction. */
   menuActions?: (die: string) => ManoeuvreMenus | null;
+  /** The objective a select-objective container around this ability bound, when the ability is that container's body (compile-containers.ts effectsOf). Only a move-end nearest reads it. */
+  selectedObjective?: string;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -324,7 +326,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText, options), bulletBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective) => nestedPart(group, sourceText, options, objective), bulletBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -598,7 +600,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     index: at, leaf: list[at]!, node, gate: [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])],
     selected: selectedGlobally || selectedSentences.has(places[at]!.sentence) || selectedClauses.has(places[at]!.clause), replaces: false,
   });
-  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence, (at) => [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])], endNearestEntry, sourceText));
+  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence, (at) => [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])], endNearestEntry, sourceText, options.selectedObjective, consumedByContainer));
   errors.push(...bindEngagedPermissions(planned));
   for (const rule of moveEnds) {
     // "Can end that move more than 6\" … (instead of more than 8\")" replaces the usual threshold of the move the trigger names, not one a make-move makes.

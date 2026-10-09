@@ -62,13 +62,13 @@ export function containerEffect(leaf: CompileLeaf): Node | undefined {
  * already names a bearer (persistent-designation's `beneficiary`) passes that name instead, so a
  * reroll inside it targets the same bearer the container itself names, not a second default.
  */
-function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unknown> | string | null = null): Node {
+function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unknown> | string | null = null, objective?: string): Node {
   if (leaves.length === 0) throw new CompileError("An option has no effect.");
   const bad = leaves.find((leaf) => leaf.role !== "EFFECT");
   if (bad) {
     // An option with its own moment or conditions ("Each time a model in this unit makes a
     // Pile-in move, …") compiles like a whole ability of its own, as one ability-part.
-    if (nestedCompiler) return nestedCompiler(leaves);
+    if (nestedCompiler) return nestedCompiler(leaves, objective);
     throw new CompileError(`An option here can only hold effect leaves; ${bad.family_id} has no place inside it.`);
   }
   const nodes = leaves.map((leaf) => effect(leaf, { attached: false, attacker, incoming: false }));
@@ -80,7 +80,7 @@ function effectsOf(leaves: readonly CompileLeaf[], attacker: Record<string, unkn
  * `planContainers` for the duration of one plan: `compile.ts` owns that pipeline, and passing it in
  * keeps this module free of an import cycle.
  */
-let nestedCompiler: ((leaves: readonly CompileLeaf[]) => Node) | null = null;
+let nestedCompiler: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null;
 
 /** A named option's leading `named-option` leaf, and the plain effect leaves after it. */
 function namedOption(group: readonly CompileLeaf[], forRequirement: boolean): { name: unknown; effect: Node; marker: CompileLeaf } {
@@ -346,7 +346,8 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
   if (head.parameters.range_inches !== undefined) selector.range_inches = closed(head, "range_inches");
   if (head.parameters.origin !== undefined) selector.origin = closed(head, "origin") === "this-model" ? "bearer" : "bearer-unit";
   if (head.parameters.controlled_by !== undefined) selector.controlled_by = closed(head, "controlled_by");
-  return { type: "select-objective", selector, effect: effectsOf(groups[0]!) };
+  // The body names the objective this select bound, so a move-end inside it can end nearest that objective.
+  return { type: "select-objective", selector, effect: effectsOf(groups[0]!, null, String(selector.bind_as)) };
 }
 
 function buildContainer(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -373,7 +374,7 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  * node is `nodes.get(openerIndex)`.
  */
 export function planContainers(
-  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[]) => Node) | null = null, bullets: readonly boolean[] = [],
+  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null, bullets: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
   nestedCompiler = nested;

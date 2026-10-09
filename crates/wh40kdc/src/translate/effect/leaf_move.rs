@@ -142,7 +142,11 @@ fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
     // An objective names no unit: any marker, or the one a select-objective bound.
     let objective = e.get("of").and_then(|of| of.get("objective"));
     let named = if let Some(obj) = objective {
-        if obj.get("selection_var").is_some() { "selected objective".to_string() } else { "objective marker".to_string() }
+        if obj.get("selection_var").is_some() {
+            "selected objective".to_string()
+        } else {
+            "objective marker".to_string()
+        }
     } else {
         let mut named = effect_subject(e.get("of"), ctx);
         for article in ["an ", "a ", "the ", "all "] {
@@ -155,7 +159,10 @@ fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
     };
     let nearest = format!("as close as possible to the closest {named}");
     let must = if jstr(e.get("per")) == "model" {
-        format!("each model in {} must end {move_ref}", if who == "it" { "the unit" } else { who })
+        format!(
+            "each model in {} must end {move_ref}",
+            if who == "it" { "the unit" } else { who }
+        )
     } else {
         format!("{who} must end {move_ref}")
     };
@@ -215,7 +222,11 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         ));
     }
     if let Some(c) = nn(m, "ends_when") {
-        let replaces = if is_true(m, "ends_when_replaces") { " (instead of the usual threshold)" } else { "" };
+        let replaces = if is_true(m, "ends_when_replaces") {
+            " (instead of the usual threshold)"
+        } else {
+            ""
+        };
         s.push_str(&format!(
             "; it must end that move where {}{replaces}",
             describe_condition_value(c)

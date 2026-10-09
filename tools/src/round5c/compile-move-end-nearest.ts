@@ -18,9 +18,12 @@ export function destinationOf(leaf: CompileLeaf): string {
 /**
  * The DSL value of one move-end nearest: `of` (the unit its folded filter names, any objective
  * marker, or the objective a select-objective bound), per model when it says so, and instead_of.
+ * The selected objective is bound by exactly one select-objective: a select-objective leaf in this
+ * ability, or the one whose body this ability is (`selectedObjective`). A select leaf in this ability
+ * must come before the move-end, since the DSL binds the name for the select's own effect only.
  * Returns an error when the destination has no value in this ability.
  */
-export function endsNearestValue(list: readonly CompileLeaf[], at: number): { value: Node } | { error: string } {
+export function endsNearestValue(list: readonly CompileLeaf[], at: number, selectedObjective?: string): { value: Node } | { error: string } {
   const leaf = list[at]!;
   const to = destinationOf(leaf);
   const value: Node = {};
@@ -30,9 +33,11 @@ export function endsNearestValue(list: readonly CompileLeaf[], at: number): { va
   } else if (to === "closest-objective-marker") {
     value.of = { objective: {} };
   } else {
-    const selections = list.filter((other) => other.family_id === "select-objective-open");
-    if (selections.length !== 1) return { error: "A move-end nearest to the selected objective needs exactly one select-objective in its ability." };
-    value.of = { objective: { selection_var: selections[0]!.parameters.bind_as } };
+    const selections = list.flatMap((other, index) => other.family_id === "select-objective-open" ? [{ name: String(other.parameters.bind_as), index }] : []);
+    const bound = selectedObjective === undefined ? selections : [...selections, { name: selectedObjective, index: -1 }];
+    if (bound.length !== 1) return { error: "A move-end nearest to the selected objective needs exactly one select-objective in its ability." };
+    if (bound[0]!.index > at) return { error: "A move-end nearest to the selected objective comes before the select-objective that binds it." };
+    value.of = { objective: { selection_var: bound[0]!.name } };
   }
   if (leaf.parameters.per === "model") value.per = "model";
   if (leaf.parameters.instead_of !== undefined) value.instead_of = leaf.parameters.instead_of;
@@ -81,11 +86,13 @@ function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest
  */
 export function attachMoveEndNearest<T extends PlannedNode>(
   list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[],
-  entryFor: (at: number, node: Node) => T, sourceText?: string,
+  entryFor: (at: number, node: Node) => T, sourceText?: string, selectedObjective?: string,
+  consumed: ReadonlySet<number> = new Set(),
 ): string[] {
   const errors: string[] = [];
-  const nearests = list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" ? [at] : []);
-  const waivers = list.flatMap((leaf, at) => leaf.family_id === "move-end-waiver" ? [at] : []);
+  // A leaf a container took (consumed) is compiled inside that container's body, not here.
+  const nearests = list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" && !consumed.has(at) ? [at] : []);
+  const waivers = list.flatMap((leaf, at) => leaf.family_id === "move-end-waiver" && !consumed.has(at) ? [at] : []);
   for (const waiver of waivers) {
     if (!nearests.some((at) => sentenceAt(at) === sentenceAt(waiver))) errors.push("A move-end waiver needs a move-end nearest the closest unit in its sentence.");
   }
@@ -96,7 +103,7 @@ export function attachMoveEndNearest<T extends PlannedNode>(
     if (own.length > 1) { errors.push("A move-end nearest has more than one waiver in its sentence."); continue; }
     if (own.length === 1 && destinationOf(leaf) !== "following-filter") { errors.push("A move-end waiver applies only to a move-end nearest the closest unit."); continue; }
     if (own.length === 1 && leaf.parameters.instead_of !== undefined) { errors.push("A move-end waiver and \"instead of\" the closest enemy unit in one sentence have no DSL form together."); continue; }
-    const built = endsNearestValue(list, at);
+    const built = endsNearestValue(list, at, selectedObjective);
     if ("error" in built) { errors.push(built.error); continue; }
     if (sentenceIsOptional(sourceText, leaf)) { errors.push("A move-end the unit can choose is optional; no optional destination shape exists."); continue; }
     const endsNearest: Node = built.value;

@@ -108,6 +108,40 @@ describe("move-end nearest to an objective (make-move, must)", () => {
     expect(errorsOf(placed(twoText, ...two), twoText)).toMatch(/select-objective-open needs exactly one sentence/u);
   });
 
+  it("binds a selected-objective end to the bind_as of the select-objective whose body holds it", () => {
+    const text = "Choose one objective marker. Your unit can make a Normal move and must end that move as close as possible to that objective.";
+    const mechanics = compiled(placed(text,
+      ["Choose one objective marker", "select-objective-open", { bind_as: "marker" }],
+      ["Your unit can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+      ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
+    ), text);
+    expect(mechanics.effect.type).toBe("select-objective");
+    expect(mechanics.effect.selector).toEqual({ bind_as: "marker", count: 1 });
+    expect(JSON.stringify(mechanics.effect.effect)).toContain('"ends_nearest":{"of":{"objective":{"selection_var":"marker"}}}');
+  });
+
+  it("refuses a selected-objective end that comes before the select-objective binding it", () => {
+    const text = "Your unit can make a Normal move and must end that move as close as possible to that objective. Choose one objective marker. Your unit gains fights first.";
+    expect(errorsOf(placed(text,
+      ["Your unit can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+      ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
+      ["Choose one objective marker", "select-objective-open", { bind_as: "marker" }],
+      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5 }],
+    ), text)).toMatch(/comes before the select-objective that binds it/u);
+  });
+
+  it("reaches the compiler's exactly-one check when the ability has two select-objective leaves", () => {
+    const text = "Your unit can make a Normal move and must end that move as close as possible to that objective. Choose one objective marker. Your unit gains fights first. Choose another objective marker. Your unit gains stealth.";
+    expect(errorsOf(placed(text,
+      ["Your unit can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+      ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
+      ["Choose one objective marker", "select-objective-open", { bind_as: "marker" }],
+      ["Your unit gains fights first", "feel-no-pain", { subject: "this-model", threshold: 5 }],
+      ["Choose another objective marker", "select-objective-open", { bind_as: "other" }],
+      ["Your unit gains stealth", "feel-no-pain", { subject: "this-model", threshold: 4 }],
+    ), text)).toMatch(/selected objective needs exactly one select-objective in its ability/u);
+  });
+
   it("refuses an objective destination followed by a unit-filter, which it does not consume", () => {
     const orphanText = "Your unit can make a Normal move. When doing so, it must end that move as close as possible to the closest objective marker enemy unit.";
     const orphan = placed(orphanText,
@@ -319,20 +353,30 @@ describe("feasibility proviso on a distance bonus (2306 shape)", () => {
 });
 
 describe("ability-scoped charge ban on the ability's move (9046 sentence 2, not yet authored)", () => {
+  const text = "Each time your unit is picked to make a Normal move with the Quantum Gadget ability, your unit can end that move more than 6\" from all enemy units. When this unit ends that move within 8\" of an enemy unit, this unit is not eligible to declare a charge until the end of the turn.";
+  const list = () => placed(text,
+    ["is picked to make a Normal move", "event", { kind: "selected", move_types: ["normal"] }],
+    ["the Quantum Gadget ability", "by-ability", { id: "quantum-gadget" }],
+    ["can end that move", "move-must-end", { match: "all", polarity: "cannot", replaces: true }],
+    ["more than 6\" from", "unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "following-filter" }],
+    ["enemy units", "unit-filter", { side: "enemy" }],
+    ["ends that move within 8\"", "event", { kind: "move-ended", move_types: ["normal", "advance"] }],
+    ["not eligible to declare a charge", "eligibility-permission", { subject: "this-unit", activity: "charge", allow: false }],
+  );
+
+  // The record compiles today; only the ability scope is missing. The expected-failure test asserts
+  // a successful compile first, so it can fail only on the missing condition, not on a refusal.
+  it("compiles sentence 2 with its trigger and permission, with no ability condition yet", () => {
+    expect(compileLeaves(list(), text).ok).toBe(true);
+  });
+
   // Expected output, not yet produced: each permission follows a trigger that names the ability's
   // move. Sentence 2 cannot yet bind to sentence 1's move, so this test is expected to fail.
   it.fails("gives every permission trigger the ability condition", () => {
-    const text = "Each time your unit is picked to make a Normal move with the Quantum Gadget ability, your unit can end that move more than 6\" from all enemy units. When this unit ends that move within 8\" of an enemy unit, this unit is not eligible to declare a charge until the end of the turn.";
-    const list = placed(text,
-      ["is picked to make a Normal move", "event", { kind: "selected", move_types: ["normal"] }],
-      ["the Quantum Gadget ability", "by-ability", { id: "quantum-gadget" }],
-      ["can end that move", "move-must-end", { match: "all", polarity: "cannot", replaces: true }],
-      ["more than 6\" from", "unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "following-filter" }],
-      ["enemy units", "unit-filter", { side: "enemy" }],
-      ["ends that move within 8\"", "event", { kind: "move-ended", move_types: ["normal", "advance"] }],
-      ["not eligible to declare a charge", "eligibility-permission", { subject: "this-unit", activity: "charge", allow: false }],
-    );
-    const triggers = nodesWhere(compiled(list, text), (node) => node.event !== undefined || node.kind !== undefined);
+    const result = compileLeaves(list(), text);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const triggers = nodesWhere(result.mechanics, (node) => node.event !== undefined || node.kind !== undefined);
     expect(triggers.length).toBeGreaterThan(0);
     for (const trigger of triggers) expect(JSON.stringify(trigger)).toContain("happened");
   });
