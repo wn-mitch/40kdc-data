@@ -206,7 +206,12 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
   const compileBodies = (bodies: Fold["bodies"]) => {
   for (const body of bodies) {
     const name = abilityId ? `${body.label ?? "The unnamed granted ability"} in ${abilityId}` : body.label ?? "The unnamed granted ability";
-    const lead = leadingNarrowing(body.leaves, sourceText);
+    let lead: ReturnType<typeof leadingNarrowing>;
+    try { lead = leadingNarrowing(body.leaves, sourceText); } catch (error) {
+      if (!(error instanceof CompileError)) throw error;
+      errors.push(`${name}: ${error.message}`);
+      continue;
+    }
     if (lead && selfHeld(body.header)) { errors.push(`${name}: a units-only section cannot narrow a self-held ability.`); continue; }
     const compiled = compileBody(withSelfGrant(lead ? lead.rest : body.leaves), sourceText);
     if (!compiled.ok) { errors.push(...compiled.errors.map((error) => `${name}: ${error}`)); continue; }

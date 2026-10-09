@@ -246,9 +246,11 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
       const candidate = list[next];
       if (!isFilter(candidate) || candidate!.fragment !== leaf.fragment) break;
       // "If your army includes a X unit, friendly Y units …": a condition that awaits its following filter
-      // takes the first filter alone; the filter after it is the effect's own, not a narrowing of X.
+      // takes the first filter alone; a positive filter after it is the effect's own, not a narrowing of X
+      // (an exclusion-only filter, "(excluding Z)", still narrows X).
       const awaiting = out.at(-1);
-      if (last === leaf && awaiting !== undefined && awaiting.fragment === leaf.fragment && awaitsFollowingFilter(awaiting.parameters)) break;
+      const exclusionOnly = Object.entries(candidate!.parameters).every(([key, value]) => value === undefined || key === "side" || key === "level" || key.startsWith("excluded_"));
+      if (last === leaf && !exclusionOnly && awaiting !== undefined && awaiting.fragment === leaf.fragment && awaitsFollowingFilter(awaiting.parameters)) break;
       const joiner = between.length === 0 ? joinerBetween(sourceText, last, candidate!) : null;
       if (joiner !== null && ALTERNATIVE_JOINERS.has(joiner)) {
         sawOr ||= joiner.includes("or");

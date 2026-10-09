@@ -389,8 +389,9 @@ describe("Round 5C printed grants: a record's grant to other units and refusals 
     expect(effect).not.toContain('"modifier":{"ability":"shade-ward"}');
   });
 
+  // The "with this ability" header needs the record's id; a grant naming a different id than the record's stays a plain record grant.
   it("keeps a grant of another record as a plain record grant", () => {
-    const result = compileLeaves(selfLeaves(), SELF_TEXT);
+    const result = compileLeaves(selfLeaves(), SELF_TEXT, { abilityId: "other-record" });
     if (!result.ok) throw new Error(result.errors.join("; "));
     expect(JSON.stringify(result.mechanics.effect)).toContain('"modifier":{"ability":"shade-ward"}');
   });
