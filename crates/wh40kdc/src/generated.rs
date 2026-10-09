@@ -15982,8 +15982,13 @@ impl ::std::convert::From<SelectObjectiveEffect> for EffectNode {
 ///        "declare-charge",
 ///        "fight",
 ///        "start-action",
-///        "be-selected"
+///        "be-selected",
+///        "embark-within"
 ///      ]
+///    },
+///    "transport": {
+///      "description": "embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability.",
+///      "$ref": "#/$defs/unit-ref"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -16000,6 +16005,9 @@ pub struct EligibleConditionParameters {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<UnitRef>,
     pub to: EligibleConditionParametersTo,
+    ///embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub transport: ::std::option::Option<UnitRef>,
 }
 ///`EligibleConditionParametersAt`
 ///
@@ -16196,7 +16204,8 @@ for EligibleConditionParametersSourceAbilityOwner {
 ///    "declare-charge",
 ///    "fight",
 ///    "start-action",
-///    "be-selected"
+///    "be-selected",
+///    "embark-within"
 ///  ]
 ///}
 /// ```
@@ -16224,6 +16233,8 @@ pub enum EligibleConditionParametersTo {
     StartAction,
     #[serde(rename = "be-selected")]
     BeSelected,
+    #[serde(rename = "embark-within")]
+    EmbarkWithin,
 }
 impl ::std::fmt::Display for EligibleConditionParametersTo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -16233,6 +16244,7 @@ impl ::std::fmt::Display for EligibleConditionParametersTo {
             Self::Fight => f.write_str("fight"),
             Self::StartAction => f.write_str("start-action"),
             Self::BeSelected => f.write_str("be-selected"),
+            Self::EmbarkWithin => f.write_str("embark-within"),
         }
     }
 }
@@ -16247,6 +16259,7 @@ impl ::std::str::FromStr for EligibleConditionParametersTo {
             "fight" => Ok(Self::Fight),
             "start-action" => Ok(Self::StartAction),
             "be-selected" => Ok(Self::BeSelected),
+            "embark-within" => Ok(Self::EmbarkWithin),
             _ => Err("invalid value".into()),
         }
     }

@@ -289,6 +289,13 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             return f"{neg}{who} has Fights First"
         return f"{who} is {_state_phrase(_str(p.get('state')), negated)}{with_ref}"
     if ctype == "eligible":
+        if p.get("to") == "embark-within":
+            # The candidate being checked (this-unit) reads "that Transport".
+            transport = (
+                "that Transport" if p.get("transport") == "this-unit"
+                else unit_ref_phrase(p.get("transport"), "that Transport")
+            )
+            return f"{_subject_of(p)} is {nt}able to embark within {transport}"
         if p.get("to") == "be-selected":
             source = _obj(p.get("source_ability")).get("ability_id")
             return (

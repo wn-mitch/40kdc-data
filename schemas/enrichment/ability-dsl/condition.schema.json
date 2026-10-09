@@ -626,7 +626,8 @@
                     "declare-charge",
                     "fight",
                     "start-action",
-                    "be-selected"
+                    "be-selected",
+                    "embark-within"
                   ]
                 },
                 "source_ability": {
@@ -652,11 +653,37 @@
                     "now",
                     "opponents-previous-turn-end"
                   ]
+                },
+                "transport": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+                  "description": "embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability."
                 }
               },
               "required": [
                 "to"
-              ]
+              ],
+              "if": {
+                "properties": {
+                  "to": {
+                    "const": "embark-within"
+                  }
+                },
+                "required": [
+                  "to"
+                ]
+              },
+              "then": {
+                "required": [
+                  "transport"
+                ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "transport"
+                  ]
+                }
+              }
             }
           }
         },

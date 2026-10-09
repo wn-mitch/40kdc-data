@@ -314,6 +314,17 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             )
         }
         "eligible" => {
+            if is(p, "to", "embark-within") {
+                // The candidate being checked (this-unit) reads "that Transport".
+                let transport = match p.get("transport") {
+                    Some(Value::String(s)) if s == "this-unit" => "that Transport".to_string(),
+                    other => unit_ref_phrase(other, "that Transport"),
+                };
+                return format!(
+                    "{} is {not_}able to embark within {transport}",
+                    subject_of(p, "the unit")
+                );
+            }
             if is(p, "to", "be-selected") {
                 let source = obj(p.get("source_ability")).get("ability_id");
                 return format!(

@@ -56,6 +56,9 @@ export function negatePhrase(phrase: string): string {
   return `not ${phrase}`;
 }
 
+/** The Transport an embark-within names; the candidate being checked (this-unit) reads "that Transport". */
+const transportPhrase = (ref: unknown): string => ref === "this-unit" ? "that Transport" : unitRefPhrase(ref, "that Transport");
+
 /** The predicate phrase, optionally negated ("the unit is not below starting strength"). */
 export function describePredicate(c: Condition, negated: boolean): string {
   if (negated && VERB_NEGATED.has(String(c.type))) return negatePhrase(describePredicate(c, false));
@@ -134,6 +137,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${who} is ${statePhrase(str(p.state), negated)}${withRef}`;
     }
     case "eligible": {
+      if (p.to === "embark-within") return `${subjectOf(p)} is ${negated ? "not " : ""}able to embark within ${transportPhrase(p.transport)}`;
       if (p.to === "be-selected") {
         const source = (p.source_ability as P | undefined)?.ability_id;
         return `${neg}the candidate was eligible for the ${dekebab(str(source))} ability at the end of the opponent's previous turn`;

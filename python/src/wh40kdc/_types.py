@@ -2923,9 +2923,10 @@ class SimpleCondition16(TypedDict):
 
 class Parameters22(TypedDict):
     subject: NotRequired[UnitRef]
-    to: Literal["shoot", "declare-charge", "fight", "start-action", "be-selected"]
+    to: Literal["shoot", "declare-charge", "fight", "start-action", "be-selected", "embark-within"]
     source_ability: NotRequired[SourceAbility1]
     at: NotRequired[Literal["now", "opponents-previous-turn-end"]]
+    transport: NotRequired[UnitRef]
 
 
 class SimpleCondition17(TypedDict):

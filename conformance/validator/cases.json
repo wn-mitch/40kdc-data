@@ -644,5 +644,46 @@
       }
     },
     "expected_errors": []
+  },
+  {
+    "name": "ability: eligible to embark within a named Transport",
+    "target": "ability",
+    "input": {
+      "ability_id": "fabricated-transport-embark",
+      "name": "Fabricated Transport Embark",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [
+        "fabricated-unit"
+      ],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "eligible",
+          "parameters": {
+            "subject": "this-unit",
+            "to": "embark-within",
+            "transport": "ability-unit"
+          }
+        },
+        "effect": {
+          "type": "feel-no-pain",
+          "target": "this-unit",
+          "modifier": {
+            "threshold": 6
+          }
+        }
+      }
+    },
+    "expected_errors": []
   }
 ]

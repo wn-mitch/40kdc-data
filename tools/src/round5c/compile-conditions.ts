@@ -547,6 +547,11 @@ export function condition(leaf: CompileLeaf): Node {
       }, subjectOf(leaf)));
     case "eligible": {
       const parameters: Node = { to: closed(leaf, "to") };
+      // "able to embark within" names the Transport; the DSL reads its unit-ref as given (this-unit or ability-unit).
+      if (leaf.parameters.to === "embark-within") {
+        parameters.transport = closed(leaf, "transport");
+        return polarity(leaf, pred("eligible", parameters, subjectOf(leaf)));
+      }
       if (leaf.parameters.source_ability_id !== undefined) {
         const sourceAbility: Node = { ability_id: closed(leaf, "source_ability_id") };
         if (leaf.parameters.source_ability_owner !== undefined) sourceAbility.owner = closed(leaf, "source_ability_owner");

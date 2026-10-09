@@ -44,6 +44,7 @@ import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
 import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
+import { refuseEmbarkDestination } from "./compile-transport-embark.js";
 import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { checkOptionalCosts, wrapOptionalSpends } from "./compile-optional-cost.js";
@@ -244,6 +245,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
+    refuseEmbarkDestination(list);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

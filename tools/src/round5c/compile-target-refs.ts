@@ -52,7 +52,7 @@ export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   "ability-activate": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"],
   "hit-by-attacks": ["subject"], "in-region": ["subject"], targeted: ["subject"], "target-is-selected": ["by", "target"],
-  visible: ["subject", "to"],
+  visible: ["subject", "to"], eligible: ["subject"],
 };
 
 const accepts = (leaf: CompileLeaf, key: string) => TARGET_REF_KEYS[leaf.family_id]?.includes(key) === true;
