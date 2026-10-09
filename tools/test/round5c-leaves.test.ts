@@ -128,6 +128,27 @@ describe("Round 5C leaf surfaces", () => {
     }
   });
 
+  it("does not write a leaf over bytes a human marked as a connective, whatever the family's current version", () => {
+    const { db } = fixture([
+      { faction_id: "alpha", ability_id: "free", raw_text: `Then ${CP}.` },
+      { faction_id: "alpha", ability_id: "glue", raw_text: `Then ${CP}.` },
+    ]);
+    try {
+      const glue = current(db, "glue");
+      const start = Buffer.byteLength("Then ");
+      // An accepted connective covering the whole occurrence, keyed to no fingerprint at all.
+      const spanId = insertSpan(db, glue.id, "RAW_TEXT", start, start + CP.length, CP);
+      db.prepare("INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, created_at) VALUES (?, NULL, 'CONNECTIVE', 'connective-span', 'accepted', '{}', ?)")
+        .run(spanId, new Date().toISOString());
+      const report = confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      expect(report.applied).toBe(1);
+      expect(report.blocked.map((item) => [item.ability_id, item.reason])).toEqual([["glue", "CONNECTIVE_HERE"]]);
+      expect(leaves(db, "glue")).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("accepts pending proposals it confirms and undoes the whole decision", () => {
     const { db } = fixture([
       { faction_id: "alpha", ability_id: "one", raw_text: `Then ${CP}.` },

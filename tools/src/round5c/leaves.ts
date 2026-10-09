@@ -101,7 +101,7 @@ export type Fingerprint = { id: string; family_id: string; family_version: numbe
 export type ApplyReport = {
   applied: number;
   already: number;
-  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" }>;
+  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" | "CONNECTIVE_HERE" }>;
   /** Machine rows at the same bytes and meaning that a trusted surface row replaced. */
   promoted?: number;
   /** Occurrences of the wording outside the surface's stored scope, left alone. */
@@ -226,6 +226,14 @@ export function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: st
       AND proposals.fingerprint_id = ? AND proposals.status IN ('rejected', 'corrected')
     LIMIT 1
   `);
+  // A human marked these bytes as glue (an accepted connective covering the whole occurrence): no
+  // surface writes a leaf over them, whatever fingerprint the family's current version gives it.
+  const connectiveHere = db.prepare(`
+    SELECT 1 FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+    WHERE source_spans.ability_version_id = ? AND source_spans.fragment = ? AND source_spans.start_byte <= ? AND source_spans.end_byte >= ?
+      AND proposals.role = 'CONNECTIVE' AND proposals.status = 'accepted'
+    LIMIT 1
+  `);
   const pendingHere = db.prepare(`
     SELECT proposals.id, proposals.status FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     WHERE source_spans.ability_version_id = ? AND source_spans.fragment = ? AND source_spans.start_byte = ? AND source_spans.end_byte = ?
@@ -274,6 +282,7 @@ export function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: st
     if (others.length > 0) { blocked(!trusted && others.some((other) => other.authority_kind !== "machine") ? "TRUSTED_HERE" : "OTHER_LEAF_HERE"); continue; }
     if (qualifiedAt((sourceText.get(occurrence.ability_version_id) as { source_text: string }).source_text, occurrence.start_byte)) { blocked("QUALIFIED_HERE"); continue; }
     if (refused.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id)) { blocked("REJECTED_HERE"); continue; }
+    if (connectiveHere.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte)) { blocked("CONNECTIVE_HERE"); continue; }
     // Promotion: the machine row this trusted row confirms, same bytes and meaning.
     const promoted = trusted ? all.find((other) => other.authority_kind === "machine" && exact(other)) : undefined;
     if (promoted) {
