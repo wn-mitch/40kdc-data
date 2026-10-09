@@ -1,5 +1,5 @@
 {
-  "version": 29,
+  "version": 30,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -5161,7 +5161,15 @@
       "servo-armature",
       "severance-and-rebuke",
       "thunderstrike-icarus-rocket-pod",
-      "ultramarian-combat-weapons"
+      "ultramarian-combat-weapons",
+      "drone-burst-cannon-drone",
+      "eadbanger-wurrband",
+      "imperiums-sword-assault-brethren",
+      "missile-pod-drone",
+      "the-thief-of-secrets-black-spear-task-force",
+      "tl-4-9-lords-of-the-forge",
+      "twin-pulse-blaster-drone",
+      "twin-pulse-carbine-drone"
     ],
     "enhancement": [
       "a-chink-in-their-armour",
