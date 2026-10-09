@@ -7737,29 +7737,33 @@
   }
  },
  {
-  "fn": "condition",
-  "input": {
-   "type": "designated",
-   "parameters": {
-    "tag": "shaken"
-   }
-  },
-  "output": "the unit is shaken"
- },
- {
-  "fn": "ability",
-  "input": {
-   "effect": {
-    "type": "designate",
-    "target": "this-unit",
-    "modifier": {
+  "fn": "describeCondition",
+  "args": [
+   {
+    "type": "designated",
+    "parameters": {
      "tag": "shaken"
     }
-   },
-   "scope": {
-    "duration": "permanent"
    }
-  },
-  "output": "The unit is shaken."
+  ],
+  "out": "the unit is shaken"
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "designate",
+     "target": "this-unit",
+     "modifier": {
+      "tag": "shaken"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit is shaken."
  }
 ]

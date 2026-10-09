@@ -168,7 +168,7 @@ describe("a designation check on each unit a for-each passes", () => {
     ["the unit being rolled for is struck by spores", "apply-mark", { subject: "antecedent", tag: "struck-by-spores" }],
     ["After resolving all of this model's attacks", "event", { kind: "attacks-resolved" }],
     ["each", "for-each-unit-select", {}],
-    ["unit struck", "unit-filter", { side: "any" }],
+    ["unit", "unit-filter", { side: "any" }],
     ["struck by spores", "designated-filter", { tag: "struck-by-spores" }],
     ["suffers D3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "D3" }]);
 
@@ -190,5 +190,21 @@ describe("a hit-by qualifier on a Stratagem target", () => {
       ["hit by one or more of those attacks", "hit-by-attacks", { subject: "antecedent" }],
     ).map((leaf) => (leaf.family_id === "hit-by-attacks" ? { ...leaf, fragment: "TARGET" } : leaf));
     expect(errorsOf(list, text).join(" ")).toMatch(/hit-by-attacks qualifier on a Stratagem target has no DSL shape yet/u);
+  });
+
+  // "just after an enemy unit has shot ... One ALPHA unit that was hit by one or more of those attacks": the window is
+  // the attack moment, so the reactive trigger already carries the hit and the record compiles.
+  it("compiles when the window is an enemy-has-shot moment", () => {
+    const reactive = "Your opponent's Shooting phase, just after an enemy unit has shot. One ALPHA unit from your army that was hit by one or more of those attacks. Your unit can make a Normal move of up to D6\".";
+    const list = placed(reactive,
+      ["Your opponent's Shooting phase", "use-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: [] }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["has shot", "event", { kind: "enemy-has-shot" }],
+      ["One", "stratagem-target", { count: "one" }],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["was hit by one or more of those attacks", "hit-by-attacks", { subject: "antecedent" }],
+      ["Your unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+    ).map((leaf, i) => ({ ...leaf, fragment: ["WHEN", "WHEN", "WHEN", "TARGET", "TARGET", "TARGET", "EFFECT"][i] as CompileLeaf["fragment"] }));
+    expect(compiled(list, reactive)).toContain('"event":"attacks-resolved"');
   });
 });
