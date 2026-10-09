@@ -293,7 +293,8 @@ function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][]):
   return {
     type: "persistent-designation",
     designation: closed(head, "designation"),
-    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: "one-time" },
+    // "This ability can be used even if this unit is embarked" (compile-embarked-permission.ts).
+    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: "one-time", ...(head.parameters.allow_while_embarked === true ? { allow_while_embarked: true } : {}) },
     consumer: {
       relation: scope === "enemy-unit" ? "attacks-selected-unit" : "within-selected-marker",
       beneficiary: beneficiary === "this-model" ? "bearer" : "unit",

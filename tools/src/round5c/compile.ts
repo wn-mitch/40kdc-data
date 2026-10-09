@@ -48,6 +48,7 @@ import { refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-tra
 import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { checkOptionalCosts, wrapOptionalSpends } from "./compile-optional-cost.js";
+import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -247,6 +248,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
     refuseEmbarkDestination(list);
+    // "This ability can be used even if this unit is embarked": the designation before it may be chosen while embarked (compile-embarked-permission.ts).
+    list = foldEmbarkedPermission(list);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

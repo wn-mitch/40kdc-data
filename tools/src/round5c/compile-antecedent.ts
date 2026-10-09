@@ -377,6 +377,9 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
  * the bound roles.
  */
 export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null, sourceText?: string): CompileLeaf[] {
+  // "the TRANSPORT this model is embarked within": a Stratagem has no bearer, so it has no such Transport.
+  const transport = isStratagem(leaves) ? leaves.find((leaf) => leaf.parameters.subject === "bearer-transport" || leaf.parameters.within_origin === "bearer-transport") : undefined;
+  if (transport) throw new CompileError(`${transport.family_id} at byte ${transport.start_byte} names the Transport its bearer is embarked within, but a Stratagem has no bearer.`);
   return leaves.map((leaf, index) => {
     const keys = antecedentKeys(leaf.family_id, leaf.parameters);
     if (keys.length === 0) return leaf;

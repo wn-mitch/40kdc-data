@@ -32,6 +32,7 @@ import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } fro
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
+import { EMBARKED_PERMISSION_FAMILIES } from "./embarked-permission-families.js";
 import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./family-extensions-w8-granted.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
@@ -111,6 +112,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...CHARACTERISTIC_AMOUNT_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
+  ...EMBARKED_PERMISSION_FAMILIES,
 ]));
 
 /** The version new fingerprints and model requests use for a family. */

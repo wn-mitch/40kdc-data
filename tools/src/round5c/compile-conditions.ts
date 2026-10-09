@@ -278,8 +278,10 @@ export function condition(leaf: CompileLeaf): Node {
         const subject = wide ? widenedWho(closed(leaf, "subject"))
           : STRENGTH_STATES[state] ? who
             : state === "on-battlefield" && !target && leaf.parameters.subject === "this-model" ? "this-model" : who;
-        if (leaf.parameters.at !== undefined && (STRENGTH_STATES[state] || state === "carrying-units")) throw new CompileError(`unit-state ${state} has no DSL form for an earlier point (at).`);
+        if (leaf.parameters.at !== undefined && (STRENGTH_STATES[state] || state === "carrying-units" || state === "embarked")) throw new CompileError(`unit-state ${state} has no DSL form for an earlier point (at).`);
         if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, subject);
+        // Version 13: the subject is embarked within some Transport (the state itself, not the units it carries).
+        if (state === "embarked") return pred("unit-state", { state: "embarked" }, subject);
         // Version 7: some unit is embarked within the subject (a Transport carries units).
         if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
         // Version 5: engaged with one named unit, the DSL's `with`.
