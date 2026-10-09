@@ -211,26 +211,66 @@ function onAttacker(leaves: readonly CompileLeaf[], index: number): boolean {
 /** Leaves that claim a unit-filter right before them, so it is not an effect's postfix recipient. */
 const FILTER_CLAIMANTS = new Set(["aura-range", "event", "attack"]);
 
+/** The wording after a unit-filter (and its owner leaves) up to the next leaf, or undefined when the bytes are unknown. */
+function gapAfterFilter(leaves: readonly CompileLeaf[], at: number, sourceText: string | undefined): string | undefined {
+  const before = leaves[at - 1];
+  const next = leaves[at];
+  if (sourceText === undefined || before?.end_byte === undefined || next?.start_byte === undefined) return undefined;
+  return Buffer.from(sourceText, "utf8").subarray(before.end_byte, next.start_byte).toString("utf8");
+}
+
+/**
+ * A back-referring effect after a filter claims it as its own prefix only when a linking verb joins
+ * them ("Friendly X units have …"). Other wording ("… K units from your army and add 1 to …") leaves
+ * the filter to the effect before it. Without known bytes the claim stands.
+ */
+const LINKING_VERB = /^\s*(have|has|is|are|can)\b/u;
+function linkedToFilter(leaves: readonly CompileLeaf[], at: number, sourceText: string | undefined): boolean {
+  const gap = gapAfterFilter(leaves, at, sourceText);
+  return gap === undefined || LINKING_VERB.test(gap);
+}
+
+/** The index of the first leaf after a filter's owner leaves, when the filter sits right after the effect at `index`. */
+function afterFilter(leaves: readonly CompileLeaf[], index: number): number | undefined {
+  const leaf = leaves[index]!;
+  const filter = leaves[index + 1];
+  if (!ANY_UNIT_KEYS[leaf.family_id] || filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return undefined;
+  let at = index + 2;
+  while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at += 1;
+  return at;
+}
+
 /**
  * "Add 1 to the Strength characteristic of" + "**K** models from your army": an effect whose units
  * a unit-filter right after it names, in the same fragment, when nothing after the filter (past a
  * "from your army") claims it instead.
  */
-export function postfixFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+export function postfixFilter(leaves: readonly CompileLeaf[], index: number, sourceText?: string): boolean {
+  const at = afterFilter(leaves, index);
+  if (at === undefined) return false;
   const leaf = leaves[index]!;
-  const filter = leaves[index + 1];
-  if (!ANY_UNIT_KEYS[leaf.family_id] || filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
-  let at = index + 2;
-  while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at += 1;
   const next = leaves[at];
   // A back-referring effect after the filter takes it as its own prefix ("Friendly X units have …").
   return !(next && next.fragment === leaf.fragment
-    && (FILTER_CLAIMANTS.has(next.family_id) || (next.role === "EFFECT" && Object.values(next.parameters).includes("antecedent"))));
+    && (FILTER_CLAIMANTS.has(next.family_id)
+      || (next.role === "EFFECT" && Object.values(next.parameters).includes("antecedent") && linkedToFilter(leaves, at, sourceText))));
+}
+
+/**
+ * An effect with no introducer of its own whose filter a later back-referring effect claims with a
+ * linking verb ("Adds 1 to … units. Friendly K units have …" read as one clause). Its anaphor has no
+ * unit to point to, so binding it would fall back to this unit.
+ */
+function claimedByLaterEffect(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): boolean {
+  const at = afterFilter(leaves, index);
+  const next = at === undefined ? undefined : leaves[at];
+  return next !== undefined && next.fragment === leaves[index]!.fragment && next.role === "EFFECT"
+    && Object.values(next.parameters).includes("antecedent") && linkedToFilter(leaves, at!, sourceText);
 }
 
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
-function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null): string | null {
-  if (postfixFilter(leaves, index)) return FILTERED_UNITS;
+function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
+  if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   const momentUnit = onMomentUnit(leaves, index);
   if (momentUnit !== null) return momentUnit;
@@ -334,11 +374,14 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
  * whose family cannot name the unit it binds to, refuses compilation. Later lowering only sees
  * the bound roles.
  */
-export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null): CompileLeaf[] {
+export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: number) => string | null, sourceText?: string): CompileLeaf[] {
   return leaves.map((leaf, index) => {
     const keys = antecedentKeys(leaf.family_id, leaf.parameters);
     if (keys.length === 0) return leaf;
-    const introduced = antecedentRole(leaves, index, focus);
+    const introduced = antecedentRole(leaves, index, focus, sourceText);
+    if (introduced === null && !isStratagem(leaves) && claimedByLaterEffect(leaves, index, sourceText)) {
+      throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a unit (${ANTECEDENT}), but the unit-filter after it belongs to a later effect and no earlier leaf names it.`);
+    }
     if (introduced === null && isStratagem(leaves)) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
     }

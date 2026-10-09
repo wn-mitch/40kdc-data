@@ -47,6 +47,11 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
       ? "No separate text: the effect in its sentence applies once for each bulleted item after it whose conditions hold."
       : `No separate text: the amount of the effect in its sentence applies ${per} of the units or models the unit-filter after it counts.` };
   }
+  if (leaf.family_id === "characteristic-amount") return { kind: "implicit", note: "No separate text: the characteristic change before it, past its recipient, takes this amount." };
+  // An additive change with no amount reads as its recipient and characteristic; the amount leaf after the recipient gives the rest.
+  if (leaf.family_id === "characteristic-modifier" && leaf.parameters.value === undefined && leaf.parameters.operation !== "halve") {
+    return { kind: "implicit", note: "No separate text: the amount is the characteristic-amount leaf after its recipient, bound when the record compiles." };
+  }
   if (leaf.family_id === "scale-cap") return { kind: "implicit", note: `No separate text: the amount the count-scale in its sentence multiplies is at most ${String(leaf.parameters.max)}.` };
   if (leaf.family_id === "membership") return { kind: "implicit", note: `No separate text: the counted models are ${String(leaf.parameters.relation).replaceAll("-", " ")} ${leaf.parameters.of === "this-model" ? "this model" : "this unit"}.` };
   if (leaf.family_id === "unit-size") return { kind: "implicit", note: `No separate text: the unit the add-unit before it adds contains ${String(leaf.parameters.models)} ${leaf.parameters.models === 1 ? "model" : "models"}.` };

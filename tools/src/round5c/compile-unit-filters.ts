@@ -491,6 +491,10 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       throw new CompileError("An aura-range without a side needs a unit-filter right before it.");
     } else if (bareForEach(leaf)) {
       throw new CompileError("A bare for-each-unit-select (\"each\") needs a unit-filter right after it, in its fragment.");
+    } else if (inheritedPostfixFilter(out, list, index) !== undefined) {
+      // "Add 2 to the Move characteristic of" + "**K** models from your army" + "and add 1 to … rolls made for such units":
+      // a later leaf about the same units takes the filter the effect before it was given.
+      out.push({ ...leaf, parameters: { ...leaf.parameters, subject_filter: inheritedPostfixFilter(out, list, index) } });
     } else {
       out.push(leaf);
     }
@@ -580,6 +584,23 @@ function objectEvent(leaf: CompileLeaf | undefined): boolean {
   // "when an enemy unit targets a friendly X unit": the unit targeted.
   return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
     || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
+}
+
+/**
+ * The subject_filter of the nearest earlier effect in the leaf's fragment that took a postfix
+ * recipient, for a later leaf whose units are the same "filtered-units" with no filter of its own.
+ */
+function inheritedPostfixFilter(out: readonly CompileLeaf[], list: readonly CompileLeaf[], index: number): Record<string, unknown> | undefined {
+  const leaf = list[index]!;
+  if (leaf.parameters.subject !== FILTERED_UNITS || leaf.parameters.subject_filter !== undefined) return undefined;
+  // A leaf with its own unit-filter after it (past its owners) is not a later leaf: that filter is its recipient.
+  let after = index + 1;
+  while (list[after]?.family_id === "unit-owner" && list[after]!.fragment === leaf.fragment) after += 1;
+  if (isFilter(list[after]) && list[after]!.fragment === leaf.fragment) return undefined;
+  const takes = (other: CompileLeaf) => other.fragment === leaf.fragment && other.role === "EFFECT" && other.parameters.subject_filter !== undefined
+    && Object.values(other.parameters).includes(FILTERED_UNITS);
+  const effect = [...out].reverse().find(takes);
+  return effect?.parameters.subject_filter as Record<string, unknown> | undefined;
 }
 
 /** An effect bound to the units of the unit-filter right after it (compile-antecedent.ts postfixFilter). */

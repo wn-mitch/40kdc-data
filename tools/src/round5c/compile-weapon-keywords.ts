@@ -24,6 +24,26 @@ function between(sourceText: string | undefined, left: CompileLeaf, right: Compi
   return Buffer.from(sourceText, "utf8").subarray(left.end_byte, right.start_byte).toString("utf8");
 }
 
+/** Recipient leaves a frame may have between it and the keywords it grants: "… equipped by K models from your army have the". */
+const RECIPIENT_LEAVES = new Set(["unit-filter", "unit-owner"]);
+
+/**
+ * The first unclaimed keyword run after a frame, when only recipient leaves of the frame's fragment
+ * sit between them and the wording between them has no sentence break. Anything else between them
+ * (a duration, a condition, a roll) leaves the run unclaimed.
+ */
+function runAfter(list: readonly CompileLeaf[], index: number, runs: readonly number[][], claimed: ReadonlySet<number[]>, sourceText: string | undefined): number[] | undefined {
+  const frame = list[index]!;
+  const run = runs.find((candidate) => candidate[0]! > index && !claimed.has(candidate));
+  if (!run) return undefined;
+  for (let at = index + 1; at < run[0]!; at += 1) {
+    const other = list[at]!;
+    if (other.fragment !== frame.fragment || !RECIPIENT_LEAVES.has(other.family_id)) return undefined;
+  }
+  if (run[0]! > index + 1 && /[.;:]/u.test(between(sourceText, frame, list[run[0]!]!))) return undefined;
+  return run;
+}
+
 export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === KEYWORD)) {
     if (list.some(isFrame)) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
@@ -41,7 +61,7 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
   const folded = new Map<number, CompileLeaf>();
   list.forEach((leaf, index) => {
     if (!isFrame(leaf)) return;
-    const after = runs.find((run) => run[0] === index + 1 && !claimed.has(run));
+    const after = runAfter(list, index, runs, claimed, sourceText);
     const before = [...runs].reverse().find((run) => run.at(-1)! < index && !claimed.has(run));
     const run = after ?? before;
     if (!run) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");

@@ -3,8 +3,9 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
-import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { CompileError, compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { foldWeaponKeywords } from "../src/round5c/compile-weapon-keywords.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 /**
@@ -213,5 +214,116 @@ describe("Round 5C grants & ability control families", () => {
     const v3 = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" }, 3);
     const v4 = leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "melee" }, 4);
     expect(compiled([v3]).mechanics.effect).toEqual(compiled([v4]).mechanics.effect);
+  });
+});
+
+/** Leaves placed on fabricated wording in order, each spanning its phrase (as round5c-attack-properties.test.ts). */
+function placed(text: string, ...items: Array<[string, string, Record<string, unknown>, string?]>): CompileLeaf[] {
+  const bytes = Buffer.from(text, "utf8");
+  let from = 0;
+  return items.map(([wording, family, parameters, fragment = "RAW_TEXT"]) => {
+    const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
+    if (start < 0) throw new Error(`"${wording}" is not in the text`);
+    from = start + Buffer.byteLength(wording, "utf8");
+    const version = currentFamilyVersion(family);
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment };
+  });
+}
+
+describe("Round 5C weapon-ability grants with recipient leaves between frame and keyword", () => {
+  // Fabricated wording: a frame, a model recipient, an owner clause, then the keyword it grants.
+  const text = "Ranged weapons carried by ZORN models from your army have Ignores Cover.";
+  const frameWording = "Ranged weapons carried by";
+  const recipient = ["ZORN models", "unit-filter", { side: "friendly", keywords: ["ZORN"], level: "model" }] as const;
+  const owner = ["from your army", "unit-owner", { owner: "friendly" }] as const;
+  const keyword = ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }] as const;
+  const frame = (subject: string) => [frameWording, "weapon-ability-grant", { subject, weapon_type: "ranged" }] as const;
+
+  it("folds a keyword run across a model recipient and owner into the frame that precedes them", () => {
+    const list = placed(text, [...frame("antecedent")], [...recipient], [...owner], [...keyword]);
+    const folded = foldWeaponKeywords(list, text);
+    expect(folded.map((leaf) => leaf.family_id)).toEqual(["weapon-ability-grant", "unit-filter", "unit-owner"]);
+    expect(folded[0]!.parameters.keywords).toEqual(["Ignores Cover"]);
+    expect(folded[1]!.parameters).toMatchObject({ side: "friendly", level: "model" });
+  });
+
+  it("compiles the folded grant to a model-level recipient", () => {
+    const result = compileLeaves(placed(text, [...frame("antecedent")], [...recipient], [...owner], [...keyword]), text);
+    expect(result.ok).toBe(true);
+    expect(result.mechanics.effect).toMatchObject({ type: "weapon-ability-grant", modifier: { abilities: ["Ignores Cover"], weapon_type: "ranged" } });
+  });
+
+  it("refuses a duration between the frame and its keyword, so the keyword is not folded across it", () => {
+    const timed = "Ranged weapons carried by ZORN models until the end of the phase have Ignores Cover.";
+    const withDuration = placed(timed, [...frame("antecedent")], ["until the end of the phase", "duration", {}], [...keyword]);
+    expect(() => foldWeaponKeywords(withDuration, timed)).toThrow(CompileError);
+    expect(() => foldWeaponKeywords(withDuration, timed)).toThrow("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
+  });
+
+  it("does not claim a keyword run across a sentence break", () => {
+    const broken = "Ranged weapons carried by ZORN models. Ignores Cover.";
+    const list = placed(broken, [...frame("antecedent")], ["ZORN models", "unit-filter", { side: "friendly", keywords: ["ZORN"], level: "model" }], [...keyword]);
+    expect(() => foldWeaponKeywords(list, broken)).toThrow(CompileError);
+  });
+
+  it("does not claim a keyword run across a recipient leaf in another fragment", () => {
+    const other = placed(text, [...frame("antecedent")], ["ZORN models", "unit-filter", { side: "friendly", keywords: ["ZORN"], level: "model" }, "WHEN"], [...keyword]);
+    expect(() => foldWeaponKeywords(other, text)).toThrow(CompileError);
+  });
+
+  it("refuses a this-unit frame with a recipient filter after it, through the full pipeline", () => {
+    const result = compileLeaves(placed(text, [...frame("this-unit")], [...recipient], [...owner], [...keyword]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("A unit-filter needs a select-unit or attack right before it");
+  });
+});
+
+describe("Round 5C grant and activation shapes from the wave-10 records (fabricated wording)", () => {
+  it("re-rolls a roll made by the units a filter after the reroll names", () => {
+    const text = "Re-roll Advance rolls made for FOO units from your army.";
+    const result = compileLeaves(placed(text,
+      ["Re-roll Advance rolls made for", "reroll", { roll: "advance", subset: "all", weapon_type: "all", subject: "antecedent" }],
+      ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
+      ["from your army", "unit-owner", { owner: "friendly" }]), text);
+    expect(result.ok).toBe(true);
+    expect(result.mechanics.effect).toEqual({ type: "re-roll", target: { owner: "friendly", all_of: ["FOO"] }, modifier: { roll: "advance", result_scope: "any-result" } });
+  });
+
+  it("activates a chosen option for the units a filter after it names, with no exclusive", () => {
+    const text = "Choose one Blessing of Khorne. That Blessing of Khorne is active for friendly FOO units in addition to it.";
+    const result = compileLeaves(placed(text,
+      ["Choose one Blessing of Khorne", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["That Blessing of Khorne is active for", "ability-activate", { subject: "antecedent", ability: "blessing-of-khorne", chosen: true, additive: true }],
+      ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }]), text);
+    expect(result.ok).toBe(true);
+    expect(result.mechanics.effect).toEqual({ type: "ability-activate", target: { owner: "friendly", all_of: ["FOO"] }, modifier: { ability: "blessing-of-khorne", select: { by: "player" } } });
+  });
+
+  it("gives each option of a menu its own unit filter, with the header a connective", () => {
+    const text = "Select one option. Furor: weapons equipped by FOO units have the Ignores Cover ability. Malleus: weapons equipped by FOO units have the Lethal Hits ability.";
+    const result = compileLeaves(placed(text,
+      ["Select one option.", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["Furor", "named-option", { label: "Furor" }],
+      ["weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all" }],
+      ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
+      ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+      ["Malleus", "named-option", { label: "Malleus" }],
+      ["weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all" }],
+      ["FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
+      ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text);
+    expect(result.ok).toBe(true);
+    const options = (result.mechanics.effect as { options: Array<{ target: unknown }> }).options;
+    expect(options).toHaveLength(2);
+    expect(options.map((option) => option.target)).toEqual([{ owner: "friendly", all_of: ["FOO"] }, { owner: "friendly", all_of: ["FOO"] }]);
+  });
+
+  it("grants a keyword across a model recipient with a weapon keyword scope (the ranged and psychic shapes)", () => {
+    const text = "Psychic weapons equipped by FOO models have the Ignores Cover ability.";
+    const result = compileLeaves(placed(text,
+      ["Psychic weapons equipped by", "weapon-ability-grant", { subject: "antecedent", weapon_type: "all", weapon_keyword: "Psychic" }],
+      ["FOO models", "unit-filter", { side: "friendly", keywords: ["FOO"], level: "model" }],
+      ["Ignores Cover", "weapon-ability-keyword", { keyword: "Ignores Cover" }]), text);
+    expect(result.ok).toBe(true);
+    expect(result.mechanics.effect).toEqual({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["FOO"], level: "model" }, modifier: { abilities: ["Ignores Cover"], weapon_keyword: "Psychic" } });
   });
 });

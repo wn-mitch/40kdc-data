@@ -39,6 +39,7 @@ import { planDelayedDestruction } from "./compile-delayed-destruction.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
+import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
 import type { CoreCheck } from "./core-checks.js";
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
@@ -197,9 +198,15 @@ export type CompileOptions = { abilityId?: string };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
+  // A characteristic amount after its recipient filter is bound to its change first (compile-characteristic-amount.ts).
+  let bound: CompileLeaf[];
+  try { bound = bindCharacteristicAmounts(leaves); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
+  }
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
-  return compileGranted(leaves, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
+  return compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
 }
 
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
@@ -232,7 +239,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const weaponBound = bindWeaponAntecedents(leaves);
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(hoistWeaponRecipients(ordered(weaponBound), sourceText))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus))), sourceText)), sourceText);
+    const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText))), sourceText)), sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);

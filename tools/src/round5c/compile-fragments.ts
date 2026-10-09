@@ -356,6 +356,10 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: /^\d+$/u.test(amount) ? Number(amount) : amount, ...(per ? { per } : {}) } };
     }
     case "characteristic-modifier": {
+      // An additive change needs its amount: a change left without one is not lowered as a change of nothing.
+      if (leaf.parameters.value === undefined && leaf.parameters.operation !== "halve") {
+        throw new CompileError("Stat adjustment needs an amount; a change with no amount needs a characteristic amount leaf after its recipient.");
+      }
       if (leaf.family_version < 2) {
         return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }

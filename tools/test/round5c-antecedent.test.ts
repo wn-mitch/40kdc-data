@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, leafFragment } from "../src/round5c/compile.js";
+import { bindAntecedents, postfixFilter } from "../src/round5c/compile-antecedent.js";
 import type { CompileLeaf } from "../src/round5c/compile-fragments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { ANTECEDENT_KEYS, antecedentVersion } from "../src/round5c/antecedent-families.js";
@@ -132,5 +133,68 @@ describe("Round 5C anaphoric subjects", () => {
         expect(JSON.stringify((previous.parameterSchema.properties as Record<string, unknown>)[key]), `${id}.${key}`).not.toContain("antecedent");
       }
     }
+  });
+});
+
+/** Leaves placed on fabricated wording in order, each spanning its phrase; the wording is the text the claim gate reads. */
+function placedIn(text: string, ...items: Array<[string, CompileLeaf["family_id"], Record<string, unknown>, string?]>): CompileLeaf[] {
+  const bytes = Buffer.from(text, "utf8");
+  let from = 0;
+  return items.map(([wording, family_id, parameters, fragment = "RAW_TEXT"]) => {
+    const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
+    if (start < 0) throw new Error(`"${wording}" is not in the text`);
+    from = start + Buffer.byteLength(wording, "utf8");
+    const family_version = currentFamilyVersion(family_id);
+    return { role: familyRole(family_id, family_version), family_id, family_version, parameters, start_byte: start, end_byte: from, fragment };
+  });
+}
+
+describe("Round 5C a filter after a characteristic change, and a later roll that points back", () => {
+  // Fabricated wording of the 6690 shape: a Move change, its recipient filter and owner, then a roll
+  // change joined by "and" (not a linking verb), so the Move change takes the filter.
+  const moveText = "Gain Move 2 for friendly FOO WALKER units from your army and add 1 to bonus rolls made for such units.";
+  const move = ["Gain Move 2 for", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }] as const;
+  const filter = ["friendly FOO WALKER units", "unit-filter", { side: "friendly", keywords: ["FOO", "WALKER"] }] as const;
+  const owner = ["from your army", "unit-owner", { owner: "friendly" }] as const;
+  const roll = ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, rolls: ["advance", "charge"] }] as const;
+  const moveLeaves = (text: string) => placedIn(text, [...move], [...filter], [...owner], [...roll]);
+
+  it("gives the filter to the Move change when only 'and add' joins the roll to it", () => {
+    const list = moveLeaves(moveText);
+    expect(postfixFilter(list, 0, moveText)).toBe(true);
+    const bound = bindAntecedents(list, undefined, moveText);
+    expect(bound[0]!.parameters.subject).toBe("filtered-units");
+  });
+
+  it("gives the roll the Move change's filter, not this unit", () => {
+    const result = compileLeaves(moveLeaves(moveText), moveText);
+    expect(result.ok).toBe(true);
+    const flat = (node: Record<string, any>): Array<Record<string, any>> => node.type === "sequence" ? node.steps.flatMap(flat) : [node];
+    const changes = flat(result.mechanics.effect as Record<string, any>);
+    expect(changes.map((change) => change.type)).toEqual(["stat-modifier", "roll-modifier", "roll-modifier"]);
+    expect(changes[0]!.target).toEqual({ owner: "friendly", all_of: ["FOO", "WALKER"] });
+    expect(changes.map((change) => change.target)).toEqual([changes[0]!.target, changes[0]!.target, changes[0]!.target]);
+  });
+
+  it("keeps the filter with the linking verb's effect, so the Move change points back with no unit", () => {
+    const haveText = "Gain Move 2 for friendly FOO units have bonus rolls.";
+    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, rolls: ["advance"] }]);
+    expect(postfixFilter(list, 0, haveText)).toBe(false);
+    // The roll binds the filter through bareFilter (the Move change is not in its way).
+    const bound = bindAntecedents(list.slice(1), undefined, haveText);
+    expect(bound[1]!.parameters.subject).toBe("filtered-units");
+  });
+
+  it("refuses the Move change when a linking verb gives the filter to the roll after it", () => {
+    const haveText = "Gain Move 2 for friendly FOO units have bonus rolls.";
+    const list = placedIn(haveText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["bonus rolls", "roll-modifier", { subject: "antecedent", operation: "add", value: 1, rolls: ["advance"] }]);
+    expect(() => bindAntecedents(list, undefined, haveText)).toThrow("belongs to a later effect and no earlier leaf names it");
+  });
+
+  it("keeps an aura's claim of a filter as it was (the change is not refused)", () => {
+    const auraText = "Gain Move 2 for friendly FOO units within 6\" of this unit.";
+    const list = placedIn(auraText, [...move], ["friendly FOO units", "unit-filter", { side: "friendly", keywords: ["FOO"] }], ["within 6\" of this unit", "aura-range", { side: "friendly", distance: "within", range: 6 }]);
+    expect(postfixFilter(list, 0, auraText)).toBe(false);
+    expect(bindAntecedents(list, undefined, auraText)[0]!.parameters.subject).toBe("this-unit");
   });
 });
