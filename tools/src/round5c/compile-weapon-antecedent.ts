@@ -20,6 +20,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 const SELECT = "select-weapon";
 const GRANT = "weapon-ability-grant";
 const FILTER = "attack-filter";
+const SCOPE = "weapon-property-scope";
 
 export function bindWeaponAntecedents(list: readonly CompileLeaf[]): CompileLeaf[] {
   if (!list.some((leaf) => (leaf.family_id === GRANT || leaf.family_id === FILTER) && leaf.parameters.weapon === ANTECEDENT)) return [...list];
@@ -62,6 +63,8 @@ function bindGrant(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): CompileL
 function bindAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): CompileLeaf {
   if (leaf.parameters.of !== undefined) throw new CompileError("An attack-filter names either those attacks or the weapons a grant gave, not both.");
   const grant = [...earlier].reverse().find((item) => item.family_id === GRANT && typeof item.parameters.keyword === "string");
+  // A weapon scope printed in this record has no grant frame until foldWeaponScopes runs; bindScopeAttacks binds it then.
+  if (!grant && earlier.some((item) => item.family_id === SCOPE)) return leaf;
   if (!grant) throw new CompileError("\"Such a weapon\" has no earlier keyword grant to name the weapons it gave the keyword to.");
   // "Such a weapon" is every weapon the grant gave the keyword to. A grant already narrowed to one
   // bound weapon, or by name, keyword or incoming attacks, gave it to fewer weapons than its type
@@ -87,7 +90,8 @@ function bindAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): Compil
  * A weapon-scoped adjustment that names no weapon beside a select-weapon is refused by
  * refuseUnboundWeaponScope below.
  */
-const isAntecedent = (leaf: CompileLeaf) => leaf.parameters.weapon === "antecedent";
+// attack-filter is bound by bindScopeAttacks, after the scopes fold; its weapon antecedent is not a stat's.
+const isAntecedent = (leaf: CompileLeaf) => leaf.parameters.weapon === "antecedent" && leaf.family_id !== FILTER;
 
 function nearestBinder(earlier: readonly CompileLeaf[]): CompileLeaf | undefined {
   for (let index = earlier.length - 1; index >= 0; index -= 1) {
@@ -142,4 +146,76 @@ export function refuseUnboundWeaponScope(list: readonly CompileLeaf[]): void {
     if (NAMED_WEAPON_KEYS.some((key) => leaf.parameters[key] !== undefined)) continue;
     throw new CompileError(`A ${leaf.family_id} scoped to ${String(leaf.parameters.weapon_type)} weapons sits beside a select-weapon, which binds one weapon; it must name its weapon (that weapon, or a weapon name or keyword).`);
   }
+}
+
+/**
+ * "such a weapon" that bindAttacks deferred because the record prints a weapon scope. Runs after
+ * foldUnitFilters, when the scope has folded into a grant frame: a `weapon-ability-grant` with
+ * `keywords` (folded by foldWeaponKeywords) and `subject_filter` (the recipient chain).
+ *
+ * The frame is the nearest earlier grant that names a keyword. Its keyword is the one it gives, its
+ * units are the attackers, and the nearest earlier attack this record makes in the fragment takes
+ * those units as `attacker_filter`. The filter becomes an attack-is over that keyword. Refused: no
+ * frame, a frame that names a weapon, name, keyword or incoming attacks, a frame with no units or
+ * several keywords, a stated attack_type that differs, or an attack that is missing, a backref, or
+ * names its attacker other than as "that unit" (`unit`), or with `attacker_filter`.
+ */
+const isDeferredFilter = (leaf: CompileLeaf) => leaf.family_id === FILTER && leaf.parameters.weapon === ANTECEDENT;
+
+function lastIndexOf(list: readonly CompileLeaf[], test: (leaf: CompileLeaf) => boolean): number {
+  for (let index = list.length - 1; index >= 0; index -= 1) if (test(list[index]!)) return index;
+  return -1;
+}
+
+export function bindScopeAttacks(list: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!list.some(isDeferredFilter)) return [...list];
+  const bound: CompileLeaf[] = [];
+  for (const leaf of list) {
+    if (!isDeferredFilter(leaf)) {
+      bound.push(leaf);
+      continue;
+    }
+    const { filter, attackAt, attack } = scopeAttacks(leaf, bound);
+    bound[attackAt] = attack;
+    bound.push(filter);
+  }
+  return bound;
+}
+
+function scopeAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): { filter: CompileLeaf; attackAt: number; attack: CompileLeaf } {
+  const frameAt = lastIndexOf(earlier, (item) => item.family_id === GRANT && (Array.isArray(item.parameters.keywords) || typeof item.parameters.keyword === "string"));
+  const frame = frameAt < 0 ? undefined : earlier[frameAt];
+  if (!frame) throw new CompileError("\"Such a weapon\" has no earlier keyword grant to name the weapons it gave the keyword to.");
+  for (const key of ["weapon_var", "weapon_name", "weapon_keyword", "incoming"]) {
+    if (frame.parameters[key] !== undefined) throw new CompileError(`"Such a weapon" cannot follow a keyword grant that also names ${key}; the attacks would widen past the granted weapons.`);
+  }
+  let keyword: string;
+  if (typeof frame.parameters.keyword === "string") {
+    keyword = frame.parameters.keyword;
+  } else {
+    const keywords = frame.parameters.keywords as unknown[];
+    if (keywords.length !== 1) throw new CompileError("\"Such a weapon\" needs a keyword grant that gives exactly one keyword.");
+    keyword = String(keywords[0]);
+  }
+  const attacker = frame.parameters.subject_filter;
+  if (attacker === undefined) throw new CompileError("\"Such a weapon\" follows a keyword grant that names no units, so its attacker is unknown.");
+  const weaponType = frame.parameters.weapon_type;
+  if (typeof weaponType !== "string") throw new CompileError("The keyword grant before \"such a weapon\" names no weapon type.");
+  const attackType = weaponType === "all" ? undefined : weaponType;
+  const stated = leaf.parameters.attack_type;
+  if (stated !== undefined && stated !== attackType) throw new CompileError(`The attack_type ${String(stated)} conflicts with the granted ${weaponType} weapons.`);
+  const attackAt = lastIndexOf(earlier, (item) => item.family_id === "attack" && item.fragment === leaf.fragment && item.parameters.direction === "makes");
+  const attack = attackAt < 0 ? undefined : earlier[attackAt];
+  if (!attack || attackAt < 0) throw new CompileError("\"Such a weapon\" follows no attack this record makes, so its attacker is unknown.");
+  if (attack.parameters.backref === true || attack.parameters.refers !== undefined) throw new CompileError("\"Such a weapon\" follows a backref attack, which does not name its attacker.");
+  // The attack family requires a unit on every attack this record makes. "that unit" is the one the
+  // labeller prints for an attacker a recipient chain introduced; the grant's units replace it.
+  if (attack.parameters.unit !== undefined && attack.parameters.unit !== "that-unit") {
+    throw new CompileError(`"Such a weapon" needs the attack to take its attacker from the keyword grant; the attack already names it with unit ${String(attack.parameters.unit)}.`);
+  }
+  if (attack.parameters.attacker_filter !== undefined) throw new CompileError("\"Such a weapon\" needs the attack to take its attacker from the keyword grant; the attack already names it with attacker_filter.");
+  const { weapon: _weapon, attack_type: _stated, ...rest } = leaf.parameters;
+  const filter = { ...leaf, parameters: { ...rest, weapon_keyword: keyword, ...(attackType === undefined ? {} : { attack_type: attackType }) } };
+  const bound = { ...attack, parameters: { ...attack.parameters, attacker_filter: structuredClone(attacker) } };
+  return { filter, attackAt, attack: bound };
 }

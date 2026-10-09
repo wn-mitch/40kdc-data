@@ -157,3 +157,60 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
   }
   return result;
 }
+
+/**
+ * A weapon scope with no weapon of its own: "Ranged weapons equipped by …" before its recipient
+ * chain. Scopes are placed by byte order, so the scope would sort ahead of the filter that names
+ * its weapons' bearers, and the fold would find a filter where it needs a property.
+ */
+const isOpenScope = (leaf: CompileLeaf) => leaf.family_id === SCOPE && leaf.role === "CONDITION"
+  && ["weapon", "weapon_name", "weapon_keyword", "incoming"].every((key) => leaf.parameters[key] === undefined);
+
+/**
+ * The index of the last leaf of the recipient chain after the scope at `at`, when the keyword run
+ * right after the chain can take the scope. The chain is one friendly or enemy unit-filter, then
+ * unit-owners of the same side. The run is one or more keywords in the scope's fragment, with no
+ * sentence break between the chain and the run or between its keywords. Anything else is undefined.
+ */
+function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buffer): number | undefined {
+  const scope = list[at]!;
+  const inScope = (index: number): boolean => list[index] !== undefined && list[index]!.fragment === scope.fragment;
+  if (!inScope(at + 1) || list[at + 1]!.family_id !== "unit-filter") return undefined;
+  const side = list[at + 1]!.parameters.side;
+  if (side !== "friendly" && side !== "enemy") return undefined;
+  let last = at + 1;
+  while (inScope(last + 1) && list[last + 1]!.family_id === "unit-owner") {
+    if (list[last + 1]!.parameters.owner !== side) return undefined;
+    last += 1;
+  }
+  let keywords = 0;
+  for (let next = last + 1; next < list.length && list[next]!.family_id === KEYWORD; next += 1) {
+    const previous = list[next - 1]!;
+    if (!inScope(next) || previous.end_byte === undefined || list[next]!.start_byte === undefined) return undefined;
+    if (/[.;]/u.test(between(source, previous, list[next]!))) return undefined;
+    keywords += 1;
+  }
+  return keywords > 0 ? last : undefined;
+}
+
+/**
+ * Moves each open scope that has a recipient chain and keyword run to a zero-width place right
+ * after its chain. The scope's text then ends at the chain, so the gap before the keyword is the
+ * property's lead-in. Records with no source text, or no such scope, are returned unchanged.
+ */
+export function hoistWeaponRecipients(list: readonly CompileLeaf[], sourceText: string | undefined): CompileLeaf[] {
+  const result = [...list];
+  if (sourceText === undefined) return result;
+  const source = Buffer.from(sourceText, "utf8");
+  for (let at = 0; at < result.length; at += 1) {
+    const scope = result[at]!;
+    if (!isOpenScope(scope)) continue;
+    const last = recipientChainEnd(result, at, source);
+    if (last === undefined) continue;
+    const end = result[last]!.end_byte!;
+    result.splice(at, 1);
+    // Removing the scope moved the chain's last leaf to last - 1, so the scope goes in at `last`.
+    result.splice(last, 0, { ...scope, start_byte: end, end_byte: end });
+  }
+  return result;
+}

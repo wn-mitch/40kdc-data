@@ -26,8 +26,8 @@ import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abil
 import { destroyedFilterObject, wrapModelAura } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
 import { foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
-import { foldWeaponScopes } from "./compile-weapon-scopes.js";
-import { bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
+import { foldWeaponScopes, hoistWeaponRecipients } from "./compile-weapon-scopes.js";
+import { bindScopeAttacks, bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
 import { bindEquippedCounts } from "./compile-equipped-count.js";
 import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
@@ -231,10 +231,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // "that weapon" names the weapon an earlier select-weapon bound, or the attacks an earlier keyword grant gave (compile-weapon-antecedent.ts).
     const weaponBound = bindWeaponAntecedents(leaves);
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
-    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(ordered(weaponBound))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(hoistWeaponRecipients(ordered(weaponBound), sourceText))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus))), sourceText)), sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText)), sourceText));
-    const filtered = resolveArmyGroups(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText));
+    const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
   } catch (error) {
