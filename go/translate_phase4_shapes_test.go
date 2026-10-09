@@ -179,6 +179,8 @@ func TestPhase4ConditionAndTriggerRenders(t *testing.T) {
 			"the target unit is Spotted by a MARKERLIGHT unit that is an Observer"},
 		{`{"type":"happened","parameters":{"event":"used","filter":{"kind":"ability","same_rule_as":{"event_var":"b"}},"window":"turn"}}`, "the unit used that same ability this turn"},
 		{`{"operator":"not","operands":[{"type":"battle-size","parameters":{"size":"strike-force"}}]}`, "the battle size is not Strike Force"},
+		{`{"type":"eligible","parameters":{"subject":"this-unit","to":"embark-within","transport":"ability-unit"}}`, "the unit is able to embark within this unit"},
+		{`{"operator":"not","operands":[{"type":"eligible","parameters":{"subject":"this-unit","to":"embark-within","transport":"this-unit"}}]}`, "the unit is not able to embark within that Transport"},
 	}
 	for _, c := range conditions {
 		if got := describeCondition(j(t, c.c)); got != c.want {

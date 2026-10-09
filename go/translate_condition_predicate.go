@@ -273,6 +273,14 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return who + " is " + statePhrase(cstr(p["state"]), negated) + withRef
 	case "eligible":
+		if p["to"] == "embark-within" {
+			// The candidate being checked (this-unit) reads "that Transport".
+			transport := "that Transport"
+			if p["transport"] != "this-unit" {
+				transport = unitRefPhrase(p["transport"], "that Transport")
+			}
+			return subjectOf(p, "the unit") + " is " + neg + "able to embark within " + transport
+		}
 		if p["to"] == "be-selected" {
 			source := mapOr(p["source_ability"])["ability_id"]
 			return neg + "the candidate was eligible for the " + dekebab(cstr(source)) + " ability at the end of the opponent's previous turn"
