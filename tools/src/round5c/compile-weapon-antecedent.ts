@@ -1,5 +1,7 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { isContainerOpener } from "./compile-containers.js";
+import { targetCondition } from "./compile-weapon-scopes.js";
 
 /**
  * "that weapon" (`weapon: antecedent`), bound before the record's other folds.
@@ -218,4 +220,66 @@ function scopeAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): { fil
   const filter = { ...leaf, parameters: { ...rest, weapon_keyword: keyword, ...(attackType === undefined ? {} : { attack_type: attackType }) } };
   const bound = { ...attack, parameters: { ...attack.parameters, attacker_filter: structuredClone(attacker) } };
   return { filter, attackAt, attack: bound };
+}
+
+/**
+ * An antecedent frame: a weapon-ability-grant or weapon-property-scope with `frame: "antecedent"`
+ * (family-extensions-18-frame-antecedent.ts). It names no recipient or weapon type; the binder takes
+ * both from the nearest earlier frame or scope, so the branch it opens shares the sentence's weapons.
+ *
+ * The source is the nearest earlier grant with no keyword or scope with a subject, bound or not. Refused:
+ * no source; a source that names a weapon, weapon name, weapon keyword or incoming attacks (the copy
+ * would widen the weapons); a trigger, a container opener, a target condition or a duration between the
+ * source and the frame; or a recipient unit-filter or unit-owner in the frame's own fragment. A
+ * unit-filter with side any is a qualifier of a keyword, not a recipient, and does not refuse. Sentence
+ * breaks are not refused: the "Or:" branch inherits the frame of the sentence before it.
+ */
+const FRAME_KEY = "frame";
+const ANTECEDENT_FRAME = "antecedent";
+const NARROWING_KEYS = ["weapon_keyword", "weapon_name", "incoming", "weapon", "weapon_var"] as const;
+const isFrameAntecedent = (leaf: CompileLeaf) => (leaf.family_id === GRANT || leaf.family_id === SCOPE) && leaf.parameters[FRAME_KEY] === ANTECEDENT_FRAME;
+const isGrantSource = (leaf: CompileLeaf) => leaf.family_id === GRANT && leaf.parameters.keyword === undefined && leaf.parameters.keywords === undefined && leaf.parameters.subject !== undefined;
+const isScopeSource = (leaf: CompileLeaf) => leaf.family_id === SCOPE && leaf.parameters.subject !== undefined;
+const isRecipient = (leaf: CompileLeaf) => leaf.family_id === "unit-owner" || (leaf.family_id === "unit-filter" && leaf.parameters.side !== "any");
+
+/** A leaf that starts a new moment, which a frame may not inherit across: a trigger or its target. */
+const isTriggerLeaf = (leaf: CompileLeaf) => leaf.role === "EVENT" || leaf.family_id === "use-window" || leaf.family_id === "triggering-target";
+
+export function bindFrameAntecedents(list: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!list.some(isFrameAntecedent)) return [...list];
+  const bound: CompileLeaf[] = [];
+  for (const leaf of list) {
+    bound.push(isFrameAntecedent(leaf) ? bindFrame(leaf, bound, list) : leaf);
+  }
+  return bound;
+}
+
+function bindFrame(leaf: CompileLeaf, earlier: readonly CompileLeaf[], list: readonly CompileLeaf[]): CompileLeaf {
+  let at = earlier.length - 1;
+  while (at >= 0 && !isGrantSource(earlier[at]!) && !isScopeSource(earlier[at]!)) at -= 1;
+  if (at < 0) {
+    throw new CompileError(leaf.family_id === GRANT
+      ? "A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it."
+      : "A weapon-property-scope with no recipient needs an earlier frame to take its recipient from.");
+  }
+  const source = earlier[at]!;
+  for (const key of NARROWING_KEYS) {
+    if (source.parameters[key] !== undefined) throw new CompileError(`An antecedent frame cannot copy a source that also names ${key}; the copy would widen its weapons.`);
+  }
+  for (const between of earlier.slice(at + 1)) {
+    if (isTriggerLeaf(between)) throw new CompileError("An antecedent frame cannot inherit its weapons across a trigger; the moment after the trigger is new.");
+    if (isContainerOpener(between.family_id)) throw new CompileError("An antecedent frame cannot inherit its weapons across a container option.");
+    if (targetCondition(between, source) || (between.fragment === source.fragment && between.role === "DURATION")) {
+      throw new CompileError("An antecedent frame cannot inherit a target condition or duration from its source; the copy would drop it.");
+    }
+  }
+  if (list.some((item) => item.fragment === leaf.fragment && isRecipient(item))) {
+    throw new CompileError("An antecedent frame that names its own recipient cannot also inherit one.");
+  }
+  const { [FRAME_KEY]: _frame, ...rest } = leaf.parameters;
+  const weaponType = source.parameters.weapon_type;
+  return {
+    ...leaf,
+    parameters: { ...rest, subject: source.parameters.subject, ...(weaponType === undefined ? {} : { weapon_type: weaponType }) },
+  };
 }

@@ -1,5 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { blastRatingRefused } from "./contracts.js";
+import { qualifierOf } from "./compile-weapon-scopes.js";
 
 /**
  * Keyword-less weapon-ability-grant frames ("ranged weapons equipped by models in this unit have
@@ -59,6 +60,7 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
   });
   const claimed = new Set<number[]>();
   const folded = new Map<number, CompileLeaf>();
+  const grants: Array<{ frame: number; run: number[] }> = [];
   list.forEach((leaf, index) => {
     if (!isFrame(leaf)) return;
     const after = runAfter(list, index, runs, claimed, sourceText);
@@ -66,6 +68,7 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
     const run = after ?? before;
     if (!run) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
     claimed.add(run);
+    grants.push({ frame: index, run });
     const joiners = run.slice(1).map((at) => between(sourceText, list[at - 1]!, list[at]!));
     // A bulleted list's first item follows a bullet too ("the following: ■ [A] ■ [B]").
     const lead = after ? between(sourceText, leaf, list[run[0]!]!) : "";
@@ -78,7 +81,63 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
   });
   const unclaimed = runs.filter((run) => !claimed.has(run));
   if (unclaimed.length) throw new CompileError("A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it.");
-  return list.flatMap((leaf, index) => (leaf.family_id === KEYWORD ? [] : [folded.get(index) ?? leaf]));
+  const { consumed, merged } = foldGrantQualifiers(list, grants, folded, sourceText);
+  return list.flatMap((leaf, index) => (leaf.family_id === KEYWORD || consumed.has(index) || merged.has(index) ? [] : [folded.get(index) ?? leaf]));
+}
+
+/** The printed gap between two options of a menu: "[A: X]. Or: [B: Y]" (the period ends the first clause). */
+const CHOICE_GAP = /^[\s\]\[*.]*\bor\b[\s:*\[]*$/iu;
+
+/**
+ * Target qualifiers printed after the keywords a frame grants ("[SUSTAINED HITS 1: NON-MONSTER/VEHICLE]").
+ * Two single-keyword grants, each qualified, joined by an "Or:" become one menu whose options carry their
+ * qualifiers (`option_conditions`, read by the effect fragment). A qualified option with an unqualified
+ * partner in such a menu is refused. A qualifier after several keywords is refused. Any other qualifier
+ * is set on its frame as `gate`, so it conditions only that grant. Returns the list indices the fold
+ * removes (the qualifiers and the second frame of a menu).
+ */
+function foldGrantQualifiers(list: readonly CompileLeaf[], grants: ReadonlyArray<{ frame: number; run: number[] }>, folded: Map<number, CompileLeaf>, sourceText?: string) {
+  const source = sourceText === undefined ? undefined : Buffer.from(sourceText, "utf8");
+  const qualifiers = new Map<number, CompileLeaf>();
+  const consumed = new Set<number>();
+  const merged = new Set<number>();
+  const ordered = [...grants].sort((a, b) => a.frame - b.frame);
+  for (const grant of ordered) {
+    // A scope that already took its qualifier (foldWeaponScopes) has the gate on its frame.
+    if (list[grant.frame]!.parameters.gate !== undefined) continue;
+    const fragment = list[grant.frame]!.fragment;
+    const last = grant.run.at(-1)!;
+    const qualifier = qualifierOf(list, source, last, fragment);
+    if (!qualifier) continue;
+    if (grant.run.length > 1) throw new CompileError("A qualifier after a keyword run of more than one keyword is not compiled.");
+    qualifiers.set(grant.frame, qualifier);
+    consumed.add(last + 1);
+  }
+  const singles = ordered.filter((grant) => grant.run.length === 1);
+  for (let at = 0; at < singles.length; at += 1) {
+    const first = singles[at]!;
+    const next = singles[at + 1];
+    if (!next || merged.has(first.frame)) continue;
+    const tail = qualifiers.get(first.frame) ?? list[first.run[0]!]!;
+    const gap = between(sourceText, tail, list[next.run[0]!]!);
+    if (!CHOICE_GAP.test(gap)) continue;
+    const qualifiedFirst = qualifiers.has(first.frame);
+    if (qualifiedFirst !== qualifiers.has(next.frame)) throw new CompileError("A choice between a qualified and an unqualified keyword is not compiled.");
+    if (!qualifiedFirst) continue;
+    const options = [first, next].map((grant) => list[grant.run[0]!]!.parameters.keyword as string);
+    const leaf = folded.get(first.frame)!;
+    folded.set(first.frame, { ...leaf, parameters: { ...leaf.parameters, keywords: options, keyword_choice: true, option_conditions: [qualifiers.get(first.frame)!, qualifiers.get(next.frame)!] } });
+    qualifiers.delete(first.frame);
+    qualifiers.delete(next.frame);
+    merged.add(next.frame);
+    at += 1;
+  }
+  // A qualifier that is not a menu option gates its own grant.
+  for (const [frame, qualifier] of qualifiers) {
+    const leaf = folded.get(frame)!;
+    folded.set(frame, { ...leaf, parameters: { ...leaf.parameters, gate: qualifier } });
+  }
+  return { consumed, merged };
 }
 
 /**

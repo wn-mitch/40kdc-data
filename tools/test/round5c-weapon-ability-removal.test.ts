@@ -59,8 +59,7 @@ describe("weapon-ability-removal family", () => {
 });
 
 describe("weapon-property-scope version 4: weapon_keyword", () => {
-  it("is the current version and keeps version 3 unchanged", () => {
-    expect(currentFamilyVersion("weapon-property-scope")).toBe(4);
+  it("keeps version 3 unchanged", () => {
     expect(normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }, 3))
       .toEqual({ subject: "this-unit", weapon_type: "ranged" });
   });

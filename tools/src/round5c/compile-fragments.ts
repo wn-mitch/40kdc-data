@@ -4,6 +4,7 @@
  */
 
 import { activationModifier } from "./compile-activation.js";
+import { condition } from "./compile-conditions.js";
 import { boardEffect } from "./compile-board-effects.js";
 import { applyCounts } from "./compile-scaling.js";
 import { containerEffect } from "./compile-containers.js";
@@ -236,6 +237,11 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "weapon-ability-range", target: target(leaf.parameters.subject), modifier: { keyword: closed(leaf, "keyword"), within: closed(leaf, "within") } };
     }
     case "weapon-ability-grant": {
+      // A keyword gated by its own target qualifier (compile-weapon-keywords.ts): only this grant is conditional.
+      if (leaf.parameters.gate !== undefined) {
+        const { gate, ...rest } = leaf.parameters as Record<string, unknown> & { gate: CompileLeaf };
+        return { type: "conditional", condition: condition(gate), effect: effect({ ...leaf, parameters: rest }, context) };
+      }
       const weaponType = closed(leaf, "weapon_type");
       const weaponName = leaf.parameters.weapon_name;
       const weaponKeyword = leaf.parameters.weapon_keyword;
@@ -244,8 +250,13 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // A frame folded with its keyword leaves (compile-weapon-keywords.ts) carries `keywords`; a menu grants one of them.
       const keywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords as string[] : [closed(leaf, "keyword")];
       if (leaf.parameters.keyword_choice === true) {
-        const { keywords: _keywords, keyword_choice: _choice, ...frame } = leaf.parameters;
-        return { type: "choice", options: keywords.map((keyword) => effect({ ...leaf, parameters: { ...frame, keyword } }, context)) };
+        // A menu option may carry the target qualifier printed after it (compile-weapon-keywords.ts): that option is conditional.
+        const { keywords: _keywords, keyword_choice: _choice, option_conditions: conditions, ...frame } = leaf.parameters as Record<string, unknown> & { option_conditions?: CompileLeaf[] };
+        return { type: "choice", options: keywords.map((keyword, at) => {
+          const grant = effect({ ...leaf, parameters: { ...frame, keyword } }, context);
+          const qualifier = conditions?.[at];
+          return qualifier ? { type: "conditional", condition: condition(qualifier), effect: grant } : grant;
+        }) };
       }
       // Version 7: "that attack has the [X] ability" — the attack's weapon, whoever makes the attack.
       const holder = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);

@@ -91,7 +91,7 @@ function bindRemoval(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
 const TARGET_CONDITIONS = new Set(["target-is-selected", "designated-filter", "unit-mark", "unit-keyword", "unit-position", "unit-state", "unit-filter-target"]);
 const TARGET_SUBJECTS = new Set(["target", "defender"]);
 
-function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
+export function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
   if (leaf.role !== "CONDITION" || leaf.fragment !== scope.fragment || !TARGET_CONDITIONS.has(leaf.family_id) || namesSelection(leaf)) return false;
   const subject = leaf.parameters.subject;
   // A designation with no subject in this position names the attacks' target ("that target a busted unit").
@@ -99,13 +99,19 @@ function targetCondition(leaf: CompileLeaf, scope: CompileLeaf): boolean {
     || (typeof subject === "string" && TARGET_SUBJECTS.has(subject));
 }
 
-/** "[LETHAL HITS: CHARACTER/MONSTER/VEHICLE]": the target qualifier after one keyword, joined by a colon. */
-function qualifierOf(list: readonly CompileLeaf[], source: Buffer | undefined, keyword: number, scope: CompileLeaf): CompileLeaf | null {
+/**
+ * "[LETHAL HITS: CHARACTER/MONSTER/VEHICLE]": the target qualifier after one keyword, joined by a colon.
+ * The qualifier is a unit-filter with side any and exactly one of any_keywords or excluded_keywords.
+ * The gap may hold the colon, spaces and emphasis asterisks ("`: **`") and nothing else, so a
+ * sentence break or a word between the keyword and the qualifier refuses it.
+ */
+export function qualifierOf(list: readonly CompileLeaf[], source: Buffer | undefined, keyword: number, fragment: string | undefined): CompileLeaf | null {
   const leaf = list[keyword + 1];
-  if (!leaf || leaf.family_id !== "unit-filter" || leaf.fragment !== scope.fragment || leaf.parameters.side !== "any") return null;
-  if (!Array.isArray(leaf.parameters.any_keywords) || Object.keys(leaf.parameters).some((key) => key !== "side" && key !== "any_keywords")) return null;
+  if (!leaf || leaf.family_id !== "unit-filter" || leaf.fragment !== fragment || leaf.parameters.side !== "any") return null;
+  const keys = Object.keys(leaf.parameters).filter((key) => key !== "side");
+  if (keys.length !== 1 || (keys[0] !== "any_keywords" && keys[0] !== "excluded_keywords") || !Array.isArray(leaf.parameters[keys[0]!])) return null;
   const gap = source === undefined || list[keyword]!.end_byte === undefined ? null : between(source, list[keyword]!, leaf);
-  return gap !== null && /^\s*:\s*$/u.test(gap) ? { ...leaf, family_id: "unit-filter-target" } : null;
+  return gap !== null && /^[\s*]*:[\s*]*$/u.test(gap) ? { ...leaf, family_id: "unit-filter-target" } : null;
 }
 
 /** "[CLEAVE 1]. Or: +1 AP": a choice marker between a keyword and the stat adjustment after it, with the sentence break a printed "Or:" starts. */
@@ -183,7 +189,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     }
     if (end > first && end < list.length) refuseAlternativeRoll(list[end - 1]!, list[end]!, source);
     // A qualifier after a single keyword with no bound leaf ("[LETHAL HITS: CHARACTER]") gates the frame.
-    const qualifier = !containsBound && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
+    const qualifier = !containsBound && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope.fragment) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
     const run = list.slice(first, end);
     // A scope for the bound weapon ("That weapon's attacks have") takes stat adjustments only: a keyword
@@ -205,7 +211,9 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     if (!containsBound) {
       // Preserve the existing keyword-menu composition rules.
       if (qualifier) {
-        result.push(qualifier, grantFrame(scope, list[first]!), list[first]!);
+        // The qualifier gates this one grant only (`gate`, read by the effect fragment), not the steps after it.
+        const frame = grantFrame(scope, list[first]!);
+        result.push({ ...frame, parameters: { ...frame.parameters, gate: qualifier } }, list[first]!);
         index = end;
         continue;
       }
