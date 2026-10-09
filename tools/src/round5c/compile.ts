@@ -44,6 +44,8 @@ import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
 import { bindCharacteristicAmounts } from "./compile-characteristic-amount.js";
+import { bindAdditiveOptions } from "./compile-additive-option.js";
+import { bindIgnoreLists } from "./compile-ignore-list.js";
 import type { CoreCheck } from "./core-checks.js";
 import { compileWithName, NAME_FRAGMENT } from "./compile-name.js";
 import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./compile-psychic-cost.js";
@@ -213,9 +215,9 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
     return compileWithName(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   }
-  // A characteristic amount after its recipient filter is bound to its change first (compile-characteristic-amount.ts).
+  // Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), and an ignore-modifier list after its lead-in (compile-ignore-list.ts).
   let bound: CompileLeaf[];
-  try { bound = bindCharacteristicAmounts(leaves); } catch (error) {
+  try { bound = bindIgnoreLists(bindAdditiveOptions(bindCharacteristicAmounts(leaves), sourceText), sourceText); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }

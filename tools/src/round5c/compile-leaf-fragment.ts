@@ -48,6 +48,8 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
       : `No separate text: the amount of the effect in its sentence applies ${per} of the units or models the unit-filter after it counts.` };
   }
   if (leaf.family_id === "characteristic-amount") return { kind: "implicit", note: "No separate text: the characteristic change before it, past its recipient, takes this amount." };
+  if (leaf.family_id === "additive-option") return { kind: "implicit", note: "No separate text: the activation before it, past its duration, takes this addition." };
+  if (leaf.family_id === "ignore-modifier-list") return { kind: "implicit", note: "No separate text: the kinds the ignore-modifiers lead-in before it names." };
   // An additive change with no amount reads as its recipient and characteristic; the amount leaf after the recipient gives the rest.
   if (leaf.family_id === "characteristic-modifier" && leaf.parameters.value === undefined && leaf.parameters.operation !== "halve") {
     return { kind: "implicit", note: "No separate text: the amount is the characteristic-amount leaf after its recipient, bound when the record compiles." };

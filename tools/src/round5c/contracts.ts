@@ -30,6 +30,7 @@ import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
 import { CHARACTERISTIC_AMOUNT_FAMILIES, normalizeCharacteristicAmountParameters } from "./characteristic-amount-families.js";
+import { DISCONTIGUOUS_LEAF_FAMILIES, normalizeDiscontiguousLeafParameters } from "./family-extensions-16-discontiguous-leaf.js";
 import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } from "./equipped-weapon-families.js";
 import { NAMED_WARGEAR_LOADOUT_FAMILIES, normalizeNamedWargearParameters } from "./family-extensions-16-named-wargear-loadout.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
@@ -116,6 +117,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...EQUIPPED_WEAPON_COUNT_FAMILIES,
   ...CHARACTERISTIC_AMOUNT_FAMILIES,
   ...NAMED_WARGEAR_LOADOUT_FAMILIES,
+  ...DISCONTIGUOUS_LEAF_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
   ...EMBARKED_PERMISSION_FAMILIES,
@@ -196,6 +198,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeGrantedParameters(family, input)
     ?? normalizeCountParameters(family, input)
     ?? normalizeCharacteristicAmountParameters(family, input)
+    ?? normalizeDiscontiguousLeafParameters(family, input)
     ?? normalizeEquippedWeaponParameters(family, input)
     ?? normalizeNamedWargearParameters(family, input)
     ?? normalizeArmyIncludesParameters(family, input)
