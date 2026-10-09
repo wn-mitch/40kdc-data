@@ -4,6 +4,7 @@ import { currentFamilyVersion, exactSpan, familyRole } from "./contracts.js";
 import { AMONG_TARGETS } from "./family-extensions-w8-multi.js";
 import { awaitsFollowingFilter, FOLLOWING_FILTER } from "./family-extensions-11.js";
 import { type TargetHead, targetGroupOf, targetHeads } from "./compile-target-groups.js";
+import { assignTargetModes } from "./compile-target-modes.js";
 
 /**
  * References to one or several of a Stratagem's named targets ("your **VEHICLE** unit", "both of
@@ -85,7 +86,7 @@ function matchedNames(filter: CompileLeaf, heads: readonly TargetHead[]): Match[
 /**
  * The reference an among-filter makes, refusing a pick that is not exactly what the targets allow.
  * A bare "your unit" (no keywords) that matches several targets, the first among them, is the
- * first target; any other ambiguity refuses.
+ * first target when the record has no target modes; any other ambiguity refuses.
  */
 function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: string; singular: boolean } {
   const matches = matchedNames(filter, heads);
@@ -95,7 +96,9 @@ function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: 
   if (pick === "one") {
     const bare = ((filter.parameters.keywords as string[] | undefined) ?? []).length === 0;
     const first = heads[0]!;
-    if (matches.length > 1 && bare && first.names.length === 1 && names[0] === first.names[0] && !matches[0]!.gate) return { ref: targetRef(first.names[0]!), singular: true };
+    // With target modes the chosen target may be in either mode, so a bare "your unit" is not the first target.
+    const moded = heads.some((head) => head.mode !== null);
+    if (!moded && matches.length > 1 && bare && first.names.length === 1 && names[0] === first.names[0] && !matches[0]!.gate) return { ref: targetRef(first.names[0]!), singular: true };
     if (matches.length !== 1) throw new CompileError(`An among-filter at byte ${filter.start_byte} names one target but matches ${matches.length} (${names.join(", ")}).`);
     if (matches[0]!.gate) throw new CompileError(`An among-filter at byte ${filter.start_byte} names one target, which has its keywords only in some of its alternatives.`);
     return { ref: targetRef(names[0]!), singular: true };
@@ -174,23 +177,6 @@ function promoteBoundFilters(list: readonly CompileLeaf[]): CompileLeaf[] {
 }
 
 /**
- * "One **X** unit, or one **Y** unit": a target leaf after "or" offers another way to target the
- * Stratagem, not a further target. The compiler has no form for that yet, so it refuses rather
- * than read the two as targets of one use.
- */
-function refuseAlternativeTargets(list: readonly CompileLeaf[], heads: readonly TargetHead[], sourceText: string | undefined): void {
-  if (sourceText === undefined) return;
-  for (const head of heads.slice(1)) {
-    const previous = list[head.index - 1];
-    const selector = head.selector;
-    if (!previous || !selector || previous.end_byte === undefined || selector.end_byte === undefined || previous.end_byte > selector.start_byte) continue;
-    if (/\bor\b/iu.test(exactSpan(sourceText, previous.end_byte, selector.end_byte))) {
-      throw new CompileError(`The target leaf at byte ${selector.start_byte} follows "or": it is another way to target the Stratagem, which the compiler does not compile yet.`);
-    }
-  }
-}
-
-/**
  * Bind every among-filter of a Stratagem with several targets to the leaf it names, and drop the
  * filter. It is the other unit of the distance or visibility right before it ("within 6\" of" +
  * "that **TRANSPORT**"), the attacker of the attack right after it ("a model in" + "one of those
@@ -201,7 +187,7 @@ function refuseAlternativeTargets(list: readonly CompileLeaf[], heads: readonly 
  * moment's unit.
  */
 export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string): { leaves: CompileLeaf[]; focus: (index: number) => string | null } {
-  const input = promoteBoundFilters(raw);
+  const input = assignTargetModes(promoteBoundFilters(raw), sourceText).leaves;
   const heads = targetHeads(input);
   const names = heads.flatMap((head) => head.names);
   const among = input.filter((leaf) => leaf.family_id === "unit-filter" && leaf.parameters.among === AMONG_TARGETS);
@@ -209,7 +195,6 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
     if (among.length) throw new CompileError("An among-filter picks among a Stratagem's targets, but this record names one target; name it as this unit.");
     return { leaves: [...input], focus: () => null };
   }
-  refuseAlternativeTargets(input, heads, sourceText);
   const leaves = input.map((leaf, index) => leaf.fragment === "TARGET" ? bindInTarget(input, index, heads, sourceText) : leaf);
   const dropped = new Set<number>();
   // What a later bare antecedent names, at each leaf.

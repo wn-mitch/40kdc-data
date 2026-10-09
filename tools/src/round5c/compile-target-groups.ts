@@ -20,7 +20,7 @@ const ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seven
  * One target leaf and what it prints: the targets it names, whose units, their keywords, and the
  * alternatives its filter offers ("one **X** model or one **Y** model"), each with its own keywords.
  */
-export type TargetHead = { index: number; selector: CompileLeaf | null; names: string[]; side: string | null; level: string; keywords: string[]; alternatives: string[][] };
+export type TargetHead = { index: number; selector: CompileLeaf | null; names: string[]; side: string | null; level: string; keywords: string[]; alternatives: string[][]; mode: string | null; mode_cost: { label: string; amount: number } | null };
 
 const SIDES: Record<string, string> = { "your-army": "friendly", enemy: "enemy" };
 
@@ -29,7 +29,7 @@ export function targetHeads(list: readonly CompileLeaf[]): TargetHead[] {
   const selectors = list.flatMap((leaf, index) => SELECTORS.has(leaf.family_id) ? [index] : []);
   if (selectors.length === 0) {
     const binding = list.findIndex((leaf) => leaf.family_id === "target-binding");
-    return binding === -1 ? [] : [{ index: binding, selector: null, names: [ORDINALS[0]!], side: null, level: "unit", keywords: [], alternatives: [] }];
+    return binding === -1 ? [] : [{ index: binding, selector: null, names: [ORDINALS[0]!], side: null, level: "unit", keywords: [], alternatives: [], mode: null, mode_cost: null }];
   }
   const sizes = selectors.map((at) => list[at]!.parameters.count === "exactly" ? Number(list[at]!.parameters.count_exact) : 1);
   const total = sizes.reduce((sum, size) => sum + size, 0);
@@ -48,7 +48,7 @@ export function targetHeads(list: readonly CompileLeaf[]): TargetHead[] {
     const alternatives = filters.flatMap((filter) => ((filter.parameters.alternatives as FilterAlternative[] | undefined) ?? []).map((item) => item.keywords ?? []));
     const names = ORDINALS.slice(next, next + sizes[position]!);
     next += sizes[position]!;
-    return { index: at, selector, names, side: side === "any" ? null : side, level, keywords, alternatives };
+    return { index: at, selector, names, side: side === "any" ? null : side, level, keywords, alternatives, mode: selector.mode ?? null, mode_cost: selector.mode_cost ?? null };
   });
 }
 
@@ -128,12 +128,13 @@ export function groupedTargetRestrictions(list: readonly CompileLeaf[], parts: r
     }
     // "Two X units": that many targets, each one unit under the same restrictions.
     if (count === "exactly") counted = { count: "one" };
+    const modeFields: Node = head.mode === null ? {} : { mode: head.mode, ...(head.mode_cost ? { mode_cost: head.mode_cost } : {}) };
     head.names.forEach((name, copy) => {
       const own = structuredClone(rest);
       // "Two X units": each later copy is another unit than the copies before it.
       const others = head.names.slice(0, copy).map(notSameAs);
       if (others.length) own.eligibility = allOf([...(own.eligibility ? [own.eligibility as Node] : []), ...others]);
-      restrictions.push({ name, ...structuredClone(counted), ...own });
+      restrictions.push({ name, ...structuredClone(counted), ...modeFields, ...own });
     });
   });
   return restrictions;
@@ -149,11 +150,13 @@ function allOf(nodes: Node[]): Node {
 
 /**
  * Stratagem targets are distinct units: a later target is not the same unit as any target named
- * before it. Omitted against an earlier target of the other side, which can never be the same unit.
+ * before it in its own mode (targets of an unchosen mode are never selected together). Omitted
+ * against an earlier target of the other side, which can never be the same unit.
  */
 function distinctFrom(heads: readonly TargetHead[], position: number): Node[] {
-  const side = heads[position]!.side;
+  const { side, mode } = heads[position]!;
   return heads.slice(0, position)
+    .filter((earlier) => earlier.mode === mode)
     .filter((earlier) => side === null || earlier.side === null || earlier.side === side)
     .flatMap((earlier) => earlier.names.map(notSameAs));
 }

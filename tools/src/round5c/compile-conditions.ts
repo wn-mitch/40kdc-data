@@ -699,8 +699,10 @@ export function targetRestrictions(parts: readonly CompileLeaf[], eligibility: r
     ...(filter.states ?? []).map((state) => stateCheck(state)),
     ...(filter.excluded_all_keywords?.length ? [negate({ type: "has-keyword", parameters: { all_of: filter.excluded_all_keywords } })] : []),
     ...abilityChecks(filter.excluded_abilities, filter.abilities),
-    ...(filter.other === true ? [negate({ type: "same-unit", parameters: { as: "ability-unit" } })] : []),
   ];
+  // "other" on a unit-filter says the unit is not the bearer. A Stratagem target has no bearer, so the
+  // exclusion must be stated in the unit-filter it belongs to, not inferred here.
+  if (filter.other === true) throw new CompileError("A Stratagem target has no bearer, so \"other\" has no unit to exclude; state the exclusion in the unit-filter.");
   const anyRequired = selector.parameters.match === "any" ? keywords : (selector.parameters.any_keywords as string[] | undefined) ?? [];
   const attackedFilter = attackedChecks(attacked, selector.parameters.match === "any" ? [] : keywords, anyRequired);
   const eligibilityCondition = allOf([...filtered, ...attackedFilter, ...eligibility]);

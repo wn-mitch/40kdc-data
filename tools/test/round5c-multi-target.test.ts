@@ -340,15 +340,20 @@ describe("Round 5C Stratagems with several targets: a target with alternatives, 
     expect(refused(text, ...head, ["your ALPHA units", "unit-filter", { side: "friendly", keywords: ["BETA"], among: "stratagem-targets", targets: "one" }, "EFFECT"], eligible)).toMatch(/only in some of its alternatives/u);
   });
 
-  it("refuses a target leaf after \"or\": another way to target, not a second target", () => {
+  it("reads a target leaf after \"or\" as the other target mode, not as a second target of the same use", () => {
     const or = "Movement phase. One friendly ALPHA unit, or one friendly BETA unit. Until the end of the turn, it is eligible to shoot and charge after falling back.";
-    expect(refused(or, WINDOW,
+    const items: Item[] = [WINDOW,
       ["One", "stratagem-target", { count: "one" }, "TARGET"],
       ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
       ["one", "stratagem-target", { count: "one" }, "TARGET"],
       ["friendly BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"],
-      ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }, "EFFECT"],
-      ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"])).toMatch(/follows "or"/u);
+      ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }, "EFFECT"]];
+    const { target } = compiled(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"]);
+    expect(target).toEqual([
+      { name: "first", mode: "a", count: "one", side: "your-army", selects: "unit", required_keywords: ["ALPHA"] },
+      { name: "second", mode: "b", count: "one", side: "your-army", selects: "unit", required_keywords: ["BETA"] },
+    ]);
+    expect(refused(or, ...items, ["is eligible to shoot and charge after falling back", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot", "charge"] }, "EFFECT"])).toMatch(/several targets/u);
   });
 });
 

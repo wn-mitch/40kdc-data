@@ -306,4 +306,16 @@ describe("integrity: phase-4 bindings", () => {
     ]);
     expect(await run(effect)).toEqual(['stratagem_target "tzaangors" is not a named target of any Stratagem using this ability']);
   });
+  it("requires every target of one target mode to name the same mode_cost", async () => {
+    const benign = leaf("designate", { subject: "selected-unit", tag: "RILED UP" });
+    const row = (costB: { label: string; amount: number }) => ({
+      id: "probe-modes", target_restrictions: [
+        { name: "first", count: "one", mode: "a" },
+        { name: "second", count: "one", mode: "b", mode_cost: costB },
+        { name: "third", count: "one", mode: "b", mode_cost: { label: "yp-pool", amount: 1 } },
+      ],
+    });
+    expect(await run(benign, [row({ label: "yp-pool", amount: 1 })])).toEqual([]);
+    expect(await run(benign, [row({ label: "yp-pool", amount: 2 })])).toEqual(['mode "b" names a different mode_cost than its other targets']);
+  });
 });

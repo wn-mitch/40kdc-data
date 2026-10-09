@@ -58584,7 +58584,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StateChangeEffectModifie
 ///          "$ref": "#/$defs/stratagem-target-restriction"
 ///        },
 ///        {
-///          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}.",
+///          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}. Targets in exclusive modes (\"up to two X, or one other Y\") each carry a mode: when any does, every one does and both modes a and b are present. The player chooses one mode; the targets of an unchosen mode are not selected, their eligibility is not checked, and no effect of them occurs. Targets are distinct units only within one mode.",
 ///          "type": "array",
 ///          "items": {
 ///            "allOf": [
@@ -58849,6 +58849,34 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///    "excluded_keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "mode": {
+///      "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///      "enum": [
+///        "a",
+///        "b"
+///      ]
+///    },
+///    "mode_cost": {
+///      "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///      "type": "object",
+///      "required": [
+///        "amount",
+///        "label"
+///      ],
+///      "properties": {
+///        "amount": {
+///          "description": "How many of that resource the mode spends to be chosen.",
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "label": {
+///          "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///          "type": "string",
+///          "minLength": 1
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "name": {
 ///      "description": "Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.",
 ///      "$ref": "#/$defs/entity-id"
@@ -58900,6 +58928,11 @@ pub struct StratagemTargetRestriction {
     pub eligibility: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<StratagemTargetRestrictionMode>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode_cost: ::std::option::Option<StratagemTargetRestrictionModeCost>,
     ///Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
@@ -58926,6 +58959,8 @@ impl ::std::default::Default for StratagemTargetRestriction {
             count_max: Default::default(),
             eligibility: Default::default(),
             excluded_keywords: Default::default(),
+            mode: Default::default(),
+            mode_cost: Default::default(),
             name: Default::default(),
             notes: Default::default(),
             required_keywords: Default::default(),
@@ -59095,6 +59130,194 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestricti
         value.parse()
     }
 }
+///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///  "enum": [
+///    "a",
+///    "b"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionMode {
+    #[serde(rename = "a")]
+    A,
+    #[serde(rename = "b")]
+    B,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("a"),
+            Self::B => f.write_str("b"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "a" => Ok(Self::A),
+            "b" => Ok(Self::B),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "label"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "description": "How many of that resource the mode spends to be chosen.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "label": {
+///      "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct StratagemTargetRestrictionModeCost {
+    ///How many of that resource the mode spends to be chosen.
+    pub amount: ::std::num::NonZeroU64,
+    ///The resource pool or resource the mode spends, as the resource-spend effect names it.
+    pub label: StratagemTargetRestrictionModeCostLabel,
+}
+///The resource pool or resource the mode spends, as the resource-spend effect names it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StratagemTargetRestrictionModeCostLabel(::std::string::String);
+impl ::std::ops::Deref for StratagemTargetRestrictionModeCostLabel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StratagemTargetRestrictionModeCostLabel>
+for ::std::string::String {
+    fn from(value: StratagemTargetRestrictionModeCostLabel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionModeCostLabel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StratagemTargetRestrictionModeCostLabel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///Whether the target is a unit or a single model.
 ///
 /// <details><summary>JSON schema</summary>
@@ -59260,7 +59483,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestricti
 ///      "$ref": "#/$defs/stratagem-target-restriction"
 ///    },
 ///    {
-///      "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}.",
+///      "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}. Targets in exclusive modes (\"up to two X, or one other Y\") each carry a mode: when any does, every one does and both modes a and b are present. The player chooses one mode; the targets of an unchosen mode are not selected, their eligibility is not checked, and no effect of them occurs. Targets are distinct units only within one mode.",
 ///      "type": "array",
 ///      "items": {
 ///        "allOf": [
@@ -59337,6 +59560,11 @@ pub struct StratagemTargetRestrictionsArrayItem {
     pub eligibility: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<StratagemTargetRestrictionsArrayItemMode>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode_cost: ::std::option::Option<StratagemTargetRestrictionsArrayItemModeCost>,
     ///Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.
     pub name: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -59513,6 +59741,198 @@ for StratagemTargetRestrictionsArrayItemCount {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///  "enum": [
+///    "a",
+///    "b"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsArrayItemMode {
+    #[serde(rename = "a")]
+    A,
+    #[serde(rename = "b")]
+    B,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsArrayItemMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("a"),
+            Self::B => f.write_str("b"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsArrayItemMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "a" => Ok(Self::A),
+            "b" => Ok(Self::B),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "label"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "description": "How many of that resource the mode spends to be chosen.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "label": {
+///      "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct StratagemTargetRestrictionsArrayItemModeCost {
+    ///How many of that resource the mode spends to be chosen.
+    pub amount: ::std::num::NonZeroU64,
+    ///The resource pool or resource the mode spends, as the resource-spend effect names it.
+    pub label: StratagemTargetRestrictionsArrayItemModeCostLabel,
+}
+///The resource pool or resource the mode spends, as the resource-spend effect names it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StratagemTargetRestrictionsArrayItemModeCostLabel(::std::string::String);
+impl ::std::ops::Deref for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StratagemTargetRestrictionsArrayItemModeCostLabel>
+for ::std::string::String {
+    fn from(value: StratagemTargetRestrictionsArrayItemModeCostLabel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///Whether the target is a unit or a single model.

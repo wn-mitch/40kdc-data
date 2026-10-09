@@ -6366,6 +6366,23 @@ export interface StratagemTargetRestriction {
   bound_to?: "triggering-unit" | "attacked-unit";
   eligibility?: AbilityDSLCondition8;
   notes?: string;
+  /**
+   * The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+   */
+  mode?: "a" | "b";
+  /**
+   * What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+   */
+  mode_cost?: {
+    /**
+     * The resource pool or resource the mode spends, as the resource-spend effect names it.
+     */
+    label: string;
+    /**
+     * How many of that resource the mode spends to be chosen.
+     */
+    amount: number;
+  };
 }
 /**
  * A CP-costed ability usable during specific game phases.

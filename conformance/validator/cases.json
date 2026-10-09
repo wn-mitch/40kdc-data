@@ -646,6 +646,107 @@
     "expected_errors": []
   },
   {
+    "name": "stratagem: two exclusive target modes, mode b with a cost",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-modal-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "up-to",
+          "count_max": 2,
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "ALPHA"
+          ]
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit",
+          "required_keywords": [
+            "BETA"
+          ],
+          "mode_cost": {
+            "label": "yp-pool",
+            "amount": 2
+          }
+        }
+      ]
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "stratagem: target mode outside a and b",
+    "target": "stratagem",
+    "input": {
+      "id": "fabricated-modal-ploy",
+      "name": "Fabricated Ploy",
+      "category": "core",
+      "type": "strategic-ploy",
+      "cp_cost": 1,
+      "phases": [
+        "movement"
+      ],
+      "player_turn": "your-turn",
+      "timing": "once-per-phase",
+      "game_version": {
+        "edition": "11th",
+        "dataslate": "pre-launch-provisional"
+      },
+      "target_restrictions": [
+        {
+          "name": "first",
+          "mode": "a",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "second",
+          "mode": "b",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        },
+        {
+          "name": "third",
+          "mode": "c",
+          "count": "one",
+          "side": "your-army",
+          "selects": "unit"
+        }
+      ]
+    },
+    "expected_errors": [
+      {
+        "path": "/target_restrictions",
+        "code": "TYPE_MISMATCH"
+      },
+      {
+        "path": "/target_restrictions/2/mode",
+        "code": "ENUM_VIOLATION"
+      }
+    ]
+  },
+  {
     "name": "ability: eligible to embark within a named Transport",
     "target": "ability",
     "input": {

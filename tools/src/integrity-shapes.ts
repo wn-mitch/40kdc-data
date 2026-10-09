@@ -194,6 +194,24 @@ export async function checkDslShapes(root: string, result: ValidationResult): Pr
     } catch {
       continue;
     }
-    rows.forEach((row, index) => record(file, index, tagIssues(row, `/${index}`)));
+    rows.forEach((row, index) => record(file, index, [...tagIssues(row, `/${index}`), ...modeCostIssues(row, index)]));
   }
+}
+
+/**
+ * A target mode is chosen as a whole, so every target of one mode names the same mode_cost (the
+ * schema cannot compare array items). A mode's targets are listed under target_restrictions.
+ */
+function modeCostIssues(row: unknown, index: number): Issue[] {
+  if (!isNode(row) || !Array.isArray(row.target_restrictions)) return [];
+  const costs = new Map<string, string>();
+  const issues: Issue[] = [];
+  row.target_restrictions.forEach((target, at) => {
+    if (!isNode(target) || typeof target.mode !== "string") return;
+    const cost = JSON.stringify(target.mode_cost ?? null);
+    const seen = costs.get(target.mode);
+    if (seen === undefined) costs.set(target.mode, cost);
+    else if (seen !== cost) issues.push({ path: `/${index}/target_restrictions/${at}/mode_cost`, message: `mode "${target.mode}" names a different mode_cost than its other targets` });
+  });
+  return issues;
 }

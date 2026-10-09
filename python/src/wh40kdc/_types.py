@@ -556,6 +556,11 @@ class WhenDrawn(TypedDict):
     battle_round: NotRequired[BattleRound]
 
 
+class ModeCost(TypedDict):
+    label: str
+    amount: int
+
+
 class TargetProfile(TypedDict):
     id: EntityId
     name: str
@@ -2661,6 +2666,8 @@ class StratagemTargetRestriction(TypedDict):
     bound_to: NotRequired[Literal["triggering-unit", "attacked-unit"]]
     eligibility: NotRequired[Condition]
     notes: NotRequired[str]
+    mode: NotRequired[Literal["a", "b"]]
+    mode_cost: NotRequired[ModeCost]
 
 
 class Stratagem(TypedDict):
