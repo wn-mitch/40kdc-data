@@ -29,6 +29,7 @@ import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
 import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.js";
+import { foldEngagementExclusive } from "./compile-engagement-exclusive.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
@@ -251,7 +252,13 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
 
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   // "Those attacks" are named across the whole record before it splits into parts (compile-bound-attacks.ts).
-  const leaves = nameBoundAttacks(given);
+  // "only within Engagement Range of …" folds onto the engaged state before filters attach to their neighbours (compile-engagement-exclusive.ts).
+  let qualified: CompileLeaf[];
+  try { qualified = foldEngagementExclusive(given, sourceText); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
+  }
+  const leaves = nameBoundAttacks(qualified);
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
   try { checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); } catch (error) {
     if (!(error instanceof CompileError)) throw error;

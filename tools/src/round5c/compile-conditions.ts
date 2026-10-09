@@ -232,6 +232,21 @@ function followingFilter(leaf: CompileLeaf): Node {
   return structuredClone(filter);
 }
 
+/**
+ * "engaged with nothing except <filter>" (compile-engagement-exclusive.ts folds the qualifier onto
+ * the state): engaged with a unit of the filter, and not engaged with a friendly unit the filter does
+ * not match. The filter must be a friendly filter of keywords alone, so its complement is a DSL filter too.
+ */
+function exclusiveEngagement(leaf: CompileLeaf, subject: string | undefined, engaged: Node, state: unknown): Node {
+  const filter = followingFilter(leaf);
+  const keys = Object.keys(filter);
+  if (filter.owner !== "friendly" || !Array.isArray(filter.all_of) || keys.some((key) => key !== "owner" && key !== "all_of")) {
+    throw new CompileError("engagement-exclusive needs a friendly unit-filter of keywords alone; its complement is not a DSL filter otherwise.");
+  }
+  const others = { owner: "friendly", not_all_of: filter.all_of };
+  return allOf([engaged, negate(pred("unit-state", { state, with: others }, subject))])!;
+}
+
 /** Stands in for a folded filter's units while a condition lowers; replaced by the filter itself. */
 const FILTER_STAND_IN = "__filtered-units__";
 
@@ -312,7 +327,10 @@ export function condition(leaf: CompileLeaf): Node {
         // Version 5: engaged with one named unit, the DSL's `with`.
         // Version 10: the state as it was at the start of the phase or turn.
         const at = leaf.parameters.at === undefined ? {} : { at: closed(leaf, "at") };
-        if (leaf.parameters.with === "following-filter") return pred("unit-state", { state, with: followingFilter(leaf), ...at }, subject);
+        if (leaf.parameters.with === "following-filter") {
+          const engaged = pred("unit-state", { state, with: followingFilter(leaf), ...at }, subject);
+          return leaf.parameters.exclusive === true ? exclusiveEngagement(leaf, subject, engaged, state) : engaged;
+        }
         // The DSL's `with` absent means engaged with any unit, so this unit is named, not defaulted.
         if (leaf.parameters.with !== undefined) return pred("unit-state", { state, with: widenedWho(closed(leaf, "with")) ?? "this-unit", ...at }, subject);
         // Version 8: "in Reserves" is Strategic Reserves in the rules; the DSL has only that state.
@@ -409,11 +427,13 @@ export function condition(leaf: CompileLeaf): Node {
         // distance from this unit to the attack's target, as the authored data measures it.
         // A named range (range_ref, family-extensions-16-named-range-reference.ts) replaces inches:
         // its aura carries the anchor, and `of` says whose units the distance is measured to.
-        const named = leaf.parameters.range_ref !== undefined;
+        // range_ref engagement is the Engagement Range itself: the DSL names it as the string "engagement", not an aura.
+        const engagement = leaf.parameters.range_ref === "engagement";
+        const named = leaf.parameters.range_ref !== undefined && !engagement;
         if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
-        const range: Node = named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : { inches: closed(leaf, "inches") };
+        const range: unknown = engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : { inches: closed(leaf, "inches") };
         const inchesOnly = (): Node => {
-          if (named) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range.`);
+          if (named || engagement) throw new CompileError(`unit-position of ${String(leaf.parameters.of)} takes inches, not a named range.`);
           return { inches: closed(leaf, "inches") };
         };
         const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
@@ -428,7 +448,7 @@ export function condition(leaf: CompileLeaf): Node {
           : leaf.parameters.of === "battlefield-edge"
           ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "following-filter"
-          ? pred("within", { of: followingFilter(leaf), range: inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: followingFilter(leaf), range: engagement ? range : inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "matching-unit"
           ? pred("within", { of: matchingUnit(leaf, subject), range, ...wholly }, subject)
           : leaf.parameters.of !== undefined

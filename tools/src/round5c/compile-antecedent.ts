@@ -4,6 +4,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
+import { placements } from "./compile-placement.js";
 
 /** Leaves that choose a unit an anaphor can point back to. */
 /** A Stratagem's TARGET leaves; the target is the unit its effects name as this-unit. */
@@ -478,6 +479,7 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
       if (value === null) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to the ${role}, which its ${key} cannot name.`);
       parameters[key] = value;
     }
+    if (leaf.family_id === "unit-state" && leaf.parameters.with === ANTECEDENT) refuseUnboundWith(leaves, index, parameters, sourceText);
     // The keys this binding filled in, so a later lowering can tell "that unit" from an authored subject.
     return { ...leaf, parameters, antecedent_keys: keys };
   });
@@ -494,6 +496,27 @@ function momentUnitRole(leaves: readonly CompileLeaf[], index: number): string {
   const moment = leaves[at]!.parameters;
   const object = OBJECT_MOMENTS.has(String(moment.kind)) || ((moment.kind === "unit-destroyed" || moment.kind === "model-destroyed") && moment.by === undefined);
   return object ? "event-object" : "event-subject";
+}
+
+/** Families whose leaf introduces a unit a later "that unit" can name: a selection, a moment or a filter. */
+const INTRODUCING_FAMILIES = new Set(["select-unit", "stratagem-target", "event", "unit-filter"]);
+
+/**
+ * A unit-state "engaged with that unit" binds only when the state's subject is another unit and
+ * the same sentence introduces the unit it names. Otherwise the DSL would read the state as
+ * engagement with the subject itself, with the unit an enemy filter names, or with a unit that a
+ * different sentence introduced. Those are refused rather than lowered.
+ */
+function refuseUnboundWith(leaves: readonly CompileLeaf[], index: number, bound: Record<string, unknown>, sourceText: string | undefined): void {
+  const leaf = leaves[index]!;
+  if (bound.subject === bound.with) {
+    throw new CompileError(`unit-state at byte ${leaf.start_byte} engages ${ANTECEDENT} with the same unit as its subject (${String(bound.with)}); the DSL cannot name a second unit for it.`);
+  }
+  const places = placements(leaves, sourceText);
+  const sentence = places[index]!.sentence;
+  if (!leaves.some((other, at) => at < index && places[at]!.sentence === sentence && INTRODUCING_FAMILIES.has(other.family_id))) {
+    throw new CompileError(`unit-state at byte ${leaf.start_byte} names a unit introduced outside this sentence, which the DSL cannot bind.`);
+  }
 }
 
 /** Whether any parameter of a leaf still points back to an earlier unit. */
