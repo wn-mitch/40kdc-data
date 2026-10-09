@@ -225,6 +225,10 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         },
       };
     }
+    case "weapon-ability-range": {
+      // "Friendly X units' Rapid Fire attacks benefit … up to that attack's maximum range": the units the subject names, one clause.
+      return { type: "weapon-ability-range", target: target(leaf.parameters.subject), modifier: { keyword: closed(leaf, "keyword"), within: closed(leaf, "within") } };
+    }
     case "weapon-ability-grant": {
       const weaponType = closed(leaf, "weapon_type");
       const weaponName = leaf.parameters.weapon_name;

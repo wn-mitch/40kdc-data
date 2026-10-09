@@ -35,6 +35,8 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "move-through": ["subject"],
   // "that unit has the [LETHAL HITS] ability", "models in that unit have the Feel No Pain 5+ ability".
   "weapon-ability-grant": ["subject"],
+  // "Friendly X units' Rapid Fire attacks benefit from [Rapid Fire] …": the units the leading unit-filter names.
+  "weapon-ability-range": ["subject"],
   "keyword-grant": ["subject"],
   "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"],

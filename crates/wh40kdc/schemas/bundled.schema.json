@@ -11076,6 +11076,41 @@
               "$ref": "#/$defs/scaling"
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "weapon-ability-range effect",
+          "description": "[ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "weapon-ability-range"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "keyword",
+                "within"
+              ],
+              "properties": {
+                "keyword": {
+                  "const": "Rapid Fire"
+                },
+                "within": {
+                  "const": "weapon"
+                }
+              }
+            }
+          }
         }
       ]
     },

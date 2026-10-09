@@ -24935,5 +24935,44 @@
     "expected": {
       "text": "When resolving this use, the unit counts as being within Synapse Range of all friendly units."
     }
+  },
+  {
+    "caseId": "weapon-range-override-this-unit#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": "this-unit",
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit's attacks benefit from [RAPID FIRE] when the target is within the weapon's range."
+    }
+  },
+  {
+    "caseId": "weapon-range-override-filtered-units#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "TACTICUS"
+        ]
+      },
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly TACTICUS units' attacks benefit from [RAPID FIRE] when the target is within the weapon's range."
+    }
   }
 ]

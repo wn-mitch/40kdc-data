@@ -1791,6 +1791,11 @@ class Modifier56(TypedDict):
     bind_as: str
 
 
+class Modifier57(TypedDict):
+    keyword: Literal["Rapid Fire"]
+    within: Literal["weapon"]
+
+
 Result: TypeAlias = int
 
 
@@ -1837,7 +1842,7 @@ AttackerKeyword: TypeAlias = str
 AttackerUnitKeyword: TypeAlias = str
 
 
-class Modifier59(TypedDict):
+class Modifier60(TypedDict):
     stance_id: EntityId
     additional_selections: int
     allocation: Literal["choose-one-option", "fixed-option"]
@@ -1848,7 +1853,7 @@ class Modifier59(TypedDict):
 class StanceSelectionCapacityEffect(TypedDict):
     type: Literal["stance-selection-capacity"]
     scope: NotRequired[Literal["army", "unit"]]
-    modifier: Modifier59
+    modifier: Modifier60
 
 
 class Eligible1(TypedDict):
@@ -4089,6 +4094,12 @@ class SingleEffect47(TypedDict):
     scaling: NotRequired[Scaling]
 
 
+class SingleEffect48(TypedDict):
+    type: Literal["weapon-ability-range"]
+    target: UnitRef
+    modifier: Modifier57
+
+
 SingleEffect: TypeAlias = (
     SingleEffect1
     | SingleEffect2
@@ -4137,6 +4148,7 @@ SingleEffect: TypeAlias = (
     | SingleEffect45
     | SingleEffect46
     | SingleEffect47
+    | SingleEffect48
 )
 
 
@@ -4172,7 +4184,7 @@ class AbilityPart(TypedDict):
     usage: NotRequired[AbilityUsage]
 
 
-class Modifier57(TypedDict):
+class Modifier58(TypedDict):
     condition: Condition
     value: int
 
@@ -4180,7 +4192,7 @@ class Modifier57(TypedDict):
 class Test(TypedDict):
     kind: Literal["leadership", "battle-shock"]
     subject: Literal["unit", "self", "target"]
-    modifiers: NotRequired[list[Modifier57]]
+    modifiers: NotRequired[list[Modifier58]]
 
 
 DiceGatedEffect = TypedDict(
@@ -4309,7 +4321,7 @@ class UnitSelector(TypedDict):
     within_objective: NotRequired[SelectionReference]
 
 
-class Modifier58(TypedDict):
+class Modifier59(TypedDict):
     range: NotRequired[int | list[RangeItem]]
     range_bonus: NotRequired[int]
     of: NotRequired[str]
@@ -4324,7 +4336,7 @@ class Modifier58(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier58
+    modifier: Modifier59
 
 
 class Select1(TypedDict):

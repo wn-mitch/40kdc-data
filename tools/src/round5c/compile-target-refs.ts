@@ -44,7 +44,7 @@ const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as S
  * binds selected and triggering units to.
  */
 export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
-  "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
+  "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],

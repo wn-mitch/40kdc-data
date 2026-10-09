@@ -55380,6 +55380,28 @@ pub enum SimpleCondition {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "weapon-ability-range effect",
+///      "description": "[ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/weapon-ability-range-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "weapon-ability-range"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -55860,6 +55882,11 @@ pub enum SingleEffect {
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
     },
+    /**weapon-ability-range effect
+
+[ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.*/
+    #[serde(rename = "weapon-ability-range")]
+    WeaponAbilityRange { modifier: WeaponAbilityRangeEffectModifier, target: UnitRef },
 }
 ///Type of game element that is the source of an enrichment entry
 ///
@@ -69586,6 +69613,35 @@ for WeaponAbilityGrantEffectModifierWeaponType {
         value.parse()
     }
 }
+///`WeaponAbilityRangeEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keyword",
+///    "within"
+///  ],
+///  "properties": {
+///    "keyword": {
+///      "const": "Rapid Fire"
+///    },
+///    "within": {
+///      "const": "weapon"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct WeaponAbilityRangeEffectModifier {
+    pub keyword: ::serde_json::Value,
+    pub within: ::serde_json::Value,
+}
 ///`WeaponGrantEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -71086,7 +71142,8 @@ fn effect_node_from_value(
             | "state-change" | "cp-gain" | "cost-modifier" | "resource-gain"
             | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
             | "army-rule" | "test-exemption" | "datasheet-swap"
-            | "characteristic-resolution" | "borrow-weapons" | "select-weapon",
+            | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
+            | "weapon-ability-range",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

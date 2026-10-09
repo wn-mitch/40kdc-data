@@ -27,7 +27,7 @@ export type Inline = (e: unknown, ctx: Ctx) => string;
 /** Every single-effect type; anything else is a container. */
 export const LEAF_TYPES = new Set([
   "stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-  "keyword-grant", "weapon-ability-grant", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
+  "keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
   "counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -205,6 +205,11 @@ function keywordGrant(m: Record<string, unknown>, subj: string): string {
   const noun = kws.length === 1 ? "keyword" : "keywords";
   const replaces = Array.isArray(m.replaces) ? `, replacing ${pronoun(subj)} ${andList((m.replaces as unknown[]).map(jstr))} ${m.replaces.length === 1 ? "keyword" : "keywords"}` : "";
   return `${subj} ${v(subj, "gains")} the ${andList(kws)} ${noun}${replaces}`;
+}
+
+/** A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire). */
+function weaponAbilityRange(m: Record<string, unknown>, subj: string): string {
+  return `${ofOrPossessive(subj, "attacks")} benefit from ${bracketKeyword(m.keyword)} when the target is within the weapon's range`;
 }
 
 function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -427,6 +432,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "ability-grant": return abilityGrant(e, m, subj, ctx, inline);
     case "keyword-grant": return keywordGrant(m, subj);
     case "weapon-ability-grant": return weaponAbilityGrant(e, m, subj, ctx);
+    case "weapon-ability-range": return weaponAbilityRange(m, subj);
     case "weapon-grant": {
       const count = Number(m.count ?? 1) || 1;
       return `${subj} ${v(subj, "gains")} ${count} ${weaponLabel(m.weapon_id)} weapon${count === 1 ? "" : "s"}`;

@@ -308,7 +308,7 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
  * unit-filter object, which only an effect's target can hold.
  */
 const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
-  "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
+  "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
@@ -393,6 +393,11 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     // to this unit would test the wrong unit, so refuse.
     if (introduced === null && leaf.role !== "DURATION" && leaves.slice(0, index).some((other) => other.family_id === "unit-filter" && other.parameters.designated !== undefined)) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a unit (${ANTECEDENT}), but the only unit it can mean is the one a designated unit-filter before it names, and no leaf binds it to that.`);
+    }
+    // A weapon-ability range names the units an earlier unit-filter or selection introduced. Without one,
+    // the record's own unit is not what the text means, so refuse rather than default to it.
+    if (introduced === null && leaf.family_id === "weapon-ability-range") {
+      throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a unit (${ANTECEDENT}), but no earlier unit-filter or selection before it names one.`);
     }
     // "While an enemy unit is within Engagement Range of this unit": a condition on the units a
     // bare filter matches holds when any of them meets it. When a later leaf also points back

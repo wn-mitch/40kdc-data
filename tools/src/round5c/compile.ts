@@ -130,7 +130,7 @@ const LASTING_EFFECTS = new Set([
   "ability-grant", "ability-modifier", "act-on-death", "borrow-weapons", "cost-modifier", "counts-as", "damage-reduction",
   "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant", "leader-model-ability-grant",
   "move-modifier", "named-region-state", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
-  "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-grant",
+  "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-ability-range", "weapon-grant",
 ]);
 
 /** Whether an effect tree holds a lasting effect. */

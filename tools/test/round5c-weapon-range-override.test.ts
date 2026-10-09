@@ -97,3 +97,18 @@ describe("Round 5C unit-position weapon_range: a distance equal to the attacking
     expect(result.ok ? "" : result.errors.join(" ")).toMatch(/half- or full-weapon distance has no placement form/u);
   });
 });
+
+// The design's record-shape check: a unit's ranged attacks that target a unit within half range gain a keyword.
+describe("Round 5C weapon-range override shapes compile end to end", () => {
+  it("compiles the attack-gated keyword grant for a ranged attack at half range", () => {
+    const text = "This unit's ranged attacks that target a unit within half range have [Sustained Hits 1].";
+    const result = compileLeaves(placed(text,
+      ["This unit's ranged attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
+      ["that target a unit within half range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "half" }],
+      ["have", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }],
+      ["[Sustained Hits 1]", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+    ), text, {});
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expect(JSON.stringify(result.ok && result.mechanics)).toContain('"range":"half-weapon"');
+  });
+});

@@ -65,6 +65,7 @@ LEAF_TYPES = frozenset(
         "ability-grant",
         "keyword-grant",
         "weapon-ability-grant",
+        "weapon-ability-range",
         "weapon-grant",
         "ability-modifier",
         "ability-activate",
@@ -492,6 +493,11 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
     return s + cap + ability_limits(m)
 
 
+def _weapon_ability_range(m: dict[str, Any], subj: str) -> str:
+    """A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire)."""
+    return f"{of_or_possessive(subj, 'attacks')} benefit from {bracket_keyword(m.get('keyword'))} when the target is within the weapon's range"
+
+
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("in_region") is not None:
         region = m["in_region"] if isinstance(m["in_region"], dict) else {}
@@ -609,6 +615,8 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
         return permission(m, subj, ctx)
     if t == "targeting":
         return targeting(m, subj, ctx)
+    if t == "weapon-ability-range":
+        return _weapon_ability_range(m, subj)
     if t == "counts-as":
         return _counts_as(m, subj, ctx)
     if t == "rule-state":

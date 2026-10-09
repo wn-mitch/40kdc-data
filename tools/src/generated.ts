@@ -617,7 +617,8 @@ export type SingleEffect =
   | DatasheetSwapEffect
   | CharacteristicResolutionEffect
   | BorrowWeaponsEffect
-  | SelectWeaponEffect;
+  | SelectWeaponEffect
+  | WeaponAbilityRangeEffect;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect-node".
@@ -6288,6 +6289,17 @@ export interface SelectWeaponEffect {
     bind_as: string;
   };
   scaling?: Scaling;
+}
+/**
+ * [ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.
+ */
+export interface WeaponAbilityRangeEffect {
+  type: "weapon-ability-range";
+  target: UnitRef;
+  modifier: {
+    keyword: "Rapid Fire";
+    within: "weapon";
+  };
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema

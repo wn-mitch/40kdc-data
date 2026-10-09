@@ -23,6 +23,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "ability-grant",
     "keyword-grant",
     "weapon-ability-grant",
+    "weapon-ability-range",
     "weapon-grant",
     "ability-modifier",
     "ability-activate",
@@ -475,6 +476,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "ability-activate" => ability_activate(m, subj),
         "permission" => permission(m, subj, ctx),
         "targeting" => targeting(m, subj, ctx),
+        "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
         "rule-state" => rule_state(m, subj),
         _ => describe_shape_leaf(e, m, subj, ctx)

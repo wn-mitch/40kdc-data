@@ -1,4 +1,5 @@
-import { enumValue } from "./family-validation.js";
+import type { SemanticFamilyDefinition } from "./contracts.js";
+import { enumValue, exactKeys } from "./family-validation.js";
 import { type FamilyExtension, optional, withProperties } from "./family-extension-helpers.js";
 
 /**
@@ -29,3 +30,43 @@ export const FAMILY_EXTENSIONS_16_WEAPON_RANGE_OVERRIDE: readonly FamilyExtensio
     },
   },
 ];
+
+const WEAPON_RANGE_KEYWORDS = ["Rapid Fire"] as const;
+const WEAPON_RANGE_WITHIN = ["weapon"] as const;
+
+/**
+ * `weapon-ability-range`: a weapon ability's test (Rapid Fire's bonus) applies out to the attacking
+ * weapon's full range rather than half of it, for the units the subject names. One effect leaf
+ * carries the whole clause; the test is the keyword and the range, with no condition leaf.
+ */
+export const WEAPON_RANGE_FAMILIES: readonly SemanticFamilyDefinition[] = [
+  {
+    id: "weapon-ability-range",
+    version: 1,
+    role: "EFFECT",
+    label: "Weapon ability tested at full range",
+    description: "A named weapon ability (Rapid Fire) benefits its attacks when the target is within the attacking weapon's full range, not only half of it, for the units the subject names.",
+    starter: { subject: "this-unit", keyword: "Rapid Fire", within: "weapon" },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "keyword", "within"],
+      properties: {
+        subject: { enum: ["this-unit", "this-model"] },
+        keyword: { enum: [...WEAPON_RANGE_KEYWORDS] },
+        within: { enum: [...WEAPON_RANGE_WITHIN] },
+      },
+      additionalProperties: false,
+    },
+  },
+];
+
+/** The weapon-ability-range parameters, or null for another family. */
+export function normalizeWeaponRangeParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family !== "weapon-ability-range") return null;
+  exactKeys(input, ["subject", "keyword", "within"], family);
+  return {
+    subject: enumValue(input.subject, ["this-unit", "this-model"], "weapon-ability-range.subject"),
+    keyword: enumValue(input.keyword, WEAPON_RANGE_KEYWORDS, "weapon-ability-range.keyword"),
+    within: enumValue(input.within, WEAPON_RANGE_WITHIN, "weapon-ability-range.within"),
+  };
+}

@@ -17,7 +17,7 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -582,6 +582,11 @@ func abilityLimits(m map[string]any) string {
 	return ", " + strings.Join(parts, ", ")
 }
 
+// weaponAbilityRangeLeaf is a weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire).
+func weaponAbilityRangeLeaf(m map[string]any, subj string) string {
+	return ofOrPossessive(subj, "attacks") + " benefit from " + bracketKeyword(m["keyword"]) + " when the target is within the weapon's range"
+}
+
 func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["in_region"] != nil {
 		return subj + " " + ev(subj, "counts") + " as being within " + regionPhrase(mapOr(m["in_region"]))
@@ -710,6 +715,8 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return permissionLeaf(m, subj, ctx)
 	case "targeting":
 		return targetingLeaf(m, subj, ctx)
+	case "weapon-ability-range":
+		return weaponAbilityRangeLeaf(m, subj)
 	case "counts-as":
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":

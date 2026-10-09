@@ -12,6 +12,7 @@ import { MOVEMENT_FAMILIES, normalizeMovementParameters } from "./movement-famil
 import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families.js";
 import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
 import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
+import { normalizeWeaponRangeParameters, WEAPON_RANGE_FAMILIES } from "./family-extensions-16-weapon-rule-range-override.js";
 import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
 import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
@@ -89,6 +90,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...ECONOMY_FAMILIES,
   ...UNIT_STATE_EFFECT_FAMILIES,
   ...WEAPON_BUFF_FAMILIES,
+  ...WEAPON_RANGE_FAMILIES,
   ...ABILITY_MODIFIER_FAMILIES,
   ...CONTAINER_FAMILIES,
   ...NAMED_REGION_FAMILIES,
@@ -167,6 +169,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeEconomyParameters(family, input)
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
+    ?? normalizeWeaponRangeParameters(family, input)
     ?? normalizeAbilityModifierParameters(family, input, version)
     ?? normalizeContainerParameters(family, input, version)
     ?? normalizeUnitFilterParameters(family, input)

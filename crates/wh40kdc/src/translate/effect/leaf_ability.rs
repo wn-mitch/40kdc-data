@@ -114,6 +114,15 @@ pub(super) fn keyword_grant(m: &P, subj: &str) -> String {
     )
 }
 
+/// A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire).
+pub(super) fn weapon_ability_range(m: &P, subj: &str) -> String {
+    format!(
+        "{} benefit from {} when the target is within the weapon's range",
+        of_or_possessive(subj, "attacks"),
+        bracket_keyword(m.get("keyword").unwrap_or(&Value::Null))
+    )
+}
+
 pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     // A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
     let gained = map_arr(m, "abilities", bracket_keyword)
