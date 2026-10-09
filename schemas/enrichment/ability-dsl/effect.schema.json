@@ -1270,18 +1270,18 @@
                   "const": true
                 }
               },
-              "anyOf": [
-                {
+              "if": {
+                "not": {
                   "required": [
                     "abilities"
                   ]
-                },
-                {
-                  "required": [
-                    "removes"
-                  ]
                 }
-              ]
+              },
+              "then": {
+                "required": [
+                  "removes"
+                ]
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"

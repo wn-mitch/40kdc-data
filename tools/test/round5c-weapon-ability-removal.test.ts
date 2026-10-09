@@ -230,6 +230,17 @@ describe("a removal under a scope refuses what it cannot bind", () => {
     expect(() => normalizeFingerprintParameters("weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_name: "Plasma rifle" }, 4)).toThrow();
   });
 
+  it("refuses a subjectless hit roll in an alternative after a scope, which would land on this unit's own attacks", () => {
+    // Fabricated analogue of a defender-side option: the -1 names attacks that target the unit, which
+    // no scope binds, so the compiler must not default it to this unit's own weapons.
+    const text = "Your unit's melee weapons: Have +1 to Hit rolls. Or: Attacks that target this unit have -1 to Hit rolls.";
+    expect(refusal(text, placed(text,
+      ["Your unit's melee weapons:", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee" }],
+      ["Have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ["Attacks that target this unit have -1 to Hit rolls.", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }],
+    ))).toContain("names no recipient");
+  });
+
   it("refuses a hit roll under a keyword scope, which the DSL roll modifier cannot select", () => {
     const text = "Your unit's Blast weapons: Have +1 to Hit rolls.";
     expect(refusal(text, placed(text,

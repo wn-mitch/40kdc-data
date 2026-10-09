@@ -120,6 +120,18 @@ function choiceMarkerAfter(list: readonly CompileLeaf[], source: Buffer | undefi
 
 const isChoiceMarker = (leaf: CompileLeaf) => leaf.family_id === "instead" && leaf.parameters.choice === true;
 
+/**
+ * The leaf after a scope's run that starts an alternative ("... have +1 to hit rolls. Or: Attacks that
+ * target this unit have -1 to hit rolls"). A subjectless attack roll there has no recipient: the scope
+ * binds only the run before the "Or:", and the default would give the roll to this unit's own attacks.
+ */
+function refuseAlternativeRoll(before: CompileLeaf, roll: CompileLeaf, source: Buffer | undefined): void {
+  if (!isWeaponRoll(roll) || roll.parameters.subject !== undefined || roll.fragment !== before.fragment) return;
+  if (/\bor\b/iu.test(between(source, before, roll))) {
+    throw new CompileError(`A ${String(roll.parameters.roll)} roll in an alternative after a weapon scope names no recipient, so it is not compiled.`);
+  }
+}
+
 /** One run may not both remove and grant the same ability ("Do not have Blast. Have Blast" is a contradiction). */
 function refuseKeywordAndRemoval(run: readonly CompileLeaf[]): void {
   const granted = run.filter((leaf) => leaf.family_id === KEYWORD).map((leaf) => leaf.parameters.keyword);
@@ -169,6 +181,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
       containsBound ||= isBound(leaf);
       end += 1;
     }
+    if (end > first && end < list.length) refuseAlternativeRoll(list[end - 1]!, list[end]!, source);
     // A qualifier after a single keyword with no bound leaf ("[LETHAL HITS: CHARACTER]") gates the frame.
     const qualifier = !containsBound && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");

@@ -7786,19 +7786,7 @@
                 "incoming": {
                   "const": true
                 }
-              },
-              "anyOf": [
-                {
-                  "required": [
-                    "abilities"
-                  ]
-                },
-                {
-                  "required": [
-                    "removes"
-                  ]
-                }
-              ]
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"

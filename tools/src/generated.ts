@@ -3391,7 +3391,30 @@ export interface WeaponAbilityGrantEffect {
   type: "weapon-ability-grant";
   target: UnitRef;
   modifier: {
-    [k: string]: unknown;
+    /**
+     * @minItems 1
+     */
+    abilities?: [string, ...string[]];
+    /**
+     * Weapon abilities the weapons lose, as printed ("Do not have [Heavy]"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.
+     *
+     * @minItems 1
+     */
+    removes?: [string, ...string[]];
+    weapon_type?: "melee" | "ranged";
+    weapon_name?: string;
+    weapon_keyword?: string;
+    weapon_ref?:
+      | {
+          weapon_var: string;
+        }
+      | {
+          selected_by: {
+            ability: EntityId;
+          };
+        };
+    if_present?: "increment";
+    incoming?: true;
   };
   scaling?: Scaling;
 }
