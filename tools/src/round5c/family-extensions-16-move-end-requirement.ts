@@ -6,12 +6,16 @@ const OBJECTIVE_TO = ["closest-objective-marker", "selected-objective"] as const
 const TO_VALUES = ["following-filter", ...OBJECTIVE_TO] as const;
 
 /**
- * The eighteenth round of family extensions: a move-end nearest can end as close as possible to an
- * objective marker (any one, or the one a select-objective bound), per unit or per model, and can
- * name the closest enemy unit as the place it need not be closer than ("instead of").
+ * The move-end requirement round of family extensions (wave 10):
+ * - move-end-nearest version 2: the destination can be an objective marker (any one, or the one a
+ *   select-objective bound), per unit or per model, and instead_of names the closest enemy unit the
+ *   move need not end closer to.
+ * - move-must-end version 4: a cannot-end restriction can replace the usual end threshold. Its move
+ *   kinds come from the trigger, not the leaf (move_types stays restricted to MOVE_SUBSET in version 3).
  */
-export const FAMILY_EXTENSIONS_18_MOVE_END_NEAREST: readonly FamilyExtension[] = [
+export const FAMILY_EXTENSIONS_16_MOVE_END_REQUIREMENT: readonly FamilyExtension[] = [
   {
+    // "must end that move as close as possible to the closest objective marker"
     family: "move-end-nearest",
     description: "As the previous version, and to may be closest-objective-marker (any objective marker) or selected-objective (the objective a select-objective bound). per (unit or model) applies to an objective destination only. instead_of closest-enemy-unit names the enemy unit the move is not required to end closer to, with any destination.",
     schema: (previous) => withProperties(previous, {
@@ -35,6 +39,21 @@ export const FAMILY_EXTENSIONS_18_MOVE_END_NEAREST: readonly FamilyExtension[] =
         result.instead_of = "closest-enemy-unit";
       }
       return result;
+    },
+  },
+  {
+    // "can end that move more than 6\" horizontally from all enemy units (instead of more than 8\")"
+    family: "move-must-end",
+    description: "As the previous version, plus replaces: true, for a cannot restriction that replaces the usual end threshold (\"instead of more than 8\\\"\"). Its move kinds come from the trigger. Absent, the restriction adds to the usual rules.",
+    schema: (previous) => withProperties(previous, {
+      replaces: optional({ const: true, "x-only-when": { polarity: ["cannot"] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.replaces === undefined) return previous(input);
+      if (input.replaces !== true) throw new TypeError("move-must-end.replaces must be true, or omitted.");
+      if (input.polarity !== "cannot") throw new TypeError("move-must-end.replaces applies only to polarity cannot.");
+      const { replaces: _replaces, ...rest } = input;
+      return { ...previous(rest), replaces: true };
     },
   },
 ];
