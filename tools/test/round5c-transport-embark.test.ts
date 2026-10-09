@@ -119,6 +119,21 @@ describe("Round 5C transport eligibility: compiling the Transport target", () =>
     expect(target).toContain('"to":"embark-within"');
   });
 
+  it("refuses a proximity whose anchor is a later target, rather than measuring the unit to itself", () => {
+    const text = "Movement phase. One ALPHA unit wholly within 6\" of a friendly TRANSPORT, and one friendly TRANSPORT that it is able to embark within. Until the end of the turn, one friendly ALPHA unit is eligible to shoot after falling back.";
+    const items: Item[] = [
+      WINDOW,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+      ["wholly within 6\" of a friendly TRANSPORT", "unit-position", { kind: "within", inches: 6, of: "antecedent", subject: "this-unit", negated: false, wholly: true }, "TARGET"],
+      ["one", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT"] }, "TARGET"],
+      ["that it is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "TARGET"],
+      ...ALPHA_EFFECT,
+    ];
+    expect(refused(text, ...items)).toMatch(/measures a unit to itself/u);
+  });
+
   it("still refuses an effect on this unit once there are several targets", () => {
     expect(refused(TEXT, ...TWO_TARGETS.slice(0, 6), DURATION, ["is eligible to shoot after falling back", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot"] }, "EFFECT"]))
       .toMatch(/several targets/u);
@@ -129,6 +144,30 @@ describe("Round 5C transport eligibility: compiling the Transport target", () =>
     expect(refused(TEXT, ...TWO_TARGETS.slice(0, 6), ...ALPHA_EFFECT.slice(0, 2), embark)).toMatch(/no destination for an embark/u);
     const move: Item = ["can embark", "make-move", { subject: "antecedent", move_type: "embark" }, "EFFECT"];
     expect(refused(TEXT, ...TWO_TARGETS.slice(0, 6), ...ALPHA_EFFECT.slice(0, 2), move)).toMatch(/no destination for an embark/u);
+  });
+
+  it("refuses an antecedent subject with no earlier unit, rather than binding it to the Transport itself", () => {
+    const text = "Movement phase. One TRANSPORT that it is able to embark within. Until the end of the turn, it can shoot.";
+    const items: Item[] = [
+      WINDOW,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT"] }, "TARGET"],
+      ["that it is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "TARGET"],
+      DURATION,
+      ["it can shoot", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot"] }, "EFFECT"],
+    ];
+    expect(refused(text, ...items)).toMatch(/names the Transport as the unit able to embark within itself/u);
+  });
+
+  it("refuses an antecedent subject that a unit-filter right before it binds to the Transport's own units", () => {
+    const text = "Movement phase. One TRANSPORT that it is able to embark within. Until the end of the turn, it can shoot.";
+    const items: Item[] = [
+      WINDOW,
+      ["One TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT"] }, "WHEN"],
+      ["that it is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "WHEN"],
+      DURATION,
+    ];
+    expect(refused(text, ...items)).toMatch(/names the Transport as the unit able to embark within itself/u);
   });
 
   it("refuses embark-within inside a bound selection pair, whose eligibility is not bound with it yet", () => {
@@ -156,6 +195,18 @@ describe("Round 5C transport eligibility: a unit selected to embark within the a
     ["that was one of those charge targets", "target-is-selected", { by: "event-subject", target: "this-unit" }, "EFFECT"],
     ["is able to embark within this unit", "eligible", { subject: "this-unit", to: "embark-within", transport: "ability-unit" }, "EFFECT"],
   ];
+
+  it("binds a selected unit's embark-within eligibility to the selection (a single select-unit, no pair)", () => {
+    const text = "Select one friendly ALPHA unit that is able to embark within this unit. That unit suffers 1 mortal wound.";
+    const items: Item[] = [
+      ["Select one friendly", "select-unit", { distance: "any", visible: false }, "EFFECT"],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "EFFECT"],
+      ["that is able to embark within this unit", "eligible", { subject: "antecedent", to: "embark-within", transport: "ability-unit" }, "EFFECT"],
+      ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }, "EFFECT"],
+    ];
+    const { effect } = compiled(text, ...items);
+    expect(effect).toContain('"subject":"selected-unit","to":"embark-within","transport":"ability-unit"');
+  });
 
   it("compiles the candidate's embark-within condition against the ability's own unit", () => {
     const { effect } = compiled(text, ...selection, ["That unit can embark within this unit", "make-move", { subject: "antecedent", move_type: "normal" }, "EFFECT"]);

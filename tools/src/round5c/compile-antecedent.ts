@@ -323,6 +323,8 @@ const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   targeted: ["subject"], "target-is-selected": ["by", "target"],
   // An owned moment's subject, and who destroyed a unit, go into the trigger as is (compile-triggers.ts).
   event: ["subject", "by"],
+  // A selected unit able to embark within a named Transport (compile-transport-embark.ts).
+  eligible: ["subject"],
 };
 
 /** Units a chosen-option-grant holder can bind to: the menu's own-unit effects are retargeted to it. */
