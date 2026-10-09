@@ -40,26 +40,26 @@ function nodes(tree: unknown, test: (node: Record<string, unknown>) => boolean):
 
 const FIGHT_WINDOW = { your_phases: [], opponent_phases: [], either_phases: ["fight"] };
 
-describe("unit-filter@9 family: engaged and hidden", () => {
+describe("unit-filter family: engaged and hidden", () => {
   it("accepts engaged and hidden at the current version, and the previous version still refuses them", () => {
-    expect(currentFamilyVersion("unit-filter")).toBe(9);
-    expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, 9)).toEqual({ side: "friendly", states: ["engaged"] });
-    expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, 9)).toEqual({ side: "friendly", states: ["hidden"] });
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, 8)).toThrow();
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, 8)).toThrow();
+    expect(currentFamilyVersion("unit-filter")).toBeGreaterThanOrEqual(9);
+    expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["engaged"] });
+    expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["hidden"] });
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, currentFamilyVersion("unit-filter") - 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, currentFamilyVersion("unit-filter") - 1)).toThrow();
   });
 
   it("normalizes an input with none of the new states exactly as the previous version does", () => {
     const input = { side: "friendly", keywords: ["ARMIGER"], states: ["battle-shocked", "unengaged"] };
-    expect(normalizeFingerprintParameters("unit-filter", input, 9)).toEqual(normalizeFingerprintParameters("unit-filter", input, 8));
+    expect(normalizeFingerprintParameters("unit-filter", input, currentFamilyVersion("unit-filter"))).toEqual(normalizeFingerprintParameters("unit-filter", input, currentFamilyVersion("unit-filter") - 1));
   });
 
   it("refuses engaged with unengaged in one filter", () => {
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged", "unengaged"] }, 9)).toThrow(/both engaged and unengaged/);
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged", "unengaged"] }, currentFamilyVersion("unit-filter"))).toThrow(/both engaged and unengaged/);
   });
 
   it("refuses a state listed twice when the filter names an engaged or hidden state", () => {
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden", "hidden"] }, 9)).toThrow(/twice/);
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden", "hidden"] }, currentFamilyVersion("unit-filter"))).toThrow(/twice/);
   });
 });
 
