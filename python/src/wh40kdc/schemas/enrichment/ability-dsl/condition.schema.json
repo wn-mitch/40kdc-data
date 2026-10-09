@@ -1822,6 +1822,35 @@
               }
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "deployment-window condition",
+          "description": "[clock] It is the deployment step, before the battle starts (\"during deployment\").",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "deployment-window"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "during": {
+                  "enum": [
+                    "deployment"
+                  ]
+                }
+              },
+              "required": [
+                "during"
+              ]
+            }
+          }
         }
       ]
     },
