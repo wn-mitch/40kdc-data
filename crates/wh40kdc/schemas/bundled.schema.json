@@ -1189,10 +1189,35 @@
       "required": [
         "of"
       ],
-      "description": "Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).",
+      "description": "Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.",
       "properties": {
         "of": {
-          "$ref": "#/$defs/unit-ref"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/unit-ref"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "objective"
+              ],
+              "properties": {
+                "objective": {
+                  "$ref": "#/$defs/objective-filter"
+                }
+              }
+            }
+          ]
+        },
+        "per": {
+          "enum": [
+            "unit",
+            "model"
+          ]
+        },
+        "instead_of": {
+          "const": "closest-enemy-unit"
         },
         "waives": {
           "const": "closest-enemy-model"
@@ -9878,6 +9903,10 @@
                 "ends_when": {
                   "$ref": "#/$defs/condition",
                   "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there."
+                },
+                "ends_when_replaces": {
+                  "const": true,
+                  "description": "Only with ends_when: the ends_when condition replaces the usual end threshold (\"instead of more than 8\\\"\") rather than adding to it. Without this flag the condition adds to the usual rules."
                 }
               },
               "minProperties": 1

@@ -139,18 +139,30 @@ fn mode_clause(m: &P) -> String {
 /// As `endsNearestPhrase` in the TypeScript describer: the closest unit's name, with the waiver's
 /// alternative end when `waives` is closest-enemy-model.
 fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
-    let mut named = effect_subject(e.get("of"), ctx);
-    for article in ["an ", "a ", "the ", "all "] {
-        if let Some(rest) = named.strip_prefix(article) {
-            named = rest.to_string();
-            break;
+    // An objective names no unit: any marker, or the one a select-objective bound.
+    let objective = e.get("of").and_then(|of| of.get("objective"));
+    let named = if let Some(obj) = objective {
+        if obj.get("selection_var").is_some() { "selected objective".to_string() } else { "objective marker".to_string() }
+    } else {
+        let mut named = effect_subject(e.get("of"), ctx);
+        for article in ["an ", "a ", "the ", "all "] {
+            if let Some(rest) = named.strip_prefix(article) {
+                named = rest.to_string();
+                break;
+            }
         }
-    }
-    named = named.replacen(" units", " unit", 1).replace(" units)", ")");
+        named.replacen(" units", " unit", 1).replace(" units)", ")")
+    };
     let nearest = format!("as close as possible to the closest {named}");
-    let must = format!("{who} must end {move_ref}");
+    let must = if jstr(e.get("per")) == "model" {
+        format!("each model in {} must end {move_ref}", if who == "it" { "the unit" } else { who })
+    } else {
+        format!("{who} must end {move_ref}")
+    };
     if jstr(e.get("waives")) == "closest-enemy-model" {
         format!("{must} either closer to the closest enemy model or {nearest}")
+    } else if jstr(e.get("instead_of")) == "closest-enemy-unit" {
+        format!("{must} {nearest}, instead of as close as possible to the closest enemy unit")
     } else {
         format!("{must} {nearest}")
     }
@@ -203,8 +215,9 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         ));
     }
     if let Some(c) = nn(m, "ends_when") {
+        let replaces = if is_true(m, "ends_when_replaces") { " (instead of the usual threshold)" } else { "" };
         s.push_str(&format!(
-            "; it must end that move where {}",
+            "; it must end that move where {}{replaces}",
             describe_condition_value(c)
         ));
     }
@@ -285,7 +298,8 @@ pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         clauses.push(if nn(m, "distance_bonus").is_some() {
             format!("the extra distance applies only if {subj} can end {} move where {where_}, and must end it there", pronoun(subj))
         } else {
-            format!("{subj} must end {} move where {where_}", pronoun(subj))
+            let replaces = if is_true(m, "ends_when_replaces") { " (instead of the usual threshold)" } else { "" };
+            format!("{subj} must end {} move where {where_}{replaces}", pronoun(subj))
         });
     }
     if is_true(m, "end_on_terrain") {

@@ -16405,20 +16405,45 @@ impl ::std::default::Default for EndAttackSequenceEffectModifier {
         Self {}
     }
 }
-///Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).
+///Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).",
+///  "description": "Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.",
 ///  "type": "object",
 ///  "required": [
 ///    "of"
 ///  ],
 ///  "properties": {
+///    "instead_of": {
+///      "const": "closest-enemy-unit"
+///    },
 ///    "of": {
-///      "$ref": "#/$defs/unit-ref"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "objective"
+///          ],
+///          "properties": {
+///            "objective": {
+///              "$ref": "#/$defs/objective-filter"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
+///    "per": {
+///      "enum": [
+///        "unit",
+///        "model"
+///      ]
 ///    },
 ///    "waives": {
 ///      "const": "closest-enemy-model"
@@ -16431,9 +16456,125 @@ impl ::std::default::Default for EndAttackSequenceEffectModifier {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct EndsNearest {
-    pub of: UnitRef,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub instead_of: ::std::option::Option<::serde_json::Value>,
+    pub of: EndsNearestOf,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per: ::std::option::Option<EndsNearestPer>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub waives: ::std::option::Option<::serde_json::Value>,
+}
+///`EndsNearestOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "objective"
+///      ],
+///      "properties": {
+///        "objective": {
+///          "$ref": "#/$defs/objective-filter"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum EndsNearestOf {
+    UnitRef(UnitRef),
+    Object { objective: ObjectiveFilter },
+}
+impl ::std::convert::From<UnitRef> for EndsNearestOf {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+///`EndsNearestPer`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "unit",
+///    "model"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EndsNearestPer {
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "model")]
+    Model,
+}
+impl ::std::fmt::Display for EndsNearestPer {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+            Self::Model => f.write_str("model"),
+        }
+    }
+}
+impl ::std::str::FromStr for EndsNearestPer {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            "model" => Ok(Self::Model),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`EngagementFrontsConditionParameters`
 ///
@@ -27656,6 +27797,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///      "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.",
 ///      "$ref": "#/$defs/condition"
 ///    },
+///    "ends_when_replaces": {
+///      "description": "Only with ends_when: the ends_when condition replaces the usual end threshold (\"instead of more than 8\\\"\") rather than adding to it. Without this flag the condition adds to the usual rules.",
+///      "const": true
+///    },
 ///    "ignore_vertical": {
 ///      "const": true
 ///    },
@@ -27743,6 +27888,9 @@ pub struct MoveModifierEffectModifier {
     ///Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_when: ::std::option::Option<Condition>,
+    ///Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_when_replaces: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_vertical: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -27761,6 +27909,7 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             end_on_terrain: Default::default(),
             ends_nearest: Default::default(),
             ends_when: Default::default(),
+            ends_when_replaces: Default::default(),
             ignore_vertical: Default::default(),
             no_end_in_engagement: Default::default(),
             passthrough: Default::default(),

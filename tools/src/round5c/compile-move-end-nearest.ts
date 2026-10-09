@@ -10,14 +10,76 @@ export function isBonusNode(node: Node): boolean {
   return node.type === "move-modifier" && (node.modifier as Node | undefined)?.distance_bonus !== undefined;
 }
 
+/** A move-end nearest's destination: following-filter (version 1, the unit its filter names) when absent. */
+export function destinationOf(leaf: CompileLeaf): string {
+  return typeof leaf.parameters.to === "string" ? leaf.parameters.to : "following-filter";
+}
+
 /**
- * Attaches each move-end-nearest (its filter already folded into `of`) and its waiver, if any, to
- * the nearest earlier move in the same sentence: a make-move gets ends_nearest on its modifier; a
- * move-distance bonus gets a new move-modifier of its own, so the bonus itself is never gated by
- * the end rule. Returns the refusals; nothing is attached when one is returned for that leaf.
+ * The DSL value of one move-end nearest: `of` (the unit its folded filter names, any objective
+ * marker, or the objective a select-objective bound), per model when it says so, and instead_of.
+ * Returns an error when the destination has no value in this ability.
+ */
+export function endsNearestValue(list: readonly CompileLeaf[], at: number): { value: Node } | { error: string } {
+  const leaf = list[at]!;
+  const to = destinationOf(leaf);
+  const value: Node = {};
+  if (to === "following-filter") {
+    if (leaf.parameters.of === undefined) return { error: "A move-end nearest has no unit-filter for the unit it ends nearest." };
+    value.of = leaf.parameters.of;
+  } else if (to === "closest-objective-marker") {
+    value.of = { objective: {} };
+  } else {
+    const selections = list.filter((other) => other.family_id === "select-objective-open");
+    if (selections.length !== 1) return { error: "A move-end nearest to the selected objective needs exactly one select-objective in its ability." };
+    value.of = { objective: { selection_var: selections[0]!.parameters.bind_as } };
+  }
+  if (leaf.parameters.per === "model") value.per = "model";
+  if (leaf.parameters.instead_of !== undefined) value.instead_of = leaf.parameters.instead_of;
+  return { value };
+}
+
+/**
+ * "…, can end that move as close as possible to …": the sentence the move-end sits in has "can" and
+ * no "must", so the unit may choose this destination. The sentence is the text between the sentence
+ * stops (. ; :) around the leaf. Needs the source text; without it the answer is no.
+ */
+export function sentenceIsOptional(sourceText: string | undefined, leaf: CompileLeaf): boolean {
+  if (sourceText === undefined || leaf.end_byte === undefined) return false;
+  const bytes = Buffer.from(sourceText, "utf8");
+  const before = bytes.subarray(0, leaf.start_byte).toString("utf8").replace(/^[\s\S]*[.;:]/u, "");
+  const own = bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
+  const after = bytes.subarray(leaf.end_byte).toString("utf8").replace(/[.;:][\s\S]*$/u, "");
+  const sentence = `${before}${own}${after}`;
+  return /\bcan\b/iu.test(sentence) && !/\bmust\b/iu.test(sentence);
+}
+
+/**
+ * The trigger's move for a move-end with no make-move in its sentence: the nearest earlier selected
+ * or move-ended event. A selection names the moves it covers (move_types) and the move ends after it.
+ * A move-ended trigger has no move left to end, and a trigger with no move_types names no move.
+ */
+function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest: Node): { node: Node } | { error: string } {
+  let trigger: CompileLeaf | undefined;
+  for (let other = at - 1; other >= 0 && !trigger; other -= 1) {
+    const leaf = list[other]!;
+    if (leaf.family_id === "event" && (leaf.parameters.kind === "selected" || leaf.parameters.kind === "move-ended")) trigger = leaf;
+  }
+  if (!trigger || !Array.isArray(trigger.parameters.move_types)) return { error: "A move-end has no move to attach to." };
+  if (trigger.parameters.kind === "move-ended") return { error: "A move-end after a move-ended trigger has no move left to end: the move has already ended." };
+  return { node: { type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: trigger.parameters.move_types, ends_nearest: endsNearest } } };
+}
+
+/**
+ * Attaches each move-end-nearest (its filter already folded into `of` for a following-filter
+ * destination) and its waiver, if any, to the nearest earlier move in the same sentence: a make-move
+ * gets ends_nearest on its modifier; a move-distance bonus gets a new move-modifier of its own, so the
+ * bonus itself is never gated by the end rule. With no move in the sentence, the end attaches to the
+ * ability's selected move (triggerEndNearest). Returns the refusals; nothing is attached when one is
+ * returned for that leaf.
  */
 export function attachMoveEndNearest<T extends PlannedNode>(
-  list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[],
+  list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[], sourceText?: string,
 ): string[] {
   const errors: string[] = [];
   const nearests = list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" ? [at] : []);
@@ -27,14 +89,25 @@ export function attachMoveEndNearest<T extends PlannedNode>(
   }
   for (const at of nearests) {
     const sentence = sentenceAt(at);
+    const leaf = list[at]!;
     const own = waivers.filter((waiver) => sentenceAt(waiver) === sentence);
     if (own.length > 1) { errors.push("A move-end nearest has more than one waiver in its sentence."); continue; }
-    const of = list[at]!.parameters.of;
-    if (of === undefined) { errors.push("A move-end nearest has no unit-filter for the unit it ends nearest."); continue; }
-    const endsNearest: Node = { of };
+    if (own.length === 1 && destinationOf(leaf) !== "following-filter") { errors.push("A move-end waiver applies only to a move-end nearest the closest unit."); continue; }
+    if (own.length === 1 && leaf.parameters.instead_of !== undefined) { errors.push("A move-end waiver and \"instead of\" the closest enemy unit in one sentence have no DSL form together."); continue; }
+    const built = endsNearestValue(list, at);
+    if ("error" in built) { errors.push(built.error); continue; }
+    if (sentenceIsOptional(sourceText, leaf)) { errors.push("A move-end the unit can choose is optional; no optional destination shape exists."); continue; }
+    const endsNearest: Node = built.value;
     if (own.length === 1) endsNearest.waives = list[own[0]!]!.parameters.rule;
     const target = planned.filter((item) => item.index < at && sentenceAt(item.index) === sentence && (item.node.type === "move" || isBonusNode(item.node))).at(-1);
-    if (!target) { errors.push("A move-end has no move to attach to."); continue; }
+    if (!target) {
+      const fallback = triggerEndNearest(list, at, endsNearest);
+      if ("error" in fallback) { errors.push(fallback.error); continue; }
+      const next = planned.findIndex((item) => item.index > at);
+      const entry = { index: at, leaf, node: fallback.node, gate: gateAt(at) } as unknown as T;
+      if (next === -1) planned.push(entry); else planned.splice(next, 0, entry);
+      continue;
+    }
     if (target.node.type === "move") {
       const modifier = target.node.modifier as Node;
       if (modifier.ends_nearest !== undefined) { errors.push("A move already has a move-end nearest; a second one has no DSL form."); continue; }
@@ -44,7 +117,7 @@ export function attachMoveEndNearest<T extends PlannedNode>(
     const bonus = target.node.modifier as Node;
     const node: Node = { type: "move-modifier", target: target.node.target, modifier: { applies_to_moves: bonus.applies_to_moves, ends_nearest: endsNearest } };
     // The new node is the end rule's own effect: it takes the gates of the end leaf's clause, not the bonus's.
-    planned.splice(planned.indexOf(target) + 1, 0, { ...target, index: at, leaf: list[at]!, node: node as T["node"], gate: gateAt(at) });
+    planned.splice(planned.indexOf(target) + 1, 0, { ...target, index: at, leaf, node: node as T["node"], gate: gateAt(at) });
   }
   return errors;
 }

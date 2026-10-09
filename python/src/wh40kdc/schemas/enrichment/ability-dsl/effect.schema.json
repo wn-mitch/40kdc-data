@@ -3498,6 +3498,10 @@
                 "ends_when": {
                   "$ref": "condition.schema.json",
                   "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there."
+                },
+                "ends_when_replaces": {
+                  "const": true,
+                  "description": "Only with ends_when: the ends_when condition replaces the usual end threshold (\"instead of more than 8\\\"\") rather than adding to it. Without this flag the condition adds to the usual rules."
                 }
               },
               "minProperties": 1

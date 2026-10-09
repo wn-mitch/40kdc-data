@@ -1817,13 +1817,19 @@ export interface PlacementRegion {
   wholly?: true;
 }
 /**
- * Where a move must end: as close as possible to the closest unit matching `of`. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal).
+ * Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "ends-nearest".
  */
 export interface EndsNearest {
-  of: UnitRef;
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
   waives?: "closest-enemy-model";
 }
 /**
@@ -5168,7 +5174,13 @@ export interface MoveEffect {
  * Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
  */
 export interface EndsNearest1 {
-  of: UnitRef;
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
   waives?: "closest-enemy-model";
 }
 /**
@@ -5269,6 +5281,10 @@ export interface MoveModifierEffect {
     end_on_terrain?: true;
     ends_nearest?: EndsNearest2;
     ends_when?: AbilityDSLCondition6;
+    /**
+     * Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
+     */
+    ends_when_replaces?: true;
   };
   scaling?: Scaling;
 }
@@ -5276,7 +5292,13 @@ export interface MoveModifierEffect {
  * Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
  */
 export interface EndsNearest2 {
-  of: UnitRef;
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
   waives?: "closest-enemy-model";
 }
 /**

@@ -2228,6 +2228,10 @@ class PlacementRegion(TypedDict):
     wholly: NotRequired[Literal[True]]
 
 
+class Of(TypedDict):
+    objective: ObjectiveFilter
+
+
 AbilityUsage: TypeAlias = AbilityUsageLimit | list[AbilityUsageLimit]
 
 
@@ -2608,7 +2612,9 @@ class PlacementAway(TypedDict):
 
 
 class EndsNearest(TypedDict):
-    of: UnitRef
+    of: UnitRef | Of
+    per: NotRequired[Literal["unit", "model"]]
+    instead_of: NotRequired[Literal["closest-enemy-unit"]]
     waives: NotRequired[Literal["closest-enemy-model"]]
 
 
@@ -3858,6 +3864,7 @@ class Modifier35(TypedDict):
     end_on_terrain: NotRequired[Literal[True]]
     ends_nearest: NotRequired[EndsNearest]
     ends_when: NotRequired[Condition]
+    ends_when_replaces: NotRequired[Literal[True]]
 
 
 class SingleEffect29(TypedDict):

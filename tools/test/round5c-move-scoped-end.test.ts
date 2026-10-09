@@ -33,7 +33,7 @@ function refused(leaves: CompileLeaf[]): string {
 
 describe("move-must-end version 3 (move_types)", () => {
   it("is the current version, takes move_types, and refuses an unknown or empty list", () => {
-    expect(currentFamilyVersion("move-must-end")).toBe(3);
+    expect(currentFamilyVersion("move-must-end")).toBe(4);
     const canonical = normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["advance", "normal"] }, 3);
     expect(canonical.move_types).toEqual(["normal", "advance"]);
     expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", move_types: ["pile-in"] }, 3)).toThrow();

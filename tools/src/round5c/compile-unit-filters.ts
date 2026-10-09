@@ -2,6 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scope.js";
+import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
@@ -320,13 +321,16 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       out[out.length - 1] = { ...frame, parameters: { ...frame.parameters, attacker_filter: attackerFilter(leaf, frame) } };
       continue;
     }
-    if (leaf.family_id === "move-end-nearest") {
+    if (leaf.family_id === "move-end-nearest" && destinationOf(leaf) === "following-filter") {
       // A move-end nearest the closest unit names that unit with the unit-filter right after it: the
       // filter after it names the unit the move ends nearest. The leaf takes the filter as `of`.
       if (!isFilter(next) || next!.fragment !== leaf.fragment) throw new CompileError("A move-end nearest the closest unit needs a unit-filter right after it.");
       if (next!.parameters.side === "any") throw new CompileError("A move-end nearest the closest unit must say friendly or enemy.");
       out.push({ ...leaf, parameters: { ...leaf.parameters, of: dslUnitFilter(next!) } });
       index += 1;
+    } else if (leaf.family_id === "move-end-nearest") {
+      // An objective destination names no unit: it takes no filter, and a filter after it is left for its own rule.
+      out.push(leaf);
     } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.

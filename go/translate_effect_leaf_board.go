@@ -250,6 +250,9 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	if when, ok := asMap(m["ends_when"]); ok && when != nil {
 		s += "; it must end that move where " + describeCondition(when)
+		if m["ends_when_replaces"] == true {
+			s += " (instead of the usual threshold)"
+		}
 	}
 	if en, ok := asMap(m["ends_nearest"]); ok && en != nil {
 		s += "; " + endsNearestPhrase(en, ctx, "it", "that move")
@@ -273,19 +276,38 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 // endsNearestPhrase mirrors endsNearestPhrase in the TypeScript describer: the closest unit's name,
 // with the waiver's alternative end when waives is closest-enemy-model.
 func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string {
-	named := effectSubject(e["of"], ctx)
-	for _, article := range []string{"an ", "a ", "the ", "all "} {
-		if strings.HasPrefix(named, article) {
-			named = strings.TrimPrefix(named, article)
-			break
+	// An objective names no unit: any marker, or the one a select-objective bound.
+	var named string
+	if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
+		named = "objective marker"
+		if obj, ok := asMap(of["objective"]); ok && obj != nil && obj["selection_var"] != nil {
+			named = "selected objective"
 		}
+	} else {
+		named = effectSubject(e["of"], ctx)
+		for _, article := range []string{"an ", "a ", "the ", "all "} {
+			if strings.HasPrefix(named, article) {
+				named = strings.TrimPrefix(named, article)
+				break
+			}
+		}
+		named = strings.Replace(named, " units", " unit", 1)
+		named = strings.ReplaceAll(named, " units)", ")")
 	}
-	named = strings.Replace(named, " units", " unit", 1)
-	named = strings.ReplaceAll(named, " units)", ")")
 	nearest := "as close as possible to the closest " + named
 	must := who + " must end " + moveRef
+	if e["per"] == "model" {
+		unit := who
+		if who == "it" {
+			unit = "the unit"
+		}
+		must = "each model in " + unit + " must end " + moveRef
+	}
 	if e["waives"] == "closest-enemy-model" {
 		return must + " either closer to the closest enemy model or " + nearest
+	}
+	if e["instead_of"] == "closest-enemy-unit" {
+		return must + " " + nearest + ", instead of as close as possible to the closest enemy unit"
 	}
 	return must + " " + nearest
 }
@@ -333,7 +355,11 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		if m["distance_bonus"] != nil {
 			clauses = append(clauses, "the extra distance applies only if "+subj+" can end "+pronoun(subj)+" move where "+describeCondition(when)+", and must end it there")
 		} else {
-			clauses = append(clauses, subj+" must end "+pronoun(subj)+" move where "+describeCondition(when))
+			replaces := ""
+			if m["ends_when_replaces"] == true {
+				replaces = " (instead of the usual threshold)"
+			}
+			clauses = append(clauses, subj+" must end "+pronoun(subj)+" move where "+describeCondition(when)+replaces)
 		}
 	}
 	if m["end_on_terrain"] == true {

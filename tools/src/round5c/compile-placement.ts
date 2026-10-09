@@ -51,6 +51,13 @@ export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string 
 export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
   const sentenceOf: number[] = [];
   const andBefore: boolean[] = [];
+  // A line that opens with bold text ("**Restrictions:** …") is a new paragraph: it starts a clause even when the
+  // sentence before it has no effect and joins that sentence (its conditions then sit in a clause of their own).
+  const headed = leaves.map((leaf, index) => {
+    const previous = leaves[index - 1];
+    if (sourceText === undefined || index === 0 || previous?.end_byte === undefined || leaf.start_byte <= previous.end_byte) return false;
+    return /\n[ \t]*\*\*/u.test(exactSpan(sourceText, previous.end_byte, leaf.start_byte));
+  });
   leaves.forEach((leaf, index) => {
     const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
     sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
@@ -78,7 +85,7 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
   let clause = 0;
   let clauseStart = 0;
   leaves.forEach((_, index) => {
-    if (index > 0 && sentenceOf[index] !== sentenceOf[index - 1]) {
+    if (index > 0 && (sentenceOf[index] !== sentenceOf[index - 1] || headed[index])) {
       clause += 1;
       clauseStart = index;
     } else if (index > 0 && andBefore[index]) {

@@ -152,11 +152,16 @@ function passItem(x: P): string {
  * end an alternative, so either end is legal.
  */
 function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string {
-  // A filter names a plural group ("all enemy units"); the closest one is singular.
-  const named = effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")");
+  // An objective names no unit: any marker, or the one a select-objective bound.
+  const objective = (e.of as P).objective as P | undefined;
+  const named = objective !== undefined
+    ? (objective.selection_var !== undefined ? "selected objective" : "objective marker")
+    // A filter names a plural group ("all enemy units"); the closest one is singular.
+    : effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")");
   const nearest = `as close as possible to the closest ${named}`;
-  const must = `${who} must end ${moveRef}`;
-  return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}`;
+  const must = e.per === "model" ? `each model in ${who === "it" ? "the unit" : who} must end ${moveRef}` : `${who} must end ${moveRef}`;
+  const instead = e.instead_of === "closest-enemy-unit" ? ", instead of as close as possible to the closest enemy unit" : "";
+  return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}${instead}`;
 }
 
 function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -167,7 +172,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
-  if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}`;
+  if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}${m.ends_when_replaces === true ? " (instead of the usual threshold)" : ""}`;
   if (m.ends_nearest != null) s += `; ${endsNearestPhrase(m.ends_nearest as P, ctx, "it", "that move")}`;
   if (m.allow_engagement === true) s += m.engaged_with === "nearest-move-end" ? "; it can end that move within Engagement Range of that enemy unit" : "; it can end that move within Engagement Range of enemy units";
   if (m.counts_as_move != null) s += `; that move counts as ${movedPhrase(m.counts_as_move)}`;
@@ -204,9 +209,10 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
   // With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
   if (m.ends_when != null) {
     const where = describeCondition(m.ends_when as Condition);
+    const replaces = m.ends_when_replaces === true ? " (instead of the usual threshold)" : "";
     clauses.push(m.distance_bonus != null
       ? `the extra distance applies only if ${subj} can end ${pronoun(subj)} move where ${where}, and must end it there`
-      : `${subj} must end ${pronoun(subj)} move where ${where}`);
+      : `${subj} must end ${pronoun(subj)} move where ${where}${replaces}`);
   }
   if (m.end_on_terrain === true) clauses.push(`${subj} can end ${pronoun(subj)} moves on top of terrain features`);
   if (m.ignore_vertical === true) clauses.push(`${subj} ${v(subj, "ignores")} vertical distances when ${pronoun(subj) === "their" ? "they move" : "it moves"}`);

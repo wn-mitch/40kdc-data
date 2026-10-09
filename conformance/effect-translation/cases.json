@@ -25728,6 +25728,86 @@
     }
   },
   {
+    "caseId": "move-end-nearest-objective-marker-make-move",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "objective": {}
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest objective marker."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-selected-objective-per-model-instead",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal"
+        ],
+        "ends_nearest": {
+          "of": {
+            "objective": {
+              "selection_var": "marker"
+            }
+          },
+          "per": "model",
+          "instead_of": "closest-enemy-unit"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Each model in the unit must end its move as close as possible to the closest selected objective, instead of as close as possible to the closest enemy unit, during its Normal moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-replaces",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal",
+          "advance"
+        ],
+        "ends_when": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged"
+              }
+            }
+          ]
+        },
+        "ends_when_replaces": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move where the unit is unengaged (instead of the usual threshold), during its Normal and Advance moves."
+    }
+  },
+  {
     "caseId": "scaling-on-apply-enemy-models-in-range#0",
     "effect": {
       "type": "stat-modifier",

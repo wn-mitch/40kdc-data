@@ -423,7 +423,8 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         wholly = "wholly " if ends.get("wholly") is True else ""
         s += f", ending that move {wholly}within {range_phrase(ends.get('range'))} of {of}"
     if m.get("ends_when") is not None:
-        s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}"
+        replaces = " (instead of the usual threshold)" if m.get("ends_when_replaces") is True else ""
+        s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}{replaces}"
     if m.get("ends_nearest") is not None:
         s += f"; {_ends_nearest_phrase(m['ends_nearest'], ctx, 'it', 'that move')}"
     if m.get("allow_engagement") is True:
@@ -442,13 +443,18 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -> str:
     """As endsNearestPhrase in the TypeScript describer: the closest unit's name, with the waiver's
     alternative end when waives is closest-enemy-model."""
-    named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
-    named = named.replace(" units", " unit", 1).replace(" units)", ")")
+    objective = e["of"].get("objective") if isinstance(e.get("of"), dict) else None
+    if objective is not None:
+        named = "selected objective" if "selection_var" in objective else "objective marker"
+    else:
+        named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
+        named = named.replace(" units", " unit", 1).replace(" units)", ")")
     nearest = f"as close as possible to the closest {named}"
-    must = f"{who} must end {move_ref}"
+    must = f"each model in {'the unit' if who == 'it' else who} must end {move_ref}" if e.get("per") == "model" else f"{who} must end {move_ref}"
+    instead = ", instead of as close as possible to the closest enemy unit" if e.get("instead_of") == "closest-enemy-unit" else ""
     if e.get("waives") == "closest-enemy-model":
         return f"{must} either closer to the closest enemy model or {nearest}"
-    return f"{must} {nearest}"
+    return f"{must} {nearest}{instead}"
 
 
 def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -483,12 +489,13 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     # With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
     if m.get("ends_when") is not None:
         where = describe_condition(_obj(m["ends_when"]))
+        replaces = " (instead of the usual threshold)" if m.get("ends_when_replaces") is True else ""
         if m.get("distance_bonus") is not None:
             clauses.append(
                 f"the extra distance applies only if {subj} can end {pronoun(subj)} move where {where}, and must end it there"
             )
         else:
-            clauses.append(f"{subj} must end {pronoun(subj)} move where {where}")
+            clauses.append(f"{subj} must end {pronoun(subj)} move where {where}{replaces}")
     if m.get("end_on_terrain") is True:
         clauses.append(f"{subj} can end {pronoun(subj)} moves on top of terrain features")
     if m.get("ignore_vertical") is True:

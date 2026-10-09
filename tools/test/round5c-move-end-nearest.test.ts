@@ -37,7 +37,7 @@ function refused(leaves: CompileLeaf[]): string {
 
 describe("move-end-nearest and move-end-waiver families", () => {
   it("are version 1 and refuse any parameter they do not name", () => {
-    expect(currentFamilyVersion("move-end-nearest")).toBe(1);
+    expect(currentFamilyVersion("move-end-nearest")).toBe(2);
     expect(currentFamilyVersion("move-end-waiver")).toBe(1);
     expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective" }, 1)).toThrow();
     expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "following-filter", per: "unit" }, 1)).toThrow();
