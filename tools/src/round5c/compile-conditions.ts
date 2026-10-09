@@ -17,6 +17,7 @@ import { DESIGNATION_IDS } from "../translate/designations.js";
 import { abilityUsedCondition } from "./compile-named-ability.js";
 import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
+import { namedEquipmentPredicate } from "./compile-named-equipment.js";
 
 type Node = Record<string, unknown>;
 
@@ -548,6 +549,9 @@ export function condition(leaf: CompileLeaf): Node {
       if (leaf.parameters.model_keyword !== undefined) parameters.model_keyword = closed(leaf, "model_keyword");
       return polarity(leaf, pred("loadout", parameters, subjectOf(leaf)));
     }
+    case "named-weapon":
+    case "unit-wargear":
+      return polarity(leaf, namedEquipmentPredicate(leaf));
     case "equipped-weapon-count":
       return polarity(leaf, pred("equipped-weapon-count", {
         weapon_type: closed(leaf, "weapon_type"), count: closed(leaf, "count"), other_than: closed(leaf, "other_than"),

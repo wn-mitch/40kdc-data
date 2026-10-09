@@ -1,4 +1,5 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { refuseUnitEquipmentPairs } from "./compile-named-equipment.js";
 
 const COUNT = "equipped-weapon-count";
 // The equipped-weapon-count form carries a melee or ranged weapon_type; the select-weapon form carries none.
@@ -13,6 +14,7 @@ const isAntecedentStat = (leaf: CompileLeaf) => leaf.family_id === "characterist
  * or name is refused rather than widened to every melee weapon.
  */
 export function bindEquippedCounts(list: readonly CompileLeaf[]): CompileLeaf[] {
+  refuseUnitEquipmentPairs(list);
   if (!list.some(isAntecedentStat)) return [...list];
   const counts = list.filter((leaf) => leaf.family_id === COUNT);
   return list.map((leaf) => {

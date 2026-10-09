@@ -29,6 +29,7 @@ import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILT
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
 import { CHARACTERISTIC_AMOUNT_FAMILIES, normalizeCharacteristicAmountParameters } from "./characteristic-amount-families.js";
 import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } from "./equipped-weapon-families.js";
+import { NAMED_WARGEAR_LOADOUT_FAMILIES, normalizeNamedWargearParameters } from "./family-extensions-16-named-wargear-loadout.js";
 import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
 import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
 import { familyExtension, withFamilyExtensions } from "./family-extensions.js";
@@ -110,6 +111,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...COUNT_FAMILIES,
   ...EQUIPPED_WEAPON_COUNT_FAMILIES,
   ...CHARACTERISTIC_AMOUNT_FAMILIES,
+  ...NAMED_WARGEAR_LOADOUT_FAMILIES,
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
   ...EMBARKED_PERMISSION_FAMILIES,
@@ -189,6 +191,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeCountParameters(family, input)
     ?? normalizeCharacteristicAmountParameters(family, input)
     ?? normalizeEquippedWeaponParameters(family, input)
+    ?? normalizeNamedWargearParameters(family, input)
     ?? normalizeArmyIncludesParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);

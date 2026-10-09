@@ -116,6 +116,8 @@ export function conditionLeadIn(c: Condition): string {
       return `when ${describePredicate(c, false)}`;
     case "model-count":
     case "loadout":
+    case "named-weapon":
+    case "unit-wargear":
     case "equipped-weapon-count":
       return `if ${describePredicate(c, false)}`;
     case "within":

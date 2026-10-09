@@ -5389,6 +5389,118 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "named-weapon condition",
+          "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "named-weapon"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "models": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "at_least",
+                    "state"
+                  ],
+                  "properties": {
+                    "at_least": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 30
+                    },
+                    "state": {
+                      "enum": [
+                        "carry",
+                        "lack"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "subject",
+                "name",
+                "count"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "unit-wargear condition",
+          "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "unit-wargear"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "#/$defs/unit-ref"
+                },
+                "wargear": {
+                  "$ref": "#/$defs/entity-id"
+                },
+                "models": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "at_least",
+                    "state"
+                  ],
+                  "properties": {
+                    "at_least": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 30
+                    },
+                    "state": {
+                      "enum": [
+                        "carry",
+                        "lack"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "subject",
+                "wargear"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "unit-state condition",
           "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
           "required": [

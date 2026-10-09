@@ -4,6 +4,7 @@
 use serde_json::Value;
 
 use super::board::board_predicate;
+use super::equipment::named_equipment_phrase;
 use super::history::describe_happened;
 use super::js::*;
 use super::refs::*;
@@ -263,6 +264,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             }
             format!("{neg}{who} {}", and_list(&parts))
         }
+        "named-weapon" | "unit-wargear" => named_equipment_phrase(t, p, negated),
         "equipped-weapon-count" => {
             format!(
                 "{} is {not_}equipped with a weapon named \"{}\" and exactly {} other {} weapon{}",

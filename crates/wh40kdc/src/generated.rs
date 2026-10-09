@@ -31050,6 +31050,256 @@ impl ::std::convert::TryFrom<::std::string::String> for NamedRegionStateEffectTy
         value.parse()
     }
 }
+///`NamedWeaponConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "name",
+///    "subject"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "maximum": 12.0,
+///      "minimum": 1.0
+///    },
+///    "models": {
+///      "type": "object",
+///      "required": [
+///        "at_least",
+///        "state"
+///      ],
+///      "properties": {
+///        "at_least": {
+///          "type": "integer",
+///          "maximum": 30.0,
+///          "minimum": 1.0
+///        },
+///        "state": {
+///          "enum": [
+///            "carry",
+///            "lack"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 80,
+///      "minLength": 1
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct NamedWeaponConditionParameters {
+    pub count: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models: ::std::option::Option<NamedWeaponConditionParametersModels>,
+    pub name: NamedWeaponConditionParametersName,
+    pub subject: UnitRef,
+}
+///`NamedWeaponConditionParametersModels`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "at_least",
+///    "state"
+///  ],
+///  "properties": {
+///    "at_least": {
+///      "type": "integer",
+///      "maximum": 30.0,
+///      "minimum": 1.0
+///    },
+///    "state": {
+///      "enum": [
+///        "carry",
+///        "lack"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct NamedWeaponConditionParametersModels {
+    pub at_least: ::std::num::NonZeroU64,
+    pub state: NamedWeaponConditionParametersModelsState,
+}
+///`NamedWeaponConditionParametersModelsState`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "carry",
+///    "lack"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum NamedWeaponConditionParametersModelsState {
+    #[serde(rename = "carry")]
+    Carry,
+    #[serde(rename = "lack")]
+    Lack,
+}
+impl ::std::fmt::Display for NamedWeaponConditionParametersModelsState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Carry => f.write_str("carry"),
+            Self::Lack => f.write_str("lack"),
+        }
+    }
+}
+impl ::std::str::FromStr for NamedWeaponConditionParametersModelsState {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "carry" => Ok(Self::Carry),
+            "lack" => Ok(Self::Lack),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`NamedWeaponConditionParametersName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 80,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct NamedWeaponConditionParametersName(::std::string::String);
+impl ::std::ops::Deref for NamedWeaponConditionParametersName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<NamedWeaponConditionParametersName> for ::std::string::String {
+    fn from(value: NamedWeaponConditionParametersName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for NamedWeaponConditionParametersName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 80usize {
+            return Err("longer than 80 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for NamedWeaponConditionParametersName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///Resolve no effect; does not create attacks, damage, selections, or secondary events.
 ///
 /// <details><summary>JSON schema</summary>
@@ -53579,6 +53829,42 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "named-weapon condition",
+///      "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/named-weapon-condition-parameters"
+///        },
+///        "type": {
+///          "const": "named-weapon"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "unit-wargear condition",
+///      "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/unit-wargear-condition-parameters"
+///        },
+///        "type": {
+///          "const": "unit-wargear"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "unit-state condition",
 ///      "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
 ///      "type": "object",
@@ -54069,6 +54355,16 @@ pub enum SimpleCondition {
 [composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.*/
     #[serde(rename = "equipped-weapon-count")]
     EquippedWeaponCount { parameters: EquippedWeaponCountConditionParameters },
+    /**named-weapon condition
+
+[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).*/
+    #[serde(rename = "named-weapon")]
+    NamedWeapon { parameters: NamedWeaponConditionParameters },
+    /**unit-wargear condition
+
+[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).*/
+    #[serde(rename = "unit-wargear")]
+    UnitWargear { parameters: UnitWargearConditionParameters },
     /**unit-state condition
 
 [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.*/
@@ -68132,6 +68428,169 @@ pub struct UnitWargearBudgetsItem {
     pub items: ::std::vec::Vec<EntityId>,
     ///Models per `count` allowance; 0 means a flat per-unit cap of `count` (independent of squad size).
     pub per_models: u64,
+}
+///`UnitWargearConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "subject",
+///    "wargear"
+///  ],
+///  "properties": {
+///    "models": {
+///      "type": "object",
+///      "required": [
+///        "at_least",
+///        "state"
+///      ],
+///      "properties": {
+///        "at_least": {
+///          "type": "integer",
+///          "maximum": 30.0,
+///          "minimum": 1.0
+///        },
+///        "state": {
+///          "enum": [
+///            "carry",
+///            "lack"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "wargear": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitWargearConditionParameters {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models: ::std::option::Option<UnitWargearConditionParametersModels>,
+    pub subject: UnitRef,
+    pub wargear: EntityId,
+}
+///`UnitWargearConditionParametersModels`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "at_least",
+///    "state"
+///  ],
+///  "properties": {
+///    "at_least": {
+///      "type": "integer",
+///      "maximum": 30.0,
+///      "minimum": 1.0
+///    },
+///    "state": {
+///      "enum": [
+///        "carry",
+///        "lack"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitWargearConditionParametersModels {
+    pub at_least: ::std::num::NonZeroU64,
+    pub state: UnitWargearConditionParametersModelsState,
+}
+///`UnitWargearConditionParametersModelsState`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "carry",
+///    "lack"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitWargearConditionParametersModelsState {
+    #[serde(rename = "carry")]
+    Carry,
+    #[serde(rename = "lack")]
+    Lack,
+}
+impl ::std::fmt::Display for UnitWargearConditionParametersModelsState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Carry => f.write_str("carry"),
+            Self::Lack => f.write_str("lack"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitWargearConditionParametersModelsState {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "carry" => Ok(Self::Carry),
+            "lack" => Ok(Self::Lack),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`UnitWargearCostsItem`
 ///

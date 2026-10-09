@@ -139,7 +139,7 @@ func conditionLeadIn(c map[string]any) string {
 		return leadingForRe.ReplaceAllString(describePredicate(c, false), "while making ")
 	case "attack-compare":
 		return "when " + describePredicate(c, false)
-	case "model-count", "loadout", "equipped-weapon-count":
+	case "model-count", "loadout", "equipped-weapon-count", "named-weapon", "unit-wargear":
 		return "if " + describePredicate(c, false)
 	case "within", "in-region":
 		return "while " + describePredicate(c, false)

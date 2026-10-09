@@ -24812,6 +24812,371 @@
     }
   },
   {
+    "caseId": "fidelity/condition-named-weapon-this-model#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 1
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with one weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 2
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#2",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Test blade",
+              "count": 2
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless this model is equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 2,
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit are each equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 1,
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If one or more models in this unit have no weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 3,
+          "models": {
+            "at_least": 2,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit have fewer than 3 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-unit",
+              "name": "Test blade",
+              "count": 1,
+              "models": {
+                "at_least": 3,
+                "state": "carry"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless at least 3 models in this unit are each equipped with one weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this unit has the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "test-relay"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless this unit has the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit are equipped with the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If one or more models in this unit are not equipped with the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
     "caseId": "weapon-removal-ranged-heavy#0",
     "effect": {
       "type": "weapon-ability-grant",

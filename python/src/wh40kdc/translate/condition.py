@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import re
 
+from wh40kdc.translate.condition_equipment import named_equipment_phrase
 from wh40kdc.translate.condition_history import _describe_happened, _destroyed_count
 from wh40kdc.translate.condition_refs import (
     Condition,
@@ -260,6 +261,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("damaged") is True:
             parts.append("is Damaged")
         return f"{neg}{who} {_and_list(parts)}"
+    if ctype in ("named-weapon", "unit-wargear"):
+        return named_equipment_phrase(str(ctype), p, negated)
     if ctype == "equipped-weapon-count":
         count = p.get("count")
         plural = "" if count == 1 else "s"

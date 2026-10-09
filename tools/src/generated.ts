@@ -468,6 +468,8 @@ export type SimpleCondition =
   | WoundsCondition
   | LoadoutCondition
   | EquippedWeaponCountCondition
+  | NamedWeaponCondition
+  | UnitWargearCondition
   | UnitStateCondition
   | EligibleCondition
   | HappenedCondition
@@ -2702,6 +2704,35 @@ export interface EquippedWeaponCountCondition {
     weapon_type: "melee" | "ranged";
     count: number;
     other_than: string;
+  };
+}
+/**
+ * [composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).
+ */
+export interface NamedWeaponCondition {
+  type: "named-weapon";
+  parameters: {
+    subject: UnitRef;
+    name: string;
+    count: number;
+    models?: {
+      at_least: number;
+      state: "carry" | "lack";
+    };
+  };
+}
+/**
+ * [composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).
+ */
+export interface UnitWargearCondition {
+  type: "unit-wargear";
+  parameters: {
+    subject: UnitRef;
+    wargear: EntityId;
+    models?: {
+      at_least: number;
+      state: "carry" | "lack";
+    };
   };
 }
 /**

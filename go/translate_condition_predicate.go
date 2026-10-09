@@ -235,6 +235,8 @@ func describePredicate(c map[string]any, negated bool) string {
 			parts = append(parts, "is Damaged")
 		}
 		return neg + who + " " + andList(parts)
+	case "named-weapon", "unit-wargear":
+		return namedEquipmentPhrase(cstr(c["type"]), p, negated)
 	case "equipped-weapon-count":
 		plural := "s"
 		if n, ok := p["count"].(float64); ok && n == 1 {

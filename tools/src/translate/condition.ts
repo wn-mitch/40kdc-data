@@ -19,6 +19,7 @@ export interface Condition {
 }
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
+import { namedEquipmentPhrase } from "./condition-equipment.js";
 import { andList, dekebab, designationPhrase, idLabel, objectivePhrase, ord, orList, type P, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
@@ -126,6 +127,9 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const count = Number(p.count);
       return `${subjectOf(p, "the model")} is equipped with a weapon named "${str(p.other_than)}" and exactly ${count} other ${str(p.weapon_type)} weapon${count === 1 ? "" : "s"}`;
     }
+    case "named-weapon":
+    case "unit-wargear":
+      return namedEquipmentPhrase(String(c.type), p, negated);
     case "loadout":
       return `${neg}all ${str(p.uniform)} weapons equipped by each ${p.model_keyword ? `${str(p.model_keyword)} ` : ""}model in the unit are the same`;
     case "unit-state": {

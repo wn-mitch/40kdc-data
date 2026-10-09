@@ -158,6 +158,17 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
+  // Printed weapon names and wargear ids are free text, so the sampler cannot draw them; one of each
+  // quantifier state is listed so every named-equipment predicate form appears in the catalog.
+  "named-weapon@1": [
+    { subject: "this-model", name: "Fizz blade", count: 1 },
+    { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "carry" } },
+    { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "lack" } },
+  ],
+  "unit-wargear@1": [
+    { subject: "this-unit", wargear: "fizz-relay-kit" },
+    { subject: "this-unit", wargear: "fizz-relay-kit", models: { at_least: 1, state: "carry" } },
+  ],
   // counts-as@3 takes a range, a named range or a region; its region object is not sampled, so all three forms are listed.
   "counts-as@3": [
     { subject: "this-unit", within: 6 },
