@@ -133,6 +133,22 @@ describe("the moment's unit as a membership (\"that unit's Character models\")",
   });
 });
 
+describe("a membership on an attacker's filter reaches the attack's attacker filter (8520 shape)", () => {
+  it("names the Stratagem target as the attackers' unit when the attack is this unit's", () => {
+    const text = "Fight phase. One friendly unit. Attacks made by KILLER models in your unit have [DEVASTATING WOUNDS].";
+    const json = JSON.stringify(mechanicsOf(text,
+      ["Fight phase", "use-window", FIGHT_WINDOW],
+      ["One friendly unit", "stratagem-target", TARGET],
+      ["Attacks made by", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["KILLER models", "unit-filter", { side: "friendly", keywords: ["KILLER"], level: "model" }],
+      member("in your unit", "stratagem-target"),
+      ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }]));
+    expect(json).toContain('"member_of":"stratagem-target"');
+    expect(json).toContain('"all_of":["KILLER"]');
+    expect(json).not.toContain('"member_of":"this-unit"');
+  });
+});
+
 describe("a weapon scope printed before its recipient chain, and the stat-first run", () => {
   it("hoists the scope past an in-this-unit membership and lowers a stat with no keyword", () => {
     const mechanics = mechanicsOf("Melee weapons equipped by non-CHARACTER models in this unit have an Attacks characteristic of 3.",
@@ -221,6 +237,21 @@ describe("a Stratagem's membership with the scope printed first", () => {
       ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }]));
     expect(json).toContain('"member_of":"stratagem-target"');
     expect(json).toContain("Devastating Wounds");
+  });
+});
+
+describe("a detachment rule's selected unit with a scope and a membership (10358 shape)", () => {
+  it("names the selected unit as the models' unit for the scope's grant", () => {
+    const text = "When a friendly BETA unit is selected to make a move, BATTLELINE models in that unit have melee attacks with [SUSTAINED HITS 1].";
+    const json = JSON.stringify(mechanicsOf(text,
+      ["When a friendly BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }],
+      ["is selected to make a move", "event", { kind: "selected" }],
+      ["BATTLELINE models", "unit-filter", { side: "friendly", keywords: ["BATTLELINE"], level: "model" }],
+      member("in that unit", "antecedent"),
+      ["have melee attacks with", "weapon-property-scope", { subject: "antecedent", weapon_type: "all" }],
+      ["[SUSTAINED HITS 1]", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }]));
+    expect(json).toContain('"member_of":"event-subject"');
+    expect(json).toContain('"all_of":["BATTLELINE"]');
   });
 });
 
