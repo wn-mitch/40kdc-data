@@ -161,3 +161,110 @@ describe("Round 5C attackers named by an earlier unit", () => {
     expect(effect).toMatchObject({ type: "roll-modifier", target: { owner: "friendly", all_of: ["ALPHA"], level: "model" } });
   });
 });
+
+/** The key paths at which a compiled tree holds a node that passes `test`. */
+function pathsWhere(root: unknown, test: (node: Record<string, any>) => boolean, path = "$", out: string[] = []): string[] {
+  if (Array.isArray(root)) root.forEach((item, index) => pathsWhere(item, test, `${path}[${index}]`, out));
+  else if (root !== null && typeof root === "object") {
+    if (test(root as Record<string, any>)) out.push(path);
+    for (const [key, value] of Object.entries(root)) pathsWhere(value, test, `${path}.${key}`, out);
+  }
+  return out;
+}
+const attackerGate = (node: Record<string, any>) => node.type === "happened" && node.parameters?.subject === "attacker";
+
+describe("Round 5C attacker gates on a designation are checked per attack", () => {
+  // "In your Shooting phase ... select one enemy unit ..., each time a friendly ALPHA model that
+  // disembarked from this TRANSPORT this turn makes an attack that targets that enemy unit": the
+  // designation's effect is the attack's re-roll, gated on the attacker's disembark.
+  const SHOT = "In your Shooting phase, after this model has shot, select one enemy unit hit by one or more of those attacks. Until the end of the phase, each time a friendly ALPHA model that disembarked from this TRANSPORT this turn makes an attack that targets that enemy unit, you can re-roll the Wound roll.";
+  const SHOT_LEAVES: Array<[string, string, Record<string, unknown>]> = [
+    ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+    ["after this model has shot", "event", { kind: "after-shooting" }],
+    ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+    ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+    ["friendly ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
+    ["that disembarked from this TRANSPORT this turn", "unit-activity", { activities: ["disembarked-from-this-transport-this-turn"], subject: "antecedent", negated: false }],
+    ["makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+    ["that targets that enemy unit", "target-is-selected", {}],
+    ["you can re-roll the Wound roll", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }],
+  ];
+  const swap = (from: string, to: [string, string, Record<string, unknown>]) =>
+    SHOT_LEAVES.map((leaf) => (leaf[0] === from ? to : leaf));
+  const compiled = (text: string, leaves: Array<[string, string, Record<string, unknown>]>): Record<string, any> => {
+    const result = compileLeaves(placed(text, ...leaves), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return result.mechanics as unknown as Record<string, any>;
+  };
+
+  it("checks the attacker's disembark gate on each attack, inside the designation", () => {
+    const mechanics = compiled(SHOT, SHOT_LEAVES);
+    expect(pathsWhere(mechanics.effect.condition, attackerGate)).toEqual([]);
+    const applies = mechanics.effect.effect.applies.effect;
+    expect(applies).toMatchObject({ type: "conditional", condition: { type: "happened", parameters: { subject: "attacker" } } });
+    expect(applies.effect).toMatchObject({ type: "re-roll", modifier: { roll: "wound" } });
+    checked(placed(SHOT, ...SHOT_LEAVES), SHOT);
+  });
+
+  it("keeps the attack type gate beside the attacker gate for a psychic attack", () => {
+    const text = SHOT.replace("makes an attack", "makes a Psychic Attack");
+    const leaves = swap("makes an attack", ["makes a Psychic Attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "psychic" }]);
+    const mechanics = compiled(text, leaves);
+    expect(pathsWhere(mechanics.effect.condition, attackerGate)).toEqual([]);
+    expect(mechanics.effect.effect.applies.effect).toMatchObject({
+      type: "conditional",
+      condition: { operator: "and", operands: [{ type: "happened", parameters: { subject: "attacker" } }, { type: "attack-is", parameters: { attack_type: "psychic" } }] },
+    });
+  });
+
+  it("keeps the usage limit at the top level while the attacker gate moves into the designation", () => {
+    const text = "In your Shooting phase, after this model has shot, select one enemy unit hit by one or more of those attacks. Until the end of the turn, each time a friendly ALPHA model that disembarked from this TRANSPORT this turn makes an attack that targets that enemy unit, improve the Armour Penetration characteristic of that attack by 1. The same enemy unit can only be affected by this ability once per turn.";
+    const leaves: Array<[string, string, Record<string, unknown>]> = [
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["after this model has shot", "event", { kind: "after-shooting" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["Until the end of the turn", "duration", { endpoint: "end-of-turn" }],
+      ["friendly ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
+      ["that disembarked from this TRANSPORT this turn", "unit-activity", { activities: ["disembarked-from-this-transport-this-turn"], subject: "antecedent", negated: false }],
+      ["makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+      ["that targets that enemy unit", "target-is-selected", {}],
+      ["improve the Armour Penetration characteristic of that attack by 1", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "all" }],
+      ["once per turn", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
+    ];
+    const mechanics = compiled(text, leaves);
+    expect(mechanics.usage).toEqual({ frequency: "once-per-turn", per: "unit" });
+    expect(pathsWhere(mechanics.effect.condition, attackerGate)).toEqual([]);
+    expect(mechanics.effect.effect.applies.effect.condition).toMatchObject({ type: "happened", parameters: { subject: "attacker" } });
+  });
+
+  it("refuses the disembark gate when the attack verb has no attack leaf", () => {
+    const leaves = SHOT_LEAVES.filter((leaf) => leaf[0] !== "makes an attack");
+    expect(() => compiled(SHOT, leaves)).toThrow(/needs a select-unit or attack right before it/);
+  });
+
+  it("refuses the disembark wording written as one attacks-resolved event (no attack leaf)", () => {
+    // Record shape: the event spans "a model that disembarked ... makes an attack"; the target and the re-roll follow it.
+    const text = "In your Shooting phase, after this model has shot, select one enemy unit hit by one or more of those attacks. Until the end of the phase, each time a model that disembarked from this TRANSPORT this turn makes an attack that targets that enemy unit, you can re-roll the Hit roll.";
+    const leaves: Array<[string, string, Record<string, unknown>]> = [
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["after this model has shot", "event", { kind: "after-shooting" }],
+      ["select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["a model that disembarked from this TRANSPORT this turn makes an attack", "event", { kind: "attacks-resolved" }],
+      ["that targets that enemy unit", "target-is-selected", {}],
+      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
+    ];
+    expect(() => compiled(text, leaves)).toThrow(/needs an attack leaf/);
+  });
+
+  it("compiles the attacks-resolved rewrite as a unit-filter, a unit-activity and an attack", () => {
+    const text = SHOT.replace("a friendly ALPHA model", "a model");
+    const leaves = SHOT_LEAVES.map((leaf): [string, string, Record<string, unknown>] => leaf[0] === "friendly ALPHA model" ? ["a model", "unit-filter", { side: "friendly", level: "model" }] : leaf);
+    const mechanics = compiled(text, leaves);
+    expect(pathsWhere(mechanics.effect.condition, attackerGate)).toEqual([]);
+    expect(mechanics.effect.effect.applies.effect.condition).toMatchObject({ type: "happened", parameters: { subject: "attacker" } });
+  });
+});

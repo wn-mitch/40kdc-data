@@ -133,6 +133,13 @@ const gated = (gate: Node[], body: Node): Node => {
   return node ? { type: "conditional", condition: node, effect: body } : body;
 };
 
+/**
+ * A condition on the attacker of the attack a designation changes ("that disembarked from this
+ * TRANSPORT this turn" + "makes an attack"): it is checked per attack, not once when the
+ * designation starts, because the attacker is not the unit that made the selection.
+ */
+const isAttackerGate = (node: Node): boolean => node.type === "happened" && (node.parameters as { subject?: unknown } | undefined)?.subject === "attacker";
+
 /** Leaves only a stratagem has: its phase window and its TARGET. */
 const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggering-target", "target-binding"]);
 
@@ -931,9 +938,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
   if (selections.length === 1 && selected.length > 0) {
     // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
-    // designated unit are changed, so it narrows the designation's effect, not the selection.
-    const attackGates = global.filter((node) => node.type === "attack-is");
-    if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => node.type !== "attack-is"));
+    // designated unit are changed, so it narrows the designation's effect, not the selection. The
+    // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
+    const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
+    if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
