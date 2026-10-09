@@ -167,9 +167,19 @@ export function trigger(leaf: CompileLeaf): Node {
   return node;
 }
 
+/**
+ * "Each time a unit disembarks from this model": any unit's disembarkation from this Transport.
+ * The bare moment has no subject, so the DSL default (this unit, the Transport) would name the
+ * Transport; a folded unit-filter replaces the `owner: any` subject in `trigger()`.
+ */
+function disembarkedFromTransport(leaf: CompileLeaf): Node {
+  return { event: "disembarked", subject: { owner: "any" }, filter: { transport: closed(leaf, "transport") } };
+}
+
 function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.family_id === "event") {
     const kind = String(leaf.parameters.kind);
+    if (kind === "disembarked" && leaf.parameters.transport !== undefined) return disembarkedFromTransport(leaf);
     // Version 13's move-started takes the same owner, subject and move_types as move-ended.
     if ((OWNED_EVENT_KINDS as readonly string[]).includes(kind) || kind === "move-started") return ownedEventTrigger(leaf);
     if (V7_FILTERED_KINDS[kind]) return V7_FILTERED_KINDS[kind]!(leaf);
