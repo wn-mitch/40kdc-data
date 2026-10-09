@@ -12,7 +12,8 @@ import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { trigger } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
-import { resolveRolls, rollMarker } from "./compile-dice.js";
+import { refuseOtherwiseGates } from "./compile-otherwise.js";
+import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
@@ -269,7 +270,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
   }
-  const errors: string[] = [];
+  const errors: string[] = refuseOtherwiseGates(list, places, sourceText);
   const attempt = <T>(work: () => T): T | null => {
     try {
       return work();
@@ -573,6 +574,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       continue;
     }
     replaced.gate = [...replaced.gate, negate(alternative)];
+    // A result band that gates the replaced effect ("on a 2+ … instead") covers its replacement too:
+    // the replacement joins the same roll (compile-dice.ts), and the band stays out of its condition.
+    const band = replaced.gate.filter(isRollMarker);
+    if (band.length === 1 && !replacement.gate.some(isRollMarker)) replacement.gate = [...band, ...replacement.gate];
     replacement.replaces = true;
   }
 

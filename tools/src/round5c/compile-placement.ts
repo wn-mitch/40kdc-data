@@ -20,6 +20,18 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   return { sentence: /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
 }
 
+/**
+ * Whether a combinator starts a clause of its own: a player's pick ("choice") always does, and an
+ * "instead" written as the word "or" does too ("…, or anywhere …instead" with no comma), so the
+ * replacement is not counted with the effect it replaces.
+ */
+function opensClause(leaf: CompileLeaf, sourceText: string | undefined): boolean {
+  if (leaf.role !== "COMBINATOR") return false;
+  if (leaf.parameters.choice === true) return true;
+  if (sourceText === undefined || leaf.end_byte === undefined || leaf.end_byte <= leaf.start_byte) return false;
+  return exactSpan(sourceText, leaf.start_byte, leaf.end_byte).trim().toLowerCase() === "or";
+}
+
 export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
   const sentenceOf: number[] = [];
   const andBefore: boolean[] = [];
@@ -28,7 +40,7 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
     sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
     // A player's pick between two effects ("re-roll one Hit roll or one Wound roll") is a leaf on
     // its "or", so the "or" is not in a gap: the choice leaf itself starts the clause.
-    andBefore.push((gap.and || (leaf.role === "COMBINATOR" && leaf.parameters.choice === true)) && !gap.sentence);
+    andBefore.push((gap.and || opensClause(leaf, sourceText)) && !gap.sentence);
   });
   // A sentence without an effect ("While this model is leading a unit.") only sets conditions
   // for what follows, so it joins the next sentence; the last one joins the one before.
