@@ -411,10 +411,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       }
     };
     attempt(() => {
+      // A trigger's read of an optional spend gates the clause that uses the designation (an "instead"), never the
+      // sentence that holds the spend: the spend is offered until it is paid, so the read cannot gate its own offer.
+      if (leaf.role === "CONDITION" && leaf.family_id === "optional-cost-paid" && leaf.parameters.window === "trigger") {
+        clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), condition(leaf)]);
+      }
       // In the TARGET fragment no attack is being made: "target" is the candidate unit, the eligibility's default subject.
       // Each target (subject each-target) is the candidate of every group it is copied into (compile-target-groups.ts).
       // An each-target condition in RESTRICTIONS ("Each unit targeted with this Stratagem must …") is eligibility too.
-      if (leaf.role === "CONDITION" && (leaf.fragment === "TARGET" || (leaf.fragment === "RESTRICTIONS" && leaf.parameters.subject === "each-target"))) {
+      else if (leaf.role === "CONDITION" && (leaf.fragment === "TARGET" || (leaf.fragment === "RESTRICTIONS" && leaf.parameters.subject === "each-target"))) {
         const candidate = leaf.parameters.subject === "target" || leaf.parameters.subject === "each-target";
         targetConditions.push({ index, eachTarget: leaf.parameters.subject === "each-target", node: condition(candidate ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf) });
       }

@@ -278,6 +278,14 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run(leaf("army-rule", { rule: "detachment-tag-exclusive", tag: "flyblown" }))).toEqual([]);
   });
 
+  it("rejects a designated condition whose tag is not registered, as it does a designate", async () => {
+    const gate = { type: "conditional", condition: { type: "designated", parameters: { subject: "this-unit", tag: "made-up-mark" } }, effect: { type: "no-effect" } };
+    expect(await run(gate)).toEqual([
+      'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
+    ]);
+    expect(await run({ ...gate, condition: { type: "designated", parameters: { subject: "this-unit", tag: "bastion-shield-yp-spent" } } })).toEqual([]);
+  });
+
   it("requires a bound roll inside the roll step that binds it", async () => {
     const mw = leaf("mortal-wounds", { count: { roll_var: "r" } });
     expect(await run(mw)).toEqual(['{roll_var: "r"} is not inside a roll step that binds it']);

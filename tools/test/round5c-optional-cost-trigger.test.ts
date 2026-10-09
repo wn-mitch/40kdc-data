@@ -165,6 +165,15 @@ describe("trigger pairing: the spend must be optional", () => {
   });
 });
 
+/** The condition of each conditional whose effect matches `pattern` (the gates of the matching effects). */
+function conditionalsAbove(tree: unknown, pattern: RegExp): unknown[] {
+  if (Array.isArray(tree)) return tree.flatMap((item) => conditionalsAbove(item, pattern));
+  if (tree === null || typeof tree !== "object") return [];
+  const record = tree as Record<string, any>;
+  const own = record.type === "conditional" && pattern.test(JSON.stringify(record.effect)) ? [record.condition] : [];
+  return [...own, ...Object.values(record).flatMap((value) => conditionalsAbove(value, pattern))];
+}
+
 describe("trigger spend in an or-alternative (8925 shape)", () => {
   const OR_TEXT = "Each time a fabricated unit is selected to fight, if it disembarked from a TRANSPORT this turn, or if you spend 2YP, until the end of the phase, the weapons of that unit have the SUSTAINED HITS 2 ability.";
   const orLeaves = (tag = "trivarg-yp-spent") => placed(OR_TEXT,
@@ -180,6 +189,13 @@ describe("trigger spend in an or-alternative (8925 shape)", () => {
   it("accepts the read as an alternative of the disembark condition, not as a stacked gate", () => {
     const mechanics = mechanicsOf(orLeaves(), OR_TEXT);
     expect(JSON.stringify(mechanics)).toContain("\"operator\":\"or\"");
+    // The grant is gated on the either-or: the disembark, or the designation the paid spend set.
+    const grantGates = conditionalsAbove(mechanics, /sustain/iu);
+    expect(grantGates).toHaveLength(1);
+    const gate = JSON.stringify(grantGates[0]);
+    expect(gate).toContain("\"operator\":\"or\"");
+    expect(gate).toContain("disembarked");
+    expect(gate).toContain("\"tag\":\"trivarg-yp-spent\"");
   });
 
   it("gates the spend on the other alternative not holding, and on the designation not set", () => {
@@ -318,11 +334,33 @@ describe("two-reroll instead (SS-A, 8892 shape)", () => {
       ["instead", "instead", {}],
     );
     const mechanics = mechanicsOf(leaves, text);
-    const json = JSON.stringify(mechanics);
-    expect(json).toContain("\"subject\":\"attacker\",\"tag\":\"optimal-expenditure-yp-spent\"");
-    expect(json).toContain("\"ones\"");
+    // Each re-roll with its enclosing gates: the paid instead re-roll is gated on the designation, the base ones are not.
+    // "paid": the gate holds only when the spend was paid; "not-paid": the base re-roll the paid instead replaces.
+    const classify = (gate: unknown) => {
+      const text = JSON.stringify(gate);
+      if (!text.includes("optimal-expenditure-yp-spent")) return "other";
+      return text.includes("\"operator\":\"not\"") ? "not-paid" : "paid";
+    };
+    expect(rerollGates(mechanics).map((item) => {
+      const modifier = item.modifier as Record<string, string>;
+      return { roll: modifier.roll, scope: modifier.result_scope ?? modifier.subset, gates: item.gates.map(classify) };
+    })).toEqual([
+      { roll: "hit", scope: "ones", gates: [] },
+      { roll: "wound", scope: "ones", gates: ["not-paid"] },
+      { roll: "wound", scope: "any-result", gates: ["paid"] },
+    ]);
   });
 });
+
+/** Each re-roll node with the conditions that enclose it. */
+function rerollGates(tree: unknown, outer: unknown[] = []): Array<{ modifier: unknown; gates: unknown[] }> {
+  if (Array.isArray(tree)) return tree.flatMap((item) => rerollGates(item, outer));
+  if (tree === null || typeof tree !== "object") return [];
+  const record = tree as Record<string, any>;
+  if (record.type === "re-roll") return [{ modifier: record.modifier, gates: outer }];
+  const next = record.type === "conditional" ? [...outer, record.condition] : outer;
+  return Object.values(record).flatMap((value) => rerollGates(value, next));
+}
 
 describe("compiled trigger part is a valid DSL effect", () => {
   it("validates the gated optional part against the effect schema", () => {
@@ -341,5 +379,55 @@ describe("describer output for the trigger shapes", () => {
     expect(text).toContain("spend 1 Pain token");
     expect(text).toContain("tagged eye of spite pain spent");
     expect(text).toContain("improve the unit's Armour Penetration characteristic by 2");
+  });
+});
+
+/** The condition nodes that enclose every node of `type` in `tree` (outermost first). */
+function enclosingConditions(tree: unknown, type: string, outer: unknown[] = []): unknown[][] {
+  if (Array.isArray(tree)) return tree.flatMap((item) => enclosingConditions(item, type, outer));
+  if (tree === null || typeof tree !== "object") return [];
+  const record = tree as Record<string, any>;
+  if (record.type === type) return [outer];
+  const next = record.type === "conditional" ? [...outer, record.condition] : outer;
+  return Object.values(record).flatMap((value) => enclosingConditions(value, type, next));
+}
+
+describe("the offer of a trigger spend is not gated by its own read (8844 shape)", () => {
+  it("keeps the optional part outside any gate on the designation it sets", () => {
+    const mechanics = mechanicsOf(bastionLeaves(), BASTION_TEXT);
+    const tag = "bastion-shield-yp-spent";
+    const onTag = (condition: unknown) => JSON.stringify(condition).includes(`"tag":"${tag}"`) && !JSON.stringify(condition).includes("\"operator\":\"not\"");
+    for (const gates of enclosingConditions(mechanics, "ability-part")) {
+      expect(gates.some(onTag)).toBe(false);
+    }
+  });
+});
+
+describe("and/or of two optional-spend reads on one attack (4224 shape)", () => {
+  const TEXT = "Each time you use this Stratagem, you can spend 2YP. Until the end of the phase, each time a model in your unit makes an attack, "
+    + "if you spent YP during this use of this Stratagem and/or if that attack targets an assailed unit, re-roll the Wound roll.";
+  const leavesFor = (joiner: string) => placed(TEXT.replace("and/or", joiner),
+    ["Each time you use this Stratagem", "event", { kind: "used", activity: "stratagem" }],
+    ["you can", "optional-use", { who: "you" }],
+    ["spend 2YP", "resource-spend", { pool: "yp-pool", amount: 2 }],
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+    ["each time a model in your unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+    ["if you spent YP during this use of this Stratagem", "optional-cost-paid", { pool: "yp-pool", window: "use", subject: "attacker", tag: "exposed-flaws-yp-spent" }],
+    ["if that attack targets an assailed unit", "designated-filter", { subject: "defender", tag: "assailed" }],
+    ["re-roll the Wound roll", "reroll", { roll: "wound", subset: "all", weapon_type: "all" }],
+  );
+
+  it("gates the re-roll on either read: an any-of of the paid spend and the assailed target", () => {
+    const mechanics = mechanicsOf(leavesFor("and/or"), TEXT);
+    const json = JSON.stringify(mechanics);
+    expect(json).toContain("\"operator\":\"or\"");
+    expect(json).toContain("\"subject\":\"attacker\",\"tag\":\"exposed-flaws-yp-spent\"");
+    expect(json).toContain("\"subject\":\"defender\",\"tag\":\"assailed\"");
+  });
+
+  it("gates the re-roll on both reads when the words are a plain and, not an alternative", () => {
+    const mechanics = mechanicsOf(leavesFor("and"), TEXT.replace("and/or", "and"));
+    const json = JSON.stringify(mechanics);
+    expect(json).not.toContain("\"operator\":\"or\"");
   });
 });
