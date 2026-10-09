@@ -197,6 +197,7 @@ function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
     parameters.folded_in_region = { region: found.region, ...(found.wholly === true ? { wholly: true } : {}) };
     return parameters;
   }
+  if (limit.parameters.weapon_range !== undefined) throw new CompileError("A half- or full-weapon distance has no placement form.");
   if (node.type !== "within") throw new CompileError(`A ${limit.family_id} placement limit lowered to ${String(node.type)}, which has no placement form.`);
   if (!negated) {
     append("folded_near", { of: found.of, range: found.range, ...(found.wholly === true ? { wholly: true } : {}) });

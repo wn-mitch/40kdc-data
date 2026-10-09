@@ -368,6 +368,11 @@ export function condition(leaf: CompileLeaf): Node {
         if (leaf.parameters.range !== undefined) parameters.range = { inches: closed(leaf, "range") };
         return polarity(leaf, pred("closest", parameters, subject));
       }
+      if (kind === "within" && leaf.parameters.weapon_range !== undefined) {
+        // Version 15: the distance is the attacking weapon's range, or half of it (compile-attack-properties reads the weapon).
+        const range = closed(leaf, "weapon_range") === "half" ? "half-weapon" : "weapon";
+        return polarity(leaf, pred("within", { of: "attacker", range }, subject));
+      }
       if (kind === "within" || kind === "beyond") {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
