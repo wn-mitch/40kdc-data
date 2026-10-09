@@ -307,6 +307,41 @@ function claimedByLaterEffect(leaves: readonly CompileLeaf[], index: number, sou
     && Object.values(next.parameters).includes("antecedent") && linkedToFilter(leaves, at!, sourceText);
 }
 
+/**
+ * The select-unit a set-up names when the selection comes after it ("Redeploy up to three friendly
+ * units"): the nearest later select-unit in the same fragment, with only optional-use leaves
+ * between. Null for any other leaf, or when no such selection follows.
+ */
+function selectionFollowsVerb(leaves: readonly CompileLeaf[], index: number): number | null {
+  const leaf = leaves[index]!;
+  if (leaf.family_id !== "set-up") return null;
+  for (let at = index + 1; at < leaves.length; at += 1) {
+    const other = leaves[at]!;
+    if (other.fragment !== leaf.fragment) return null;
+    if (other.family_id === "select-unit") return at;
+    if (other.family_id !== "optional-use") return null;
+  }
+  return null;
+}
+
+/**
+ * The unit a verb-first set-up binds to: the selection that follows it. Refuses a record it cannot
+ * bind unambiguously: a second selection, or an earlier set-up of this unit in the same part
+ * (binding to the selection would drop that unit from the set-up).
+ */
+function verbFirstSelection(leaves: readonly CompileLeaf[], index: number): string {
+  const leaf = leaves[index]!;
+  if (leaves.filter((other) => other.family_id === "select-unit").length > 1) {
+    throw new CompileError(`set-up at byte ${leaf.start_byte}: a second selection makes selected-unit ambiguous.`);
+  }
+  const earlierSelf = leaves.slice(0, index).some((other) =>
+    other.family_id === "set-up" && other.fragment === leaf.fragment && other.parameters.subject === "this-unit");
+  if (earlierSelf) {
+    throw new CompileError(`set-up at byte ${leaf.start_byte}: an earlier set-up of this unit in the same part makes selected-unit ambiguous with it.`);
+  }
+  return "selected-unit";
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
@@ -324,6 +359,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // scope names whose attacks, even after a selection the rest of the record points to.
   if (leaves[index]!.family_id === "weapon-property-scope" && bareFilter(leaves, index)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "select-unit")) return "selected-unit";
+  // "Redeploy up to three friendly units": a set-up whose selection comes after it, in the same part.
+  if (selectionFollowsVerb(leaves, index) !== null) return verbFirstSelection(leaves, index);
   // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.
   if (earlier.some((other) => other.family_id === "for-each-unit-select")) return AURA_RECIPIENT;
   if (bareFilter(leaves, index)) return FILTERED_UNITS;
