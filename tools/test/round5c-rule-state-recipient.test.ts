@@ -49,7 +49,7 @@ describe("Round 5C rule-state subject bound to a filtered set or an aura's recip
     expect(JSON.stringify(result)).toContain('"type":"counts-as","target":"recipient","modifier":{"in_region":{"rule_region":{"region_id":"the-shadow-of-chaos","owner_faction":"chaos-daemons"}}}');
   });
 
-  it("binds a unit-position's 'that unit is within 9 of this unit' subject to the filtered units (SS-C, part of 5802)", () => {
+  it("PARTIAL (5802): binds a unit-position's 'that unit is within 9 of this unit' subject to the filtered units; the counts-as leaf is pending the named-range-reference mechanism", () => {
     const stratagem = [
       leaf("use-window", { your_phases: ["command"], opponent_phases: [], either_phases: [] }, "WHEN"),
       leaf("stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["SAMPLE-ALPHA"], match: "all", excluded_keywords: [] }, "TARGET"),
@@ -61,6 +61,26 @@ describe("Round 5C rule-state subject bound to a filtered set or an aura's recip
     const result = compileLeaves(stratagem);
     expect(result.ok).toBe(true);
     expect(JSON.stringify(result)).toContain('"condition":{"type":"within","parameters":{"subject":"recipient","of":"this-unit","range":{"inches":9}}}');
+  });
+
+  it("pins the authored 5828 shape: a suppression of a named ability on a filtered set lasts permanently", () => {
+    const result = compileLeaves([filterDeathleaper(), leaf("rule-state", SUPPRESSED_ABILITY)]);
+    expect(result.ok).toBe(true);
+    expect(JSON.stringify(result)).toContain('"scope":{"duration":"permanent"}');
+    expect(JSON.stringify(result)).toContain('"rule":"sample-suppressed-rule"');
+  });
+
+  it("refuses a model-level aura with no 'of': its range has no measuring point (the frozen refusal, not a default)", () => {
+    const modelAura = [leaf("unit-filter", { side: "friendly", keywords: ["SAMPLE-ALPHA"], level: "model" }), leaf("aura-range", { inches: 6 })];
+    expect(compileLeaves([...modelAura, leaf("characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" })])).toMatchObject({
+      ok: false,
+      errors: ["A model-level aura must say what its range is measured from."],
+    });
+  });
+
+  it("compiles a unit-level aura with no 'of': the unit-level aura does not read 'of', so it is not refused", () => {
+    const unitAura = [filterDeathleaper(), leaf("aura-range", { inches: 6 })];
+    expect(compileLeaves([...unitAura, leaf("characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" })])).toMatchObject({ ok: true });
   });
 
   it("keeps refusing a Stratagem's rule-state subject that no earlier leaf introduces", () => {
