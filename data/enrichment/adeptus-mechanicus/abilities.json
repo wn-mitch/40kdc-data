@@ -2000,7 +2000,7 @@
   },
   {
     "ability_id": "omnissiahs-blessing-adeptus-mechanicus",
-    "name": "Omnissiah\u2019s Blessing",
+    "name": "Omnissiah’s Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3061,7 +3061,7 @@
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "tl-4-9"
+        "weapon_id": "tl-4-9-lords-of-the-forge"
       }
     },
     "scope": {
@@ -4535,7 +4535,7 @@
     "scope": {
       "duration": "battle-round"
     },
-    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ \u2192 D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ \u2192 D3 mortal wounds), and the FALLOUT effect across battle rounds 2\u20135 are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store."
   },
   {
     "ability_id": "broad-spectrum-targeting-augurs-adeptus-mechanicus",

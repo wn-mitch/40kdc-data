@@ -115,6 +115,13 @@ import {
   buildMfmExternalRefsReport,
 } from "./mfm/external-refs.js";
 import { applyWrites, type StagedWrite } from "./mfm/apply.js";
+import {
+  mintDroneWeapons,
+  mintEnhancementWeapons,
+  type WeaponMintResult,
+} from "./mfm/enhancement-weapons.js";
+import { CONFIRMED } from "./mfm/wargear.js";
+import type { WeaponRecord } from "./mfm/gear-projection.js";
 import { writeGolden } from "./mfm/golden.js";
 import {
   type GoldenMode,
@@ -1509,6 +1516,41 @@ async function runWeaponVariantsCmd(
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+/**
+ * Append the weapons of inline profiles (enhancement and drone wargear) to each faction's
+ * weapons.json. A weapon whose id already exists with other values is refused, not replaced.
+ */
+async function runWeaponsCmd(dump: MfmDump, write: boolean): Promise<void> {
+  const ctx = { dump, gv: { ...CONFIRMED }, warnings: [] as string[] };
+  const enhancements: WeaponMintResult = mintEnhancementWeapons(ctx);
+  const drones: WeaponMintResult = mintDroneWeapons(ctx);
+  const refusals = [...enhancements.refusals, ...drones.refusals];
+  const byDir = new Map<string, WeaponRecord[]>();
+  for (const { dir, weapon } of [...enhancements.minted, ...drones.minted]) {
+    (byDir.get(dir) ?? byDir.set(dir, []).get(dir)!).push(weapon);
+  }
+  const staged: StagedWrite[] = [];
+  for (const [dir, added] of byDir) {
+    const file = path.join(CORE_DIR, dir, "weapons.json");
+    const existing = readJsonArray<WeaponRecord>(file);
+    const prior = new Map(existing.map((weapon) => [weapon.id, weapon]));
+    const fresh: WeaponRecord[] = [];
+    for (const weapon of added) {
+      const before = prior.get(weapon.id);
+      if (!before) fresh.push(weapon);
+      else if (JSON.stringify(before) !== JSON.stringify(weapon))
+        refusals.push({ source: weapon.name, reason: `id ${weapon.id} already exists in ${dir} with other values` });
+    }
+    if (fresh.length > 0) staged.push({ path: file, value: [...existing, ...fresh] });
+  }
+  const minted = enhancements.minted.length + drones.minted.length;
+  console.log(`Inline weapons minted ${minted}, refused ${refusals.length}.`);
+  for (const refusal of refusals) console.log(`  refused ${refusal.source}: ${refusal.reason}`);
+  await applyWrites(staged, { write, label: "weapons" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 async function runConditionalKeywordsCmd(
   dump: MfmDump,
   write: boolean,
@@ -1569,6 +1611,7 @@ export const INGEST_MFM_COMMANDS = [
   "seed-detachments",
   "allies",
   "weapon-variants",
+  "weapons",
   "external-refs",
 ] as const;
 
@@ -1653,6 +1696,7 @@ export async function runIngestMfmCommand(
   else if (command === "allies") await runAlliesCmd(dump, options.write);
   else if (command === "weapon-variants")
     await runWeaponVariantsCmd(dump, options.write, options.onlyDir);
+  else if (command === "weapons") await runWeaponsCmd(dump, options.write);
   else {
     const unsupportedCommand: never = command;
     throw new Error(`Unsupported MFM ingest command: ${unsupportedCommand}`);

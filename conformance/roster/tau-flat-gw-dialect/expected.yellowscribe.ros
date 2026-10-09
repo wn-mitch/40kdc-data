@@ -110,7 +110,7 @@
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model gains 1 Drone Burst Cannon weapon.
+                <characteristic name="Description">This model gains 1 Drone Burst Cannon Drone weapon.
 The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
@@ -126,7 +126,7 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Gun Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine Drone weapon.</characteristic>
               </characteristics>
             </profile>
             <profile name="Marker Drone" typeName="Abilities">
@@ -353,7 +353,7 @@ The unit is eligible to act as an Observer in a turn in which it Advanced.</char
             </profile>
             <profile name="Gun Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">This model gains 1 Twin Pulse Carbine weapon.</characteristic>
+                <characteristic name="Description">This model gains 1 Twin Pulse Carbine Drone weapon.</characteristic>
               </characteristics>
             </profile>
             <profile name="Marker Drone" typeName="Abilities">

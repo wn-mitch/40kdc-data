@@ -581,7 +581,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -596,7 +598,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -6412,53 +6416,17 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "1f00fe64ef0f030bb4bd21818749665def954bd17227d027bf5948ed80f5cd18",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "all_of": [
-            "WARBOSS"
-          ]
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_name": "da-gobshot-thunderbuss",
-              "abilities": [
-                "Lethal Hits"
-              ]
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_name": "da-gobshot-thunderbuss",
-              "abilities": [
-                "Rapid Fire 6"
-              ]
-            }
-          }
-        ]
-      }
-    },
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "brute-bosses",
+    "ability_type": "enhancement",
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [],
-    "ability_type": "enhancement",
-    "behavior": "passive",
-    "detachment_id": "brute-bosses",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    }
   },
   {
     "ability_id": "da-hunt-is-on-orks",
@@ -6525,24 +6493,17 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "c3a779d4a75a1b864cd5b5165578da0fb93694decb4a905552c3cd00d8081210",
-    "version": "2025-q3",
-    "effect": {
-      "type": "weapon-grant",
-      "target": "this-model",
-      "modifier": {
-        "weapon_id": "da-krunch"
-      }
-    },
+    "unit_ids": [],
+    "faction_id": "orks",
+    "detachment_id": "wurrband",
+    "ability_type": "enhancement",
     "scope": {
       "duration": "permanent"
     },
-    "unit_ids": [],
-    "ability_type": "enhancement",
-    "behavior": "passive",
-    "detachment_id": "wurrband",
-    "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "stub": true,
+    "effect": {
+      "type": "no-effect"
+    }
   },
   {
     "ability_id": "dakka-dakka-dakka-orks",
@@ -6970,98 +6931,13 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     },
-    "source_digest": "fe8ae218b155051e68971e8df9f47fab0680dc83e9d6468671e3af9a27d331e0",
+    "source_digest": "acf5e88873f8bffaa46354e3b98786b8e595dddaf73a36d9d742253263ac5278",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "PSYKER"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "eadbanger"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 2,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "S",
-              "operation": "set",
-              "value": 6,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "AP",
-              "operation": "set",
-              "value": 1,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "D",
-              "operation": "set",
-              "value": 3,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "abilities": [
-                "Hazardous",
-                "Precision",
-                "Psychic"
-              ],
-              "weapon_name": "’Eadbanger"
-            }
-          }
-        ]
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "eadbanger-wurrband"
       }
     },
     "scope": {

@@ -221,8 +221,7 @@
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "twin-pulse-carbine",
-        "count": 1
+        "weapon_id": "twin-pulse-carbine-drone"
       }
     },
     "scope": {
@@ -549,7 +548,7 @@
   },
   {
     "ability_id": "pechra-tau-empire",
-    "name": "Pech\u2019ra",
+    "name": "Pech’ra",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -683,7 +682,7 @@
           "type": "weapon-grant",
           "target": "this-model",
           "modifier": {
-            "weapon_id": "drone-burst-cannon",
+            "weapon_id": "drone-burst-cannon-drone",
             "count": 1
           }
         },
@@ -847,7 +846,7 @@
   },
   {
     "ability_id": "exemplars-of-montka-tau-empire",
-    "name": "Exemplars of Mont\u2019ka",
+    "name": "Exemplars of Mont’ka",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -998,7 +997,7 @@
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "twin-pulse-blaster",
+        "weapon_id": "twin-pulse-blaster-drone",
         "count": 1
       }
     },
@@ -1679,8 +1678,7 @@
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "missile-pod",
-        "count": 1
+        "weapon_id": "missile-pod-drone"
       }
     },
     "scope": {
@@ -1751,7 +1749,7 @@
   },
   {
     "ability_id": "puretides-teachings-tau-empire",
-    "name": "Puretide\u2019s Teachings",
+    "name": "Puretide’s Teachings",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3988,7 +3986,7 @@
   },
   {
     "ability_id": "hunters-instincts-tau-empire",
-    "name": "Hunter\u2019s Instincts",
+    "name": "Hunter’s Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -6906,7 +6904,9 @@
           "target": {
             "owner": "friendly",
             "within": {
-              "range": {"inches":12}
+              "range": {
+                "inches": 12
+              }
             }
           },
           "modifier": {
@@ -6920,7 +6920,9 @@
           "target": {
             "owner": "friendly",
             "within": {
-              "range": {"inches":12}
+              "range": {
+                "inches": 12
+              }
             }
           },
           "modifier": {

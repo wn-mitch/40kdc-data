@@ -43,7 +43,7 @@ export interface MintContext {
 }
 
 /** Parse one dump wargear ability display name into repo keyword references. */
-function mapWeaponKeyword(
+export function mapWeaponKeyword(
   raw: string,
 ): { keyword_id: string; parameters?: Record<string, unknown> }[] | null {
   const name = raw.trim();

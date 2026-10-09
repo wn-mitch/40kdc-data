@@ -5630,5 +5630,133 @@
         "id": "fb97d933-94d4-42cf-814f-8846d560fd40"
       }
     ]
+  },
+  {
+    "id": "twin-pulse-carbine-drone",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7b869f23-60c0-4d2a-8d4d-b6dbe9fff367"
+      }
+    ],
+    "name": "Twin pulse carbine",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin pulse carbine",
+        "range": 20,
+        "stats": {
+          "A": 2,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          },
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "missile-pod-drone",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "21d80668-7582-4409-af0a-dd65c1292ff9"
+      }
+    ],
+    "name": "Missile pod",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Missile pod",
+        "range": 30,
+        "stats": {
+          "A": 2,
+          "S": 7,
+          "AP": -1,
+          "D": 2,
+          "BS": 5
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "twin-pulse-blaster-drone",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "189ee391-f402-4ad1-a044-2106662c7948"
+      }
+    ],
+    "name": "Twin pulse blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Twin pulse blaster",
+        "range": 10,
+        "stats": {
+          "A": 2,
+          "S": 6,
+          "AP": -1,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "drone-burst-cannon-drone",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e63aac10-6f51-4d7d-afff-4ef394b32978"
+      }
+    ],
+    "name": "Drone burst cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Drone burst cannon",
+        "range": 18,
+        "stats": {
+          "A": 4,
+          "S": 5,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]
