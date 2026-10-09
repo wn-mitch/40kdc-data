@@ -48064,13 +48064,13 @@ impl ::std::convert::TryFrom<::std::string::String> for ScalingSource {
 pub struct Scope {
     pub duration: ScopeDuration,
 }
-///How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+///How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.",
+///  "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.",
 ///  "type": "string",
 ///  "enum": [
 ///    "phase",
@@ -48089,7 +48089,12 @@ pub struct Scope {
 ///    "until-end-of-your-next-turn",
 ///    "until-end-of-opponent-next-turn",
 ///    "until-this-unit-has-shot",
-///    "control-lost"
+///    "control-lost",
+///    "until-end-of-your-next-fight-phase",
+///    "until-end-of-your-next-shooting-phase",
+///    "until-end-of-your-next-movement-phase",
+///    "until-end-of-opponent-next-movement-phase",
+///    "until-start-of-opponent-next-command-phase"
 ///  ]
 ///}
 /// ```
@@ -48141,6 +48146,16 @@ pub enum ScopeDuration {
     UntilThisUnitHasShot,
     #[serde(rename = "control-lost")]
     ControlLost,
+    #[serde(rename = "until-end-of-your-next-fight-phase")]
+    UntilEndOfYourNextFightPhase,
+    #[serde(rename = "until-end-of-your-next-shooting-phase")]
+    UntilEndOfYourNextShootingPhase,
+    #[serde(rename = "until-end-of-your-next-movement-phase")]
+    UntilEndOfYourNextMovementPhase,
+    #[serde(rename = "until-end-of-opponent-next-movement-phase")]
+    UntilEndOfOpponentNextMovementPhase,
+    #[serde(rename = "until-start-of-opponent-next-command-phase")]
+    UntilStartOfOpponentNextCommandPhase,
 }
 impl ::std::fmt::Display for ScopeDuration {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -48164,6 +48179,21 @@ impl ::std::fmt::Display for ScopeDuration {
             }
             Self::UntilThisUnitHasShot => f.write_str("until-this-unit-has-shot"),
             Self::ControlLost => f.write_str("control-lost"),
+            Self::UntilEndOfYourNextFightPhase => {
+                f.write_str("until-end-of-your-next-fight-phase")
+            }
+            Self::UntilEndOfYourNextShootingPhase => {
+                f.write_str("until-end-of-your-next-shooting-phase")
+            }
+            Self::UntilEndOfYourNextMovementPhase => {
+                f.write_str("until-end-of-your-next-movement-phase")
+            }
+            Self::UntilEndOfOpponentNextMovementPhase => {
+                f.write_str("until-end-of-opponent-next-movement-phase")
+            }
+            Self::UntilStartOfOpponentNextCommandPhase => {
+                f.write_str("until-start-of-opponent-next-command-phase")
+            }
         }
     }
 }
@@ -48190,6 +48220,21 @@ impl ::std::str::FromStr for ScopeDuration {
             "until-end-of-opponent-next-turn" => Ok(Self::UntilEndOfOpponentNextTurn),
             "until-this-unit-has-shot" => Ok(Self::UntilThisUnitHasShot),
             "control-lost" => Ok(Self::ControlLost),
+            "until-end-of-your-next-fight-phase" => {
+                Ok(Self::UntilEndOfYourNextFightPhase)
+            }
+            "until-end-of-your-next-shooting-phase" => {
+                Ok(Self::UntilEndOfYourNextShootingPhase)
+            }
+            "until-end-of-your-next-movement-phase" => {
+                Ok(Self::UntilEndOfYourNextMovementPhase)
+            }
+            "until-end-of-opponent-next-movement-phase" => {
+                Ok(Self::UntilEndOfOpponentNextMovementPhase)
+            }
+            "until-start-of-opponent-next-command-phase" => {
+                Ok(Self::UntilStartOfOpponentNextCommandPhase)
+            }
             _ => Err("invalid value".into()),
         }
     }

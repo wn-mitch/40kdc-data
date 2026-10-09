@@ -20,6 +20,8 @@ import { namedRange } from "./named-ranges.js";
 import { optionalCostCondition } from "./compile-optional-cost.js";
 import { namedEquipmentPredicate } from "./compile-named-equipment.js";
 import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-opponent-stratagem.js";
+import { phaseEdgeDuration } from "./compile-duration-edges.js";
+import { PHASE_EDGE_ENDPOINTS } from "./family-extensions-16-duration-endpoint-vocabulary.js";
 
 type Node = Record<string, unknown>;
 
@@ -684,6 +686,7 @@ function subjectOf(leaf: CompileLeaf): string | undefined {
 
 /** A DURATION leaf's DSL scope. */
 export function duration(leaf: CompileLeaf): string {
+  if (PHASE_EDGE_ENDPOINTS.includes(String(closed(leaf, "endpoint")))) return phaseEdgeDuration(leaf);
   const found = DURATIONS[String(closed(leaf, "endpoint"))];
   if (!found) throw new CompileError(`Duration ${String(leaf.parameters.endpoint)} has no DSL scope yet.`);
   return found;

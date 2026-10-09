@@ -6412,6 +6412,106 @@
      }
     },
     "scope": {
+     "duration": "until-end-of-your-next-fight-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Fight phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-your-next-shooting-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Shooting phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-your-next-movement-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Movement phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-opponent-next-movement-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your opponent's next Movement phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-start-of-opponent-next-command-phase"
+    }
+   }
+  ],
+  "out": "Until the start of your opponent's next Command phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
      "duration": "one-use"
     }
    }

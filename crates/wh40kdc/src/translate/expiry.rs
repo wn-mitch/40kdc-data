@@ -23,6 +23,19 @@ pub(crate) fn expiry_trail(duration: Option<&Value>) -> &'static str {
         Some("until-end-of-opponent-next-turn") => "until the end of your opponent's next turn",
         Some("until-this-unit-has-shot") => "until this unit has resolved its ranged attacks",
         Some("control-lost") => "until you no longer control it",
+        Some("until-end-of-your-next-fight-phase") => "until the end of your next Fight phase",
+        Some("until-end-of-your-next-shooting-phase") => {
+            "until the end of your next Shooting phase"
+        }
+        Some("until-end-of-your-next-movement-phase") => {
+            "until the end of your next Movement phase"
+        }
+        Some("until-end-of-opponent-next-movement-phase") => {
+            "until the end of your opponent's next Movement phase"
+        }
+        Some("until-start-of-opponent-next-command-phase") => {
+            "until the start of your opponent's next Command phase"
+        }
         _ => "",
     }
 }

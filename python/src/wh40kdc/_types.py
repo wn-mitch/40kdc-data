@@ -2143,6 +2143,11 @@ ScopeDuration: TypeAlias = Literal[
     "until-end-of-opponent-next-turn",
     "until-this-unit-has-shot",
     "control-lost",
+    "until-end-of-your-next-fight-phase",
+    "until-end-of-your-next-shooting-phase",
+    "until-end-of-your-next-movement-phase",
+    "until-end-of-opponent-next-movement-phase",
+    "until-start-of-opponent-next-command-phase",
 ]
 
 

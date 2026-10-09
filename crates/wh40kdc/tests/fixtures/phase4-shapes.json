@@ -1532,5 +1532,95 @@
    }
   },
   "output": "The unit is shaken."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-fight-phase"
+   }
+  },
+  "output": "Until the end of your next Fight phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-shooting-phase"
+   }
+  },
+  "output": "Until the end of your next Shooting phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-movement-phase"
+   }
+  },
+  "output": "Until the end of your next Movement phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-opponent-next-movement-phase"
+   }
+  },
+  "output": "Until the end of your opponent's next Movement phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-start-of-opponent-next-command-phase"
+   }
+  },
+  "output": "Until the start of your opponent's next Command phase, subtract 1 from the selected unit's Leadership characteristic."
  }
 ]

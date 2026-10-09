@@ -757,7 +757,7 @@ export type AbilityDSLCondition3 = SimpleCondition | CompoundCondition;
  */
 export type EventOrSelectionReference = EventBoundReference | SelectionReference;
 /**
- * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+ * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "scope-duration".
@@ -779,7 +779,12 @@ export type ScopeDuration =
   | "until-end-of-your-next-turn"
   | "until-end-of-opponent-next-turn"
   | "until-this-unit-has-shot"
-  | "control-lost";
+  | "control-lost"
+  | "until-end-of-your-next-fight-phase"
+  | "until-end-of-your-next-shooting-phase"
+  | "until-end-of-your-next-movement-phase"
+  | "until-end-of-opponent-next-movement-phase"
+  | "until-start-of-opponent-next-command-phase";
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -3740,7 +3745,12 @@ export interface AbilityPart {
     | "until-end-of-your-next-turn"
     | "until-end-of-opponent-next-turn"
     | "until-this-unit-has-shot"
-    | "control-lost";
+    | "control-lost"
+    | "until-end-of-your-next-fight-phase"
+    | "until-end-of-your-next-shooting-phase"
+    | "until-end-of-your-next-movement-phase"
+    | "until-end-of-opponent-next-movement-phase"
+    | "until-start-of-opponent-next-command-phase";
   /**
    * The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration.
    */
