@@ -170,15 +170,29 @@ describe("an Otherwise sentence after a gating condition is refused (compile-oth
   });
 });
 
+describe("an amount alternative under a gate that precedes an Otherwise sentence is refused", () => {
+  it("refuses the 2498 mirror: an or-alternative move with a leading not-engaged gate and an Otherwise fall-back", () => {
+    const text = "If your unit is not engaged, it can move six inches, or up to 12 inches if your unit is a MOUNTED unit. Otherwise, your unit can fall back.";
+    const result = compile(text,
+      ["your unit is not engaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }, "EFFECT"],
+      ["it can move six inches", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }, "EFFECT"],
+      ["or", "instead", {}, "EFFECT"],
+      ["up to 12 inches", "make-move", { subject: "this-unit", move_type: "normal", distance: 12 }, "EFFECT"],
+      ["MOUNTED unit", "unit-keyword", { keywords: ["MOUNTED"], subject: "this-unit", negated: false }, "EFFECT"],
+      ["your unit can fall back", "make-move", { subject: "this-unit", move_type: "fall-back" }, "EFFECT"]);
+    expect(result.ok ? [] : result.errors).toContain(OTHERWISE_REFUSAL);
+  });
+});
+
 describe("authored shapes for the design's sub-shapes compile to their mechanics", () => {
   it("replaces an amount under a leading-unit condition inside a parenthesis", () => {
-    const text = "Reanimate D3 wounds (or D3+1 wounds if a NECRONS CHARACTER is leading the unit).";
+    const text = "Heal D3 wounds (or D3+1 wounds if a ZARKS HERO is leading the unit).";
     const mechanics = mechanicsOf(text,
-      ["Reanimate D3 wounds", "regain-wounds", { subject: "this-unit", amount: "D3", per: "unit" }, "EFFECT"],
+      ["Heal D3 wounds", "regain-wounds", { subject: "this-unit", amount: "D3", per: "unit" }, "EFFECT"],
       ["or", "instead", {}, "EFFECT"],
       ["D3+1 wounds", "regain-wounds", { subject: "this-unit", amount: "D3+1", per: "unit" }, "EFFECT"],
-      ["a NECRONS CHARACTER is leading the unit", "leading-unit", { subject: "this-unit", attachment: "led", leader_keywords: ["NECRONS", "CHARACTER"] }, "EFFECT"]);
-    const led = { type: "attachment", parameters: { role: "led", with: { all_of: ["NECRONS", "CHARACTER"] } } };
+      ["a ZARKS HERO is leading the unit", "leading-unit", { subject: "this-unit", attachment: "led", leader_keywords: ["ZARKS", "HERO"] }, "EFFECT"]);
+    const led = { type: "attachment", parameters: { role: "led", with: { all_of: ["ZARKS", "HERO"] } } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
       { condition: { operator: "not", operands: [led] }, effect: { modifier: { amount: "D3" } } },
       { condition: led, effect: { modifier: { amount: "D3+1" } } },
@@ -186,11 +200,11 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
   });
 
   it("replaces a range under a keyword condition after a comma-or", () => {
-    const text = "Set up the unit more than 6 inches away from enemy units, or more than 8 inches away if it is a MONSTER unit.";
+    const text = "Place the unit more than 6 inches from foes, or more than 8 inches from foes if it is a MONSTER unit.";
     const mechanics = mechanicsOf(text,
-      ["Set up the unit more than 6 inches away from enemy units", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 6 }, "EFFECT"],
+      ["Place the unit more than 6 inches from foes", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 6 }, "EFFECT"],
       ["or", "instead", {}, "EFFECT"],
-      ["more than 8 inches away", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 8 }, "EFFECT"],
+      ["more than 8 inches from foes", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 8 }, "EFFECT"],
       ["MONSTER unit", "unit-keyword", { keywords: ["MONSTER"], subject: "this-unit", negated: false }, "EFFECT"]);
     const monster = { type: "has-keyword", parameters: { all_of: ["MONSTER"] } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
@@ -200,18 +214,18 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
   });
 
   it("replaces a returned-model count under a battleline condition", () => {
-    const text = "Return up to one fallen model to your unit (not CHARACTER models) or up to D3 fallen models (not CHARACTER models) if your unit is a BATTLELINE unit.";
+    const text = "Recall up to one lost model to your unit (not HERO models) or up to D3 lost models (not HERO models) if your unit is a BATTLELINE unit.";
     const mechanics = mechanicsOf(text,
-      ["Return up to one fallen model to your unit", "return-models", { subject: "this-unit", count: "1" }, "EFFECT"],
-      ["not CHARACTER models", "returned-model-exclusion", { keywords: ["CHARACTER"] }, "EFFECT"],
+      ["Recall up to one lost model to your unit", "return-models", { subject: "this-unit", count: "1" }, "EFFECT"],
+      ["not HERO models", "returned-model-exclusion", { keywords: ["HERO"] }, "EFFECT"],
       ["or", "instead", {}, "EFFECT"],
-      ["up to D3 fallen models", "return-models", { subject: "this-unit", count: "D3" }, "EFFECT"],
-      ["(not CHARACTER models)", "returned-model-exclusion", { keywords: ["CHARACTER"] }, "EFFECT"],
+      ["up to D3 lost models", "return-models", { subject: "this-unit", count: "D3" }, "EFFECT"],
+      ["(not HERO models)", "returned-model-exclusion", { keywords: ["HERO"] }, "EFFECT"],
       ["BATTLELINE unit", "unit-keyword", { keywords: ["BATTLELINE"], subject: "this-unit", negated: false }, "EFFECT"]);
     const battleline = { type: "has-keyword", parameters: { all_of: ["BATTLELINE"] } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
-      { condition: { operator: "not", operands: [battleline] }, effect: { modifier: { count: 1, exclude_model_keyword: ["CHARACTER"] } } },
-      { condition: battleline, effect: { modifier: { count: "D3", exclude_model_keyword: ["CHARACTER"] } } },
+      { condition: { operator: "not", operands: [battleline] }, effect: { modifier: { count: 1, exclude_model_keyword: ["HERO"] } } },
+      { condition: battleline, effect: { modifier: { count: "D3", exclude_model_keyword: ["HERO"] } } },
     ] });
   });
 });
