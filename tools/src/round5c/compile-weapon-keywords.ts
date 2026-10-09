@@ -8,7 +8,8 @@ import { qualifierOf } from "./compile-weapon-scopes.js";
  * compiles. A frame takes the run of keyword leaves right after it, with no other leaf between;
  * failing that ("… have the selected ability"), the nearest unclaimed run before it. A run whose
  * keywords are joined by "or" or listed as bullets is a menu: one of them is chosen. Otherwise
- * every keyword in it is granted. The folded leaf keeps the frame's place and carries `keywords`
+ * every keyword in it is granted. When neither exists, characteristic-modifier leaves directly after
+ * the frame ("have: +1 S. [Lethal Hits]") are stepped over to find the run behind them. The folded leaf keeps the frame's place and carries `keywords`
  * and `keyword_choice`, which the effect fragment reads.
  */
 
@@ -65,7 +66,11 @@ export function foldWeaponKeywords(list: readonly CompileLeaf[], sourceText?: st
     if (!isFrame(leaf)) return;
     const after = runAfter(list, index, runs, claimed, sourceText);
     const before = [...runs].reverse().find((run) => run.at(-1)! < index && !claimed.has(run));
-    const run = after ?? before;
+    // Last resort: "have: +1 S. [Lethal Hits]" puts stat adjustments of the same attacks between the frame and its keywords.
+    let skip = index + 1;
+    while (list[skip]?.family_id === "characteristic-modifier") skip += 1;
+    const past = skip > index + 1 ? runs.find((candidate) => candidate[0] === skip && !claimed.has(candidate)) : undefined;
+    const run = after ?? before ?? past;
     if (!run) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
     claimed.add(run);
     grants.push({ frame: index, run });

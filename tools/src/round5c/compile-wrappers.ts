@@ -78,6 +78,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (filter.abilities?.length) throw new CompileError("An aura reaching units by ability has no DSL eligible field yet.");
   if (filter.alternatives?.length) throw new CompileError("An aura reaching units of alternatives that differ by more than one keyword has no DSL eligible field yet.");
   if (filter.states?.some((state) => state.startsWith("in-"))) throw new CompileError("An aura cannot reach a unit held off the battlefield.");
+  if (filter.states?.some((state) => state === "engaged" || state === "hidden")) throw new CompileError("An aura reaching units that are engaged or hidden has no DSL eligible field yet.");
   if (filter.states?.length) eligible.states = filter.states;
   if (keywords?.length) eligible.required_keywords = keywords;
   if (filter.any_keywords?.length) eligible.any_keywords = filter.any_keywords;

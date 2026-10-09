@@ -36,6 +36,26 @@ function notStates(states: readonly string[] | undefined): string[] {
 /** Where a held unit waits, as the DSL unit-state it is in. */
 const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategic-reserves", "cult-ambush": "in-cult-ambush" };
 
+/** The states a unit-filter holds as its one DSL `state` (unengaged and not-battle-shocked are negations). */
+const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden"];
+
+const positiveFilterStates = (states: readonly string[] | undefined): string[] => (states ?? []).filter((state) => POSITIVE_FILTER_STATES.includes(state));
+
+/**
+ * A filter's positive state: the DSL carries one `state` per unit-filter, so a filter that holds two
+ * (or a state and a held unit's Reserves state) is refused, as is engaged with unengaged. `held` is
+ * the DSL unit-state of a held unit, if the filter names one.
+ */
+export function assertOneFilterState(states: readonly string[] | undefined, held: string | undefined): void {
+  if (states?.includes("engaged") && states.includes("unengaged")) throw new CompileError("A unit-filter cannot be both engaged and unengaged.");
+  const positive = positiveFilterStates(states);
+  if (positive.length > 1) throw new CompileError(`A unit-filter holds one state; it cannot be both ${positive.join(" and ")}.`);
+  if (positive.length === 1 && held !== undefined) {
+    const named = positive[0] === "battle-shocked" ? "Battle-shocked" : positive[0];
+    throw new CompileError(`A unit-filter holds one state; a held unit cannot also be ${named} here.`);
+  }
+}
+
 /**
  * The who as the DSL's own unit-filter (a unit-ref "any unit that…"), for a trigger's subject or
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
@@ -47,7 +67,7 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
   if (p.designated === "warlord" && options.warlordTest !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
-  if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
+  assertOneFilterState(p.states, held);
   if (p.any_keywords?.length && p.alternatives?.length) throw new CompileError("A unit-filter holds one any-of; it cannot also hold alternatives.");
   return {
     owner: p.side,
@@ -56,7 +76,7 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     // "A or B C unit": any one alternative, each with its own keywords, exclusions and states.
     ...dslAlternatives(p.alternatives),
     ...(p.excluded_keywords?.length ? { none_of: p.excluded_keywords } : {}),
-    ...(p.states?.includes("battle-shocked") ? { state: "battle-shocked" } : {}),
+    ...(positiveFilterStates(p.states).length === 1 ? { state: positiveFilterStates(p.states)[0] } : {}),
     ...(held !== undefined ? { state: held } : {}),
     ...(notStates(p.states).length ? { not_states: notStates(p.states) } : {}),
     ...(Array.isArray(filter.parameters.excluded_all_keywords) ? { not_all_of: filter.parameters.excluded_all_keywords } : {}),
@@ -197,6 +217,8 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
       throw new CompileError(`A unit-filter narrowing alternatives contradicts or repeats one of them (${(error as Error).message}).`);
     }
   }
+  // Two stacked filters that hold two states (or a state and a held unit) are one filter the DSL cannot say.
+  assertOneFilterState(states, held === undefined ? undefined : HELD_STATES[held] ?? held);
   return { ...first, parameters };
 }
 
