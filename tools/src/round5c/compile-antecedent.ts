@@ -343,6 +343,18 @@ function ownRole(leaves: readonly CompileLeaf[]): string {
 }
 
 /**
+ * Whether a key takes any DSL unit-ref, so a filtered set can be bound to it. A rule-state subject
+ * is one such key: a suppressed or granted rule lowers to a unit-ref target (compile-fragments.ts
+ * target()). `rule-state` stays out of ANY_UNIT_KEYS, since that table also drives postfixFilter,
+ * which would claim a unit-filter that follows a rule-state. An aura's recipient does not bind to a
+ * rule-state subject: its rule grants would be the wrong mechanic for a region or range count.
+ */
+function anyUnitKey(leaf: CompileLeaf, key: string): boolean {
+  return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) === true || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key) === true
+    || (leaf.family_id === "rule-state" && key === "subject");
+}
+
+/**
  * The value a family records for a bound role, when the family can name it. A recipient of
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
@@ -350,7 +362,7 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
   if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
-  if (role === FILTERED_UNITS) return ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key) ? role : null;
+  if (role === FILTERED_UNITS) return anyUnitKey(leaf, key) ? role : null;
   if (role === AURA_RECIPIENT) {
     if (ANY_UNIT_KEYS[leaf.family_id]?.includes(key) || ANY_UNIT_CONDITION_KEYS[leaf.family_id]?.includes(key)) return role;
     if (leaf.family_id === "mortal-wounds" && key === "recipient") return role;
