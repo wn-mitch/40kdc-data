@@ -129,6 +129,15 @@ describe("move-end nearest on a selected move (no make-move in the sentence)", (
     expect(JSON.stringify(mechanics)).toContain(JSON.stringify({ type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: ["surge"], ends_nearest: { of: { objective: {} } } } }));
   });
 
+  it("refuses a second move-end on the same selected move, which has no DSL form", () => {
+    const text = "Each time your unit is selected to make a Surge move, it must end that move as close as possible to the closest objective marker. It must end that move as close as possible to the closest objective marker.";
+    expect(errorsOf(placed(text,
+      ["is selected to make a Surge move", "event", { kind: "selected", move_types: ["surge"] }],
+      ["must end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker" }],
+      ["It must end that move as close as possible to the closest objective marker", "move-end-nearest", { to: "closest-objective-marker" }],
+    ), text)).toMatch(/second move-end nearest/u);
+  });
+
   it("refuses an end after a move-ended trigger, which has no move left to end", () => {
     const text = "Each time your unit ends a Normal move, it must end that move as close as possible to the closest objective marker.";
     expect(errorsOf(placed(text,
@@ -209,6 +218,34 @@ describe("the 9046 sentence-1 shape: selected move, by-ability, replacing distan
   it("refuses a replacing end that names its own move kinds", () => {
     const leaves = selectedMoveLeaves().map((item) => item.family_id === "move-must-end" ? { ...item, parameters: { ...item.parameters, move_types: ["normal"] } } : item);
     expect(errorsOf(leaves, selectedMoveText)).toMatch(/takes its move kinds from the trigger/u);
+  });
+});
+
+describe("an instead consumed by a replacing move-end keeps the other effect in its clause (SS-F)", () => {
+  const text = "Each time your unit is picked to make a Normal move with the Quantum Gadget ability, re-roll a Hit roll of 1, and your unit can end that move more than 6\" from all enemy units (instead of more than 8\").";
+  const reroll: [string, string, Record<string, unknown>] = ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }];
+  const items = (extra: Array<[string, string, Record<string, unknown>]> = []): Array<[string, string, Record<string, unknown>]> => [
+    ["is picked to make a Normal move", "event", { kind: "selected", move_types: ["normal"] }],
+    ["the Quantum Gadget ability", "by-ability", { id: "quantum-gadget" }],
+    reroll,
+    ...extra,
+    ["can end that move", "move-must-end", { match: "all", polarity: "cannot", replaces: true }],
+    ["more than 6\" from", "unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "following-filter" }],
+    ["enemy units", "unit-filter", { side: "enemy" }],
+    ["(instead of more than 8\")", "instead", {}],
+  ];
+
+  it("keeps the re-roll unchanged and gives the replacing end the instead", () => {
+    const mechanics = compiled(placed(text, ...items()), text);
+    const steps = mechanics.effect.steps as Array<Record<string, any>>;
+    expect(steps[0]).toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } });
+    expect(steps[1]!.modifier.ends_when_replaces).toBe(true);
+  });
+
+  it("refuses an instead with two effects besides the move-end", () => {
+    const wider = "Each time your unit is picked to make a Normal move with the Quantum Gadget ability, re-roll a Hit roll of 1, re-roll a Wound roll of 1, and your unit can end that move more than 6\" from all enemy units (instead of more than 8\").";
+    const second: [string, string, Record<string, unknown>] = ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }];
+    expect(errorsOf(placed(wider, ...items([second])), wider)).toMatch(/besides the move-end/u);
   });
 });
 

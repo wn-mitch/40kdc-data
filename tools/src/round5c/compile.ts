@@ -594,7 +594,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     modifier.arrives = "next-movement-phase";
     if (leaf.parameters.allow_first_round === true) modifier.allow_first_round = true;
   }
-  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence, (at) => [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])], sourceText));
+  const endNearestEntry = (at: number, node: Node): PlannedEffect => ({
+    index: at, leaf: list[at]!, node, gate: [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])],
+    selected: selectedGlobally || selectedSentences.has(places[at]!.sentence) || selectedClauses.has(places[at]!.clause), replaces: false,
+  });
+  errors.push(...attachMoveEndNearest(list, planned, (at) => places[at]!.sentence, (at) => [...(sentenceGates.get(places[at]!.sentence) ?? []), ...(clauseGates.get(places[at]!.clause) ?? [])], endNearestEntry, sourceText));
   errors.push(...bindEngagedPermissions(planned));
   for (const rule of moveEnds) {
     // "Can end that move more than 6\" … (instead of more than 8\")" replaces the usual threshold of the move the trigger names, not one a make-move makes.
@@ -633,11 +637,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   for (const combinator of combinators) {
     const clause = places[combinator]!.clause;
     const own = planned.filter((item) => places[item.index]!.clause === clause && !optionalSpends.has(item.leaf));
-    // "(instead of more than 8\")" after a move-end that replaces the usual threshold: the end leaf takes the instead,
-    // which replaces nothing else. A clause with another effect in it is handled as before.
+    // "(instead of more than 8\")" after a move-end that replaces the usual threshold: the move-end leaf consumes
+    // the instead, which replaces nothing. Any other effect in the clause is kept as it is; two or more are refused.
     const endsInstead = (leaf: CompileLeaf) => (leaf.family_id === "move-end-nearest" && leaf.parameters.instead_of !== undefined)
       || (leaf.family_id === "move-must-end" && leaf.parameters.replaces === true);
-    if (list.some((leaf, at) => endsInstead(leaf) && places[at]!.clause === clause) && own.every((item) => endsInstead(item.leaf))) continue;
+    if (list.some((leaf, at) => endsInstead(leaf) && places[at]!.clause === clause)) {
+      const others = own.filter((item) => !endsInstead(item.leaf));
+      if (others.length > 1) errors.push(`"Instead" needs exactly one effect besides the move-end in its clause; found ${others.length}.`);
+      continue;
+    }
     if (own.length !== 1) {
       errors.push(`"Instead" needs exactly one effect in its clause; found ${own.length}.`);
       continue;

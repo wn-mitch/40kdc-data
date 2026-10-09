@@ -59,15 +59,16 @@ export function sentenceIsOptional(sourceText: string | undefined, leaf: Compile
  * or move-ended event. A selection names the moves it covers (move_types) and the move ends after it.
  * A move-ended trigger has no move left to end, and a trigger with no move_types names no move.
  */
-function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest: Node): { node: Node } | { error: string } {
-  let trigger: CompileLeaf | undefined;
-  for (let other = at - 1; other >= 0 && !trigger; other -= 1) {
+function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest: Node): { node: Node; trigger: number } | { error: string } {
+  let trigger = -1;
+  for (let other = at - 1; other >= 0 && trigger < 0; other -= 1) {
     const leaf = list[other]!;
-    if (leaf.family_id === "event" && (leaf.parameters.kind === "selected" || leaf.parameters.kind === "move-ended")) trigger = leaf;
+    if (leaf.family_id === "event" && (leaf.parameters.kind === "selected" || leaf.parameters.kind === "move-ended")) trigger = other;
   }
-  if (!trigger || !Array.isArray(trigger.parameters.move_types)) return { error: "A move-end has no move to attach to." };
-  if (trigger.parameters.kind === "move-ended") return { error: "A move-end after a move-ended trigger has no move left to end: the move has already ended." };
-  return { node: { type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: trigger.parameters.move_types, ends_nearest: endsNearest } } };
+  const named = trigger < 0 ? undefined : list[trigger];
+  if (named === undefined || !Array.isArray(named.parameters.move_types)) return { error: "A move-end has no move to attach to." };
+  if (named.parameters.kind === "move-ended") return { error: "A move-end after a move-ended trigger has no move left to end: the move has already ended." };
+  return { node: { type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: named.parameters.move_types, ends_nearest: endsNearest } }, trigger };
 }
 
 /**
@@ -75,11 +76,12 @@ function triggerEndNearest(list: readonly CompileLeaf[], at: number, endsNearest
  * destination) and its waiver, if any, to the nearest earlier move in the same sentence: a make-move
  * gets ends_nearest on its modifier; a move-distance bonus gets a new move-modifier of its own, so the
  * bonus itself is never gated by the end rule. With no move in the sentence, the end attaches to the
- * ability's selected move (triggerEndNearest). Returns the refusals; nothing is attached when one is
- * returned for that leaf.
+ * ability's selected move (triggerEndNearest), as an entry built by `entryFor`. Returns the refusals;
+ * nothing is attached when one is returned for that leaf.
  */
 export function attachMoveEndNearest<T extends PlannedNode>(
-  list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[], sourceText?: string,
+  list: readonly CompileLeaf[], planned: T[], sentenceAt: (index: number) => number, gateAt: (index: number) => Node[],
+  entryFor: (at: number, node: Node) => T, sourceText?: string,
 ): string[] {
   const errors: string[] = [];
   const nearests = list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" ? [at] : []);
@@ -103,8 +105,13 @@ export function attachMoveEndNearest<T extends PlannedNode>(
     if (!target) {
       const fallback = triggerEndNearest(list, at, endsNearest);
       if ("error" in fallback) { errors.push(fallback.error); continue; }
+      // One move-end per trigger: an earlier fallback end on the same trigger's move is already there.
+      if (planned.some((item) => item.index > fallback.trigger && item.index < at && (item.node.target === "event-subject") && (item.node.modifier as Node | undefined)?.ends_nearest !== undefined)) {
+        errors.push("A second move-end nearest on the same move has no DSL form.");
+        continue;
+      }
       const next = planned.findIndex((item) => item.index > at);
-      const entry = { index: at, leaf, node: fallback.node, gate: gateAt(at) } as unknown as T;
+      const entry = entryFor(at, fallback.node);
       if (next === -1) planned.push(entry); else planned.splice(next, 0, entry);
       continue;
     }
