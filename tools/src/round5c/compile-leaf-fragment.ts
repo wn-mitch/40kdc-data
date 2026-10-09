@@ -68,9 +68,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     || leaf.parameters.weapon_type === undefined && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))))
     || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3 && (leaf.parameters.subject === undefined
       || leaf.parameters.weapon_type === undefined && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(leaf.parameters.characteristic))))) {
-    // antecedent_keys is compiler bookkeeping (compile-antecedent.ts), not authored text.
-    const { antecedent_keys: _bookkeeping, ...authored } = leaf.parameters;
-    return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(authored)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
+    return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {

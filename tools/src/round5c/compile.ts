@@ -159,7 +159,15 @@ function hasLastingEffect(node: unknown): boolean {
  * end of that Shooting phase). A window of phases is a phase; "in your turn" alone is the turn.
  */
 function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
-  const windows = list.filter((leaf) => leaf.family_id === "use-window" || leaf.family_id === "activation-window"
+  // A folded either-phase window ("in your Shooting phase and the Fight phase") is one any-of whose
+  // alternatives are each one phase window; those alternatives are the windows. Other any-of leaves
+  // (an "or" with a non-window condition) hold no window.
+  const flat = list.flatMap((leaf) => {
+    if (leaf.family_id !== "__any-of") return [leaf];
+    const alternatives = leaf.parameters.alternatives as CompileLeaf[][];
+    return alternatives.every((alternative) => alternative.length === 1 && alternative[0]!.family_id === "phase-window") ? alternatives.flat() : [];
+  });
+  const windows = flat.filter((leaf) => leaf.family_id === "use-window" || leaf.family_id === "activation-window"
     || (leaf.family_id === "phase-window" && leaf.parameters.phase !== "any"));
   if (windows.some((leaf) => leaf.family_id !== "phase-window" || leaf.parameters.phase !== undefined)) return "phase";
   return windows.length ? "turn" : null;

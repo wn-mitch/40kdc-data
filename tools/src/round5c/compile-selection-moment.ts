@@ -23,7 +23,7 @@ export function refuseSelectionAcrossMoment(list: readonly CompileLeaf[]): void 
     const moment = sorted.slice(at + 1).find(isMoment);
     if (moment === undefined) return;
     const later = sorted.find((leaf) => leaf.start_byte > moment.start_byte && leaf.role !== "EVENT" && leaf.role !== "DURATION"
-      && leaf.parameters.subject === "selected-unit" && leaf.start_byte >= moment.end_byte);
+      && leaf.parameters.subject === "selected-unit" && leaf.start_byte >= (moment.end_byte ?? moment.start_byte));
     if (later === undefined) return;
     const scoped = sorted.some((leaf) => leaf.family_id === "target-is-selected" && leaf.start_byte > selection.start_byte && leaf.start_byte < later.start_byte);
     if (scoped) return;

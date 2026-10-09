@@ -173,6 +173,19 @@ describe("Round 5C selection shapes of the model-selection rows", () => {
     });
   });
 
+  it("refuses the enemy selection when the first selection has no bind_as to measure from", () => {
+    const text = "In your Shooting phase, select one friendly EXPLOSIVES model in your unit. Select one unengaged enemy unit within 8\" of and visible to that model. The selected unit suffers 1 mortal wound.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["select one friendly", "select-unit", { distance: "any", visible: false }],
+      ["EXPLOSIVES model", "unit-filter", { side: "friendly", any_keywords: ["EXPLOSIVES"], level: "model" }],
+      ["Select one unengaged", "select-unit", { distance: "within", inches: 8, visible: true, within_of: "shooter", visible_to: "shooter" }],
+      ["enemy unit", "unit-filter", { side: "enemy", states: ["unengaged"] }],
+      ["suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "selected-unit" }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join("\n")).toContain("bound by a name (bind_as)");
+  });
+
   it("compiles a model selection by its own ability as selector structure only, bound to the record id", () => {
     const text = "When a friendly Psyker model is destroyed, select one of those models with this ability within 9\" of it. It has +1 to the test.";
     const result = compileLeaves(placed(text,
@@ -189,5 +202,68 @@ describe("Round 5C selection shapes of the model-selection rows", () => {
       { type: "within", parameters: { subject: "selected-unit", of: "event-object", range: { inches: 9 } } },
       { type: "has-ability", parameters: { subject: "selected-unit", ability: "spirit-snare-zadophon-the-soul-eater-thousand-sons" } },
     ]));
+  });
+});
+
+describe("Round 5C 9016 full leaf set under the record's own events", () => {
+  // Fabricated wording with the record's leaf structure: a once-per-turn attack trigger, a selected
+  // model, a permission on it, and the record's targeting restriction and eligibility leaves.
+  const TEXT = "Once per turn, in your opponent's Shooting phase, when a foe unit makes a ranged attack that targets a friendly GAUNTS unit within 3\" of a model with this ability, after that foe unit has shot, select one model with this ability that is within 3\" of that target can shoot as if it were your Shooting phase, but it must target only that foe unit when doing so, and can only do so if that foe unit is an eligible target.";
+  const OPTIONS = { abilityId: "fabricated-snap-fire-fabricated-faction" };
+  const FULL = (): CompileLeaf[] => placed(TEXT,
+    ["Once", "usage-limit", { frequency: "once-per-turn" }],
+    ["per turn", "usage-scope", { per: "unit" }],
+    ["in your opponent's Shooting phase", "phase-window", { phase: "shooting", turn: "opponent" }],
+    ["when a foe unit makes a ranged attack", "attack", { direction: "makes", unit: "enemy-unit", attack_type: "ranged" }],
+    ["friendly GAUNTS unit", "unit-filter", { side: "friendly", keywords: ["GAUNTS"] }],
+    ["after that foe unit has shot", "event", { kind: "enemy-has-shot" }],
+    ["select one", "select-unit", { distance: "any", visible: false }],
+    ["model", "unit-filter", { side: "friendly", level: "model" }],
+    ["with this ability that", "unit-has-ability", { subject: "selected-unit", own: true, negated: false }],
+    ["within 3\" of that target", "unit-position", { kind: "within", inches: 3, of: "antecedent", subject: "selected-unit", negated: false }],
+    ["can shoot", "eligibility-permission", { subject: "antecedent", activity: "shoot", allow: true, as_if: "shooting-phase" }],
+    ["must target only that foe unit", "targeting-restriction", { may: "must-target", kind: "shoot", weapon_type: "all", target: "event-subject", by: "this-model" }],
+    ["an eligible target", "eligible", { to: "shoot" }]);
+
+  it("binds the permission's subject and the 'of' after the attack to the selection and the attacked unit", () => {
+    const bound = bindAntecedents(FULL());
+    expect(bound.find((leaf) => leaf.family_id === "eligibility-permission")?.parameters.subject).toBe("selected-unit");
+    expect(bound.find((leaf) => leaf.family_id === "unit-position")?.parameters.of).toBe("target");
+  });
+
+  it("keeps the selected-model attack refusal", () => {
+    const result = compileLeaves(FULL(), TEXT, OPTIONS);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toEqual([expect.stringContaining("An attack made by a selected model has no decided binding yet")]);
+  });
+
+  it("targets the permission at the selected unit once the attack leaf is out of the way", () => {
+    const result = compileLeaves(FULL().filter((leaf) => leaf.family_id !== "attack"), TEXT, OPTIONS);
+    expect(result.ok).toBe(true);
+    const mechanics = result.ok ? JSON.stringify(result.mechanics) : "";
+    expect(mechanics).toContain('"type":"permission","target":"selected-unit"');
+    expect(mechanics).toContain('"usage":{"frequency":"once-per-turn","per":"unit"}');
+  });
+
+  it("clears the usage refusal with a usage scope and keeps the other refusals", () => {
+    const withoutScope = compileLeaves(FULL().filter((leaf) => leaf.family_id !== "usage-scope"), TEXT, OPTIONS);
+    expect(withoutScope.ok ? [] : withoutScope.errors.join("\n")).toContain("Usage frequency needs a reviewed usage scope");
+    const withScope = compileLeaves(FULL(), TEXT, OPTIONS);
+    expect(withScope.ok ? [] : withScope.errors.join("\n")).not.toContain("Usage frequency");
+  });
+});
+
+describe("Round 5C antecedent binding bookkeeping", () => {
+  it("keeps the bound keys off the leaf's parameters, so no output or fingerprint can read them", () => {
+    const text = "Once per turn, when a foe unit makes a ranged attack that targets a friendly GAUNTS unit, select one model with this ability that is within 3\" of that target can shoot.";
+    const bound = bindAntecedents(placed(text,
+      ["Once", "usage-limit", { frequency: "once-per-turn" }],
+      ["when a foe unit makes a ranged attack", "attack", { direction: "makes", unit: "enemy-unit", attack_type: "ranged" }],
+      ["friendly GAUNTS unit", "unit-filter", { side: "friendly", keywords: ["GAUNTS"] }],
+      ["select one", "select-unit", { distance: "any", visible: false }],
+      ["within 3\" of that target", "unit-position", { kind: "within", inches: 3, of: "antecedent", subject: "selected-unit", negated: false }]));
+    const position = bound.find((leaf) => leaf.family_id === "unit-position")!;
+    expect(position.parameters).not.toHaveProperty("antecedent_keys");
+    expect(position.antecedent_keys).toEqual(expect.arrayContaining(["of"]));
   });
 });

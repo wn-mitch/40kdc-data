@@ -80,6 +80,28 @@ describe("Round 5C window period as the default duration", () => {
     expect(mechanics.scope).toEqual({ duration: "phase" });
   });
 
+  it("keeps the phase period when the windows fold into one either-phase any-of", () => {
+    const text = "In your Shooting phase and the Fight phase, you can add 1 to the Hit roll for this unit.";
+    const mechanics = mechanicsOf(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["the Fight phase", "phase-window", { phase: "fight" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    expect(mechanics.behavior).toBe("activated");
+    expect(mechanics.effect.condition.operator).toBe("or");
+    expect(mechanics.scope).toEqual({ duration: "phase" });
+  });
+
+  it("leaves an any-of that holds a non-window alternative without a window period", () => {
+    const text = "In your Shooting phase or while this unit is within 6\" of an enemy unit, you can add 1 to the Hit roll for this unit.";
+    const mechanics = mechanicsOf(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["while this unit is within 6\" of an enemy unit", "unit-position", { subject: "this-unit", relation: "within", distance: 6, of: "enemy-unit" }],
+      ["you can", "optional-use", { who: "you" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    expect(mechanics.scope).toEqual({ duration: "permanent" });
+  });
+
   it("bounds a used ability named only by its turn to that turn", () => {
     const text = "In your turn, you can add 1 to the Hit roll for this unit.";
     const mechanics = mechanicsOf(placed(text,

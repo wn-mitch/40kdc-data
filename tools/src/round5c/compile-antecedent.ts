@@ -479,7 +479,7 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
       parameters[key] = value;
     }
     // The keys this binding filled in, so a later lowering can tell "that unit" from an authored subject.
-    return { ...leaf, parameters: { ...parameters, antecedent_keys: keys } };
+    return { ...leaf, parameters, antecedent_keys: keys };
   });
 }
 

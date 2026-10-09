@@ -27,6 +27,8 @@ export type CompileLeaf = {
   mode?: string;
   /** The cost a paid target mode names (label: pool or resource name; amount: whole number). */
   mode_cost?: { label: string; amount: number };
+  /** The parameters a binding filled in from an earlier leaf (compile-antecedent.ts); absent when none. */
+  antecedent_keys?: string[];
 };
 
 export class CompileError extends Error {}
@@ -399,7 +401,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // A weapon characteristic of "this model" names the bearer's own weapons: an attached leader's
       // bearer stays the model, not the led unit (so a Psychic-weapon scope does not widen to the unit).
       // "that unit" bound to the bearer (compile-antecedent.ts) is the led unit's models, so only an authored "this model" qualifies.
-      const authoredBearer = !((leaf.parameters.antecedent_keys as string[] | undefined) ?? []).includes("subject");
+      const authoredBearer = !(leaf.antecedent_keys ?? []).includes("subject");
       const bearerWeapons = leaf.parameters.subject === "this-model" && authoredBearer && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat));
       const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
       const weaponType = closed(leaf, "weapon_type") ?? "all";
