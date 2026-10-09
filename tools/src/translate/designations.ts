@@ -140,6 +140,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "vendetta-target",
   "vengeful-dead",
   "victim",
+  "warlord",
   "whispering-web",
   "wholly-within-flow-of-magic",
   "winning-the-wager",
@@ -152,7 +153,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
 ]);
 
 /** The rules' term for a designation: an adjective ("Spotted") or a noun ("Observer" -> "an Observer", "Observers"). */
-const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: string }>> = {
+const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: string; definite?: string }>> = {
   afflicted: { adjective: "Afflicted" },
   spotted: { adjective: "Spotted" },
   guided: { adjective: "Guided" },
@@ -193,13 +194,27 @@ const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: st
   sabotaged: { adjective: "Sabotaged" },
   warded: { adjective: "Warded" },
   corrupted: { adjective: "Corrupted" },
+  // The list-building designation: the model chosen as Warlord when mustering, not a keyword.
+  warlord: { definite: "the Warlord" },
 };
+
+/**
+ * Designations that only list building sets (the model chosen as Warlord). An effect, an
+ * objective tag or an event may not apply them; a unit-filter or designated-filter may test them.
+ */
+export const LIST_BUILDING_DESIGNATIONS: ReadonlySet<string> = new Set(["warlord"]);
+
+/** Refuses a list-building designation where an effect or event would apply it. */
+export function refuseListBuildingTag(tag: string, where: string): void {
+  if (LIST_BUILDING_DESIGNATIONS.has(designationId(tag))) throw new TypeError(`${where} ${JSON.stringify(tag)} is a list-building designation and cannot be applied in a rule.`);
+}
 
 /** The printed term for a registered id after "is"/"are" ("Spotted", "an Observer" / "Observers"), else undefined. */
 export function designationLabel(id: string, plural = false): string | undefined {
   const term = DESIGNATION_TERMS[id];
   if (term == null) return undefined;
   if (term.adjective != null) return term.adjective;
+  if (term.definite != null) return term.definite;
   const noun = term.noun ?? id;
   return plural ? `${noun}s` : `${/^[aeiou]/i.test(noun) ? "an" : "a"} ${noun}`;
 }

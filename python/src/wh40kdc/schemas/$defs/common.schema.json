@@ -410,7 +410,7 @@
         },
         "designated": {
           "$ref": "#/$defs/designation-id",
-          "description": "The unit carries this designation (a tag an effect applied)."
+          "description": "The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model."
         },
         "state": {
           "$ref": "#/$defs/unit-state"
@@ -1201,7 +1201,7 @@
     "designation-id": {
       "type": "string",
       "minLength": 1,
-      "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them."
+      "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it."
     },
     "unit-rating": {
       "type": "object",

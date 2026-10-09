@@ -13422,13 +13422,13 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersSubject {
         Self::UnitRef(value)
     }
 }
-///A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.
+///A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.",
+///  "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.",
 ///  "type": "string",
 ///  "minLength": 1
 ///}
@@ -66400,7 +66400,7 @@ pub struct UnitDetachmentPricingItem {
 ///      "minItems": 2
 ///    },
 ///    "designated": {
-///      "description": "The unit carries this designation (a tag an effect applied).",
+///      "description": "The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.",
 ///      "$ref": "#/$defs/designation-id"
 ///    },
 ///    "designated_by": {
@@ -66516,7 +66516,7 @@ pub struct UnitFilter {
     ///Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub any_of_filters: ::std::vec::Vec<UnitFilter>,
-    ///The unit carries this designation (a tag an effect applied).
+    ///The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub designated: ::std::option::Option<DesignationId>,
     ///The designation was applied by this unit (their Spotted unit). Requires `designated`.

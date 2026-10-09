@@ -9,6 +9,7 @@ import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alt
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
+import { isBackref } from "./compile-attack-backref.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -39,8 +40,11 @@ const HELD_STATES: Record<string, string> = { "strategic-reserves": "in-strategi
  * The who as the DSL's own unit-filter (a unit-ref "any unit that…"), for a trigger's subject or
  * an attack's target. Unengaged is not engaged (`not_states`); a held unit is in its Reserves state.
  */
-export function dslUnitFilter(filter: CompileLeaf): Record<string, unknown> {
+// A "your Warlord" test is refused unless the caller passes `warlordTest` (the S2 gate in
+// compile-warlord-test.ts): every other caller would drop or misread it.
+export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean } = {}): Record<string, unknown> {
   const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string };
+  if (p.designated === "warlord" && options.warlordTest !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   if (held !== undefined && p.states?.includes("battle-shocked")) throw new CompileError("A unit-filter holds one state; a held unit cannot also be Battle-shocked here.");
@@ -337,7 +341,8 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const condition = out.at(-1)!;
       // The condition's wording now runs through the filter it absorbed, so the words after it (an "or") sit between it and the next condition.
       const end = list[at - 1]!.end_byte ?? condition.end_byte;
-      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf) } };
+      // "If a friendly X model is your Warlord": only army-includes reads a Warlord test, and only at muster.
+      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf, { warlordTest: condition.family_id === "army-includes" }) } };
       index = at - 1;
     } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
       // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
@@ -577,8 +582,10 @@ function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf): bool
 
 /** "an attack made by a" + filter: the attack's own wording, or the words before the filter, say who made it. */
 function madeBy(attack: CompileLeaf | undefined, filter: CompileLeaf, sourceText: string | undefined): boolean {
-  if (sourceText === undefined || !attackerAfter(attack, filter) || attack!.fragment !== filter.fragment || filter.start_byte <= attack!.start_byte) return false;
-  return /\bmade by\b/iu.test(exactSpan(sourceText, attack!.start_byte, filter.start_byte));
+  if (sourceText === undefined || attack === undefined || attack.fragment !== filter.fragment || filter.start_byte <= attack.start_byte) return false;
+  if (!/\bmade by\b/iu.test(exactSpan(sourceText, attack.start_byte, filter.start_byte))) return false;
+  if (isBackref(attack)) throw new CompileError("An attack named again by its attacker (\"that attack is made by an X model\") has no DSL shape yet.");
+  return attackerAfter(attack, filter);
 }
 
 function attackerFilter(filter: CompileLeaf, attack: CompileLeaf): Record<string, unknown> {

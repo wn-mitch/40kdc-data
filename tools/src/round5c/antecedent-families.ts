@@ -46,6 +46,8 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"],
   "ability-record-grant": ["subject"],
+  // "if that unit is your Warlord" after a unit-filter: the Warlord test folds onto the filter (compile-warlord-test.ts).
+  "designated-filter": ["subject"],
 };
 
 /**

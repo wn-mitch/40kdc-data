@@ -22,6 +22,7 @@ import { boundSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
+import { foldWarlordTests } from "./compile-warlord-test.js";
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
@@ -258,7 +259,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(leaves)));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
-    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(ordered(weaponBound), sourceText)))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldByAbility(foldAuraMoments(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText))), sourceText)), sourceText);
     refuseTransportAsSubject(bound);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldAsIfPhases(foldHitFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText)), sourceText));

@@ -72,13 +72,26 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   let at = index - 1;
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
   while (at >= 0 && leaves[at]!.fragment === leaf.fragment
-    && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!)))) at -= 1;
+    && (leaves[at]!.family_id === "unit-owner" || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!))
+      // "Friendly X units have: Battleline. +1 OC.": each effect of one list takes the same filter.
+      || (leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
   const filter = leaves[at];
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
   const before = leaves[at - 1];
   // A filter with a membership names models of a unit, so a target or attack before it does not make it the target.
-  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter");
+  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1)));
   return !anchored || filter.parameters.member_of !== undefined;
+}
+
+/**
+ * A unit-filter a condition before it names as its following filter ("If a friendly X model is your
+ * Warlord": the condition's units, which the later effects' units do not share).
+ */
+export function gateFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+  const filter = leaves[index];
+  const condition = leaves[index - 1];
+  return filter?.family_id === "unit-filter" && condition !== undefined && condition.role === "CONDITION"
+    && condition.fragment === filter.fragment && awaitsFollowingFilter(condition.parameters);
 }
 
 /**
@@ -413,7 +426,7 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     // affected units of a Bondsman): "it" in "While a model is affected by this ability, it is eligible to
     // declare a charge in a turn in which it Advanced" means one of those units, not this unit. Falling back
     // to this unit would test the wrong unit, so refuse.
-    if (introduced === null && leaf.role !== "DURATION" && leaves.slice(0, index).some((other) => other.family_id === "unit-filter" && other.parameters.designated !== undefined)) {
+    if (introduced === null && leaf.role !== "DURATION" && leaves.slice(0, index).some((other, at) => other.family_id === "unit-filter" && other.parameters.designated !== undefined && !gateFilter(leaves, at))) {
       throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a unit (${ANTECEDENT}), but the only unit it can mean is the one a designated unit-filter before it names, and no leaf binds it to that.`);
     }
     // A weapon-ability range names the units an earlier unit-filter or selection introduced. Without one,

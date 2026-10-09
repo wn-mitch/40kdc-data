@@ -25403,5 +25403,64 @@
     "expected": {
       "text": "If during deployment, the unit can be set up on the battlefield more than 8\" away from your opponent's deployment zone more than 8\" away from all enemy models."
     }
+  },
+  {
+    "caseId": "warlord-designation-this-model",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "designated",
+        "parameters": {
+          "subject": "this-model",
+          "tag": "warlord"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While this model is the Warlord, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "warlord-designation-target-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "warlord"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While the target unit is not the Warlord, the unit gets +1 to Hit rolls."
+    }
   }
 ]

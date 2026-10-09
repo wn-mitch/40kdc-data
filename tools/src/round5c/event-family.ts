@@ -2,7 +2,7 @@ import type { SemanticFamilyDefinition } from "./contracts.js";
 import { enumSet, enumValue, enumOrSource, enumOrSourceSchema, exactKeys } from "./family-validation.js";
 import { ROLL_KINDS } from "./dice-families.js";
 import { MOVE_TYPES } from "./movement-families.js";
-import { DESIGNATION_IDS } from "../translate/designations.js";
+import { DESIGNATION_IDS, refuseListBuildingTag } from "../translate/designations.js";
 
 /**
  * The `event` EVENT family (versions 1-7), split out of `core-families.ts` (batch 6) once
@@ -338,6 +338,7 @@ export function normalizeEventParameters(family: string, input: Record<string, u
     exactKeys(input, ["kind", "tag"], family);
     const tag = String(input.tag ?? "");
     if (!DESIGNATION_IDS.has(tag) && !/^[A-Z][A-Z0-9' -]*[A-Z0-9]$/u.test(tag)) throw new TypeError("event.tag must be a registered designation id.");
+    refuseListBuildingTag(tag, "event.tag");
     return { kind, tag };
   }
   if ((BEFORE_ROLL_KINDS as readonly string[]).includes(kind) || (AFTER_ROLL_KINDS as readonly string[]).includes(kind)) {

@@ -197,7 +197,9 @@ export function resolveArmyGroups(leaves: readonly CompileLeaf[]): CompileLeaf[]
 /** A group must name units of your army, by what they are rather than where they are. */
 function musterFilter(filter: Node, leaf: CompileLeaf): Node {
   if (filter.owner !== undefined && filter.owner !== "friendly") throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} names ${String(filter.owner)} units; a list-building group is units of your army.`);
-  const stray = Object.keys(filter).filter((key) => !MUSTER_FILTER_KEYS.has(key));
+  // "designated": only the Warlord, the model chosen at mustering. Any other designation is battle-time state.
+  if (filter.designated !== undefined && filter.designated !== "warlord") throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} names a designation, which is not known when mustering an army.`);
+  const stray = Object.keys(filter).filter((key) => !MUSTER_FILTER_KEYS.has(key) && !(key === "designated" && filter.designated === "warlord"));
   if (stray.length) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} qualifies its group by ${stray.join(", ")}, which means nothing when mustering an army.`);
   return filter;
 }

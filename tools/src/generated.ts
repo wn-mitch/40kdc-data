@@ -263,7 +263,7 @@ export type UnitRef =
  */
 export type HistoryWindow = "phase" | "turn" | "round" | "battle" | "previous-turn" | "event";
 /**
- * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.
+ * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "designation-id".
@@ -1066,7 +1066,7 @@ export interface UnitFilter {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
@@ -1239,7 +1239,7 @@ export interface UnitFilter1 {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
@@ -1412,7 +1412,7 @@ export interface UnitFilter2 {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
@@ -5746,7 +5746,7 @@ export interface UnitFilter3 {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
@@ -5919,7 +5919,7 @@ export interface UnitFilter4 {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
@@ -6092,7 +6092,7 @@ export interface UnitFilter5 {
    */
   any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;

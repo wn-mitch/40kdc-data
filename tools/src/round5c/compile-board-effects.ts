@@ -4,6 +4,7 @@
  * for any family it does not handle itself.
  */
 
+import { LIST_BUILDING_DESIGNATIONS } from "../translate/designations.js";
 import { armyRuleEffect } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
@@ -117,6 +118,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     }
     case "apply-mark": {
       const modifier: Node = { tag: closed(leaf, "tag") };
+      if (LIST_BUILDING_DESIGNATIONS.has(String(modifier.tag))) throw new CompileError("A list-building designation (the Warlord) cannot be applied by a rule.");
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
       // apply-mark@4: who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
       if (leaf.parameters.by !== undefined) modifier.by = closed(leaf, "by");

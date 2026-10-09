@@ -140,6 +140,8 @@ const DESIGNATED_SUBJECTS = new Set(["this-model", "model-in-this-unit", "attack
 export function bindDesignationSubjects(leaves: readonly CompileLeaf[]): CompileLeaf[] {
   return leaves.map((leaf, index) => {
     if (leaf.family_id !== "designated-filter" || leaf.parameters.subject !== undefined) return leaf;
+    // "If a model is your Warlord": the Warlord is named by its list-building designation, never by the next effect.
+    if (leaf.parameters.tag === "warlord") return leaf;
     if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) return leaf;
     const after = leaves.slice(index + 1);
     const effect = after.find((other) => other.role === "EFFECT");
@@ -534,6 +536,9 @@ export function condition(leaf: CompileLeaf): Node {
     }
     case "designated-filter": {
       const parameters: Node = { tag: closed(leaf, "tag") };
+      // The Warlord is one model: a count of Warlords has no meaning.
+      if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
+      if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");
       if (leaf.parameters.by !== undefined) parameters.by = closed(leaf, "by");
       if (leaf.parameters.count_min !== undefined) parameters.count_min = closed(leaf, "count_min");
       if (leaf.parameters.count_max !== undefined) parameters.count_max = closed(leaf, "count_max");

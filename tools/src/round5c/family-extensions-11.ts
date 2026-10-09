@@ -1,7 +1,7 @@
 import { ANTECEDENT } from "./antecedent-families.js";
 import { activitiesExtension, type FamilyExtension, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 import { enumValue, sourceQualifiedSchema } from "./family-validation.js";
-import { DESIGNATION_IDS } from "../translate/designations.js";
+import { DESIGNATION_IDS, refuseListBuildingTag } from "../translate/designations.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { ABILITY_ACTIVATE_OPTIONS, CHOSEN_OPTION_HOLDER_ANTECEDENT, STANCE_CAPACITY_SHARED_OPTIONS, STANCE_SELECT_ADDITIVE } from "./activation-families.js";
 
@@ -307,6 +307,7 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
       if (rest.kind !== "objective-range") throw new TypeError("unit-position.objective qualifies an objective-range.");
       if ((value === "designated") !== (tag !== undefined)) throw new TypeError("unit-position.objective_tag names the designation of a designated objective, and only then.");
       if (tag !== undefined && !DESIGNATION_IDS.has(String(tag))) throw new TypeError(`unit-position.objective_tag ${JSON.stringify(tag)} is not a registered designation.`);
+      if (tag !== undefined) refuseListBuildingTag(String(tag), "unit-position.objective_tag");
       const normalized = previous(rest);
       return value === "any" ? normalized : { ...normalized, objective: value, ...(tag !== undefined ? { objective_tag: tag } : {}) };
     },
@@ -382,6 +383,7 @@ export const FAMILY_EXTENSIONS_11: readonly FamilyExtension[] = [
     normalize: (input, previous) => {
       if (typeof input.tag !== "string") return previous(input);
       if (!DESIGNATION_IDS.has(input.tag)) throw new TypeError(`apply-mark.tag ${JSON.stringify(input.tag)} is not a registered designation.`);
+      refuseListBuildingTag(input.tag, "apply-mark.tag");
       return { ...previous({ ...input, tag: "designated" }), tag: input.tag };
     },
   },

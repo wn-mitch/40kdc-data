@@ -145,6 +145,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "vendetta-target",
         "vengeful-dead",
         "victim",
+        "warlord",
         "whispering-web",
         "wholly-within-flow-of-magic",
         "winning-the-wager",
@@ -193,7 +194,12 @@ _DESIGNATION_TERMS: dict[str, dict[str, str]] = {
     "slayers-oath": {"noun": "Slayer's Oath"},
     "vendetta-target": {"noun": "Vendetta target"},
     "victim": {"noun": "victim"},
+    # The list-building designation: the model chosen as Warlord when mustering.
+    "warlord": {"adjective": "the Warlord"},
 }
+
+#: Designations only list building sets (the model chosen as Warlord): a rule may test them, never apply them.
+LIST_BUILDING_DESIGNATIONS: frozenset[str] = frozenset({"warlord"})
 
 
 def designation_label(id_: str, plural: bool = False) -> str | None:

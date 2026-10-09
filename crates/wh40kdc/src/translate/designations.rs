@@ -136,6 +136,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "vendetta-target",
     "vengeful-dead",
     "victim",
+    "warlord",
     "whispering-web",
     "wholly-within-flow-of-magic",
     "winning-the-wager",
@@ -148,6 +149,14 @@ pub const DESIGNATION_IDS: &[&str] = &[
 /// Whether `id` is a registered designation.
 pub fn is_designation_id(id: &str) -> bool {
     DESIGNATION_IDS.binary_search(&id).is_ok()
+}
+
+/// Designations only list building sets (the model chosen as Warlord); a rule may test them, never apply them.
+pub const LIST_BUILDING_DESIGNATIONS: &[&str] = &["warlord"];
+
+/// Whether `id` is a list-building designation.
+pub fn is_list_building_designation(id: &str) -> bool {
+    LIST_BUILDING_DESIGNATIONS.contains(&id)
 }
 
 /// The printed term for a registered id after "is"/"are" ("Spotted", "an Observer" /
@@ -190,6 +199,7 @@ pub fn designation_label(id: &str, plural: bool) -> Option<String> {
         "slayers-oath" => (None, Some("Slayer's Oath")),
         "vendetta-target" => (None, Some("Vendetta target")),
         "victim" => (None, Some("victim")),
+        "warlord" => (Some("the Warlord"), None),
         _ => return None,
     };
     if let Some(a) = adjective {
@@ -249,6 +259,13 @@ mod tests {
             Some("riled up")
         );
         assert_eq!(designation_label("hunted", false), None);
+        // The Warlord is the list-building designation: a definite noun, singular in every form.
+        assert!(is_designation_id("warlord") && is_list_building_designation("warlord"));
+        assert_eq!(
+            designation_label("warlord", false).as_deref(),
+            Some("the Warlord")
+        );
+        assert!(!is_list_building_designation("spotted"));
         assert_eq!(designation_id(" RILED  UP "), "riled-up");
         assert_eq!(designation_id("Oath_of Moment"), "oath-of-moment");
     }
