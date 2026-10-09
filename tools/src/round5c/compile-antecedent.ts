@@ -80,7 +80,10 @@ function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
   const before = leaves[at - 1];
   // A filter with a membership names models of a unit, so a target or attack before it does not make it the target.
-  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1)));
+  // "If your army includes a X unit, friendly Y units …": the filter before this one is the army-includes
+  // condition's own following filter, so this filter still stands alone.
+  const conditionsFilter = before?.family_id === "unit-filter" && leaves[at - 2]?.family_id === "army-includes" && leaves[at - 2]!.fragment === leaf.fragment;
+  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter));
   return !anchored || filter.parameters.member_of !== undefined;
 }
 

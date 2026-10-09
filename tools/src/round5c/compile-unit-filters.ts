@@ -245,6 +245,10 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
       while (list[next]?.family_id === "unit-owner" && list[next]!.fragment === leaf.fragment) between.push(list[next++]!);
       const candidate = list[next];
       if (!isFilter(candidate) || candidate!.fragment !== leaf.fragment) break;
+      // "If your army includes a X unit, friendly Y units …": a condition that awaits its following filter
+      // takes the first filter alone; the filter after it is the effect's own, not a narrowing of X.
+      const awaiting = out.at(-1);
+      if (last === leaf && awaiting !== undefined && awaiting.fragment === leaf.fragment && awaitsFollowingFilter(awaiting.parameters)) break;
       const joiner = between.length === 0 ? joinerBetween(sourceText, last, candidate!) : null;
       if (joiner !== null && ALTERNATIVE_JOINERS.has(joiner)) {
         sawOr ||= joiner.includes("or");

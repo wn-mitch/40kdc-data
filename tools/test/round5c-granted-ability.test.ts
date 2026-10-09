@@ -372,3 +372,85 @@ describe("ability-grant definition in the DSL", () => {
     expect(validate(rally.mechanics.effect)).toBe(true);
   });
 });
+
+describe("Round 5C printed grants: a record's grant to other units and refusals that name it", () => {
+  const SELF_TEXT = "Friendly GLOOM WARDENS units with this ability have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nFriendly MONSTER units benefit from the Shade Ward rule.";
+  const selfLeaves = (): CompileLeaf[] => placed(SELF_TEXT, WARDENS, ["with this ability", "unit-has-ability", { subject: "antecedent", own: true }], header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+    ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+    ["Friendly MONSTER units", "unit-filter", { side: "friendly", keywords: ["MONSTER"] }],
+    ["benefit from the Shade Ward rule", "ability-record-grant", { subject: "antecedent", ability: "shade-ward" }]);
+
+  it("gives the units a record grants to its own bodies, not the bare record id", () => {
+    const result = compileLeaves(selfLeaves(), SELF_TEXT, { abilityId: "shade-ward" });
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = JSON.stringify(result.mechanics.effect);
+    expect(effect).toContain('"target":{"owner":"friendly","all_of":["MONSTER"]}');
+    expect(effect).toContain('"definition":{"type":"ability-part","name":"Shade Ward"');
+    expect(effect).not.toContain('"modifier":{"ability":"shade-ward"}');
+  });
+
+  it("keeps a grant of another record as a plain record grant", () => {
+    const result = compileLeaves(selfLeaves(), SELF_TEXT);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"modifier":{"ability":"shade-ward"}');
+  });
+
+  it("names the record in a body refusal when the record id is known", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** Sergeant model only. This unit has a 5+ invulnerable save.";
+    const list = placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+      ["Sergeant model only", "bearer-eligibility", { keywords: ["SERGEANT"], match: "all", excluded_keywords: [] }],
+      ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]);
+    const named = compileLeaves(list, text, { abilityId: "shade-ward" });
+    expect(named.ok).toBe(false);
+    expect(named.ok ? "" : named.errors[0]).toMatch(/^Shade Ward in shade-ward: a granted ability cannot hold/u);
+    expect(errorsOf(list, text)[0]).toMatch(/^Shade Ward: a granted ability cannot hold/u);
+  });
+});
+
+describe("Round 5C army condition with a following filter before a granted body", () => {
+  // The army condition's filter and the printed grant's filter are two units, not one stacked filter.
+  const TEXT = "If your army includes a Vulkan unit, friendly Infernus units have the following:this unit has a 5+ invulnerable save.";
+  const leaves = (): CompileLeaf[] => placed(TEXT,
+    ["If your army includes", "army-includes", { quantifier: "some", with: "following-filter" }],
+    ["a Vulkan unit", "unit-filter", { side: "friendly", keywords: ["VULKAN"] }],
+    ["friendly Infernus units", "unit-filter", { side: "friendly", keywords: ["INFERNUS"] }],
+    ["have the following:", "ability-record-grant", { subject: "antecedent", printed: "unnamed" }],
+    ["this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]);
+
+  it("keeps the condition's filter and the granted units' filter apart", () => {
+    const result = compiled(leaves(), TEXT);
+    const effect = JSON.stringify(result.mechanics.effect);
+    expect(effect).toContain('"condition":{"type":"army-includes","parameters":{"filter":{"owner":"friendly","all_of":["VULKAN"]}}}');
+    expect(effect).toContain('"target":{"owner":"friendly","all_of":["INFERNUS"]}');
+    expect(effect).not.toContain("INFERNUS\",\"VULKAN");
+  });
+});
+
+describe("Round 5C printed grants: a units-only section narrows its body's holders", () => {
+  const TEXT = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** GLOOM HOUND units only: This unit has a 5+ invulnerable save.";
+  const body = (filter: Item): CompileLeaf[] => placed(TEXT, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+    filter, ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }]);
+
+  it("grants the body to the header's units that also have the section's keywords", () => {
+    const result = compiled(body(["GLOOM HOUND units only", "unit-filter", { side: "friendly", keywords: ["GLOOM HOUND"] }]), TEXT);
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"target":{"owner":"friendly","all_of":["GLOOM WARDENS","GLOOM HOUND"]}');
+  });
+
+  it("refuses a units-only section that names more than keywords", () => {
+    const errors = errorsOf(body(["GLOOM HOUND units only", "unit-filter", { side: "friendly", keywords: ["GLOOM HOUND"], any_keywords: ["MONSTER", "VEHICLE"] }]), TEXT);
+    expect(errors[0]).toMatch(/narrows by keywords alone/u);
+  });
+});
+
+describe("Round 5C printed grants: a self-grant gives only the own-ability bodies", () => {
+  it("keeps a grant to other units plain when the header is not the record's own ability", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nFriendly MONSTER units benefit from the Shade Ward rule.";
+    const list = placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+      ["This unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+      ["Friendly MONSTER units", "unit-filter", { side: "friendly", keywords: ["MONSTER"] }],
+      ["benefit from the Shade Ward rule", "ability-record-grant", { subject: "antecedent", ability: "shade-ward" }]);
+    const result = compileLeaves(list, text, { abilityId: "shade-ward" });
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain('"modifier":{"ability":"shade-ward"}');
+  });
+});

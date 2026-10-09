@@ -2,6 +2,7 @@ import { slug } from "../pack-blocks.js";
 import type { Compiled } from "./compile.js";
 import type { CoreCheck } from "./core-checks.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { dslUnitFilter } from "./compile-unit-filters.js";
 import { ordered, shapeSignature } from "./compile-placement.js";
 import { GRANTED_ABILITY_NAME } from "./family-extensions-w8-granted.js";
 
@@ -18,14 +19,18 @@ import { GRANTED_ABILITY_NAME } from "./family-extensions-w8-granted.js";
  * paragraph ends at a line break, except that it continues onto the next line when it ends with
  * ":" (ignoring bold markers and spacing) or the next line opens with "■". A body's paragraph also
  * continues over a directly following line that opens with "Or:", so that line's leaves belong to
- * the body. Leaves after the last body go back to the host.
+ * the body. Leaves after the last body go back to the host. A body that opens with a keyword-only
+ * "units only" filter narrows the header's holders to those units (`leadingNarrowing`).
  */
 
 type Node = Record<string, unknown>;
 type Compile = (leaves: readonly CompileLeaf[], sourceText?: string) => Compiled;
 
-/** One compiled body as the header carries it: the granted ability's id (from its label) and its part. */
-export type GrantedBody = { ability?: string; part: Node };
+/**
+ * One compiled body as the header carries it: the granted ability's id (from its label), its part,
+ * and the keyword filter a leading "… units only" narrows its holders by (`narrow`), if any.
+ */
+export type GrantedBody = { ability?: string; part: Node; narrow?: Node };
 
 const SELF_HOLDERS = new Set(["this-unit", "this-model"]);
 const BEHAVIOR_RANK = ["passive", "activated", "reactive", "aura"];
@@ -61,6 +66,30 @@ function orEnd(spans: ReadonlyArray<[number, number]>, bytes: Buffer, end: numbe
   const next = spans.find(([from]) => from === end + 1);
   if (!next) return end;
   return /^[\s*]*Or:/u.test(bytes.subarray(next[0], next[1]).toString("utf8")) ? next[1] : end;
+}
+
+/**
+ * A body whose wording opens with a keyword-only unit-filter followed by "units only" ("SHADOW LEGION
+ * units only: …") holds only the header's units that also have those keywords. Returns that filter as
+ * DSL and the body's leaves after it. Any other leading filter stays part of the body.
+ */
+function leadingNarrowing(leaves: readonly CompileLeaf[], sourceText: string | undefined): { narrow: Node; rest: CompileLeaf[] } | undefined {
+  const [first, ...rest] = leaves;
+  if (first?.family_id !== "unit-filter" || sourceText === undefined) return undefined;
+  const after = Buffer.from(sourceText, "utf8").subarray(first.start_byte, (first.end_byte ?? first.start_byte) + 16).toString("utf8");
+  if (!/units only/iu.test(after)) return undefined;
+  const set = Object.entries(first.parameters).filter(([, value]) => value !== undefined).map(([key]) => key);
+  if (!set.every((key) => key === "side" || key === "keywords") || !Array.isArray(first.parameters.keywords)) {
+    throw new CompileError(`A "units only" section at byte ${first.start_byte} narrows by keywords alone; this filter names more.`);
+  }
+  return { narrow: dslUnitFilter(first), rest };
+}
+
+/** The header's target with the body's keywords added: the units that hold both. */
+function narrowTarget(target: Node | string, narrow: Node): Node {
+  if (typeof target === "string" || narrow.owner !== target.owner) throw new CompileError("A units-only section needs a unit-filter header with the same owner.");
+  const extra = Array.isArray(narrow.all_of) ? narrow.all_of as string[] : [];
+  return { ...target, all_of: [...new Set([...(Array.isArray(target.all_of) ? target.all_of as string[] : []), ...extra])] };
 }
 
 /**
@@ -145,7 +174,7 @@ function splitBodies(list: readonly CompileLeaf[], sourceText: string | undefine
  * A self-held grant ("this model has the following ability") that is the record's only effect is
  * the record itself: the record compiles without the header, as that ability.
  */
-export function compileGranted(leaves: readonly CompileLeaf[], sourceText: string | undefined, compileHost: Compile, compileBody: Compile): Compiled {
+export function compileGranted(leaves: readonly CompileLeaf[], sourceText: string | undefined, compileHost: Compile, compileBody: Compile, abilityId?: string): Compiled {
   const list = ordered(leaves);
   const signature = shapeSignature(list, sourceText);
   let fold: Fold;
@@ -166,22 +195,43 @@ export function compileGranted(leaves: readonly CompileLeaf[], sourceText: strin
   const behaviors: string[] = [];
   const bodyChecks: CoreCheck[] = [];
   const errors: string[] = [];
-  for (const body of fold.bodies) {
-    const name = body.label ?? "The unnamed granted ability";
-    const compiled = compileBody(body.leaves, sourceText);
+  // A grant of this record to other units ("benefit from the <record> rule") gives them the record's
+  // own-ability bodies (ownHeader): those bodies compile first, and a self-grant leaf in any body or the
+  // host lowers to one ability-grant per own body on its own target.
+  const isSelfGrant = (leaf: CompileLeaf) => leaf.family_id === "ability-record-grant" && leaf.parameters.printed === undefined
+    && abilityId !== undefined && leaf.parameters.ability === abilityId;
+  let ownGranted: GrantedBody[] = [];
+  const withSelfGrant = (leaves: CompileLeaf[]) => ownGranted.length === 0 ? leaves
+    : leaves.map((leaf) => isSelfGrant(leaf) ? { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted } } : leaf);
+  const compileBodies = (bodies: Fold["bodies"]) => {
+  for (const body of bodies) {
+    const name = abilityId ? `${body.label ?? "The unnamed granted ability"} in ${abilityId}` : body.label ?? "The unnamed granted ability";
+    const lead = leadingNarrowing(body.leaves, sourceText);
+    if (lead && selfHeld(body.header)) { errors.push(`${name}: a units-only section cannot narrow a self-held ability.`); continue; }
+    const compiled = compileBody(withSelfGrant(lead ? lead.rest : body.leaves), sourceText);
     if (!compiled.ok) { errors.push(...compiled.errors.map((error) => `${name}: ${error}`)); continue; }
     const refused = compiled.core || compiled.checks.some((check) => !ownStratagemCheck(check, compiled.mechanics.trigger));
     if (refused) { errors.push(`${name}: a granted ability cannot hold a Stratagem target or a bearer restriction.`); continue; }
     bodyChecks.push(...compiled.checks);
     if (selfHeld(body.header) && compiled.mechanics.behavior) behaviors.push(compiled.mechanics.behavior);
     const list = granted.get(body.header) ?? [];
-    list.push({ ...(body.label ? { ability: slug(body.label) } : {}), part: bodyPart(body.label, compiled) });
+    list.push({ ...(body.label ? { ability: slug(body.label) } : {}), part: bodyPart(body.label, compiled), ...(lead ? { narrow: lead.narrow } : {}) });
     granted.set(body.header, list);
   }
+  };
+  const ownHeader = (header: CompileLeaf) => {
+    const before = list[list.indexOf(header) - 1];
+    return before?.family_id === "unit-has-ability" && before.fragment === header.fragment && before.parameters.own === true;
+  };
+  compileBodies(fold.bodies.filter((body) => ownHeader(body.header)));
+  ownGranted = [...granted.values()].flat();
+  compileBodies(fold.bodies.filter((body) => !ownHeader(body.header)));
   if (errors.length) return { ok: false, signature, errors };
-  const host = fold.host.map((leaf) => granted.has(leaf)
-    ? { ...leaf, parameters: { ...leaf.parameters, granted: granted.get(leaf), ...(selfHeld(leaf) ? { granted_self: true } : {}) } }
-    : leaf);
+  const host = fold.host.map((leaf) => {
+    if (granted.has(leaf)) return { ...leaf, parameters: { ...leaf.parameters, granted: granted.get(leaf), ...(selfHeld(leaf) ? { granted_self: true } : {}) } };
+    if (isSelfGrant(leaf) && ownGranted.length) return { ...leaf, parameters: { ...leaf.parameters, granted: ownGranted } };
+    return leaf;
+  });
   const result = compileHost(host, sourceText);
   if (!result.ok) return { ...result, signature };
   // A self-held ability is part of the record's own: the record reads as its liveliest part.
@@ -199,6 +249,6 @@ export function printedGrantEffect(leaf: CompileLeaf, target: Node | string): No
   if (!granted?.length) throw new CompileError(`ability-record-grant at byte ${leaf.start_byte} prints its abilities, but no body was folded onto it.`);
   const nodes = granted.map((body) => leaf.parameters.granted_self === true
     ? structuredClone(body.part)
-    : { type: "ability-grant", target: structuredClone(target), modifier: { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } });
+    : { type: "ability-grant", target: structuredClone(body.narrow ? narrowTarget(target, body.narrow) : target), modifier: { ...(body.ability ? { ability: body.ability } : {}), definition: structuredClone(body.part) } });
   return nodes.length === 1 ? nodes[0]! : { type: "sequence", steps: nodes };
 }

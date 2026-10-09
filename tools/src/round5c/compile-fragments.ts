@@ -294,7 +294,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "ability-grant", target: target(leaf.parameters.subject), modifier: { ability: closed(leaf, "ability"), ...(value !== undefined ? { value } : {}) } };
     }
     case "ability-record-grant": {
-      if (leaf.parameters.printed !== undefined) return printedGrantEffect(leaf, target(leaf.parameters.subject));
+      if (leaf.parameters.printed !== undefined || leaf.parameters.granted !== undefined) return printedGrantEffect(leaf, target(leaf.parameters.subject));
       const value = leaf.parameters.value;
       const rulesBundle = leaf.parameters.rules_bundle;
       return {

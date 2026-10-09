@@ -220,7 +220,7 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   }
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
-  const compiled = compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text));
+  const compiled = compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text), options.abilityId);
   if (compiled.ok && gatesTriggerOnWarlord(compiled.mechanics)) {
     return { ok: false, signature: compiled.signature, errors: ["A Warlord gate on an army list covers a trigger-based ability; the trigger sentence is a separate rule and this record cannot be split here."] };
   }
