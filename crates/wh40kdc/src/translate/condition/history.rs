@@ -271,6 +271,11 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 }
                 return format!("{neg}destroyed by any attack");
             }
+            // "this model": the destroyed model is this one, not any model of the unit.
+            if is(p, "object", "this-model") {
+                let s = if negated { "this model was not destroyed" } else { "this model was destroyed" };
+                return with_window(s, window);
+            }
             let o = obj(p.get("object"));
             let kws = strs(o.get("all_of"))
                 .map(|k| format!("{} ", k.join(" ")))

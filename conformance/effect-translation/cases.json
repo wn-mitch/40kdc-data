@@ -24810,5 +24810,33 @@
     "expected": {
       "text": "The unit must end its move where the unit is engaged, during its Advance moves."
     }
+  },
+  {
+    "caseId": "delayed-destruction-phase-end-this-model",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count_min": 1
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    },
+    "expected": {
+      "text": "At the end of each phase, if this model was destroyed this phase, the first time this battle per model, nothing happens."
+    }
   }
 ]

@@ -173,6 +173,9 @@ def _describe_happened(p: P, negated: bool) -> str:
                 )
                 return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
             return f"{neg}destroyed by any attack"
+        # "this model": the destroyed model is this one, not any model of the unit.
+        if p.get("object") == "this-model":
+            return _with_window("this model was not destroyed" if negated else "this model was destroyed", window)
         victim = _obj(p.get("object"))
         kws = (
             f"{' '.join(_str(k) for k in victim['all_of'])} "

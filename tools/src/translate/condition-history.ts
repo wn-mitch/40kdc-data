@@ -76,6 +76,8 @@ export function describeHappened(p: P, negated: boolean): string {
       if (p.object === "event-object" && p.window === "event") {
         return f.attack_type ? `${neg}destroyed by a ${str(f.attack_type)} attack${f.weapon_name ? ` made with ${str(f.weapon_name)}` : ""}` : `${neg}destroyed by any attack`;
       }
+      // "this model": the destroyed model is this one, not any model of the unit.
+      if (p.object === "this-model") return withWindow(negated ? "this model was not destroyed" : "this model was destroyed", p.window);
       const obj = (typeof p.object === "object" && p.object ? p.object : {}) as P;
       const kws = Array.isArray(obj.all_of) ? `${(obj.all_of as unknown[]).map(str).join(" ")} ` : "";
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";

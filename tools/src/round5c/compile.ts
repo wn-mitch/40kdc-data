@@ -35,6 +35,7 @@ import { foldModelState } from "./compile-model-state.js";
 import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
+import { planDelayedDestruction } from "./compile-delayed-destruction.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
@@ -486,10 +487,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   });
   if (list.every((leaf) => leaf.role !== "EFFECT")) errors.push("There is no effect leaf to compile.");
 
-  // "Can make an ingress move in your next Movement phase": the set-up before it returns then.
+  // "Can make an ingress move in your next Movement phase": the set-up before it returns then. A set-up
+  // earlier in the same sentence wins; failing that, the first set-up after it in its sentence (1339's
+  // "Remove your unit from the battlefield" is a different sentence from its battlefield set-up).
   for (const [index, leaf] of list.entries()) {
     if (leaf.family_id !== "reserves-arrival") continue;
-    const setUp = planned.filter((item) => item.index < index && item.node.type === "set-up").at(-1);
+    const sentence = places[index]!.sentence;
+    const setUps = planned.filter((item) => item.node.type === "set-up");
+    const setUp = setUps.filter((item) => item.index < index && places[item.index]!.sentence === sentence).at(-1)
+      ?? setUps.find((item) => item.index > index && places[item.index]!.sentence === sentence)
+      ?? setUps.filter((item) => item.index < index).at(-1);
     if (!setUp) { errors.push("A reserves arrival has no set-up before it."); continue; }
     const modifier = setUp.node.modifier as Node;
     modifier.arrives = "next-movement-phase";
@@ -593,6 +600,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (last && !planned.some((item) => item.index > last.index && item.index < index)) last.moments.push(position);
     else partStarts.push({ index, moments: [position] });
   });
+  // "The first time this model is destroyed, at the end of the phase": one moment (compile-delayed-destruction.ts).
+  const delayed = planDelayedDestruction(list, triggerIndexes, partStarts, sourceText);
+  errors.push(...delayed.errors);
+  for (const [position, lowering] of delayed.lowered) triggers[position] = { ...lowering.trigger, condition: lowering.condition };
   if (partStarts.some((part) => !alternativeMoments(part.moments.map((position) => list[triggerIndexes[position]!]!), sourceText))) {
     errors.push("A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.");
   }
@@ -761,7 +772,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     return moment;
   });
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
-  const leading = moments.filter((_, position) => !partStarts.some((part) => part.moments.includes(position)));
+  const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
   let entryTrigger = asTrigger(leading);
   if (partStarts.length) {
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.

@@ -219,6 +219,13 @@ func describeHappened(p map[string]any, negated bool) string {
 			}
 			return neg + "destroyed by any attack"
 		}
+		// "this model": the destroyed model is this one, not any model of the unit.
+		if p["object"] == "this-model" {
+			if negated {
+				return withWindow("this model was not destroyed", p["window"])
+			}
+			return withWindow("this model was destroyed", p["window"])
+		}
 		obj := map[string]any{}
 		if m, ok := asMap(p["object"]); ok && m != nil {
 			obj = m
