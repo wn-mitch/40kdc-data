@@ -248,7 +248,9 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
 function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
   // Read before the placement limits fold into their set-up: a destroyed moment names its object for them.
-  const placesFromEventObject = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.of === "event-object");
+  // Only a limit on a set-up or an added unit places units; a "within N of that unit" condition does not.
+  const placesFromEventObject = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.of === "event-object")
+    && leaves.some((leaf) => leaf.family_id === "set-up" || leaf.family_id === "add-unit");
   let list: CompileLeaf[];
   try {
     refuseBlastRating(leaves, sourceText);

@@ -25339,5 +25339,69 @@
     "expected": {
       "text": "All friendly TACTICUS units' attacks benefit from [RAPID FIRE] when the target is within the weapon's range."
     }
+  },
+  {
+    "caseId": "set-up-restriction-ingress-limits#0",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "mandatory": true,
+        "ignore_limits": true,
+        "near": [
+          {
+            "of": "this-unit",
+            "range": {
+              "inches": 6
+            },
+            "wholly": true
+          }
+        ],
+        "placement": "unengaged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must be set up on the battlefield not within Engagement Range of any enemy units wholly within 6\" of the unit, ignoring the usual set-up limits."
+    }
+  },
+  {
+    "caseId": "set-up-restriction-deployment-window#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "deployment-window",
+        "parameters": {
+          "during": "deployment"
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "battlefield",
+          "min_enemy_distance": 8,
+          "away_from": [
+            {
+              "of": {
+                "territory": "enemy-deployment-zone"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If during deployment, the unit can be set up on the battlefield more than 8\" away from your opponent's deployment zone more than 8\" away from all enemy models."
+    }
   }
 ]

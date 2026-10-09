@@ -148,6 +148,17 @@ describe("Wave 10 placement after a set-up (SS1, SS2)", () => {
     expect(mechanics.trigger).toEqual({ event: "destroyed" });
   });
 
+  it("keeps a destroyed trigger as it was when the destroyed unit is only a condition, with no set-up (regression 4483)", () => {
+    // Fabricated wording: a condition on the destroyed unit's position, and no placement. The trigger must not gain an object.
+    const text = "When a unit is destroyed, select one friendly unit that was within 6\" of that destroyed unit when it was destroyed. That unit is Afflicted.";
+    const mechanics = mechanicsOf(text,
+      ["When a unit is destroyed", "event", { kind: "unit-destroyed" }],
+      ["select one friendly unit", "unit-filter", { side: "friendly", keywords: ["GRUNT"] }],
+      ["that was within 6\" of that destroyed unit", "unit-position", { kind: "within", inches: 6, of: "event-object", subject: "antecedent", negated: false }],
+      ["That unit is Afflicted", "apply-mark", { subject: "antecedent", tag: "afflicted" }]);
+    expect(mechanics.trigger).toEqual({ event: "destroyed" });
+  });
+
   it("makes an ingress set-up ignore the usual limits and place within a distance of its unit, unengaged (SS2)", () => {
     const text = "While making that ingress move, that unit must be set up wholly within 6\" of this unit and unengaged, even if that is within your opponent's deployment zone.";
     const mechanics = mechanicsOf(text,
