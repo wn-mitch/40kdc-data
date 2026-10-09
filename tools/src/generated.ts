@@ -3224,6 +3224,10 @@ export interface Scaling {
    * Kebab-case identifier
    */
   wargear?: string;
+  /**
+   * When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+   */
+  evaluated?: "live" | "on-apply";
 }
 /**
  * [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).

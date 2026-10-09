@@ -140,7 +140,13 @@ def usage_clause(u: Any) -> str:
 
 
 def _scaling_clause(s: dict[str, Any]) -> str:
-    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\"")."""
+    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\""), with a timing note when on apply."""
+    clause = _scaling_wording(s)
+    return f"{clause} (counted when the rule applies)" if s.get("evaluated") == "on-apply" else clause
+
+
+def _scaling_wording(s: dict[str, Any]) -> str:
+    """The scaling clause without its timing note."""
     cap = f" (to a maximum of {jstr(s['max_value'])})" if s.get("max_value") is not None else ""
     if s.get("of") == "battle-round":
         return f"multiplied by the battle round number{cap}"

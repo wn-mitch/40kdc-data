@@ -6880,6 +6880,15 @@
         "wargear": {
           "$ref": "#/$defs/entity-id",
           "description": "models-equipped-with: the wargear counted."
+        },
+        "evaluated": {
+          "type": "string",
+          "enum": [
+            "live",
+            "on-apply"
+          ],
+          "default": "live",
+          "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts)."
         }
       },
       "required": [

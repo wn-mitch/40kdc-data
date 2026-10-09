@@ -25726,5 +25726,29 @@
     "expected": {
       "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, you gain 1 Blood Tithe point."
     }
+  },
+  {
+    "caseId": "scaling-on-apply-enemy-models-in-range#0",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1
+      },
+      "scaling": {
+        "per": 5,
+        "of": "enemy-models-in-range",
+        "within_inches": 6,
+        "evaluated": "on-apply"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to the unit's Attacks characteristic for every 5 enemy models within 6\" (counted when the rule applies)."
+    }
   }
 ]

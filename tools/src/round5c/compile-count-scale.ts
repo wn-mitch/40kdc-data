@@ -207,6 +207,7 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
     if (leaf.family_id !== "count-scale") return;
     if (list[index - 1]?.family_id === "for-each-unit-select") throw new CompileError("A count-scale and a for-each-unit-select cannot share one unit-filter.");
     if (leaf.parameters.counts === "following-items") {
+      if (leaf.parameters.timing === "on-apply") throw new CompileError("An on-apply count takes a fixed set once; following-items counts one item at a time.");
       const at = scaledEffect(list, sentences, index, index + 1);
       if (list[at]!.parameters.scaling !== undefined || list[at]!.parameters.per_item !== undefined) throw new CompileError("An effect is scaled by two counts.");
       onePerItem(list[at]!);
@@ -217,6 +218,8 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
     const group = countedGroup(list, index);
     if (!group) throw new CompileError("A count-scale (\"for each\") needs the unit-filter it counts right after it, in its fragment.");
     if (list[group.end]?.family_id === "for-each-unit-select") throw new CompileError("A count-scale and a for-each-unit-select cannot share one unit-filter.");
+    const onApply = leaf.parameters.timing === "on-apply";
+    if (onApply) refuseLaterEventCount(list, group);
     const scaling: Record<string, unknown> = { per: leaf.parameters.per, ...scalingSource(list, group) };
     // A cap belongs to the nearest count-scale before it in its sentence.
     const next = list.findIndex((other, at) => at > index && other.family_id === "count-scale");
@@ -229,6 +232,7 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
     [index, group.filter, ...group.qualifiers].forEach((at) => take.add(at));
     // "contains 1 model for each model in this unit": the count is the added unit's size.
     if (list[index - 1]?.family_id === "unit-size") {
+      if (onApply) throw new CompileError("An on-apply count does not scale the size of an added unit.");
       const size = list[index - 1]!;
       if (size.parameters.models !== 1 || scaling.per !== 1 || scaling.max_value !== undefined) throw new CompileError("An added unit's size equal to a count is 1 model per counted model, with no cap.");
       const { per: _per, of, ...rest } = scaling;
@@ -238,6 +242,10 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
     const at = scaledEffect(list, sentences, index, group.end);
     if (list[at]!.parameters.scaling !== undefined || list[at]!.parameters.per_item !== undefined) throw new CompileError("An effect is scaled by two counts.");
     if (Object.keys(list[at]!.parameters).some((key) => key.startsWith("scaling_"))) throw new CompileError("A test that scales its own amount cannot also take a count-scale.");
+    if (onApply) {
+      checkLastingEffect(list, at);
+      scaling.evaluated = "on-apply";
+    }
     list[at] = { ...list[at]!, parameters: { ...list[at]!.parameters, scaling } };
   });
   for (const at of caps) if (!take.has(at)) throw new CompileError("A scale-cap (\"to a maximum of\") has no count-scale before it in its sentence.");
@@ -248,6 +256,33 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
     if (leaf.parameters.subject === COUNTED) throw new CompileError(`${leaf.family_id} is about each counted model, but no count or per-model roll takes it here.`);
   });
   return list.filter((_, index) => !take.has(index));
+}
+
+/**
+ * Event families a counted set can be narrowed by. A count taken when a rule applies cannot hold
+ * one of these: each is a later happening whose count would change during the rule.
+ */
+const LATER_EVENT_FAMILIES: ReadonlySet<string> = new Set([
+  "unit-activity", "hit-by-attacks", "ability-used", "history-compare", "targeted", "roll-outcome",
+  "moved-over", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "optional-cost-paid",
+]);
+
+/** An on-apply count's counted set holds no later event (see LATER_EVENT_FAMILIES). */
+function refuseLaterEventCount(list: readonly CompileLeaf[], group: Group): void {
+  const named = [group.filter, ...group.qualifiers].map((at) => list[at]!.family_id);
+  if (named.some((family) => LATER_EVENT_FAMILIES.has(family))) throw new CompileError("An on-apply count cannot count a later event.");
+}
+
+/**
+ * The effect an on-apply count scales is a lasting modifier, in a rule with a duration or a
+ * triggering moment in the same fragment. An instantaneous effect has nothing to hold the count for.
+ */
+function checkLastingEffect(list: readonly CompileLeaf[], at: number): void {
+  const effect = list[at]!;
+  if (effect.family_id !== "characteristic-modifier" && effect.family_id !== "roll-modifier") throw new CompileError("An on-apply count is for a lasting modifier.");
+  if (!list.some((leaf) => leaf.fragment === effect.fragment && (leaf.role === "DURATION" || leaf.role === "EVENT"))) {
+    throw new CompileError("An on-apply count needs a rule that lasts: a duration, or a triggered or used ability, in the same rule.");
+  }
 }
 
 /** The DSL selector of the models a per-model roll counts: one die for each. */

@@ -1149,6 +1149,7 @@ class Scaling(TypedDict):
     field: NotRequired[Literal["value", "count", "amount", "distance", "modifier", "max_models"]]
     keyword: NotRequired[Keyword]
     wargear: NotRequired[EntityId]
+    evaluated: NotRequired[Literal["live", "on-apply"]]
 
 
 RuleStateCoreRuleSlug: TypeAlias = Literal[

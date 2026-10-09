@@ -59,6 +59,15 @@ pub(crate) fn usage_clause(u: &Value) -> String {
 
 /// A `scaling` block → trailing clause ("for every 5 enemy models within 6\"").
 pub(crate) fn scaling_clause(s: &P) -> String {
+    let clause = scaling_wording(s);
+    if sv(s, "evaluated") == Some("on-apply") {
+        format!("{clause} (counted when the rule applies)")
+    } else {
+        clause
+    }
+}
+
+fn scaling_wording(s: &P) -> String {
     let max = nn(s, "max_value")
         .map(|mx| format!(" (to a maximum of {})", jv(mx)))
         .unwrap_or_default();

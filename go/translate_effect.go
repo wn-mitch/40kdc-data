@@ -35,6 +35,15 @@ func durationClauses(duration any) (string, string) {
 
 // scalingClause renders a scaling block as a trailing clause ("for every 5 enemy models within 6\"").
 func scalingClause(s map[string]any) string {
+	clause := scalingWording(s)
+	if s["evaluated"] == "on-apply" {
+		return clause + " (counted when the rule applies)"
+	}
+	return clause
+}
+
+// scalingWording is the scaling clause without the timing note.
+func scalingWording(s map[string]any) string {
 	maxTail := ""
 	if s["max_value"] != nil {
 		maxTail = " (to a maximum of " + ejstr(s["max_value"]) + ")"

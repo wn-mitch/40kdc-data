@@ -126,6 +126,8 @@ export interface Effect {
     within_inches?: number;
     round?: string;
     max_value?: number;
+    /** When the count is taken: live (default) at each use, on-apply once when the rule applies. */
+    evaluated?: "live" | "on-apply";
   };
   // designate-target / persistent-designation
   designation?: string;
@@ -679,6 +681,11 @@ function usageClause(u: AbilityUsage | AbilityUsage[]): string {
 
 /** A `scaling` block → trailing clause ("for every 5 enemy models within 6\""). */
 function scalingClause(s: NonNullable<Effect["scaling"]>): string {
+  const clause = scalingWording(s);
+  return s.evaluated === "on-apply" ? `${clause} (counted when the rule applies)` : clause;
+}
+
+function scalingWording(s: NonNullable<Effect["scaling"]>): string {
   if (s.of === "battle-round") return `multiplied by the battle round number${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
   // A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
   if (s.of === "embarked-models-oc") return `for every ${Number(s.per) === 1 ? "point" : `${jstr(s.per)} points`} of ${scaleSource(s as Record<string, unknown>)}${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
