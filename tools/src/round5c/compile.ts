@@ -12,7 +12,7 @@ import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
-import { trigger, withDestroyedObject } from "./compile-triggers.js";
+import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
 import { bulletBreaks, ordered, placements, shapeSignature } from "./compile-placement.js";
 import { refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
@@ -503,8 +503,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
-          triggers.push(withDestroyedObject(trigger(leaf), placesFromEventObject));
-          triggerIndexes.push(index);
+          // A list of roll kinds is one trigger per kind (compile-triggers.ts triggerLeaves).
+          for (const each of triggerLeaves(leaf)) {
+            triggers.push(withDestroyedObject(trigger(each), placesFromEventObject));
+            triggerIndexes.push(index);
+          }
           // "At the start or end of this unit's move": the other end is an alternative moment.
           if (leaf.family_id === "event" && typeof leaf.parameters.also === "string") {
             const { also, ...rest } = leaf.parameters;

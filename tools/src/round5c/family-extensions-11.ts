@@ -422,7 +422,7 @@ function antecedentSubject(family: string, example: string): FamilyExtension {
 const ROLL_SUBJECTS = ["this-unit", "this-model", "event-subject", "selected-unit", "recipient", ANTECEDENT] as const;
 
 /** A version whose rolls belong to a named unit: subject, which an earlier leaf's unit may bind. */
-function rollSubject(family: string, example: string): FamilyExtension {
+export function rollSubject(family: string, example: string): FamilyExtension {
   return {
     family,
     description: `As the previous version, plus subject: the unit whose rolls these are (${example}); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).`,

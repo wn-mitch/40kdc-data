@@ -1,5 +1,5 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
-import { trigger } from "./compile-triggers.js";
+import { trigger, triggerLeaves } from "./compile-triggers.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -242,7 +242,7 @@ function buildResourceActionMenu(head: CompileLeaf, groups: CompileLeaf[][]): No
     const whenLeaves: CompileLeaf[] = [];
     while (group[cursor] && group[cursor]!.role === "EVENT") { whenLeaves.push(group[cursor]!); cursor += 1; }
     if (whenLeaves.length === 0) throw new CompileError("A menu-action needs its own trigger leaf (an EVENT leaf) after its marker and any eligibility leaves.");
-    const triggers = whenLeaves.map((leaf) => trigger(leaf));
+    const triggers = whenLeaves.flatMap((leaf) => triggerLeaves(leaf).map((each) => trigger(each)));
     const when: Node | Node[] = triggers.length === 1 ? triggers[0]! : triggers;
     if (marker.parameters.binds_event_variable !== undefined && !Array.isArray(when)) when.binds_event_variable = closed(marker, "binds_event_variable");
     const cost: Node = { pool_id: marker.parameters.cost_pool_id !== undefined ? closed(marker, "cost_pool_id") : closed(head, "pool_id"), amount: closed(marker, "cost_amount") };

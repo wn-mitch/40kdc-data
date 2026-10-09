@@ -6,6 +6,7 @@
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
+import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
 
 type Node = Record<string, unknown>;
 
@@ -63,8 +64,21 @@ function withTurn(node: Node, leaf: CompileLeaf): Node {
   return { ...node, condition: { type: "player-turn-is", parameters: { turn: `${String(closed(leaf, "turn"))}-turn` } } };
 }
 
+/** A before-roll or after-roll filter's roll: a kind the DSL trigger can name, never any, all or attacks. */
 function triggerRoll(leaf: CompileLeaf): unknown {
-  return closed(leaf, "roll");
+  const roll = closed(leaf, "roll");
+  if (!(TRIGGER_ROLL_KINDS as readonly unknown[]).includes(roll)) throw new CompileError(`A ${String(leaf.parameters.kind)} moment names roll ${JSON.stringify(roll)}, which a DSL trigger cannot name; name the roll kinds it covers.`);
+  return roll;
+}
+
+/**
+ * The triggers one EVENT leaf lowers to: a list of roll kinds (`rolls`, version 19) is one trigger
+ * per kind, in the listed order, each with that kind as its roll. Every other leaf is one trigger.
+ */
+export function triggerLeaves(leaf: CompileLeaf): CompileLeaf[] {
+  if (leaf.family_id !== "event" || !Array.isArray(leaf.parameters.rolls)) return [leaf];
+  const { rolls, ...rest } = leaf.parameters as { rolls: unknown[] } & Record<string, unknown>;
+  return rolls.map((roll) => ({ ...leaf, parameters: { ...rest, roll } }));
 }
 
 /**
@@ -142,6 +156,8 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
 }
 
 export function trigger(leaf: CompileLeaf): Node {
+  // A list of roll kinds is several triggers; a caller that takes one trigger must use triggerLeaves().
+  if (Array.isArray(leaf.parameters.rolls)) throw new CompileError("A moment that names several rolls lowers to one trigger per roll; it cannot be one trigger.");
   const node = eventTrigger(leaf);
   // "Those attacks": the moment's attacks, which a later effect names (compile-bound-attacks.ts).
   if (leaf.parameters.binds_event_variable !== undefined && leaf.family_id === "event") node.binds_event_variable = closed(leaf, "binds_event_variable");

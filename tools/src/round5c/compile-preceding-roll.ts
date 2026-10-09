@@ -3,11 +3,16 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 /** Rolls an event can name that a roll-modifier can change too. */
 const MODIFIABLE_ROLLS = new Set(["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage", "hazard", "psychic", "desperate-escape"]);
 
-/** The roll a leaf makes or names, when a later "that roll" can mean it. */
-function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: string } | null {
+/**
+ * The roll a leaf makes or names, when a later "that roll" can mean it. A moment over several roll
+ * kinds names no one roll ("several"), so a "that roll" after it has no single referent.
+ */
+function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: string } | { kind: "several" } | null {
   if (leaf.family_id === "dice-roll") return { kind: "dice" };
   if (leaf.family_id === "test") return { kind: "named", roll: String(leaf.parameters.test) };
-  if (leaf.family_id === "event" && (leaf.parameters.kind === "before-roll" || leaf.parameters.kind === "after-roll")) return { kind: "named", roll: String(leaf.parameters.roll) };
+  if (leaf.family_id === "event" && (leaf.parameters.kind === "before-roll" || leaf.parameters.kind === "after-roll")) {
+    return Array.isArray(leaf.parameters.rolls) ? { kind: "several" } : { kind: "named", roll: String(leaf.parameters.roll) };
+  }
   return null;
 }
 
@@ -31,6 +36,7 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
     while (at >= 0 && rollOf(out[at]!) === null) at -= 1;
     const source = at >= 0 ? rollOf(out[at]!) : null;
     if (source === null) throw new CompileError(`roll-modifier at byte ${leaf.start_byte} changes "that roll", but no roll or test comes before it.`);
+    if (source.kind === "several") throw new CompileError(`roll-modifier at byte ${leaf.start_byte} changes "that roll", but the moment before it names several rolls; author a rolls list on the roll-modifier.`);
     if (source.kind === "named") {
       if (!MODIFIABLE_ROLLS.has(source.roll)) throw new CompileError(`roll-modifier at byte ${leaf.start_byte} changes a ${source.roll} roll, which a roll modifier cannot name.`);
       out[index] = { ...leaf, parameters: { ...leaf.parameters, roll: source.roll } };

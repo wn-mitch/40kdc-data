@@ -131,7 +131,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     // A test taker that names the units of a unit-filter, with none folded onto this leaf, has no unit to name.
     if (leaf.parameters.test_taker === "filtered-units") throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
     return typeof leaf.parameters.test_taker === "string" ? leaf.parameters.test_taker
-      : typeof leaf.parameters.subject === "string" && (leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") ? target(leaf.parameters.subject)
+      : typeof leaf.parameters.subject === "string" && (leaf.family_id === "roll-modifier" || leaf.family_id === "reroll" || leaf.family_id === "roll-auto-result") ? target(leaf.parameters.subject)
       : context.incoming && ATTACKER_ROLLS.has(String(roll)) ? "attacker" : context.attacker ?? "this-unit";
   };
   switch (leaf.family_id) {

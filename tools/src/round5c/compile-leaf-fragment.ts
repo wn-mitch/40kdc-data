@@ -2,7 +2,7 @@ import { hasAntecedent } from "./compile-antecedent.js";
 import { attackTypeCondition, ATTACK_EVENTS, condition, duration } from "./compile-conditions.js";
 import { isContainerOpener } from "./compile-containers.js";
 import { effect, type CompileLeaf } from "./compile-fragments.js";
-import { trigger } from "./compile-triggers.js";
+import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { usageFor } from "./restriction-families.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
@@ -12,7 +12,9 @@ type Node = Record<string, unknown>;
 
 /** What one leaf contributes on its own, for the per-leaf preview. */
 export type LeafFragment =
-  | { kind: "effect" | "condition" | "trigger"; node: Node }
+  | { kind: "effect" | "condition"; node: Node }
+  // One trigger, or one per roll kind for a list moment (compile-triggers.ts triggerLeaves).
+  | { kind: "trigger"; node: Node | Node[] }
   | { kind: "duration"; duration: string }
   | { kind: "implicit"; note: string };
 
@@ -116,5 +118,6 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   }
   if (leaf.family_id === "select-unit" || leaf.family_id === "for-each-unit-select") return { kind: "implicit", note: "No separate text: the selection is written with the effects that refer to the selected unit." };
   if (leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind))) return { kind: "implicit", note: "No separate text: an attack-time event is part of the effect it goes with." };
-  return { kind: "trigger", node: trigger(leaf) };
+  const triggers = triggerLeaves(leaf).map((each) => trigger(each));
+  return { kind: "trigger", node: triggers.length === 1 ? triggers[0]! : triggers };
 }

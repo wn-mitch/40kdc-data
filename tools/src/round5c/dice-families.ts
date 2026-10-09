@@ -28,6 +28,17 @@ export const ROLL_KINDS = [
   "desperate-escape", "deadly-demise", "all",
 ] as const;
 
+/**
+ * The rolls a DSL reactive trigger can name (`common.schema.json` roll-kind): the thirteen kinds
+ * of ROLL_KINDS that the trigger's filter takes. `any`, `all`, `attacks`, `surge` and
+ * `resource-die` are not trigger kinds, so a before-roll or after-roll moment cannot name them.
+ * Canonical order: a list of kinds lowers to triggers in this order.
+ */
+export const TRIGGER_ROLL_KINDS = [
+  "hit", "wound", "save", "damage", "charge", "advance", "battle-shock", "leadership", "hazard",
+  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise",
+] as const;
+
 export const IGNORE_SUBJECTS = ["this-unit", "this-model"] as const;
 /** ignore-modifiers' own `stats` enum: the model/weapon characteristics plus the three extras the DSL allows there. */
 export const IGNORE_STATS = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", "S", "AP", "D", "Range", "detection-range", "psyker-level"] as const;
