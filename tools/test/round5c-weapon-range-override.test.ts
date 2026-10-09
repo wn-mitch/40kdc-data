@@ -85,6 +85,7 @@ describe("Round 5C unit-position weapon_range: a distance equal to the attacking
   it("maps a version-14 distance leaf to the current version with its parameters unchanged", () => {
     const parameters = { kind: "within", inches: 12, of: "attacker", subject: "target", negated: false };
     expect(mapToLatest("unit-position", 14, parameters)).toEqual({ family: "unit-position", version: currentFamilyVersion("unit-position"), parameters });
+    expect(currentFamilyVersion("unit-position")).toBeGreaterThan(14);
   });
 
   it("refuses a weapon_range limit on a set-up's placement rather than folding it as a distance", () => {
@@ -107,6 +108,33 @@ describe("Round 5C weapon-range override shapes compile end to end", () => {
       ["that target a unit within half range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "half" }],
       ["have", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }],
       ["[Sustained Hits 1]", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+    ), text, {});
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expect(JSON.stringify(result.ok && result.mechanics)).toContain('"range":"half-weapon"');
+  });
+});
+
+// Re-roll gates on the attack's target: the half-range test sits between the attack and the re-roll.
+describe("Round 5C weapon-range override: re-roll gates on a half-range target", () => {
+  it("compiles a hit re-roll gated on the hit's target, with the wound re-roll gated the same way", () => {
+    const text = "Your unit's ranged attacks: Can re-roll hit rolls of 1. That target a unit within half range, can re-roll wound rolls of 1.";
+    const result = compileLeaves(placed(text,
+      ["Your unit's ranged attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
+      ["Can re-roll hit rolls of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
+      ["That target a unit within half range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "half" }],
+      ["can re-roll wound rolls of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
+    ), text, {});
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    expect(JSON.stringify(result.ok && result.mechanics)).toContain('"range":"half-weapon"');
+  });
+
+  it("compiles a per-attack re-roll gated on a half-range target under an end-of-phase duration", () => {
+    const text = "Until the end of the phase, each time a model in your unit makes an attack that targets a unit within half range, re-roll a Hit roll of 1.";
+    const result = compileLeaves(placed(text,
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["each time a model in your unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["that targets a unit within half range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "half" }],
+      ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }],
     ), text, {});
     expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
     expect(JSON.stringify(result.ok && result.mechanics)).toContain('"range":"half-weapon"');
