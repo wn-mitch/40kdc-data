@@ -155,8 +155,40 @@ describe("duration@4 phase-edge endpoints: scope.duration", () => {
     expect(mechanics.scope).toEqual({ duration: "until-start-of-opponent-next-command-phase" });
   });
 
+  // The effect starts inside the named phase (the Command phase starts, the effect applies, and the
+  // duration names the next start of that phase). The compiler maps the leaf to the start-edge
+  // value only; it cannot evaluate which phase is in progress when the effect applies. That rule is
+  // the scope-duration description, which the consumers of the DSL apply. A regression that maps this
+  // record to an end edge, or to the v3 next-phase value, fails here.
+  it("does not map a start edge inside the named phase to an end edge or to the v3 next-phase value", () => {
+    const text = "At the start of your opponent's Command phase, that unit is wracked with agonies until the start of your opponent's next Command phase.";
+    const mechanics = mechanicsOf(placed(text,
+      ["At the start of your opponent's Command phase", "event", { kind: "phase-start", phase: "command", turn: "opponent" }],
+      ["that unit is wracked with agonies", "apply-mark", { subject: "this-unit", tag: "wracked-with-agonies" }],
+      ["until the start of your opponent's next Command phase", "duration", { endpoint: "start-of-next-phase", phase: "command", turn: "opponent" }],
+    ), text);
+    expect(mechanics.scope).toEqual({ duration: "until-start-of-opponent-next-command-phase" });
+  });
+
   it("maps the v3 attack-sequence endpoint to attack-sequence", () => {
     expect(compileWithDuration({ endpoint: "end-of-attack-sequence" }, "until the attacking unit has resolved all of its attacks").scope).toEqual({ duration: "attack-sequence" });
+  });
+
+  // Fabricated wording with the shape of record 2546: an attack-sequence duration and a trailing
+  // attacks-resolved moment with no effect after it. The two errors are the gaps the design names
+  // for that record; the duration is not one of them. A later fix that changes these messages fails
+  // here, and the record's status must be re-checked then.
+  it("keeps the two named gap errors for an attack-sequence duration with a trailing moment", () => {
+    const text = "Each time this unit shoots, that unit is wracked with agonies until the attacking unit has resolved all of its attacks. When the attacking unit has resolved all of its attacks, it is battle-shocked.";
+    const result = resultOf(placed(text,
+      ["Each time this unit shoots", "event", { kind: "targets-selected", action_kind: "shoot" }],
+      ["that unit is wracked with agonies", "apply-mark", { subject: "selected-unit", tag: "wracked-with-agonies" }],
+      ["until the attacking unit has resolved all of its attacks", "duration", { endpoint: "end-of-attack-sequence" }],
+      ["When the attacking unit has resolved all of its attacks", "event", { kind: "attacks-resolved" }],
+    ), text);
+    expect(result.ok).toBe(false);
+    expect(result.errors).toContain("A moment ends the ability with no effect after it.");
+    expect(result.errors).toContain("An effect names \"that unit\", but no select-unit leaf says which unit.");
   });
 });
 

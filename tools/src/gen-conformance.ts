@@ -3749,6 +3749,19 @@ function genEffectTranslation(): void {
     const scope = { duration: "resolution" };
     cases.push({ ...example, scope, expected: { text: describeAbility({ ...example, scope } as Parameters<typeof describeAbility>[0]) } });
   }
+  // Every scope.duration value, on one plain effect, so each duration's English is pinned.
+  const durationValues = [
+    "until-end-of-your-next-fight-phase",
+    "until-end-of-your-next-shooting-phase",
+    "until-end-of-your-next-movement-phase",
+    "until-end-of-opponent-next-movement-phase",
+    "until-start-of-opponent-next-command-phase",
+  ];
+  for (const duration of durationValues) {
+    const effect = { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } };
+    const scope = { duration };
+    cases.push({ caseId: `fidelity/duration-${duration}`, effect, scope, expected: { text: describeAbility({ effect, scope } as Parameters<typeof describeAbility>[0]) } });
+  }
   writeJson(join(CONFORMANCE, "effect-translation", "cases.json"), cases);
   console.log(
     `effect-translation/cases.json: ${cases.length} cases (${seen.size} node types)`,

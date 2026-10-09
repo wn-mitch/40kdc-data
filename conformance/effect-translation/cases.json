@@ -25830,5 +25830,85 @@
     "expected": {
       "text": "Add 1 to the unit's Attacks characteristic for every 5 enemy models within 6\" (counted when the rule applies)."
     }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-fight-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-fight-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Fight phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-shooting-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-shooting-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Shooting phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-opponent-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-opponent-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your opponent's next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-start-of-opponent-next-command-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-start-of-opponent-next-command-phase"
+    },
+    "expected": {
+      "text": "Until the start of your opponent's next Command phase, the unit has the Feel No Pain 5+ ability."
+    }
   }
 ]

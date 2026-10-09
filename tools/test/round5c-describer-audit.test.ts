@@ -18,6 +18,9 @@ describe("Round 5C leaf describer audit", () => {
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
       // It folds into the used-manoeuvre moment before it, so on its own it has no DSL fragment.
       "manoeuvre-own-roll": { unrendered: [], colliding: [], problems: 1 },
+      // Phase-edge durations compile only for the five scope.duration values; the other six
+      // end-of-next-phase phase/turn pairs have no DSL scope yet.
+      duration: { unrendered: [], colliding: [], problems: 6 },
       // A Leader is a model, so leading never shows the subject. Supporting compiles only for this
       // model, as part of an attached unit, which is also what attached in any role reads as; a
       // supporting unit or bearer's unit has no DSL condition. Supporting a named unit, or another
