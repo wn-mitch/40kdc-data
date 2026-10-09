@@ -47432,6 +47432,15 @@ pub struct SameUnitConditionParameters {
 ///    "per"
 ///  ],
 ///  "properties": {
+///    "evaluated": {
+///      "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
+///      "default": "live",
+///      "type": "string",
+///      "enum": [
+///        "live",
+///        "on-apply"
+///      ]
+///    },
 ///    "field": {
 ///      "description": "The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.",
 ///      "type": "string",
@@ -47481,6 +47490,9 @@ pub struct SameUnitConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Scaling {
+    ///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+    #[serde(default = "defaults::scaling_evaluated")]
+    pub evaluated: ScalingEvaluated,
     ///The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub field: ::std::option::Option<ScalingField>,
@@ -47498,6 +47510,89 @@ pub struct Scaling {
     pub wargear: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within_inches: ::std::option::Option<f64>,
+}
+///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
+///  "default": "live",
+///  "type": "string",
+///  "enum": [
+///    "live",
+///    "on-apply"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ScalingEvaluated {
+    #[serde(rename = "live")]
+    Live,
+    #[serde(rename = "on-apply")]
+    OnApply,
+}
+impl ::std::fmt::Display for ScalingEvaluated {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Live => f.write_str("live"),
+            Self::OnApply => f.write_str("on-apply"),
+        }
+    }
+}
+impl ::std::str::FromStr for ScalingEvaluated {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "live" => Ok(Self::Live),
+            "on-apply" => Ok(Self::OnApply),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for ScalingEvaluated {
+    fn default() -> Self {
+        ScalingEvaluated::Live
+    }
 }
 ///The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.
 ///
@@ -72097,6 +72192,9 @@ pub mod defaults {
     }
     pub(super) fn piece_piece_type() -> super::PiecePieceType {
         super::PiecePieceType::Area
+    }
+    pub(super) fn scaling_evaluated() -> super::ScalingEvaluated {
+        super::ScalingEvaluated::Live
     }
     pub(super) fn scaling_round() -> super::ScalingRound {
         super::ScalingRound::Down
