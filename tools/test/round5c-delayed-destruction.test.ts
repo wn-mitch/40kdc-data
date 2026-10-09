@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { describeAbility } from "../src/translate/index.js";
+import { describeHappened } from "../src/translate/condition-history.js";
 import { NESTED_MOMENT_ERROR } from "../src/round5c/compile-delayed-destruction.js";
 import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
 
@@ -77,16 +78,20 @@ describe("Delayed destruction: a leading pair lowers to the phase that holds it"
     expect(JSON.stringify(mechanics)).not.toContain("destroy-models");
   });
 
-  it("T2 pin: the same wording authored as an effect is refused, not lowered", () => {
+  it("T2 pin: the same wording authored as an effect is not lowered to a happened condition (the leaf must be relabelled)", () => {
+    // A bare phase-end with destroy-models is a legitimate removal, so the compiler cannot refuse it.
+    // What must not happen is the compiler inventing the destruction condition from an effect leaf.
     const text = "At the end of a phase in which this model is destroyed, roll one D6: On a 2+, set this model back up.";
-    const result = compileLeaves(placed(text,
+    const mechanics = mechanicsOf(placed(text,
       ["At the end of a phase", "event", PHASE_END],
       ["in which this model is destroyed", "destroy-models", { target: "this-model" }],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
-    expect(result.ok && JSON.stringify(result.mechanics).includes('"type":"phase-ended"') ? "lowered" : "not lowered").toBe("not lowered");
+    expect(mechanics.trigger).toEqual({ event: "phase-ended" });
+    expect(JSON.stringify(mechanics)).not.toContain('"happened"');
+    expect(JSON.stringify(mechanics.effect)).toContain("destroy-models");
   });
 });
 
@@ -176,6 +181,16 @@ describe("Delayed destruction: a destruction, a Leadership test, and a phase-end
     expect(mechanics.trigger).toEqual({ event: "phase-ended", condition: { type: "happened", parameters: DESTROYED_IN_PHASE } });
     expect(JSON.stringify(mechanics)).not.toContain("ability-part");
     expect(JSON.stringify(mechanics.effect)).toContain('"type":"test"');
+  });
+
+  it("T3 gate: the set-up runs only inside the leadership success conditional; the test itself is ungated", () => {
+    const mechanics = mechanicsOf(leaves(), text);
+    const steps = mechanics.effect.steps as Array<Record<string, any>>;
+    expect(steps.map((step) => step.type)).toEqual(["test", "conditional"]);
+    const gate = steps[1]!;
+    expect(gate.condition).toEqual({ type: "roll-result", parameters: { roll: "leadership", result: "success" } });
+    expect(gate.effect.type).toBe("set-up");
+    expect(JSON.stringify(steps[0])).not.toContain("set-up");
   });
 
   it("T3b: the entry's usage is the only usage, and it limits the whole ability", () => {
@@ -302,6 +317,12 @@ describe("Delayed destruction: the describer names this model, not any model of 
     const english = describeAbility(mechanics as Parameters<typeof describeAbility>[0]);
     expect(english).toContain("if this model was destroyed this phase");
     expect(english).not.toContain("models destroyed");
+  });
+
+  it("reads the negated condition as this model was not destroyed, never as the destruction", () => {
+    const negated = describeHappened({ event: "model-destroyed", object: "this-model", window: "phase", count_min: 1 }, true);
+    expect(negated).toContain("this model was not destroyed");
+    expect(negated).not.toContain("this model was destroyed");
   });
 });
 
