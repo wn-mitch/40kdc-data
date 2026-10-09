@@ -59,8 +59,9 @@ export function normalizeOptionalCostV2(input: Record<string, unknown>): Record<
   }
   if ("negated" in input) throw new TypeError(`${family} negated is only for window turn ("spent no YP in that turn").`);
   if (input.subject === undefined) throw new TypeError(`${family} window ${window} needs the subject that spent the pool.`);
-  if (input.tag === undefined) throw new TypeError(`${family} window ${window} needs the designation tag its spend sets.`);
-  const tag = input.tag;
+  // A version-1 use leaf names no tag: it reads the legacy designation the same use's spend sets.
+  if (input.tag === undefined && window !== "use") throw new TypeError(`${family} window ${window} needs the designation tag its spend sets.`);
+  const tag = input.tag === undefined ? "yp-spent-this-use" : input.tag;
   if (typeof tag !== "string" || !/^[a-z][a-z0-9-]*$/u.test(tag) || tag.length > 60) throw new TypeError(`${family}.tag is a kebab-case designation id.`);
   const subject = enumValue(input.subject, SUBJECT_REF, `${family}.subject`);
   if (window === "use") return { pool, window, subject, tag };

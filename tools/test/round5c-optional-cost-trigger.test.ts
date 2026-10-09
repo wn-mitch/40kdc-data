@@ -48,6 +48,11 @@ describe("optional-cost-paid version 2 parameters", () => {
       .toEqual({ pool: "yp-pool", window: "use", subject: "this-unit" });
   });
 
+  it("keeps a version-1 use leaf readable under version 2 by giving it the legacy tag", () => {
+    expect(v2({ pool: "yp-pool", window: "use", subject: "this-unit" })).toEqual({ pool: "yp-pool", window: "use", subject: "this-unit", tag: "yp-spent-this-use" });
+    expect(() => v2({ pool: "yp-pool", window: "trigger", subject: "this-unit" })).toThrow(/needs the designation tag/);
+  });
+
   it("accepts a trigger with its subject and tag, and defaults the holder to this unit", () => {
     expect(v2({ pool: "pain-token-pool", window: "trigger", subject: "this-unit", tag: "eye-of-spite-pain-spent" }))
       .toEqual({ pool: "pain-token-pool", window: "trigger", subject: "this-unit", tag: "eye-of-spite-pain-spent", holder: "this-unit" });
@@ -69,8 +74,8 @@ describe("optional-cost-paid version 2 parameters", () => {
     refused({ pool: "yp-pool", window: "trigger", subject: "this-unit", tag: "x-spent", holder: "this-model" });
   });
 
-  it("refuses a use or trigger with no tag or no subject", () => {
-    refused({ pool: "yp-pool", window: "use", subject: "this-unit" });
+  it("refuses a trigger with no tag or no subject, and a use with no subject", () => {
+    refused({ pool: "yp-pool", window: "use", tag: "x-spent" });
     refused({ pool: "pain-token-pool", window: "trigger", subject: "this-unit" });
     refused({ pool: "pain-token-pool", window: "trigger", tag: "x-spent" });
   });

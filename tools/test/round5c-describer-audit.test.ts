@@ -78,6 +78,8 @@ describe("Round 5C leaf describer audit", () => {
       // Batch 7a: be-selected always reads "at the end of the opponent's previous turn", so `at`
       // never shows; the omitted-subject collision is the same one every widened predicate has.
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
+      // embarked-permission takes only this-unit and gates nothing; its one leaf reads the same as none.
+      "embarked-permission": { unrendered: [], colliding: [], problems: 1 },
       // count_min stops mattering once count_max is 0 ("no operation markers"), same text either way.
       "operation-markers": { unrendered: [], colliding: ["count_min"], problems: 0 },
       // Batch 7b follow-up (x-leaf-5): the schema lets move_types/action_kind pair with a `to`
