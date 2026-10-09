@@ -72,6 +72,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "losing-the-wager",
         "machine-vengeance-target",
         "malevolent",
+        "mark",
         "marked",
         "marked-prey",
         "mutated",

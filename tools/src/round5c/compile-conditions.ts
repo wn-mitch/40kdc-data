@@ -22,6 +22,7 @@ import { namedEquipmentPredicate } from "./compile-named-equipment.js";
 import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-opponent-stratagem.js";
 import { phaseEdgeDuration } from "./compile-duration-edges.js";
 import { PHASE_EDGE_ENDPOINTS } from "./family-extensions-16-duration-endpoint-vocabulary.js";
+import { canonicalDesignation } from "./compile-redesignate.js";
 
 type Node = Record<string, unknown>;
 
@@ -573,7 +574,7 @@ export function condition(leaf: CompileLeaf): Node {
       return polarity(leaf, pred("visible", parameters, subjectOf(leaf)));
     }
     case "designated-filter": {
-      const parameters: Node = { tag: closed(leaf, "tag") };
+      const parameters: Node = { tag: canonicalDesignation(closed(leaf, "tag")) };
       // The Warlord is one model: a count of Warlords has no meaning.
       if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
       if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");

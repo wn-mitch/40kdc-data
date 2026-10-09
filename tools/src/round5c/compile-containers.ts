@@ -1,5 +1,6 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
+import { canonicalDesignation, designationChoices, findReplacementOpeners, refuseEstablishmentCount, replacementTail, splitReplacementTail } from "./compile-redesignate.js";
 
 /**
  * Container fragments (batch 5). `compile.ts` delegates here in two ways:
@@ -320,14 +321,21 @@ function poolLifecycleSequence(head: CompileLeaf, menu: Node): Node {
   return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
 }
 
-function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+/**
+ * A persistent designation. With a `replacement` (its trigger, selection and may-clause, see
+ * compile-redesignate.ts), the selection is the one that replaces the designated unit when it is
+ * destroyed: it binds a selection variable that the consumer and the lifecycle both reference.
+ */
+function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }): Node {
   const scope = closed(head, "scope") as string;
   const beneficiary = closed(head, "beneficiary") as string;
-  return {
+  const designation = canonicalDesignation(closed(head, "designation"));
+  const bindAs = `${designation}-selection`;
+  const node: Node = {
     type: "persistent-designation",
-    designation: closed(head, "designation"),
+    designation,
     // "This ability can be used even if this unit is embarked" (compile-embarked-permission.ts).
-    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: "one-time", ...(head.parameters.allow_while_embarked === true ? { allow_while_embarked: true } : {}) },
+    select: { scope, count: 1, timing: closed(head, "timing"), selection_policy: replacement ? "replace-on-destroyed" : "one-time", ...(head.parameters.allow_while_embarked === true ? { allow_while_embarked: true } : {}) },
     consumer: {
       relation: scope === "enemy-unit" ? "attacks-selected-unit" : "within-selected-marker",
       beneficiary: beneficiary === "this-model" ? "bearer" : "unit",
@@ -338,6 +346,16 @@ function buildPersistentDesignation(head: CompileLeaf, groups: CompileLeaf[][]):
     },
     duration: "battle",
   };
+  if (replacement) {
+    (node.select as Node).bind_as = bindAs;
+    (node.consumer as Node).reference = { selection_var: bindAs };
+    node.lifecycle = {
+      replace: { event: "on-unit-destroyed", reference: { selection_var: bindAs }, optional: replacement.optional },
+      exclusivity: "one-active-per-bearer-unit",
+      expiry: "battle-end",
+    };
+  }
+  return node;
 }
 
 function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node {
@@ -350,7 +368,7 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
   return { type: "select-objective", selector, effect: effectsOf(groups[0]!, null, String(selector.bind_as)) };
 }
 
-function buildContainer(head: CompileLeaf, groups: CompileLeaf[][]): Node {
+function buildContainer(head: CompileLeaf, groups: CompileLeaf[][], replacement?: { optional: boolean }): Node {
   switch (head.family_id) {
     case "choice-open": return buildChoice(head, groups);
     case "stance-select-open": return buildStanceSelect(head, groups);
@@ -358,7 +376,7 @@ function buildContainer(head: CompileLeaf, groups: CompileLeaf[][]): Node {
     case "dice-pool-allocation-open": return buildDicePoolAllocation(head, groups);
     case "risk-reward-open": return buildRiskReward(head, groups);
     case "resource-action-menu-open": return buildResourceActionMenu(head, groups);
-    case "persistent-designation-open": return buildPersistentDesignation(head, groups);
+    case "persistent-designation-open": return buildPersistentDesignation(head, groups, replacement);
     default: return buildSelectObjective(head, groups);
   }
 }
@@ -388,8 +406,13 @@ export function planContainers(
 function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
+  const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
   list.forEach((leaf, index) => {
     if (!LEADING_CONTAINERS.has(leaf.family_id)) return;
+    // A replacement opener is the last sentence of its origin's ability part (below), so it builds no container of its own.
+    if (replacements.replacements.has(index)) return;
+    // An origin with a replacement reads on through it: its trailing sentence is part of the origin.
+    const replacement = replacements.origins.get(index);
     const groups: CompileLeaf[][] = [];
     let current: CompileLeaf[] = [];
     let currentSentence: number | null = null;
@@ -402,7 +425,7 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // A choice whose options carry named-option markers splits at them too.
     const byMarker = NAMED_OPTION_CONTAINERS.has(leaf.family_id)
       || (leaf.family_id === "choice-open" && list.slice(index + 1).some((item) => item.family_id === "named-option"));
-    for (let cursor = index + 1; cursor < list.length && !LEADING_CONTAINERS.has(list[cursor]!.family_id); cursor += 1) {
+    for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || !LEADING_CONTAINERS.has(list[cursor]!.family_id)); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
       const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts;
@@ -437,8 +460,16 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     while (!SINGLE_BODY_CONTAINERS.has(leaf.family_id) && groups.length && groups[0]![0]!.family_id !== "named-option" && groups[0]!.every((item) => item.role !== "EFFECT")) {
       for (const returned of groups.shift()!) consumed.delete(list.indexOf(returned));
     }
+    let replacementTailOf: { optional: boolean } | undefined;
+    let sentences = groups;
+    if (replacement !== undefined) {
+      const split = splitReplacementTail(groups);
+      sentences = split.groups;
+      replacementTailOf = replacementTail(split.tail, list[replacement]!);
+    }
+    if (leaf.family_id === "persistent-designation-open") refuseEstablishmentCount(list, sentenceOf, index);
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {
-      if (groups.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
+      if (sentences.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
     } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {
       if (groups.length < 1) throw new CompileError(`${leaf.family_id} needs at least one option after it.`);
     } else if (groups.length < 2) {
@@ -451,7 +482,12 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     const bulletCertain = leaf.family_id === "choice-open" && bulletBoundaries > 0 && sentenceBoundaries === 0;
     if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain) nestedCompiler = null;
     try {
-      nodes.set(index, buildContainer(leaf, groups));
+      let node = buildContainer(leaf, sentences, replacementTailOf);
+      // "you can select up to one …" establishes the designation only if the controlling player chooses to.
+      if (leaf.family_id === "persistent-designation-open" && designationChoices(list, sentenceOf, index).length > 0) {
+        node = { type: "ability-part", optional: true, effect: node };
+      }
+      nodes.set(index, node);
     } finally {
       nestedCompiler = outer;
     }

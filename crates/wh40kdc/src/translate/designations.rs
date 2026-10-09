@@ -63,6 +63,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "losing-the-wager",
     "machine-vengeance-target",
     "malevolent",
+    "mark",
     "marked",
     "marked-prey",
     "mutated",

@@ -20,6 +20,7 @@ import { refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
+import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { selectionLimitFor } from "./compile-selection-limit.js";
@@ -344,6 +345,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     return { ok: false, signature, errors: [error.message] };
   }
   const places = placements(list, sourceText);
+  // An optional-use that is a designation's own choice ("you can select …") is the wrapped opener's, not the ability's.
+  const designationOptional = optionalDesignationUses(list, places.map((place) => place.sentence));
+  // "At the start of the battle": the designation's own start timing states that moment, so the leaves that say it are not also the ability's.
+  const designationTiming = timingMoments(list, places.map((place) => place.sentence));
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
@@ -438,7 +443,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // A container opener's options are folded into its own node (`containerNodes.get(index)`,
     // used where planned effects are built below); the leaves that became those options never
     // separately reach condition/duration/event dispatch or their own planned effect.
-    if (consumedByContainer.has(index)) return;
+    if (consumedByContainer.has(index) || designationTiming.has(index)) return;
     const { sentence, clause } = places[index]!;
     const first = firstEffect(sentence);
     const leading = first === -1 || index < first;
@@ -500,6 +505,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
           if (leaf.parameters.per === "model") modelUsages.push({ leaf, index });
         } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
+        else if (leaf.family_id === "optional-use" && designationOptional.has(index)) { /* the designation's own choice: its opener is wrapped optional */ }
         else if (leaf.family_id === "optional-use") {
           // "You can also target one …": that later target is optional, not the Stratagem's use.
           const group = optionalTargetGroup(list, index);
@@ -931,7 +937,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
-  else if (selections.length === 1 && body?.type === "persistent-designation") { /* its own select */ }
+  // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
+  else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) { /* its own select */ }
   else if (pair && body) body = selectUnit(pair.outer, selectUnit(pair.inner, body, {}), {});
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {

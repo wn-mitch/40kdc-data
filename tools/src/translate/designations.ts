@@ -73,6 +73,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "losing-the-wager",
   "machine-vengeance-target",
   "malevolent",
+  "mark",
   "marked",
   "marked-prey",
   "mutated",
