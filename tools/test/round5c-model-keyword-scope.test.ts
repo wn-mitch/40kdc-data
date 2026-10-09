@@ -194,6 +194,21 @@ describe("an attack exclusion (excluded_from attacks)", () => {
   });
 });
 
+describe("a membership filter is not a selection, an aura or a target", () => {
+  it("refuses a target with no side that a membership filter follows, rather than taking the filter as the target", () => {
+    const text = "Fight phase. One friendly unit. Weapons equipped by CRYPTEK models in your unit have [DEVASTATING WOUNDS].";
+    expect(errorsOf(text,
+      ["Fight phase", "use-window", FIGHT_WINDOW],
+      ["One friendly unit", "stratagem-target", { count: "one" }],
+      scope("Weapons equipped by", "all"),
+      ["CRYPTEK models", "unit-filter", { side: "friendly", keywords: ["CRYPTEK"], level: "model" }],
+      member("in your unit", "stratagem-target"),
+      ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }])).toEqual([
+      "A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.",
+    ]);
+  });
+});
+
 describe("a Stratagem's membership with the scope printed first", () => {
   it("lowers a keyword grant whose recipients are the target's models", () => {
     const text = "Fight phase. One friendly unit. Weapons equipped by CRYPTEK or CANOPTEK models in your unit have [DEVASTATING WOUNDS].";
@@ -232,6 +247,18 @@ describe("a weapon property scope naming no weapon keyword binds to a model-grou
       ["+1 S", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]));
     expect(json).toContain('"all_of":["ORKS","PSYKER"]');
     expect(json).toContain('"weapon_keyword":"Psychic"');
+  });
+});
+
+describe("a unit-filter after an attack without excluded_from is still the attack's target", () => {
+  it("keeps the attack's own attacker and reads the keyword filter as the target", () => {
+    const text = "This unit's ranged attacks that target an enemy VEHICLE unit have [IGNORES COVER].";
+    const json = JSON.stringify(mechanicsOf(text,
+      ["This unit's ranged attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "ranged" }],
+      ["an enemy VEHICLE unit", "unit-filter", { side: "enemy", keywords: ["VEHICLE"] }],
+      ["have [IGNORES COVER]", "weapon-ability-keyword", { keyword: "Ignores Cover" }]));
+    expect(json).not.toContain('"member_of":"this-unit"');
+    expect(json).toContain('"VEHICLE"');
   });
 });
 
