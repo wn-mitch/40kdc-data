@@ -518,8 +518,14 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         who = effect_subject(m["subject"], ctx)
     else:
         who = subj
+    # An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+    reserves = m.get("to") == "strategic-reserves" or m.get("from") == "strategic-reserves"
     limits = (
-        ", ignoring any limits on units in Strategic Reserves"
+        (
+            ", ignoring any limits on units in Strategic Reserves"
+            if reserves
+            else ", ignoring the usual set-up limits"
+        )
         if m.get("ignore_limits") is True
         else ""
     )

@@ -10,7 +10,7 @@ import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-prec
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
-import { trigger } from "./compile-triggers.js";
+import { trigger, withDestroyedObject } from "./compile-triggers.js";
 import { ordered, placements, shapeSignature } from "./compile-placement.js";
 import { refuseOtherwiseGates } from "./compile-otherwise.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
@@ -247,6 +247,8 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
 
 function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions): Compiled {
   const signature = shapeSignature(ordered(leaves), sourceText);
+  // Read before the placement limits fold into their set-up: a destroyed moment names its object for them.
+  const placesFromEventObject = leaves.some((leaf) => leaf.family_id === "unit-position" && leaf.parameters.of === "event-object");
   let list: CompileLeaf[];
   try {
     refuseBlastRating(leaves, sourceText);
@@ -269,7 +271,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   // "within range of that objective marker": the marker this record's one select-objective chose.
   const objectiveSelections = list.filter((leaf) => leaf.family_id === "select-objective-open").map((leaf) => String(leaf.parameters.bind_as));
-  list = list.map((leaf) => leaf.family_id === "unit-position" && leaf.parameters.objective === "selected" && objectiveSelections.length === 1
+  list = list.map((leaf) => (leaf.family_id === "unit-position" && leaf.parameters.objective === "selected" || leaf.family_id === "apply-mark" && leaf.parameters.subject === "selected-objective") && objectiveSelections.length === 1
     ? { ...leaf, parameters: { ...leaf.parameters, selection_var: objectiveSelections[0] } } : leaf);
   // "in any phase" with no turn restricts nothing: it says the ability is not phase-bound.
   list = list.filter((leaf) => !(leaf.family_id === "phase-window" && leaf.parameters.phase === "any"
@@ -470,7 +472,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
-          triggers.push(trigger(leaf));
+          triggers.push(withDestroyedObject(trigger(leaf), placesFromEventObject));
           triggerIndexes.push(index);
           // "At the start or end of this unit's move": the other end is an alternative moment.
           if (leaf.family_id === "event" && typeof leaf.parameters.also === "string") {

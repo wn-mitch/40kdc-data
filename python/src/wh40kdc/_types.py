@@ -1119,6 +1119,15 @@ class SimpleCondition37(TypedDict):
     parameters: Parameters42
 
 
+class Parameters46(TypedDict):
+    during: Literal["deployment"]
+
+
+class SimpleCondition41(TypedDict):
+    type: Literal["deployment-window"]
+    parameters: Parameters46
+
+
 class EventBoundReference(TypedDict):
     event_var: str
 
@@ -2582,7 +2591,7 @@ EventFilter = TypedDict(
 
 
 PlaceRef: TypeAlias = (
-    UnitRef | PlaceRef1 | PlaceRef2 | Literal["battlefield-edge", "battlefield-centre"]
+    UnitRef | PlaceRef1 | PlaceRef2 | Literal["battlefield-edge", "battlefield-centre"] | RegionRef
 )
 
 
@@ -3153,6 +3162,7 @@ SimpleCondition: TypeAlias = (
     | SimpleCondition38
     | SimpleCondition39
     | SimpleCondition40
+    | SimpleCondition41
 )
 
 

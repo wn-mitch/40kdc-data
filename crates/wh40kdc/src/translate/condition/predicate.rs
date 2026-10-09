@@ -134,6 +134,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             };
             format!("{neg}in {turn} turn")
         }
+        "deployment-window" => format!("{neg}during deployment"),
         "battle-round" => {
             let min = crate::translate::num_param(p, "min");
             let max = crate::translate::num_param(p, "max");

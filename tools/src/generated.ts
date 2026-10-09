@@ -381,7 +381,8 @@ export type PlaceRef =
   | {
       marker: string;
     }
-  | ("battlefield-edge" | "battlefield-centre");
+  | ("battlefield-edge" | "battlefield-centre")
+  | RegionRef;
 /**
  * Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked).
  */
@@ -492,7 +493,8 @@ export type SimpleCondition =
   | ArmyFactionCondition
   | ArmyIncludesCondition
   | MovedOverCondition
-  | GuidedCondition;
+  | GuidedCondition
+  | DeploymentWindowCondition;
 /**
  * What the event was aimed at: a unit, or (for actions) an objective or terrain area.
  *
@@ -3140,6 +3142,15 @@ export interface GuidedCondition {
   type: "guided";
   parameters: {
     subject?: UnitRef;
+  };
+}
+/**
+ * [clock] It is the deployment step, before the battle starts ("during deployment").
+ */
+export interface DeploymentWindowCondition {
+  type: "deployment-window";
+  parameters: {
+    during: "deployment";
   };
 }
 /**

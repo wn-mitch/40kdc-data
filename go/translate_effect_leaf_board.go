@@ -365,9 +365,14 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	} else if m["subject"] != nil {
 		who = effectSubject(m["subject"], ctx)
 	}
+	// An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+	reserves := m["to"] == "strategic-reserves" || m["from"] == "strategic-reserves"
 	limits := ""
 	if m["ignore_limits"] == true {
 		limits = ", ignoring any limits on units in Strategic Reserves"
+		if !reserves {
+			limits = ", ignoring the usual set-up limits"
+		}
 	}
 	can, whoCan := "can", who
 	if m["allow"] == false {

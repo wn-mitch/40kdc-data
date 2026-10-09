@@ -217,7 +217,9 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
 const ORD = ["", "first", "second", "third", "fourth", "fifth"];
 function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const who = m.subject === "models-on-this-model" ? "the models on this model" : m.subject != null ? effectSubject(m.subject, ctx) : subj;
-  const limits = m.ignore_limits === true ? ", ignoring any limits on units in Strategic Reserves" : "";
+  // An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+  const reserves = m.to === "strategic-reserves" || m.from === "strategic-reserves";
+  const limits = m.ignore_limits === true ? (reserves ? ", ignoring any limits on units in Strategic Reserves" : ", ignoring the usual set-up limits") : "";
   const can = m.allow === false ? "cannot" : m.mandatory === true ? "must" : "can";
   if (m.to === "strategic-reserves") return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}`;
   const from = m.from === "strategic-reserves" ? " from Strategic Reserves" : m.from === "transport" ? " from its Transport" : "";

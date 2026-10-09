@@ -9,10 +9,15 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * which one ends the designation. The record's scope.duration is left as it is.
  */
 export function withDesignationExpiry(list: readonly CompileLeaf[]): CompileLeaf[] {
-  const applied = (leaf: CompileLeaf) => leaf.family_id === "apply-mark" && leaf.parameters.by !== undefined;
+  // A designation on an objective marker (apply-mark selected-objective) lasts as long as the record's
+  // duration says: it has no applier, so it takes the duration with no `by`.
+  const applied = (leaf: CompileLeaf) => leaf.family_id === "apply-mark" && (leaf.parameters.by !== undefined || leaf.parameters.subject === "selected-objective");
   if (!list.some(applied)) return [...list];
   const ends = [...new Set(list.filter((leaf) => leaf.role === "DURATION").map((leaf) => duration(leaf)))];
-  if (ends.length === 0) throw new CompileError("A designation a unit applies to another needs its duration printed, or it never ends.");
+  if (ends.length === 0) {
+    const onObjective = list.some((leaf) => leaf.family_id === "apply-mark" && leaf.parameters.subject === "selected-objective");
+    throw new CompileError(onObjective ? "A designation on the selected objective marker needs its duration printed, or it never ends." : "A designation a unit applies to another needs its duration printed, or it never ends.");
+  }
   if (ends.length > 1) throw new CompileError("A designation a unit applies to another has two printed durations, and the record does not say which one ends it.");
   const clearsOn = ends[0]!;
   return list.map((leaf) => applied(leaf) ? { ...leaf, parameters: { ...leaf.parameters, clears_on: clearsOn } } : leaf);

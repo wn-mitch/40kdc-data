@@ -164,6 +164,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         and _truthy(p["subject"].get("objective"))
     ):
         return negate_phrase(_describe_predicate(c, False))
+    if ctype == "deployment-window":
+        return f"{neg}during deployment"
     if ctype == "phase-is":
         phase = _str(p.get("phase"))
         if phase == "command":

@@ -56,6 +56,9 @@ describe("Round 5C leaf describer audit", () => {
       // open ability id did not; its subject collides as unit-owner's does.
       "unit-has-ability": { unrendered: [], colliding: ["subject"], problems: 0 },
       "same-unit": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // A mark on the selected objective marker needs the select leaf that binds the marker, so alone it
+      // has no text (555 combinations); a clear reads as "no longer" and does not name its applier.
+      "apply-mark": { unrendered: ["by"], colliding: [], problems: 555 },
       "wounds-state": { unrendered: [], colliding: ["subject"], problems: 0 },
       "in-region": { unrendered: [], colliding: ["subject"], problems: 0 },
       // window use names the subject that spent; its English says "you spent YP during this use" without the subject.

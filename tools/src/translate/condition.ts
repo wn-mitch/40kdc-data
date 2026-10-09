@@ -70,6 +70,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
   switch (c.type) {
     case "phase-is":
       return str(p.phase) === "command" ? `${neg}during the Command phase` : `${neg}during the ${titleCase(str(p.phase))} phase`;
+    case "deployment-window":
+      return `${neg}during deployment`;
     case "player-turn-is":
       return `${neg}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "the opponent's" : "either player's"} turn`;
     case "battle-round": {

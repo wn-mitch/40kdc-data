@@ -186,3 +186,12 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.object !== undefined) node.object = closed(leaf, "object");
   return node;
 }
+
+/**
+ * A unit-destroyed moment names the destroyed unit as its object when a later leaf places units
+ * "of event-object" (wave 10, set-up placement after a destruction). Other destroyed moments keep
+ * their trigger as it was.
+ */
+export function withDestroyedObject(node: Node, placedFromObject: boolean): Node {
+  return node.event === "destroyed" && node.object === undefined && placedFromObject ? { ...node, object: "event-object" } : node;
+}

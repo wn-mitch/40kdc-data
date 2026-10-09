@@ -182,9 +182,21 @@ function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
     owner: closed(leaf, "of_side"), ...(leaf.parameters.of_keywords !== undefined ? { all_of: closed(leaf, "of_keywords") } : {}),
     // "(excluding NEUROGAUNT units)": no unit that has any of these keywords.
     ...(leaf.parameters.of_excluded_keywords !== undefined ? { none_of: closed(leaf, "of_excluded_keywords") } : {}),
+    // Wave 10: units that carry, or do not carry, a registered designation (unit-filter designated / not_designated).
+    ...(leaf.parameters.of_designated !== undefined ? { designated: closed(leaf, "of_designated") } : {}),
+    ...(leaf.parameters.of_not_designated !== undefined ? { not_designated: closed(leaf, "of_not_designated") } : {}),
     // "of one or more friendly X VEHICLE or Y units": any one alternative.
     ...dslAlternatives(leaf.parameters.of_alternatives as FilterAlternative[] | undefined),
     ...(leaf.parameters.of_other === true ? { excluding: subject ?? "this-unit" } : {}),
+  };
+}
+
+/** The objective marker a distance measures to: carries objective_tag, controlled as the leaf says. */
+function objectiveFilter(leaf: CompileLeaf): Node {
+  const controlled = leaf.parameters.controlled_by === undefined ? "any" : closed(leaf, "controlled_by");
+  return {
+    designated: closed(leaf, "objective_tag"),
+    ...(controlled === "you" ? { controlled_by: "friendly" } : controlled === "opponent" ? { controlled_by: "enemy" } : {}),
   };
 }
 
@@ -389,7 +401,13 @@ export function condition(leaf: CompileLeaf): Node {
           return { inches: closed(leaf, "inches") };
         };
         const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
-        const node = leaf.parameters.of === "marker"
+        // Wave 10: a distance to an objective marker by its designation and controller, or to the
+        // enemy deployment zone (a region place, beyond only; compile-set-up-placement folds it).
+        const node = leaf.parameters.of === "objective"
+          ? pred("within", { of: { objective: objectiveFilter(leaf) }, range: inchesOnly() }, subject)
+          : leaf.parameters.of === "enemy-deployment-zone"
+          ? pred("within", { of: { territory: "enemy-deployment-zone" }, range: inchesOnly() }, subject)
+          : leaf.parameters.of === "marker"
           ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "battlefield-edge"
           ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...wholly }, subject)
@@ -412,6 +430,8 @@ export function condition(leaf: CompileLeaf): Node {
       }
       return polarity(leaf, pred("within", { of: { objective }, range: "objective-control" }, subject));
     }
+    case "deployment-window":
+      return polarity(leaf, { type: "deployment-window", parameters: { during: closed(leaf, "during") } });
     case "target-is-selected":
       if (namesSelection(leaf)) return targetingCondition(leaf);
       throw new CompileError("target-is-selected only compiles with a select-unit leaf; the compiler resolves it there.");

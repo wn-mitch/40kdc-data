@@ -106,6 +106,8 @@ func describePredicate(c map[string]any, negated bool) string {
 	}
 	neg := notWord(negated)
 	switch c["type"] {
+	case "deployment-window":
+		return neg + "during deployment"
 	case "phase-is":
 		if cstr(p["phase"]) == "command" {
 			return neg + "during the Command phase"

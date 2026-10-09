@@ -39,7 +39,7 @@ const RESOURCE_DIE_ROLLS = [
 ] as const;
 
 /** The tags apply-mark@1 accepts: the registry as it stood then (later versions check the live registry). */
-const MARK_TAGS: readonly string[] = [
+export const MARK_TAGS: readonly string[] = [
   "a-trap-well-laid", "acquisition", "affected-by-order", "afflicted", "aflame", "analysed", "assailed", "assemblage-of-might",
   "auspex-scanned", "battle-shock-auto-succeed", "bio-stimulus-target", "blight-bombardment-target", "bloody-vengeance",
   "breaching-fire-target", "busted", "chronosorcerous-bleed", "claw-of-ascension-crossfire-target",

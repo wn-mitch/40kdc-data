@@ -106,7 +106,7 @@ function filterOf(filter: CompileLeaf): Record<string, unknown> {
   // Alternatives that are each one keyword are the any-of the eligibility checks already read.
   const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
   // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
-  if (rest.designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
+  if (rest.designated !== undefined || rest.not_designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
   if (rest.member_of !== undefined) throw new CompileError("A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.");
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];

@@ -121,6 +121,14 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       // apply-mark@4: who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
       if (leaf.parameters.by !== undefined) modifier.by = closed(leaf, "by");
       if (leaf.parameters.clears_on !== undefined) modifier.clears_on = leaf.parameters.clears_on;
+      // apply-mark@5: the selected objective marker carries the tag (designate's objective subject).
+      // The stratagem's effect has no unit to tag, so the target is this unit, as optional costs do.
+      if (leaf.parameters.subject === "selected-objective") {
+        if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("apply-mark names the selected objective marker, but this record selects no objective marker.");
+        if (leaf.parameters.by !== undefined) throw new CompileError("A designation on an objective marker has no applier; drop by.");
+        modifier.subject = { objective: { selection_var: leaf.parameters.selection_var } };
+        return { type: "designate", target: "this-unit", modifier };
+      }
       return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
     case "army-construction":
@@ -172,7 +180,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       // "… and set it up anywhere on the battlefield": the set-up folded in (compile-set-up-placement.ts).
       const placed = foldedPlacement(leaf, leaf.parameters.set_up_placement);
       // Folded from a unit-size qualifier (compile-model-state.ts): how many models the new unit contains.
-      const size = leaf.parameters.model_count;
+      const size = leaf.parameters.model_count ?? leaf.parameters.models;
       if (size !== undefined && (join || source !== "datasheet")) throw new CompileError("Only a new unit of a named datasheet takes a size; a copy or models joining a unit already say how many.");
       return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...(size !== undefined ? { model_count: structuredClone(size) } : {}), ...copy, ...held, ...placed } };
     }

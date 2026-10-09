@@ -11527,6 +11527,104 @@ impl<'de> ::serde::Deserialize<'de> for DeploymentPatternZonesItemName {
             })
     }
 }
+///`DeploymentWindowConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "during"
+///  ],
+///  "properties": {
+///    "during": {
+///      "enum": [
+///        "deployment"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DeploymentWindowConditionParameters {
+    pub during: DeploymentWindowConditionParametersDuring,
+}
+///`DeploymentWindowConditionParametersDuring`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "deployment"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DeploymentWindowConditionParametersDuring {
+    #[serde(rename = "deployment")]
+    Deployment,
+}
+impl ::std::fmt::Display for DeploymentWindowConditionParametersDuring {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Deployment => f.write_str("deployment"),
+        }
+    }
+}
+impl ::std::str::FromStr for DeploymentWindowConditionParametersDuring {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "deployment" => Ok(Self::Deployment),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`DesignateEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -37068,6 +37166,9 @@ impl ::std::default::Default for PiecePieceType {
 ///        "battlefield-edge",
 ///        "battlefield-centre"
 ///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/region-ref"
 ///    }
 ///  ]
 ///}
@@ -37080,6 +37181,7 @@ pub enum PlaceRef {
     Variant1 { objective: ObjectiveFilter },
     Variant2 { marker: PlaceRefVariant2Marker },
     Variant3(PlaceRefVariant3),
+    Variant4(RegionRef),
 }
 impl ::std::convert::From<UnitRef> for PlaceRef {
     fn from(value: UnitRef) -> Self {
@@ -37089,6 +37191,11 @@ impl ::std::convert::From<UnitRef> for PlaceRef {
 impl ::std::convert::From<PlaceRefVariant3> for PlaceRef {
     fn from(value: PlaceRefVariant3) -> Self {
         Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<RegionRef> for PlaceRef {
+    fn from(value: RegionRef) -> Self {
+        Self::Variant4(value)
     }
 }
 ///`PlaceRefVariant2Marker`
@@ -54272,6 +54379,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "deployment-window condition",
+///      "description": "[clock] It is the deployment step, before the battle starts (\"during deployment\").",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/deployment-window-condition-parameters"
+///        },
+///        "type": {
+///          "const": "deployment-window"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -54495,6 +54620,11 @@ pub enum SimpleCondition {
 [designation] The subject (default this unit) is Guided: it has For the Greater Good, is not an Observer, and is targeting one or more Spotted units.*/
     #[serde(rename = "guided")]
     Guided { parameters: GuidedConditionParameters },
+    /**deployment-window condition
+
+[clock] It is the deployment step, before the battle starts ("during deployment").*/
+    #[serde(rename = "deployment-window")]
+    DeploymentWindow { parameters: DeploymentWindowConditionParameters },
 }
 ///One effect: a type, the unit-ref it applies to (`target`), and that effect's closed `modifier`.
 ///
@@ -67136,7 +67266,7 @@ pub struct UnitRating {
 ///  "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
 ///  "oneOf": [
 ///    {
-///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///      "type": "string",
 ///      "enum": [
 ///        "this-unit",
@@ -67220,13 +67350,13 @@ impl ::std::convert::From<UnitFilter> for UnitRef {
         Self::Variant1(value)
     }
 }
-///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
+///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///  "type": "string",
 ///  "enum": [
 ///    "this-unit",

@@ -341,8 +341,15 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(s) if !s.is_null() => effect_subject(Some(s), ctx),
         _ => subj.to_string(),
     };
+    // An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+    let reserves =
+        sv(m, "to") == Some("strategic-reserves") || sv(m, "from") == Some("strategic-reserves");
     let limits = if is_true(m, "ignore_limits") {
-        ", ignoring any limits on units in Strategic Reserves"
+        if reserves {
+            ", ignoring any limits on units in Strategic Reserves"
+        } else {
+            ", ignoring the usual set-up limits"
+        }
     } else {
         ""
     };

@@ -33,6 +33,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "conqueror-imperative-active",
   "consecrated",
   "contract-unit",
+  "corrupted",
   "counterstrategist-target",
   "covered-in-squigs",
   "daring-recon-target",
@@ -147,6 +148,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "wracked-with-agonies",
   "yp-spent-this-use",
   "zapped",
+  "warded",
 ]);
 
 /** The rules' term for a designation: an adjective ("Spotted") or a noun ("Observer" -> "an Observer", "Observers"). */
@@ -188,6 +190,9 @@ const DESIGNATION_TERMS: Readonly<Record<string, { adjective?: string; noun?: st
   "slayers-oath": { noun: "Slayer's Oath" },
   "vendetta-target": { noun: "Vendetta target" },
   victim: { noun: "victim" },
+  sabotaged: { adjective: "Sabotaged" },
+  warded: { adjective: "Warded" },
+  corrupted: { adjective: "Corrupted" },
 };
 
 /** The printed term for a registered id after "is"/"are" ("Spotted", "an Observer" / "Observers"), else undefined. */
