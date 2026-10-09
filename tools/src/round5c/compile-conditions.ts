@@ -8,6 +8,7 @@
 import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
+import { isTriggeringDestruction, lowerTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
 import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
 import { dslAlternatives } from "./compile-filter-alternatives.js";
@@ -303,6 +304,8 @@ export function condition(leaf: CompileLeaf): Node {
     case "ability-used":
       return abilityUsedCondition(leaf);
     case "unit-activity": {
+      // "if those attacks destroyed an enemy unit": the folded destruction (compile-triggering-destruction.ts), which names no subject.
+      if (isTriggeringDestruction(leaf)) return polarity(leaf, { type: "happened", parameters: lowerTriggeringDestruction(leaf) });
       // Version 3 (batch 6) widens subject beyond this-unit/target.
       const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;
       // Version 4 names several activities: any of them, and negated none of them.

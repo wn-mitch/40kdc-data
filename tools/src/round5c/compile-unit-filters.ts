@@ -6,6 +6,7 @@ import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, m
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
+import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
 
 /**
@@ -260,8 +261,10 @@ function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right:
   return Buffer.from(sourceText, "utf8").subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
 }
 
-export function foldUnitFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  if (!input.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || leaf.family_id === "for-each-unit-select" || leaf.family_id === "move-end-nearest")) return [...input];
+export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (!input0.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || isTriggeringDestruction(leaf) || leaf.family_id === "for-each-unit-select" || leaf.family_id === "move-end-nearest")) return [...input0];
+  // "if those attacks destroyed an enemy unit" pairs its destroyed unit before the merges below (compile-triggering-destruction.ts).
+  const input = foldTriggeringDestruction(input0);
   const list = foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter);
   if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
     throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
