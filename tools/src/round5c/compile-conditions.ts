@@ -8,6 +8,7 @@
 import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
+import { isOneTargetRef } from "./compile-target-refs.js";
 import { isTriggeringDestruction, lowerTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
 import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
@@ -152,7 +153,8 @@ export function bindDesignationSubjects(leaves: readonly CompileLeaf[]): Compile
     const attack = after.slice(0, after.indexOf(effect)).find((other) => other.family_id === "attack");
     // "When an X unit targets that unit": an attack on the designated unit makes it the defender too.
     const who = attack ? (attack.parameters.direction === "targeted" || attack.parameters.target === "that-unit" ? "defender" : undefined) : effect.parameters.subject ?? effect.parameters.target;
-    return typeof who === "string" && DESIGNATED_SUBJECTS.has(who) ? { ...leaf, parameters: { ...leaf.parameters, subject: who } } : leaf;
+    // A named Stratagem target ("the second unit", minted by compile-target-refs) is a unit too; several targets are not one unit.
+    return typeof who === "string" && (DESIGNATED_SUBJECTS.has(who) || isOneTargetRef(who)) ? { ...leaf, parameters: { ...leaf.parameters, subject: who } } : leaf;
   });
 }
 

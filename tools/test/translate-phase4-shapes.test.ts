@@ -227,7 +227,7 @@ describe("describer: abilities, rules and army", () => {
       "The war dogs target counts as being within its aura range of the abhorrent target.",
     );
     expect(render({ type: "select-objective", selector: { count: 1, range: "objective-control", origin: "bearer-unit", controlled_by: "your-army", bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
-      "Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it.",
+      "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it.",
     );
     expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: 3, range_cap: 12, emitter_filter: { required_keywords: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
       'While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.',

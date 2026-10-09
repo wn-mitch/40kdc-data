@@ -1329,7 +1329,7 @@
     "duration": "permanent"
    }
   },
-  "output": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it."
+  "output": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it."
  },
  {
   "fn": "ability",

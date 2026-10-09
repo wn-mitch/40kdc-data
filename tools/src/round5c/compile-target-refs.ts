@@ -28,6 +28,11 @@ export function isTargetRef(value: unknown): value is string {
   return typeof value === "string" && (value.startsWith(ONE) || value.startsWith(SEVERAL));
 }
 
+/** Whether a lowered value is a reference to one named Stratagem target (not several). */
+export function isOneTargetRef(value: unknown): value is string {
+  return typeof value === "string" && value.startsWith(ONE);
+}
+
 /** One matched target, and the keywords it must also have when only some of its alternatives match. */
 type Match = { name: string; gate?: string[] };
 type Several = { pick: "every" | "any"; targets: Match[] };
