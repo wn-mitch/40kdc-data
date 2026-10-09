@@ -340,18 +340,18 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  * node is `nodes.get(openerIndex)`.
  */
 export function planContainers(
-  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[]) => Node) | null = null,
+  list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[]) => Node) | null = null, bullets: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
   nestedCompiler = nested;
   try {
-    return planContainerNodes(list, sentenceOf);
+    return planContainerNodes(list, sentenceOf, bullets);
   } finally {
     nestedCompiler = outer;
   }
 }
 
-function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[]): ContainerPlan {
+function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   list.forEach((leaf, index) => {
@@ -359,6 +359,10 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     const groups: CompileLeaf[][] = [];
     let current: CompileLeaf[] = [];
     let currentSentence: number | null = null;
+    // A choice-open also starts an option at each bullet ("■"), whatever the punctuation. Its options
+    // are bullet-certain when every boundary between them is a bullet, not a sentence break inside one.
+    let sentenceBoundaries = 0;
+    let bulletBoundaries = 0;
     // Under a named-option container each option begins at its marker, whatever the punctuation
     // ("roll one D6: on a 4+" stays in one option; a heading with no full stop does not leak).
     // A choice whose options carry named-option markers splits at them too.
@@ -366,8 +370,13 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       || (leaf.family_id === "choice-open" && list.slice(index + 1).some((item) => item.family_id === "named-option"));
     for (let cursor = index + 1; cursor < list.length && !LEADING_CONTAINERS.has(list[cursor]!.family_id); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
-      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence;
+      const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
+      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts;
       if (starts) {
+        if (currentSentence !== null) {
+          if (bulletStarts) bulletBoundaries += 1;
+          else sentenceBoundaries += 1;
+        }
         if (current.length) groups.push(current);
         current = [];
         currentSentence = sentence;
@@ -405,7 +414,8 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // marker, or a single body. Sentence-split options ("…; if that test is passed, gain 1CP")
     // can cut one option in two, so those keep refusing a non-effect leaf.
     const outer = nestedCompiler;
-    if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id)) nestedCompiler = null;
+    const bulletCertain = leaf.family_id === "choice-open" && bulletBoundaries > 0 && sentenceBoundaries === 0;
+    if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain) nestedCompiler = null;
     try {
       nodes.set(index, buildContainer(leaf, groups));
     } finally {

@@ -13,7 +13,7 @@ import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { trigger, withDestroyedObject } from "./compile-triggers.js";
-import { ordered, placements, shapeSignature } from "./compile-placement.js";
+import { bulletBreaks, ordered, placements, shapeSignature } from "./compile-placement.js";
 import { refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
@@ -29,7 +29,7 @@ import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.
 import { applyHolderAllowance, foldHolderAbilities } from "./compile-holder-abilities.js";
 import { destroyedFilterObject, wrapModelAura, groupMembership } from "./compile-model-level.js";
 import { bindTargetedTarget, namesSelection } from "./compile-targeting-history.js";
-import { foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
+import { dropRedundantMenuOpeners, foldWeaponKeywords, refuseBlastRating } from "./compile-weapon-keywords.js";
 import { foldWeaponScopes, hoistWeaponRecipients } from "./compile-weapon-scopes.js";
 import { bindFrameAntecedents, bindScopeAttacks, bindWeaponAntecedents, bindWeaponStatAntecedents, refuseUnboundWeaponScope } from "./compile-weapon-antecedent.js";
 import { bindEquippedCounts } from "./compile-equipped-count.js";
@@ -304,11 +304,17 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (list.some((leaf) => leaf.family_id === "named-region-state")) {
     return { ok: false, signature, errors: ["named-region-state must be the ability's only leaf."] };
   }
+  try {
+    list = dropRedundantMenuOpeners(list);
+  } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature, errors: [error.message] };
+  }
   const places = placements(list, sourceText);
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText, options)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group) => nestedPart(group, sourceText, options), bulletBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -367,10 +373,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
 
   // "Your unit must end that move either …": the conditions after a move-must-end in its sentence
   // say where the preceding move ends, so they gate nothing and are taken out of clause binding.
-  const moveEnds: MoveEndRule[] = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" ? [{
+  // A move-must-end or condition that a container option consumed belongs to that option, not to the outer move.
+  const moveEnds: MoveEndRule[] = list.flatMap((leaf, index) => leaf.family_id === "move-must-end" && !consumedByContainer.has(index) ? [{
     index, match: String(leaf.parameters.match), cannot: leaf.parameters.polarity === "cannot",
     moveTypes: Array.isArray(leaf.parameters.move_types) ? leaf.parameters.move_types as string[] : null,
-    conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && places[at]!.sentence === places[index]!.sentence ? [at] : []),
+    conditions: list.flatMap((other, at) => at > index && other.role === "CONDITION" && !consumedByContainer.has(at) && places[at]!.sentence === places[index]!.sentence ? [at] : []),
   }] : []);
   const endConditions = new Set(moveEnds.flatMap((rule) => rule.conditions));
   // Conditions on the selected unit right after a selection in its sentence ("select one enemy

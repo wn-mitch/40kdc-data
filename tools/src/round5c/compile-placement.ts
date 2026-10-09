@@ -32,6 +32,22 @@ function opensClause(leaf: CompileLeaf, sourceText: string | undefined): boolean
   return exactSpan(sourceText, leaf.start_byte, leaf.end_byte).trim().toLowerCase() === "or";
 }
 
+const BULLET = /[■▪•]/u;
+
+/**
+ * Where a bullet sits between leaves: entry `i` is true when the source between `leaves[i-1]` and
+ * `leaves[i]` contains a bullet character. Sentence numbering does not use this; it only lets an
+ * opener split its options at bullets that carry no full stop (compile-containers.ts).
+ */
+export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string | undefined): boolean[] {
+  return leaves.map((leaf, index) => {
+    if (index === 0 || sourceText === undefined) return false;
+    const previous = leaves[index - 1]!;
+    if (previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) return false;
+    return BULLET.test(exactSpan(sourceText, previous.end_byte, leaf.start_byte));
+  });
+}
+
 export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
   const sentenceOf: number[] = [];
   const andBefore: boolean[] = [];

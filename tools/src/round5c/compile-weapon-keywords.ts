@@ -1,3 +1,4 @@
+import { isContainerOpener } from "./compile-containers.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { blastRatingRefused } from "./contracts.js";
 import { qualifierOf } from "./compile-weapon-scopes.js";
@@ -159,4 +160,43 @@ export function refuseBlastRating(leaves: readonly CompileLeaf[], sourceText: st
       throw new CompileError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
     }
   }
+}
+
+/** A grant that the keyword fold made into a menu: one of its keywords is chosen. */
+const isKeywordMenu = (leaf: CompileLeaf) => leaf.family_id === "weapon-ability-grant" && leaf.parameters.keyword_choice === true;
+
+/**
+ * A choice-open whose only effect is a keyword menu ("select either the [A] or the [B]") is the
+ * menu itself, so the opener is dropped: the menu's grant keeps the opener's choice_label, and the
+ * fragment for a keyword menu lowers to the same DSL choice. Any other choice-open holding a menu
+ * (a second effect, a random pick, a min or max other than one) is refused, because a sentence
+ * after the menu would otherwise be split into a choice between the menu and that sentence.
+ * The refusal names a second effect when there is one, and the choice's own bounds otherwise.
+ */
+export function dropRedundantMenuOpeners(list: readonly CompileLeaf[]): CompileLeaf[] {
+  const dropped = new Set<number>();
+  const relabelled = new Map<number, CompileLeaf>();
+  list.forEach((leaf, index) => {
+    if (leaf.family_id !== "choice-open") return;
+    let end = index + 1;
+    while (end < list.length && !isContainerOpener(list[end]!.family_id)) end += 1;
+    const rest = list.slice(index + 1, end);
+    const menus = rest.flatMap((other, offset) => isKeywordMenu(other) ? [index + 1 + offset] : []);
+    if (menus.length === 0) return;
+    const effects = rest.filter((other) => other.family_id !== "duration");
+    const menu = effects.length === 1 && isKeywordMenu(effects[0]!) && (effects[0]!.parameters.keywords as unknown[]).length >= 2 ? effects[0]! : null;
+    const oneOfOne = leaf.parameters.min_choices === 1 && leaf.parameters.max_choices === 1 && leaf.parameters.or_random === undefined;
+    if (menu && oneOfOne) {
+      dropped.add(index);
+      if (leaf.parameters.choice_label !== undefined) {
+        relabelled.set(list.indexOf(menu), { ...menu, parameters: { ...menu.parameters, choice_label: leaf.parameters.choice_label } });
+      }
+      return;
+    }
+    if (effects.length > 1 || (effects.length === 1 && !isKeywordMenu(effects[0]!))) {
+      throw new CompileError("A choice-open over a keyword menu needs the menu as its only effect.");
+    }
+    throw new CompileError("A choice-open over a keyword menu needs exactly one choice: min_choices and max_choices both 1, and no random pick.");
+  });
+  return list.flatMap((leaf, index) => dropped.has(index) ? [] : [relabelled.get(index) ?? leaf]);
 }

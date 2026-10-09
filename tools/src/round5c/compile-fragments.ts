@@ -255,12 +255,15 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const keywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords as string[] : [closed(leaf, "keyword")];
       if (leaf.parameters.keyword_choice === true) {
         // A menu option may carry the target qualifier printed after it (compile-weapon-keywords.ts): that option is conditional.
-        const { keywords: _keywords, keyword_choice: _choice, option_conditions: conditions, ...frame } = leaf.parameters as Record<string, unknown> & { option_conditions?: CompileLeaf[] };
-        return { type: "choice", options: keywords.map((keyword, at) => {
+        const { keywords: _keywords, keyword_choice: _choice, choice_label: _label, option_conditions: conditions, ...frame } = leaf.parameters as Record<string, unknown> & { option_conditions?: CompileLeaf[] };
+        const menu: Node = { type: "choice", options: keywords.map((keyword, at) => {
           const grant = effect({ ...leaf, parameters: { ...frame, keyword } }, context);
           const qualifier = conditions?.[at];
           return qualifier ? { type: "conditional", condition: condition(qualifier), effect: grant } : grant;
         }) };
+        // The opener's label for its menu (compile-weapon-keywords.ts carries it over when the opener is dropped).
+        if (leaf.parameters.choice_label !== undefined) menu.choice_label = closed(leaf, "choice_label");
+        return menu;
       }
       // Version 7: "that attack has the [X] ability" — the attack's weapon, whoever makes the attack.
       const holder = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
