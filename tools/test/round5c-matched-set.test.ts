@@ -146,10 +146,11 @@ describe("Round 5C matched sets (those X units)", () => {
     expect(selector.keywords).toEqual(["ALPHA"]);
   });
 
-  it("registers unit-filter at 11, targeting-restriction at 4 and attack at 6", () => {
-    expect(currentFamilyVersion("unit-filter")).toBe(11);
-    expect(currentFamilyVersion("targeting-restriction")).toBe(4);
-    expect(currentFamilyVersion("attack")).toBe(6);
+  it("registers the matched-set widenings (unit-filter from 11, targeting-restriction from 4, attack from 6)", () => {
+    // Lower bounds: later widenings stack on these versions.
+    expect(currentFamilyVersion("unit-filter")).toBeGreaterThanOrEqual(11);
+    expect(currentFamilyVersion("targeting-restriction")).toBeGreaterThanOrEqual(4);
+    expect(currentFamilyVersion("attack")).toBeGreaterThanOrEqual(6);
   });
 
   it("the unit-filter version refuses matched-units with side any or with targets", () => {
