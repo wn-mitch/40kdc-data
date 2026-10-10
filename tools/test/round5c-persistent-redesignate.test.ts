@@ -1,8 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { createValidator } from "../src/schema-loader.js";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+import { checkDslShapes } from "../src/integrity-shapes.js";
 import { DESIGNATION_IDS } from "../src/translate/designations.js";
+import type { ValidationResult } from "../src/validate.js";
 
 /**
  * Re-designation (compile-redesignate.ts): a persistent designation whose trailing sentence selects
@@ -208,7 +214,8 @@ describe("Round 5C re-designation: start timing", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.mechanics.trigger).toBeNull();
-    expect(result.mechanics.effect).toMatchObject({ type: "persistent-designation", designation: "hated-foe" });
+    expect(result.mechanics.effect).toMatchObject({ type: "persistent-designation", designation: "hated-foe", select: { timing: "start-of-first-battle-round" } });
+    expect(JSON.stringify(result.mechanics)).not.toContain("battle-started");
   });
 
   it("keeps a battle-round gate that is not round one as the ability's gate, not the designation's timing", () => {
@@ -253,7 +260,13 @@ describe("Round 5C re-designation: beneficiary this-unit (2146 shape)", () => {
       designatedFilter("B", "prey"), reroll("B", "wound"),
       destroyed("C"), select("C"), replacement,
     ]);
-    expect(effect).toMatchObject({ type: "persistent-designation", designation: "prey", consumer: { beneficiary: "unit" }, lifecycle: { replace: { optional: false } } });
+    expect(effect).toMatchObject({
+      type: "persistent-designation",
+      designation: "prey",
+      select: { timing: "start-of-first-battle-round" },
+      consumer: { beneficiary: "unit" },
+      lifecycle: { replace: { optional: false }, exclusivity: "one-active-per-bearer-unit" },
+    });
     expect(effectOk(effect)).toBe(true);
   });
 });
@@ -276,5 +289,35 @@ describe("Round 5C re-designation: names and registry", () => {
   it("registers mark as a designation id", () => {
     expect(DESIGNATION_IDS.has("mark")).toBe(true);
     expect(DESIGNATION_IDS.has("marked")).toBe(true);
+  });
+});
+
+describe("Round 5C re-designation: registry integrity", () => {
+  const root = mkdtempSync(join(tmpdir(), "redesig-integrity-"));
+  afterAll(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, "enrichment/probe"), { recursive: true });
+  /** Runs checkDslShapes over one ability whose effect and trigger come from a compiled record. */
+  const integrityErrors = async (designation: string): Promise<string[]> => {
+    const result = compileLeaves([
+      select("A"), open("A", "start-of-first-battle-round", designation), attack("B"), designatedFilter("B", designation), reroll("B", "wound"),
+      destroyed("C"), select("C"), open("C", "on-unit-destroyed", designation),
+    ]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const ability = { ability_id: "probe-ability", effect: result.mechanics.effect, trigger: result.mechanics.trigger, scope: result.mechanics.scope };
+    writeFileSync(join(root, "enrichment/probe/abilities.json"), JSON.stringify([ability]));
+    const checked: ValidationResult = { totalFiles: 0, totalItems: 0, passed: 0, failed: 0, errors: [] };
+    await checkDslShapes(root, checked);
+    return checked.errors.flatMap((e) => e.errors.map((x) => x.message));
+  };
+
+  it("passes a compiled re-designation whose designation is the registered id mark", async () => {
+    expect(await integrityErrors("mark")).toEqual([]);
+  });
+
+  it("rejects the same re-designation under an unregistered designation id", async () => {
+    expect(await integrityErrors("made-up-mark")).toEqual([
+      'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
+      'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
+    ]);
   });
 });

@@ -25910,5 +25910,246 @@
     "expected": {
       "text": "Until the start of your opponent's next Command phase, the unit has the Feel No Pain 5+ ability."
     }
+  },
+  {
+    "caseId": "redesignate-mandatory#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": false
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of the first battle round, select one enemy unit (your Quarry target), binding it as quarry selection. When the bound quarry selection is destroyed, you must select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound quarry selection, while making melee attacks, while that unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "redesignate-optional-replacement#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": true
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of the first battle round, select one enemy unit (your Quarry target), binding it as quarry selection. When the bound quarry selection is destroyed, you may select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound quarry selection, while making melee attacks, while that unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "designation-optional-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "mark",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "one-time"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "battle"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> You can:\n  -> At the start of the first battle round, select one enemy unit (your Mark target). For the rest of the battle, each time this model makes an attack against it, while making melee attacks, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "designation-up-to-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "hunted",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "replace-on-destroyed",
+          "bind_as": "hunted-selection"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "hunted-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "hunted-selection"
+            },
+            "optional": true
+          },
+          "exclusivity": "one-active-per-bearer-unit",
+          "expiry": "battle-end"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> You can:\n  -> At the start of the first battle round, select one enemy unit (your Hunted target), binding it as hunted selection. When the bound hunted selection is destroyed, you may select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound hunted selection, while making melee attacks, you can re-roll the Wound roll for attacks made by this model."
+    }
   }
 ]
