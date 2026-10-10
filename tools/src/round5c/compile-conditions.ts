@@ -192,7 +192,7 @@ export function attackTypeCondition(leaf: CompileLeaf): Node | null {
  * "One or more (other) friendly **K** units" as the DSL's unit-filter: every keyword, the side,
  * and, for "other", not the subject itself.
  */
-function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
+export function matchingUnit(leaf: CompileLeaf, subject: string | undefined): Node {
   return {
     owner: closed(leaf, "of_side"), ...(leaf.parameters.of_keywords !== undefined ? { all_of: closed(leaf, "of_keywords") } : {}),
     // "(excluding NEUROGAUNT units)": no unit that has any of these keywords.

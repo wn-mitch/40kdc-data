@@ -54,7 +54,8 @@ describe("Round 5C leaf describer audit", () => {
       // keywords, Starting Strength, a [One Shot] reset) refuses to compile.
       "add-unit": { unrendered: [], colliding: [], problems: 165 },
       // A named weapon type takes over the phrase ("with ranged weapons"), so kind stops showing.
-      "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 0 },
+      // target matched-units names the set an earlier unit-position of matching-unit introduces; alone the leaf has no set, so every combination with it has no text (567).
+      "targeting-restriction": { unrendered: [], colliding: ["kind"], problems: 567 },
       // Batch 6 predicates: an omitted subject defaults to "this-unit"/"the unit", which reads
       // the same as naming it explicitly, and "recipient" reads as "the unit" too.
       "unit-owner": { unrendered: [], colliding: ["subject"], problems: 0 },

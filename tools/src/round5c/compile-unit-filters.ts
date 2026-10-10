@@ -5,6 +5,8 @@ import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scop
 import { FILTER_SUBJECT_TARGET } from "./family-extensions-16-trailing-while-targeting.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { matchedPoolOf } from "./compile-matched-set.js";
+import { MATCHED_UNITS } from "./family-extensions-16-those-enemy-units-role.js";
 import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
@@ -65,6 +67,8 @@ export function assertOneFilterState(states: readonly string[] | undefined, held
 // A "your Warlord" test is refused unless the caller passes `warlordTest` (the S2 gate in
 // compile-warlord-test.ts): every other caller would drop or misread it.
 export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean } = {}): Record<string, unknown> {
+  // "one of those X units": the matched set, which bindMatchedPools attached (compile-matched-set.ts).
+  if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
   const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string };
   if (p.designated === "warlord" && options.warlordTest !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
@@ -129,6 +133,11 @@ function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): Reco
  * held unit ("that is in Reserves") is one more state there, its DSL Reserves unit-state.
  */
 function filterOf(filter: CompileLeaf): Record<string, unknown> {
+  // A matched set is read by its pool: a selection takes the pool's keywords and exclusions, and its range is the select's distance.
+  if (filter.parameters.among === MATCHED_UNITS) {
+    const pool = matchedPoolOf(filter);
+    return { keywords: pool.all_of, ...(pool.none_of !== undefined ? { excluded_keywords: pool.none_of } : {}) };
+  }
   // Alternatives that are each one keyword are the any-of the eligibility checks already read.
   const { side: _side, visible: _visible, level: _level, held_in: heldIn, ...rest } = collapsedAlternatives(filter.parameters);
   // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
@@ -155,7 +164,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
 }
 
 type FilterParameters = {
-  side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
+  among?: string; side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
   held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string;
 };
 
@@ -169,6 +178,8 @@ const union = (left: string[] | undefined, right: string[] | undefined) => [...n
 function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | null {
   const a = first.parameters as FilterParameters;
   const b = second.parameters as FilterParameters;
+  // A matched set is its own filter: merging would drop its among and pool silently.
+  if (a.among === MATCHED_UNITS || b.among === MATCHED_UNITS) return null;
   const sides = new Set([a.side, b.side].filter((value) => value !== "any"));
   if (sides.size > 1) return null;
   if ((a.level ?? "unit") !== (b.level ?? "unit")) return null;

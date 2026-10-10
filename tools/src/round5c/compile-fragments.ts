@@ -13,6 +13,7 @@ import { testEffect } from "./compile-test-effects.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { isTargetRef } from "./compile-target-refs.js";
 import { namedRange } from "./named-ranges.js";
+import { matchedPoolOf } from "./compile-matched-set.js";
 
 export type CompileLeaf = {
   role: string;
@@ -448,7 +449,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     }
     case "targeting-restriction": {
       // enemy-units / friendly-units are every unit of that side, as a DSL unit-filter.
-      const unit = (value: unknown) => value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
+      // "those X units": the set an earlier unit-position of matching-unit introduced (compile-matched-set.ts).
+      const unit = (value: unknown) => value === "matched-units" ? matchedPoolOf(leaf) : value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
       const weaponType = closed(leaf, "weapon_type");
       const range = leaf.parameters.range;
       const modifier: Node = {

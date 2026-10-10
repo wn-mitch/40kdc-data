@@ -65,6 +65,7 @@ import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
+import { bindMatchedPools } from "./compile-matched-set.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -314,7 +315,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText))), sourceText)), sourceText);
     refuseTransportAsSubject(bound);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText));
-    const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(scoped, sourceText), sourceText), sourceText), sourceText)));
+    const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);
