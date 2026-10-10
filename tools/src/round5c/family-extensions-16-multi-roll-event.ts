@@ -1,7 +1,7 @@
 import { type FamilyExtension, optional, withProperties } from "./family-extension-helpers.js";
 import { rollSubject } from "./family-extensions-11.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
-import { enumSet, enumValue } from "./family-validation.js";
+import { enumSet } from "./family-validation.js";
 
 /**
  * Wave-10 multi-roll events: one moment over a list of roll kinds ("after making a Hit roll, Wound
@@ -15,13 +15,14 @@ const ROLL_MOMENTS = ["before-roll", "after-roll"] as const;
 const EVENT_ROLLS: FamilyExtension = {
   // One leaf for a list of roll kinds; triggerLeaves() (compile-triggers.ts) lowers it to one trigger per kind.
   family: "event",
-  description: "As the previous version, plus rolls: two or more roll kinds one before-roll or after-roll moment covers (\"after making a Hit roll, Wound roll or saving throw\"), which lowers to one trigger per kind. roll takes only the kinds a DSL trigger can name (no any, all, attacks, surge or resource-die).",
+  description: "As the previous version, plus rolls: two or more roll kinds one before-roll or after-roll moment covers (\"after making a Hit roll, Wound roll or saving throw\"), which lowers to one trigger per kind; the list takes only the kinds a DSL trigger can name (no any, all, attacks, surge or resource-die). A single roll is unchanged.",
   schema: (previous) => withProperties(previous, {
     rolls: optional({ type: "array", items: { enum: TRIGGER_ROLL_KINDS }, minItems: 2, uniqueItems: true, "x-only-when": { kind: ROLL_MOMENTS } }),
   }),
   normalize: (input, previous) => {
     if (!("rolls" in input)) {
-      if (ROLL_MOMENTS.includes(input.kind as typeof ROLL_MOMENTS[number]) && input.roll !== undefined) enumValue(input.roll, TRIGGER_ROLL_KINDS, "event.roll");
+      // A single roll keeps the previous version's whole enum (any, attacks, all, surge, …): a widening never
+      // rejects a leaf the previous version accepted. Only the rolls list is limited to trigger-nameable kinds.
       return previous(input);
     }
     const { rolls, ...rest } = input;

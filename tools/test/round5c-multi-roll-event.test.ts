@@ -144,8 +144,11 @@ describe("event rolls list (event version 19)", () => {
     expect(() => NORMALIZE_EVENT({ kind: "unit-destroyed", rolls: ["hit", "wound"] })).toThrow(/before-roll or after-roll/u);
   });
 
-  it("refuses a single roll kind a trigger cannot name", () => {
-    expect(() => NORMALIZE_EVENT({ kind: "before-roll", roll: "any" })).toThrow(/must be one of/u);
+  it("keeps a legacy single roll the previous version accepts (a widening never rejects stored leaves)", () => {
+    // Live event leaves carry roll: any / attacks / all / surge / resource-die; only the rolls list is trigger-limited.
+    for (const roll of ["any", "attacks", "all", "surge"]) {
+      expect(NORMALIZE_EVENT({ kind: "before-roll", roll })).toMatchObject({ kind: "before-roll", roll });
+    }
   });
 
   it("keeps list order canonical, so equal lists normalize alike", () => {
