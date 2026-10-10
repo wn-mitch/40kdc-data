@@ -262,12 +262,16 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
 /**
  * In a Stratagem with several targets, "this unit" no longer says which one: refuse any leaf
  * outside TARGET that still names it once anaphors are bound.
+ *
+ * A placement limit's subject is rewritten to this-unit by foldSetUpPlacement, because it places the
+ * set-up's unit; `placedLimit` exempts that subject only, so a limit's other fields still refuse.
  */
-export function refuseBareTarget(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+export function refuseBareTarget(leaves: readonly CompileLeaf[], placedLimit: (leaf: CompileLeaf) => boolean = () => false): CompileLeaf[] {
   if (targetHeads(leaves).flatMap((head) => head.names).length < 2) return [...leaves];
   for (const leaf of leaves) {
     if (leaf.fragment === "TARGET") continue;
-    const keys = Object.entries(leaf.parameters).filter(([, value]) => value === "this-unit").map(([key]) => key);
+    const exempt = placedLimit(leaf) ? "subject" : undefined;
+    const keys = Object.entries(leaf.parameters).filter(([key, value]) => value === "this-unit" && key !== exempt).map(([key]) => key);
     if (keys.length) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} names this unit (${keys.join(", ")}), but the Stratagem has several targets; name the one it means.`);
   }
   return [...leaves];

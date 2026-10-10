@@ -1,6 +1,7 @@
 import { exactSpan } from "./contracts.js";
 import { condition } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { AMONG_TARGETS } from "./family-extensions-w8-multi.js";
 
 /**
  * Where a set-up may (or may not) place a unit. Three folds tie placement wording to the set-up
@@ -33,6 +34,13 @@ const MERGEABLE_SET_UP_KEYS = new Set(["subject", "to", "placement"]);
 
 /** Owner key: the owner's start byte, which no other leaf of the ability shares. */
 const LIMIT_OWNER = "set_up_limit_owner";
+
+/** Wording between an add-unit and the permission set-up after it: "… . If you do, that <unit> can be set up". */
+const PERMISSION_LEAD = /^\s*\.\s*If you do,\s*$/iu;
+/** The add-unit parameter that marks a permission to set up the new unit within a range of the destroyed unit. */
+const PERMISSION_FLAG = "set_up_permission";
+/** The limit parameter that marks a limit of a permission: it lowers to allow_engagement_with, not a near or away_from entry. */
+const PERMISSION_LIMIT = "set_up_permission_limit";
 
 const sameFragment = (left: CompileLeaf, right: CompileLeaf) => (left.fragment ?? null) === (right.fragment ?? null);
 
@@ -84,13 +92,20 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
   if (sourceText === undefined || !leaves.some((leaf) => isSetUp(leaf))) return leaves;
   const result = [...leaves];
   const drop = new Set<number>();
+  // The add-unit whose run (its own set-up and placement limits) ends at `end`, for a permission set-up after it.
+  let addUnit: { at: number; end: number } | null = null;
   for (let at = 0; at < result.length; at++) {
     const leaf = result[at]!;
     let last = at;
+    let ownerAt = at;
+    let permission = false;
     if (isAddUnit(leaf)) {
       const next = result[at + 1];
       const between = next ? gap(leaf, next, sourceText) : null;
-      if (!next || !isSetUp(next) || next.parameters.subject !== "antecedent" || !sameFragment(leaf, next) || between === null || !ADD_UNIT_GLUE.test(between)) continue;
+      if (!next || !isSetUp(next) || next.parameters.subject !== "antecedent" || !sameFragment(leaf, next) || between === null || !ADD_UNIT_GLUE.test(between)) {
+        addUnit = { at, end: at };
+        continue;
+      }
       if (leaf.parameters.held_in !== undefined) throw new CompileError("A unit added in Strategic Reserves is not also set up on the battlefield; drop held_in or the set-up.");
       const extra = Object.keys(next.parameters).find((key) => !MERGEABLE_SET_UP_KEYS.has(key));
       if (extra) throw new CompileError(`The set-up of a newly added unit has no add-unit form for ${extra}.`);
@@ -100,6 +115,22 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
       result[at] = { ...leaf, parameters: merged, end_byte: next.end_byte };
       drop.add(at + 1);
       last = at + 1;
+    } else if (isSetUp(leaf) && leaf.parameters.allow !== false && permissionLead(result, at, sourceText) !== null) {
+      // "… and set it up. If you do, that unit can be set up within Engagement Range of …": a permission of the add-unit.
+      const lead = permissionLead(result, at, sourceText)!;
+      if (addUnit === null || addUnit.end !== lead.anchorAt) throw new CompileError("A permission to set up a unit must follow the add-unit it permits, in the same sentence.");
+      if (leaf.parameters.subject !== "antecedent" || leaf.parameters.to !== "battlefield") throw new CompileError("A permission to set up a newly added unit names it as antecedent and sets it up on the battlefield.");
+      if (leaf.parameters.placement !== undefined) throw new CompileError("A set-up permission with its own placement has no add-unit form; a permission may only lower a range limit.");
+      const extra = Object.keys(leaf.parameters).find((key) => key !== "subject" && key !== "to");
+      if (extra) throw new CompileError(`A set-up permission has no add-unit form for ${extra}.`);
+      const added = result[addUnit.at]!;
+      if (added.parameters[PERMISSION_FLAG] === true) throw new CompileError("A newly added unit has one set-up permission; this sentence grants a second.");
+      result[addUnit.at] = { ...added, parameters: { ...added.parameters, [PERMISSION_FLAG]: true } };
+      drop.add(at);
+      if (lead.filterAt !== null) drop.add(lead.filterAt);
+      ownerAt = addUnit.at;
+      last = at;
+      permission = true;
     } else if (isSetUp(leaf) && leaf.parameters.allow === false && leaf.parameters.subject === "antecedent") {
       const moment = result[at - 1];
       const between = moment ? gap(moment, leaf, sourceText) : null;
@@ -110,18 +141,23 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
     } else if (!isSetUp(leaf)) {
       continue;
     }
-    const ownerLeaf = result[at]!;
+    const ownerLeaf = result[ownerAt]!;
     const ownerSubject = isSetUp(ownerLeaf) && ownerLeaf.parameters.restricted_owner === undefined ? ownerLeaf.parameters.subject : "antecedent";
     let limits = 0;
     for (let next = last + 1; next < result.length; next++) {
       const candidate = result[next]!;
       const between = gap(result[next - 1]!, candidate, sourceText);
+      if (stepsOverAmong(candidate, result[next + 1], ownerLeaf, between, sourceText)) continue;
       if (!isLimit(candidate) || !sameFragment(ownerLeaf, candidate) || between === null || !LIMIT_GLUE.test(between)) break;
       checkLimit(candidate, ownerSubject);
-      result[next] = { ...candidate, parameters: { ...candidate.parameters, ...(candidate.parameters.subject !== undefined ? { subject: "this-unit" } : {}), [LIMIT_OWNER]: ownerLeaf.start_byte } };
+      result[next] = { ...candidate, parameters: { ...candidate.parameters, ...(candidate.parameters.subject !== undefined ? { subject: "this-unit" } : {}), [LIMIT_OWNER]: ownerLeaf.start_byte, ...(permission ? { [PERMISSION_LIMIT]: true } : {}) } };
       limits += 1;
       last = next;
     }
+    if (permission && limits === 0) {
+      throw new CompileError("A permission to set up a newly added unit names no range; the permission has no DSL form without Engagement Range.");
+    }
+    addUnit = isAddUnit(ownerLeaf) ? { at: ownerAt, end: last } : null;
     if (ownerLeaf.parameters.allow === false && limits > 1) {
       throw new CompileError("A forbidden set-up with more than one placement limit leaves unclear which zone is barred; split it into one restriction per zone.");
     }
@@ -137,6 +173,35 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
     at = last;
   }
   return result.filter((_, index) => !drop.has(index));
+}
+
+/**
+ * A set-up that follows "If you do," (optionally after the unit-filter that names its unit): the
+ * permission wording. Null when the wording before the set-up is anything else.
+ */
+function permissionLead(result: readonly CompileLeaf[], at: number, sourceText: string | undefined): { anchorAt: number; filterAt: number | null } | null {
+  const set = result[at]!;
+  if (sourceText === undefined || set.parameters.subject !== "antecedent") return null;
+  const prior = result[at - 1];
+  const filterAt = prior !== undefined && prior.family_id === "unit-filter" && sameFragment(prior, set) ? at - 1 : null;
+  const anchorAt = filterAt === null ? at - 1 : at - 2;
+  const anchor = result[anchorAt];
+  if (anchor === undefined || !sameFragment(anchor, set)) return null;
+  const lead = gap(anchor, filterAt === null ? set : result[filterAt]!, sourceText);
+  if (lead === null || !PERMISSION_LEAD.test(lead)) return null;
+  if (filterAt !== null && gap(result[filterAt]!, set, sourceText)?.trim() !== "") return null;
+  return { anchorAt, filterAt };
+}
+
+/**
+ * An among-filter between two placement limits ("… within 6″ of your MONOLITH model and not within …"):
+ * the run steps over it, and bindTargetRefs binds it to the limit before it.
+ */
+function stepsOverAmong(candidate: CompileLeaf, after: CompileLeaf | undefined, owner: CompileLeaf, between: string | null, sourceText: string | undefined): boolean {
+  if (candidate.family_id !== "unit-filter" || candidate.parameters.among !== AMONG_TARGETS || !sameFragment(owner, candidate)) return false;
+  if (between === null || !LIMIT_GLUE.test(between) || after === undefined || !isLimit(after) || !sameFragment(owner, after)) return false;
+  const tail = gap(candidate, after, sourceText);
+  return tail !== null && LIMIT_GLUE.test(tail);
 }
 
 /** A forbidden set-up whose units are named by the set-up moment before it. */
@@ -179,8 +244,9 @@ export function foldSetUpLimits(leaves: readonly CompileLeaf[]): readonly Compil
 
 function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
   const parameters: Node = { ...owner.parameters };
-  const { [LIMIT_OWNER]: _owner, ...rest } = limit.parameters;
+  const { [LIMIT_OWNER]: _owner, [PERMISSION_LIMIT]: _permission, ...rest } = limit.parameters;
   const append = (field: string, item: Node) => { parameters[field] = [...((parameters[field] as Node[] | undefined) ?? []), item]; };
+  if (limit.parameters[PERMISSION_LIMIT] === true) return permissionLimit(parameters, limit);
   if (limit.family_id === "unit-state") {
     parameters.folded_unengaged = true;
     return parameters;
@@ -206,8 +272,9 @@ function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
   const of = found.of as Node | string;
   const anyEnemy = typeof of === "object" && Object.keys(of).length === 1 && of.owner === "enemy";
   // "More than 9\" away from all enemy units" on a permitted set-up is its min_enemy_distance.
-  if (anyEnemy && isSetUp(owner) && owner.parameters.allow !== false) {
-    // min_enemy_distance is a fixed inch count; a named range (range_ref) has no such field.
+  // A range that is a string ("engagement") is not a fixed inch count, so it takes the away-from path below.
+  if (anyEnemy && isSetUp(owner) && owner.parameters.allow !== false && typeof found.range === "object" && found.range !== null) {
+    // min_enemy_distance is a fixed inch count; a named range (aura_of) has no such field.
     if ("aura_of" in (found.range as Node)) throw new CompileError("A set-up's minimum distance from enemy units is a fixed inch count; a named range has no placement shape yet.");
     const inches = (found.range as Node).inches;
     if (parameters.min_enemy_distance !== undefined && parameters.min_enemy_distance !== inches) {
@@ -218,4 +285,21 @@ function withLimit(owner: CompileLeaf, limit: CompileLeaf): Node {
   }
   append("folded_away_from", { of, range: found.range });
   return parameters;
+}
+
+/**
+ * A permission's only limit: within Engagement Range of the destroyed unit (of event-object), which
+ * the DSL carries as the add-unit's allow_engagement_with. Any other limit has no permission form.
+ */
+function permissionLimit(parameters: Node, limit: CompileLeaf): Node {
+  const p = limit.parameters;
+  const engagementOfDestroyed = limit.family_id === "unit-position" && p.kind === "within" && p.range_ref === "engagement" && p.of === "event-object"
+    && p.negated !== true && p.wholly !== true && p.inches === undefined;
+  if (!engagementOfDestroyed) throw new CompileError("A permission to set up within a range has no DSL form beyond Engagement Range of the destroyed unit.");
+  return { ...parameters, folded_allow_engagement_with: "event-object" };
+}
+
+/** A placement limit folded by foldSetUpPlacement and not yet lowered into its owner. */
+export function isPlacedLimit(leaf: CompileLeaf): boolean {
+  return leaf.parameters[LIMIT_OWNER] !== undefined;
 }

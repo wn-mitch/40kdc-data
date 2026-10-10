@@ -184,7 +184,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       // Folded from a unit-size qualifier (compile-model-state.ts): how many models the new unit contains.
       const size = leaf.parameters.model_count ?? leaf.parameters.models;
       if (size !== undefined && (join || source !== "datasheet")) throw new CompileError("Only a new unit of a named datasheet takes a size; a copy or models joining a unit already say how many.");
-      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...(size !== undefined ? { model_count: structuredClone(size) } : {}), ...copy, ...held, ...placed } };
+      // "If you do, that unit can be set up within Engagement Range of the destroyed unit" (compile-set-up-placement.ts permissionLimit).
+      const permitted = leaf.parameters.folded_allow_engagement_with !== undefined ? { allow_engagement_with: leaf.parameters.folded_allow_engagement_with } : {};
+      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...(size !== undefined ? { model_count: structuredClone(size) } : {}), ...copy, ...held, ...placed, ...permitted } };
     }
     case "battle-shock-state": {
       const recipient = String(closed(leaf, "recipient"));
