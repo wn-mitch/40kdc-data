@@ -59,6 +59,16 @@ const MORTAL_TARGETS: Record<string, string> = { target: "defender", "that-unit"
 
 const isSource = (value: unknown): boolean => value !== null && typeof value === "object" && "source" in value;
 
+/**
+ * A roll a named ability makes ({ability: id} on a reroll or roll-modifier): the DSL's of_ability
+ * ability-roll. Not closed(): the object carries an id, not quoted source text.
+ */
+export function abilityRollOf(leaf: CompileLeaf): { of_ability: string } | undefined {
+  const roll = leaf.parameters.roll;
+  if (roll === null || typeof roll !== "object" || !("ability" in roll)) return undefined;
+  return { of_ability: String((roll as { ability: unknown }).ability) };
+}
+
 export function closed(leaf: CompileLeaf, name: string): unknown {
   const value = leaf.parameters[name];
   if (isSource(value)) throw new CompileError(`${leaf.family_id} ${name} is quoted source text; give it a listed value before it can compile.`);
@@ -146,7 +156,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const { rolls, each: _each, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
         return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
       }
-      const roll = closed(leaf, "roll");
+      const roll = abilityRollOf(leaf) ?? closed(leaf, "roll");
       const subset = closed(leaf, "subset");
       const modifier: Node = subset === "ones" ? { roll, subset: "ones" } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
       // Version 1 leaves have neither field; version 2 adds them, weapon_type defaulting to "all".
@@ -200,7 +210,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const { rolls, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
         return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
       }
-      const roll = closed(leaf, "roll");
+      const roll = abilityRollOf(leaf) ?? closed(leaf, "roll");
       return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...weaponScope(leaf) } };
     }
     case "critical-hit-threshold": {

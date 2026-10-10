@@ -27,10 +27,10 @@ function scaleLeaf(node: Node, scaling: Node): Node {
   if (field === undefined) throw new CompileError(`A count-scale multiplies an amount; ${type} has none.`);
   if (node.scaling !== undefined) throw new CompileError(`The ${type} a count-scale multiplies is already scaled.`);
   const modifier = { ...(node.modifier as Node | undefined ?? {}) };
-  const { per, of, within_inches: within, keyword, max_value: max } = scaling as Record<string, unknown>;
+  const { per, of, within_inches: within, keyword, max_value: max, wargear } = scaling as Record<string, unknown>;
   const counted = COUNTED_FIELDS[type];
   if (counted !== undefined && per === 1 && max === undefined && String(modifier[counted]) === "1") {
-    modifier[counted] = { count_of: of, ...(keyword !== undefined ? { keyword } : {}), ...(within !== undefined ? { within_inches: within } : {}) };
+    modifier[counted] = { count_of: of, ...(keyword !== undefined ? { keyword } : {}), ...(within !== undefined ? { within_inches: within } : {}), ...(wargear !== undefined ? { wargear } : {}) };
     return { ...node, modifier };
   }
   if (modifier[field] === undefined) throw new CompileError(`The ${type} a count-scale multiplies has no ${field} to multiply.`);

@@ -3,6 +3,7 @@ import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-ante
 import { checkAbilityUsedWindows, foldAuraMoments, foldByAbility, namedAbilityChecks } from "./compile-named-ability.js";
 import { foldObjectRange, foldStratagemTail } from "./compile-opponent-stratagem.js";
 import { foldManoeuvreOwnRoll, manoeuvreLookupFor } from "./compile-manoeuvre-own-roll.js";
+import { checkAbilityRollUses } from "./compile-ability-roll.js";
 import type { ManoeuvreMenus } from "./named-ability-checks.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldCountsAsMoved } from "./compile-counts-as-moved.js";
@@ -323,6 +324,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseEmbarkDestination(list);
     // "This ability can be used even if this unit is embarked": the designation before it may be chosen while embarked (compile-embarked-permission.ts).
     list = foldEmbarkedPermission(list);
+    // A roll of a named ability's own dice needs that ability used in its clause before it (compile-ability-roll.ts).
+    checkAbilityRollUses(list);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

@@ -5,7 +5,7 @@
  */
 
 import type { CoreCheck } from "./core-checks.js";
-import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { abilityRollOf, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { ANTECEDENT } from "./antecedent-families.js";
 
@@ -164,6 +164,13 @@ export function namedAbilityChecks(list: readonly CompileLeaf[]): CoreCheck[] {
       return checks;
     }
     if (leaf.family_id === "ability-used" && p.id !== undefined) return [{ kind: "named-ability", parameters: { id: p.id, activity: p.activity, subject: p.subject } }];
+    // A roll of a named ability's own dice: the id must be an ability of the record's faction (or a core one).
+    const rolled = abilityRollOf(leaf)?.of_ability;
+    if (rolled !== undefined) return [{ kind: "named-ability", parameters: { id: rolled, activity: "ability", subject: "this-unit" } }];
+    // A count of the models equipped with a wargear item: the wargear must be a core wargear record. The
+    // count-scale is folded into the effect it scales (compile-count-scale.ts), so the scaling carries it here.
+    const scaling = p.scaling as { of?: unknown; wargear?: unknown } | undefined;
+    if (scaling?.of === "models-equipped-with") return [{ kind: "named-wargear", parameters: { id: String(scaling.wargear) } }];
     return [];
   });
 }

@@ -19,9 +19,32 @@ export function manoeuvreLookupFor(abilityId: string | undefined, dataRoot = DEF
   return (die) => abilityId === undefined ? null : menuActionsForAbility(dataRoot, abilityId, die as "D6");
 }
 
-/** Whether a leaf needs this fold: a manoeuvre-own-roll condition or a roll of a manoeuvre. */
+/** Whether a leaf needs this fold: a manoeuvre-own-roll condition, or a roll-modifier or re-roll of a manoeuvre. */
 export function hasManoeuvreRoll(list: readonly CompileLeaf[]): boolean {
-  return list.some((leaf) => leaf.family_id === "manoeuvre-own-roll" || (leaf.family_id === "roll-modifier" && leaf.parameters.roll === "manoeuvre"));
+  return list.some((leaf) => leaf.family_id === "manoeuvre-own-roll" || ((leaf.family_id === "roll-modifier" || leaf.family_id === "reroll") && leaf.parameters.roll === "manoeuvre"));
+}
+
+/**
+ * A re-roll of a manoeuvre's own dice needs a manoeuvre moment in its clause: an earlier used-manoeuvre
+ * event, or an ability-used of a manoeuvre in progress anywhere in the clause (the in-progress
+ * clause may follow the re-roll in its sentence). A plain used-manoeuvre ability-used before the roll
+ * is not enough (see checkManoeuvreRollMoments for the roll-modifier).
+ */
+function reRollHasMoment(list: readonly CompileLeaf[], index: number): boolean {
+  const roll = list[index]!;
+  const before = list.slice(0, index).some((leaf) => leaf.fragment === roll.fragment && leaf.family_id === "event"
+    && leaf.parameters.kind === "used" && leaf.parameters.activity === "manoeuvre");
+  const during = list.some((leaf) => leaf.fragment === roll.fragment && leaf.family_id === "ability-used"
+    && leaf.parameters.activity === "manoeuvre" && leaf.parameters.window === "now" && leaf.parameters.negated !== true);
+  return before || during;
+}
+
+/** Each re-roll of a manoeuvre roll has a manoeuvre moment in its clause (reRollHasMoment). */
+export function checkManoeuvreRollMoments(list: readonly CompileLeaf[]): void {
+  list.forEach((leaf, index) => {
+    if (leaf.family_id !== "reroll" || leaf.parameters.roll !== "manoeuvre") return;
+    if (!reRollHasMoment(list, index)) throw new CompileError(`re-roll of a manoeuvre roll at byte ${leaf.start_byte} has no manoeuvre moment in its clause.`);
+  });
 }
 
 /** Folds each manoeuvre-own-roll into its used-manoeuvre moment, then checks each manoeuvre roll has one. */
@@ -49,6 +72,7 @@ export function foldManoeuvreOwnRoll(list: readonly CompileLeaf[], lookup: Manoe
     if (menus.withDie.length === menus.actions.length) throw new CompileError(`manoeuvre-own-roll at byte ${leaf.start_byte} names every manoeuvre of the menus; drop it.`);
     out[at] = { ...moment, parameters: { ...moment.parameters, manoeuvre_ids: [...menus.withDie] } };
   }
+  checkManoeuvreRollMoments(out);
   out.forEach((leaf, index) => {
     if (leaf.family_id !== "roll-modifier" || leaf.parameters.roll !== "manoeuvre") return;
     const bound = out.slice(0, index).some((item) => item.fragment === leaf.fragment && item.parameters.manoeuvre_ids !== undefined);

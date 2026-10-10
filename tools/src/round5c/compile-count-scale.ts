@@ -27,6 +27,9 @@ import { ANTECEDENT } from "./antecedent-families.js";
  */
 export const COUNTED = "counted";
 
+/** The count of models equipped with a wargear item (count-scale counts models-equipped-with). */
+const MODELS_EQUIPPED_WITH = "models-equipped-with";
+
 const KEYWORD_SOURCES = new Set(["enemy-models-in-range", "friendly-models-in-range", "models-in-bearer-unit", "models-in-or-embarked-in-bearer", "models-embarked-in-bearer"]);
 const BEARER = new Set(["this-unit", "this-model", undefined]);
 
@@ -212,6 +215,16 @@ export function foldCountScales(input: readonly CompileLeaf[], sourceText?: stri
       if (list[at]!.parameters.scaling !== undefined || list[at]!.parameters.per_item !== undefined) throw new CompileError("An effect is scaled by two counts.");
       onePerItem(list[at]!);
       list[at] = { ...list[at]!, parameters: { ...list[at]!.parameters, per_item: bulletItems(list, index, sourceText, take) } };
+      take.add(index);
+      return;
+    }
+    if (leaf.parameters.counts === "models-equipped-with") {
+      // A count of the models that carry a wargear item: the count names the wargear, not a filter after it.
+      if (list[index + 1]?.family_id === "unit-filter" && list[index + 1]!.fragment === leaf.fragment) throw new CompileError("A count of models equipped with a wargear takes no unit-filter after it.");
+      const at = scaledEffect(list, sentences, index, index + 1);
+      if (list[at]!.parameters.scaling !== undefined || list[at]!.parameters.per_item !== undefined) throw new CompileError("An effect is scaled by two counts.");
+      if (Object.keys(list[at]!.parameters).some((key) => key.startsWith("scaling_"))) throw new CompileError("A test that scales its own amount cannot also take a count-scale.");
+      list[at] = { ...list[at]!, parameters: { ...list[at]!.parameters, scaling: { per: leaf.parameters.per, of: MODELS_EQUIPPED_WITH, wargear: leaf.parameters.wargear } } };
       take.add(index);
       return;
     }

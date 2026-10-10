@@ -15,6 +15,8 @@ export type CoreCheck =
   | { kind: "bearer-eligibility"; parameters: Record<string, unknown> }
   /** An ability, Stratagem, manoeuvre or action a leaf names by id (named-ability-checks.ts). */
   | { kind: "named-ability"; parameters: Record<string, unknown> }
+  /** A wargear item a leaf names by id (a count of the models equipped with it). */
+  | { kind: "named-wargear"; parameters: { id: string } }
   | { kind: "datasheets"; parameters: { ids: string[] } }
   | { kind: "army-factions"; parameters: { ids: string[] } };
 
@@ -80,6 +82,25 @@ function coreUnitIds(dataRoot: string): Set<string> {
   const core = join(dataRoot, "core");
   const ids = new Set(existsSync(core) ? readdirSync(core).flatMap((faction) => factionUnits(dataRoot, faction).map((unit) => unit.id)) : []);
   unitIdCache.set(dataRoot, ids);
+  return ids;
+}
+
+const wargearIdCache = new Map<string, Set<string>>();
+
+/** Every core wargear id, across faction directories (wargear is identical wherever it is carried). */
+function coreWargearIds(dataRoot: string): Set<string> {
+  const cached = wargearIdCache.get(dataRoot);
+  if (cached) return cached;
+  const core = join(dataRoot, "core");
+  const ids = new Set<string>();
+  if (existsSync(core)) {
+    for (const dir of readdirSync(core)) {
+      const file = join(core, dir, "wargear.json");
+      if (!existsSync(file)) continue;
+      for (const record of JSON.parse(readFileSync(file, "utf8")) as Array<{ id?: unknown }>) if (typeof record.id === "string") ids.add(record.id);
+    }
+  }
+  wargearIdCache.set(dataRoot, ids);
   return ids;
 }
 
@@ -211,6 +232,8 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
       if (phases.join() !== [...expected.phases].sort().join() || record.player_turn !== expected.player_turn) {
         errors.push(`WHEN reads as ${expected.phases.join(", ")} in ${expected.player_turn}, but core says ${phases.join(", ")} in ${String(record.player_turn)}.`);
       }
+    } else if (check.kind === "named-wargear") {
+      if (!coreWargearIds(dataRoot).has(check.parameters.id)) errors.push(`The wargear ${check.parameters.id} is not a core wargear record.`);
     } else if (check.kind === "army-factions") {
       // "You cannot select X as your Army Faction": X must be a faction, not a unit keyword or a Detachment.
       const known = coreFactionIds(dataRoot);
