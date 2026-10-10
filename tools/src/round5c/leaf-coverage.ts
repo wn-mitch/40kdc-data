@@ -208,7 +208,9 @@ const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> 
  * one compiling combination per catalog type, which the baseline alone already supplies — the
  * exact record shapes stay covered by their own pinned tests, not this sweep.
  */
-const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption"]);
+// characteristic-modifier@16 joins them: its characteristics and keyword domains with its optional names
+// product exhausted the default worker heap.
+const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption", "characteristic-modifier"]);
 
 /**
  * `trigger`/`when` are the only fields whose value is genuinely a trigger node (or an array of

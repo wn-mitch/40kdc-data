@@ -137,6 +137,14 @@ describe("Round 5C named weapons: lookup and spelling", () => {
     expect(message).toMatch(/printed with 2 spellings/u);
   });
 
+  it("refuses a three-name list whose one folded name has two printed spellings", () => {
+    const text = "Your unit's zap rifles, Zap cannons and Zap missiles weapons have Lethal Hits.";
+    const message = refusalOf(placed(text,
+      ["Your unit's zap rifles, Zap cannons and Zap missiles weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap rifle", "Zap cannon", "Zap missile"] }],
+      ["have Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }]), text);
+    expect(message).toMatch(/printed with 2 spellings/u);
+  });
+
   it("refuses a melee name under a ranged weapon type", () => {
     const text = "Your unit's Zap blades and Zap lasguns weapons have +1 A.";
     const message = refusalOf(placed(text,
@@ -210,6 +218,19 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
     const stats = mechanics.effect.steps as Array<{ target: unknown; modifier: Record<string, unknown> }>;
     expect(stats.map((step) => step.modifier.weapon_name)).toEqual(["Zap lasgun", "Zap pistol"]);
     expect(stats.every((step) => step.target === "event-subject")).toBe(true);
+  });
+
+  it("emits no duration for a named enhancement change the record prints no duration for", () => {
+    const text = "When a friendly unit embarked within this unit disembarks, that friendly unit's Zap lasguns and Zap pistols weapons have +1 A.";
+    const mechanics = mechanicsOf(placed(text,
+      ["a friendly unit", "unit-filter", { side: "friendly" }],
+      ["embarked within this unit disembarks", "event", { kind: "disembarked" }],
+      ["that friendly unit's Zap lasguns and Zap pistols weapons", "weapon-property-scope", { subject: "antecedent", weapon_type: "ranged", weapon_names: ["Zap lasgun", "Zap pistol"] }],
+      ["have +1 A", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }]), text,
+    { faction_id: "fab", source_type: "enhancement", catalog: { faction: FACTION, own: [] } });
+    // "permanent" is the compiler's no-duration scope; an inferred end-of-phase or end-of-turn would fail here.
+    expect(mechanics.scope.duration).toBe("permanent");
+    expect(JSON.stringify(mechanics)).not.toMatch(/end-of-phase|end-of-turn|"duration":"(phase|turn|battle)"/u);
   });
 
   it("takes both names of a half-range condition as one conditional over two grants", () => {
