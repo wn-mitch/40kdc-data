@@ -217,3 +217,33 @@ describe("Count of models equipped with a wargear item (count-scale v3)", () => 
     expect(coreCheckErrors(DATA_ROOT, "eviscerating-fly-by-aeldari", result.checks).filter((error) => error.includes("wargear"))).toEqual([]);
   });
 });
+
+describe("Counts of models equipped with wargear leave their qualifiers alone (markCountedSubjects)", () => {
+  // Fabricated wording. A qualifier that points back at the counted set ("that unit") is marked COUNTED
+  // only for a following-filter count, which takes a unit-filter after it. The models-equipped-with
+  // count takes no filter, so the qualifier stays as authored and nothing is required after it.
+  const counted = { per: 1, counts: "models-equipped-with", wargear: "cluster-caltrops" };
+  const qualifier = { subject: "antecedent", subject_kind: "unit", activity: "ability", window: "now", negated: false };
+  const leafAt = (family: string, parameters: Record<string, unknown>, role: CompileLeaf["role"], start: number): CompileLeaf => ({
+    role, family_id: family, family_version: 1, parameters, start_byte: start, end_byte: start + 1, fragment: "RAW_TEXT",
+  });
+
+  it("does not rewrite a qualifier after a models-equipped-with count to COUNTED", () => {
+    const list = [
+      leafAt("count-scale", counted, "EFFECT", 0),
+      leafAt("ability-used", qualifier, "CONDITION", 1),
+    ];
+    const marked = markCountedSubjects(list);
+    expect(marked[1]!.parameters.subject).toBe("antecedent");
+  });
+
+  it("does not rewrite a qualifier even when a unit-filter follows the count", () => {
+    const list = [
+      leafAt("count-scale", counted, "EFFECT", 0),
+      leafAt("unit-filter", { side: "friendly" }, "EFFECT", 0),
+      leafAt("ability-used", qualifier, "CONDITION", 1),
+    ];
+    const marked = markCountedSubjects(list);
+    expect(marked[2]!.parameters.subject).toBe("antecedent");
+  });
+});
