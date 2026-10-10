@@ -1,10 +1,11 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
- * A counts-as-moved leaf ("Units that do so count as having made a Normal move this turn") folds
+ * A counts-as-moved leaf (a status that makes carried units count as having made a move this turn) folds
  * into the nearest disembark permission before it in its fragment, as the DSL permission's
- * `counts_as_move`. Between the two, only one `move-ended` event may lie (the "after it has
- * disembarked" moment). Every other shape refuses.
+ * `counts_as_move`. Between the two, only one `move-ended` event may lie (the moment after the
+ * move). Every other shape refuses. A DSL gap (refusals 6-8) is reported before the structural
+ * check, so a row with a known gap names the gap.
  *
  * The permission's target must name the units that disembark. The DSL has no such target for a
  * permission: the eligibility-permission subjects are this-unit and this-model, and a disembark
@@ -57,12 +58,8 @@ export function foldCountsAsMoved(leaves: readonly CompileLeaf[], sourceText: st
     if (permission.parameters.allow === false) throw new CompileError(`"${wording}" counts as a move, but its permission forbids the activity.`);
     // 4. One counts_as_move per permission.
     if (permission.parameters.counts_as_move !== undefined) throw new CompileError(`Conflicting counts-as: the permission already counts as ${String(permission.parameters.counts_as_move)}; "${wording}" says otherwise.`);
-    // 5. Only one move-ended event may lie between the permission and the counts-as leaf.
-    const between = list.slice(at + 1, index);
-    if (between.length !== 1 || !isMoveEnded(between[0])) {
-      throw new CompileError(`"${wording}" counts as a move, but leaves other than one move-ended event lie between it and its permission.`);
-    }
-    // 6-8. Gaps: each one is collected so a record reports every reason it cannot compile.
+    // 6-8. Gaps: each one is collected so a record reports every reason it cannot compile. They
+    // are checked before the structural check in step 5, so a row with a known gap reports the gap.
     const gaps: string[] = [];
     if (leaf.parameters.window === "phase") gaps.push("counts_as_until: the status lapses at the end of that phase; the DSL has no counts_as_until");
     if (PERMISSION_SELF_SUBJECTS.has(String(permission.parameters.subject))) gaps.push("the disembarking units are not the permission's target; the DSL cannot name them, and the permission names this-unit");
@@ -72,6 +69,11 @@ export function foldCountsAsMoved(leaves: readonly CompileLeaf[], sourceText: st
       && other.start_byte >= sentence.from && other.start_byte < sentence.to);
     if (chargeRefusal) gaps.push("the charge refusal in this sentence binds the disembarking units, not the permission's target");
     if (gaps.length > 0) throw new CompileError(`DSL_GAP: "${wording}": ${gaps.join("; ")}.`);
+    // 5. Only one move-ended event may lie between the permission and the counts-as leaf.
+    const between = list.slice(at + 1, index);
+    if (between.length !== 1 || !isMoveEnded(between[0])) {
+      throw new CompileError(`"${wording}" counts as a move, but leaves other than one move-ended event lie between it and its permission.`);
+    }
     list[at] = { ...permission, parameters: { ...permission.parameters, counts_as_move: leaf.parameters.move_type } };
     drop.add(index);
   });

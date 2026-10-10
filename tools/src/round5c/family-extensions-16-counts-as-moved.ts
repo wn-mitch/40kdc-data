@@ -3,7 +3,7 @@ import { enumValue, exactKeys } from "./family-validation.js";
 
 /**
  * Wave-10 counts-as-moved: a status that makes a unit count as having made a move this turn or
- * phase ("Units that do so count as having made a Normal move"). It is a modifier that folds into
+ * phase (a status that makes carried units count as having made a move). It is a modifier that folds into
  * the disembark permission before it (compile-counts-as-moved.ts), so it gates nothing and has no
  * subject: the disembarking units are not a subject the DSL can name for a permission.
  */
