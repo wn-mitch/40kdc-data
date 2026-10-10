@@ -99,7 +99,7 @@ describe("ignore-modifier list after a lead-in", () => {
 
   it("refuses a non-list leaf between the lead-in and its list", () => {
     const text = "Sample vehicle: that model's attacks can ignore modifiers to the following, and move again: **BS**.";
-    const errors = refused(text, [LEAD, ["and move again", "move", {}], STATS]);
+    const errors = refused(text, [LEAD, ["and move again", "unit-owner", { owner: "friendly" }], STATS]);
     expect(errors.join(" ")).toMatch(/sits between/);
   });
 

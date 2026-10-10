@@ -25,8 +25,13 @@ type Open = { host: CompileLeaf; items: CompileLeaf[]; pending: CompileLeaf[] };
 const isLead = (leaf: CompileLeaf) => leaf.family_id === LEAD && leaf.family_version >= 3 && Array.isArray(leaf.parameters.what);
 
 export function bindIgnoreLists(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  if (!leaves.some((leaf) => leaf.family_id === LIST)) return [...leaves];
-  if (sourceText === undefined) throw new CompileError("An ignore-modifier list needs source text to verify its clause.");
+  const hasList = leaves.some((leaf) => leaf.family_id === LIST);
+  // A lead-in is checked for a list that follows it even when no list leaf exists at all.
+  if (sourceText === undefined) {
+    if (hasList) throw new CompileError("An ignore-modifier list needs source text to verify its clause.");
+    return [...leaves];
+  }
+  if (!hasList && !leaves.some(isLead)) return [...leaves];
   const source = Buffer.from(sourceText, "utf8");
   const sorted = ordered(leaves);
   const groups: Open[] = [];
