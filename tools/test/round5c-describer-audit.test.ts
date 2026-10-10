@@ -32,6 +32,8 @@ describe("Round 5C leaf describer audit", () => {
       // On its own, "the attack" has no attack leaf to belong to, so it reads as the unit. weapon:
       // earlier-named reads as the weapons it changes; the English does not say they were named earlier.
       "characteristic-modifier": { unrendered: ["weapon"], colliding: ["subject"], problems: 0 },
+      // "change the Damage characteristic of that attack to 1": the attack reads as the unit on its own, as above.
+      "characteristic-set": { unrendered: [], colliding: ["subject"], problems: 0 },
       // A roll change's unit renders as "the unit" for every unit-ref, so a named subject reads like this unit's.
       "roll-modifier": { unrendered: [], colliding: ["subject"], problems: 0 },
       // A removal takes its recipient and weapons from the weapon-property scope before it, so alone every keyword has no recipient.

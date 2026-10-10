@@ -241,8 +241,10 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       if (leaf.family_version >= 3 && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
       }
+      // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
+      const owner = subject === "attack" && leaf.family_version >= 7 ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(subject);
       return {
-        type: "stat-modifier", target: target(subject),
+        type: "stat-modifier", target: owner,
         modifier: {
           stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),

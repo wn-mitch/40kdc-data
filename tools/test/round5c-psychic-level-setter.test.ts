@@ -19,8 +19,8 @@ function leafAt(text: string, wording: string, parameters: Record<string, unknow
 }
 
 describe("Round 5C characteristic-set v6 psyker-level setter", () => {
-  it("is the current characteristic-set version", () => {
-    expect(currentFamilyVersion("characteristic-set")).toBe(SETTER);
+  it("is still in the current characteristic-set version, which later versions extend", () => {
+    expect(currentFamilyVersion("characteristic-set")).toBeGreaterThanOrEqual(SETTER);
   });
 
   it("accepts a model's psyker level, and v5 still refuses it", () => {
