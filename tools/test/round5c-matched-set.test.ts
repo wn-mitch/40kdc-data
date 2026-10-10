@@ -44,14 +44,18 @@ describe("Round 5C matched sets (those X units)", () => {
     expect(modifier.modifier.target).toEqual({ owner: "enemy", within: { range: { inches: 6 }, of: "this-unit" } });
   });
 
-  it("gives the 10249 shape the same modifier as the 9073 shape", () => {
-    const build = () => [
+  it("must select one of those units as the charge's target (10249 shape): must-target on the same pool", () => {
+    const build = (may: string) => [
       leaf("unit-position", { kind: "within", inches: 6, subject: "this-unit", of: "matching-unit", of_side: "enemy", negated: false }),
-      leaf("targeting-restriction", { may: "target", kind: "charge", weapon_type: "all", by: "this-unit", target: "matched-units" }),
+      leaf("targeting-restriction", { may, kind: "charge", weapon_type: "all", by: "this-unit", target: "matched-units" }),
     ];
-    const first = compileLeaves(build());
-    expect(first).toEqual(compileLeaves(build()));
-    expect(JSON.stringify(first)).toContain("\"within\":{\"range\":{\"inches\":6}");
+    const must = compileLeaves(build("must-target"));
+    expect(must.ok).toBe(true);
+    const modifier = (must as unknown as { mechanics: { effect: { effect: { modifier: Record<string, unknown> } } } }).mechanics.effect.effect.modifier;
+    expect(modifier.may).toBe("must-target");
+    expect(modifier.target).toEqual({ owner: "enemy", within: { range: { inches: 6 }, of: "this-unit" } });
+    // A "may only target" restriction is a different rule: the same pool with may target.
+    expect(JSON.stringify(compileLeaves(build("target")))).not.toEqual(JSON.stringify(must));
   });
 
   it("makes the attacker one of those units (8166 shape): the pool, not this unit", () => {
