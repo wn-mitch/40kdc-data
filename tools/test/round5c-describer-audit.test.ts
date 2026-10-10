@@ -92,7 +92,10 @@ describe("Round 5C leaf describer audit", () => {
       // action_kind ability refuses on its own: it needs a by-ability leaf naming the selecting ability.
       // Version 19: an object antecedent (a targeted unit an aura named) and owner any refuse on a
       // targeting without that aura, or without its selecting ability, as the ability values do.
-      event: { unrendered: [], colliding: ["object", "owner", "subject", "move_types", "action_kind"], problems: 24 },
+      // 80 of these are a single roll of any / attacks / all / surge / resource-die on a before-roll or after-roll
+      // moment: valid stored leaves (the roll-list widening keeps the previous enum) that a DSL trigger cannot name,
+      // so the compiler refuses them with "name the roll kinds it covers".
+      event: { unrendered: [], colliding: ["object", "owner", "subject", "move_types", "action_kind"], problems: 104 },
       // An aura's recipient and this unit both read "the unit".
       "ability-used": { unrendered: [], colliding: ["subject"], problems: 0 },
       // test-exemption@2's target enum: "this-unit"/"recipient" both read "the unit", and
