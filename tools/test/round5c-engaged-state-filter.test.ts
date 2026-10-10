@@ -41,12 +41,15 @@ function nodes(tree: unknown, test: (node: Record<string, unknown>) => boolean):
 const FIGHT_WINDOW = { your_phases: [], opponent_phases: [], either_phases: ["fight"] };
 
 describe("unit-filter family: engaged and hidden", () => {
-  it("accepts engaged and hidden at the current version, and the previous version still refuses them", () => {
-    expect(currentFamilyVersion("unit-filter")).toBeGreaterThanOrEqual(9);
+  it("accepts engaged and hidden at the current version, and the version before they were introduced still refuses them", () => {
+    // The version that introduced engaged and hidden is pinned by number: later versions add to the chain above it.
+    const INTRODUCED = 10;
+    expect(currentFamilyVersion("unit-filter")).toBeGreaterThanOrEqual(INTRODUCED);
     expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["engaged"] });
     expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, currentFamilyVersion("unit-filter"))).toEqual({ side: "friendly", states: ["hidden"] });
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, currentFamilyVersion("unit-filter") - 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, currentFamilyVersion("unit-filter") - 1)).toThrow();
+    expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, INTRODUCED)).toEqual({ side: "friendly", states: ["engaged"] });
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["engaged"] }, INTRODUCED - 1)).toThrow();
+    expect(() => normalizeFingerprintParameters("unit-filter", { side: "friendly", states: ["hidden"] }, INTRODUCED - 1)).toThrow();
   });
 
   it("normalizes an input with none of the new states exactly as the previous version does", () => {

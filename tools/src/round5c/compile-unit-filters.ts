@@ -2,6 +2,7 @@ import { exactSpan } from "./contracts.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scope.js";
+import { FILTER_SUBJECT_TARGET } from "./family-extensions-16-trailing-while-targeting.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
@@ -300,10 +301,25 @@ function joinerBetween(sourceText: string | undefined, left: CompileLeaf, right:
   return Buffer.from(sourceText, "utf8").subarray(left.end_byte, right.start_byte).toString("utf8").replace(/[*\s()]/g, "").toLowerCase();
 }
 
+/**
+ * A unit-filter with subject target ("while targeting an enemy unit") becomes the defender's
+ * condition before any other fold sees it, so no neighbouring leaf (a Stratagem target, a select)
+ * can take it and drop its subject.
+ */
+function targetNamingFilter(leaf: CompileLeaf): CompileLeaf {
+  if (!isFilter(leaf) || leaf.parameters.subject !== FILTER_SUBJECT_TARGET) return leaf;
+  if (leaf.fragment === "TARGET") throw new CompileError("A unit-filter with subject target needs an effect that names an attack's target.");
+  if (leaf.parameters.side === "any") throw new CompileError("A unit-filter naming an attack's target must say friendly or enemy.");
+  const { subject: _subject, ...rest } = leaf.parameters;
+  // binds_defender: the rolls after it in this fragment are the attacker's (compile.ts reads it).
+  return { ...leaf, family_id: "unit-filter-target", parameters: { ...rest, owner_explicit: true, binds_defender: true } };
+}
+
 export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!input0.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || isTriggeringDestruction(leaf) || leaf.family_id === "for-each-unit-select" || leaf.family_id === "move-end-nearest")) return [...input0];
   // "if those attacks destroyed an enemy unit" pairs its destroyed unit before the merges below (compile-triggering-destruction.ts).
-  const input = foldTriggeringDestruction(input0);
+  // A filter naming the attack's target is the defender's condition, not a filter a neighbouring leaf can take.
+  const input = foldTriggeringDestruction(input0.map(targetNamingFilter));
   const list = foldSelectExclusions(mergeStackedFilters(input, sourceText), mergedFilter);
   if (list.some((leaf, at) => isFilter(leaf) && leaf.parameters.datasheets !== undefined && !armyGroup(list, at))) {
     throw new CompileError("A datasheet list has no DSL unit-filter shape outside army construction.");
