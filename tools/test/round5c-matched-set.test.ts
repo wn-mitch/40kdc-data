@@ -133,6 +133,15 @@ describe("Round 5C matched sets (those X units)", () => {
     expect(select.ok).toBe(false);
   });
 
+  it("carries the source's excluded keywords into the selection as the pool's none_of", () => {
+    const source = leaf("unit-position", { kind: "within", inches: 6, subject: "this-model", of: "matching-unit", of_side: "friendly", of_keywords: ["ALPHA"], of_excluded_keywords: ["DAMNED"], negated: false });
+    const result = compileLeaves([source, selectFriendly(), those(["ALPHA"]), mortal()]);
+    expect(result.ok).toBe(true);
+    const selector = (result as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
+    expect(selector.excluded_keywords ?? selector.none_of).toEqual(["DAMNED"]);
+    expect(selector.keywords).toEqual(["ALPHA"]);
+  });
+
   it("registers unit-filter at 11, targeting-restriction at 4 and attack at 6", () => {
     expect(currentFamilyVersion("unit-filter")).toBe(11);
     expect(currentFamilyVersion("targeting-restriction")).toBe(4);
