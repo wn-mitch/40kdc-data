@@ -589,6 +589,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         // A defender-bound unit-filter before the roll makes the roll the attacker's, unless an
         // attack this unit makes says otherwise.
         incoming: attack?.parameters.direction === "targeted" || (attack?.parameters.direction !== "makes" && defenderBoundBefore(list, index)),
+        // An allocation moment before the effect ("Each time an attack … is allocated to a model in that unit"):
+        // the attack a makes-attack names is the one allocated to the bearer's unit (compile-fragments.ts attackOwner).
+        defended: list.slice(0, index).some((item) => item.family_id === "event" && item.parameters.kind === "damage-allocated"),
       });
     });
     if (!node) return;

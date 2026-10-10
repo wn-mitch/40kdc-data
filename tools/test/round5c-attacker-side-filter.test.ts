@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
+import { attackOwner, effect } from "../src/round5c/compile-fragments.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 // Fabricated wording only: the names, keywords and numbers are invented, and the sentence
@@ -14,18 +15,20 @@ const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/en
 const base = (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abilities.json"), "utf8")) as Array<Record<string, unknown>>)
   .find((entry) => entry.ability_id === "control-edict-adeptus-mechanicus")!;
 
-type Item = [wording: string, family: string, parameters: Record<string, unknown>];
+/** "zero": a zero-width leaf at the first byte of its wording (a frame that precedes the leaf it grants). */
+type Item = [wording: string, family: string, parameters: Record<string, unknown>, ("zero" | undefined)?];
 
 /** Leaves on their own wording in `text`, in order. `version` pins a family version other than the current one. */
 function placed(text: string, items: Item[], version?: { family: string; version: number }): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
-  return items.map(([wording, family, parameters]) => {
+  return items.map(([wording, family, parameters, zero]) => {
     const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
-    from = start + Buffer.byteLength(wording, "utf8");
+    const end = zero ? start : start + Buffer.byteLength(wording, "utf8");
+    if (!zero) from = end;
     const family_version = version?.family === family ? version.version : currentFamilyVersion(family);
-    return { role: familyRole(family, family_version), family_id: family, family_version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, family_version), family_id: family, family_version, parameters, start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
   });
 }
 
@@ -64,6 +67,16 @@ describe("Round 5C attacker-side filter on a destruction by an attack", () => {
     expect(result.ok ? "" : result.errors.join(" ")).toContain("cannot also take that destroyer");
   });
 
+  it("refuses a destruction that names the attacks it is destroyed by, since the fold would drop the attack's maker", () => {
+    // destroy_filter already names the destroying weapon; the fold is refused rather than combined with it.
+    const text = SHOT_TEXT;
+    const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
+    leaves[1]!.parameters = { kind: "unit-destroyed", destroy_filter: { weapon: "any" } };
+    const result = compileLeaves(leaves, text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("cannot also take its destroyer");
+  });
+
   it("refuses a destruction that already has a subject filter", () => {
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
@@ -93,7 +106,6 @@ describe("Round 5C attacker-side filter on a destruction by an attack", () => {
 
 describe("Round 5C attacker filter on an incoming attack's damage", () => {
   it("makes a friendly model's attack the damage moment's subject, with the model filter", () => {
-    // The Damage change is left as the attack's owner for now; only the trigger's subject is pinned here.
     const { mechanics } = compiled("Each time an attack made by a NURGLE LEGIONES DAEMONICA model is allocated to a model in that unit, add 1 to the Damage characteristic of that attack.", [
       ["Each time an attack made by a", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
       ["NURGLE LEGIONES DAEMONICA model", "unit-filter", { side: "friendly", keywords: ["NURGLE", "LEGIONES DAEMONICA"], level: "model" }],
@@ -101,6 +113,40 @@ describe("Round 5C attacker filter on an incoming attack's damage", () => {
       ["add 1 to the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "add", value: 1, weapon_type: "all" }],
     ]);
     expect(mechanics.trigger).toMatchObject({ event: "damage-allocated", subject: { owner: "friendly", all_of: ["NURGLE", "LEGIONES DAEMONICA"], level: "model" } });
+  });
+
+  it("changes the Damage of the allocated attack on the bearer's unit, not on every friendly unit", () => {
+    // The makes-attack's maker is the trigger's subject; the modifier targets the unit the attack is allocated to.
+    const { mechanics } = compiled("Each time an attack made by a NURGLE LEGIONES DAEMONICA model is allocated to a model in that unit, add 1 to the Damage characteristic of that attack.", [
+      ["Each time an attack made by a", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+      ["NURGLE LEGIONES DAEMONICA model", "unit-filter", { side: "friendly", keywords: ["NURGLE", "LEGIONES DAEMONICA"], level: "model" }],
+      ["is allocated to a model in that unit", "event", { kind: "damage-allocated" }],
+      ["add 1 to the Damage characteristic of that attack", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "add", value: 1, weapon_type: "all" }],
+    ]);
+    expect(mechanics.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "add", value: 1 } });
+  });
+});
+
+describe("Round 5C attack owner for a subject-attack setter (compile-fragments attackOwner)", () => {
+  it("names the attacker of an incoming attack", () => {
+    expect(attackOwner({ incoming: true, attacker: { owner: "enemy" }, defended: true })).toBe("attacker");
+  });
+
+  it("names the bearer's unit for an allocation moment, whatever the attacker's filter says", () => {
+    expect(attackOwner({ incoming: false, attacker: { owner: "friendly" }, defended: true })).toBe("this-unit");
+  });
+
+  it("names the attacker filter of the bearer's own attack, else this unit", () => {
+    expect(attackOwner({ incoming: false, attacker: { owner: "enemy" }, defended: false })).toEqual({ owner: "enemy" });
+    expect(attackOwner({ incoming: false, defended: false })).toBe("this-unit");
+  });
+
+  it("lowers an incoming subject-attack setter to the attacker, not to the bearer", () => {
+    const leaf = placed("change the Damage characteristic of that attack to 1", [
+      ["change the Damage characteristic of that attack to 1", "characteristic-set", { subject: "attack", characteristic: "D", value: 1, weapon_type: "all" }],
+    ])[0]!;
+    expect(effect(leaf, { attached: false, incoming: true, attacker: null })).toMatchObject({ type: "stat-modifier", target: "attacker" });
+    expect(effect(leaf, { attached: false, incoming: false, attacker: null })).toMatchObject({ type: "stat-modifier", target: "this-unit" });
   });
 });
 
@@ -176,6 +222,28 @@ describe("Round 5C benefit of cover for a marked unit's targets", () => {
     ]);
     expect(mechanics.trigger).toEqual({ event: "attacks-resolved" });
     expect(mechanics.effect).toMatchObject({ type: "conditional", effect: { type: "rule-state", target: "defender" } });
+  });
+});
+
+describe("Round 5C Or: arm with a Character condition on the bearer (10539 shape)", () => {
+  // "Have [LETHAL HITS]. Or: If your unit is a Character unit, have [LETHAL HITS] and [LANCE]." The second arm
+  // repeats the keyword under the antecedent frame; the player picks one arm, so the result is a choice.
+  const TEXT = "Your unit's melee attacks have [LETHAL HITS]. Or: If your unit is a Character unit, have [LETHAL HITS] and [LANCE].";
+  const ITEMS: Item[] = [
+    ["Your unit's melee attacks", "weapon-ability-grant", { subject: "this-unit", weapon_type: "melee" }],
+    ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+    ["Or:", "instead", { choice: true }],
+    ["If your unit is a Character unit", "unit-keyword", { keywords: ["CHARACTER"], subject: "this-unit", negated: false }],
+    ["[LETHAL HITS]", "weapon-ability-grant", { frame: "antecedent" }, "zero"],
+    ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+    ["[LANCE]", "weapon-ability-keyword", { keyword: "Lance" }],
+  ] as Item[];
+
+  it("lowers to a choice: the plain arm, or the Character arm under its own condition", () => {
+    const { mechanics } = compiled(TEXT, ITEMS);
+    expect(mechanics.effect.type).toBe("choice");
+    expect(mechanics.effect.options[0]).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } });
+    expect(mechanics.effect.options[1]).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["CHARACTER"] } }, effect: { modifier: { abilities: ["Lethal Hits", "Lance"] } } });
   });
 });
 

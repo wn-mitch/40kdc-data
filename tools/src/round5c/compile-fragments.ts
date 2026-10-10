@@ -113,11 +113,24 @@ function pickOne(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): Node
 }
 
 /**
+ * The attack a subject-attack leaf changes ("that attack"). `incoming` attacks target this unit, so
+ * the attack belongs to its attacker. `defended` marks an allocation moment: the attack is allocated
+ * to a model in the bearer's unit, so the bearer's unit is the attack's target, as in every
+ * stat-modifier on an incoming attack. Else the attack is the one the bearer's unit makes.
+ */
+export function attackOwner(context: { attacker?: Node | string | null; incoming: boolean; defended?: boolean }): Node | string {
+  if (context.incoming) return "attacker";
+  if (context.defended) return "this-unit";
+  return context.attacker ?? "this-unit";
+}
+
+/**
  * One effect. `subject` is who the ability's own subject resolves to: the unit when a leader
  * is attached, else the family's subject parameter. `incoming` marks an effect on attacks that
- * target this unit, where the attacker's rolls are modified.
+ * target this unit, where the attacker's rolls are modified. `defended` is set when an
+ * allocation moment precedes the effect (see attackOwner).
  */
-export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean }): Node {
+export function effect(leaf: CompileLeaf, context: { attached: boolean; attacker?: Node | string | null; incoming: boolean; defended?: boolean }): Node {
   // A count folded onto the leaf (compile-count-scale.ts) applies to the whole node it lowers to.
   const { scaling, per_item: perItem, ...parameters } = leaf.parameters;
   if (scaling === undefined && perItem === undefined) return leafEffect(leaf, context);
@@ -242,7 +255,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
-      const owner = subject === "attack" && leaf.family_version >= 7 ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(subject);
+      const owner = subject === "attack" && leaf.family_version >= 7 ? attackOwner(context) : target(subject);
       return {
         type: "stat-modifier", target: owner,
         modifier: {
@@ -422,7 +435,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       // "that unit" bound to the bearer (compile-antecedent.ts) is the led unit's models, so only an authored "this model" qualifies.
       const authoredBearer = !(leaf.antecedent_keys ?? []).includes("subject");
       const bearerWeapons = leaf.parameters.subject === "this-model" && authoredBearer && (leaf.parameters.characteristics as string[]).some((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat));
-      const owner = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
+      const owner = leaf.parameters.subject === "attack" ? attackOwner(context) : models(leaf, bearerWeapons ? "this-model" : target(leaf.parameters.subject));
       const weaponType = closed(leaf, "weapon_type") ?? "all";
       // A list of named weapons (compile-weapon-names.ts) changes each characteristic for each weapon: one step per pair.
       const named = Array.isArray(leaf.parameters.weapon_names) ? leaf.parameters.weapon_names as string[] : undefined;
