@@ -1,4 +1,6 @@
-import { EVENT_SUBJECT, type FamilyExtension, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { EVENT_SUBJECT, type FamilyExtension, properties, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
+import { PHASE_EVENT_KINDS, PHASES, TURNS } from "./event-family.js";
+import { enumValue } from "./family-validation.js";
 
 /**
  * Wave-10 own-dice manoeuvre roll: "each time a unit performs an Agile Manoeuvre that involves
@@ -18,6 +20,29 @@ export const FAMILY_EXTENSIONS_16_NAMED_ABILITY_USED_EVENT: readonly FamilyExten
       if ("rolls" in input) throw new TypeError("roll-modifier roll manoeuvre names one roll, not rolls.");
       if (input.subject !== EVENT_SUBJECT) throw new TypeError("roll-modifier roll manoeuvre names the performing unit as its subject (event-subject).");
       return standIn(input, "roll", "hit", previous);
+    },
+  },
+  {
+    family: "event",
+    description: "As the previous version, and an attacks-resolved moment may name the phase and whose turn it is (\"in your opponent's Shooting phase\"), lowered to the trigger's condition.",
+    schema: (previous) => {
+      const props = properties(previous);
+      if (!props.phase || !props.turn) throw new Error("event schema has no phase or turn to widen.");
+      const kinds = [...PHASE_EVENT_KINDS, "attacks-resolved"];
+      return withProperties(previous, {
+        phase: { ...props.phase, "x-only-when": { kind: kinds } },
+        turn: { ...props.turn, "x-only-when": { kind: kinds } },
+      });
+    },
+    normalize: (input, previous) => {
+      if (input.kind !== "attacks-resolved" || (!("phase" in input) && !("turn" in input))) return previous(input);
+      const { phase, turn, ...rest } = input;
+      const canonical = previous(rest);
+      return {
+        ...canonical,
+        ...(phase !== undefined ? { phase: enumValue(phase, PHASES, "event.phase") } : {}),
+        ...(turn !== undefined ? { turn: enumValue(turn, TURNS, "event.turn") } : {}),
+      };
     },
   },
 ];

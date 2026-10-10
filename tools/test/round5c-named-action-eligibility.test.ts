@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 
 /**
  * Menu-action eligibility from ordinary leaves in source order (compile-containers.ts,
@@ -64,13 +65,62 @@ describe("menu-action eligibility in source order", () => {
     });
   });
 
-  it("refuses an enemy select-unit, two select-units, and a leaf that repeats a flag", () => {
-    const menu = () => leaf("EVENT", "menu-action", { action_id: "a", label: "A", cost_amount: 1, binds_event_variable: "triggering-enemy", eligibility_engaged_with_bound_at_phase_start: true, duration: "immediate" }, "D", 2);
+  it("refuses an enemy select-unit, two select-units, a count other than one, an extra filter key, and a leaf that repeats a flag", () => {
+    const menu = (extra: Record<string, unknown> = {}) => leaf("EVENT", "menu-action", { action_id: "a", label: "A", cost_amount: 1, binds_event_variable: "triggering-enemy", duration: "immediate", ...extra }, "D", 2);
     const trigger = () => leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"] }, "D", 9);
     const effect = () => leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "D");
-    expect(compileLeaves([opener(), menu(), trigger(), leaf("EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }, "D"), effect()]).ok).toBe(false);
-    expect(compileLeaves([opener(), menu(), trigger(), leaf("EVENT", "select-unit", { distance: "any", visible: false }, "D"), leaf("EVENT", "select-unit", { distance: "any", visible: false }, "D"), effect()]).ok).toBe(false);
-    expect(compileLeaves([opener(), menu(), trigger(), leaf("EVENT", "select-unit", { distance: "any", visible: false }, "D"), leaf("CONDITION", "unit-state", bound, "D", 14), effect()]).ok).toBe(false);
+    const select = (parameters: Record<string, unknown> = {}) => leaf("EVENT", "select-unit", { distance: "any", visible: false, ...parameters }, "D");
+    const errorsOf = (leaves: CompileLeaf[]) => {
+      const result = compileLeaves(leaves);
+      return result.ok ? [] : result.errors;
+    };
+    expect(errorsOf([opener(), menu(), trigger(), select({ scope: "enemy" }), effect()])).toEqual([expect.stringContaining("selects a friendly unit")]);
+    expect(errorsOf([opener(), menu(), trigger(), select(), select(), effect()])).toEqual([expect.stringContaining("selects one unit: give it one select-unit.")]);
+    expect(errorsOf([opener(), menu(), trigger(), select({ count: 2 }), effect()])).toEqual([expect.stringContaining("selects one unit.")]);
+    expect(errorsOf([opener(), menu(), trigger(), select({ filter: { battle_shocked: true } }), effect()])).toEqual([expect.stringContaining("the DSL holds no battle_shocked for it")]);
+    expect(errorsOf([opener(), menu({ eligibility_engaged_with_bound_at_phase_start: true }), trigger(), select(), leaf("CONDITION", "unit-state", bound, "D", 14), effect()]))
+      .toEqual([expect.stringContaining("states a bound requirement both as a leaf and as a flag")]);
+  });
+
+  it("reads the attacks-resolved phase and turn of Fade Back into the trigger's condition, never into eligibility", () => {
+    const result = compileLeaves([
+      opener(),
+      leaf("EVENT", "menu-action", { action_id: "fade-back", label: "Fade Back", cost_amount: 1, binds_event_variable: "triggering-shooter", duration: "immediate" }, "C", 2),
+      leaf("EVENT", "event", { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot", phase: "shooting", turn: "opponent" }, "C", 19),
+      leaf("EVENT", "select-unit", { distance: "any", visible: true }, "C"),
+      leaf("CONDITION", "unit-filter", { side: "friendly", excluded_keywords: ["TITANIC"] }, "C"),
+      leaf("CONDITION", "hit-by-attacks", { subject: "selected-unit" }, "C"),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "C"),
+    ]);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const [action] = (result.mechanics.effect as { actions: Array<Record<string, unknown>> }).actions;
+    expect(action!.when).toEqual({
+      event: "attacks-resolved",
+      filter: { kind: "shoot" },
+      subject: { owner: "enemy" },
+      condition: {
+        operator: "and",
+        operands: [{ type: "phase-is", parameters: { phase: "shooting" } }, { type: "player-turn-is", parameters: { turn: "opponent-turn" } }],
+      },
+    });
+    expect(action!.eligibility).toEqual({
+      selector_count: 1,
+      excludes_keyword: ["TITANIC"],
+      requires: [{ type: "happened", parameters: { event: "after-roll", object: "selected-unit", filter: { roll: "hit", result: "success", by: { event_var: "triggering-shooter" } }, window: "event" } }],
+    });
+  });
+
+  it("refuses a phase or turn on an owned moment other than attacks-resolved", () => {
+    const result = compileLeaves([
+      opener(),
+      leaf("EVENT", "menu-action", { action_id: "c", label: "C", cost_amount: 1, binds_event_variable: "triggering-enemy", duration: "immediate" }, "C", 2),
+      leaf("EVENT", "event", { kind: "move-ended", owner: "enemy", move_types: ["fall-back"], phase: "movement" }, "C", 19),
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "C"),
+    ]);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors).toEqual([expect.stringContaining("Only an attacks-resolved moment names its phase and turn")]);
   });
 
   it("does not read a unit-state that is not the bound engagement as eligibility", () => {
@@ -82,5 +132,12 @@ describe("menu-action eligibility in source order", () => {
       leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6+1" }, "E"),
     ]);
     expect(result.ok).toBe(false);
+  });
+  it("accepts phase and turn on attacks-resolved only, as event version 19", () => {
+    const moment = { kind: "attacks-resolved", owner: "enemy", action_kind: "shoot", phase: "shooting", turn: "opponent" };
+    expect(normalizeFingerprintParameters("event", moment, 19)).toMatchObject({ kind: "attacks-resolved", phase: "shooting", turn: "opponent" });
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", owner: "enemy", phase: "movement" }, 19)).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { ...moment, phase: "any-phase" }, 19)).toThrow();
+    expect(() => normalizeFingerprintParameters("event", moment, 18)).toThrow();
   });
 });

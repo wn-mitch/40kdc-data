@@ -42,30 +42,51 @@ describe("manoeuvre-own-roll compile", () => {
     expect(JSON.stringify(result.mechanics)).not.toContain('"type":"conditional"');
   });
 
-  it("refuses a set that is empty, the full menu, a missing die, or a missing faction", () => {
-    const refuses = (menuActions: ((die: string) => unknown) | undefined) => compileLeaves(
-      [usedManoeuvre(), dieCondition(), manoeuvreRoll()], undefined,
-      menuActions === undefined ? {} : { menuActions: menuActions as never },
-    ).ok;
-    expect(refuses(() => ({ actions: ["a"], withDie: [] }))).toBe(false);
-    expect(refuses(() => ({ actions: ["a", "b"], withDie: ["a", "b"] }))).toBe(false);
-    expect(refuses(() => null)).toBe(false);
-    expect(refuses(undefined)).toBe(false);
+  it("refuses a set that is empty, the full menu, a missing die, or a missing faction, each with its reason", () => {
+    const errorsWith = (menuActions: ((die: string) => unknown) | undefined) => {
+      const result = compileLeaves(
+        [usedManoeuvre(), dieCondition(), manoeuvreRoll()], undefined,
+        menuActions === undefined ? {} : { menuActions: menuActions as never },
+      );
+      return result.ok ? [] : result.errors;
+    };
+    expect(errorsWith(() => ({ actions: ["a"], withDie: [] }))).toEqual([expect.stringContaining("finds no manoeuvre whose own move rolls D6.")]);
+    expect(errorsWith(() => ({ actions: ["a", "b"], withDie: ["a", "b"] }))).toEqual([expect.stringContaining("names every manoeuvre of the menus; drop it.")]);
+    expect(errorsWith(() => null)).toEqual([expect.stringContaining("no faction holds this ability.")]);
+    expect(errorsWith(undefined)).toEqual([expect.stringContaining("no faction holds this ability.")]);
+  });
+
+  it("reads the D6 manoeuvres from the record's own faction when no menuActions stub is given", () => {
+    const result = compileLeaves([usedManoeuvre(), dieCondition(), manoeuvreRoll()], undefined, { abilityId: "martial-grace-aeldari" });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"id":"fade-back"');
+    expect(text).toContain('"id":"opportunity-seized"');
+    expect(text).not.toContain('"id":"sudden-strike"');
+    expect(text).not.toContain('"id":"swift-as-the-wind"');
   });
 
   it("refuses a manoeuvre-own-roll with no used-manoeuvre moment in its clause", () => {
     const result = compileLeaves([leaf("EVENT", "event", { kind: "used", activity: "ability" }, "A", 18), dieCondition(), manoeuvreRoll()], undefined, { menuActions: stub });
     expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors).toEqual([expect.stringContaining("names a manoeuvre, but no used-manoeuvre moment sits before it")]);
   });
 
   it("refuses a manoeuvre roll with no folded manoeuvre moment before it in its clause", () => {
     const result = compileLeaves([usedManoeuvre("B"), dieCondition("D6", "B"), manoeuvreRoll("A")], undefined, { menuActions: stub });
     expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors).toEqual([expect.stringContaining("has no manoeuvre-own-roll moment before it in its clause.")]);
   });
 
   it("refuses a manoeuvre-own-roll that already names an id on its moment", () => {
     const named = { ...usedManoeuvre(), parameters: { kind: "used", activity: "manoeuvre", id: "alpha-move" } };
-    expect(compileLeaves([named, dieCondition(), manoeuvreRoll()], undefined, { menuActions: stub }).ok).toBe(false);
+    const result = compileLeaves([named, dieCondition(), manoeuvreRoll()], undefined, { menuActions: stub });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors).toEqual([expect.stringContaining("names the manoeuvres of a moment that already names one or a subject.")]);
   });
 
   it("refuses a manoeuvre roll that subtracts, names weapons, or lacks the performing unit as subject", () => {

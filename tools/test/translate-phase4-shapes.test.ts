@@ -126,7 +126,7 @@ describe("describer: dice", () => {
     expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe("The unit gets +1 to Reanimation Protocols rolls.");
     expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("The unit's Hit rolls count as an unmodified 6.");
     // The performing unit's own Agile Manoeuvre roll (compile-manoeuvre-own-roll.ts): the roll is named, not every roll.
-    expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toContain("an Agile Manoeuvre roll");
+    expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toMatch(/the triggering unit gets \+1 to Agile Manoeuvre rolls/iu);
     expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapon_type: "ranged", incoming: true }))).toBe(
       "Each time a ranged attack targets the unit, an unmodified Hit roll of 1-3 for that attack always fails.",
     );

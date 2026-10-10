@@ -42,12 +42,18 @@ const TRIGGERS: Record<string, Node> = {
 function phaseTrigger(leaf: CompileLeaf): Node | null {
   const event = leaf.parameters.kind === "phase-start" ? "phase-started" : leaf.parameters.kind === "phase-end" ? "phase-ended" : null;
   if (!event) return null;
+  const operands = phaseTurnOperands(leaf);
+  if (operands.length === 0) return { event };
+  return { event, condition: operands.length === 1 ? operands[0] : { operator: "and", operands } };
+}
+
+/** The phase-is and player-turn-is operands a leaf names, unless it says any phase or either turn. */
+function phaseTurnOperands(leaf: CompileLeaf): Node[] {
   const operands: Node[] = [];
   if (leaf.parameters.phase && leaf.parameters.phase !== "any") operands.push({ type: "phase-is", parameters: { phase: leaf.parameters.phase } });
   // The DSL spells whose turn as the schema's player-turn enum does.
   if (leaf.parameters.turn && leaf.parameters.turn !== "either") operands.push({ type: "player-turn-is", parameters: { turn: `${String(leaf.parameters.turn)}-turn` } });
-  if (operands.length === 0) return { event };
-  return { event, condition: operands.length === 1 ? operands[0] : { operator: "and", operands } };
+  return operands;
 }
 
 /** A turn-boundary trigger (version 7's turn-ended), narrowed by whose turn unless "either". */
@@ -142,6 +148,12 @@ function ownedEventTrigger(leaf: CompileLeaf): Node {
     filter.id = closed(leaf, "id");
   }
   if (Object.keys(filter).length) node.filter = filter;
+  // "In your opponent's Shooting phase" on an attacks-resolved moment: the trigger's own condition.
+  const timing = phaseTurnOperands(leaf);
+  if (timing.length) {
+    if (leaf.parameters.kind !== "attacks-resolved") throw new CompileError("Only an attacks-resolved moment names its phase and turn among the owned moments.");
+    node.condition = timing.length === 1 ? timing[0] : { operator: "and", operands: timing };
+  }
   // "Selected by a friendly X unit's Foo ability" (compile-named-ability.ts): the selecting ability
   // and its user; the trigger's subject is the selected unit, any unit unless the moment names one.
   if (filter.kind === "ability") {
