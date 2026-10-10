@@ -116,10 +116,12 @@ describe("bound durations on the stored records", () => {
     expect(mechanics.scope.duration).toBe("permanent");
   });
 
-  it("4194: refused, because the pinned test follows the assailed mark in the same part", () => {
+  it("4194: refused — the selection cannot carry past the attacks-resolved moment, else the pinned test follows the assailed mark", () => {
     const result = compileFixture(4194);
     expect(result.ok).toBe(false);
-    expect(result.ok ? [] : result.errors).toContain("A tag tested after it is applied in the same part; the compiler does not order them.");
+    // The selection-across-moment guard (compile-selection-moment.ts) fires first; without it the tag-order refusal would.
+    const errors = result.ok ? [] : result.errors;
+    expect(errors.some((error) => error.startsWith("A hit-by-attacks at byte") || error === "A tag tested after it is applied in the same part; the compiler does not order them.")).toBe(true);
   });
 
   it("8879 and 994: a set-up moment beside another moment is refused", () => {

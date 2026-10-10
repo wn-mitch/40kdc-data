@@ -107,7 +107,10 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 let target = unit_ref_phrase(nn(p, "object"), "the unit");
                 let has = if negated { "has not" } else { "has" };
                 return with_window(
-                    &format!("{target} {has} been targeted with the {} Stratagem", id_label(f.get("id"))),
+                    &format!(
+                        "{target} {has} been targeted with the {} Stratagem",
+                        id_label(f.get("id"))
+                    ),
                     window,
                 );
             }
