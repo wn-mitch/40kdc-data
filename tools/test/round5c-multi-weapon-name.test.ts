@@ -239,8 +239,8 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
     const text = "Fight phase. The Attacks characteristic of Zap stompers is 8. The Attacks characteristic of Zap crushers is 12. Improve the Armour Penetration characteristic of those weapons by 1.";
     const mechanics = mechanicsOf(placed(text,
       ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }],
-      ["The Attacks characteristic of Zap stompers is 8", "characteristic-set", { subject: "this-model", characteristic: "A", value: 8, weapon_type: "melee", weapon_name: "armoured feet" }],
-      ["The Attacks characteristic of Zap crushers is 12", "characteristic-set", { subject: "this-model", characteristic: "A", value: 12, weapon_type: "melee", weapon_name: "titanic feet" }],
+      ["The Attacks characteristic of Zap stompers is 8", "characteristic-set", { subject: "this-model", characteristic: "A", value: 8, weapon_type: "melee", weapon_name: "zap stompers" }],
+      ["The Attacks characteristic of Zap crushers is 12", "characteristic-set", { subject: "this-model", characteristic: "A", value: 12, weapon_type: "melee", weapon_name: "zap crushers" }],
       ["Improve the Armour Penetration characteristic of those weapons by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "improve", value: 1, subject: "this-model", weapon_type: "melee", weapon: "earlier-named" }]), text);
     const steps = JSON.stringify(mechanics);
     expect(steps).toContain('"weapon_name":"Zap stompers"');
@@ -254,8 +254,8 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
     expect(alone).toMatch(/has no earlier named-weapon leaf/u);
     const mixed = "Set A to 8 for Zap stompers. Set A to 12 for Zap crushers. Improve AP of those weapons by 1.";
     const message = refusalOf(placed(mixed,
-      ["Set A to 8 for Zap stompers", "characteristic-set", { subject: "this-model", characteristic: "A", value: 8, weapon_type: "melee", weapon_name: "armoured feet" }],
-      ["Set A to 12 for Zap crushers", "characteristic-set", { subject: "this-unit", characteristic: "A", value: 12, weapon_type: "melee", weapon_name: "titanic feet" }],
+      ["Set A to 8 for Zap stompers", "characteristic-set", { subject: "this-model", characteristic: "A", value: 8, weapon_type: "melee", weapon_name: "zap stompers" }],
+      ["Set A to 12 for Zap crushers", "characteristic-set", { subject: "this-unit", characteristic: "A", value: 12, weapon_type: "melee", weapon_name: "zap crushers" }],
       ["Improve AP of those weapons by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "improve", value: 1, subject: "this-model", weapon_type: "melee", weapon: "earlier-named" }]), mixed);
     expect(message).toMatch(/different recipients or weapon types/u);
   });
