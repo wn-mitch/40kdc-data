@@ -112,3 +112,34 @@ describe("trailing while-targeting shapes", () => {
     expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: { owner: "friendly", all_of: ["TYRANIDS"] }, range: { inches: 6 } } });
   });
 });
+
+describe("trailing while-targeting with a use window and a duration", () => {
+  it("gates the grant on the target when a use window and an end-of-phase duration come first", () => {
+    // Shape of record 963's first sentence: the window and duration lead, the target filter and range trail the grant.
+    const text = "Your Shooting phase. Until the end of the phase, models have Sustained Hits 1 while targeting an enemy unit within 12\".";
+    const mechanics = mechanicsOf(text, [
+      ["Your Shooting phase.", "use-window", "WHEN", { your_phases: ["shooting"], opponent_phases: [], either_phases: [] }],
+      ["Until the end of the phase", "duration", "EFFECT", { endpoint: "end-of-phase" }],
+      ["models have", "weapon-ability-grant", "EFFECT", { subject: "this-unit", weapon_type: "ranged" }],
+      ["Sustained Hits 1", "weapon-ability-keyword", "EFFECT", { keyword: "Sustained Hits 1" }],
+      TARGET_FILTER,
+      TARGET_RANGE,
+    ]);
+    expect(JSON.stringify(mechanics)).toContain('"owner":"enemy"');
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: { inches: 12 } } });
+    expect(mechanics.effect.effect.type).toBe("weapon-ability-grant");
+  });
+
+  it("gates the grant on the target's range when the range is half the attacking weapon's range", () => {
+    // Shape of record 6864 (and the half-range part of 1492): a half-range check measured from the attacker.
+    const text = "Models have Sustained Hits 1 while targeting an enemy unit within half range.";
+    const mechanics = mechanicsOf(text, [
+      ["Models have", "weapon-ability-grant", "EFFECT", { subject: "this-unit", weapon_type: "ranged" }],
+      ["Sustained Hits 1", "weapon-ability-keyword", "EFFECT", { keyword: "Sustained Hits 1" }],
+      TARGET_FILTER,
+      ["within half range", "unit-position", "EFFECT", { kind: "within", of: "attacker", subject: "target", negated: false, weapon_range: "half" }],
+    ]);
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: "half-weapon" } });
+    expect(mechanics.effect.condition.operands).toContainEqual({ type: "owned-by", parameters: { subject: "defender", owner: "enemy" } });
+  });
+});
