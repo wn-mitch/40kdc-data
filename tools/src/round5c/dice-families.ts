@@ -30,13 +30,14 @@ export const ROLL_KINDS = [
 
 /**
  * The rolls a DSL reactive trigger can name (`common.schema.json` roll-kind): the thirteen kinds
- * of ROLL_KINDS that the trigger's filter takes. `any`, `all`, `attacks`, `surge` and
- * `resource-die` are not trigger kinds, so a before-roll or after-roll moment cannot name them.
+ * of ROLL_KINDS that the trigger's filter takes, and `channelling` (a model's Channel the Warp roll,
+ * which an event can name). `any`, `all`, `attacks`, `surge` and `resource-die` are
+ * not trigger kinds, so a before-roll or after-roll moment cannot name them.
  * Canonical order: a list of kinds lowers to triggers in this order.
  */
 export const TRIGGER_ROLL_KINDS = [
   "hit", "wound", "save", "damage", "charge", "advance", "battle-shock", "leadership", "hazard",
-  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise",
+  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise", "channelling",
 ] as const;
 
 export const IGNORE_SUBJECTS = ["this-unit", "this-model"] as const;

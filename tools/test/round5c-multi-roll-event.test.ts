@@ -154,7 +154,7 @@ describe("event rolls list (event version 19)", () => {
 
   it("lists exactly the roll kinds the DSL trigger's roll-kind enum names", () => {
     const schema = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "../../schemas/$defs/common.schema.json"), "utf8"));
-    const dslKinds = (schema.$defs["roll-kind"].oneOf[0].enum as string[]).filter((kind) => kind !== "dark-pact" && kind !== "manoeuvre" && kind !== "channelling");
+    const dslKinds = (schema.$defs["roll-kind"].oneOf[0].enum as string[]).filter((kind) => kind !== "dark-pact" && kind !== "manoeuvre");
     expect([...TRIGGER_ROLL_KINDS].sort()).toEqual([...dslKinds].sort());
   });
 });
@@ -254,6 +254,8 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
     role: familyRole(family, version), family_id: family, family_version: version, fragment,
     parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: start + 1,
   });
+  // Fragment B's leaves sit at bytes 10 to 31, so the source text must reach that far.
+  const MENU_TEXT = "x".repeat(40);
   const menu = (eventParameters: Record<string, unknown>): CompileLeaf[] => [
     menuLeaf("resource-action-menu-open", { menu_id: "wave-ten-menu", pool_id: "wave-ten-pool" }, "A", undefined, 0),
     menuLeaf("menu-action", { action_id: "wave-ten-action", label: "Wave Ten Action", cost_amount: 1 }, "B", undefined, 10),
@@ -262,7 +264,7 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
   ];
 
   it("lowers the action's when to one trigger per listed roll kind, in canonical order", () => {
-    const result = compileLeaves(menu({ kind: "after-roll", rolls: ["wound", "hit"] }), "");
+    const result = compileLeaves(menu({ kind: "after-roll", rolls: ["wound", "hit"] }), MENU_TEXT);
     expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
     const action = (result.mechanics as unknown as { effect: { actions: Array<{ when: unknown[] }> } }).effect.actions[0]!;
     expect(action.when).toEqual([
@@ -273,7 +275,12 @@ describe("a menu action whose trigger is a list moment (compile-containers path)
   });
 
   it("refuses a roll kind in the action's list that a trigger cannot name", () => {
-    const result = compileLeaves(menu({ kind: "after-roll", rolls: ["hit", "any"] }), "");
+    // The event family refuses the list, so the leaf is built without normalizing to reach the compiler's own check.
+    const list = menu({ kind: "after-roll", rolls: ["hit", "wound"] });
+    const event = list.find((leaf) => leaf.family_id === "event")!;
+    event.parameters = { kind: "after-roll", rolls: ["hit", "any"] };
+    const result = compileLeaves(list, MENU_TEXT);
     expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join("; ")).toMatch(/cannot name/u);
   });
 });
