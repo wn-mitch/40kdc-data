@@ -131,6 +131,10 @@ unless it is needed to operate.
 - **Roll thresholds do not guess the die.** A minimum-result leaf records the lower bound
   ("on a 2+" means at least 2); the dice leaf supplies its upper bound during compilation.
   Explicit ranges and exact results retain both bounds.
+- **A reactive effect names the roll its trigger names.** A before-roll or after-roll moment over one
+  roll kind is followed by an effect whose `roll` is that kind (`roll-result` with `roll: hit` after
+  "after making a Hit roll"). `roll: any` on such an effect is accepted by the schema and changes
+  other rolls, so drafters must not author it.
 - **A placeholder is not a meaning.** A trusted leaf whose parameter still holds the import
   placeholder `"source"` does not count as resolved source (`placeholders.ts`), and no new
   decision may create one. A text holding such a leaf is not leaf-complete.

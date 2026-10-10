@@ -246,3 +246,34 @@ describe("trigger wiring", () => {
     expect(trigger(leaf!)).toMatchObject({ event: "after-roll", filter: { roll: "hit" } });
   });
 });
+
+describe("a menu action whose trigger is a list moment (compile-containers path)", () => {
+  // Fragment-tagged leaves, as a resource-action-menu record carries them. Versions are the current
+  // ones except characteristic-modifier, which the existing menu fixtures pin at 3.
+  const menuLeaf = (family: string, parameters: Record<string, unknown>, fragment: string, version = currentFamilyVersion(family), start = 0): CompileLeaf => ({
+    role: familyRole(family, version), family_id: family, family_version: version, fragment,
+    parameters: normalizeFingerprintParameters(family, parameters, version), start_byte: start, end_byte: start + 1,
+  });
+  const menu = (eventParameters: Record<string, unknown>): CompileLeaf[] => [
+    menuLeaf("resource-action-menu-open", { menu_id: "wave-ten-menu", pool_id: "wave-ten-pool" }, "A", undefined, 0),
+    menuLeaf("menu-action", { action_id: "wave-ten-action", label: "Wave Ten Action", cost_amount: 1 }, "B", undefined, 10),
+    menuLeaf("event", eventParameters, "B", undefined, 20),
+    menuLeaf("characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }, "B", 3, 30),
+  ];
+
+  it("lowers the action's when to one trigger per listed roll kind, in canonical order", () => {
+    const result = compileLeaves(menu({ kind: "after-roll", rolls: ["wound", "hit"] }), "");
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    const action = (result.mechanics as unknown as { effect: { actions: Array<{ when: unknown[] }> } }).effect.actions[0]!;
+    expect(action.when).toEqual([
+      { event: "after-roll", filter: { roll: "hit" } },
+      { event: "after-roll", filter: { roll: "wound" } },
+    ]);
+    expect(schemaErrors(result.mechanics)).toEqual([]);
+  });
+
+  it("refuses a roll kind in the action's list that a trigger cannot name", () => {
+    const result = compileLeaves(menu({ kind: "after-roll", rolls: ["hit", "any"] }), "");
+    expect(result.ok).toBe(false);
+  });
+});
