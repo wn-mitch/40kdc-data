@@ -260,7 +260,8 @@ describe("Round 5C antecedent frames on an Or: branch", () => {
   describe("family versions", () => {
     it("grant v10 and scope v5 take frame antecedent and nothing that names a recipient or keyword", () => {
       expect(currentFamilyVersion("weapon-ability-grant")).toBe(10);
-      expect(currentFamilyVersion("weapon-property-scope")).toBe(5);
+      // Version 5 is the frame-antecedent widening; later widenings (weapon_names) stack on it.
+      expect(currentFamilyVersion("weapon-property-scope")).toBeGreaterThanOrEqual(5);
       expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, 10)).toEqual({ frame: "antecedent" });
       expect(normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent" }, 5)).toEqual({ frame: "antecedent" });
       expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent", keyword: "Lance" }, 10)).toThrow(TypeError);
