@@ -12,7 +12,7 @@ import { untiledRuns } from "./leaves.js";
  * In a machine view a trusted row shadows any machine row or overlay proposal it overlaps.
  */
 export type TiledSource = {
-  id: number; faction_id: string; ability_id: string; name: string | null; source_hash: string; source_text: string;
+  id: number; faction_id: string; ability_id: string; name: string | null; source_hash: string; source_text: string; source_type: string | null;
   leaves: CompileLeaf[];
   /** How many of the leaves are machine rows or overlay proposals (0 in the trusted view). */
   machine_leaves: number;
@@ -37,7 +37,7 @@ export function tiledSources(
   const faction = options.factionId ?? null;
   const coverage = getCurrentCoverage(db, options);
   const abilities = db.prepare(`
-    SELECT id, faction_id, ability_id, name, source_hash, source_text FROM abilities
+    SELECT id, faction_id, ability_id, name, source_hash, source_text, source_type FROM abilities
     WHERE current = 1 AND (? IS NULL OR faction_id = ?) ${scope.replaceAll("abilities.id", "id")} ORDER BY faction_id, ability_id
   `).all(faction, faction) as Array<Omit<TiledSource, "leaves" | "machine_leaves">>;
   const columns = `source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
