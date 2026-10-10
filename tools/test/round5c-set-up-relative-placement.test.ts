@@ -194,3 +194,27 @@ describe("Round 5C set-up placement in a Stratagem with several targets (SS2)", 
     expect(JSON.stringify(mechanics)).not.toContain("\"placement\":\"unengaged\"");
   });
 });
+
+describe("Round 5C set-up placement: among-filter matches inside a set-up limit (SS2, T9)", () => {
+  const WINDOW: Item = ["Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }, "WHEN"];
+  const setUp: Item = ["Set it back up", "set-up", { subject: "antecedent", to: "battlefield" }, "EFFECT"];
+  const wholly: Item = ["wholly within 6\" of", "unit-position", { kind: "within", inches: 6, of: "following-filter", subject: "antecedent", negated: false, wholly: true }, "EFFECT"];
+  const among: Item = ["your MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model", among: "stratagem-targets", targets: "one" }, "EFFECT"];
+  const tail = " Set it back up anywhere on the battlefield that is wholly within 6\" of your MONOLITH model and not within Engagement Range of one or more enemy units.";
+
+  it("refuses an among-filter that matches none of the targets when it sits inside a set-up limit", () => {
+    const text = `Movement phase. One friendly INFANTRY unit, and one friendly VEHICLE model.${tail}`;
+    expect(errorsOf(text, WINDOW,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"], ["friendly INFANTRY unit", "unit-filter", { side: "friendly", keywords: ["INFANTRY"] }, "TARGET"],
+      ["one", "stratagem-target", { count: "one" }, "TARGET"], ["friendly VEHICLE model", "unit-filter", { side: "friendly", keywords: ["VEHICLE"], level: "model" }, "TARGET"],
+      setUp, wholly, among)).toMatch(/matches none/u);
+  });
+
+  it("refuses an among-filter that matches several targets when it sits inside a set-up limit", () => {
+    const text = `Movement phase. One friendly MONOLITH model, and one friendly MONOLITH model.${tail}`;
+    expect(errorsOf(text, WINDOW,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"], ["friendly MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model" }, "TARGET"],
+      ["one", "stratagem-target", { count: "one" }, "TARGET"], ["friendly MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model" }, "TARGET"],
+      setUp, wholly, among)).toMatch(/names one target but matches 2/u);
+  });
+});
