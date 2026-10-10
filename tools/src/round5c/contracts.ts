@@ -28,6 +28,7 @@ import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-famil
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { ENGAGEMENT_RELATION_FAMILIES } from "./family-extensions-16-engagement-relation.js";
+import { OTHERWISE_FAMILIES } from "./family-extensions-16-otherwise-else-branch.js";
 import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
@@ -113,6 +114,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...PSYCHIC_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
   ...ENGAGEMENT_RELATION_FAMILIES,
+  ...OTHERWISE_FAMILIES,
   ...ARMY_INCLUDES_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,

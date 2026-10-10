@@ -17,8 +17,8 @@ import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
-import { bulletBreaks, ordered, placements, shapeSignature } from "./compile-placement.js";
-import { refuseOtherwiseGates } from "./compile-otherwise.js";
+import { bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
+import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
@@ -440,6 +440,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     && leaf.parameters.subject === "selected-unit" && places[at]!.sentence === places[selectionIndex]!.sentence
     && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
   for (const at of eligibilityIndexes) endConditions.add(at);
+  // "Otherwise, …": its else gate is the negation of the sentence before it (compile-otherwise.ts). The leading
+  // conditions it negates move from the ability's gates to that sentence's gates, so they gate only that sentence.
+  const otherwise = otherwiseElse(list, places, rawSentences(list, sourceText), sourceText, new Set([...endConditions, ...consumedByContainer, ...designationTiming]));
+  errors.push(...otherwise.errors);
+  const otherwiseMoved = otherwise.moved;
+  for (const { sentence, gate } of otherwise.gates) sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), gate]);
   const battleSizeCount = list.find((leaf) => leaf.family_id === "count-by-battle-size");
   // Battle-size leaves for two or more sizes are table rows: alternatives, one per size. Each row
   // decides only its own sentence, so a row never joins the ability-wide gates (where rows would
@@ -453,6 +459,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
   list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
+    // An otherwise leaf is the else branch's marker: its gate is built above, and it is no combinator of its own.
+    if (leaf.family_id === "otherwise") return;
     // A container opener's options are folded into its own node (`containerNodes.get(index)`,
     // used where planned effects are built below); the leaves that became those options never
     // separately reach condition/duration/event dispatch or their own planned effect.
@@ -461,8 +469,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const first = firstEffect(sentence);
     const leading = first === -1 || index < first;
     const scope = (node: Node | "selected") => {
+      // A leading condition an Otherwise sentence negates gates the sentence before it, not the ability's later sentences.
+      if (node !== "selected" && otherwiseMoved.has(index)) {
+        sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]);
       // A result band decides only the effects of its own clause, wherever it sits in it.
-      if (node !== "selected" && node.type === "__roll-result") {
+      } else if (node !== "selected" && node.type === "__roll-result") {
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;

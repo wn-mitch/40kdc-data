@@ -48,8 +48,21 @@ export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string 
   });
 }
 
-export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
+/**
+ * The sentence of each leaf before effect-less sentences join the next effectful one: a new sentence
+ * starts at a full stop, semicolon or colon in the source, or where the source fragment changes.
+ */
+export function rawSentences(leaves: readonly CompileLeaf[], sourceText: string | undefined): number[] {
   const sentenceOf: number[] = [];
+  leaves.forEach((leaf, index) => {
+    const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
+    sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
+  });
+  return sentenceOf;
+}
+
+export function placements(leaves: readonly CompileLeaf[], sourceText: string | undefined): Placement[] {
+  const sentenceOf = rawSentences(leaves, sourceText);
   const andBefore: boolean[] = [];
   // A line that opens with bold text ("**Restrictions:** …") is a new paragraph: it starts a clause even when the
   // sentence before it has no effect and joins that sentence (its conditions then sit in a clause of their own).
@@ -60,7 +73,6 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
   });
   leaves.forEach((leaf, index) => {
     const gap = index === 0 ? { sentence: false, and: false } : gapBetween(leaves[index - 1]!, leaf, sourceText);
-    sentenceOf.push(index === 0 ? 0 : sentenceOf[index - 1]! + (gap.sentence ? 1 : 0));
     // A player's pick between two effects ("re-roll one Hit roll or one Wound roll") is a leaf on
     // its "or", so the "or" is not in a gap: the choice leaf itself starts the clause.
     andBefore.push((gap.and || opensClause(leaf, sourceText)) && !gap.sentence);
