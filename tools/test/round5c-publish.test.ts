@@ -90,7 +90,10 @@ function buildFixture(): Fixture {
   const directory = mkdtempSync(join(tmpdir(), "round5c-publish-"));
   temporaryDirectories.push(directory);
   const dataRoot = join(directory, "data");
-  cpSync(liveDataRoot, dataRoot, { recursive: true });
+  // Copy the bytes, never a link: a symlinked data/ (a scratch tree pointing at a real checkout) would be copied as
+  // the link itself, and the publications below would write into the real data files.
+  cpSync(realpathSync(liveDataRoot), dataRoot, { recursive: true, dereference: true });
+  if (realpathSync(dataRoot) === realpathSync(liveDataRoot)) throw new Error("The publication fixture must not resolve to the live data root.");
   const rawStore = join(directory, "raw-store");
   mkdirSync(rawStore, { recursive: true });
   process.env.ROUND5C_DATA_ROOT = dataRoot;
