@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import {
   OTHERWISE_AMBIGUOUS, OTHERWISE_NO_EFFECT, OTHERWISE_NO_PRECEDING, OTHERWISE_REFUSAL, OTHERWISE_ROLL, OTHERWISE_TEXT, OTHERWISE_UNNEGATABLE,
 } from "../src/round5c/compile-otherwise.js";
@@ -295,5 +295,16 @@ describe("an eligibility permission after an Otherwise sentence (2498 shape)", (
     expect(steps[2]).toMatchObject({ type: "permission" });
     expect(JSON.stringify(steps[2])).not.toMatch(/engaged/u);
     expect(JSON.stringify(result.core)).toContain("ALPHA");
+  });
+});
+
+describe("otherwise@1 parameters", () => {
+  // Review-apply normalizes every decision's parameters; a family with no normalizer cannot be recorded at all.
+  it("accepts the empty parameter object a reviewed leaf records", () => {
+    expect(normalizeFingerprintParameters("otherwise", {}, currentFamilyVersion("otherwise"))).toEqual({});
+  });
+
+  it("rejects any parameter", () => {
+    expect(() => normalizeFingerprintParameters("otherwise", { negated: true }, currentFamilyVersion("otherwise"))).toThrow();
   });
 });

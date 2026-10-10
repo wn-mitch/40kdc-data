@@ -1,4 +1,5 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
+import { exactKeys } from "./family-validation.js";
 
 /**
  * Wave-10 otherwise-else-branch (tier 5). "Otherwise, …" opens the sentence that is the else branch
@@ -17,3 +18,10 @@ export const OTHERWISE_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: { type: "object", properties: {}, additionalProperties: false },
   },
 ];
+
+/** otherwise@1 parameters: the leaf records no value, so only an empty object is accepted. */
+export function normalizeOtherwiseParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+  if (family !== "otherwise") return null;
+  exactKeys(input, [], family);
+  return {};
+}
