@@ -717,6 +717,44 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       continue;
     }
     const replacement = own[0]!;
+    // "Add 1 to S and 3 to Range. While …, add 2 to S and 6 to Range instead": the instead replaces the earlier
+    // sentence's effects as a group, so each effect under the same condition in the instead sentence is a replacement
+    // and each effect of the sentence before is a default that holds only when the condition does not.
+    const sameGate = (item: PlannedEffect) => JSON.stringify(item.gate) === JSON.stringify(replacement.gate);
+    const siblings = planned.filter((item) => item !== replacement && item.index < replacement.index && !item.replaces
+      && places[item.index]!.sentence === places[replacement.index]!.sentence && sameGate(item) && !optionalSpends.has(item.leaf));
+    // "…, instead of up to two" names the default it replaces after the word, so there is no earlier group to find.
+    const namesDefault = sourceText !== undefined && /^\s*of\b/u.test(Buffer.from(sourceText, "utf8").subarray(list[combinator]!.end_byte).toString("utf8"));
+    if (siblings.length > 0 && list[combinator]!.parameters.choice !== true && !namesDefault) {
+      const group = [...siblings, replacement];
+      const sentence = places[replacement.index]!.sentence;
+      const before = planned.filter((item) => item.index < group[0]!.index && !item.replaces && !optionalSpends.has(item.leaf)
+        && places[item.index]!.sentence < sentence);
+      const defaultSentence = before.length > 0 ? Math.max(...before.map((item) => places[item.index]!.sentence)) : null;
+      const defaults = before.filter((item) => places[item.index]!.sentence === defaultSentence);
+      const families = new Set(group.map((item) => item.leaf.family_id));
+      const alternative = allOf(replacement.gate);
+      if (defaults.length === 0 || defaults.some((item) => !families.has(item.leaf.family_id))) {
+        errors.push(`"Instead" over ${group.length} effects needs the sentence before it to hold the effects it replaces.`);
+        continue;
+      }
+      if (!alternative) {
+        errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
+        continue;
+      }
+      if (group.some((item) => boundDuration.has(item.index)) !== defaults.some((item) => boundDuration.has(item.index))) {
+        errors.push(CONFLICTING_DURATIONS);
+        continue;
+      }
+      for (const item of defaults) item.gate = [...item.gate, negate(alternative)];
+      const bands = defaults.map((item) => item.gate.filter(isRollMarker));
+      const band = bands[0]!;
+      if (band.length === 1 && bands.every((other) => JSON.stringify(other) === JSON.stringify(band))) {
+        for (const item of group) if (!item.gate.some(isRollMarker)) item.gate = [...band, ...item.gate];
+      }
+      for (const item of group) item.replaces = true;
+      continue;
+    }
     const replaced = planned.filter((item) => item.index < replacement.index && item.leaf.family_id === replacement.leaf.family_id && !item.replaces).at(-1);
     // "Do not make an Advance roll; instead, add 6\" to its Move": the no-advance-roll fragment
     // already says what happens in its place, so the clause's effect folds into it. Anything

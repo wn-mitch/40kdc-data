@@ -229,3 +229,42 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
     ] });
   });
 });
+
+describe("an instead over several effects replaces the sentence before it as a group (compile.ts)", () => {
+  const stat = (characteristic: string, value: number): Record<string, unknown> => ({ subject: "this-model", characteristics: [characteristic], operation: "add", value, weapon_type: "ranged" });
+  const glowing: Record<string, unknown> = { rule: "glow-field" };
+  const text = "Add 1 to the Speed of its guns and add 3 to the Reach of those guns. While it glows, add 2 to the Speed of its guns and add 6 to the Reach of those guns instead.";
+  const pieces: Piece[] = [
+    ["Add 1 to the Speed of its guns", "characteristic-modifier", stat("S", 1)],
+    ["add 3 to the Reach of those guns", "characteristic-modifier", stat("Range", 3)],
+    ["While it glows", "rule-active", glowing],
+    ["add 2 to the Speed of its guns", "characteristic-modifier", stat("S", 2)],
+    ["add 6 to the Reach of those guns", "characteristic-modifier", stat("Range", 6)],
+    ["instead", "instead", {}],
+  ];
+
+  it("guards every default by the negated condition and every replacement by the condition", () => {
+    const steps = mechanicsOf(text, ...pieces).effect.steps as Array<Record<string, any>>;
+    const glows = { type: "rule-active", parameters: glowing };
+    const negated = { operator: "not", operands: [glows] };
+    expect(steps.map((step) => [step.condition, step.effect.modifier.stat, step.effect.modifier.value])).toEqual([
+      [negated, "S", 1], [negated, "Range", 3], [glows, "S", 2], [glows, "Range", 6],
+    ]);
+  });
+
+  it("refuses when the sentence before holds no effect the group replaces", () => {
+    const lone = "While it glows, add 2 to the Speed of its guns and add 6 to the Reach of those guns instead.";
+    const result = compile(lone, ...pieces.slice(2));
+    expect(result.ok).toBe(false);
+  });
+
+  it("leaves an instead that names its default after the word to the existing path", () => {
+    const named = "While it glows, halve its Speed and it can pick one boon, instead of up to two.";
+    const result = compile(named,
+      ["While it glows", "rule-active", glowing],
+      ["halve its Speed", "characteristic-modifier", { subject: "this-model", characteristics: ["S"], operation: "halve", weapon_type: "all" }],
+      ["it can pick one boon", "ability-modifier", { subject: "this-model", ability: "boon-of-light", aspect: "selections", operation: "set", value: 1 }],
+      ["instead", "instead", {}]);
+    expect(result.ok).toBe(true);
+  });
+});
