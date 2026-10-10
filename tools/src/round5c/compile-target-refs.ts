@@ -204,11 +204,14 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
   const dropped = new Set<number>();
   // What a later bare antecedent names, at each leaf.
   const focusAt: Array<string | null> = leaves.map(() => null);
+  // The level of the target a bare antecedent names: "model" when the focus is a model-level target.
+  const focusLevelAt: Array<string> = leaves.map(() => "unit");
   let focus = targetRef(names.at(-1)!);
+  let focusLevel = String(heads.at(-1)?.level ?? "unit");
   for (let index = 0; index < leaves.length; index += 1) {
     const leaf = leaves[index]!;
     if (!(leaf.family_id === "unit-filter" && leaf.parameters.among === AMONG_TARGETS)) {
-      if (afterTargeting(leaf)) focusAt[index] = focus;
+      if (afterTargeting(leaf)) { focusAt[index] = focus; focusLevelAt[index] = focusLevel; }
       continue;
     }
     if (leaf.fragment === "TARGET") throw new CompileError("An among-filter cannot sit in TARGET; a later target points back to an earlier one with antecedent.");
@@ -219,7 +222,7 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       ? FOLLOWING_KEYS.find((key) => previous.parameters[key] === FOLLOWING_FILTER) : undefined;
     if (followingKey !== undefined) {
       leaves[index - 1] = bind(previous!, [followingKey], ref);
-      if (singular) focus = ref;
+      if (singular) { focus = ref; focusLevel = String(leaf.parameters.level ?? "unit"); }
       continue;
     }
     let at = index + 1;
@@ -233,16 +236,18 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       }
       leaves[at] = { ...next, parameters: { ...next.parameters, attacker_filter: ref } };
       focus = singular ? ref : "attacker";
+      focusLevel = "unit";
     } else if (next.family_id === "event" && next.parameters.owner === undefined && next.parameters.subject === undefined) {
       leaves[at] = { ...next, parameters: { ...next.parameters, subject_filter: ref } };
       focus = singular ? ref : "event-subject";
+      focusLevel = "unit";
     } else if (antecedentKeys(next.family_id, next.parameters).length) {
       leaves[at] = bind(next, antecedentKeys(next.family_id, next.parameters), ref);
-      if (singular) focus = ref;
+      if (singular) { focus = ref; focusLevel = String(leaf.parameters.level ?? "unit"); }
     } else throw new CompileError(`An among-filter at byte ${leaf.start_byte} names no distance, attack, moment or back-reference right beside it.`);
     index = at - 1;
   }
-  const kept = leaves.flatMap((leaf, index) => dropped.has(index) ? [] : [{ leaf, focus: focusAt[index] ?? null }]);
+  const kept = leaves.flatMap((leaf, index) => dropped.has(index) ? [] : [{ leaf, focus: focusAt[index] ?? null, level: focusLevelAt[index]! }]);
   const out = kept.map((item) => item.leaf);
   return {
     leaves: out,
@@ -250,6 +255,10 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       const leaf = out[index]!;
       const target = kept[index]!.focus;
       if (target === null) return null;
+      // A set-up places units. A bare "it" that names a model-level target cannot be placed.
+      if (leaf.family_id === "set-up" && kept[index]!.level === "model") {
+        throw new CompileError(`set-up at byte ${leaf.start_byte} takes its subject from a model-level Stratagem target; a set-up places a unit, so name the unit it means.`);
+      }
       // "those units", "both of them": several targets, which one bound anaphor cannot carry.
       if (sourceText !== undefined && leaf.end_byte !== undefined && PLURAL.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte))) {
         throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to several of the Stratagem's targets; name them with an among-filter (targets every or any).`);

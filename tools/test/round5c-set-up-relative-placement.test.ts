@@ -171,8 +171,39 @@ describe("Round 5C set-up placement in a Stratagem with several targets (SS2)", 
   const among: Item = ["your MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model", among: "stratagem-targets", targets: "one" }, "EFFECT"];
   const notEngaged: Item = ["not within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }, "EFFECT"];
 
-  it("folds the wholly limit to the second target and the engaged limit past the among-filter to unengaged", () => {
-    const mechanics = mechanicsOf(text, WINDOW, ...TARGETS, setUp, wholly, among, notEngaged);
+  it("refuses a bare set-up antecedent that names a model-level target, since a set-up places a unit", () => {
+    expect(errorsOf(text, WINDOW, ...TARGETS, setUp, wholly, among, notEngaged)).toMatch(/model-level Stratagem target/u);
+  });
+
+  it("binds a bare set-up antecedent to a unit-level last target and keeps the model limit on the other target", () => {
+    const unitLast = "Movement phase. One friendly MONOLITH model, and one friendly INFANTRY unit. Set it back up anywhere on the battlefield that is wholly within 6\" of your MONOLITH model and not within Engagement Range of one or more enemy units.";
+    const targets: Item[] = [
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model" }, "TARGET"],
+      ["one", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly INFANTRY unit", "unit-filter", { side: "friendly", keywords: ["INFANTRY"] }, "TARGET"],
+    ];
+    const mechanics = mechanicsOf(unitLast, WINDOW, ...targets, setUp, wholly, among, notEngaged);
+    const modifier = mechanics.effect.modifier ?? mechanics.effect.effect?.modifier;
+    const subject = JSON.stringify(mechanics.effect.target);
+    const measured = JSON.stringify(modifier.near[0].of);
+    expect(subject).toContain("stratagem_target");
+    expect(measured).toContain("stratagem_target");
+    expect(subject).not.toBe(measured);
+  });
+
+  // The last target is a unit, so a bare "it" names the unit (a set-up cannot place a model-level target).
+  const UNIT_LAST: Item[] = [
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["friendly MONOLITH model", "unit-filter", { side: "friendly", keywords: ["MONOLITH"], level: "model" }, "TARGET"],
+    ["one", "stratagem-target", { count: "one" }, "TARGET"],
+    ["friendly INFANTRY unit", "unit-filter", { side: "friendly", keywords: ["INFANTRY"] }, "TARGET"],
+  ];
+  const UNIT_LAST_TEXT = "Movement phase. One friendly MONOLITH model, and one friendly INFANTRY unit.";
+
+  it("folds the wholly limit to the first target and the engaged limit past the among-filter to unengaged", () => {
+    const unitLast = `${UNIT_LAST_TEXT} Set it back up anywhere on the battlefield that is wholly within 6" of your MONOLITH model and not within Engagement Range of one or more enemy units.`;
+    const mechanics = mechanicsOf(unitLast, WINDOW, ...UNIT_LAST, setUp, wholly, among, notEngaged);
     const modifier = mechanics.effect.modifier ?? mechanics.effect.effect?.modifier;
     expect(modifier.placement).toBe("unengaged");
     expect(modifier.near).toHaveLength(1);
@@ -181,14 +212,14 @@ describe("Round 5C set-up placement in a Stratagem with several targets (SS2)", 
   });
 
   it("refuses a placement limit that names this unit as its measure, though its subject is exempt", () => {
-    const named = "Movement phase. One friendly INFANTRY unit, and one friendly MONOLITH model. Set it back up anywhere on the battlefield that is wholly within 6\" of this unit.";
-    expect(errorsOf(named, WINDOW, ...TARGETS, setUp, ["wholly within 6\" of this unit", "unit-position",
+    const named = `${UNIT_LAST_TEXT} Set it back up anywhere on the battlefield that is wholly within 6" of this unit.`;
+    expect(errorsOf(named, WINDOW, ...UNIT_LAST, setUp, ["wholly within 6\" of this unit", "unit-position",
       { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false, wholly: true }, "EFFECT"])).toMatch(/names this unit \(of\)/u);
   });
 
   it("breaks the limit run at an among-filter that no limit follows, so a later engaged limit is not folded", () => {
-    const roll = "Movement phase. One friendly INFANTRY unit, and one friendly MONOLITH model. Set it back up anywhere on the battlefield that is wholly within 6\" of your MONOLITH model and add 1 to the Hit roll. Not within Engagement Range of one or more enemy units.";
-    const mechanics = mechanicsOf(roll, WINDOW, ...TARGETS, setUp, wholly, among,
+    const roll = `${UNIT_LAST_TEXT} Set it back up anywhere on the battlefield that is wholly within 6" of your MONOLITH model and add 1 to the Hit roll. Not within Engagement Range of one or more enemy units.`;
+    const mechanics = mechanicsOf(roll, WINDOW, ...UNIT_LAST, setUp, wholly, among,
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "antecedent" }, "EFFECT"],
       ["Not within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }, "EFFECT"]);
     expect(JSON.stringify(mechanics)).not.toContain("\"placement\":\"unengaged\"");
