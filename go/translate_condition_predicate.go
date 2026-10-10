@@ -581,6 +581,10 @@ func describeWithin(p map[string]any, neg string) string {
 	if p["wholly"] == true {
 		wholly = "wholly "
 	}
+	who := subjectOf(p, "the unit")
+	if p["models"] == "every" {
+		who = "every model in " + who
+	}
 	if rng == "half-weapon" || rng == "weapon" {
 		who := subjectOf(p, "the unit")
 		if p["subject"] == "defender" {
@@ -591,10 +595,10 @@ func describeWithin(p map[string]any, neg string) string {
 	ofMap, ofIsMap := asMap(of)
 	if ofIsMap && jsTruthy(ofMap["objective"]) {
 		if mapOr(ofMap["objective"])["selection_var"] != nil {
-			return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of that objective marker"
+			return who + " is " + neg + wholly + "within range of that objective marker"
 		}
 		obj := objectivePhrase(mapOr(ofMap["objective"]), false, "objective marker")
-		return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of " + article(obj) + " " + obj
+		return who + " is " + neg + wholly + "within range of " + article(obj) + " " + obj
 	}
 	if ofIsMap && ofMap["owner"] == "enemy" && p["subject"] == nil {
 		if neg != "" {
@@ -613,10 +617,6 @@ func describeWithin(p map[string]any, neg string) string {
 		target = article(marker) + " " + dekebab(marker) + " marker"
 	default:
 		target = unitRefPhrase(of, "the unit")
-	}
-	who := subjectOf(p, "the unit")
-	if p["models"] == "every" {
-		who = "every model in " + who
 	}
 	is, at := "is", ""
 	if p["at"] == "phase-start" {

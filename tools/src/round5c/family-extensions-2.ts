@@ -79,7 +79,7 @@ export const FAMILY_EXTENSIONS_2: readonly FamilyExtension[] = [
   {
     // "while this unit is wholly within 6\" of one or more friendly **K** units", "within 3\" of one or more enemy units".
     family: "unit-position",
-    description: "As the previous version, plus wholly (every model of the subject is within the distance), and a matching unit can be any unit of a side, with no keywords.",
+    description: "As the previous version, plus wholly (every part of each model of the subject is within the distance), and a matching unit can be any unit of a side, with no keywords.",
     schema: (previous) => withProperties(previous, {
       wholly: optional({ const: true, "x-only-when": { kind: ["within"] } }),
       of_keywords: optional(properties(previous).of_keywords!),

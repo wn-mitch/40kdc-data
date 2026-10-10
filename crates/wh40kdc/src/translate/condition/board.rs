@@ -52,6 +52,11 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 ""
             };
+            let who = if is(p, "models", "every") {
+                format!("every model in {}", subject_of(p, "the unit"))
+            } else {
+                subject_of(p, "the unit")
+            };
             if matches!(
                 range.and_then(Value::as_str),
                 Some("half-weapon" | "weapon")
@@ -66,15 +71,11 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             let of_obj = of.and_then(Value::as_object);
             if let Some(o) = of_obj.filter(|o| truthy(o.get("objective"))) {
                 if nn(obj(o.get("objective")), "selection_var").is_some() {
-                    return format!(
-                        "{} is {not_}{wholly}within range of that objective marker",
-                        subject_of(p, "the unit")
-                    );
+                    return format!("{who} is {not_}{wholly}within range of that objective marker");
                 }
                 let phrase = objective_phrase(obj(o.get("objective")), false, "objective marker");
                 return format!(
-                    "{} is {not_}{wholly}within range of {} {phrase}",
-                    subject_of(p, "the unit"),
+                    "{who} is {not_}{wholly}within range of {} {phrase}",
                     article(&phrase)
                 );
             }
@@ -100,11 +101,6 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 format!("{} {} marker", article(&marker), dekebab(&marker))
             } else {
                 unit_ref_phrase(of, "the unit")
-            };
-            let who = if is(p, "models", "every") {
-                format!("every model in {}", subject_of(p, "the unit"))
-            } else {
-                subject_of(p, "the unit")
             };
             let phase_start = is(p, "at", "phase-start");
             format!(

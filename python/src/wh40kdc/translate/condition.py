@@ -333,14 +333,15 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         of = p.get("of")
         range_v = p.get("range")
         wholly = "wholly " if p.get("wholly") is True else ""
+        who = f"every model in {_subject_of(p)}" if p.get("models") == "every" else _subject_of(p)
         if range_v in ("half-weapon", "weapon"):
             who = "the target" if p.get("subject") == "defender" else _subject_of(p)
             return f"{who} is {nt}within {range_phrase(range_v)}"
         if isinstance(of, dict) and _truthy(of.get("objective")):
             if _obj(of["objective"]).get("selection_var") is not None:
-                return f"{_subject_of(p)} is {nt}{wholly}within range of that objective marker"
+                return f"{who} is {nt}{wholly}within range of that objective marker"
             obj = _objective_phrase(of["objective"], False, "objective marker")
-            return f"{_subject_of(p)} is {nt}{wholly}within range of {_article(obj)} {obj}"
+            return f"{who} is {nt}{wholly}within range of {_article(obj)} {obj}"
         if isinstance(of, dict) and of.get("owner") == "enemy" and p.get("subject") is None:
             if negated:
                 noun = re.sub(r"^an? ", "", unit_filter_phrase(of), count=1)
@@ -355,7 +356,6 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             target = f"{_article(marker)} {dekebab(marker)} marker"
         else:
             target = unit_ref_phrase(of)
-        who = f"every model in {_subject_of(p)}" if p.get("models") == "every" else _subject_of(p)
         start = p.get("at") == "phase-start"
         at = " at the start of the phase" if start else ""
         return (

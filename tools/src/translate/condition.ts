@@ -165,17 +165,17 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const of = p.of;
       const range = p.range;
       const wholly = p.wholly === true ? "wholly " : "";
+      const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
       if (range === "half-weapon" || range === "weapon")
         return `${p.subject === "defender" ? "the target" : subjectOf(p)} is ${negated ? "not " : ""}within ${rangePhrase(range)}`;
       if (of && typeof of === "object" && (of as P).objective) {
-        if (((of as P).objective as P).selection_var != null) return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
+        if (((of as P).objective as P).selection_var != null) return `${who} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
         const obj = objectivePhrase((of as P).objective as P, false, "objective marker");
-        return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
+        return `${who} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
       }
       if (of && typeof of === "object" && (of as P).owner === "enemy" && p.subject == null)
         return negated ? `no ${unitFilterPhrase(of as P).replace(/^an? /, "")} is within ${rangePhrase(range)}` : `${unitFilterPhrase(of as P)} is within ${rangePhrase(range)}`;
       const target = of === "battlefield-edge" ? "a battlefield edge" : of === "battlefield-centre" ? "the centre of the battlefield" : of && typeof of === "object" && (of as P).marker ? `${/^[aeiou]/i.test(str((of as P).marker)) ? "an" : "a"} ${dekebab(str((of as P).marker))} marker` : unitRefPhrase(of);
-      const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
       const at = p.at === "phase-start" ? " at the start of the phase" : "";
       return `${who} ${p.at === "phase-start" ? "was" : "is"} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)} of ${target}${at}`;
     }

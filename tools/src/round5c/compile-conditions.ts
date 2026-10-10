@@ -8,6 +8,7 @@
 import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
+import { everyModelFlag } from "./compile-every-model.js";
 import { isOneTargetRef } from "./compile-target-refs.js";
 import { isTriggeringDestruction, lowerTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
@@ -442,6 +443,8 @@ export function condition(leaf: CompileLeaf): Node {
           return { inches: closed(leaf, "inches") };
         };
         const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
+        // Version 22: every model of the subject is within (family-extensions-16-every-model-position.ts).
+        const every = everyModelFlag(leaf);
         // Wave 10: a distance to an objective marker by its designation and controller, or to the
         // enemy deployment zone (a region place, beyond only; compile-set-up-placement folds it).
         const node = leaf.parameters.of === "objective"
@@ -453,11 +456,11 @@ export function condition(leaf: CompileLeaf): Node {
           : leaf.parameters.of === "battlefield-edge"
           ? pred("within", { of: "battlefield-edge", range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "following-filter"
-          ? pred("within", { of: followingFilter(leaf), range: engagement ? range : inchesOnly(), ...wholly }, subject)
+          ? pred("within", { of: followingFilter(leaf), range: engagement ? range : inchesOnly(), ...wholly, ...every }, subject)
           : leaf.parameters.of === "matching-unit"
           ? pred("within", { of: matchingUnit(leaf, subject), range, ...wholly }, subject)
           : leaf.parameters.of !== undefined
-          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range, ...wholly }, subject)
+          ? pred("within", { of: widenedWho(closed(leaf, "of")) ?? "this-unit", range, ...wholly, ...every }, subject)
           : pred("within", { of: "defender", range: inchesOnly() });
         return polarity(leaf, kind === "beyond" ? negate(node) : node);
       }
@@ -469,7 +472,7 @@ export function condition(leaf: CompileLeaf): Node {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("unit-position names the selected objective marker, but this record selects no objective marker.");
         objective.selection_var = leaf.parameters.selection_var;
       }
-      return polarity(leaf, pred("within", { of: { objective }, range: "objective-control" }, subject));
+      return polarity(leaf, pred("within", { of: { objective }, range: "objective-control", ...everyModelFlag(leaf) }, subject));
     }
     case "deployment-window":
       return polarity(leaf, { type: "deployment-window", parameters: { during: closed(leaf, "during") } });
