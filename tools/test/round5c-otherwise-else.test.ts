@@ -243,13 +243,13 @@ describe("an Otherwise after a phase-and-selection head (7005 shape, with a bear
     expect(selected.steps[1].condition).toEqual({ operator: "not", operands: [{ type: "strength", parameters: { below: "starting" } }] });
   });
 
-  it("pins the 7005 refusal when the destroyed-models condition names the selected unit in the selection's sentence", () => {
-    const selected = [
+  it("compiles the 7005 shape with an antecedent strength condition: the head gates stay on the ability, the strength gate is the else gate", () => {
+    const antecedentText = [
       "In your Command phase, select one friendly SPIRIT unit within 6\" of this model.",
       "If that unit is below Starting Strength, you can return one destroyed model to that unit.",
       "Otherwise, one model in that unit regains up to D3 lost wounds.",
     ].join(" ");
-    const errors = errorsOf(selected,
+    const result = compile(antecedentText,
       ["In your Command phase", "phase-window", { phase: "command", turn: "own" }],
       ["select one", "select-unit", { distance: "any", visible: false }],
       ["friendly SPIRIT unit", "unit-filter", { side: "friendly", keywords: ["SPIRIT"] }],
@@ -258,6 +258,42 @@ describe("an Otherwise after a phase-and-selection head (7005 shape, with a bear
       ["you can return one destroyed model", "return-models", { subject: "antecedent", count: 1 }],
       ["Otherwise", "otherwise", {}],
       ["one model in that unit regains up to D3 lost wounds", "regain-wounds", { subject: "antecedent", amount: "D3" }]);
-    expect(errors).toContain(OTHERWISE_UNNEGATABLE);
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    const effect = (result.mechanics as unknown as Node).effect as Node;
+    // The head (phase window and selection) gates the whole ability: the Otherwise branch sits inside it.
+    expect(effect.type).toBe("conditional");
+    expect(effect.condition.operands).toContainEqual({ type: "phase-is", parameters: { phase: "command" } });
+    const selected = effect.effect as Node;
+    expect(selected.type).toBe("select-units");
+    expect(selected.selector.keywords).toEqual(["SPIRIT"]);
+    const [returned, healed] = (selected.effect as Node).steps as Node[];
+    const below = { type: "strength", parameters: { subject: "selected-unit", below: "starting" } };
+    expect(returned!.condition).toEqual(below);
+    expect(healed!.condition).toEqual({ operator: "not", operands: [below] });
+  });
+});
+
+describe("an eligibility permission after an Otherwise sentence (2498 shape)", () => {
+  const text = "End of the Fight phase. One friendly ALPHA unit from your army that was eligible to fight this phase. If your unit is not engaged, it can move six inches. Otherwise, your unit can fall back. It cannot embark within a TRANSPORT at the end of this move.";
+  const pieces: Piece[] = [
+    ["End of the Fight phase", "event", { kind: "phase-end", phase: "fight", turn: "either" }, "WHEN"],
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+    ["from your army", "unit-owner", { owner: "friendly" }, "TARGET"],
+    ["that was eligible to fight this phase", "eligible", { subject: "this-unit", to: "fight" }, "TARGET"],
+    ["your unit is not engaged", "unit-state", engaged],
+    ["it can move six inches", "make-move", move(6)],
+    ["Otherwise", "otherwise", {}],
+    ["your unit can fall back", "make-move", fallBack],
+    ["It cannot embark within a TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: false }],
+  ];
+
+  it("compiles, and the trailing permission carries no engaged term from the Otherwise pair", () => {
+    const result = compile(text, ...pieces);
+    expect(result.ok, result.ok ? "" : result.errors.join("; ")).toBe(true);
+    const steps = ((result.mechanics as unknown as Node).effect as Node).steps as Node[];
+    expect(steps[2]).toMatchObject({ type: "permission" });
+    expect(JSON.stringify(steps[2])).not.toMatch(/engaged/u);
+    expect(JSON.stringify(result.core)).toContain("ALPHA");
   });
 });

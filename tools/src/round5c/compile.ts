@@ -435,14 +435,21 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // Conditions on the selected unit right after a selection in its sentence ("select one enemy
   // unit within 6\" of this unit", "that are on the battlefield") say which units can be selected:
   // the selection's eligibility, not a gate on the ability.
+  // An effect-less selection sentence merges into the next one, so a gate in that next sentence
+  // ("If one or more models in that unit are destroyed, …" before an Otherwise sentence) would share the
+  // selection's merged sentence. In an ability with an Otherwise sentence the raw (pre-merge) sentence
+  // decides instead; other abilities keep the merged test unchanged.
+  const rawOf = rawSentences(list, sourceText);
+  const sameSentence = (at: number, selected: number) => list.some((leaf) => leaf.family_id === "otherwise")
+    ? rawOf[at] === rawOf[selected] : places[at]!.sentence === places[selected]!.sentence;
   const selectionIndex = list.findIndex((leaf) => leaf.family_id === "select-unit");
   const eligibilityIndexes = selectionIndex === -1 ? [] : list.flatMap((leaf, at) => at > selectionIndex && leaf.role === "CONDITION"
-    && leaf.parameters.subject === "selected-unit" && places[at]!.sentence === places[selectionIndex]!.sentence
+    && leaf.parameters.subject === "selected-unit" && sameSentence(at, selectionIndex)
     && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
   for (const at of eligibilityIndexes) endConditions.add(at);
   // "Otherwise, …": its else gate is the negation of the sentence before it (compile-otherwise.ts). The leading
   // conditions it negates move from the ability's gates to that sentence's gates, so they gate only that sentence.
-  const otherwise = otherwiseElse(list, places, rawSentences(list, sourceText), sourceText, new Set([...endConditions, ...consumedByContainer, ...designationTiming]));
+  const otherwise = otherwiseElse(list, places, rawOf, sourceText, new Set([...endConditions, ...consumedByContainer, ...designationTiming]));
   errors.push(...otherwise.errors);
   const otherwiseMoved = otherwise.moved;
   for (const { sentence, gate } of otherwise.gates) sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), gate]);
