@@ -635,9 +635,10 @@ function followedBy(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean
  * "engaged with an enemy unit **engaged** with a friendly CHARACTER unit": the enemy filter (right
  * after the outer state) is engaged with the friendly filter after the inner state. The inner state
  * names "that unit" (its subject is antecedent, bound to the outer filter), so it and the partner are
- * consumed here and the inner subject is not read. Returns the partner's DSL filter and the index past
- * it, or null when the leaves after the filter hold no inner state awaiting a filter. An inner state
- * that is not a plain engaged state naming its unit, or a chain nested a second level, is refused.
+ * consumed here and the inner subject is not read. An inner state whose subject is this unit ("this
+ * unit is engaged with a friendly VEHICLE unit") is a separate condition, so it returns null, as does
+ * a leaf list with no inner state awaiting a filter. An antecedent inner state that is not a plain
+ * engaged state, or a chain nested a second level, is refused.
  */
 function nestedEngagedChain(list: readonly CompileLeaf[], index: number, filter: CompileLeaf): { partner: Record<string, unknown>; at: number } | null {
   const inner = list[index + 1];
@@ -645,9 +646,10 @@ function nestedEngagedChain(list: readonly CompileLeaf[], index: number, filter:
   const partnerAt = index + 2;
   const partner = list[partnerAt];
   if (!isFilter(partner) || partner.fragment !== filter.fragment) return null;
+  if (!(inner.antecedent_keys ?? []).includes("subject")) return null;
   const p = inner.parameters;
   const plain = JSON.stringify(p.states) === JSON.stringify(["engaged"]) && p.negated !== true && p.at === undefined && p.exclusive !== true;
-  if (!plain || !(inner.antecedent_keys ?? []).includes("subject")) throw new CompileError("An engaged-with chain takes a plain engaged state that names its unit (\"that unit\"), with no at, negation or exclusive qualifier.");
+  if (!plain) throw new CompileError("An engaged-with chain takes a plain engaged state that names its unit (\"that unit\"), with no at, negation or exclusive qualifier.");
   if (partner.parameters.side === "any") throw new CompileError("An engaged-with chain's partner unit must say friendly or enemy.");
   const at = pastOwners(list, partnerAt, partner);
   const further = list[at];

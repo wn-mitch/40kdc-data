@@ -71,7 +71,6 @@ describe("positive must-end anchored to a declared charge", () => {
     const plainMessage = "An engaged-with chain takes a plain engaged state that names its unit";
     expect(refused([...outer, engagedWith("antecedent", "following-filter", { at: "phase-start" }), friendlyCharacter()])).toContain(plainMessage);
     expect(refused([...outer, engagedWith("antecedent", "following-filter", { negated: true }), friendlyCharacter()])).toContain(plainMessage);
-    expect(refused([...outer, engagedWith("this-unit", "following-filter"), friendlyCharacter()])).toContain(plainMessage);
   });
 
   it("refuses a nested chain nested a second level", () => {
