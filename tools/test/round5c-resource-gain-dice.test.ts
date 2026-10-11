@@ -84,6 +84,14 @@ describe("resource-gain v4: dice amounts and plain pool ids", () => {
     const mechanics = compiled([leaf(parameters, 3)]);
     const gain = nodes(mechanics, (node) => node.type === "resource-gain")[0]!;
     expect(gain.modifier).toMatchObject({ pool: "resurgence-points", amount: 2 });
+    expect(checkEntry(entryWithMechanics(base(), mechanics as never)).errors).toEqual([]);
+  });
+
+  it("renders a plain pool gain at its count as a full sentence", () => {
+    const mechanics = compiled([leaf(normalize({ pool: "resurgence-points", amount: 2 }, 3), 3)]);
+    const check = checkEntry(entryWithMechanics(base(), mechanics as never));
+    expect(check.errors).toEqual([]);
+    expect(check.rendered_text).toContain("You gain 2 Resurgence points.");
   });
 
   it("compiles a dice amount to a DSL quantity and describes it as dice", () => {
