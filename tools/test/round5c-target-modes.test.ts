@@ -200,3 +200,47 @@ describe("Stratagem target_restrictions modes in the schema", () => {
     expect(targetValid([{ ...first, mode: "a" }, { ...second, mode: "c" }])).toBe(false);
   });
 });
+
+describe("Round 5C Stratagem target modes: a target after \"or\" needs its own stratagem-target leaf", () => {
+  const WINDOW_MOVE: Item = ["Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }, "WHEN"];
+
+  it("refuses a second target filter that follows \"or\" with no selector for its mode", () => {
+    const text = "Movement phase. One ALPHA unit, or up to two BETA units.";
+    expect(refused(text, WINDOW_MOVE,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+      ["BETA units", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"])).toMatch(/has no stratagem-target leaf/u);
+  });
+
+  it("refuses the same gap after \"Alternatively\"", () => {
+    const text = "Movement phase. One ALPHA unit. Alternatively, you can target one BETA unit.";
+    expect(refused(text, WINDOW_MOVE,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+      ["BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"])).toMatch(/has no stratagem-target leaf/u);
+  });
+
+  it("keeps adjacent alternatives in one target", () => {
+    const text = "Movement phase. One ALPHA INFANTRY or ALPHA MOUNTED unit from your army. Until the end of the turn, your unit is eligible to shoot and charge after falling back.";
+    const { target } = compiled(text, WINDOW_MOVE,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA INFANTRY", "unit-filter", { side: "friendly", keywords: ["ALPHA", "INFANTRY"] }, "TARGET"],
+      ["ALPHA MOUNTED unit", "unit-filter", { side: "friendly", keywords: ["ALPHA", "MOUNTED"] }, "TARGET"],
+      DURATION, ELIGIBLE);
+    expect(Array.isArray(target)).toBe(false);
+    expect(JSON.stringify(target)).toContain("INFANTRY");
+    expect(JSON.stringify(target)).toContain("MOUNTED");
+  });
+
+  it("still AND-merges two target filters whose gap says \"one or more\", which is not a mode", () => {
+    const text = "Movement phase. One ALPHA unit that has one or more BETA units. Until the end of the turn, your unit is eligible to shoot and charge after falling back.";
+    const { target } = compiled(text, WINDOW_MOVE,
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+      ["BETA units", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"],
+      DURATION, ELIGIBLE);
+    expect(Array.isArray(target)).toBe(false);
+    expect(JSON.stringify(target)).toContain("BETA");
+    expect(JSON.stringify(target)).toContain("ALPHA");
+  });
+});

@@ -229,6 +229,20 @@ describe("Round 5C authority boundary", () => {
     }
   });
 
+  it("adds an among-filter inside an effect span only with containment approval", () => {
+    const db = fixture([{ ability_id: "contained", raw_text: `Then ${CP} next turn.` }]);
+    try {
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "contained", `${CP} next turn`)] }, WILL);
+      const among = { ...confirmDecision(db, "contained", "next turn"), role: "CONDITION", family_id: "unit-filter", parameters: { side: "friendly", among: "stratagem-targets", targets: "every" } };
+      expect(() => applyAnnotationBatch(db, { reviewer: "will", decisions: [among] }, WILL)).toThrow(/containment approval/u);
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [{ ...among, allow_overlap: true }] }, WILL);
+      const active = db.prepare("SELECT fingerprints.family_id, source_spans.exact_text FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id WHERE annotations.status = 'active' ORDER BY source_spans.start_byte").all();
+      expect(active).toEqual([{ family_id: "resource-action", exact_text: `${CP} next turn` }, { family_id: "unit-filter", exact_text: "next turn" }]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("copies a trusted leaf onto a byte-identical record as derived, and undoing the source retracts the copy", () => {
     const db = fixture([{ ability_id: "first", raw_text: `Then ${CP}.` }, { ability_id: "second", raw_text: `Then ${CP}.` }]);
     try {

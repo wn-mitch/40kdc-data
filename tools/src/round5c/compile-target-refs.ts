@@ -112,6 +112,17 @@ function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: 
   return { ref: targetRefs(pick as "every" | "any", matches), singular: false };
 }
 
+/**
+ * The EFFECT leaves of the same fragment whose span holds the among-filter at `index`. The
+ * filter's own span lies inside its container's, and a container starts no later than the filter.
+ */
+function containerOf(leaves: readonly CompileLeaf[], index: number): number[] {
+  const filter = leaves[index]!;
+  const end = filter.end_byte ?? filter.start_byte;
+  return leaves.flatMap((leaf, at) => at !== index && leaf.role === "EFFECT" && leaf.fragment === filter.fragment
+    && leaf.start_byte <= filter.start_byte && end <= (leaf.end_byte ?? leaf.start_byte) ? [at] : []);
+}
+
 /** The one target a group names, refusing a group of several ("Two X units" pointed back to as "it"). */
 function oneTarget(head: TargetHead, leaf: CompileLeaf): string {
   if (head.names.length !== 1) throw new CompileError(`${leaf.family_id} at byte ${leaf.start_byte} points back to a group of ${head.names.length} targets; the compiler binds only one.`);
@@ -221,6 +232,17 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
     if (leaf.fragment === "TARGET") throw new CompileError("An among-filter cannot sit in TARGET; a later target points back to an earlier one with antecedent.");
     const { ref, singular } = referenceOf(leaf, heads);
     dropped.add(index);
+    const containers = containerOf(leaves, index);
+    if (containers.length > 1) throw new CompileError(`An among-filter at byte ${leaf.start_byte} sits inside several effects; name the one it means.`);
+    if (containers.length === 1) {
+      // "Remove those units …": the effect that contains the filter takes the filter's reference as its subject.
+      const container = leaves[containers[0]!]!;
+      const keys = antecedentKeys(container.family_id, container.parameters);
+      if (keys.length === 0) throw new CompileError(`An among-filter inside an effect names that effect's subject, but the effect's subject is not antecedent (${container.family_id} at byte ${container.start_byte}).`);
+      leaves[containers[0]!] = bind(container, keys, ref);
+      if (singular) { focus = ref; focusLevel = String(leaf.parameters.level ?? "unit"); }
+      continue;
+    }
     const previous = leaves[index - 1];
     const followingKey = previous && previous.fragment === leaf.fragment && !dropped.has(index - 1)
       ? FOLLOWING_KEYS.find((key) => previous.parameters[key] === FOLLOWING_FILTER) : undefined;

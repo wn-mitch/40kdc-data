@@ -55,6 +55,8 @@ export function targetHeads(list: readonly CompileLeaf[]): TargetHead[] {
 /** Whether no sentence break (. ; :) falls between two leaves, the first before the second. */
 function sameSentence(first: CompileLeaf, second: CompileLeaf, sourceText: string | undefined): boolean {
   if (sourceText === undefined || first.end_byte === undefined || second.start_byte < first.end_byte) return false;
+  // Adjacent leaves have no text between them, so no break can fall there.
+  if (second.start_byte === first.end_byte) return true;
   return !/[.;:]/u.test(exactSpan(sourceText, first.end_byte, second.start_byte));
 }
 

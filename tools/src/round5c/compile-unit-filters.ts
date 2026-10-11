@@ -1,4 +1,5 @@
 import { exactSpan } from "./contracts.js";
+import { ALTERNATIVELY, OR_CONNECTIVE, ONE_OR_MORE, uncoveredText } from "./compile-target-modes.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scope.js";
@@ -274,6 +275,9 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
       }
       const side = (group.filter.parameters as FilterParameters).side;
       if (between.some((owner) => owner.parameters.owner !== side)) break;
+      // Two target filters with an "or" (or "Alternatively") between them and no stratagem-target leaf
+      // name a second mode the compiler cannot place; joined by no connective they would merge into one target.
+      if (sourceText !== undefined && leaf.fragment === "TARGET") refuseUnnamedMode(sourceText, group.filter, candidate!, list);
       const combined = mergedFilter(group.filter, candidate!);
       if (combined === null) break;
       // The merged filter's wording runs to the last filter it took in ("(excluding X)" included).
@@ -302,6 +306,19 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
     index = at - 1;
   }
   return out;
+}
+
+/**
+ * Refuses the AND-merge of two target filters whose gap reads as a second mode ("or" or
+ * "Alternatively", not "one or more"). The gap is the wording the leaves between them do not cover.
+ */
+function refuseUnnamedMode(sourceText: string, first: CompileLeaf, second: CompileLeaf, list: readonly CompileLeaf[]): void {
+  const from = first.end_byte ?? first.start_byte;
+  const inside = list.filter((leaf) => leaf.start_byte >= from && (leaf.end_byte ?? leaf.start_byte) <= second.start_byte);
+  const gap = uncoveredText(Buffer.from(sourceText, "utf8"), from, second.start_byte, inside);
+  if (OR_CONNECTIVE.test(gap.replace(ONE_OR_MORE, " ")) || ALTERNATIVELY.test(gap)) {
+    throw new CompileError("A target after \"or\" or \"Alternatively\" has no stratagem-target leaf; name the mode's count.");
+  }
 }
 
 /** Joiners that make the next filter an alternative to the one before it, read without bold or spaces. */

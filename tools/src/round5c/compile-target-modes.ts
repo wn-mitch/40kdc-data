@@ -17,9 +17,9 @@ export type ModeCost = { label: string; amount: number };
 /** Leaves that may sit between two targets' wording without ending the first target's group. */
 const LEAD_FAMILIES = new Set(["optional-use", "resource-spend", "event"]);
 const SELECTOR_FAMILIES = new Set(["stratagem-target"]);
-const OR_CONNECTIVE = /(?:^|[\s,;:.])or(?=\s|$)/iu;
-const ONE_OR_MORE = /\bor\s+more\b/giu;
-const ALTERNATIVELY = /\balternatively\b/iu;
+export const OR_CONNECTIVE = /(?:^|[\s,;:.])or(?=\s|$)/iu;
+export const ONE_OR_MORE = /\bor\s+more\b/giu;
+export const ALTERNATIVELY = /\balternatively\b/iu;
 
 export type ModeAnnotated = { leaves: CompileLeaf[] };
 
@@ -87,7 +87,7 @@ export function assignTargetModes(list: readonly CompileLeaf[], sourceText: stri
 }
 
 /** The leaf-free text in [start, end), with the lead-in leaves' spans removed. */
-function uncoveredText(bytes: Buffer, start: number, end: number, leaves: readonly CompileLeaf[]): string {
+export function uncoveredText(bytes: Buffer, start: number, end: number, leaves: readonly CompileLeaf[]): string {
   const keep: Buffer[] = [];
   let at = start;
   for (const leaf of [...leaves].sort((a, b) => a.start_byte - b.start_byte)) {
