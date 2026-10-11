@@ -403,6 +403,9 @@ func triggerEventPhrase(t map[string]any) string {
 			}
 			return "after " + who + " " + verb
 		}
+		if f["kind"] == "fight" {
+			return "after " + who + " resolves its attacks in a fight"
+		}
 		return "after " + who + " resolves its attacks"
 	case "destroyed":
 		melee := ""

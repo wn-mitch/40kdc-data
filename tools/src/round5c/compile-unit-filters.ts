@@ -15,7 +15,7 @@ import { foldSelectExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
 import { isBackref } from "./compile-attack-backref.js";
-import { destroyingAttackBefore, foldDestroyingAttack } from "./compile-destroying-attack.js";
+import { destroyingAttackBefore, destroyedByFilterAfter, destroyerSideOf, foldDestroyedByFilter, foldDestroyingAttack } from "./compile-destroying-attack.js";
 
 /**
  * A unit-filter leaf ("friendly **WRAITH CONSTRUCT** unit") folded into the selection or aura it
@@ -480,6 +480,13 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const at = pastOwners(list, index, leaf);
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, subject_filter: dslUnitFilter(leaf) } });
       index = at;
+    } else if (isFilter(leaf) && destroyedByFilterAfter(out, list, index, sourceText)) {
+      // "a friendly X unit is destroyed by a" + "PENITENT unit from your army": the destroyer is the
+      // destruction's subject. A "from your army" right after the filter names its side (compile-destroying-attack.ts).
+      const side = destroyerSideOf(list, index)!;
+      foldDestroyedByFilter(out, dslUnitFilter({ ...leaf, parameters: { ...leaf.parameters, side } }));
+      const owner = list[index + 1];
+      if (owner?.family_id === "unit-owner" && owner.fragment === leaf.fragment) index += 1;
     } else if (isFilter(leaf) && destroyingAttackBefore(out, leaf, sourceText)) {
       // "a friendly X unit" + "is destroyed by an attack made by an enemy Y unit": the attack's maker
       // is the destruction's destroyer, so the filter is the destruction's subject (compile-destroying-attack.ts).

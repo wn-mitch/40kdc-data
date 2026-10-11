@@ -332,6 +332,8 @@ def _event_phrase(t: AbilityTrigger) -> str:
             if obj is not None:
                 return f"after {who} has shot and targeted {_object_phrase(obj)}"
             return f"after {who} {'fights' if f.get('kind') == 'fight' else 'shoots'}"
+        if f.get("kind") == "fight":
+            return f"after {who} resolves its attacks in a fight"
         return f"after {who} resolves its attacks"
     if event == "destroyed":
         melee = " in melee" if f.get("attack_type") == "melee" else ""

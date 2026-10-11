@@ -3,6 +3,7 @@ import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
+import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 import { placements } from "./compile-placement.js";
 
@@ -136,7 +137,7 @@ export function momentOfFilter(leaves: readonly CompileLeaf[], filterIndex: numb
  * The moment's unit a condition between a bare filter and the moment describes, or null: the
  * subject, or, for a destruction the filter names (compile-unit-filters.ts), the destroyed object.
  */
-function onMomentUnit(leaves: readonly CompileLeaf[], index: number): string | null {
+function onMomentUnit(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string | null {
   const leaf = leaves[index]!;
   if (leaf.role !== "CONDITION") return null;
   // Back past the description to the filter it starts with (a filter a following-filter distance
@@ -145,6 +146,11 @@ function onMomentUnit(leaves: readonly CompileLeaf[], index: number): string | n
   while (at >= 0 && describes(leaves, at, leaf.fragment)) at -= 1;
   const moment = momentOfFilter(leaves, at);
   if (moment === null || moment <= index) return null;
+  // A destruction whose following unit-filter names the destroyer: the moment's unit is that destroyer.
+  if (trailingDestroyerFilter(leaves, moment, sourceText) !== null) {
+    refuseDestroyedUnitAntecedent(leaves, moment, leaf, sourceText);
+    return "event-subject";
+  }
   return destroyedObject(leaves[moment], leaves[at]) ? "event-object" : "event-subject";
 }
 
@@ -346,10 +352,18 @@ function verbFirstSelection(leaves: readonly CompileLeaf[], index: number): stri
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
-  const momentUnit = onMomentUnit(leaves, index);
+  const momentUnit = onMomentUnit(leaves, index, sourceText);
   if (momentUnit !== null) return momentUnit;
   // "a friendly model" + "that disembarked this turn" + "makes an attack": the attacking unit.
   if (onAttacker(leaves, index)) return "attacker";
+  // "destroyed by an enemy unit" + "that enemy unit": the destroyer, once the refusal in compile-destroying-attack.ts passes.
+  // Checked before the Stratagem-target and bare-filter rules, which would otherwise take the antecedent.
+  let destroyedAt = -1;
+  for (let at = 0; at < index; at += 1) if (momentNamesUnit(leaves, at)) destroyedAt = at;
+  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null) {
+    refuseDestroyedUnitAntecedent(leaves, destroyedAt, leaves[index]!, sourceText);
+    return "event-subject";
+  }
   // "a friendly X unit" + "is within range of an objective" + "attacks that target that unit": the defender.
   if (onTargeted(leaves, index)) return "target";
   // "when a saving throw is failed for a friendly X model within 6\" …, that attack": the model whose roll it is.
@@ -472,7 +486,7 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     // A filter's membership ("that unit's Character models", written by groupMembership) names the
     // moment's unit, never the filter's own units, which bareFilter must still read as the filter.
     if (leaf.family_id === "unit-filter" && leaf.parameters.member_of === ANTECEDENT) {
-      return { ...leaf, parameters: { ...leaf.parameters, member_of: momentUnitRole(leaves, index) } };
+      return { ...leaf, parameters: { ...leaf.parameters, member_of: momentUnitRole(leaves, index, sourceText) } };
     }
     const keys = antecedentKeys(leaf.family_id, leaf.parameters);
     if (keys.length === 0) return leaf;
@@ -526,11 +540,15 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
  * The unit a moment names for a membership ("that unit's Character models"): the nearest earlier
  * moment naming a unit. A destruction without a destroyer names the object; others name the subject.
  */
-function momentUnitRole(leaves: readonly CompileLeaf[], index: number): string {
+function momentUnitRole(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): string {
   let at = -1;
   for (let other = 0; other < index; other += 1) if (momentNamesUnit(leaves, other)) at = other;
   if (at < 0) throw new CompileError(`${leaves[index]!.family_id} at byte ${leaves[index]!.start_byte} points back to an earlier unit (${ANTECEDENT}), but no earlier leaf selects a unit, targets a Stratagem or names a unit's moment.`);
   const moment = leaves[at]!.parameters;
+  if (trailingDestroyerFilter(leaves, at, sourceText) !== null) {
+    refuseDestroyedUnitAntecedent(leaves, at, leaves[index]!, sourceText);
+    return "event-subject";
+  }
   const object = OBJECT_MOMENTS.has(String(moment.kind)) || ((moment.kind === "unit-destroyed" || moment.kind === "model-destroyed") && moment.by === undefined);
   return object ? "event-object" : "event-subject";
 }

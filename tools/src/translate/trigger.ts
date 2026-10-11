@@ -224,7 +224,7 @@ function eventPhrase(t: AbilityTrigger): string {
       return t.object != null && t.object !== "this-unit" ? `when damage is allocated to ${objectPhrase(t.object)}` : "when damage is allocated";
     case "attacks-resolved":
       if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : "shoots"}`;
-      return `after ${who} resolves its attacks`;
+      return f.kind === "fight" ? `after ${who} resolves its attacks in a fight` : `after ${who} resolves its attacks`;
     case "destroyed": {
       const obj = t.object;
       const melee = f.attack_type === "melee" ? " in melee" : "";

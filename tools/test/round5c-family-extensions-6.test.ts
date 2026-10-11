@@ -114,7 +114,7 @@ describe("unit-filters that name who acts or what a moment happens to", () => {
     expect(schemaErrors(mechanics)).toEqual([]);
   });
 
-  it("names what damage was allocated to, but not who destroyed a unit", () => {
+  it("names what damage was allocated to, and the friendly unit that destroyed a unit", () => {
     const allocated = placed("Just after a mortal wound is allocated to an ADEPTUS ASTARTES unit from your army, your unit has the Feel No Pain 6+ ability.", [
       ["Just after a mortal wound is allocated to an", "event", { kind: "damage-allocated" }],
       ["ADEPTUS ASTARTES unit", "unit-filter", FRIENDLY],
@@ -127,7 +127,8 @@ describe("unit-filters that name who acts or what a moment happens to", () => {
       ["ADEPTUS ASTARTES unit", "unit-filter", FRIENDLY],
       ["this unit has +1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ]);
-    expect(compileLeaves(destroyed.leaves, destroyed.text)).toMatchObject({ ok: false });
+    // The filter after "destroyed by an" is the destroyer (compile-destroying-attack.ts), so the trigger names it as the subject.
+    expect(compiled(destroyed).trigger).toMatchObject({ event: "destroyed", subject: { owner: "friendly", all_of: ["ADEPTUS ASTARTES"] } });
   });
 });
 

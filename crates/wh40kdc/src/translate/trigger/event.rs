@@ -466,7 +466,11 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     }
                 );
             }
-            format!("after {who} resolves its attacks")
+            if is(f, "kind", "fight") {
+                format!("after {who} resolves its attacks in a fight")
+            } else {
+                format!("after {who} resolves its attacks")
+            }
         }
         "destroyed" => {
             let melee = if is(f, "attack_type", "melee") {
