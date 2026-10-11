@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { describeAbility } from "../src/translate/index.js";
 import { describeHappened } from "../src/translate/condition-history.js";
-import { NESTED_MOMENT_ERROR } from "../src/round5c/compile-delayed-destruction.js";
+import { FIRST_TIME_ERROR, NAMED_MODEL_ERROR, NESTED_MOMENT_ERROR } from "../src/round5c/compile-delayed-destruction.js";
 import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
@@ -123,8 +123,8 @@ describe("Delayed destruction: refusals", () => {
     expect(result.ok ? [] : result.errors).toContain(NESTED_MOMENT_ERROR);
   });
 
-  it("T6c: a delayed destruction with a 'then' gap and a 'first time' with no usage is the part path, not refused", () => {
-    // The part path keeps today's behaviour (S2): no new error for a "then" gap.
+  it("T6c: a 'first time' destruction with a 'then' gap and no usage limit is refused on the part path, not compiled silently", () => {
+    // Without the usage limit the part path would fire on every destruction (753 as drafted).
     const text = "The first time this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const result = compileLeaves(placed(text,
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
@@ -134,7 +134,8 @@ describe("Delayed destruction: refusals", () => {
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
-    expect(result.ok).toBe(true);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(FIRST_TIME_ERROR);
   });
 
   it("T6d: a leading pair joined by 'or' keeps the trigger list (a genuine alternative)", () => {
@@ -206,9 +207,8 @@ describe("Delayed destruction: a destruction, a Leadership test, and a phase-end
   });
 
   it("T3d: a 'then' in the gap keeps the part path (no lowering, no error)", () => {
-    const thenText = "The first time the bearer is destroyed, then take a Leadership test for the bearer at the end of the phase. If that test is passed, set the bearer back up.";
+    const thenText = "When the bearer is destroyed, then take a Leadership test for the bearer at the end of the phase. If that test is passed, set the bearer back up.";
     const result = compileLeaves(placed(thenText,
-      [...FIRST_TIME],
       ["the bearer is destroyed", "event", { kind: "this-model-destroyed" }],
       ["take a Leadership test for the bearer", "test", { target: "this-model", test: "leadership" }],
       ["at the end of the phase", "event", PHASE_END],
@@ -222,7 +222,7 @@ describe("Delayed destruction: a destruction, a Leadership test, and a phase-end
 
 describe("Delayed destruction: parts that keep today's compile", () => {
   it("T5: a destruction, then a removal and the phase-end: two parts, as before", () => {
-    const text = "The first time this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const text = "When this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const mechanics = mechanicsOf(placed(text,
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
       ["remove it from play", "destroy-models", { target: "this-model" }],
@@ -368,6 +368,161 @@ describe("Delayed destruction: further leading and mid-ability shapes", () => {
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
     expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NESTED_MOMENT_ERROR);
+  });
+});
+
+// Fabricated wording for the Wave 10 follow-up records: a destruction of this model or of a named model, then the phase end.
+/** The dice roll and its result band that follow the phase-end moment in the follow-up shapes. */
+const PHASE_END_ROLL = [
+  ["roll one D6", "dice-roll", { dice: "D6" }],
+  ["On a 2+", "roll-result", { from: 2, to: 6 }],
+] as Array<[string, string, Record<string, unknown>]>;
+
+describe("Delayed destruction follow-up: a named model's destruction is refused, not a trigger list", () => {
+
+  it("T1 (81 shape): a model-destroyed moment, then the phase end, with no usage limit is refused as NAMED_MODEL_ERROR", () => {
+    const text = "When a model in this unit is destroyed, at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      ["a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ...PHASE_END_ROLL,
+      ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
+    ), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NAMED_MODEL_ERROR);
+  });
+
+  it("T1b: the same named destruction with a first-time usage limit is still refused (the destruction is not this model's)", () => {
+    const text = "The first time a model in this unit is destroyed, at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      [...FIRST_TIME],
+      ["a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ...PHASE_END_ROLL,
+      ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
+    ), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NAMED_MODEL_ERROR);
+  });
+
+  it("T1c: a named destruction joined to the phase end by 'or' keeps the trigger list (a genuine alternative)", () => {
+    const text = "At the end of the phase or when a model in this unit is destroyed, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      ["At the end of the phase", "event", PHASE_END],
+      ["when a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ...PHASE_END_ROLL,
+      ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
+    ), text);
+    expect(result.ok).toBe(true);
+    expect(Array.isArray(result.ok ? result.mechanics.trigger : null)).toBe(true);
+  });
+
+  it("T14 (SE part path): a named destruction, then a sequence, then the phase end is refused as NAMED_MODEL_ERROR", () => {
+    const text = "When a model in this unit is destroyed, then at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      ["a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ...PHASE_END_ROLL,
+      ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
+    ), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? [] : result.errors).toContain(NAMED_MODEL_ERROR);
+  });
+
+  it("T13: 'The first time this model is destroyed, or at the end of the phase' with no usage keeps the trigger list, with no first-time error", () => {
+    const text = "The first time this model is destroyed, or at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ...PHASE_END_ROLL,
+      ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
+    ), text);
+    expect(result.ok ? [] : result.errors).not.toContain(FIRST_TIME_ERROR);
+    expect(result.ok).toBe(true);
+    expect(Array.isArray(result.ok ? result.mechanics.trigger : null)).toBe(true);
+  });
+});
+
+describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 / 7586 leaves", () => {
+  const SET_UP = ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", min_enemy_distance: 1 }] as [string, string, Record<string, unknown>];
+
+  it("T3 (753 with a usage limit): the usage is on the entry, destroy-models sits in the first part, the set-up in the second", () => {
+    const text = "The first time this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up, with D6 wounds remaining.";
+    const mechanics = mechanicsOf(placed(text,
+      [...FIRST_TIME],
+      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["remove it from play", "destroy-models", { target: "this-model" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2, to: 6 }],
+      SET_UP,
+      ["with D6 wounds remaining", "wounds-remaining", { value: "D6" }],
+    ), text);
+    expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
+    const parts = mechanics.effect.steps as Array<Record<string, any>>;
+    expect(parts.map((part) => part.trigger.event)).toEqual(["model-destroyed", "phase-ended"]);
+    expect(JSON.stringify(parts[0])).toContain("destroy-models");
+    expect(JSON.stringify(parts[1])).toContain("set-up");
+    expect(JSON.stringify(parts[1])).toContain('"wounds_remaining":"D6"');
+  });
+
+  it("T4 (1643 shape, D3 wounds): lowers to one phase-ended trigger with the happened condition, the usage, and the D3 wounds", () => {
+    const text = "The first time this model is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with D3 wounds remaining.";
+    const mechanics = mechanicsOf(placed(text,
+      [...FIRST_TIME],
+      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ["On a 2+", "roll-result", { from: 2, to: 6 }],
+      ["set this model back up on the battlefield as close as possible to where it was destroyed", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", min_enemy_distance: 1 }],
+      ["not within Engagement Range of any enemy units", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }],
+      ["with D3 wounds remaining", "wounds-remaining", { value: "D3" }],
+    ), text);
+    expect(mechanics.trigger).toEqual({ event: "phase-ended", condition: { type: "happened", parameters: DESTROYED_IN_PHASE } });
+    expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
+    expect(JSON.stringify(mechanics.effect)).toContain('"wounds_remaining":"D3"');
+  });
+
+  it("T12 (3644 / 7586 shape, full wounds): the set-up carries wounds_remaining 'full', not D3", () => {
+    const text = "The first time this model is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.";
+    const mechanics = mechanicsOf(placed(text,
+      [...FIRST_TIME],
+      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ["On a 2+", "roll-result", { from: 2, to: 6 }],
+      ["set this model back up on the battlefield as close as possible to where it was destroyed", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", min_enemy_distance: 1 }],
+      ["not within Engagement Range of any enemy units", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }],
+      ["with its full wounds remaining", "wounds-remaining", { value: "full" }],
+    ), text);
+    expect(JSON.stringify(mechanics.effect)).toContain('"wounds_remaining":"full"');
+    expect(JSON.stringify(mechanics.effect)).not.toContain('"wounds_remaining":"D3"');
+  });
+
+  it("T5 (10357 shape): the destruction is this-model-destroyed, the phase end lowers, and no destroy-models effect remains", () => {
+    const text = "At the end of a phase in which this model is destroyed, roll one D6: On a 2+, set this model back up on the battlefield as close as possible to where it was destroyed, unengaged, with 3 wounds remaining.";
+    const mechanics = mechanicsOf(placed(text,
+      ["At the end of a phase", "event", PHASE_END],
+      ["in which this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2, to: 6 }],
+      ["set this model back up on the battlefield as close as possible to where it was destroyed", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", min_enemy_distance: 1 }],
+      ["unengaged", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }],
+      ["with 3 wounds remaining", "wounds-remaining", { value: 3 }],
+    ), text);
+    expect(mechanics.trigger).toEqual({ event: "phase-ended", condition: { type: "happened", parameters: DESTROYED_IN_PHASE } });
+    expect(JSON.stringify(mechanics)).not.toContain("destroy-models");
+  });
+
+  it("T7 (1028 shape, SF): an each-time moment nested with a phase end stays refused with the nested-moment text", () => {
+    const text = "Each time this model is destroyed, at the end of the phase, roll one D6: On a 2+, set this model back up.";
+    const result = compileLeaves(placed(text,
+      ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+      ["at the end of the phase", "event", PHASE_END],
+      ...PHASE_END_ROLL,
+      SET_UP,
+    ), text);
     expect(result.ok ? [] : result.errors).toContain(NESTED_MOMENT_ERROR);
   });
 });

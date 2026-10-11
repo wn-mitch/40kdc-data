@@ -17,9 +17,23 @@ export type DelayedDestruction = { trigger: Node; condition: Node };
 /** The refusal for a nested moment that cannot be lowered (compile.ts pushes it verbatim). */
 export const NESTED_MOMENT_ERROR = "A moment nested in another (\"each time …, at the end of the phase\") has no DSL trigger; a trigger list fires on any one of its moments.";
 
+/**
+ * The refusal for a destruction of some model other than this one, followed by the end of the phase. The
+ * `model-destroyed` event has no object filter, so the lowered condition would count any model's destruction.
+ */
+export const NAMED_MODEL_ERROR = "A model-destroyed moment other than this model's own, followed by the end of the phase, has no DSL trigger; a trigger list fires on any model's destruction.";
+
+/** The refusal for a "first time" limit with no usage limit on a destruction that is part of a sequence. */
+export const FIRST_TIME_ERROR = "A \"first time\" limit with no usage limit has no DSL form; the ability would fire on every destruction.";
+
 /** The event leaf that a model's own destruction is ("this model is destroyed"). */
 export function isThisModelDestroyed(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "this-model-destroyed";
+}
+
+/** A destruction moment of any model: this model's own, or a model-destroyed event with no object filter. */
+export function isAnyDestruction(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "event" && (leaf.parameters.kind === "this-model-destroyed" || leaf.parameters.kind === "model-destroyed");
 }
 
 /** The end of any phase, in either player's turn: the only delayed moment this module lowers. */
@@ -43,9 +57,10 @@ export function momentGap(sourceText: string, first: CompileLeaf, second: Compil
  * Lowers a destruction moment and a phase-end moment that are nested in one another.
  *
  * - `null`: the pair is joined by "or", a genuine alternative. The caller keeps the trigger list.
- * - `{ error }`: the pair is nested but cannot be lowered: it is joined by "and", or the ability
- *   says "first time" with no usage limit, which would lose the once-only property, or the
- *   ability says "each time", which the phase-end condition cannot count.
+ * - `{ error }`: the pair is nested but cannot be lowered: the destruction is another model's
+ *   (NAMED_MODEL_ERROR), or it is joined by "and", or the ability says "first time" with no usage
+ *   limit, which would lose the once-only property, or the ability says "each time", which the
+ *   phase-end condition cannot count.
  * - `{ trigger, condition }`: the trigger is phase-ended, and the condition is the destruction of
  *   this model in that phase. The caller sets `condition` on the trigger.
  *
@@ -58,8 +73,9 @@ export function lowerDelayedDestruction(
   sourceText: string,
   hasUsage: boolean,
 ): DelayedDestruction | { error: string } | null {
-  if (!isThisModelDestroyed(history) || !isAnyPhaseEnd(delayed)) return null;
+  if (!isAnyDestruction(history) || !isAnyPhaseEnd(delayed)) return null;
   if (/\bor\b/iu.test(between)) return null;
+  if (!isThisModelDestroyed(history)) return { error: NAMED_MODEL_ERROR };
   if (/\band\b/iu.test(between)) return { error: NESTED_MOMENT_ERROR };
   if (/\bfirst time\b/iu.test(sourceText) && !hasUsage) return { error: NESTED_MOMENT_ERROR };
   // "each time" repeats the destruction within a phase; the happened condition collapses those into one phase-end.
@@ -106,7 +122,7 @@ export function planDelayedDestruction(
   const leafAt = (position: number) => list[triggerIndexes[position]!]!;
   const inPart = new Set(partStarts.flatMap((part) => part.moments));
   const leading = triggerIndexes.map((_, position) => position).filter((position) => !inPart.has(position));
-  const destroyed = leading.filter((position) => isThisModelDestroyed(leafAt(position)));
+  const destroyed = leading.filter((position) => isAnyDestruction(leafAt(position)));
   const delayed = leading.filter((position) => isAnyPhaseEnd(leafAt(position)));
   if (destroyed.length > 0 && delayed.length > 0) {
     if (leading.length !== 2 || destroyed.length !== 1 || delayed.length !== 1) {
@@ -128,7 +144,14 @@ export function planDelayedDestruction(
   const history = leafAt(destroyed[0]!);
   const [first, second] = history.start_byte < phaseEnd.start_byte ? [history, phaseEnd] : [phaseEnd, history];
   const gap = momentGap(sourceText, first, second);
-  if (SEQUENCE_WORD.test(gap)) return plan;
+  if (SEQUENCE_WORD.test(gap)) {
+    // A sequence is not lowered, so its destruction must not be one that the lowering would have refused.
+    if (!/\bor\b/iu.test(gap)) {
+      if (!isThisModelDestroyed(history)) plan.errors.push(NAMED_MODEL_ERROR);
+      else if (/\bfirst time\b/iu.test(sourceText) && !hasUsage) plan.errors.push(FIRST_TIME_ERROR);
+    }
+    return plan;
+  }
   const result = lowerDelayedDestruction(history, phaseEnd, gap, sourceText, hasUsage);
   if (result === null) return plan;
   if ("error" in result) { plan.errors.push(result.error); return plan; }
