@@ -1,4 +1,6 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { condition } from "./compile-conditions.js";
+import { currentFamilyVersion } from "./contracts.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 
 /**
@@ -121,8 +123,13 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
   const near = leaf.parameters.near as { of: string; inches: number } | undefined;
   if (near && leaf.parameters.distance === "within") throw new CompileError("A for-each's units are within one range; this one names two.");
   const within: Node | null = near ? { type: "within", parameters: { of: near.of, range: { inches: near.inches } } } : null;
+  // A before-form hit (bindBeforeFormHits) gates each unit on being hit by the moment's attacks, with its
+  // attack-filter: a happened after-roll whose object is the candidate. It joins the range in one eligibility.
+  const hit = forEachHitGate(leaf);
+  const gated = hit === null ? within : within === null ? hit : { operator: "and", operands: [within, hit] };
   let eligibility: Node | null;
   if (leaf.parameters.including === "target") {
+    if (hit !== null) throw new CompileError("A for-each that also takes the target cannot gate on a hit; the hit would narrow the target too.");
     // "For the target unit and one D6 for each other enemy unit within 6\" of it": the target, or
     // any unit the rest names. "Other" there is other than the target, which the target branch holds.
     const { other: _other, ...rest } = filter;
@@ -131,7 +138,7 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
     const others = filterEligibility(rest, within);
     if (!others) throw new CompileError("A for-each that also takes the target needs a range or a filter naming the other units.");
     eligibility = { operator: "or", operands: [{ type: "same-unit", parameters: { as: "defender" } }, others] };
-  } else eligibility = filterEligibility(filter, within);
+  } else eligibility = filterEligibility(filter, gated);
   return {
     type: "for-each-unit",
     selector: {
@@ -145,6 +152,18 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
     },
     effect: body,
   };
+}
+
+/**
+ * The hit gate of a before-form for-each: "scored a hit against" each candidate, by the attacks the
+ * `hit` names (its hit_filter). Only the hit_filter key is accepted; any other key is refused.
+ */
+function forEachHitGate(leaf: CompileLeaf): Node | null {
+  if (leaf.parameters.hit === undefined) return null;
+  const hit = leaf.parameters.hit as { hit_filter?: Record<string, unknown> } & Record<string, unknown>;
+  const unknown = Object.keys(hit).find((key) => key !== "hit_filter");
+  if (unknown !== undefined) throw new CompileError(`A before-form hit names ${unknown}; only its attack-filter can narrow it.`);
+  return condition({ role: "CONDITION", family_id: "hit-by-attacks", family_version: currentFamilyVersion("hit-by-attacks"), parameters: { subject: "this-unit", ...(hit.hit_filter !== undefined ? { hit_filter: hit.hit_filter } : {}) }, start_byte: leaf.start_byte, end_byte: leaf.end_byte, fragment: leaf.fragment });
 }
 
 /** The checks a folded unit-filter adds to a selector beyond its all-of and excluded keywords, as one condition. */

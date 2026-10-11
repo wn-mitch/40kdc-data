@@ -626,8 +626,12 @@ function pastOwners(list: readonly CompileLeaf[], index: number, filter: Compile
   return at;
 }
 
-/** A for-each-unit-select with no parameters: the bare "each" whose units the next leaves name. */
-const bareForEach = (leaf: CompileLeaf) => leaf.family_id === "for-each-unit-select" && Object.keys(leaf.parameters).every((key) => key === "including");
+/**
+ * A for-each-unit-select with no parameters: the bare "each" whose units the next leaves name. A
+ * before-form hit (compile-weapon-qualified.ts bindBeforeFormHits) is bare too: its `hit` names the
+ * attacks that must hit each unit the filter after it selects.
+ */
+const bareForEach = (leaf: CompileLeaf) => leaf.family_id === "for-each-unit-select" && Object.keys(leaf.parameters).every((key) => key === "including" || key === "hit");
 
 /** "Engaged with your unit" about each pass's unit (bound to the recipient), in the quantifier's fragment. */
 function engagedWithOwnUnit(leaf: CompileLeaf | undefined, quantifier: CompileLeaf): boolean {

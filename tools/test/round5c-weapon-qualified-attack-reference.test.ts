@@ -155,9 +155,9 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
     expect(bare.ok).toBe(false);
   });
 
-  it("refuses a before-form hit whose unit a later anaphor names, instead of binding it to the attacker", () => {
+  it("binds a before-form hit whose unit a later anaphor names to each unit it hit, not to the attacker", () => {
     // "until the start of your next turn, that enemy unit is pinned": the hit's unit is the unit-filter
-    // after the hit, which that anaphor cannot reach yet. The compile must refuse, not name this unit.
+    // after the hit. The binder gives the anaphor that per-unit pass (compile-weapon-qualified.ts bindBeforeFormHits).
     const text = "Each time this model makes a ranged attack, if one or more of those attacks made with its Doomweaver scored a hit against an enemy unit, until the start of your next turn, that enemy unit is pinned.";
     const result = compileLeaves(placed(text,
       ["Each time this model makes a ranged attack", "attack", { direction: "makes", unit: "this-model", attack_type: "ranged" }],
@@ -166,8 +166,8 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
     ), text);
-    expect(result.ok).toBe(false);
-    expect(result.errors.join(" ")).toMatch(/points back to that unit, which cannot bind yet/u);
+    expect(result.ok).toBe(true);
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"type":"for-each-unit","selector":{"owner":"enemy"');
   });
 
   it("a melee attack that destroys an enemy unit makes the destruction a melee one (S4, pattern B)", () => {
@@ -304,7 +304,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
     expect(bare).not.toContain("weapon_name");
   });
 
-  it("a before-form Indirect Fire hit followed by a that-unit anaphor is refused, as the span-1 shape is (S3)", () => {
+  it("a before-form Indirect Fire hit followed by a that-unit anaphor binds that unit per hit (S3, B)", () => {
     const text = "In your Shooting phase, after this model has shot, if one or more of those attacks made with an Indirect Fire weapon scored a hit against an enemy unit, that unit must take a Sample test.";
     const leaves = placed(text,
       ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
@@ -314,9 +314,9 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["that unit must take a Sample test", "test", { target: "antecedent", test: "leadership" }],
     );
-    const refused = compileLeaves(leaves, text);
-    expect(refused.ok).toBe(false);
-    expect(refused.errors.join(" ")).toMatch(/points back to that unit, which cannot bind yet/u);
+    const bound = compileLeaves(leaves, text);
+    expect(bound.ok).toBe(true);
+    expect(JSON.stringify(bound.ok ? bound.mechanics : {})).toContain('"eligibility":{"type":"happened","parameters":{"event":"after-roll","subject":"event-subject","object":"this-unit","filter":{"roll":"hit","result":"success","weapon_keyword":"Indirect Fire"}');
     // The span alone folds the Indirect Fire filter onto the hit, and the filter leaf is gone.
     const folded = foldLeadingHitFilters(leaves.slice(2, 5), text);
     expect(folded).toHaveLength(2);

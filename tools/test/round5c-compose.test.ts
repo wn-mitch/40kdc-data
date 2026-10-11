@@ -189,7 +189,7 @@ describe("Round 5C composition rules", () => {
     expect(compiled(text, pieces).mechanics.effect).toEqual({
       type: "select-units",
       selector: { owner: "enemy", count: 1, eligibility: {
-        type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "selected-unit", filter: { roll: "hit", result: "success" }, window: "event" },
+        type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success" }, window: "event" },
       } },
       effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
     });

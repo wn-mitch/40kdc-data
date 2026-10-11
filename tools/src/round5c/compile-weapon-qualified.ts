@@ -7,6 +7,7 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { HIT_ATTACK_TYPES, HIT_FILTER_KEYS } from "./compile-conditions.js";
 import { hasAntecedent } from "./compile-antecedent.js";
+import { currentFamilyVersion } from "./contracts.js";
 
 const DESTROY_KINDS = new Set(["unit-destroyed", "model-destroyed"]);
 
@@ -85,17 +86,22 @@ export function foldLeadingHitFilters(leaves: readonly CompileLeaf[], sourceText
       out.push(leaf);
       continue;
     }
-    const keys = Object.keys(filter.parameters);
-    if (filter.parameters.negated === true) throw new CompileError("A hit's attack-filter cannot be negated.");
-    if (keys.some((key) => !HIT_FILTER_KEYS.has(key))) {
-      const named = keys.find((key) => !HIT_FILTER_KEYS.has(key));
-      throw new CompileError(`A hit's attack-filter names ${named}; the DSL hit filter has no ${named}.`);
-    }
+    checkHitFilter(filter);
     if (leaf.parameters.hit_filter !== undefined) throw new CompileError("A hit names one attack-filter, and this one already has one.");
-    if (filter.parameters.attack_type !== undefined && !HIT_ATTACK_TYPES.has(String(filter.parameters.attack_type))) throw new CompileError("A hit's attack_type is melee, ranged or psychic.");
     out[out.length - 1] = { ...leaf, start_byte: filter.start_byte, parameters: { ...leaf.parameters, hit_filter: { ...filter.parameters } } };
   }
   return out;
+}
+
+/** The attack-filter fields a hit can name, checked the same way for a leading and a before-form hit. */
+function checkHitFilter(filter: CompileLeaf): void {
+  const keys = Object.keys(filter.parameters);
+  if (filter.parameters.negated === true) throw new CompileError("A hit's attack-filter cannot be negated.");
+  if (keys.some((key) => !HIT_FILTER_KEYS.has(key))) {
+    const named = keys.find((key) => !HIT_FILTER_KEYS.has(key));
+    throw new CompileError(`A hit's attack-filter names ${named}; the DSL hit filter has no ${named}.`);
+  }
+  if (filter.parameters.attack_type !== undefined && !HIT_ATTACK_TYPES.has(String(filter.parameters.attack_type))) throw new CompileError("A hit's attack_type is melee, ranged or psychic.");
 }
 
 /**
@@ -112,4 +118,56 @@ export function refuseBeforeFormAnaphors(leaves: readonly CompileLeaf[]): void {
       throw new CompileError(`A before-form hit names the unit it hit by the unit-filter after it; the ${anaphor.family_id} at byte ${anaphor.start_byte} points back to that unit, which cannot bind yet.`);
     }
   });
+}
+
+/**
+ * The before-form hit: "one or more of those attacks made with its doomweaver scored a hit against
+ * an enemy unit, … that enemy unit is pinned". The hit's unit is the unit-filter right after it, so
+ * a later "that unit" has no antecedent until the hit is bound. The binder rewrites the hit and its
+ * touching attack-filter into one for-each-unit-select whose `hit` names the hit's filter; the
+ * for-each then runs per unit the unit-filter selects, and "that unit" binds to that unit.
+ *
+ * Only a hit whose later leaves name "that unit" (an antecedent) is bound. Any other hit is left
+ * for foldLeadingHitFilters, as before. A leftover hit is refused by refuseBeforeFormAnaphors.
+ */
+export function bindBeforeFormHits(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  let out = [...leaves];
+  for (let at = 0; at < out.length; at += 1) {
+    const hit = out[at]!;
+    if (hit.family_id !== "hit-by-attacks" || hit.parameters.object !== "following-filter" || hit.parameters.window !== undefined) continue;
+    const unit = out[at + 1];
+    if (!out.slice(at + 1).some((other) => other.fragment === hit.fragment && hasAntecedent(other))) continue;
+    if (unit?.family_id !== "unit-filter" || unit.fragment !== hit.fragment || !touching(bytes, hit, unit)) continue;
+    const unitAt = at + 1;
+    const anaphorAfter = out.slice(unitAt + 1).find((other) => other.fragment !== hit.fragment && hasAntecedent(other));
+    if (anaphorAfter !== undefined) {
+      throw new CompileError(`A before-form hit's unit is the unit-filter after it; the ${anaphorAfter.family_id} at byte ${anaphorAfter.start_byte} is in another part and points back to that unit, which cannot bind.`);
+    }
+    const filter = out[at - 1];
+    const attackFilter = filter?.family_id === "attack-filter" && filter.fragment === hit.fragment && touching(bytes, filter, hit);
+    let hitFilter: Record<string, unknown> | undefined;
+    if (attackFilter) {
+      checkHitFilter(filter);
+      hitFilter = { ...filter.parameters };
+    }
+    const first = attackFilter ? at - 1 : at;
+    const quantifier: CompileLeaf = {
+      role: "EVENT",
+      family_id: "for-each-unit-select",
+      family_version: currentFamilyVersion("for-each-unit-select"),
+      parameters: { hit: hitFilter === undefined ? {} : { hit_filter: hitFilter } },
+      start_byte: out[first]!.start_byte,
+      end_byte: hit.end_byte,
+      fragment: hit.fragment,
+    };
+    out = [...out.slice(0, first), quantifier, ...out.slice(unitAt)];
+    at = first;
+  }
+  const quantified = out.some((leaf) => leaf.family_id === "for-each-unit-select" && leaf.parameters.hit !== undefined);
+  if (quantified && out.some((leaf) => (leaf.family_id === "army-construction" && leaf.parameters.rule === "composition") || leaf.family_id === "count-scale")) {
+    throw new CompileError("A before-form hit's per-unit pass cannot share a record with an army composition or a count-scale; the hit would be dropped.");
+  }
+  return out;
 }

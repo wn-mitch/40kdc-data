@@ -15,7 +15,7 @@ import { bindPrecedingRolls, foldConditionalTestModifiers, trailingTestCondition
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
-import { foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
+import { bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
 import { bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
@@ -274,9 +274,10 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }
-  const leaves = nameBoundAttacks(qualified);
+  let leaves = nameBoundAttacks(qualified);
+  // A before-form hit names its unit by the unit-filter after it, so its later "that unit" binds to that unit (compile-weapon-qualified.ts).
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
-  try { checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); } catch (error) {
+  try { leaves = bindBeforeFormHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
@@ -997,9 +998,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (pieces.some((piece) => !piece)) return { ok: false, signature, errors };
   // In a compound ability, a selection wraps only its own part's effects.
   const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
+  // The selection's eligibility: each condition on the selected unit, read by the select that wraps it (below).
+  const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
+  // Set by each branch that places the eligibility on a select or a designation; a leftover one is refused below.
+  let eligibilityPlaced = false;
   if (selectionPart !== null && selectionPart > 0) {
     const own = pieces[selectionPart]!;
-    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit })];
+    // A designated selection takes its eligibility in designation() below, so the part's select takes it only otherwise.
+    const designated = selected.length > 0;
+    pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit, eligibility: designated ? null : eligibility })];
+    eligibilityPlaced = true;
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -1029,7 +1037,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       body = gated(perUnit, body!);
     }
   }
-  const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
   const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
 
   if (selections.length === 1 && selected.length > 0) {
@@ -1039,19 +1046,31 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
+    eligibilityPlaced = true;
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
-  else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) { /* its own select */ }
-  else if (pair && body) body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
+  else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) {
+    // A persistent designation's select has no eligibility field in the DSL, so an eligibility here is refused, not dropped.
+    if (eligibilityIndexes.length) return { ok: false, signature, errors: [...errors, "A persistent designation's select has no eligibility field."] };
+  }
+  else if (pair && body) {
+    // A bound pair: the outer select takes the selection's eligibility, the inner one its candidate's (compile-pair-eligibility.ts).
+    body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
+    eligibilityPlaced = true;
+  }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
       eligibility,
       selectionLimit,
     });
+    eligibilityPlaced = true;
   }
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
+  // An eligibility no branch placed would be silently dropped; the record is refused instead. A menu action's
+  // select has no entry in `selections` (compile-containers.ts reads it), so only a selection compiled here counts.
+  if (eligibilityIndexes.length && selections.length > 0 && !eligibilityPlaced) return { ok: false, signature, errors: [...errors, "A selection's eligibility has no select to attach to."] };
   if (!body) return { ok: false, signature, errors };
   if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
@@ -1155,6 +1174,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     },
     checks: [...checks, ...armyCoreChecks(list)],
   };
+}
+
+/**
+ * A selection's eligibility condition as the DSL reads it. "This unit" in a hit's eligibility is the
+ * candidate being selected, so a hit-by-attacks names its unit as this-unit; the leaf is otherwise unchanged.
+ */
+function eligibilityLeaf(leaf: CompileLeaf): CompileLeaf {
+  return leaf.family_id === "hit-by-attacks" ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf;
 }
 
 /** Whether an effect (or one nested in it) applies to the selected unit. */
