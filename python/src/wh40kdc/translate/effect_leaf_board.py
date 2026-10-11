@@ -443,13 +443,17 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -> str:
     """As endsNearestPhrase in the TypeScript describer: the closest unit's name, with the waiver's
     alternative end when waives is closest-enemy-model."""
-    objective = e["of"].get("objective") if isinstance(e.get("of"), dict) else None
-    if objective is not None:
-        named = "selected objective" if "selection_var" in objective else "objective marker"
+    if e.get("of") == "event-subject":
+        # The enemy unit the trigger names is "that enemy unit", not the closest of a group.
+        nearest = "as close as possible to that enemy unit"
     else:
-        named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
-        named = named.replace(" units", " unit", 1).replace(" units)", ")")
-    nearest = f"as close as possible to the closest {named}"
+        objective = e["of"].get("objective") if isinstance(e.get("of"), dict) else None
+        if objective is not None:
+            named = "selected objective" if "selection_var" in objective else "objective marker"
+        else:
+            named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
+            named = named.replace(" units", " unit", 1).replace(" units)", ")")
+        nearest = f"as close as possible to the closest {named}"
     must = f"each model in {'the unit' if who == 'it' else who} must end {move_ref}" if e.get("per") == "model" else f"{who} must end {move_ref}"
     instead = ", instead of as close as possible to the closest enemy unit" if e.get("instead_of") == "closest-enemy-unit" else ""
     if e.get("waives") == "closest-enemy-model":

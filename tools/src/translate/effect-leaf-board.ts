@@ -152,13 +152,13 @@ function passItem(x: P): string {
  * end an alternative, so either end is legal.
  */
 function endsNearestPhrase(e: P, ctx: Ctx, who: string, moveRef: string): string {
+  // The enemy unit the trigger names is "that enemy unit", not the closest of a group.
   // An objective names no unit: any marker, or the one a select-objective bound.
   const objective = (e.of as P).objective as P | undefined;
-  const named = objective !== undefined
+  const nearest = e.of === "event-subject" ? "as close as possible to that enemy unit" : `as close as possible to the closest ${objective !== undefined
     ? (objective.selection_var !== undefined ? "selected objective" : "objective marker")
     // A filter names a plural group ("all enemy units"); the closest one is singular.
-    : effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")");
-  const nearest = `as close as possible to the closest ${named}`;
+    : effectSubject(e.of, ctx).replace(/^(an?|the|all) /, "").replace(" units", " unit").replace(/ units\)/g, ")")}`;
   const must = e.per === "model" ? `each model in ${who === "it" ? "the unit" : who} must end ${moveRef}` : `${who} must end ${moveRef}`;
   const instead = e.instead_of === "closest-enemy-unit" ? ", instead of as close as possible to the closest enemy unit" : "";
   return e.waives === "closest-enemy-model" ? `${must} either closer to the closest enemy model or ${nearest}` : `${must} ${nearest}${instead}`;

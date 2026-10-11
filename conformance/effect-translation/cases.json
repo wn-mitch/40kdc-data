@@ -24693,6 +24693,26 @@
     }
   },
   {
+    "caseId": "move-end-nearest-event-subject-enemy-unit",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": "event-subject"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to that enemy unit."
+    }
+  },
+  {
     "caseId": "move-end-nearest-enemy-unit-plain",
     "effect": {
       "type": "move",

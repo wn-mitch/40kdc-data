@@ -139,9 +139,13 @@ fn mode_clause(m: &P) -> String {
 /// As `endsNearestPhrase` in the TypeScript describer: the closest unit's name, with the waiver's
 /// alternative end when `waives` is closest-enemy-model.
 fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
+    // The enemy unit the trigger names is "that enemy unit", not the closest of a group.
+    let event_subject = e.get("of").and_then(Value::as_str) == Some("event-subject");
     // An objective names no unit: any marker, or the one a select-objective bound.
     let objective = e.get("of").and_then(|of| of.get("objective"));
-    let named = if let Some(obj) = objective {
+    let named = if event_subject {
+        String::new()
+    } else if let Some(obj) = objective {
         if obj.get("selection_var").is_some() {
             "selected objective".to_string()
         } else {
@@ -157,7 +161,11 @@ fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
         }
         named.replacen(" units", " unit", 1).replace(" units)", ")")
     };
-    let nearest = format!("as close as possible to the closest {named}");
+    let nearest = if event_subject {
+        "as close as possible to that enemy unit".to_string()
+    } else {
+        format!("as close as possible to the closest {named}")
+    };
     let must = if jstr(e.get("per")) == "model" {
         format!(
             "each model in {} must end {move_ref}",

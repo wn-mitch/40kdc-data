@@ -276,9 +276,13 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 // endsNearestPhrase mirrors endsNearestPhrase in the TypeScript describer: the closest unit's name,
 // with the waiver's alternative end when waives is closest-enemy-model.
 func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string {
+	// The enemy unit the trigger names is "that enemy unit", not the closest of a group.
 	// An objective names no unit: any marker, or the one a select-objective bound.
 	var named string
-	if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
+	eventSubject, _ := e["of"].(string)
+	if eventSubject == "event-subject" {
+		named = ""
+	} else if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
 		named = "objective marker"
 		if obj, ok := asMap(of["objective"]); ok && obj != nil && obj["selection_var"] != nil {
 			named = "selected objective"
@@ -295,6 +299,9 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 		named = strings.ReplaceAll(named, " units)", ")")
 	}
 	nearest := "as close as possible to the closest " + named
+	if eventSubject == "event-subject" {
+		nearest = "as close as possible to that enemy unit"
+	}
 	must := who + " must end " + moveRef
 	if e["per"] == "model" {
 		unit := who

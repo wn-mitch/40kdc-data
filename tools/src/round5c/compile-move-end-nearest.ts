@@ -16,8 +16,9 @@ export function destinationOf(leaf: CompileLeaf): string {
 }
 
 /**
- * The DSL value of one move-end nearest: `of` (the unit its folded filter names, any objective
- * marker, or the objective a select-objective bound), per model when it says so, and instead_of.
+ * The DSL value of one move-end nearest: `of` (the unit its folded filter names, the enemy unit the
+ * trigger names, any objective marker, or the objective a select-objective bound), per model when it
+ * says so, and instead_of.
  * The selected objective is bound by exactly one select-objective: a select-objective leaf in this
  * ability, or the one whose body this ability is (`selectedObjective`). A select leaf in this ability
  * must come before the move-end, since the DSL binds the name for the select's own effect only.
@@ -30,6 +31,9 @@ export function endsNearestValue(list: readonly CompileLeaf[], at: number, selec
   if (to === "following-filter") {
     if (leaf.parameters.of === undefined) return { error: "A move-end nearest has no unit-filter for the unit it ends nearest." };
     value.of = leaf.parameters.of;
+  } else if (to === "event-subject") {
+    // "as close as possible to that enemy unit": the unit the trigger names, not a filter or an objective.
+    value.of = "event-subject";
   } else if (to === "closest-objective-marker") {
     value.of = { objective: {} };
   } else {
