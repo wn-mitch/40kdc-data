@@ -47,9 +47,8 @@ function errorsOf(list: CompileLeaf[], text: string): string {
 }
 
 describe("move-end-nearest version 2 parameters", () => {
-  it("has a version 2 or later that keeps version 1 as it was, and refuses what version 2 does not name", () => {
-    // Version 2 is the version that defines these parameters; the current version (3) widens it.
-    expect(currentFamilyVersion("move-end-nearest")).toBeGreaterThanOrEqual(2);
+  it("keeps version 1 as it was, and version 2 accepts and refuses exactly what it always did", () => {
+    // Pinned at version 2 explicitly; the current version (3) widens version 2 and must not change these results.
     expect(normalizeFingerprintParameters("move-end-nearest", { to: "following-filter" }, 1)).toEqual({ to: "following-filter" });
     expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker" }, 1)).toThrow();
     expect(normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker", per: "model", instead_of: "closest-enemy-unit" }, 2))
