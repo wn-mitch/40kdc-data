@@ -74,6 +74,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
       || leaf.parameters.weapon_type === undefined && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(leaf.parameters.characteristic))))) {
     return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }
+  if (leaf.family_id === "roll-prohibition") {
+    return { kind: "implicit", note: `No separate text: the roll named here (${String(leaf.parameters.roll)}) is not made; the Instead after it says what happens in its place.` };
+  }
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {
     return { kind: "implicit", note: "No separate text: this effect replaces an earlier one of the same kind when its condition holds." };

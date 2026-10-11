@@ -281,6 +281,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:it|your unit|this unit|that unit)\b/iu.test(exactText)) prefill.subject = "this-unit";
   }
+  if (family.id === "roll-prohibition" && /\bdeadly demise\b/iu.test(exactText)) prefill.roll = "deadly-demise";
   if (family.id === "dice-roll") {
     const dice = /\broll (?:one |a )?(d3|d6|2d6)\b/iu.exec(exactText)?.[1]?.toUpperCase();
     if (dice) prefill.dice = dice;

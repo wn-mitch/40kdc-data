@@ -386,6 +386,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "objective-sticky", target: leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit" };
     case "no-advance-roll":
       return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
+    // A transient planning node (compile.ts): the instead loop removes it, and a left-over one is refused.
+    case "roll-prohibition":
+      return { type: "roll-prohibition", roll: closed(leaf, "roll") };
     case "mortal-wounds": {
       const count = String(closed(leaf, "count"));
       // Version 5: "(to a maximum of 6 mortal wounds)" caps the total.

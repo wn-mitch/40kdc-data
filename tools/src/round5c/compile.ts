@@ -68,6 +68,7 @@ import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapO
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
+import { replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -780,11 +781,30 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       for (const item of group) item.replaces = true;
       continue;
     }
+    // "Each time an enemy unit is selected to Fall Back, … that enemy unit must Remain Stationary instead": the
+    // instead replaces the move the event selected, which is no authored effect. Accepted only when the selected
+    // moves are exactly the restricted activity, the permission is on the event's subject and it has a condition.
+    const selectedMoveRestriction = selectedMoveRestrictionReplacing(list, triggerIndexes, planned, replacement);
+    if (selectedMoveRestriction !== null) {
+      if (selectedMoveRestriction !== "accepted") errors.push(selectedMoveRestriction);
+      continue;
+    }
     const replaced = planned.filter((item) => item.index < replacement.index && item.leaf.family_id === replacement.leaf.family_id && !item.replaces).at(-1);
     // "Do not make an Advance roll; instead, add 6\" to its Move": the no-advance-roll fragment
     // already says what happens in its place, so the clause's effect folds into it. Anything
     // else in its place has no DSL fragment.
     const previous = planned.filter((item) => item.index < replacement.index).at(-1);
+    // "Do not roll <roll> …. Instead, <result>": the instead replaces the roll the prohibition names (compile-roll-prohibition.ts).
+    if (previous && previous.leaf.family_id === "roll-prohibition") {
+      const problem = replaceProhibitedRoll(list, places, planned, previous, replacement, boundDuration, CONFLICTING_DURATIONS);
+      if (problem !== null) {
+        // The refused prohibition is dropped with its error, so the leftover-prohibition check does not repeat it.
+        errors.push(problem);
+        const at = planned.indexOf(previous);
+        if (at !== -1) planned.splice(at, 1);
+      }
+      continue;
+    }
     if (!replaced && previous && PROHIBITIONS.has(previous.leaf.family_id)) {
       if (isAdvanceInPlace(replacement.node)) {
         // The folded effect's duration is the no-roll's: equal to its own if it has one, else taken from the folded effect.
@@ -835,6 +855,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (band.length === 1 && !replacement.gate.some(isRollMarker)) replacement.gate = [...band, ...replacement.gate];
     replacement.replaces = true;
   }
+
+  // A roll prohibition with no instead to replace it, or a dice roll in its own sentence, has no DSL form.
+  for (const item of planned.filter((entry) => entry.leaf.family_id === "roll-prohibition")) {
+    const sentence = places[item.index]!.sentence;
+    const rolled = list.some((leaf, at) => leaf.family_id === "dice-roll" && places[at]!.sentence === sentence);
+    errors.push(rolled
+      ? "A roll prohibition shares its sentence with a dice roll; retire the dice roll it forbids."
+      : `"Do not roll ${String(item.leaf.parameters.roll)}" has no "instead" saying what happens in its place.`);
+  }
+  planned.splice(0, planned.length, ...planned.filter((entry) => entry.leaf.family_id !== "roll-prohibition"));
 
   // An optional spend comes before the effects of its ability, so a clause that reads its designation (an "instead") sees it set.
   if (optionalSpends.size > 0) {
