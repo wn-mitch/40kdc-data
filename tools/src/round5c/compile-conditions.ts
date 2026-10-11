@@ -7,6 +7,7 @@
 
 import { armyIncludesCondition } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { everyModelFlag } from "./compile-every-model.js";
 import { isOneTargetRef } from "./compile-target-refs.js";
@@ -223,6 +224,8 @@ function objectiveFilter(leaf: CompileLeaf): Node {
  * passed straight through, since those already spell the unit-ref role the describer expects.
  */
 function widenedWho(value: unknown): string | undefined {
+  // A bound selection pair's unit (compile-pair-eligibility.ts) is a unit-ref object, passed through.
+  if (isSelectionRef(value)) return value as unknown as string;
   const subject = String(value);
   if (subject === "this-unit") return undefined;
   if (subject === "target") return "defender";

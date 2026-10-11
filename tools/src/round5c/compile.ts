@@ -60,7 +60,8 @@ import { lowerPsychicRecord, psychicSegments, type PsychicSegment } from "./comp
 import type { Mechanics } from "./entries.js";
 import { usageFor } from "./restriction-families.js";
 import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target-refs.js";
-import { refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
+import { refuseDestinationMismatch, refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
+import { bindPairEligibility, candidateIndexes, pairIndexes } from "./compile-pair-eligibility.js";
 import { defenderBoundBefore } from "./compile-attack-frame.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
@@ -315,6 +316,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldByAbility(foldAuraMoments(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText)), sourceText);
     refuseTransportAsSubject(bound);
+    refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
@@ -445,11 +447,22 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const rawOf = rawSentences(list, sourceText);
   const sameSentence = (at: number, selected: number) => list.some((leaf) => leaf.family_id === "otherwise")
     ? rawOf[at] === rawOf[selected] : places[at]!.sentence === places[selected]!.sentence;
+  // A bound selection pair (compile-pair-eligibility.ts): the outer unit's references after the inner select, and the inner's candidates.
+  const pairs = pairIndexes(list);
+  const pairCandidates = pairs ? candidateIndexes(list, pairs.inner, sameSentence) : [];
+  if (pairs) {
+    const bound = bindPairEligibility(list, pairs, pairCandidates);
+    if (bound.refusal) errors.push(bound.refusal);
+    list = bound.leaves;
+  }
+  for (const at of pairCandidates) endConditions.add(at);
   const selectionIndex = list.findIndex((leaf) => leaf.family_id === "select-unit");
   const eligibilityIndexes = selectionIndex === -1 ? [] : list.flatMap((leaf, at) => at > selectionIndex && leaf.role === "CONDITION"
     && leaf.parameters.subject === "selected-unit" && sameSentence(at, selectionIndex)
     && !list.slice(selectionIndex + 1, at).some((between) => between.role === "EFFECT") ? [at] : []);
   for (const at of eligibilityIndexes) endConditions.add(at);
+  // A pair's outer gates come before the inner select and are not an embark eligibility (that names the inner Transport).
+  const pairGatesBound = eligibilityIndexes.every((at) => pairs !== null && at < pairs.inner && !(list[at]!.family_id === "eligible" && list[at]!.parameters.to === "embark-within"));
   // "Otherwise, …": its else gate is the negation of the sentence before it (compile-otherwise.ts). The leading
   // conditions it negates move from the ability's gates to that sentence's gates, so they gate only that sentence.
   const otherwise = otherwiseElse(list, places, rawOf, sourceText, new Set([...endConditions, ...consumedByContainer, ...designationTiming]));
@@ -910,7 +923,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // A model bound by name, and a unit measured from or visible to it (compile-bound-selection.ts), is the one pair.
   const pair = attempt(() => boundSelectionPair(selections));
   if (selections.length > 1 && pair === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
-  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || eligibilityIndexes.length > 0 || battleSizeCount)) {
+  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || !pairGatesBound || battleSizeCount)) {
     errors.push("A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.");
   }
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
@@ -1017,6 +1030,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     }
   }
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(list[at]!)))) : null;
+  const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
+
   if (selections.length === 1 && selected.length > 0) {
     // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
     // designated unit are changed, so it narrows the designation's effect, not the selection. The
@@ -1028,7 +1043,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
   else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) { /* its own select */ }
-  else if (pair && body) body = selectUnit(pair.outer, selectUnit(pair.inner, body, {}), {});
+  else if (pair && body) body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),

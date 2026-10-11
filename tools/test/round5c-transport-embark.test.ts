@@ -170,14 +170,15 @@ describe("Round 5C transport eligibility: compiling the Transport target", () =>
     expect(refused(text, ...items)).toMatch(/names the Transport as the unit able to embark within itself/u);
   });
 
-  it("refuses embark-within inside a bound selection pair, whose eligibility is not bound with it yet", () => {
-    const text = "Select one friendly ALPHA unit. Select one friendly TRANSPORT within 6\" of that unit that it is able to embark within. That unit suffers 1 mortal wound.";
+  it("refuses embark-within on the outer unit of a bound selection pair, before the inner select", () => {
+    // An embark eligibility that is not a candidate of the inner selection has no reading (compile-pair-eligibility.ts).
+    const text = "Select one friendly ALPHA unit that it is able to embark within. Select one friendly TRANSPORT within 6\" of that unit. That unit suffers 1 mortal wound.";
     const items: Item[] = [
       ["Select one friendly", "select-unit", { distance: "any", visible: false, bind_as: "first" }, "EFFECT"],
       ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "EFFECT"],
+      ["that it is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "EFFECT"],
       ["Select one friendly", "select-unit", { distance: "within", inches: 6, visible: false, within_of: "first" }, "EFFECT"],
       ["TRANSPORT", "unit-filter", { side: "friendly", keywords: ["TRANSPORT"] }, "EFFECT"],
-      ["that it is able to embark within", "eligible", { subject: "antecedent", to: "embark-within", transport: "this-unit" }, "EFFECT"],
       ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }, "EFFECT"],
     ];
     expect(refused(text, ...items)).toMatch(/not bound with it yet/u);

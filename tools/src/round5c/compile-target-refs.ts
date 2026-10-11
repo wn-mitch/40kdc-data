@@ -51,7 +51,7 @@ const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as S
  */
 export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
-  "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject"], "core-ability-grant": ["subject"],
+  "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"], "make-move": ["subject"], "act-after-move": ["subject"], "no-advance-roll": ["subject"],
@@ -145,7 +145,7 @@ function bind(leaf: CompileLeaf, keys: readonly string[], ref: string): CompileL
   return { ...leaf, parameters: { ...leaf.parameters, ...Object.fromEntries(keys.map((key) => [key, ref])) } };
 }
 
-const FOLLOWING_KEYS = ["of", "with", "target", "to", "by", "object"];
+const FOLLOWING_KEYS = ["of", "with", "target", "to", "by", "object", "into"];
 /** Wording that points back to several units at once. */
 const PLURAL = /\b(?:those|both|either|each of)\b/iu;
 
@@ -208,10 +208,14 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
   const focusLevelAt: Array<string> = leaves.map(() => "unit");
   let focus = targetRef(names.at(-1)!);
   let focusLevel = String(heads.at(-1)?.level ?? "unit");
+  // What a later bare antecedent names as a subject: the first target, until an among-filter binds the
+  // subject of a later leaf. An embark permission's subject reads this, its destination reads focus.
+  const subjectFocusAt: Array<string | null> = leaves.map(() => null);
+  let subjectFocus = targetRef(names[0]!);
   for (let index = 0; index < leaves.length; index += 1) {
     const leaf = leaves[index]!;
     if (!(leaf.family_id === "unit-filter" && leaf.parameters.among === AMONG_TARGETS)) {
-      if (afterTargeting(leaf)) { focusAt[index] = focus; focusLevelAt[index] = focusLevel; }
+      if (afterTargeting(leaf)) { focusAt[index] = focus; focusLevelAt[index] = focusLevel; subjectFocusAt[index] = subjectFocus; }
       continue;
     }
     if (leaf.fragment === "TARGET") throw new CompileError("An among-filter cannot sit in TARGET; a later target points back to an earlier one with antecedent.");
@@ -242,13 +246,17 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       focus = singular ? ref : "event-subject";
       focusLevel = "unit";
     } else if (antecedentKeys(next.family_id, next.parameters).length) {
-      leaves[at] = bind(next, antecedentKeys(next.family_id, next.parameters), ref);
+      // An embark permission with a subject and a destination: the among-filter names its subject; its destination stays for focus.
+      const keys = antecedentKeys(next.family_id, next.parameters);
+      const bound = keys.includes("subject") && keys.includes("into") ? keys.filter((key) => key !== "into") : keys;
+      leaves[at] = bind(next, bound, ref);
+      if (singular && bound.includes("subject")) subjectFocus = ref;
       if (singular) { focus = ref; focusLevel = String(leaf.parameters.level ?? "unit"); }
     } else throw new CompileError(`An among-filter at byte ${leaf.start_byte} names no distance, attack, moment or back-reference right beside it.`);
     index = at - 1;
   }
-  const kept = leaves.flatMap((leaf, index) => dropped.has(index) ? [] : [{ leaf, focus: focusAt[index] ?? null, level: focusLevelAt[index]! }]);
-  const out = kept.map((item) => item.leaf);
+  const kept = leaves.flatMap((leaf, index) => dropped.has(index) ? [] : [{ leaf, focus: focusAt[index] ?? null, subject: subjectFocusAt[index] ?? null, level: focusLevelAt[index]! }]);
+  const out = kept.map((item) => settleDestination(item.leaf, item.subject, item.focus));
   return {
     leaves: out,
     focus: (index) => {
@@ -266,6 +274,19 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       return target;
     },
   };
+}
+
+/**
+ * An embark permission whose subject and destination are both bare anaphors ("that unit can embark
+ * within that TRANSPORT"): the subject binds to the subject focus and the destination to the focus.
+ * One focus for both would embark the unit within itself. Other leaves return unchanged.
+ */
+function settleDestination(leaf: CompileLeaf, subject: string | null, destination: string | null): CompileLeaf {
+  if (leaf.family_id !== "eligibility-permission" || leaf.parameters.into !== ANTECEDENT) return leaf;
+  const parameters = { ...leaf.parameters };
+  if (parameters.subject === ANTECEDENT && subject !== null) parameters.subject = subject;
+  if (destination !== null) parameters.into = destination;
+  return { ...leaf, parameters };
 }
 
 /**

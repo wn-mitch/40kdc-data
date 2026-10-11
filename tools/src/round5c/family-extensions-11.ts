@@ -14,7 +14,7 @@ import { ABILITY_ACTIVATE_OPTIONS, CHOSEN_OPTION_HOLDER_ANTECEDENT, STANCE_CAPAC
 export const FOLLOWING_FILTER = "following-filter";
 
 /** Keys whose value following-filter names the unit-filter right after the leaf. */
-const FOLLOWING_FILTER_KEYS = ["of", "with", "object", "target", "by", "to"] as const;
+const FOLLOWING_FILTER_KEYS = ["of", "with", "object", "target", "by", "to", "into"] as const;
 
 /** Whether a leaf names the unit-filter right after it (a distance's, engagement's or targeting's other unit). */
 export function awaitsFollowingFilter(parameters: Record<string, unknown>): boolean {

@@ -56,6 +56,8 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
  */
 const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   event: ["subject", "by"],
+  // An embark permission's destination ("that TRANSPORT"), accepted by family-extensions-16-transport-embark-eligibility-followup.ts.
+  "eligibility-permission": ["into"],
   "rule-state": ["subject"],
   "targeting-restriction": ["by", "target"],
   "weapon-property-scope": ["subject"],

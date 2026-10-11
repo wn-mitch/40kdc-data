@@ -4,6 +4,8 @@
  */
 
 import { activationModifier } from "./compile-activation.js";
+import { permissionDestination } from "./compile-permission-destination.js";
+import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { condition } from "./compile-conditions.js";
 import { boardEffect } from "./compile-board-effects.js";
 import { applyCounts } from "./compile-scaling.js";
@@ -146,6 +148,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
     }
     // One of a Stratagem's several targets (compile-target-refs.ts), resolved once the entry is built.
     if (isTargetRef(subject)) return subject;
+    // The outer or inner unit of a bound selection pair (compile-pair-eligibility.ts).
+    if (isSelectionRef(subject)) return subject as unknown as Node;
     const found = SUBJECT_TARGETS[String(subject)];
     if (!found) throw new CompileError(`${leaf.family_id}@${leaf.family_version} subject ${JSON.stringify(subject)} has no DSL target; move the leaf to its current version.`);
     // An attached leader's own subject is the whole unit; a selected unit stays the selected unit.
@@ -467,6 +471,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(despite && despite.length > 0 ? { despite } : {}),
           ...(asIf ? { as_if: asIf } : {}),
           ...(stratagem ? { stratagem } : {}),
+          // An embark permission's destination (compile-permission-destination.ts).
+          ...(leaf.parameters.into !== undefined ? { into: permissionDestination(leaf) } : {}),
           // A folded counts-as-moved leaf (compile-counts-as-moved.ts): the units count as having made this move.
           ...(leaf.parameters.counts_as_move !== undefined ? { counts_as_move: closed(leaf, "counts_as_move") } : {}),
         },

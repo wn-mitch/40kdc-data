@@ -204,7 +204,9 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
       ...(extra.selectionLimit ? { selection_limit: extra.selectionLimit } : {}),
       // A bound selection: its name for a later selection, and the selection a later one measures from or sees.
       ...(typeof selection.parameters.bind_as === "string" ? { bind_as: selection.parameters.bind_as } : {}),
-      ...(typeof selection.parameters.within_of === "string" ? { within_inches_from: { selection_var: selection.parameters.within_of } } : {}),
+      // The schema pairs within_inches_from with within_inches. A bound pair's inner unit with no distance of its own
+      // takes its measure from the candidate condition that names the outer unit (compile-pair-eligibility.ts).
+      ...(typeof selection.parameters.within_of === "string" && selection.parameters.distance === "within" ? { within_inches_from: { selection_var: selection.parameters.within_of } } : {}),
       ...(typeof selection.parameters.visible_to === "string" ? { visible_to: { selection_var: selection.parameters.visible_to } } : {}),
     },
     effect: body,

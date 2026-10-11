@@ -86,6 +86,9 @@ describe("Round 5C leaf describer audit", () => {
       "unit-position": { unrendered: [], colliding: ["subject", "to", "of"], problems: 0 },
       // Batch 7a: be-selected always reads "at the end of the opponent's previous turn", so `at`
       // never shows; the omitted-subject collision is the same one every widened predicate has.
+      // into names the Transport a record's other leaves give (an antecedent, a following filter, a bound selection), or this unit;
+      // a leaf alone has no unit to name for the first three, so each of those combinations is a problem on its own.
+      "eligibility-permission": { unrendered: [], colliding: [], problems: 264 },
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
       // embarked-permission takes only this-unit and gates nothing; its one leaf reads the same as none.
       "embarked-permission": { unrendered: [], colliding: [], problems: 1 },
