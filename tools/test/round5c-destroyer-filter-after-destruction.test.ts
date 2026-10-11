@@ -10,7 +10,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
-// Fabricated wording only: the keywords (ALPHA, BETA, PENITENT) and the sentence shapes are invented.
+// Fabricated wording only: the keywords (ALPHA, BETA, GAMMA) and the sentences are invented; only the sentence shape is kept.
 // The shapes mirror the destroyer-filter records: a destruction whose following unit-filter is the destroyer.
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
@@ -91,17 +91,17 @@ describe("Round 5C destroyer filter after a unit-destroyed moment", () => {
   });
 
   it("folds a destroyer with side any and a 'from your army' owner into the destruction's subject", () => {
-    // 6296 shape, as its row describes it: "each time an enemy unit is destroyed by a PENITENT unit from your army". Its stored leaves were not in any scratch database.
-    const text = "Each time an enemy unit is destroyed by a PENITENT unit from your army, you gain 1 point.";
+    // Shape of the 6296 row ("destroyed by a X unit from your army"); its stored leaves were not in any scratch database.
+    const text = "Each time an enemy unit is destroyed by a GAMMA unit from your army, you gain 1 point.";
     const items: Item[] = [
       ["enemy unit", "unit-filter", { side: "enemy" }],
       destroyedUnit(),
-      ["PENITENT unit", "unit-filter", { side: "any", keywords: ["PENITENT"] }],
+      ["GAMMA unit", "unit-filter", { side: "any", keywords: ["GAMMA"] }],
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["you gain 1 point", "resource-gain", { pool: "command-point", amount: 1 }],
     ];
     const mechanics = compiled(text, items);
-    expect(mechanics.trigger).toMatchObject({ event: "destroyed", subject: { owner: "friendly", all_of: ["PENITENT"] }, object: { owner: "enemy" } });
+    expect(mechanics.trigger).toMatchObject({ event: "destroyed", subject: { owner: "friendly", all_of: ["GAMMA"] }, object: { owner: "enemy" } });
   });
 
   it("refuses a 'from your army' owner that disagrees with the destroyer's side", () => {
@@ -176,9 +176,9 @@ describe("Round 5C event and unit-activity family versions for the destroyer sha
   });
 
   it("lowers a fight moment to the fight filter kind with the bearer as its subject", () => {
-    const text = "After all the bearer's attacks have been resolved in a fight, add 1 to the Hit roll.";
+    const text = "After the bearer finishes its fight, add 1 to the Hit roll.";
     const mechanics = compiled(text, [
-      ["After all the bearer's attacks have been resolved in a fight", "event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-model" }],
+      ["After the bearer finishes its fight", "event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-model" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ]);
     expect(mechanics.trigger).toMatchObject({ event: "attacks-resolved", filter: { kind: "fight" }, subject: "this-model" });
@@ -194,13 +194,13 @@ describe("Round 5C event and unit-activity family versions for the destroyer sha
   });
 });
 
-// 6242 shape: "each time the bearer fights, if one or more enemy models are destroyed by those attacks".
-const MIRACLE = "Each time the bearer fights, if one or more enemy models are destroyed by those attacks, you gain 1 Miracle dice.";
+// Shape of the 6242 row: a fight-moment gain gated on the bearer destroying models with those attacks.
+const MIRACLE = "Each time the bearer fights, if one or more enemy models are destroyed by those attacks, you gain 1 point.";
 const MIRACLE_ITEMS: Item[] = [
   ["Each time the bearer fights", "event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-model" }],
   ["enemy models", "unit-filter", { side: "enemy", level: "model" }],
   ["are destroyed by those attacks", "unit-activity", { negated: false, activities: ["destroyed-models-by-triggering-attacks"], named: "before", container: "none", destroyer: "this-model" }],
-  ["you gain 1 Miracle dice", "resource-gain", { pool: "miracle-dice-pool", amount: 1 }],
+  ["you gain 1 point", "resource-gain", { pool: "miracle-dice-pool", amount: 1 }],
 ];
 
 describe("Round 5C destroyer shapes compile end to end", () => {
@@ -223,12 +223,12 @@ describe("Round 5C destroyer shapes compile end to end", () => {
   });
 
   it("gates a shooting moment's gain on a destruction by those attacks, the second moment inside one part", () => {
-    const text = "After that model has shot this phase, if one or more enemy units were destroyed by those attacks, you gain 2 YP.";
+    const text = "After that model has shot this phase, if one or more enemy units were destroyed by those attacks, you gain 2 points.";
     const mechanics = compiled(text, [
       ["After that model has shot this phase", "event", { kind: "attacks-resolved", action_kind: "shoot", subject: "this-model" }],
       ["enemy units", "unit-filter", { side: "enemy" }],
       ["were destroyed by those attacks", "unit-activity", { negated: false, activities: ["destroyed-units-by-triggering-attacks"], named: "before", container: "none", destroyer: "this-model" }],
-      ["you gain 2 YP", "resource-gain", { pool: "yp-pool", amount: 2 }],
+      ["you gain 2 points", "resource-gain", { pool: "command-point", amount: 2 }],
     ]);
     expect(mechanics.trigger).toMatchObject({ event: "attacks-resolved", subject: "this-model", filter: { kind: "shoot" } });
     expect(mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "happened", parameters: { event: "destroyed", object: { owner: "enemy" }, filter: { by: "this-model" } } } });
@@ -240,19 +240,19 @@ describe("Round 5C destroyer shapes compile end to end", () => {
   });
 });
 
-// 8370 shape, authored with the condition after its own moment: the critical-wound effect stays ungated.
+// Shape of the 8370 row, authored with the condition after its own moment: the critical-wound effect stays ungated.
 describe("Round 5C destruction gate scoped to its own part", () => {
   it("gates only the destroy-models effect, leaving the earlier critical-wound effect ungated", () => {
-    const text = "This unit's melee attacks score a critical wound on an unmodified 3+. When this unit has fought, if those attacks did not destroy an enemy model, one model in this unit is destroyed.";
+    const text = "This unit's GAMMA attacks score a critical wound on an unmodified 4+. When this unit has fought, if those attacks did not slay an enemy trooper, one trooper in this unit is removed.";
     const mechanics = compiled(text, [
-      ["This unit's melee attacks score a critical wound on an unmodified 3+", "critical-hit-threshold", { value: 3, roll: "wound" }],
+      ["This unit's GAMMA attacks score a critical wound on an unmodified 4+", "critical-hit-threshold", { value: 4, roll: "wound" }],
       ["When this unit has fought", "event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-unit" }],
-      ["did not destroy an", "unit-activity", { negated: true, activities: ["destroyed-models-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-unit" }],
-      ["enemy model", "unit-filter", { side: "enemy", level: "model" }],
-      ["one model in this unit is destroyed", "destroy-models", { recipient: "this-unit", count: "1" }],
+      ["did not slay an", "unit-activity", { negated: true, activities: ["destroyed-models-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-unit" }],
+      ["enemy trooper", "unit-filter", { side: "enemy", level: "model" }],
+      ["one trooper in this unit is removed", "destroy-models", { recipient: "this-unit", count: "1" }],
     ]);
     const steps = mechanics.effect.steps as Array<Record<string, any>>;
-    expect(steps[0]).toMatchObject({ type: "roll-result", modifier: { roll: "wound", critical_on: 3 } });
+    expect(steps[0]).toMatchObject({ type: "roll-result", modifier: { roll: "wound", critical_on: 4 } });
     expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "attacks-resolved", filter: { kind: "fight" } } });
     expect(steps[1]!.effect).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: "this-unit" }, window: "event" } }] } });
   });
