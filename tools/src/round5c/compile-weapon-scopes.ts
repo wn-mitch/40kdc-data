@@ -5,6 +5,11 @@ import { namesSelection } from "./compile-targeting-history.js";
 import { WEAPON_KEYWORDS } from "./family-extensions-2.js";
 
 const SCOPE = "weapon-property-scope";
+/**
+ * Stats a weapon-scope binds in place: the weapon characteristics, plus Range (a weapon's profile
+ * characteristic that the family layer names beside them). Model characteristics stay refused.
+ */
+const WEAPON_STAT_SCOPE: readonly string[] = [...WEAPON_CHARACTERISTICS, "Range"];
 const KEYWORD = "weapon-ability-keyword";
 const REMOVAL = "weapon-ability-removal";
 const isStat = (leaf: CompileLeaf) => (leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5)
@@ -49,7 +54,7 @@ function bindStat(leaf: CompileLeaf, scope: CompileLeaf): CompileLeaf {
   const characteristics = leaf.family_id === "characteristic-set"
     ? [leaf.parameters.characteristic as string]
     : leaf.parameters.characteristics as string[];
-  if (!characteristics.every((stat) => (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
+  if (!characteristics.every((stat) => WEAPON_STAT_SCOPE.includes(stat))) {
     throw new CompileError("An attack-property scope cannot modify a model characteristic.");
   }
   checkScopeConflict(leaf, scope, ["subject", "weapon_type"]);
@@ -319,7 +324,7 @@ function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buf
 /** A weapon characteristic setter's characteristics, all of them weapon characteristics. */
 function weaponStat(leaf: CompileLeaf): boolean {
   const characteristics = leaf.family_id === "characteristic-set" ? [leaf.parameters.characteristic] : leaf.parameters.characteristics as unknown[];
-  return characteristics.every((stat) => (WEAPON_CHARACTERISTICS as readonly unknown[]).includes(stat));
+  return characteristics.every((stat) => WEAPON_STAT_SCOPE.includes(String(stat)));
 }
 
 /** Whether two leaves sit in one sentence: no full stop or semicolon between them. */
