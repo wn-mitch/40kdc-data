@@ -95,6 +95,13 @@ describe("a bare unit-filter gated by a hit-by condition after it", () => {
     expect(() => bindBareFilterHits(scaled, text)).toThrow("cannot share a record");
   });
 
+  it("refuses a per-unit pass that shares a record with an army composition", () => {
+    const text = "In your Shooting phase, after this model has shot, each enemy INFANTRY unit was hit by one or more of those attacks made with a zap cannon. Until the end of the turn, that enemy unit is pinned.";
+    const list = placed(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ZAP, PINNED);
+    const composed = [...list, { role: familyRole("army-construction", currentFamilyVersion("army-construction")), family_id: "army-construction", family_version: currentFamilyVersion("army-construction"), parameters: { rule: "composition" }, start_byte: 0, end_byte: 1, fragment: "RAW_TEXT" } as CompileLeaf];
+    expect(() => bindBareFilterHits(composed, text)).toThrow("cannot share a record");
+  });
+
   it("refuses a second hit-by condition on the same bare filter", () => {
     const text = "In your Shooting phase, after this model has shot, each enemy INFANTRY unit was hit by one or more of those attacks, and was hit by one or more of those attacks. Until the end of the turn, that enemy unit is pinned.";
     const list = placed(text, SHOOTING, AFTER_SHOT, INFANTRY, HIT_BY, ["and was hit by one or more of those attacks", "hit-by-attacks", { subject: "antecedent" }], PINNED);
