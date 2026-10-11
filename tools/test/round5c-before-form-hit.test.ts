@@ -57,6 +57,19 @@ describe("a selection's hit eligibility (S1, S2)", () => {
     expect(eligibility).not.toContain("selected-unit");
   });
 
+  it("names the candidate this-unit on a designation's select too", () => {
+    const text = "Pick one enemy unit hit by one or more of those attacks made with its Doomweaver. Whenever a model in this unit attacks that unit, re-roll the hit.";
+    const mechanics = mechanicsOf(placed(text,
+      ["Pick one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
+      ["Whenever a model in this unit attacks", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["that unit", "target-is-selected", {}],
+      ["re-roll the hit", "reroll", { roll: "hit", subset: "all" }]), text);
+    expect(mechanics.effect.type).toBe("designate-target");
+    expect(mechanics.effect.select.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success", weapon_name: "Doomweaver" }, window: "event" } });
+  });
+
   it("refuses a pair of selections whose eligibility no single select owns", () => {
     const text = "Select one friendly model, then select one enemy unit within 6\" of it hit by one or more of those attacks made with its Doomweaver. Until the end of the phase, that enemy unit is pinned.";
     const result = compileLeaves(placed(text,
