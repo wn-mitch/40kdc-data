@@ -204,6 +204,25 @@ describe("an instead that restricts the move its event selected (compile.ts, sel
     expect(json).toContain("\"activity\":\"advance\"");
     expect(json).toContain("\"allow\":false");
   });
+
+  // Fabricated shape of a record that selects a move, then tests a leadership roll before "instead". Its "this
+  // phase" duration is not modelled, and the test is not a dice-gated restriction, so it must not restrict the move.
+  it("refuses a Leadership-test instead after a selected move, so the record stays unauthored", () => {
+    const text = "Each time a foe unit is selected to Fall Back, roll a Leadership test: on a failure, that foe unit must Remain Stationary instead.";
+    const errors = errorsOf(text,
+      ["Each time a foe unit is selected to Fall Back", "event", fallBackMoment, "EVENT"],
+      ["roll a Leadership test", "test", { target: "event-subject", test: "leadership" }, "EFFECT"],
+      ["on a failure", "roll-outcome", { roll: "leadership", result: "failure" }, "EFFECT"],
+      ["instead", "instead", {}, "EFFECT"]);
+    expect(errors).toContain("\"Instead\" has no earlier test effect to replace.");
+  });
+
+  // Fabricated shape of a record whose only leaf is the trigger: the trigger authors no effect.
+  it("refuses a selected-move trigger with no effect to compile", () => {
+    const text = "Each time a foe unit is selected to Fall Back, it is noted.";
+    expect(errorsOf(text, ["Each time a foe unit is selected to Fall Back", "event", fallBackMoment, "EVENT"]))
+      .toContain("There is no effect leaf to compile.");
+  });
 });
 
 describe("roll-prohibition leaf preview and prefill", () => {
