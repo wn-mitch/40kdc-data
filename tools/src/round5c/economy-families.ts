@@ -9,7 +9,7 @@ import {
  * (roster-building limits, not in-game effects, but compiled to the same `army-rule` fragment).
  */
 
-const POOL_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+export const POOL_ID_PATTERN =/^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 /** A few known pool ids for the leaf form and audit to sample; normalize accepts any matching id, not only these. */
 const KNOWN_POOL_IDS = ["command-point", "miracle-dice-pool", "pain-token-pool", "blood-tithe-pool", "yp-pool", "battle-focus-pool", "fate-dice-pool"] as const;
 const poolIdSchema = { anyOf: [{ enum: KNOWN_POOL_IDS }, sourceQualifiedSchema] };
