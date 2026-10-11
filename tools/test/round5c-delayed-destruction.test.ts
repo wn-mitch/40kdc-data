@@ -207,8 +207,9 @@ describe("Delayed destruction: a destruction, a Leadership test, and a phase-end
   });
 
   it("T3d: a 'then' in the gap keeps the part path (no lowering, no error)", () => {
-    const thenText = "When the bearer is destroyed, then take a Leadership test for the bearer at the end of the phase. If that test is passed, set the bearer back up.";
+    const thenText = "The first time the bearer is destroyed, then take a Leadership test for the bearer at the end of the phase. If that test is passed, set the bearer back up.";
     const result = compileLeaves(placed(thenText,
+      [...FIRST_TIME],
       ["the bearer is destroyed", "event", { kind: "this-model-destroyed" }],
       ["take a Leadership test for the bearer", "test", { target: "this-model", test: "leadership" }],
       ["at the end of the phase", "event", PHASE_END],
@@ -482,6 +483,10 @@ describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 /
     expect(mechanics.trigger).toEqual({ event: "phase-ended", condition: { type: "happened", parameters: DESTROYED_IN_PHASE } });
     expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
     expect(JSON.stringify(mechanics.effect)).toContain('"wounds_remaining":"D3"');
+    const english = describeAbility(mechanics as Parameters<typeof describeAbility>[0]);
+    expect(english).toContain("if this model was destroyed this phase");
+    expect(english).toContain("the first time this battle");
+    expect(english).toContain("with D3 wounds remaining");
   });
 
   it("T12 (3644 / 7586 shape, full wounds): the set-up carries wounds_remaining 'full', not D3", () => {

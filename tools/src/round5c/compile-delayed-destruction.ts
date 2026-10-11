@@ -19,9 +19,10 @@ export const NESTED_MOMENT_ERROR = "A moment nested in another (\"each time …,
 
 /**
  * The refusal for a destruction of some model other than this one, followed by the end of the phase. The
- * `model-destroyed` event has no object filter, so the lowered condition would count any model's destruction.
+ * phase-end lowering counts only this model's destruction (`happened` on this-model), so it cannot stand
+ * in for a destruction of a named model or of another model in the unit.
  */
-export const NAMED_MODEL_ERROR = "A model-destroyed moment other than this model's own, followed by the end of the phase, has no DSL trigger; a trigger list fires on any model's destruction.";
+export const NAMED_MODEL_ERROR = "A destruction of a model other than this model, followed by the end of the phase, has no DSL form; the phase-end lowering counts only this model's destruction.";
 
 /** The refusal for a "first time" limit with no usage limit on a destruction that is part of a sequence. */
 export const FIRST_TIME_ERROR = "A \"first time\" limit with no usage limit has no DSL form; the ability would fire on every destruction.";
@@ -31,7 +32,7 @@ export function isThisModelDestroyed(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "this-model-destroyed";
 }
 
-/** A destruction moment of any model: this model's own, or a model-destroyed event with no object filter. */
+/** A destruction moment: this model's own, or a model-destroyed event (any model in the unit, or a named one). */
 export function isAnyDestruction(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && (leaf.parameters.kind === "this-model-destroyed" || leaf.parameters.kind === "model-destroyed");
 }
