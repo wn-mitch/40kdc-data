@@ -6,7 +6,7 @@
 
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { HIT_ATTACK_TYPES, HIT_FILTER_KEYS } from "./compile-conditions.js";
-import { hasAntecedent } from "./compile-antecedent.js";
+import { bareFilter, hasAntecedent } from "./compile-antecedent.js";
 import { currentFamilyVersion } from "./contracts.js";
 
 const DESTROY_KINDS = new Set(["unit-destroyed", "model-destroyed"]);
@@ -174,6 +174,79 @@ export function bindBeforeFormHits(leaves: readonly CompileLeaf[], sourceText?: 
   const quantified = out.some((leaf) => leaf.family_id === "for-each-unit-select" && leaf.parameters.hit !== undefined);
   if (quantified && out.some((leaf) => (leaf.family_id === "army-construction" && leaf.parameters.rule === "composition") || leaf.family_id === "count-scale")) {
     throw new CompileError("A before-form hit's per-unit pass cannot share a record with an army composition or a count-scale; the hit would be dropped.");
+  }
+  return out;
+}
+
+/** The index bareFilter's walk stops at: past the unit-owners and antecedent conditions before `index`. Read it only when bareFilter holds. */
+function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
+  const fragment = leaves[index]!.fragment;
+  let at = index - 1;
+  while (at >= 0 && leaves[at]!.fragment === fragment && (leaves[at]!.family_id === "unit-owner"
+    || (leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!)))) at -= 1;
+  return at;
+}
+
+/**
+ * "each enemy INFANTRY unit that was hit by one or more of those attacks made with a graviton
+ * crusher …": a hit-by-attacks whose subject is the antecedent, right after a bare unit-filter, names
+ * the units that were hit. Nothing else claims that filter, so the binder rewrites the hit and its
+ * touching attack-filter into one bare for-each-unit-select whose `hit` names the attack-filter, the
+ * shape bindBeforeFormHits gives a before-form hit. The for-each runs per unit the filter selects,
+ * and the hit gate (forEachHitGate) reads the bearer's own attacks, so the hit's moment must be this
+ * unit's own after-shooting event. Any other moment is refused, since the gate cannot name its attacker.
+ */
+export function bindBareFilterHits(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  if (sourceText === undefined) return [...leaves];
+  const bytes = Buffer.from(sourceText, "utf8");
+  const replaced = new Map<number, CompileLeaf>();
+  const removed = new Set<number>();
+  for (let at = 0; at < leaves.length; at += 1) {
+    const hit = leaves[at]!;
+    if (hit.family_id !== "hit-by-attacks" || hit.parameters.subject !== "antecedent" || hit.parameters.object !== undefined
+      || hit.parameters.window !== undefined || hit.parameters.by !== undefined) continue;
+    if (!bareFilter(leaves, at)) continue;
+    const filterAt = bareFilterAt(leaves, at);
+    const filter = leaves[filterAt]!;
+    if (filter.family_id !== "unit-filter") continue;
+    if (replaced.has(filterAt)) throw new CompileError("A bare unit-filter takes one hit-by condition, and this one already has one.");
+    const moment = leaves.filter((leaf) => leaf.start_byte < filter.start_byte && leaf.fragment === hit.fragment && leaf.family_id === "event")
+      .reduce<CompileLeaf | undefined>((latest, leaf) => latest === undefined || leaf.start_byte > latest.start_byte ? leaf : latest, undefined);
+    if (moment?.parameters.kind !== "after-shooting") {
+      throw new CompileError("A hit-by condition on a bare unit-filter needs the attacks of this unit's own moment.");
+    }
+    const attackAt = at + 1;
+    const next = leaves[attackAt];
+    const attackFilter = next?.family_id === "attack-filter" && next.fragment === hit.fragment && touching(bytes, hit, next) ? next : undefined;
+    if (attackFilter !== undefined) {
+      checkHitFilter(attackFilter);
+      if (Object.keys(attackFilter.parameters).length === 0) throw new CompileError("A hit's attack-filter names at least one attack field.");
+    }
+    const last = attackFilter === undefined ? at : attackAt;
+    const anaphor = leaves.slice(last + 1).find((other) => other.fragment === hit.fragment && hasAntecedent(other));
+    if (anaphor === undefined) throw new CompileError("A hit-by condition on a bare unit-filter needs a 'that unit' after it.");
+    const takes = attackFilter ?? hit;
+    replaced.set(filterAt, {
+      role: "EVENT",
+      family_id: "for-each-unit-select",
+      family_version: currentFamilyVersion("for-each-unit-select"),
+      parameters: { hit: attackFilter === undefined ? {} : { hit_filter: { ...attackFilter.parameters } } },
+      start_byte: filter.start_byte,
+      end_byte: takes.end_byte,
+      fragment: hit.fragment,
+    });
+    removed.add(at);
+    if (attackFilter !== undefined) removed.add(attackAt);
+  }
+  if (replaced.size === 0) return [...leaves];
+  const out: CompileLeaf[] = [];
+  leaves.forEach((leaf, index) => {
+    const quantifier = replaced.get(index);
+    if (quantifier !== undefined) out.push(quantifier);
+    if (!removed.has(index)) out.push(leaf);
+  });
+  if (out.some((leaf) => (leaf.family_id === "army-construction" && leaf.parameters.rule === "composition") || leaf.family_id === "count-scale")) {
+    throw new CompileError("A hit-by condition on a bare unit-filter's per-unit pass cannot share a record with an army composition or a count-scale; the hit would be dropped.");
   }
   return out;
 }

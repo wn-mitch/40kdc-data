@@ -69,7 +69,7 @@ const FILTER_ANCHORS = new Set(["select-unit", "stratagem-target", "attack"]);
  * in the same fragment directly before the leaf (a "from your army" between them is the filter's
  * own wording), with no selection, Stratagem target or attack right before it.
  */
-function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+export function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
   const leaf = leaves[index]!;
   let at = index - 1;
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
