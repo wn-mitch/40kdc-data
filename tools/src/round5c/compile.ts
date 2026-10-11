@@ -1000,14 +1000,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
   // The selection's eligibility: each condition on the selected unit, read by the select that wraps it (below).
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
-  // Set by each branch that places the eligibility on a select or a designation; a leftover one is refused below.
-  let eligibilityPlaced = false;
   if (selectionPart !== null && selectionPart > 0) {
     const own = pieces[selectionPart]!;
     // A designated selection takes its eligibility in designation() below, so the part's select takes it only otherwise.
     const designated = selected.length > 0;
     pieces[selectionPart] = [selectUnit(selections[0]!, own.length === 1 ? own[0]! : { type: "sequence", steps: own }, { selectionLimit, eligibility: designated ? null : eligibility })];
-    eligibilityPlaced = true;
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -1046,7 +1043,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
-    eligibilityPlaced = true;
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
@@ -1057,7 +1053,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   else if (pair && body) {
     // A bound pair: the outer select takes the selection's eligibility, the inner one its candidate's (compile-pair-eligibility.ts).
     body = selectUnit(pair.outer, selectUnit(pair.inner, body, { eligibility: pairCandidateEligibility }), { eligibility });
-    eligibilityPlaced = true;
   }
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
@@ -1065,12 +1060,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       eligibility,
       selectionLimit,
     });
-    eligibilityPlaced = true;
   }
   else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
-  // An eligibility no branch placed would be silently dropped; the record is refused instead. A menu action's
-  // select has no entry in `selections` (compile-containers.ts reads it), so only a selection compiled here counts.
-  if (eligibilityIndexes.length && selections.length > 0 && !eligibilityPlaced) return { ok: false, signature, errors: [...errors, "A selection's eligibility has no select to attach to."] };
   if (!body) return { ok: false, signature, errors };
   if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }

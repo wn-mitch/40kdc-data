@@ -228,3 +228,72 @@ describe("a keyworded before-form hit", () => {
     expect(JSON.stringify(mechanics)).toContain('"weapon_name":"Ember cannon"');
   });
 });
+
+/** The per-unit pass and its hit gate, checked on fabricated wording (the 4314, 7268 and 7235 shapes). */
+describe("before-form hit guards and shapes", () => {
+  it("refuses a before-form pass whose count-scale shares the record", () => {
+    const text = "In your Shooting phase, after this model has shot, one or more of those attacks made with its Doomweaver scored a hit against an enemy unit, that enemy unit is pinned.";
+    const count: CompileLeaf = { role: "CONDITION", family_id: "count-scale", family_version: currentFamilyVersion("count-scale"), parameters: {}, start_byte: 0, end_byte: 1, fragment: "RAW_TEXT" };
+    expect(() => bindBeforeFormHits([...placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["one or more of those attacks made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
+      [DOOMWEAVER_HIT, "hit-by-attacks", { object: "following-filter" }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), count], text)).toThrow(/cannot share a record/u);
+  });
+
+  it("refuses an anaphor that follows a second unit-filter in the same part", () => {
+    const text = "In your Shooting phase, after this model has shot, one or more of those attacks made with its Doomweaver scored a hit against an enemy unit, that enemy unit is pinned. If an enemy INFANTRY unit is hit, that unit must take a Battle-shock test.";
+    const result = compileLeaves(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["one or more of those attacks made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
+      [DOOMWEAVER_HIT, "hit-by-attacks", { object: "following-filter" }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
+      ["enemy INFANTRY unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
+      ["that unit must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.errors.join(" ")).toMatch(/followed by another unit-filter in its part/u);
+  });
+
+  it("gives a hit's window to the selection's eligibility (the 4314 shape)", () => {
+    const text = "Choose one enemy unit struck by one or more of the attacks from your squad this phase. Until the end of the phase, lower that unit’s Move characteristic by 2.";
+    const mechanics = mechanicsOf(placed(text,
+      ["Choose one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["struck by one or more of the attacks from your squad this phase", "hit-by-attacks", { subject: "selected-unit", window: "phase" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["lower that unit’s Move characteristic by 2", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "subtract", value: 2, weapon_type: "all" }]), text);
+    expect(mechanics.effect.selector.eligibility).toEqual({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" } });
+  });
+
+  it("names the candidate this-unit on a designation whose attacker gate is per attack (the 7268 shape)", () => {
+    const text = "In your Shooting phase, after this model has shot, choose one enemy unit that was struck by one or more of those attacks. Until the end of the phase, each time a model that left this VEHICLE this turn makes an attack that targets that enemy unit, you can re-roll the Hit roll.";
+    const mechanics = mechanicsOf(placed(text,
+      ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["after this model has shot", "event", { kind: "after-shooting" }],
+      ["choose one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["that was struck by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["a model", "unit-filter", { side: "friendly", level: "model" }],
+      ["that left this VEHICLE this turn", "unit-activity", { activities: ["disembarked-from-this-transport-this-turn"], subject: "antecedent", negated: false }],
+      ["makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+      ["that targets that enemy unit", "target-is-selected", {}],
+      ["you can re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }]), text);
+    expect(mechanics.effect.effect.select.eligibility.parameters.object).toBe("this-unit");
+    expect(JSON.stringify(mechanics)).not.toContain("selected-unit\",\"filter");
+  });
+});
+
+describe("a hit eligibility over two unbound selections", () => {
+  it("is refused as two selections, since no single select owns the eligibility", () => {
+    const text = "Select one enemy unit, then select one friendly unit hit by one or more of those attacks made with its Doomweaver. Until the end of the phase, that enemy unit is pinned.";
+    const result = compileLeaves(placed(text,
+      ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["select one friendly unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "hit-by-attacks", { subject: "selected-unit" }],
+      ["made with its Doomweaver", "attack-filter", { weapon_name: "Doomweaver" }],
+      ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.errors.join(" ")).toMatch(/More than one unit is selected/u);
+  });
+});

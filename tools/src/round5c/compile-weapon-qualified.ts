@@ -145,6 +145,12 @@ export function bindBeforeFormHits(leaves: readonly CompileLeaf[], sourceText?: 
     if (anaphorAfter !== undefined) {
       throw new CompileError(`A before-form hit's unit is the unit-filter after it; the ${anaphorAfter.family_id} at byte ${anaphorAfter.start_byte} is in another part and points back to that unit, which cannot bind.`);
     }
+    // A second unit-filter in the same part takes its own units; an anaphor after it could name either unit.
+    const second = out.findIndex((other, index) => index > unitAt && other.family_id === "unit-filter" && other.fragment === hit.fragment);
+    const ambiguous = second < 0 ? undefined : out.slice(second + 1).find((other) => other.fragment === hit.fragment && hasAntecedent(other));
+    if (ambiguous !== undefined) {
+      throw new CompileError(`A before-form hit's unit is followed by another unit-filter in its part; the ${ambiguous.family_id} at byte ${ambiguous.start_byte} after it cannot tell that filter's units from the hit's.`);
+    }
     const filter = out[at - 1];
     const attackFilter = filter?.family_id === "attack-filter" && filter.fragment === hit.fragment && touching(bytes, filter, hit);
     let hitFilter: Record<string, unknown> | undefined;
