@@ -1,3 +1,4 @@
+import { EVENT_SUBJECT } from "./family-extension-helpers.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
@@ -33,7 +34,7 @@ export function triggerMoveEnd(
   condition: ConditionBuilder,
 ): { node: Node } | { error: string } {
   const refuse = (error: string) => ({ error });
-  if (!rule.cannot) return refuse("\"Must end that move\" has no move before it.");
+  if (!rule.cannot) return positiveChargeEnd(list, rule, condition);
   if (rule.conditions.length !== 1) return refuse("\"Cannot end that move\" with no move before it needs exactly one condition: engaged, or within a distance of a unit-filter.");
   const leaf = list[rule.conditions[0]!]!;
   if (isEngaged(leaf)) {
@@ -42,6 +43,55 @@ export function triggerMoveEnd(
   }
   if (isWithinFilter(leaf)) return endsWhen(list, rule, leaf, condition);
   return refuse("\"Cannot end that move\" with no move before it covers only \"engaged\" with this unit or model, or a distance to the unit-filter after it.");
+}
+
+/**
+ * The nearest earlier move-ended, selected or targets-selected event, when it is a declared charge
+ * (a targets-selected event with action_kind charge). Any other nearest event gives no charge anchor,
+ * so a restriction never borrows a charge declared before a later move-ended or shoot trigger.
+ */
+export function chargeDeclarationBefore(list: readonly CompileLeaf[], index: number): CompileLeaf | undefined {
+  for (let at = index - 1; at >= 0; at -= 1) {
+    const leaf = list[at]!;
+    if (leaf.family_id !== "event") continue;
+    const kind = leaf.parameters.kind;
+    if (kind !== "move-ended" && kind !== "selected" && kind !== "targets-selected") continue;
+    return kind === "targets-selected" && leaf.parameters.action_kind === "charge" ? leaf : undefined;
+  }
+  return undefined;
+}
+
+/**
+ * "This unit must end that charge move engaged with that enemy unit": a positive restriction on the
+ * move that a declared charge starts. The move-modifier sits on the declaring unit (event-subject),
+ * applies to charge moves, and ends where the conditions say. Each condition is a unit-state on the
+ * moving unit; "this unit" in a condition is rewritten to event-subject, since in a Stratagem a bare
+ * this-unit does not name the moving unit. Several conditions join with "or" (match any) or "and".
+ */
+function positiveChargeEnd(
+  list: readonly CompileLeaf[],
+  rule: MoveEndRule,
+  condition: ConditionBuilder,
+): { node: Node } | { error: string } {
+  const refuse = (error: string) => ({ error });
+  if (chargeDeclarationBefore(list, rule.index) === undefined) return refuse("\"Must end that move\" has no move before it.");
+  if (rule.replaces) return refuse("\"Must end that move\" that replaces the usual threshold has no charge form.");
+  if (rule.moveTypes && !rule.moveTypes.every((type) => type === "charge")) return refuse("\"Cannot end that move\" names a move type the trigger does not name.");
+  if (rule.conditions.length === 0) return refuse("\"Must end that move\" names no condition for where the move ends.");
+  const nodes: Node[] = [];
+  for (const at of rule.conditions) {
+    const leaf = list[at]!;
+    if (leaf.family_id !== "unit-state") return refuse("\"Must end that move\" after a charge declaration names only a unit-state condition on the moving unit.");
+    const subject = leaf.parameters.subject;
+    if (subject === "this-model") return refuse("\"Must end that move\" names a model, which the charge path does not take.");
+    if (subject !== "this-unit" && subject !== EVENT_SUBJECT) return refuse("\"Must end that move\" names a subject the charge path does not take.");
+    const fixed = subject === "this-unit" ? { ...leaf, parameters: { ...leaf.parameters, subject: EVENT_SUBJECT } } : leaf;
+    const node = condition(fixed);
+    if (node === null) return refuse("\"Must end that move\" names a condition that does not compile.");
+    nodes.push(node);
+  }
+  const where: Node = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
+  return { node: { type: "move-modifier", target: EVENT_SUBJECT, modifier: { applies_to_moves: ["charge"], ends_when: where } } };
 }
 
 /** Engaged with this unit or this model. A model subject binds to a move that names that model (noEndInEngagement). */

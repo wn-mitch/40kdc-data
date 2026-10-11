@@ -71,7 +71,7 @@ export function assertOneFilterState(states: readonly string[] | undefined, held
 export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean } = {}): Record<string, unknown> {
   // "one of those X units": the matched set, which bindMatchedPools attached (compile-matched-set.ts).
   if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string };
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
   if (p.designated === "warlord" && options.warlordTest !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
@@ -89,6 +89,8 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(notStates(p.states).length ? { not_states: notStates(p.states) } : {}),
     ...(Array.isArray(filter.parameters.excluded_all_keywords) ? { not_all_of: filter.parameters.excluded_all_keywords } : {}),
     ...(p.visible === true ? { visible: true } : {}),
+    // "engaged with an enemy unit engaged with a friendly CHARACTER unit": the unit this one is engaged with (nestedEngagedChain).
+    ...(p.nested_engaged_with !== undefined ? { engaged_with: p.nested_engaged_with } : {}),
     ...(p.other === true ? { excluding: "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
     // "Character models in this unit" (groupMembership): the unit the models belong to.
@@ -414,12 +416,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     } else if (isFilter(leaf) && followedBy(out.at(-1), leaf)) {
       // "within 8\" of a" + "friendly unengaged unit": the other unit of the distance or engagement
       // before it. A "from your army" after it is the filter's own wording.
-      const at = pastOwners(list, index, leaf);
+      // "engaged with an enemy unit engaged with a friendly CHARACTER unit": the nested chain takes the partner too.
+      const chain = nestedEngagedChain(list, index, leaf);
+      const at = chain?.at ?? pastOwners(list, index, leaf);
       const condition = out.at(-1)!;
       // The condition's wording now runs through the filter it absorbed, so the words after it (an "or") sit between it and the next condition.
       const end = list[at - 1]!.end_byte ?? condition.end_byte;
+      const named = chain ? { ...leaf, parameters: { ...leaf.parameters, nested_engaged_with: chain.partner } } : leaf;
       // "If a friendly X model is your Warlord": only army-includes reads a Warlord test, and only at muster.
-      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(leaf, { warlordTest: condition.family_id === "army-includes" }) } };
+      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(named, { warlordTest: condition.family_id === "army-includes" }) } };
       index = at - 1;
     } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
       // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
@@ -624,6 +629,32 @@ function armyGroup(list: readonly CompileLeaf[], index: number): boolean {
 function followedBy(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   return leaf !== undefined && leaf.fragment === filter.fragment && leaf.parameters.following_filter === undefined
     && awaitsFollowingFilter(leaf.parameters);
+}
+
+/**
+ * "engaged with an enemy unit **engaged** with a friendly CHARACTER unit": the enemy filter (right
+ * after the outer state) is engaged with the friendly filter after the inner state. The inner state
+ * names "that unit" (its subject is antecedent, bound to the outer filter), so it and the partner are
+ * consumed here and the inner subject is not read. Returns the partner's DSL filter and the index past
+ * it, or null when the leaves after the filter hold no inner state awaiting a filter. An inner state
+ * that is not a plain engaged state naming its unit, or a chain nested a second level, is refused.
+ */
+function nestedEngagedChain(list: readonly CompileLeaf[], index: number, filter: CompileLeaf): { partner: Record<string, unknown>; at: number } | null {
+  const inner = list[index + 1];
+  if (inner?.family_id !== "unit-state" || inner.fragment !== filter.fragment || inner.parameters.with !== "following-filter") return null;
+  const partnerAt = index + 2;
+  const partner = list[partnerAt];
+  if (!isFilter(partner) || partner.fragment !== filter.fragment) return null;
+  const p = inner.parameters;
+  const plain = JSON.stringify(p.states) === JSON.stringify(["engaged"]) && p.negated !== true && p.at === undefined && p.exclusive !== true;
+  if (!plain || !(inner.antecedent_keys ?? []).includes("subject")) throw new CompileError("An engaged-with chain takes a plain engaged state that names its unit (\"that unit\"), with no at, negation or exclusive qualifier.");
+  if (partner.parameters.side === "any") throw new CompileError("An engaged-with chain's partner unit must say friendly or enemy.");
+  const at = pastOwners(list, partnerAt, partner);
+  const further = list[at];
+  if (further?.family_id === "unit-state" && further.fragment === filter.fragment && further.parameters.with === "following-filter") {
+    throw new CompileError("An engaged-with chain takes one level of nesting; a further engaged state after its partner unit has no DSL form.");
+  }
+  return { partner: dslUnitFilter(partner), at };
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */

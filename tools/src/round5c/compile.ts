@@ -699,8 +699,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // A bonus move in the same sentence takes a move-end or a feasibility proviso that follows it.
     const bonus = move ? undefined : planned.filter((item) => item.index < rule.index && isBonusNode(item.node) && places[item.index]!.sentence === places[rule.index]!.sentence).at(-1);
     if (bonus && rule.cannot) { errors.push("\"Cannot end that move\" after a move bonus has no DSL form."); continue; }
-    if (!move && !bonus && rule.cannot) {
-      // "…, and cannot end that move within Engagement Range of them" after the trigger's move: no make-move in the ability.
+    if (!move && !bonus) {
+      // "…, and cannot end that move within Engagement Range of them" after the trigger's move, or "must end that charge move …"
+      // after a declared charge: no make-move in the ability (compile-move-end.ts decides which trigger it takes).
       const bytes = sourceText === undefined ? null : Buffer.from(sourceText, "utf8");
       const stopBetween = (from: number, to: number) => bytes !== null && /[.;:]/u.test(bytes.subarray(list[from]!.end_byte!, list[to]!.start_byte).toString("utf8"));
       const end = triggerMoveEnd(list, rule, planned.map((item) => ({ index: item.index, node: item.node })), stopBetween, (leaf) => attempt(() => condition(leaf)));
@@ -711,7 +712,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (at === -1) planned.push(entry); else planned.splice(at, 0, entry);
       continue;
     }
-    if (!move && !bonus) { errors.push("\"Must end that move\" has no move before it."); continue; }
     if (rule.moveTypes) { errors.push("\"Must end that move\" with move types has no DSL form after a make-move."); continue; }
     if (rule.conditions.length === 0) { errors.push("\"Must end that move\" names no condition for where the move ends."); continue; }
     const nodes = rule.conditions.map((at) => attempt(() => condition(list[at]!))).filter((node): node is Node => node !== null);
