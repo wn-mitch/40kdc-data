@@ -11,7 +11,7 @@ import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { bindArmyAntecedents, armyCoreChecks, foldArmyAttachments, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
-import { bindPrecedingRolls, foldConditionalTestModifiers } from "./compile-preceding-roll.js";
+import { bindPrecedingRolls, foldConditionalTestModifiers, trailingTestCondition } from "./compile-preceding-roll.js";
 import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
@@ -389,6 +389,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   /** Conditions keyed by the scope they gate: a sentence's leading conditions, or one clause. */
   const sentenceGates = new Map<number, Node[]>();
   const clauseGates = new Map<number, Node[]>();
+  // A condition trailing a change to a test just taken belongs to the change (compile-preceding-roll.ts trailingTestCondition).
+  const attachedGates = new Map<number, Node[]>();
+  const attachedAt = new Set<number>();
   const selectedClauses = new Set<number>();
   const selectedSentences = new Set<number>();
   let selectedGlobally = false;
@@ -465,7 +468,15 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const endClauses = new Set(list.flatMap((leaf, at) => leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver" ? [places[at]!.clause] : []));
   const perRecipient = !list.some((leaf) => leaf.family_id === "aura-range" || leaf.family_id === "for-each-unit-select");
   list.forEach((leaf, index) => {
+    if (trailingTestCondition(list, index, sourceText) === "attach") {
+      attachedAt.add(index + 1);
+      const gate = attempt(() => condition(list[index + 1]!));
+      if (gate) attachedGates.set(index, [gate]);
+    }
+  });
+  list.forEach((leaf, index) => {
     if (endConditions.has(index)) return;
+    if (attachedAt.has(index)) return;
     // An otherwise leaf is the else branch's marker: its gate is built above, and it is no combinator of its own.
     if (leaf.family_id === "otherwise") return;
     // A container opener's options are folded into its own node (`containerNodes.get(index)`,
@@ -615,7 +626,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (!node) return;
     planned.push({
       index, leaf, node,
-      gate: optionalSpends.has(leaf) ? sentenceGates.get(sentence) ?? [] : [...(sentenceGates.get(sentence) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
+      gate: optionalSpends.has(leaf) ? sentenceGates.get(sentence) ?? [] : [...(sentenceGates.get(sentence) ?? []), ...(attachedGates.get(index) ?? []), ...(isBonusNode(node) && endClauses.has(clause) ? [] : clauseGates.get(clause) ?? [])],
       selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause),
       replaces: false,
     });

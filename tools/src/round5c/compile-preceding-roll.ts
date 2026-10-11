@@ -26,7 +26,7 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
  * condition would otherwise gate the whole roll).
  */
 export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  const leaves = bindTestTakers(foldTestModifiers(input));
+  const leaves = bindTestTakers(foldTestModifiers(input, sourceText));
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
   const dropped = new Set<number>();
@@ -90,7 +90,7 @@ function conditionBetween(leaves: readonly CompileLeaf[], dice: number, change: 
  * A sentence, colon, or semicolon break leaves the condition gating the ability as a whole (null),
  * as does a missing source text.
  */
-function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
+export function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
   if (sourceText === undefined || !isClauseCondition(leaves[change + 1], leaves[change]!)) return null;
   const bytes = Buffer.from(sourceText, "utf8");
   const text = (from: number, to: number) => bytes.subarray(from, to).toString("utf8");
@@ -101,6 +101,31 @@ function adjacentCondition(leaves: readonly CompileLeaf[], change: number, sourc
   const second = leaves[change + 2];
   if (isClauseCondition(second, leaves[change]!) && !/[.:;]/u.test(text(first.end_byte ?? first.start_byte, second!.start_byte))) return "refuse";
   return "attach";
+}
+
+/**
+ * A condition trailing a change to a test just taken ("must take a Battle-shock test, subtracting 1
+ * from that test if X"). `null` when the change is not a test modifier of that test: a roll that
+ * is not the test's roll, a weapon-typed or non-numeric change, a test that already carries a
+ * modifier, a test that is not the leaf right before the change, or a sentence, colon or semicolon
+ * between the test and the change. Otherwise the attach rule of `adjacentCondition`. A `null`
+ * change folds into the test (foldTestModifiers); an "attach" change keeps its condition (compile.ts),
+ * and foldConditionalTestModifiers splits the test by that condition.
+ */
+export function trailingTestCondition(leaves: readonly CompileLeaf[], change: number, sourceText: string | undefined): "attach" | "refuse" | null {
+  const leaf = leaves[change];
+  const test = change > 0 ? leaves[change - 1] : undefined;
+  const value = leaf?.parameters.value;
+  if (leaf?.family_id !== "roll-modifier" || leaf.parameters.roll === "preceding" || leaf.parameters.weapon_type !== undefined || typeof value !== "number") return null;
+  if (leaf.parameters.operation !== "add" && leaf.parameters.operation !== "subtract") return null;
+  if (test?.family_id !== "test" || test.fragment !== leaf.fragment || test.parameters.modifier !== undefined) return null;
+  const roll = leaf.parameters.roll;
+  if (!(roll === test.parameters.test || (roll === "hazard" && test.parameters.test === "desperate-escape"))) return null;
+  // The change stays in the test's sentence: a sentence break between them leaves it a standing change, as before.
+  if (sourceText === undefined) return null;
+  const between = Buffer.from(sourceText, "utf8").subarray(test.end_byte ?? test.start_byte, leaf.start_byte).toString("utf8");
+  if (/[.:;]/u.test(between)) return null;
+  return adjacentCondition(leaves, change, sourceText);
 }
 
 /**
@@ -130,20 +155,25 @@ function bindTestTakers(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] 
  * test, with no condition of its own, is that test's own modifier, not a standing change to every
  * later test.
  */
-function foldTestModifiers(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+function foldTestModifiers(leaves: readonly CompileLeaf[], sourceText: string | undefined): CompileLeaf[] {
   const out: CompileLeaf[] = [];
-  for (const leaf of leaves) {
+  leaves.forEach((leaf, index) => {
     const test = out.at(-1);
     const value = leaf.parameters.value;
+    // A change with a condition trailing it ("subtracting 1 from that test if X") stays a leaf: compile.ts
+    // attaches the condition to the change, so the test is not made unconditional by it.
+    const trailing = trailingTestCondition(leaves, index, sourceText);
+    if (trailing === "refuse") throw new CompileError("A condition on a change to a test has no DSL shape yet (after a comma, or with a second condition).");
+    if (trailing === "attach") { out.push(leaf); return; }
     if (leaf.family_id === "roll-modifier" && test?.family_id === "test" && test.fragment === leaf.fragment
       && test.parameters.modifier === undefined && typeof value === "number" && leaf.parameters.weapon_type === undefined
       && (leaf.parameters.roll === "preceding" || leaf.parameters.roll === test.parameters.test
         || (leaf.parameters.roll === "hazard" && test.parameters.test === "desperate-escape"))) {
       out[out.length - 1] = { ...test, end_byte: leaf.end_byte, parameters: { ...test.parameters, modifier: leaf.parameters.operation === "subtract" ? -value : value } };
-      continue;
+      return;
     }
     out.push(leaf);
-  }
+  });
   return out;
 }
 
@@ -160,24 +190,37 @@ export function foldConditionalTestModifiers(node: Node): Node {
   if (node.type === "sequence" && Array.isArray(node.steps)) {
     const steps: Node[] = [];
     for (const step of (node.steps as Node[]).map(foldConditionalTestModifiers)) {
-      const test = steps.at(-1);
+      const last = steps.at(-1);
+      // A test the sequence gates by a condition the change does not repeat (a sentence gate on the test, as
+      // "Each enemy unit below X must take a test, subtracting 1 if Y") keeps that gate on both halves. A change
+      // under the same condition as the test stays a standing effect after it (the existing contract).
+      const gated = last?.type === "conditional" && (last.effect as Node | undefined)?.type === "test"
+        && JSON.stringify(last.condition) !== JSON.stringify(step.type === "conditional" ? step.condition : undefined) ? last : undefined;
+      const test = gated ? gated.effect as Node : last;
       const change = step.type === "conditional" ? step.effect as Node : undefined;
       const modifier = change?.modifier as Node | undefined;
       const testModifier = test?.modifier as Node | undefined;
       const roll = modifier?.roll;
-      const same = test?.type === "test" && change?.type === "roll-modifier" && change.target === test.target && testModifier?.modifier === undefined
+      const same = test?.type === "test" && change?.type === "roll-modifier" && JSON.stringify(change.target) === JSON.stringify(test.target) && testModifier?.modifier === undefined
         && (roll === testModifier?.test || (roll === "hazard" && testModifier?.test === "desperate-escape"))
         && (modifier!.operation === "add" || modifier!.operation === "subtract") && typeof modifier!.value === "number"
         && Object.keys(modifier!).every((key) => ["roll", "operation", "value"].includes(key));
       if (!same) { steps.push(step); continue; }
       const value = (modifier!.operation === "subtract" ? -1 : 1) * (modifier!.value as number);
-      steps[steps.length - 1] = { type: "conditional", condition: step.condition, effect: { ...test, modifier: { ...testModifier, modifier: value } } };
-      steps.push({ type: "conditional", condition: { operator: "not", operands: [step.condition] }, effect: test });
+      const outer = gated ? [gated.condition as Node] : [];
+      const both = (side: Node): Node => outer.length === 0 ? side : { operator: "and", operands: [...outer, side] };
+      steps[steps.length - 1] = { type: "conditional", condition: both(step.condition as Node), effect: { ...test, modifier: { ...testModifier, modifier: value } } };
+      steps.push({ type: "conditional", condition: both({ operator: "not", operands: [step.condition] }), effect: test });
     }
     return steps.length === 1 ? steps[0]! : { ...node, steps };
   }
   for (const key of ["effect", "then"]) {
     if (node[key] && typeof node[key] === "object" && !Array.isArray(node[key])) return { ...node, [key]: foldConditionalTestModifiers(node[key] as Node) };
+  }
+  // An aura or other modifier that wraps its effect (the aura's own `modifier.effect`) keeps the test inside it.
+  const modifier = node.modifier as Node | undefined;
+  if (modifier && typeof modifier === "object" && modifier.effect && typeof modifier.effect === "object") {
+    return { ...node, modifier: { ...modifier, effect: foldConditionalTestModifiers(modifier.effect as Node) } };
   }
   return node;
 }

@@ -187,7 +187,10 @@ describe("a change to a test another unit takes", () => {
       ["that enemy unit is Battle-shocked", "unit-state", { states: ["battle-shocked"], subject: "antecedent", negated: false }],
       ["subtract 1 from that test", "roll-modifier", { roll: "preceding", operation: "subtract", value: 1 }]), text);
     if (!result.ok) throw new Error(result.errors.join("; "));
-    expect(JSON.stringify(result.mechanics)).toContain('"type":"roll-modifier","target":"recipient","modifier":{"roll":"desperate-escape"');
+    // The change is the test's own modifier under the condition, split from the test on the other side (inside the aura's effect).
+    const out = JSON.stringify(result.mechanics);
+    expect(out).toContain('{"type":"conditional","condition":{"type":"unit-state","parameters":{"subject":"recipient","state":"battle-shocked"}},"effect":{"type":"test","target":"recipient","modifier":{"test":"desperate-escape","modifier":-1}}}');
+    expect(out).not.toContain('"roll-modifier"');
   });
 });
 
