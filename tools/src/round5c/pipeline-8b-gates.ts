@@ -103,16 +103,72 @@ const DAMAGE_ROLLS = new Set(["hit", "wound", "save", "damage"]);
 const STAT_MODIFIER_OUTSIDE_DAMAGE_PATH = /^stat-modifier on ".*" is outside the damage path$/u;
 const ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH = /^roll-modifier on ".*" is outside the damage path$/u;
 const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside the damage path$/u;
-/** Top-level effect `type`s the walk() dispatch has no case for that are non-damage by design.
- * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
- * shape" (the conservative default) rather than being assumed out of scope. */
-/** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
-// Effects that change no attack's damage: healing, moving, placement, eligibility permissions, and how many
-// times a stance may be selected.
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity"]);
+// Leaf effect types that change no attack's damage: healing, moving, placement, eligibility permissions,
+// how many times a stance may be selected, list-building rules, unit keywords, tests, tags, resources,
+// unit composition, and mortal wounds or the extra fight of a dying model (attack sequences of their
+// own, which the attack-buff layer does not model by design). A type not reviewed stays a gap.
+const NON_DAMAGE_EFFECT_TYPES = new Set([
+  "heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity",
+  "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "add-unit", "split-unit",
+  "transport-capacity", "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
+]);
+// Core abilities (and Reanimation Protocols) that decide deployment, movement, fight order, attachment or
+// resurrection; none changes a hit, wound, save or damage roll.
+const NON_DAMAGE_ABILITIES = new Set([
+  "deadly-demise", "deep-strike", "fights-first", "hover", "infiltrators", "leader", "lone-operative", "scouts",
+  "support", "super-heavy-walker", "mobile", "reanimation-protocols",
+]);
+const DAMAGE_STATS = new Set(["A", "S", "T", "Sv", "AP", "D", "WS", "BS"]);
 // Which objective an ability picks decides control, never an attack's damage.
 const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
+// translateStatModifier's note for a defender stat seen from the attacker; the target perspective models it.
+const DEFENDER_SIDE_STAT = /: defender-side stat; applies when the buffed unit is the target$/u;
+
+/**
+ * Whether every leaf of an effect subtree is off the damage path, so a container the buff layer
+ * stops at (a selection with a predicate, a dice gate, a dice table) hides no damage effect. Any
+ * leaf or container not recognised here counts as damage-path, the conservative default.
+ */
+export function isNonDamageEffect(node: unknown): boolean {
+  if (node === null) return true;
+  if (typeof node !== "object" || Array.isArray(node)) return false;
+  const effect = node as Record<string, unknown>;
+  const modifier = (typeof effect.modifier === "object" && effect.modifier !== null ? effect.modifier : {}) as Record<string, unknown>;
+  const all = (children: unknown): boolean => Array.isArray(children) && children.every(isNonDamageEffect);
+  switch (effect.type) {
+    case "sequence":
+    case "rules-bundle":
+      return all(effect.steps);
+    case "conditional":
+      return isNonDamageEffect(effect.effect) && (effect.else === undefined || isNonDamageEffect(effect.else));
+    case "select-units":
+    case "for-each-unit":
+    case "ability-part":
+      return isNonDamageEffect(effect.effect);
+    case "dice-gated":
+      return isNonDamageEffect(effect.on_success ?? null) && isNonDamageEffect(effect.on_fail ?? null);
+    case "dice-table":
+      return Array.isArray(effect.outcomes) && effect.outcomes.every((outcome) => isNonDamageEffect((outcome as { effect?: unknown }).effect ?? null));
+    case "roll-result":
+    case "roll-modifier":
+    case "re-roll":
+      return typeof modifier.roll === "string" && !DAMAGE_ROLLS.has(modifier.roll);
+    case "stat-modifier":
+      return typeof modifier.stat === "string" && !DAMAGE_STATS.has(modifier.stat);
+    case "ability-grant":
+    case "ability-activate":
+      return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
+    case "rule-state":
+      return modifier.rule_kind === "ability" && typeof modifier.rule === "string" && NON_DAMAGE_ABILITIES.has(modifier.rule);
+    // An aura's range only decides which units are in it, and the cruncher's range gates are permissive;
+    // a use count never changes an attack.
+    case "ability-modifier":
+      return modifier.aspect === "uses" || modifier.aspect === "range";
+    default:
+      return typeof effect.type === "string" && NON_DAMAGE_EFFECT_TYPES.has(effect.type);
+  }
+}
 
 export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
   if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason) || ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return true;
@@ -122,19 +178,23 @@ export function isOutsideDamagePath(item: EffectTranslation["unsupported"][numbe
     return typeof roll !== "string" || !DAMAGE_ROLLS.has(roll);
   }
   if (OBJECTIVE_SELECTION.test(item.reason)) return true;
-  const unmodelled = UNMODELLED_EFFECT_TYPE.exec(item.reason);
-  // How many times an ability or Stratagem can be used never changes an attack's damage.
-  if (unmodelled?.[1] === "ability-modifier") return (item.effectFragment as { modifier?: { aspect?: unknown } } | undefined)?.modifier?.aspect === "uses";
-  if (unmodelled) return NON_DAMAGE_EFFECT_TYPES.has(unmodelled[1]!);
-  return false;
+  return isNonDamageEffect(item.effectFragment);
 }
+
+const DEFENDER_CHECK_SOURCE: BuffSource = { kind: "ability", abilityId: "defender-check", abilityKind: "unit" };
 
 export function classifyUnsupported(unsupported: EffectTranslation["unsupported"]): { honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number } {
   let honestUnknown = 0;
   let outsideDamagePath = 0;
   let unrecognizedShape = 0;
   for (const item of unsupported) {
-    if (HONEST_UNKNOWN_CONDITION.test(item.reason)) honestUnknown += 1;
+    if (DEFENDER_SIDE_STAT.test(item.reason)) {
+      // Counted only as whatever the target perspective still cannot model.
+      const asTarget = classifyUnsupported(effectToBuffs(item.effectFragment, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT, "target").unsupported);
+      honestUnknown += asTarget.honestUnknown;
+      outsideDamagePath += asTarget.outsideDamagePath;
+      unrecognizedShape += asTarget.unrecognizedShape;
+    } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)) honestUnknown += 1;
     else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
     else unrecognizedShape += 1;
   }

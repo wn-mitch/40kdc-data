@@ -55,6 +55,34 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });
 
+  const classify = (effect: Record<string, unknown>) => classifyUnsupported(effectToBuffs(effect, source, ctx).unsupported);
+  const gap = { honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 };
+  const outside = { honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 };
+
+  it("looks through a predicated selection: a battle-shock test is off the damage path, a re-roll inside it is not", () => {
+    const selector = { owner: "enemy", count: 1, eligibility: { type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: "this-unit" } } };
+    expect(classify({ type: "select-units", selector, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock", modifier: -1 } } })).toEqual(outside);
+    expect(classify({ type: "select-units", selector: { ...selector, owner: "friendly" }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual(gap);
+  });
+
+  it("counts a dice table off the damage path only when no outcome touches an attack", () => {
+    const harm = { results: [2, 3, 4, 5, 6], effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: "D3" } } };
+    const nothing = { results: [1], effect: { type: "no-effect" } };
+    const hitPenalty = { results: [6], effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } };
+    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, harm] })).toEqual(outside);
+    expect(classify({ type: "dice-table", dice: "D6", outcomes: [nothing, { ...harm, results: [2, 3, 4, 5] }, hitPenalty] })).toEqual(gap);
+  });
+
+  it("separates deployment grants and non-combat roll results from damage-path ones", () => {
+    expect(classify({ type: "ability-grant", target: "this-unit", modifier: { ability: "scouts", value: 6 } })).toEqual(outside);
+    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "advance", result: 6 } })).toEqual(outside);
+    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } })).toEqual(gap);
+  });
+
+  it("does not count a defender Toughness lift the target perspective models", () => {
+    expect(classify({ type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
+  });
+
   it("still counts an honest runtime unknown as its own bucket, not outside the damage path", () => {
     const { unsupported } = effectToBuffs(
       { type: "conditional", condition: { type: "designated", parameters: { subject: "defender", tag: "X" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },

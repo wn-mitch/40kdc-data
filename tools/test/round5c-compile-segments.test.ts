@@ -185,9 +185,12 @@ describe("Round 5C crunch gate: effects off the damage path", () => {
     expect([...cost, ...uses].every(isOutsideDamagePath)).toBe(true);
   });
 
-  it("still counts an ability-modifier on anything but its uses", () => {
+  it("counts an aura range lift as off the damage path, but still counts an extra selection", () => {
     const range = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-aura", aspect: "range", operation: "add", value: 3 } });
+    const selections = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-menu", aspect: "selections", operation: "add", value: 1 } });
     expect(range.length).toBeGreaterThan(0);
-    expect(range.some((item) => !isOutsideDamagePath(item))).toBe(true);
+    expect(range.every(isOutsideDamagePath)).toBe(true);
+    expect(selections.length).toBeGreaterThan(0);
+    expect(selections.some((item) => !isOutsideDamagePath(item))).toBe(true);
   });
 });
