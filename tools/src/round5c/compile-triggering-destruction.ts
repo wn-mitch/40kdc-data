@@ -73,12 +73,23 @@ function distanceFollows(following: CompileLeaf | undefined, fragment: string | 
  * Pairs each destruction activity with the unit-filter it names and with its distance, removing
  * both from the list and storing the DSL object on the activity leaf as `destruction`.
  */
+/**
+ * A first-time usage limit is spent when its trigger fires. A destruction that gates an effect of a
+ * non-destruction trigger would spend the limit on a fight with no kill, so the pair is refused.
+ */
+function firstUsageGatedByDestruction(input: readonly CompileLeaf[]): boolean {
+  const first = input.some((leaf) => leaf.family_id === "usage-limit" && String(leaf.parameters.frequency).startsWith("first-"));
+  const destroyMoment = input.some((leaf) => leaf.family_id === "event" && (leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed"));
+  return first && !destroyMoment;
+}
+
 export function foldTriggeringDestruction(input: readonly CompileLeaf[]): CompileLeaf[] {
   const replaced = new Map<number, CompileLeaf>();
   const dropped = new Set<number>();
   const claimed = new Set<number>();
   input.forEach((leaf, index) => {
     if (!isTriggeringDestruction(leaf)) return;
+    if (firstUsageGatedByDestruction(input)) throw new CompileError("A first-time usage limit cannot wait on a destruction that is not the trigger: the limit would be spent when the trigger fires, even with no destruction.");
     const units = destructionActivity(leaf) === UNITS;
     const { named, container, destroyer } = leaf.parameters as { named: string; container: string; destroyer: unknown };
     if (units && (named === "none" || container !== "none")) throw new CompileError("A destroyed unit is named by a unit-filter before or after its verb; it has no container.");

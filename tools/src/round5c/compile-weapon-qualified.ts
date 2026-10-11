@@ -16,7 +16,7 @@ function touching(bytes: Buffer, before: CompileLeaf, after: CompileLeaf): boole
 }
 
 /** "after all of that attack's attacks have been resolved": an attacks-resolved moment with no subject or owner. */
-function isSameAttackResolved(leaf: CompileLeaf): boolean {
+export function isSameAttackResolved(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "attacks-resolved"
     && leaf.parameters.subject === undefined && leaf.parameters.owner === undefined;
 }
