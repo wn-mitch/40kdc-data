@@ -277,3 +277,30 @@ describe("a reserves arrival pairs with a set-up in an earlier sentence of its o
     expect(errors.join(" ")).toContain("A reserves arrival has no set-up before it.");
   });
 });
+
+describe("a weapon scope's recipient chain may stack filters after an attack sentence (compile-weapon-scopes.ts)", () => {
+  const text = "Each time a KEYA model from your army makes an attack, add 1 to the Hit roll. In addition, ranged weapons equipped by KEYC models (excluding KEYD models) from your army have the [ASSAULT] ability.";
+  const pieces: Piece[] = [
+    ["KEYA model", "unit-filter", { side: "friendly", keywords: ["KEYA"], level: "model" }],
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["makes an attack", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any" }],
+    ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+    ["ranged weapons equipped by", "weapon-property-scope", { subject: "antecedent", weapon_type: "ranged" }],
+    ["KEYC models", "unit-filter", { side: "friendly", keywords: ["KEYC"], level: "model" }],
+    ["excluding KEYD models", "unit-filter", { side: "friendly", excluded_keywords: ["KEYD"], level: "model" }],
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }],
+  ];
+  // The second "from your army" is the one after the exclusion: placed() searches forward from the previous wording.
+
+  it("grants the keyword to the merged recipient filter", () => {
+    const steps = mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>;
+    expect(steps[1]).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["KEYC"], none_of: ["KEYD"], level: "model" },
+      modifier: { abilities: ["Assault"], weapon_type: "ranged" } });
+  });
+
+  it("keeps the stacked filter of a different side out of the chain", () => {
+    const enemy: Piece[] = pieces.map((piece): Piece => piece[0] === "excluding KEYD models" ? [piece[0], piece[1], { ...piece[2], side: "enemy" }] : piece);
+    expect(errorsOf(text, enemy).length).toBeGreaterThan(0);
+  });
+});

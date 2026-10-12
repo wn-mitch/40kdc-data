@@ -338,8 +338,9 @@ function recipientChainEnd(list: readonly CompileLeaf[], at: number, source: Buf
   const side = list[at + 1]!.parameters.side;
   if (side !== "friendly" && side !== "enemy") return undefined;
   let last = at + 1;
-  while (inScope(last + 1) && list[last + 1]!.family_id === "unit-owner") {
-    if (list[last + 1]!.parameters.owner !== side) return undefined;
+  // Stacked filters of the same side ("K models (excluding L models) from your army") are one filter once merged (mergeStackedFilters).
+  while (inScope(last + 1) && (list[last + 1]!.family_id === "unit-owner" || (list[last + 1]!.family_id === "unit-filter" && list[last + 1]!.parameters.side === side))) {
+    if (list[last + 1]!.family_id === "unit-owner" && list[last + 1]!.parameters.owner !== side) return undefined;
     last += 1;
   }
   const membered = inScope(last + 1) && list[last + 1]!.family_id === "membership";
