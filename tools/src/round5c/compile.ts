@@ -74,6 +74,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
+import { inheritAttackFrame } from "./compile-instead-attack-gate.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -914,6 +915,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     replaced.gate = [...replaced.gate, negate(alternative)];
     // A result band that gates the replaced effect ("on a 2+ … instead") covers its replacement too (inheritBand).
     inheritBand(replaced, replacement);
+    inheritAttackFrame(list, places, replaced, replacement);
     replacement.replaces = true;
     // An "instead" replacing an effect limited to the selected unit's attacks is limited the same way
     // ("... attacks that target that enemy unit ... by 1, or by 2 instead"): the target condition sits on the first clause only.

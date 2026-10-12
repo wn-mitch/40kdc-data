@@ -148,6 +148,26 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
     expect(JSON.stringify(mechanics)).toContain('"value":2');
   });
 
+  it("gives an instead with no attack of its own the attack type of the clause it replaces", () => {
+    // 4243: "improve the AP of that attack by 2 instead" is melee-only because the replaced clause's attack is.
+    const leaves = spendLeaves(SPEND_TEXT).filter((leaf) => leaf.start_byte !== SPEND_TEXT.indexOf("ranged attacks made by your unit that target that unit"));
+    const mechanics = mechanicsOf(leaves, SPEND_TEXT);
+    const bonus = nodesOf(mechanics, "conditional").filter((node) => node.effect?.modifier?.value === 2);
+    expect(bonus).toHaveLength(1);
+    expect(bonus[0]!.condition).toEqual({ operator: "and", operands: [
+      { type: "attack-is", parameters: { attack_type: "ranged" } },
+      { type: "designated", parameters: { subject: "attacker", tag: "yp-spent-this-use" } },
+    ] });
+  });
+
+  it("leaves an instead that names its own attack type with that type", () => {
+    const text = SPEND_TEXT.replace("ranged attacks made by your unit that target that unit improve the Armour Penetration characteristic by 2", "melee attacks made by your unit that target that unit improve the Armour Penetration characteristic by 2");
+    const leaves = spendLeaves(SPEND_TEXT).map((leaf) => leaf.start_byte > SPEND_TEXT.indexOf("If you spent") && leaf.family_id === "attack" ? { ...leaf, parameters: { ...leaf.parameters, attack_type: "melee" } } : leaf);
+    const bonus = nodesOf(mechanicsOf(leaves, text), "conditional").filter((node) => node.effect?.modifier?.value === 2);
+    expect(JSON.stringify(bonus[0]!.condition)).toContain('"attack_type":"melee"');
+    expect(JSON.stringify(bonus[0]!.condition)).not.toContain('"attack_type":"ranged"');
+  });
+
   it("refuses a spend that comes after the selection", () => {
     const text = "Your Shooting phase. One ORBITAL unit from your army. Select one enemy unit. Each time you use this Stratagem, you can spend 3YP. If you spent YP during this use of this Stratagem, ranged attacks made by your unit that target that unit improve the Armour Penetration characteristic by 2 instead.";
     const leaves = placed(text,
