@@ -48,8 +48,6 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "ability-record-grant": ["subject"],
   // "if that unit is your Warlord" after a unit-filter: the Warlord test folds onto the filter (compile-warlord-test.ts).
   "designated-filter": ["subject"],
-  // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names.
-  "ability-modifier": ["subject"],
 };
 
 /**
@@ -57,6 +55,9 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
  * schema of its own rather than through an antecedent version above.
  */
 const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
+  // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names
+  // (family-extensions-20-antecedent-subject-binding.ts).
+  "ability-modifier": ["subject"],
   event: ["subject", "by"],
   // An embark permission's destination ("that TRANSPORT"), accepted by family-extensions-16-transport-embark-eligibility-followup.ts.
   "eligibility-permission": ["into"],

@@ -2,11 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { antecedentVersion } from "../src/round5c/antecedent-families.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { describeEffect } from "../src/translate/effect.js";
 import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_ANTECEDENT_SUBJECT_BINDING } from "../src/round5c/family-extensions-20-antecedent-subject-binding.js";
+import { ABILITY_MODIFIER_ANTECEDENT, FAMILY_EXTENSIONS_20_ANTECEDENT_SUBJECT_BINDING } from "../src/round5c/family-extensions-20-antecedent-subject-binding.js";
 
 // Fabricated wording only. Each test names the defect it hunts; the compile tests fail on the tree before the change.
 
@@ -65,7 +64,8 @@ describe("ability-modifier antecedent (SS-B)", () => {
   it("accepts antecedent at the current version and not at the one before; this-unit still passes both", () => {
     const leaf = { subject: "antecedent", ability: "reach-demo", aspect: "range", operation: "add", value: 3 };
     const version = currentFamilyVersion("ability-modifier");
-    const first = antecedentVersion("ability-modifier")!;
+    // The antecedent version is the one ABILITY_MODIFIER_ANTECEDENT appends, found by identity.
+    const first = Array.from({ length: version }, (_, at) => at + 1).find((at) => familyExtension("ability-modifier", at) === ABILITY_MODIFIER_ANTECEDENT)!;
     expect(first).toBeDefined();
     for (const at of [first, version]) expect(normalizeFingerprintParameters("ability-modifier", leaf, at)).toEqual(leaf);
     expect(() => normalizeFingerprintParameters("ability-modifier", leaf, first - 1)).toThrow();

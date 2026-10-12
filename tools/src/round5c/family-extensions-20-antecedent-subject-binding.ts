@@ -1,3 +1,4 @@
+import { ANTECEDENT } from "./antecedent-families.js";
 import { activitiesExtension, EVENT_SUBJECT, type FamilyExtension, optional, standIn, widenedEnum, withProperties } from "./family-extension-helpers.js";
 
 /**
@@ -10,6 +11,10 @@ import { activitiesExtension, EVENT_SUBJECT, type FamilyExtension, optional, sta
  * weapon-property-scope subject event-subject and battle-shock-state recipient event-subject: the
  * unit a Stratagem's or ability's moment names (the enemy unit that selected its targets), where
  * the family's own enum named only the bearer, a selection or an earlier leaf's unit.
+ *
+ * ability-modifier subject antecedent: the unit an earlier filter, aura or Stratagem target names
+ * ("add 3\" to that unit's Contagion Range"). Lowers to that unit as the modifier's target
+ * (compile-antecedent.ts).
  *
  * unit-activity destroyed-stratagem-target: the subject destroyed the unit the Stratagem targets
  * ("targets the enemy unit that just destroyed your unit"). Lowers to a history condition
@@ -55,9 +60,17 @@ const BATTLE_SHOCK_EVENT_SUBJECT: FamilyExtension = {
   normalize: (input, previous) => input.recipient === EVENT_SUBJECT ? standIn(input, "recipient", "this-unit", previous) : previous(input),
 };
 
+export const ABILITY_MODIFIER_ANTECEDENT: FamilyExtension = {
+  family: "ability-modifier",
+  description: "As the previous version, and subject can be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"that unit\").",
+  schema: (previous) => withProperties(previous, { subject: widenedEnum(previous, "subject", [ANTECEDENT]) }),
+  normalize: (input, previous) => input.subject === ANTECEDENT ? standIn(input, "subject", "this-unit", previous) : previous(input),
+};
+
 export const FAMILY_EXTENSIONS_20_ANTECEDENT_SUBJECT_BINDING: readonly FamilyExtension[] = [
   ATTACHED_LEADERS,
   SCOPE_EVENT_SUBJECT,
   BATTLE_SHOCK_EVENT_SUBJECT,
+  ABILITY_MODIFIER_ANTECEDENT,
   activitiesExtension([DESTROYED_STRATAGEM_TARGET], `activity ${DESTROYED_STRATAGEM_TARGET}: the subject destroyed the unit the Stratagem targets ("targets the enemy unit that just destroyed your unit")`),
 ];
