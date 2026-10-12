@@ -129,3 +129,30 @@ describe("a roll's pre-roll conditions gate every result band (compile-roll-gate
     expect(later).not.toContain("KEYA");
   });
 });
+
+describe("a standing grant sentence is its own part (compile-segments.ts standingGrant)", () => {
+  const text = "When a friendly KEYA unit is selected to move, that move does not stop that unit from charging. Friendly KEYA units have the following ability:\n**Zeal:** this unit has +1 OC.";
+  const pieces: Piece[] = [
+    ["friendly KEYA unit", "unit-filter", { side: "friendly", keywords: ["KEYA"] }],
+    ["selected to move", "event", { kind: "selected", to: "move" }],
+    ["that move does not stop that unit from charging", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true }],
+    ["Friendly KEYA units", "unit-filter", { side: "friendly", keywords: ["KEYA"] }],
+    ["have the following ability", "ability-record-grant", { subject: "antecedent", printed: "one" }],
+    ["Zeal", "granted-ability-name", { label: "Zeal" }],
+    ["this unit has +1 OC", "characteristic-modifier", stat("OC", 1)],
+  ];
+
+  it("keeps the grant out of the earlier sentence's moment", () => {
+    const mechanics = mechanicsOf(text, pieces);
+    expect(mechanics.trigger).toBeNull();
+    expect(mechanics.effect.steps[0]).toMatchObject({ type: "ability-part", trigger: { event: "selected" }, effect: { type: "permission" } });
+    expect(mechanics.effect.steps[1]).toMatchObject({ type: "ability-grant", target: { owner: "friendly", all_of: ["KEYA"] } });
+    expect(mechanics.effect.steps[1].trigger).toBeUndefined();
+  });
+
+  it("leaves a grant with no earlier moment as the record's own", () => {
+    const bare = "Friendly KEYA units have the following ability:\n**Zeal:** this unit has +1 OC.";
+    const mechanics = mechanicsOf(bare, pieces.slice(3));
+    expect(mechanics.effect).toMatchObject({ type: "ability-grant" });
+  });
+});

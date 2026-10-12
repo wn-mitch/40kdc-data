@@ -20,6 +20,8 @@ type Node = Record<string, unknown>;
  * is not split. Sentences after a colon ("While …:" and its bullets) are the items it introduces,
  * so none of them opens a new part (a colon before a roll's result band does not end its
  * sentence), and neither does a sentence naming "that unit" or "such a weapon" from an earlier one.
+ * A sentence whose only effects are printed grants ("Friendly K units have the following ability:") after
+ * a part with a moment is a part of its own too: it holds whenever the record applies.
  */
 
 const MOMENT_OPENER = /^(?:once per (?:battle|turn|phase|battle round),\s*)?(?:each time|whenever|when|after|at the (?:start|end) of)\b/iu;
@@ -130,6 +132,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
     sentences.at(-1)!.push(leaf);
   });
   const hasEffect = (sentence: readonly CompileLeaf[]) => sentence.some((leaf) => leaf.role === "EFFECT");
+  // "Friendly K units have the following ability:" is a standing grant the units hold whenever the record applies:
+  // a sentence whose effects are all printed grants (compile-granted.ts folds the granted bodies onto them).
+  const standingGrant = (sentence: readonly CompileLeaf[]) => hasEffect(sentence)
+    && sentence.every((leaf) => leaf.role !== "EFFECT" || (leaf.family_id === "ability-record-grant" && Array.isArray(leaf.parameters.granted)));
   const armyOnly = (sentence: readonly CompileLeaf[]) => hasEffect(sentence)
     && sentence.every((leaf) => leaf.role !== "EFFECT" || leaf.family_id === "army-construction");
   const firstEffectful = sentences.findIndex(hasEffect);
@@ -161,8 +167,10 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const parts: CompileLeaf[][] = [[]];
   sentences.forEach((sentence, position) => {
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
+    // A standing grant after a part with a moment of its own is not that moment's: the moment cannot trigger it.
+    const standing = standingGrant(sentence) && parts.at(-1)!.some((leaf) => leaf.role === "EVENT" && leaf.family_id !== "select-unit" && leaf.family_id !== "dice-roll");
     const opensPart = position > firstEffectful && !inList[position] && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
-      moments[position] || labels[position]) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
+      moments[position] || labels[position] || standing) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     // "None of these models can be your WARLORD" after a composition rule: the group it points back
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
     const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
