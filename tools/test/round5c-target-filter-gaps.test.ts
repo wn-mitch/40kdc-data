@@ -65,6 +65,19 @@ describe("an attack-target filter after a condition names the target the attack 
     expect(JSON.stringify(steps[0]!.condition)).toContain("ALPHA");
   });
 
+  it("keeps a first-sentence condition that no 'if' opens as a gate on the instead sentence too", () => {
+    const whileText = "While your unit has the ALPHA keyword, each time a model in your unit makes an attack, add 1 to the Damage characteristic of that attack. If your unit has the DELTA keyword, add 2 to the Damage characteristic of that attack instead.";
+    const mechanics = mechanicsOf(whileText, [
+      ["your unit has the ALPHA keyword", "unit-keyword", keyword("ALPHA")],
+      ["attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+      ["add 1 to the Damage characteristic of that attack", "characteristic-modifier", damage],
+      ["your unit has the DELTA keyword", "unit-keyword", keyword("DELTA")],
+      ["add 2 to the Damage characteristic of that attack", "characteristic-modifier", { ...damage, value: 2 }],
+      ["instead", "instead", {}],
+    ]);
+    expect(mechanics.effect.condition).toEqual(has("ALPHA"));
+  });
+
   it("keeps the refusal when no attack names the target", () => {
     const bare = "If your unit has the ALPHA keyword and that enemy model is a BETA, add 1 to the Damage characteristic of this unit.";
     const errors = errorsOf(bare, [

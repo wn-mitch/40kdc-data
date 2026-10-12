@@ -53,3 +53,26 @@ const BEARER_WORDING = /\b(?:this|your) (?:unit|model)\b/iu;
 export function namesBearer(leaf: CompileLeaf, sourceText: string | undefined): boolean {
   return sourceText !== undefined && leaf.end_byte !== undefined && BEARER_WORDING.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte));
 }
+
+const IF_BEFORE = /\bif\s*$/iu;
+const AND_BETWEEN = /^[\s,]*(?:\band\b)?[\s,]*$/iu;
+
+/**
+ * The conditions of `sentence` that an "if" opens ("..., if A and B, add 1"), before the sentence's first effect: the
+ * condition right after "if" and each condition joined to it by "and". Roll bands and a target condition that names no
+ * selection are not among them. Without source text there is no wording to read, so none are.
+ */
+export function ifGatedConditions(list: readonly CompileLeaf[], places: readonly Placement[], sentence: number, sourceText: string | undefined): Set<number> {
+  const found = new Set<number>();
+  if (sourceText === undefined) return found;
+  const firstEffect = list.findIndex((leaf, at) => leaf.role === "EFFECT" && places[at]!.sentence === sentence);
+  list.forEach((leaf, at) => {
+    if (leaf.role !== "CONDITION" || places[at]!.sentence !== sentence || (firstEffect !== -1 && at > firstEffect)) return;
+    if (leaf.family_id === "roll-result" || leaf.family_id === "target-is-selected") return;
+    const before = list[at - 1];
+    const from = before?.end_byte ?? 0;
+    const lead = from <= leaf.start_byte ? Buffer.from(sourceText, "utf8").subarray(from, leaf.start_byte).toString("utf8") : "";
+    if (IF_BEFORE.test(lead) || (found.has(at - 1) && AND_BETWEEN.test(lead))) found.add(at);
+  });
+  return found;
+}

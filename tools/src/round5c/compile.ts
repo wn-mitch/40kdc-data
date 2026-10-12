@@ -74,7 +74,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
-import { conditionedInsteadAfter, inheritAttackFrame, namesBearer } from "./compile-instead-scope.js";
+import { conditionedInsteadAfter, ifGatedConditions, inheritAttackFrame, namesBearer } from "./compile-instead-scope.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -402,9 +402,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
 
   const effectSentences = new Set(list.flatMap((leaf, index) => leaf.role === "EFFECT" ? [places[index]!.sentence] : []));
   const firstSentence = Math.min(...effectSentences);
-  // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so A gates only the first sentence;
-  // as an ability-wide gate it would also guard the replacement (compile-instead-scope.ts).
-  const firstGateIsOwn = conditionedInsteadAfter(list, places, firstSentence);
+  // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so an "if" condition of the first
+  // sentence gates that sentence only; as an ability-wide gate it would also guard the replacement (compile-instead-scope.ts).
+  const ownGates = conditionedInsteadAfter(list, places, firstSentence) ? ifGatedConditions(list, places, firstSentence, sourceText) : new Set<number>();
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
   const global: Node[] = [];
@@ -580,7 +580,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       else if (leaf.role === "CONDITION" && perRecipient && effectSentences.has(sentence) && Object.values(leaf.parameters).includes("recipient")) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
-      else if (leaf.role === "CONDITION" && firstGateIsOwn && sentence === firstSentence && leading && leaf.family_id !== "roll-result" && !(leaf.family_id === "target-is-selected" && !namesSelection(leaf))) {
+      else if (ownGates.has(index)) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" && !namesSelection(leaf) ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));
