@@ -114,7 +114,8 @@ describe("unit-state version 15: a this-model subject can be engaged", () => {
   const engagedThisModel = { states: ["engaged"], subject: "this-model", negated: false };
 
   it("accepts an engaged this-model condition only from version 15", () => {
-    expect(current()).toBe(15);
+    expect(current()).toBeGreaterThanOrEqual(15);
+    expect(normalizeFingerprintParameters("unit-state", engagedThisModel, 15)).toEqual(engagedThisModel);
     expect(normalizeFingerprintParameters("unit-state", engagedThisModel, current())).toEqual(engagedThisModel);
     expect(() => normalizeFingerprintParameters("unit-state", engagedThisModel, 14)).toThrow(/only being on the battlefield/u);
   });

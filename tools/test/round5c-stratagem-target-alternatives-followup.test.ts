@@ -103,7 +103,9 @@ describe("move-through version: the triggering unit and a pair of passthrough to
 });
 
 describe("eligibility-permission: the triggering unit as subject", () => {
-  const V = currentFamilyVersion("eligibility-permission");
+  // The version that first accepts event-subject: the lowest one that does, not the current top (later versions widen it further).
+  const accepts = (version: number) => { try { normalizeFingerprintParameters("eligibility-permission", { subject: "event-subject", activity: "move", allow: true }, version); return true; } catch { return false; } };
+  const V = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, at) => at + 1).find(accepts)!;
   const PREVIOUS = V - 1;
 
   it("keeps every value the previous version accepted, and accepts event-subject only from this version", () => {

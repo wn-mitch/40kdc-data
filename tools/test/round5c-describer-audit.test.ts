@@ -92,7 +92,11 @@ describe("Round 5C leaf describer audit", () => {
       // a leaf alone has no unit to name for the first three, so each of those combinations is a problem on its own.
       // The event-subject subject (family-extensions-16-stratagem-target-alternatives-followup.ts) adds 132 problem
       // combinations: the same count the this-unit and this-model subjects give together (264) before it.
-      "eligibility-permission": { unrendered: [], colliding: [], problems: 396 },
+      // The filtered-units subject (family-extensions-20-embarked-units-state-subject-and-moves.ts) names the units of the
+      // unit-filter before the leaf, so a leaf alone has no unit to name: each combination with it is a problem on its own.
+      "eligibility-permission": { unrendered: [], colliding: [], problems: 1518 },
+      // The filtered-units subject and the disembark mode: as above, a move alone has no filter to take its units from.
+      "make-move": { unrendered: [], colliding: [], problems: 1326 },
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
       // embarked-permission takes only this-unit and gates nothing; its one leaf reads the same as none.
       "embarked-permission": { unrendered: [], colliding: [], problems: 1 },
