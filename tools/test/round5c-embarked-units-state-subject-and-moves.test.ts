@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_20_EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES } from "../src/round5c/family-extensions-20-embarked-units-state-subject-and-moves.js";
 import { claimedByEmbarkedState } from "../src/round5c/compile-embarked-exclusion.js";
 import { mergeStackedFilters } from "../src/round5c/compile-unit-filters.js";
 
@@ -38,13 +39,17 @@ function refusal(text: string, ...items: Item[]): string {
   return result.errors.join("; ");
 }
 
-const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
-/** The version of a family that this extension replaced: look it up, never assume current - 1. */
-const previousOf = (family: string) => {
-  const version = currentFamilyVersion(family);
-  if (familyExtension(family, version) === undefined) throw new Error(`${family} has no extension at ${version}`);
-  return version - 1;
+/** The version at which this extension sits for `family`, found by lookup; later extensions may sit above it. */
+const ownVersion = (family: string) => {
+  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
+    const extension = familyExtension(family, version);
+    if (extension !== undefined && FAMILY_EXTENSIONS_20_EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES.includes(extension)) return version;
+  }
+  throw new Error(`The embarked-units extension does not extend ${family}.`);
 };
+/** The version this extension replaced: one below its own, never current - 1. */
+const previousOf = (family: string) => ownVersion(family) - 1;
+const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, ownVersion(family));
 const normalizePrevious = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, previousOf(family));
 
 const STOWED = { side: "friendly", embarked_in: "this-unit" };
