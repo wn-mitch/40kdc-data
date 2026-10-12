@@ -887,6 +887,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // A result band that gates the replaced effect ("on a 2+ … instead") covers its replacement too (inheritBand).
     inheritBand(replaced, replacement);
     replacement.replaces = true;
+    // An "instead" replacing an effect limited to the selected unit's attacks is limited the same way
+    // ("... attacks that target that enemy unit ... by 1, or by 2 instead"): the target condition sits on the first clause only.
+    if (replaced.selected) replacement.selected = true;
   }
 
   // A roll prohibition with no instead to replace it, or a dice roll in its own sentence, has no DSL form.

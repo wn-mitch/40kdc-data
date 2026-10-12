@@ -140,6 +140,14 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
     expect(JSON.stringify(mechanics)).toContain('{"type":"designated","parameters":{"subject":"attacker","tag":"yp-spent-this-use"}}');
   });
 
+  it("limits an instead that replaces a selected effect to the selection, with no attack leaf in its own clause", () => {
+    // The 4243 record's instead clause names no unit: only the first clause says "that target that unit".
+    const leaves = spendLeaves(SPEND_TEXT).filter((leaf) => leaf.start_byte !== SPEND_TEXT.indexOf("ranged attacks made by your unit that target that unit"));
+    const mechanics = mechanicsOf(leaves, SPEND_TEXT);
+    expect(JSON.stringify(mechanics)).toContain('{"type":"designated","parameters":{"subject":"attacker","tag":"yp-spent-this-use"}}');
+    expect(JSON.stringify(mechanics)).toContain('"value":2');
+  });
+
   it("refuses a spend that comes after the selection", () => {
     const text = "Your Shooting phase. One ORBITAL unit from your army. Select one enemy unit. Each time you use this Stratagem, you can spend 3YP. If you spent YP during this use of this Stratagem, ranged attacks made by your unit that target that unit improve the Armour Penetration characteristic by 2 instead.";
     const leaves = placed(text,
