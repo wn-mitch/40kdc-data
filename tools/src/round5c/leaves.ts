@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
-import { currentFamilyVersion, exactSpan, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, exactSpan, NAME_FRAGMENT, validateFingerprint } from "./contracts.js";
 import { sourcesClosed } from "./board-ranking.js";
 import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
@@ -194,6 +194,7 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND proposals.status IN ('pending', 'unresolved') AND source_spans.normalized_surface = ?
+      AND source_spans.fragment <> '${NAME_FRAGMENT}'
       ${abilityVersionIds ? `AND abilities.id IN (${[...abilityVersionIds].map(Number).filter(Number.isSafeInteger).join(",") || "NULL"})` : ""}
   `).all(surface) as Occurrence[];
   for (const proposal of proposals) add(proposal);

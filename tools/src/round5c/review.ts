@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 
-import { currentFamilyVersion, familyRole, LEAF_ROLES, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, familyRole, LEAF_ROLES, NAME_FRAGMENT, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
 import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
@@ -143,7 +143,7 @@ export type LeafProgress = {
 type ProgressCounts = { pending: number; unresolved: number; gaps: number; connective_bytes: number };
 
 /** Per-ability open-work counts for every current ability (or one), in four grouped queries. */
-function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, ProgressCounts> {
+export function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, ProgressCounts> {
   const filter = abilityVersionId === undefined ? "abilities.current = 1" : "abilities.id = ?";
   const args = abilityVersionId === undefined ? [] : [abilityVersionId];
   const counts = new Map<number, ProgressCounts>();
@@ -793,7 +793,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
-    ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(ability.id) as unknown as Array<AnnotationView & { parameters_json: string }>;
   const proposals = db.prepare(`
     SELECT proposals.id, source_spans.id AS span_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text,
@@ -805,7 +805,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     WHERE source_spans.ability_version_id = ?
       AND proposals.status IN ('pending', 'unresolved')
       AND NOT ${RESTATES_ACTIVE_ANNOTATION}
-    ORDER BY source_spans.start_byte, source_spans.end_byte, proposals.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, proposals.id
   `).all(ability.id) as unknown as Array<ProposalView & { span_id: number; parameters_json: string | null; reason_json: string }>;
   const suggestions = jevSuggestions(db, proposals.filter((proposal) => !proposal.family_id).map((proposal) => proposal.span_id));
   const review = db.prepare(`

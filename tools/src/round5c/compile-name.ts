@@ -1,6 +1,7 @@
 import type { Compiled, CompileOptions } from "./compile.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 import { joinSegments } from "./compile-segments.js";
+import { exactSpan, NAME_FRAGMENT } from "./contracts.js";
 
 /**
  * Leaves over the record's name. A workbench span with fragment `NAME` indexes the name column,
@@ -9,7 +10,7 @@ import { joinSegments } from "./compile-segments.js";
  * against `source_text` as they would without it. A name leaf never resolves against source_text.
  */
 
-export const NAME_FRAGMENT = "NAME";
+export { NAME_FRAGMENT };
 
 type Compile = (leaves: CompileLeaf[], sourceText?: string, options?: CompileOptions) => Compiled;
 
@@ -18,7 +19,9 @@ const isName = (leaf: CompileLeaf) => leaf.fragment === NAME_FRAGMENT;
 /**
  * Compile a record that has NAME leaves: the name part and the body (every other leaf) join as
  * parts of one ability. `compile` is compileLeaves; `signatureOf` is the record's shape signature.
- * Refused: a NAME leaf without the record's name, and a NAME span outside the name's bytes.
+ * Refused: a NAME leaf without the record's name, a NAME span outside the name's bytes, and a NAME
+ * leaf whose stored wording no longer sits at its offsets in the current name. A record's source hash
+ * covers source_text only, so a name edit leaves NAME rows in place; this check is what catches them.
  */
 export function compileWithName(
   leaves: readonly CompileLeaf[],
@@ -27,18 +30,23 @@ export function compileWithName(
   compile: Compile,
   signatureOf: (leaves: readonly CompileLeaf[]) => string,
 ): Compiled {
-  const signature = signatureOf(leaves);
-  const fail = (message: string): Compiled => ({ ok: false, signature, errors: [message] });
   const named = leaves.filter(isName);
   const body = leaves.filter((leaf) => !isName(leaf));
+  // Placement reads source_text, so only body leaves are placed against it; a NAME leaf's offsets index the name.
+  const signature = signatureOf(body);
+  const fail = (message: string): Compiled => ({ ok: false, signature, errors: [message] });
   if (options.name === undefined) return fail("A span over the record's name needs the record's name.");
   const nameBytes = Buffer.byteLength(options.name, "utf8");
   for (const leaf of named) {
     const end = leaf.end_byte ?? leaf.start_byte;
     if (leaf.start_byte < 0 || end <= leaf.start_byte || end > nameBytes) return fail("A name span lies outside the record's name.");
+    if (leaf.exact_text !== undefined && exactSpan(options.name, leaf.start_byte, end) !== leaf.exact_text) {
+      return fail("A name span no longer matches the record's name; re-review the name's wording.");
+    }
   }
-  // The name leaves compile as ordinary leaves over the name text; the fragment tag is only a locator.
-  const nameLeaves = named.map(({ fragment: _fragment, ...rest }) => rest as CompileLeaf);
+  // The name leaves compile as ordinary leaves over the name text; the fragment tag and the stored
+  // wording are only locators for the check above.
+  const nameLeaves = named.map(({ fragment: _fragment, exact_text: _exact, ...rest }) => rest as CompileLeaf);
   const nameResult = compile(nameLeaves, options.name, options);
   if (!nameResult.ok) return { ok: false, signature, errors: nameResult.errors };
   if (body.length === 0) return nameResult;
@@ -46,5 +54,5 @@ export function compileWithName(
   if (!bodyResult.ok) return { ok: false, signature, errors: bodyResult.errors };
   const joined = joinSegments([nameResult, bodyResult]);
   if (joined.errors.length) return fail(joined.errors.join(" "));
-  return { ok: true, signature, mechanics: joined.mechanics, checks: joined.checks, ...(joined.core ? { core: joined.core } : {}) };
+  return { ok: true, signature: `${signature} NAME ${nameResult.signature}`, mechanics: joined.mechanics, checks: joined.checks, ...(joined.core ? { core: joined.core } : {}) };
 }

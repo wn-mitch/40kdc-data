@@ -185,7 +185,7 @@ export type CalibrationResult = {
   f1: number;
 };
 
-function tiledCalibrationSample(db: DatabaseSync, embedder: Embedder, maxAbilities: number) {
+export function tiledCalibrationSample(db: DatabaseSync, embedder: Embedder, maxAbilities: number) {
   const coverage = getCurrentCoverage(db);
   const rows = db.prepare(`SELECT id, source_text FROM abilities WHERE current = 1`).all() as Array<{ id: number; source_text: string }>;
   type Sample = { text: string; start_byte: number; trueBoundaries: Set<string> };

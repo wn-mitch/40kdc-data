@@ -218,6 +218,12 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }
 
+/**
+ * Workbench fragment of a span over the record's name column (not source_text). Its offsets are name
+ * bytes. Body readers exclude it with `source_spans.fragment <> 'NAME'`, and ordered listings put it last.
+ */
+export const NAME_FRAGMENT = "NAME";
+
 /** Decode an exact UTF-8 byte span and reject boundaries that split a code point. */
 export function exactSpan(source: string, start: number, end: number): string {
   if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || end <= start) {

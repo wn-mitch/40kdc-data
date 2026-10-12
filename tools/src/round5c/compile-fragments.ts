@@ -26,6 +26,8 @@ export type CompileLeaf = {
   /** Where the leaf's wording ends; with the source text it locates clause breaks. */
   end_byte?: number;
   fragment?: string;
+  /** A NAME leaf's stored wording, set by leaf-view.ts from the workbench row; absent on hand-built leaves. */
+  exact_text?: string;
   /** A Stratagem target's exclusive mode ("a", "b"), set by compile-target-modes.ts; absent without modes. */
   mode?: string;
   /** The cost a paid target mode names (label: pool or resource name; amount: whole number). */

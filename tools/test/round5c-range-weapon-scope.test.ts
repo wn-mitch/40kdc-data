@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 
 // Fabricated wording only. Range is a weapon characteristic, so a weapon-property scope binds it
 // the way it binds Attacks or Strength (the scope's weapon type and recipient go onto the stat).
+// characteristic-set cannot name Range (its CHARACTERISTICS list omits it), so Range reaches the
+// compiler only through characteristic-modifier.
 
 type Piece = [phrase: string, role: string, family: string, parameters: Record<string, unknown>];
 
@@ -66,4 +68,8 @@ describe("Round 5C Range under a weapon-property scope", () => {
     expect(json).toContain('"member_of":"this-unit"');
   });
 
+  it("refuses a characteristic-set on Range, so a set cannot reach the Range scope path", () => {
+    const version = currentFamilyVersion("characteristic-set");
+    expect(() => normalizeFingerprintParameters("characteristic-set", { subject: "this-unit", characteristic: "Range", value: 6 }, version)).toThrow();
+  });
 });

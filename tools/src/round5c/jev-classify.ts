@@ -43,7 +43,7 @@ export type JevClassifyReport = {
 type Example = { surface: string; text: string; count: number };
 
 /** Trusted wordings per family, most frequent first. */
-function trustedWordings(db: DatabaseSync): Map<string, Example[]> {
+export function trustedWordings(db: DatabaseSync): Map<string, Example[]> {
   const byFamily = new Map<string, Map<string, Example>>();
   for (const row of db.prepare(`
     SELECT fingerprints.family_id, source_spans.exact_text

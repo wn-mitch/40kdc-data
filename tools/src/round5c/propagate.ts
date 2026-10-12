@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
+import { NAME_FRAGMENT } from "./compile-name.js";
 import { bumpWorkbenchRevision, insertSpan, withTransaction } from "./db.js";
 
 /**
@@ -126,8 +127,10 @@ function plan(db: DatabaseSync, groups: readonly number[][]): { leaves: PlannedL
     left.fragment === right.fragment && left.start_byte === right.start_byte && left.end_byte === right.end_byte;
 
   for (const group of groups) {
-    // Sources: trusted rows that are not themselves copies, so a copy is never copied back.
-    const sources = group.flatMap((id) => (byAbility.get(id) ?? []).filter((row) => row.authority_kind !== "machine" && row.derived_from_annotation_id === null));
+    // Sources: trusted rows that are not themselves copies, so a copy is never copied back. A NAME row
+    // is not copied: the group shares source_text, not the record name, so its offsets index a name that
+    // another member may not have.
+    const sources = group.flatMap((id) => (byAbility.get(id) ?? []).filter((row) => row.authority_kind !== "machine" && row.derived_from_annotation_id === null && row.fragment !== NAME_FRAGMENT));
     for (const target of group) {
       const here = byAbility.get(target) ?? [];
       const trustedHere = here.filter((row) => row.authority_kind !== "machine");

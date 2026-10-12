@@ -1,6 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
+import { NAME_FRAGMENT } from "./contracts.js";
 import type { Mechanics } from "./entries.js";
 
 /**
@@ -52,7 +53,7 @@ export function compilationInputsHash(db: DatabaseSync, abilityVersionId: number
     SELECT source_spans.fragment, source_spans.start_byte, source_spans.end_byte, annotations.fingerprint_id, annotations.authority_kind
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
-    ORDER BY source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id, annotations.authority_kind
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, source_spans.fragment, annotations.fingerprint_id, annotations.authority_kind
   `).all(abilityVersionId);
   return hashJson({ source_hash: ability.source_hash, leaves });
 }

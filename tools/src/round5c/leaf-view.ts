@@ -1,6 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import type { CompileLeaf } from "./compile.js";
+import { NAME_FRAGMENT } from "./compile-name.js";
 import { getCurrentCoverage, type CoverageView } from "./coverage.js";
 import { untiledRuns } from "./leaves.js";
 
@@ -19,7 +20,7 @@ export type TiledSource = {
 };
 
 type LeafRow = {
-  ability_version_id: number; start_byte: number; end_byte: number; fragment: string; role: string;
+  ability_version_id: number; start_byte: number; end_byte: number; fragment: string; exact_text: string; role: string;
   family_id: string; family_version: number; parameters_json: string; trusted: number;
   /** For an overlay proposal, its model run; later runs win overlaps. 0 for annotations. */
   run: number;
@@ -40,7 +41,7 @@ export function tiledSources(
     SELECT id, faction_id, ability_id, name, source_hash, source_text, source_type FROM abilities
     WHERE current = 1 AND (? IS NULL OR faction_id = ?) ${scope.replaceAll("abilities.id", "id")} ORDER BY faction_id, ability_id
   `).all(faction, faction) as Array<Omit<TiledSource, "leaves" | "machine_leaves">>;
-  const columns = `source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, semantic_families.role,
+  const columns = `source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, source_spans.exact_text, semantic_families.role,
     fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json`;
   const joins = `JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
     JOIN fingerprints ON fingerprints.id = X.fingerprint_id
@@ -74,6 +75,8 @@ export function tiledSources(
         role: row.role, family_id: row.family_id, family_version: row.family_version,
         parameters: JSON.parse(row.parameters_json) as Record<string, unknown>,
         start_byte: row.start_byte, end_byte: row.end_byte, fragment: row.fragment,
+        // A NAME leaf carries its stored wording: compileWithName re-checks it against the current name.
+        ...(row.fragment === NAME_FRAGMENT ? { exact_text: row.exact_text } : {}),
       })),
       machine_leaves: own.filter((row) => row.trusted === 0).length,
     });
