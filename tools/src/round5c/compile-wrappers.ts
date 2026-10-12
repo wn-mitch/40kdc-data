@@ -227,7 +227,7 @@ export function selectUnit(selection: CompileLeaf, body: Node, extra: { maxCount
   const eligibility = filterEligibility(filter, extra.eligibility ?? null);
   // select-unit v3 counts its own units: exactly that many, or (up to) at most that many.
   const own = selection.parameters.count as number | undefined;
-  if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size.");
+  if (own !== undefined && extra.maxCount) throw new CompileError("A selection that names its own count cannot also take one by battle size or battle round.");
   const count = own === undefined ? (extra.maxCount ? { max_count: extra.maxCount } : { count: 1 }) : selection.parameters.up_to === true ? { max_count: own } : { count: own };
   return {
     type: "select-units",
@@ -285,8 +285,21 @@ export function designationKeywords(filter: UnitFilter): Node {
   };
 }
 
-/** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
-export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null): Node {
+/**
+ * A grant or attack scope whose recipient is the friendly unit of an independent pair ("weapons
+ * equipped by models in that friendly unit have …"): it says whose attacks the designation affects.
+ */
+export function friendlyRecipientFrame(leaf: CompileLeaf): boolean {
+  return (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "weapon-property-scope")
+    && (leaf.parameters.subject === "antecedent" || leaf.parameters.subject === "selected-unit") && leaf.parameters.weapon_type !== undefined;
+}
+
+/**
+ * The selected unit and the effects on attacks against it, as the DSL's designate-target.
+ * `friendlyRecipient` is set only by boundAttackDesignation (below): the selection is then the enemy
+ * unit of an independent pair, the frame is the friendly unit's grant, and the select carries its name.
+ */
+export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false): Node {
   if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
   if (selection.parameters.within_origin !== undefined) throw new CompileError("A designated target measured from its bearer's Transport has no designate-target shape yet.");
   const keywords = designationKeywords((selection.parameters.filter ?? {}) as UnitFilter);
@@ -294,8 +307,9 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
   const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
   // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
   // (compile-weapon-scopes.ts) says whose attacks as well as an attack leaf does.
-  const frame = attack ? undefined : leaves.find((leaf) => leaf.start_byte > selection.start_byte && leaf.parameters.weapon_type !== undefined
-    && (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "characteristic-modifier") && leaf.parameters.subject !== "attack");
+  const frame = attack ? undefined : friendlyRecipient ? leaves.find(friendlyRecipientFrame)
+    : leaves.find((leaf) => leaf.start_byte > selection.start_byte && leaf.parameters.weapon_type !== undefined
+      && (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "characteristic-modifier") && leaf.parameters.subject !== "attack");
   if (!attack && !frame) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
   const own = attack ? attack.parameters.unit === "this-model" : frame!.parameters.subject === "this-model";
   return {
@@ -311,8 +325,31 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
       ...(eligibility ? { eligibility } : {}),
       // "The same enemy unit can only be affected once per turn": counted across every bearer (compile-selection-limit.ts).
       ...(selectionLimit ? { selection_limit: selectionLimit } : {}),
+      ...(friendlyRecipient && typeof selection.parameters.bind_as === "string" ? { bind_as: selection.parameters.bind_as } : {}),
     },
     applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
     ...(lasting ? { duration: lasting } : {}),
   };
+}
+
+/** Every `target: "selected-unit"` in a node, rewritten to the named selection; the rest of the node is copied. */
+function retarget(node: unknown, to: Node): unknown {
+  if (Array.isArray(node)) return node.map((item) => retarget(item, to));
+  if (node === null || typeof node !== "object") return node;
+  return Object.fromEntries(Object.entries(node as Node).map(([key, value]) => [key, key === "target" && value === "selected-unit" ? to : retarget(value, to)]));
+}
+
+/**
+ * An independent pair of selections (compile-bound-selection.ts): the friendly unit takes the
+ * ability's grant against the enemy unit. The friendly selection wraps a designate-target whose
+ * select is the enemy selection and whose `applies` binds the friendly unit as the beneficiary
+ * and the enemy unit as the reference. The body's positional "selected unit" is the friendly unit.
+ */
+export function boundAttackDesignation(pair: { friendly: CompileLeaf; enemy: CompileLeaf }, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: { friendly: Node | null; enemy: Node | null }): Node {
+  const friendly: Node = { selection_var: String(pair.friendly.parameters.bind_as) };
+  const enemy: Node = { selection_var: String(pair.enemy.parameters.bind_as) };
+  const effect = retarget(body, friendly) as Node;
+  if (JSON.stringify(effect).includes('"selected-unit"')) throw new CompileError("An independent pair binds only attack grants to the friendly unit and attacks that target the enemy unit.");
+  const designated = designation(pair.enemy, leaves, effect, lasting, eligibility.enemy, null, true);
+  return selectUnit(pair.friendly, { ...designated, applies: { to: "bound-unit-attacks-reference", beneficiary: friendly, reference: enemy, effect } }, { eligibility: eligibility.friendly });
 }

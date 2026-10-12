@@ -26,6 +26,9 @@ const LEADING_CONTAINERS = new Set([
 ]);
 /** Openers that wrap a single combined body instead of splitting into two or more options. */
 const SINGLE_BODY_CONTAINERS = new Set(["persistent-designation-open", "select-objective-open"]);
+/** A leaf that starts its own moment, duration or usage: the sentence holding it is independent of the one before. */
+const OWN_MOMENT_FAMILIES = new Set(["usage-limit", "usage-scope", "phase-window"]);
+const opensOwnMoment = (leaf: CompileLeaf) => leaf.role === "EVENT" || leaf.role === "DURATION" || OWN_MOMENT_FAMILIES.has(leaf.family_id) || LEADING_CONTAINERS.has(leaf.family_id);
 /** Openers each of whose options leads with a named-option leaf. */
 const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open"]);
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
@@ -481,6 +484,11 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       replacementTailOf = replacementTail(split.tail, list[replacement]!);
     }
     if (leaf.family_id === "persistent-designation-open") refuseEstablishmentCount(list, sentenceOf, index);
+    // A selected objective's body may span several sentences ("While in range, this model has: A, B, C" splits at
+    // each bullet). They fold into one body unless a later sentence opens a moment of its own.
+    if (leaf.family_id === "select-objective-open" && sentences.length > 1 && !sentences.slice(1).some((group) => group.some(opensOwnMoment))) {
+      sentences = [sentences.flat()];
+    }
     if (SINGLE_BODY_CONTAINERS.has(leaf.family_id)) {
       if (sentences.length !== 1) throw new CompileError(`${leaf.family_id} needs exactly one sentence after it, its own effect.`);
     } else if (ONE_OR_MORE_CONTAINERS.has(leaf.family_id)) {

@@ -32,7 +32,7 @@ export const FAMILY_EXTENSIONS_16_BOUND_SELECTION: readonly FamilyExtension[] = 
   },
 ];
 
-function selectionName(value: unknown, field: string): string {
+export function selectionName(value: unknown, field: string): string {
   if (typeof value !== "string" || !/^[a-z][a-z0-9_-]*$/.test(value) || value.length > 40) throw new TypeError(`${field} is a lowercase selection name.`);
   return value;
 }

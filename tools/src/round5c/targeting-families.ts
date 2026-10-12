@@ -124,6 +124,15 @@ export const TARGETING_FAMILIES: readonly SemanticFamilyDefinition[] = [
     },
   },
   {
+    id: "count-by-battle-round",
+    version: 1,
+    role: "RESTRICTION",
+    label: "How many, by battle round",
+    description: "\"Select a number of units equal to or less than the current battle round number\": the most units the selection before it can take is the current battle round number.",
+    starter: {},
+    parameterSchema: { type: "object", properties: {}, additionalProperties: false },
+  },
+  {
     id: "select-unit",
     version: 1,
     role: "EVENT",
@@ -282,6 +291,9 @@ export function normalizeTargetingParameters(family: string, input: Record<strin
         onslaught: boundedInteger(input.onslaught, 1, 20, "count-by-battle-size.onslaught"),
       };
     }
+    case "count-by-battle-round":
+      exactKeys(input, [], family);
+      return {};
     case "instead":
       exactKeys(input, [], family);
       return {};

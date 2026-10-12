@@ -34,10 +34,10 @@ import { foldAlternativePools } from "./compile-dice-variants.js";
 import { inheritClauseBands } from "./compile-clause-band.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
-import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
+import { boundAttackDesignation, designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
 import { selectionLimitFor } from "./compile-selection-limit.js";
-import { boundSelectionPair } from "./compile-bound-selection.js";
+import { boundSelectionPair, independentPairRefusal, independentSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
@@ -538,6 +538,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const otherwiseMoved = otherwise.moved;
   for (const { sentence, gate } of otherwise.gates) sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), gate]);
   const battleSizeCount = list.find((leaf) => leaf.family_id === "count-by-battle-size");
+  const roundCount = list.find((leaf) => leaf.family_id === "count-by-battle-round");
   // Battle-size leaves for two or more sizes are table rows: alternatives, one per size. Each row
   // decides only its own sentence, so a row never joins the ability-wide gates (where rows would
   // AND together and the ability could never apply).
@@ -655,7 +656,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "use-window" || leaf.family_id === "bearer-eligibility") checks.push({ kind: leaf.family_id, parameters: leaf.parameters });
         // A non-Stratagem ability has no core record to hold its phases, so they gate the whole ability.
         else if (leaf.family_id === "activation-window") global.push(activationWindowCondition(leaf.parameters));
-        else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size") { /* folded below */ }
+        else if (leaf.family_id === "move-must-end" || leaf.family_id === "reserves-arrival" || leaf.family_id === "count-by-battle-size" || leaf.family_id === "count-by-battle-round") { /* folded below */ }
         else if (leaf.family_id === "move-end-nearest" || leaf.family_id === "move-end-waiver") { /* attached below */ }
         // "this model has that ability": the menu before it already applies the chosen options;
         // "that unit has that ability": they are about the holder, not this unit.
@@ -1144,9 +1145,29 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const selected = planned.filter((item) => item.selected);
   // A model bound by name, and a unit measured from or visible to it (compile-bound-selection.ts), is the one pair.
   const pair = attempt(() => boundSelectionPair(selections));
-  if (selections.length > 1 && pair === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
-  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || !pairGatesBound || battleSizeCount)) {
+  // A friendly unit and an enemy unit selected apart, neither measured from the other (compile-bound-selection.ts).
+  const independent = pair === null && errors.length === 0 ? attempt(() => independentSelectionPair(selections)) : null;
+  if (selections.length > 1 && pair === null && independent === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
+  if (independent) {
+    const refusal = independentPairRefusal(list, { parts: partStarts.length > 0, forEach: forEachLeaf !== null, count: Boolean(battleSizeCount || roundCount) });
+    if (refusal) errors.push(refusal);
+  }
+  // A select measured from the other selection with no distance of its own takes that measure from a candidate leaf; with none it would be unbounded.
+  if (pair && typeof pair.inner.parameters.within_of === "string" && pair.inner.parameters.distance !== "within" && pairCandidates.length === 0) {
+    errors.push("A selection measured from another selection with no distance needs a unit-position or eligible leaf naming that selection.");
+  }
+  if (pair && (selected.length > 0 || list.some((leaf) => leaf.family_id === "attack") || partStarts.length > 0 || forEachLeaf || !pairGatesBound || battleSizeCount || roundCount)) {
     errors.push("A bound selection's effects are only the inner unit's; attacks, parts, eligibility, battle-size counts and for-each loops are not bound with it yet.");
+  }
+  // A count (by battle size or by battle round) caps the one plain selection's max_count. A designation, a compound part,
+  // a persistent designation and a for-each loop never read it, so the cap would be lost and the selection would take one unit.
+  if (battleSizeCount && roundCount) errors.push("A selection takes one count, by battle size or by battle round, not both.");
+  const lostCount = battleSizeCount ?? roundCount;
+  const countName = roundCount && !battleSizeCount ? "round" : "size";
+  if (roundCount && selections.length === 0) errors.push("A count by battle round needs the unit selection it limits.");
+  if (lostCount && selections.length > 0 && !pair
+    && (selected.length > 0 || partStarts.length > 0 || forEachLeaf || list.some((leaf) => leaf.family_id === "persistent-designation-open"))) {
+    errors.push(`A count by battle ${countName} is carried only by a plain single selection.`);
   }
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
   // mortal wounds, say); with it, every effect must be limited to those attacks.
@@ -1299,6 +1320,17 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
     if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }
+  // A friendly unit and an enemy unit selected apart: the enemy is designated, the friendly unit takes the grant against it.
+  else if (independent && body) {
+    const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
+    if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
+    // A condition on the selected unit belongs to the nearest select before it (the enemy unit's "visible to this model", say).
+    const eligibilityOf = (selection: CompileLeaf) => {
+      const own = eligibilityIndexes.filter((at) => list.slice(0, at).map((item) => item.family_id === "select-unit").lastIndexOf(true) === list.indexOf(selection));
+      return own.length ? allOf(own.map((at) => condition(eligibilityLeaf(list[at]!)))) : null;
+    };
+    body = attempt(() => boundAttackDesignation(independent, list, gated(attackGates, body!), durations[0], { friendly: eligibilityOf(independent.friendly), enemy: eligibilityOf(independent.enemy) }));
+  }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.
   else if (selections.length === 1 && (body?.type === "persistent-designation" || (body?.type === "ability-part" && (body.effect as Node | undefined)?.type === "persistent-designation"))) {
@@ -1312,6 +1344,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   else if (selections.length === 1 && (selectionPart === null || selectionPart === 0)) {
     body = selectUnit(selections[0]!, body, {
       ...(battleSizeCount ? { maxCount: { incursion: battleSizeCount.parameters.incursion, "strike-force": battleSizeCount.parameters["strike-force"], onslaught: battleSizeCount.parameters.onslaught } } : {}),
+      ...(roundCount && !battleSizeCount ? { maxCount: { count_of: "battle-round" } } : {}),
       eligibility,
       selectionLimit,
     });
