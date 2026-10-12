@@ -435,3 +435,64 @@ describe("attached Leaders have no target or aura shape (SS-A refusals)", () => 
     expect(errors.join(" ")).toMatch(/attached Leaders/u);
   });
 });
+
+describe("authoring-only shapes the leaves already express (SS-G)", () => {
+  const same = { subject: "defender", as: "this-unit" };
+
+  it("keeps the same-unit gate on a Wound penalty that follows a failed test when a second same-unit leaf is authored (reading A)", () => {
+    const text = "Fight phase, just after an enemy unit selects targets. One friendly PIONEERS unit. That enemy unit must take a Battle-shock test and, until the end of the phase, each time a model in that enemy unit makes an attack that targets your unit, subtract 1 from the Hit roll. If that test was failed, subtract 1 from the Wound roll as well.";
+    const base = (extra: Item[]): Item[] => [
+      ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }, "WHEN"],
+      ["just after an enemy unit selects targets", "event", { kind: "enemy-selected-targets" }, "WHEN"],
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly PIONEERS unit", "unit-filter", { side: "friendly", keywords: ["PIONEERS"] }, "TARGET"],
+      ["That enemy unit must take a Battle-shock test", "test", { target: "event-subject", test: "battle-shock" }, "EFFECT"],
+      ["until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
+      ["each time a model in that enemy unit makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }, "EFFECT"],
+      ["that targets your unit", "same-unit", same, "EFFECT"],
+      ["subtract 1 from the Hit roll", "roll-modifier", { roll: "hit", operation: "subtract", value: 1 }, "EFFECT"],
+      ["that test was failed", "roll-outcome", { roll: "battle-shock", result: "failure" }, "EFFECT"],
+      ...extra,
+      ["subtract 1 from the Wound roll", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }, "EFFECT"],
+    ];
+    const gated = mechanicsOf(text, base([["as well", "same-unit", same, "EFFECT"]]).sort((a, b) => text.indexOf(a[0]) - text.indexOf(b[0])));
+    const wound = gated.effect.steps.at(-1);
+    expect(wound.condition.operands.map((operand: any) => operand.type).sort()).toEqual(["roll-result", "same-unit"]);
+    expect(wound.effect.target).toBe("event-subject");
+    // Without the second leaf the Wound penalty is gated on the failed test alone.
+    const ungated = mechanicsOf(text, base([]));
+    expect(ungated.effect.steps.at(-1).condition.type).toBe("roll-result");
+  });
+
+  it("binds mortal wounds with recipient event-subject to the moment's unit, not the Stratagem target", () => {
+    const text = "Fight phase, when an enemy unit selects targets. One friendly PIONEERS unit. That enemy unit suffers 2 mortal wounds.";
+    const mechanics = mechanicsOf(text, [
+      ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }, "WHEN"],
+      ["when an enemy unit selects targets", "event", { kind: "enemy-selected-targets" }, "WHEN"],
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["friendly PIONEERS unit", "unit-filter", { side: "friendly", keywords: ["PIONEERS"] }, "TARGET"],
+      ["That enemy unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "event-subject", count: "2" }, "EFFECT"],
+    ]);
+    expect(mechanics.effect).toMatchObject({ type: "mortal-wounds", target: "event-subject", modifier: { count: 2 } });
+  });
+
+  it("reads 'at the start or end of this unit's move' as one event leaf firing at both ends", () => {
+    const text = "At the start or end of this unit's move, that unit heals D3 wounds.";
+    const mechanics = mechanicsOf(text, [
+      ["At the start or end of this unit's move", "event", { kind: "move-started", also: "move-ended" }],
+      ["that unit heals D3 wounds", "regain-wounds", { subject: "this-unit", amount: "D3" }],
+    ]);
+    expect(mechanics.trigger.map((trigger: any) => trigger.event)).toEqual(["move-started", "move-ended"]);
+  });
+
+  it("binds a distance clause's antecedent to the enemy mover and measures from this model", () => {
+    const text = "Each time an enemy unit that is within Engagement Range of this model ends a move, that enemy unit takes a Battle-shock test.";
+    const mechanics = mechanicsOf(text, [
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["that is within Engagement Range of this model", "unit-position", { kind: "within", range_ref: "engagement", of: "this-model", subject: "antecedent", negated: false }],
+      ["ends a move", "event", { kind: "move-ended" }],
+      ["that enemy unit takes a Battle-shock test", "test", { target: "event-subject", test: "battle-shock" }],
+    ]);
+    expect(mechanics.effect.condition).toMatchObject({ type: "within", parameters: { subject: "event-subject", of: "this-model", range: "engagement" } });
+  });
+});
