@@ -284,7 +284,20 @@ describe("Round 5C targeted unit measured from the bearer: shapes and refusals",
       ["is within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
       ["each time a model in that unit makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }],
       ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }]), text).mechanics as Record<string, any>).effect;
-    expect(effect.type).toBe("aura");
+    expect(effect).toEqual({ type: "aura", target: "friendly-within-aura", modifier: {
+      range: 6, effect: { type: "re-roll", target: "recipient", modifier: { roll: "hit", subset: "ones" } }, eligible: { required_keywords: ["ALPHA"] },
+    } });
+  });
+
+  it("refuses a side-less aura that follows a following-filter targeted leaf with no unit-filter between them", () => {
+    const text = "Once per turn, when an enemy unit makes a ranged attack that targets a friendly FOOTSOLDIER unit within 3\" of this model, and that enemy unit has shot, this model can shoot.";
+    const result = compileLeaves(placed(text,
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      ["makes a ranged attack that targets", "targeted", { subject: "event-subject", object: "following-filter", window: "event", attack_type: "ranged" }],
+      ["within 3\" of this model", "aura-range", { inches: 3, of: "this-model" }],
+      ["that enemy unit has shot", "event", { kind: "enemy-has-shot" }],
+    ), text);
+    expect(result.ok ? "" : result.errors.join()).toMatch(/aura-range without a side needs a unit-filter right before it/u);
   });
 
   it("compiles the 7829 shape: the same targeted aura under a keyword-named bearer with a usage scope", () => {
