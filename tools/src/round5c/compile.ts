@@ -76,6 +76,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
+import { inheritRollGates } from "./compile-roll-gates.js";
 import { conditionedInsteadAfter, ifGatedConditions, inheritAttackFrame, namesBearer, sentenceIfGates } from "./compile-instead-scope.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -413,6 +414,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   /** Conditions keyed by the scope they gate: a sentence's leading conditions, or one clause. */
   const sentenceGates = new Map<number, Node[]>();
   const clauseGates = new Map<number, Node[]>();
+  /** The leaf each sentence gate came from, so a roll's later result bands can take the conditions printed before the roll. */
+  const gateOrigin = new Map<Node, number>();
   // A condition trailing a change to a test just taken belongs to the change (compile-preceding-roll.ts trailingTestCondition).
   const attachedGates = new Map<number, Node[]>();
   const attachedAt = new Set<number>();
@@ -545,7 +548,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else global.push(node);
       } else if (leading) {
         if (node === "selected") selectedSentences.add(sentence);
-        else sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]);
+        else { sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]); gateOrigin.set(node, index); }
       } else if (node === "selected") {
         selectedClauses.add(clause);
       } else {
@@ -659,6 +662,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
     });
   });
+  inheritRollGates(list, places, sentenceGates, gateOrigin);
   // A result band decides the later clauses of its sentence too ("on a 5+, X and must Y"), compile-clause-band.ts.
   inheritClauseBands(clauseGates, places, new Set(list.flatMap((leaf, at) => leaf.family_id === "fight-on-death" ? [places[at]!.sentence] : [])));
 

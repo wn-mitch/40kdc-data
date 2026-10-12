@@ -90,3 +90,42 @@ describe("an If-led sentence gates its own sentence only (compile-instead-scope.
     expect(mechanics.effect).toMatchObject({ type: "conditional", condition: hasKeyword("KEYA") });
   });
 });
+
+describe("a roll's pre-roll conditions gate every result band (compile-roll-gates.ts)", () => {
+  const rolled: Piece[] = [
+    ["This unit has +1 OC", "characteristic-modifier", stat("OC", 1)],
+    ["If this unit has KEYA", "unit-keyword", keyword("KEYA")],
+    ["roll one D6", "dice-roll", { dice: "D6" }],
+    ["On a 1-4", "roll-result", { from: 1, to: 4 }],
+    ["this unit has -2 M", "characteristic-modifier", { ...stat("M", 2), operation: "subtract" }],
+    ["On a 5-6", "roll-result", { from: 5, to: 6 }],
+    ["this unit has -3 M", "characteristic-modifier", { ...stat("M", 3), operation: "subtract" }],
+  ];
+  const outcomes = (text: string, pieces: Piece[]) => mechanicsOf(text, pieces).effect.steps[1].outcomes as Array<Record<string, any>>;
+
+  it("gates the band after a full stop by the conditions before the roll", () => {
+    const text = "This unit has +1 OC. If this unit has KEYA, roll one D6: On a 1-4, this unit has -2 M. On a 5-6, this unit has -3 M.";
+    const [low, high] = outcomes(text, rolled);
+    expect(low!.effect).toMatchObject({ type: "conditional", condition: hasKeyword("KEYA") });
+    expect(high!.effect).toMatchObject({ type: "conditional", condition: hasKeyword("KEYA"), effect: { type: "stat-modifier", modifier: { value: 3 } } });
+  });
+
+  it("leaves a condition printed after the roll with its own band", () => {
+    const text = "This unit has +1 OC. Roll one D6: On a 1-4, if this unit has KEYB, this unit has -2 M. On a 5-6, this unit has -3 M.";
+    const [low, high] = outcomes(text, [rolled[0]!, ["Roll one D6", "dice-roll", { dice: "D6" }], rolled[3]!, ["if this unit has KEYB", "unit-keyword", keyword("KEYB")], rolled[4]!, rolled[5]!, rolled[6]!]);
+    expect(low!.effect).toMatchObject({ type: "conditional", condition: hasKeyword("KEYB") });
+    expect(high!.effect).toMatchObject({ type: "stat-modifier", modifier: { value: 3 } });
+  });
+
+  it("does not carry a roll's conditions to the bands of a later roll", () => {
+    const text = "This unit has +1 OC. If this unit has KEYA, roll one D6: On a 1-4, this unit has -2 M. When this unit is set up, roll one D6: On a 5-6, this unit has -3 M.";
+    const result = mechanicsOf(text, [
+      rolled[0]!, rolled[1]!, rolled[2]!, rolled[3]!, rolled[4]!,
+      ["When this unit is set up", "event", { kind: "set-up" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }], rolled[5]!, rolled[6]!,
+    ]);
+    const later = JSON.stringify(result.effect.steps.at(-1));
+    expect(later).toContain("-3".replace("-", "")); // the second roll's band compiled
+    expect(later).not.toContain("KEYA");
+  });
+});
