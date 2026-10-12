@@ -72,6 +72,11 @@ const FILTER_ANCHORS = new Set(["select-unit", "stratagem-target", "attack"]);
  * own wording), with no selection, Stratagem target or attack right before it.
  */
 export function bareFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+  return bareFilterAt(leaves, index) >= 0;
+}
+
+/** The index of the unit-filter `bareFilter` finds before the leaf, or -1. */
+function bareFilterAt(leaves: readonly CompileLeaf[], index: number): number {
   const leaf = leaves[index]!;
   let at = index - 1;
   // Past a per-recipient condition on the same units ("is within range of an objective, that unit's …").
@@ -81,14 +86,19 @@ export function bareFilter(leaves: readonly CompileLeaf[], index: number): boole
       // effect passes over another effect; a condition does not skip the effects that precede it.
       || (leaf.role === "EFFECT" && leaves[at]!.role === "EFFECT" && leaves[at]!.parameters.subject === ANTECEDENT))) at -= 1;
   const filter = leaves[at];
-  if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return false;
+  if (filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return -1;
   const before = leaves[at - 1];
   // A filter with a membership names models of a unit, so a target or attack before it does not make it the target.
   // "If your army includes a X unit, friendly Y units …": the filter before this one is the army-includes
   // condition's own following filter, so this filter still stands alone.
   const conditionsFilter = before?.family_id === "unit-filter" && leaves[at - 2]?.family_id === "army-includes" && leaves[at - 2]!.fragment === leaf.fragment;
-  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter && !claimedByEmbarkedState(leaves, at, leaf.fragment)));
-  return !anchored || filter.parameters.member_of !== undefined;
+  // A select that names the other side ("select one enemy unit." + "Friendly X units' attacks …") does not claim the filter.
+  const sides = ["friendly", "enemy"];
+  // "That unit" attacking after both stays refused: it could name either group, and no attack fold takes the filter after a select.
+  const attackByThatUnit = leaves.slice(at + 1).some((other) => other.fragment === leaf.fragment && other.family_id === "attack" && other.parameters.unit === "that-unit");
+  const oppositeSelect = !attackByThatUnit && before?.family_id === "select-unit" && sides.includes(before.parameters.scope as string) && sides.includes(filter.parameters.side as string) && before.parameters.scope !== filter.parameters.side;
+  const anchored = before !== undefined && before.fragment === leaf.fragment && !oppositeSelect && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter && !claimedByEmbarkedState(leaves, at, leaf.fragment)));
+  return !anchored || filter.parameters.member_of !== undefined ? at : -1;
 }
 
 /**
@@ -447,7 +457,14 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // triggering attacks ("if the enemy WARLORD was destroyed …"): the filter names the units, not the selection.
   if (leaves[index]!.family_id === "unit-position" && leaves[index]!.role === "CONDITION" && bareFilter(leaves, index)
     && leaves[index - 1]?.family_id === "unit-filter" && leaves.some(isDestructionActivity)) return FILTERED_UNITS;
-  if (earlier.some((other) => other.family_id === "select-unit")) return "selected-unit";
+  if (earlier.some((other) => other.family_id === "select-unit")) {
+    // "While an enemy unit is infested …, that unit …": a bare filter after the last selection is the nearer unit,
+    // unless it is the other unit a condition measures to (a following filter).
+    const lastSelect = earlier.map((other) => other.family_id === "select-unit").lastIndexOf(true);
+    const filterAt = bareFilterAt(leaves, index);
+    const measured = filterAt > 0 && awaitsFollowingFilter(leaves[filterAt - 1]!.parameters);
+    return filterAt > lastSelect && !measured ? FILTERED_UNITS : "selected-unit";
+  }
   // "Redeploy up to three friendly units": a set-up whose selection comes after it, in the same part.
   if (selectionFollowsVerb(leaves, index) !== null) return verbFirstSelection(leaves, index);
   // "For each enemy unit …, that unit …": each pass's unit, which the DSL's for-each-unit calls its recipient.

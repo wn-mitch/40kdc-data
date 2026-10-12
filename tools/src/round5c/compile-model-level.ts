@@ -60,6 +60,8 @@ export function destroyedModelAfter(event: CompileLeaf | undefined, filter: Comp
 export function destroyedFilter(moment: CompileLeaf, filter: CompileLeaf, dsl: Node): Node {
   if (filter.parameters.level === "model" && moment.parameters.kind !== "model-destroyed") throw new CompileError("A unit-filter naming models cannot be what a unit's destruction destroys.");
   if (moment.parameters.kind !== "model-destroyed" || moment.parameters.object_owner !== undefined) return dsl;
+  // An enemy model is no model of this unit.
+  if (dsl.owner === "enemy") return dsl;
   if (dsl.excluding !== undefined || dsl.member_of !== undefined) throw new CompileError("A destroyed model of this unit cannot also exclude or belong to another unit.");
   return { ...dsl, member_of: "this-unit" };
 }

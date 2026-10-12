@@ -241,7 +241,7 @@ describe("Round 5C attacker gates on a designation are checked per attack", () =
 
   it("refuses the disembark gate when the attack verb has no attack leaf", () => {
     const leaves = SHOT_LEAVES.filter((leaf) => leaf[0] !== "makes an attack");
-    expect(() => compiled(SHOT, leaves)).toThrow(/needs a select-unit or attack right before it/);
+    expect(() => compiled(SHOT, leaves)).toThrow(/needs a select-unit or attack right before it|selected unit needs an attack leaf/);
   });
 
   it("refuses the disembark wording written as one attacks-resolved event (no attack leaf)", () => {

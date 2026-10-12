@@ -56,7 +56,7 @@ function selectionCondition(leaf: CompileLeaf | undefined, select: CompileLeaf):
 const EXCLUSION_KEYS = new Set(["side", "excluded_keywords", "excluded_all_keywords"]);
 
 /** A unit-filter that only excludes units ("(excluding **MONSTER** units)"), so it can narrow a selection but not name one. */
-function exclusionOnly(leaf: CompileLeaf | undefined): boolean {
+export function exclusionOnly(leaf: CompileLeaf | undefined): boolean {
   if (!isFilter(leaf) || !Object.keys(leaf!.parameters).every((key) => EXCLUSION_KEYS.has(key))) return false;
   const excluded = (leaf!.parameters.excluded_keywords as unknown[] | undefined)?.length ?? 0;
   const allExcluded = (leaf!.parameters.excluded_all_keywords as unknown[] | undefined)?.length ?? 0;

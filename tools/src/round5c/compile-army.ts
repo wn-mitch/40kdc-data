@@ -126,7 +126,9 @@ export function bindArmyAntecedents(leaves: readonly CompileLeaf[]): CompileLeaf
     if (!isArmy(leaf) || leaf.parameters.subject !== ANTECEDENT) return leaf;
     // "it can be attached to this unit": only the Leader-eligibility pattern binds it (foldArmyAttachments).
     if (leaf.parameters.rule === "attachment") throw new CompileError(`army-construction attachment at byte ${leaf.start_byte} points back to a Leader, but no "<Leader> can be attached to <unit>" pattern runs right before it.`);
-    if (leaves.slice(0, index).some((other) => isArmy(other, "composition"))) return { ...leaf, parameters: { ...leaf.parameters, subject: COMPOSITION_GROUP } };
+    // A unit-filter right before the leaf and after the last composition rule is the nearer group ("A X model must be your Warlord").
+    const composition = leaves.reduce((last, other, at) => (at < index && isArmy(other, "composition") ? at : last), -1);
+    if (composition >= 0 && bareFilterBefore(leaves, index) <= composition) return { ...leaf, parameters: { ...leaf.parameters, subject: COMPOSITION_GROUP } };
     if (bareFilterBefore(leaves, index) >= 0) return { ...leaf, parameters: { ...leaf.parameters, subject: FILTERED_UNITS } };
     throw new CompileError(`army-construction at byte ${leaf.start_byte} points back to a group of units (${ANTECEDENT}), but no earlier composition rule or unit-filter right before it names one.`);
   });

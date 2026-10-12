@@ -12,6 +12,7 @@ import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, mo
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { claimedByEmbarkedState, embarkedStateBefore, foldEmbarkedExclusion } from "./compile-embarked-exclusion.js";
+import { foldDesignationBeforeFilter, foldListNarrowing } from "./compile-filter-lists.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
@@ -273,7 +274,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
  * single filter. A "from your army" of the same side between them stays, after the merged filter,
  * where it sits after a single filter.
  */
-export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+export function mergeStackedFilters(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
+  const list = foldListNarrowing(foldDesignationBeforeFilter(input), mergedFilter, alternativeFilter, sourceText);
   const out: CompileLeaf[] = [];
   for (let index = 0; index < list.length; index += 1) {
     const leaf = list[index]!;
@@ -583,7 +585,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // is the destruction's destroyer, so the filter is the destruction's subject (compile-destroying-attack.ts).
       foldDestroyingAttack(out, dslUnitFilter(leaf));
       index = pastOwners(list, index, leaf) - 1;
-    } else if (isFilter(leaf) && attackOfFilter(list, index) !== null && attackerAfter(list[attackOfFilter(list, index)!], leaf)) {
+    } else if (isFilter(leaf) && attackOfFilter(list, index) !== null && attackerAfter(list[attackOfFilter(list, index)!], leaf, selectionBefore(list, index))) {
       // "a friendly model" + "that disembarked from this TRANSPORT this turn" + "makes an attack":
       // the filter is who attacks; the conditions between (bound to the attacker by
       // compile-antecedent.ts) stay ahead of the attack as gates on it.
@@ -591,7 +593,7 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       out.push(...list.slice(index + 1, at).filter((other) => other.family_id !== "unit-owner"));
       out.push({ ...list[at]!, parameters: { ...list[at]!.parameters, attacker_filter: attackerFilter(leaf, list[at]!) } });
       index = at;
-    } else if (isFilter(leaf) && attackerAfter(list[pastOwners(list, index, leaf)], leaf)) {
+    } else if (isFilter(leaf) && attackerAfter(list[pastOwners(list, index, leaf)], leaf, selectionBefore(list, index))) {
       // "each time a friendly AELDARI model" + "makes an attack": who attacks. A model-level filter
       // before "in your unit makes …" is those models of this unit.
       const at = pastOwners(list, index, leaf);
@@ -813,16 +815,23 @@ function ownedBy(leaf: CompileLeaf | undefined, side: unknown): boolean {
   return leaf?.family_id === "event" && leaf.parameters.subject === undefined && side !== "any" && leaf.parameters.owner === side;
 }
 
+/** A selection, Stratagem target or for-each pass of the filter's fragment earlier in the list: "that unit" may name it. */
+function selectionBefore(list: readonly CompileLeaf[], index: number): boolean {
+  return list.slice(0, index).some((other) => other.fragment === list[index]!.fragment && (other.family_id === "select-unit" || other.family_id === "stratagem-target" || other.family_id === "for-each-unit-select"));
+}
+
 /**
  * An attack whose maker the filter names: any friendly unit, or a model-level filter before an
  * attack by this unit's models ("each time a PENITENT model in your unit makes a melee attack").
  */
-function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+function attackerAfter(leaf: CompileLeaf | undefined, filter: CompileLeaf, selectionBefore = false): boolean {
   if (leaf?.family_id !== "attack" || leaf.parameters.direction !== "makes" || leaf.parameters.attacker_filter !== undefined) return false;
   // "If that attack targets a" + filter: an earlier attack named again; the filter is its target.
   if (leaf.parameters.backref === true || leaf.parameters.refers !== undefined) return false;
   if (leaf.parameters.unit === "friendly-unit") return filter.parameters.side === "friendly";
   if (leaf.parameters.unit === "enemy-unit") return filter.parameters.side === "enemy";
+  // "While a friendly X unit is Y, each time a model in that unit makes an attack": the unit the filter named.
+  if (leaf.parameters.unit === "that-unit") return !selectionBefore && (filter.parameters.side === "friendly" || filter.parameters.side === "enemy");
   return leaf.parameters.unit === "this-unit" && filter.parameters.level === "model" && filter.parameters.side === "friendly";
 }
 
