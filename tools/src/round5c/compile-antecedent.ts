@@ -484,6 +484,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "make-move": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
   "damage-reduction": ["subject"],
   "counts-as": ["subject"],
+  "ability-modifier": ["subject"],
   // "**K** units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back": every unit the filter matches.
   "act-after-move": ["subject"],
 };
@@ -595,7 +596,9 @@ export function bindAntecedents(leaves: readonly CompileLeaf[], focus?: (index: 
     // bare filter matches holds when any of them meets it. When a later leaf also points back
     // ("If a friendly X unit is …, that unit …"), the condition is per recipient instead: each
     // unit the effect's filter matches receives it only while that unit meets the condition.
-    const perRecipient = introduced === FILTERED_UNITS && leaf.role === "CONDITION" && leaves.slice(index + 1).some(hasAntecedent);
+    // Only a later antecedent in the condition's own sentence counts: a later sentence's "that unit" belongs to its own filter.
+    const places = introduced === FILTERED_UNITS && leaf.role === "CONDITION" ? placements(leaves, sourceText) : undefined;
+    const perRecipient = places !== undefined && leaves.some((other, at) => at > index && hasAntecedent(other) && other.fragment === leaf.fragment && places[at]!.sentence === places[index]!.sentence);
     const parameters = { ...leaf.parameters };
     for (const key of keys) {
       if (perRecipient) {

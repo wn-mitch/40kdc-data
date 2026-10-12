@@ -73,6 +73,8 @@ import { bindTargetRefs, refuseBareTarget, resolveEntry } from "./compile-target
 import { refuseDestinationMismatch, refuseEmbarkDestination, refuseTransportAsSubject } from "./compile-transport-embark.js";
 import { bindPairEligibility, candidateIndexes, pairIndexes } from "./compile-pair-eligibility.js";
 import { defenderBoundBefore } from "./compile-attack-frame.js";
+import { bindNearFriendlyTarget } from "./compile-near-friendly-target.js";
+import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.js";
 import { groupedTargetRestrictions, optionalTargetGroup, severalTargets } from "./compile-target-groups.js";
 import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapOptionalSpends } from "./compile-optional-cost.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
@@ -338,6 +340,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let list: CompileLeaf[];
   try {
     refuseBlastRating(leaves, sourceText);
+    refuseStratagemTargetActivity(leaves);
     refuseUnboundIfItDoes(leaves, sourceText);
     // "that weapon" names the weapon an earlier select-weapon bound, or the attacks an earlier keyword grant gave (compile-weapon-antecedent.ts).
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
@@ -1101,7 +1104,17 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const per = usageScopes.values().next().value!;
     if (per !== "any") usages[0]!.per = per;
   }
-  const target = attempt(() => groupedTargetRestrictions(list, targetPartIndexes, targetConditions, optionalTargets, sourceText, targetRestrictions));
+  const grouped = attempt(() => groupedTargetRestrictions(list, targetPartIndexes, targetConditions, optionalTargets, sourceText, targetRestrictions));
+  // "That K unit" naming the friendly K unit of the WHEN's distance clause (compile-near-friendly-target.ts).
+  const target = grouped === null ? null : bindNearFriendlyTarget(list, grouped);
+  const nearTarget = target !== grouped;
+  // An enemy-acting moment with no friendly object gives "That K unit" only the enemy mover to bind to, which K keywords never match.
+  const keyworded = targetParts.some((leaf) => leaf.family_id === "triggering-target" && leaf.parameters.match === "all" && (leaf.parameters.keywords as string[]).length > 0);
+  if (keyworded && !nearTarget && target !== null && !Array.isArray(target) && target.bound_to === "triggering-unit"
+    && triggers.some((moment) => moment.subject !== null && typeof moment.subject === "object" && (moment.subject as Node).owner === "enemy"
+      && !destroyedFilterObject(moment) && !(moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy"))) {
+    errors.push("A Stratagem target \"That K unit\" after an enemy-acting moment names no friendly K unit in the moment.");
+  }
   const selected = planned.filter((item) => item.selected);
   // A model bound by name, and a unit measured from or visible to it (compile-bound-selection.ts), is the one pair.
   const pair = attempt(() => boundSelectionPair(selections));
@@ -1305,7 +1318,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (destroyedFilterObject(moment)) moment.object = withKeywords(moment.object as Node);
       else if (enemyActs) {
         if (moment.object !== null && typeof moment.object === "object" && (moment.object as Node).owner !== "enemy") moment.object = withKeywords(moment.object as Node);
-        else {
+        else if (nearTarget) {
+          // The target is the friendly unit the moment's distance names, so the enemy mover needs no keyword gate.
+        } else {
           const gate: Node = { type: "has-keyword", parameters: { all_of: keywords } };
           const own = moment.condition as Node | undefined;
           moment.condition = own ? { operator: "and", operands: [own, gate] } : gate;

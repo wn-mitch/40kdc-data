@@ -48,6 +48,8 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "ability-record-grant": ["subject"],
   // "if that unit is your Warlord" after a unit-filter: the Warlord test folds onto the filter (compile-warlord-test.ts).
   "designated-filter": ["subject"],
+  // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names.
+  "ability-modifier": ["subject"],
 };
 
 /**

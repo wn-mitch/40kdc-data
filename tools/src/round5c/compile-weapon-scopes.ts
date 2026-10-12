@@ -1,5 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { momentNamesUnit } from "./compile-antecedent.js";
 import { sameRun } from "./compile-attack-properties.js";
 import { namesSelection } from "./compile-targeting-history.js";
 import { WEAPON_KEYWORDS } from "./family-extensions-2.js";
@@ -201,6 +202,15 @@ const BEARER_IS_THIS_UNIT = /\bequipped by (?:models in )?(?:this|that|your) (?:
  * own bearer. A scope hoisted onto its recipient chain has no wording left here and keeps that chain.
  */
 function refuseUnnamedBearers(list: readonly CompileLeaf[], scope: CompileLeaf, source: Buffer | undefined): void {
+  // "weapons equipped by models in the attacking unit": the subject already names the bearers' unit, but only
+  // a moment earlier in the record gives event-subject a unit to be.
+  if (scope.parameters.subject === "event-subject") {
+    const at = list.indexOf(scope);
+    if (!list.some((leaf, other) => other < at && momentNamesUnit(list, other))) {
+      throw new CompileError("A weapon-property scope names the triggering unit, but no earlier leaf names a moment's unit.");
+    }
+    return;
+  }
   if (source === undefined || scope.start_byte === undefined || scope.end_byte === undefined || scope.end_byte <= scope.start_byte) return;
   const wording = source.subarray(scope.start_byte, scope.end_byte).toString("utf8");
   if (!EQUIPPED_BY.test(wording) || BEARER_IS_THIS_UNIT.test(wording)) return;

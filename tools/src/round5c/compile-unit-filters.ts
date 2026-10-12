@@ -97,6 +97,8 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
     // "Character models in this unit" (groupMembership): the unit the models belong to.
     ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),
+    // "that Leader unit" (unit-filter@13 attached_to): units that are part of this unit and have the Leader ability.
+    ...(filter.parameters.attached_to !== undefined ? attachedLeaders(filter) : {}),
     // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
     ...(p.designated !== undefined ? { designated: p.designated } : {}),
     ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
@@ -106,6 +108,14 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     // A list-building group's datasheets (unit-filter@6): only army construction takes them (compile-army.ts).
     ...(Array.isArray(filter.parameters.datasheets) ? { datasheets: filter.parameters.datasheets } : {}),
   };
+}
+
+/** The Leader units attached to this unit, as the DSL names them: members of this unit that have the Leader ability. */
+function attachedLeaders(filter: CompileLeaf): Record<string, unknown> {
+  if (filter.parameters.member_of !== undefined || Array.isArray(filter.parameters.abilities)) {
+    throw new CompileError("A unit-filter for attached Leaders takes no other membership or ability test.");
+  }
+  return { member_of: "this-unit", has_ability: ["leader"] };
 }
 
 /** The filter's side; a model-level filter only where `models` says the fold can name models, "any" only where `anySide` allows it. */
@@ -149,6 +159,7 @@ function filterOf(filter: CompileLeaf): Record<string, unknown> {
   // A selection or aura reads only the filter fields it knows; a designation would be dropped silently.
   if (rest.designated !== undefined || rest.not_designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
   if (rest.member_of !== undefined) throw new CompileError("A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.");
+  if (rest.attached_to !== undefined) throw new CompileError("A unit-filter for attached Leaders has no selection, aura or Stratagem target shape yet.");
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -220,6 +231,9 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   if (allOf !== undefined) parameters.excluded_all_keywords = allOf;
   const datasheets = a.datasheets ?? b.datasheets;
   if (datasheets !== undefined) parameters.datasheets = datasheets;
+  // "that INQUISITOR Leader unit": the attached-Leader membership holds for the merged filter.
+  const attached = (a as Record<string, unknown>).attached_to ?? (b as Record<string, unknown>).attached_to;
+  if (attached !== undefined) parameters.attached_to = attached;
   // "Bondsman-affected" from one filter and a unit from the other: the designation and its applier go together.
   if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
   if (a.designated_by !== undefined && b.designated_by !== undefined && a.designated_by !== b.designated_by) return null;

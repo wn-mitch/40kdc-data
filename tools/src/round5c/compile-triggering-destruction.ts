@@ -3,6 +3,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { STRATAGEM_HEADER } from "./compile-segments.js";
 import { DESTRUCTION_ACTIVITIES } from "./family-extensions-17-triggering-destruction.js";
+import { DESTROYED_STRATAGEM_TARGET } from "./family-extensions-20-antecedent-subject-binding.js";
 
 /**
  * Destruction by the triggering attacks (family-extensions-17-triggering-destruction.ts). The fold
@@ -164,4 +165,20 @@ export function lowerTriggeringDestructions(leaf: CompileLeaf): Record<string, u
     window: "event",
     ...(proximity ? { proximity } : {}),
   }));
+}
+
+/**
+ * "targets the enemy unit that just destroyed your unit": the activity says the subject destroyed
+ * the unit the Stratagem targets, which a Stratagem names only when a destruction moment in its
+ * TARGET fragment says that unit was just destroyed. Anywhere else the Stratagem target is not a
+ * destroyed unit, so the activity would test an event that never happened.
+ */
+export function refuseStratagemTargetActivity(leaves: readonly CompileLeaf[]): void {
+  const leaf = leaves.find((item) => item.family_id === "unit-activity" && Array.isArray(item.parameters.activities) && item.parameters.activities.includes(DESTROYED_STRATAGEM_TARGET));
+  if (leaf === undefined) return;
+  const stratagem = leaves.some((item) => STRATAGEM_HEADER.has(item.family_id) || item.family_id === "triggering-target");
+  const destroyedTarget = leaves.some((item) => item.family_id === "event" && item.fragment === "TARGET" && item.parameters.kind === "unit-destroyed");
+  if (!stratagem || !destroyedTarget) {
+    throw new CompileError(`${DESTROYED_STRATAGEM_TARGET} at byte ${leaf.start_byte} needs a Stratagem whose target was just destroyed.`);
+  }
 }

@@ -86,6 +86,8 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
     event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject },
     filter: { by: "event-subject" }, window: "event",
   }),
+  // "targets the enemy unit that just destroyed your unit": the subject destroyed the Stratagem's target (compile-triggering-destruction.ts guards the record).
+  "destroyed-stratagem-target": (subject) => ({ event: "destroyed", object: "stratagem-target", filter: { by: subject ?? "this-unit" }, window: "battle" }),
   // Past targeting: targeted by any unit's attacks this phase, and attacks the subject made at this unit.
   "targeted-by-attacks-this-phase": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "attack" }, window: "phase" }),
   "made-attacks-targeting-this-phase": (subject) => {

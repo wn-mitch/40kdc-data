@@ -234,7 +234,8 @@ describe("wave-4 review fixes", () => {
       [["That HAVOCS unit", "triggering-target", { selects: "unit", keywords: ["HAVOCS"], match: "all" }]],
       [["Your unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }]]), s.text)) as { mechanics: Record<string, any> };
     expect(mechanics.trigger.subject).toEqual({ owner: "enemy" });
-    expect(mechanics.trigger.condition).toEqual({ type: "has-keyword", parameters: { all_of: ["HAVOCS"] } });
+    // The HAVOCS unit is the friendly unit the distance names, so the enemy mover carries no keyword gate; the target holds the distance instead.
+    expect(mechanics.trigger.condition).toBeUndefined();
     expect(mechanics.effect.condition.parameters.subject).toBe("event-subject");
   });
 
