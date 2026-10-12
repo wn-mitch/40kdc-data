@@ -86,7 +86,8 @@ describe("Round 5C family extensions, second round", () => {
     // all limits nothing, so it is not written.
     expect(first(compiled([leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapon_type: "all" })]), "roll-modifier")!.modifier).not.toHaveProperty("weapon_type");
     expect(() => normalize("roll-modifier", { roll: "charge", operation: "add", value: 1, weapon_type: "melee" })).toThrow(/Hit, Wound or Damage/u);
-    expect(() => normalize("roll-modifier", { roll: "deadly-demise", operation: "add", value: 1 })).toThrow();
+    expect(() => normalize("roll-modifier", { roll: "deadly-demise", operation: "add", value: 1, weapon_type: "melee" })).toThrow();
+    expect(() => normalize("roll-modifier", { roll: "deadly-demise-d3", operation: "add", value: 1 })).toThrow();
   });
 
   it("moves a dice amount plus a number, and refuses a malformed one", () => {
