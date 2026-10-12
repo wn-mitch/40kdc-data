@@ -152,6 +152,9 @@ function choiceMarkerAfter(list: readonly CompileLeaf[], source: Buffer | undefi
   return (source === undefined || /^[\]*]*\.?\s*$/u.test(between(source, keyword, marker))) && sameRun(source, marker, stat);
 }
 
+/** "Or:" that opens an option, and the bullet marks that start one. */
+const OPTION_OPENER = /\bor\s*:/iu;
+const OPTION_BOUNDARY = /\bor\s*:|[■▪•]/iu;
 const isChoiceMarker = (leaf: CompileLeaf) => leaf.family_id === "instead" && leaf.parameters.choice === true;
 
 /**
@@ -166,6 +169,16 @@ function refuseAlternativeRoll(before: CompileLeaf, roll: CompileLeaf, source: B
   }
 }
 
+/**
+ * The property after a bound run's "Or:" or bullet. The scope binds only the run before the option
+ * boundary, and the choice that the boundary makes is not composed from these leaves, so a property
+ * there refuses rather than being bound to the scope or left as a second, unchosen effect.
+ */
+function refuseOptionAfterRun(next: CompileLeaf, scope: CompileLeaf): void {
+  if (next.fragment !== scope.fragment || !isProperty(next)) return;
+  throw new CompileError("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+}
+
 /** One run may not both remove and grant the same ability ("Do not have Blast. Have Blast" is a contradiction). */
 function refuseKeywordAndRemoval(run: readonly CompileLeaf[]): void {
   const granted = run.filter((leaf) => leaf.family_id === KEYWORD).map((leaf) => leaf.parameters.keyword);
@@ -174,6 +187,26 @@ function refuseKeywordAndRemoval(run: readonly CompileLeaf[]): void {
       throw new CompileError(`A weapon ability is both removed and granted in one clause: ${String(removal.parameters.keyword)}.`);
     }
   }
+}
+
+/** "equipped by …" in a scope's own wording names the weapons' bearers; "by models in this unit" names this unit. */
+const EQUIPPED_BY = /\bequipped by\b/iu;
+/** "equipped by this model", "equipped by your models", "equipped by models in your unit": the bearers are this unit's. */
+const BEARER_IS_THIS_UNIT = /\bequipped by (?:models in )?(?:this|that|your) (?:unit|models?)\b/iu;
+
+/**
+ * A scope whose wording says "equipped by" names the bearers of its weapons. The only leaves that
+ * name them are a unit or model filter, a unit owner or a membership in the same fragment. With none
+ * of those, the scope's recipient would be the only one left, and it would take the grant as its
+ * own bearer. A scope hoisted onto its recipient chain has no wording left here and keeps that chain.
+ */
+function refuseUnnamedBearers(list: readonly CompileLeaf[], scope: CompileLeaf, source: Buffer | undefined): void {
+  if (source === undefined || scope.start_byte === undefined || scope.end_byte === undefined || scope.end_byte <= scope.start_byte) return;
+  const wording = source.subarray(scope.start_byte, scope.end_byte).toString("utf8");
+  if (!EQUIPPED_BY.test(wording) || BEARER_IS_THIS_UNIT.test(wording)) return;
+  const named = list.some((leaf) => leaf.fragment === scope.fragment && (leaf.family_id === "unit-owner" || leaf.family_id === "membership"
+    || (leaf.family_id === "unit-filter" && leaf.parameters.side !== "any")));
+  if (!named) throw new CompileError("A weapon scope names its bearers (\"equipped by …\") with no unit or model filter for them; it is not compiled.");
 }
 
 export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: string): readonly CompileLeaf[] {
@@ -199,6 +232,7 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
     let end = first;
     let containsBound = false;
     let choice = false;
+    let boundaryStop = false;
     while (end < list.length && list[end]!.fragment === scope.fragment) {
       const leaf = list[end]!;
       if (isChoiceMarker(leaf)) {
@@ -206,19 +240,25 @@ export function foldWeaponScopes(list: readonly CompileLeaf[], sourceText?: stri
       } else if (!isProperty(leaf)) {
         break;
       } else if (end === first) {
-        if (/[.;]/u.test(between(source, list[end - 1]!, leaf))) break;
+        const gap = between(source, list[end - 1]!, leaf);
+        if (/[.;]/u.test(gap) || OPTION_OPENER.test(gap)) break;
       } else if (!isChoiceMarker(list[end - 1]!)) {
         // The stat after a choice marker was checked against the marker by choiceMarkerAfter.
         if (!sameRun(source, list[end - 1]!, leaf)) break;
-        if (/\bor\b|[■▪•]/iu.test(between(source, list[end - 1]!, leaf))) choice = true;
+        const gap = between(source, list[end - 1]!, leaf);
+        // A bound run ends at an option boundary: the next option is not this scope's to bind.
+        if (containsBound && OPTION_BOUNDARY.test(gap)) { boundaryStop = true; break; }
+        if (/\bor\b|[■▪•]/iu.test(gap)) choice = true;
       }
       containsBound ||= isBound(leaf);
       end += 1;
     }
     if (end > first && end < list.length) refuseAlternativeRoll(list[end - 1]!, list[end]!, source);
+    if (boundaryStop) refuseOptionAfterRun(list[end]!, scope);
     // A qualifier after a single keyword with no bound leaf ("[LETHAL HITS: CHARACTER]") gates the frame.
     const qualifier = !containsBound && end === first + 1 && list[first]!.family_id === KEYWORD ? qualifierOf(list, source, first, scope.fragment) : null;
     if (end === first) throw new CompileError("An attack-property scope needs a following weapon property in its clause.");
+    refuseUnnamedBearers(list, scope, source);
     const run = list.slice(first, end);
     // A scope for the bound weapon ("That weapon's attacks have") takes stat adjustments only: a keyword
     // grant or a removal has no bound weapon to name, and a roll is not a weapon's stat.

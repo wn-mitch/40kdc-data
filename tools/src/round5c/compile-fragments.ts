@@ -322,6 +322,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         return steps.length === 1 ? steps[0]! : { type: "sequence", steps };
       }
       // Version 7: "that attack has the [X] ability" — the attack's weapon, whoever makes the attack.
+      // A grant with no subject has no bearer: no unit names its weapons and no model filter follows its scope.
+      if (leaf.parameters.subject === undefined) throw new CompileError("A weapon-ability-grant names no bearer: it has no unit and no model filter for its weapons.");
       const holder = leaf.parameters.subject === "attack" ? (context.incoming ? "attacker" : context.attacker ?? "this-unit") : target(leaf.parameters.subject);
       return {
         type: "weapon-ability-grant", target: holder,

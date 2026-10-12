@@ -263,6 +263,51 @@ describe("T7 comma-listed menus and bearer-filtered grants (SS-J)", () => {
   });
 });
 
+describe("T7 bearer-named grants with no bearer filter (SS-J)", () => {
+  it("refuses an equipped-by scope with no bearer filter, not the scope's own unit (fails before)", () => {
+    // Fabricated wording: the drafter gave the scope this unit, but the text names CRYPTEK models.
+    const text = "Ranged weapons equipped by CRYPTEK models from your army have the ASSAULT ability.";
+    const result = compileLeaves(placed(text,
+      ["Ranged weapons equipped by", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/names its bearers/);
+  });
+
+  it("keeps an equipped-by scope naming this unit's own models without a filter (regression pin)", () => {
+    const text = "Until the end of the phase, ranged weapons equipped by your models have the ASSAULT ability.";
+    const mechanics = mechanicsOf(placed(text,
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+      ["ranged weapons equipped by your models", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+    expect(mechanics.effect.target).toBe("this-unit");
+  });
+
+  it("refuses a grant with no subject and no filter (regression pin)", () => {
+    const text = "Ranged weapons equipped by models in this unit have the ASSAULT ability.";
+    const result = compileLeaves(placed(text,
+      ["Ranged weapons", "weapon-ability-grant", { weapon_type: "ranged" }],
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }]), text);
+    expect(result.ok).toBe(false);
+  });
+
+  it("a comma menu of five keywords under a keyword-less frame is one option per keyword (regression pin)", () => {
+    const text = "■ In your Shooting phase, each time a CRYPTEK unit from your army is selected to shoot, select one of the following abilities: ANTI-INFANTRY 3+, ANTI-MOUNTED 4+, ASSAULT, HEAVY, IGNORES COVER. Until the end of the phase, ranged weapons equipped by models in that unit have that ability.";
+    const list = placed(text,
+      ["In your Shooting phase, each time a CRYPTEK unit from your army is selected to shoot", "event", { kind: "selected", to: "shoot" }],
+      ["select one of the following abilities", "choice-open", { min_choices: 1, max_choices: 1 }],
+      ["ANTI-INFANTRY 3+", "weapon-ability-keyword", { keyword: "ANTI-INFANTRY 3+" }],
+      ["ANTI-MOUNTED 4+", "weapon-ability-keyword", { keyword: "ANTI-MOUNTED 4+" }],
+      ["ASSAULT", "weapon-ability-keyword", { keyword: "ASSAULT" }],
+      ["HEAVY", "weapon-ability-keyword", { keyword: "HEAVY" }],
+      ["IGNORES COVER", "weapon-ability-keyword", { keyword: "IGNORES COVER" }],
+      ["ranged weapons equipped by models in that unit have that ability", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged" }]);
+    const mechanics = mechanicsOf(list, text);
+    expect(mechanics.effect.type).toBe("choice");
+    expect(mechanics.effect.options).toHaveLength(5);
+  });
+});
+
 describe("T7 option boundaries in a weapon scope (SS-G)", () => {
   it("an option's attack frame and incoming roll compile as the second option (regression pin)", () => {
     const text = "Select one of the following: ■ This unit's melee attacks have +1 to hit rolls. ■ Or: Attacks that target this unit have -1 to hit rolls.";
@@ -276,6 +321,28 @@ describe("T7 option boundaries in a weapon scope (SS-G)", () => {
     expect(mechanics.effect.options[0].modifier).toMatchObject({ roll: "hit", weapon_type: "melee" });
     expect(mechanics.effect.options[1].target).toBe("attacker");
     expect(mechanics.effect.options[1].modifier.weapon_type).toBeUndefined();
+  });
+
+  it("refuses a bound run followed by an option after an Or: (regression pin)", () => {
+    // Without the boundary stop the second option's roll is kept by the scope; the second option's own
+    // recipient is not a reason to compile it as a second effect beside the first.
+    const text = "Your unit's melee weapons: Have +1 to hit rolls ■ Or: This unit has -1 to hit rolls.";
+    const result = compileLeaves(placed(text,
+      ["Your unit's melee weapons:", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee" }],
+      ["Have +1 to hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ["This unit has -1 to hit rolls.", "roll-modifier", { roll: "hit", operation: "subtract", value: 1, subject: "this-unit" }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toContain("explicit composition relation");
+  });
+
+  it("refuses a weapon scope whose own option is empty, an Or: straight after it (fails before)", () => {
+    // Before the fix the first property folded across "Or:" and the choice was silently dropped.
+    const text = "Your unit's melee weapons: Or: Have +1 to hit rolls.";
+    const result = compileLeaves(placed(text,
+      ["Your unit's melee weapons:", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee" }],
+      ["Have +1 to hit rolls.", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
+    expect(result.ok).toBe(false);
+    expect(result.ok ? "" : result.errors.join(" ")).toMatch(/needs a following weapon property/);
   });
 
   it("an option's own subject roll does not take the earlier option's weapon type (regression pin)", () => {
