@@ -149,6 +149,25 @@ function bindInTarget(list: readonly CompileLeaf[], index: number, heads: readon
   return bind(leaf, keys, oneTarget(heads[group - 1]!, leaf));
 }
 
+/**
+ * Binds a targeting restriction that holds an among-filter naming its enemy target: the filter's
+ * reference is the restriction's target, and an antecedent `by` is the attacker that the nearest
+ * attack before it names (the among-filter before that attack). Without such an attacker the
+ * restriction refuses, rather than taking the enemy target as the attacker.
+ */
+function bindRestriction(leaves: CompileLeaf[], at: number, ref: string, start_byte: number, attackers: readonly { at: number; ref: string }[]): void {
+  const restriction = leaves[at]!;
+  const keys = antecedentKeys(restriction.family_id, restriction.parameters);
+  if (!keys.includes("target")) throw new CompileError(`An among-filter at byte ${start_byte} names a target inside a targeting restriction whose target is not antecedent.`);
+  let bound = bind(restriction, ["target"], ref);
+  if (keys.includes("by")) {
+    const attacker = attackers.filter((item) => item.at < at).at(-1);
+    if (attacker === undefined) throw new CompileError(`${restriction.family_id} at byte ${restriction.start_byte} takes its attacker from an antecedent, but no among-filter names the attacker before it.`);
+    bound = bind(bound, ["by"], attacker.ref);
+  }
+  leaves[at] = bound;
+}
+
 /** The keys of `leaf` set to `ref`, refusing any its family cannot name a target with. */
 function bind(leaf: CompileLeaf, keys: readonly string[], ref: string): CompileLeaf {
   const refused = keys.filter((key) => !accepts(leaf, key));
@@ -213,6 +232,9 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
   }
   const leaves = input.map((leaf, index) => leaf.fragment === "TARGET" ? bindInTarget(input, index, heads, sourceText) : leaf);
   const dropped = new Set<number>();
+  // Attack leaves an among-filter named the attacker of, and restrictions whose enemy target an among-filter names.
+  const attackers: Array<{ at: number; ref: string }> = [];
+  const restrictionTargets: Array<{ at: number; ref: string; start_byte: number }> = [];
   // What a later bare antecedent names, at each leaf.
   const focusAt: Array<string | null> = leaves.map(() => null);
   // The level of the target a bare antecedent names: "model" when the focus is a model-level target.
@@ -239,7 +261,9 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
       const container = leaves[containers[0]!]!;
       const keys = antecedentKeys(container.family_id, container.parameters);
       if (keys.length === 0) throw new CompileError(`An among-filter inside an effect names that effect's subject, but the effect's subject is not antecedent (${container.family_id} at byte ${container.start_byte}).`);
-      leaves[containers[0]!] = bind(container, keys, ref);
+      // A restriction's enemy target is its target only; its by is the attacker, bound once every attacker is known.
+      if (container.family_id === "targeting-restriction") restrictionTargets.push({ at: containers[0]!, ref, start_byte: leaf.start_byte });
+      else leaves[containers[0]!] = bind(container, keys, ref);
       if (singular) { focus = ref; focusLevel = String(leaf.parameters.level ?? "unit"); }
       continue;
     }
@@ -261,6 +285,7 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
         throw new CompileError(`An among-filter at byte ${leaf.start_byte} names the attacker, but the attack after it is made by ${String(next.parameters.unit)}.`);
       }
       leaves[at] = { ...next, parameters: { ...next.parameters, attacker_filter: ref } };
+      attackers.push({ at, ref });
       focus = singular ? ref : "attacker";
       focusLevel = "unit";
     } else if (next.family_id === "event" && next.parameters.owner === undefined && next.parameters.subject === undefined) {
@@ -277,6 +302,7 @@ export function bindTargetRefs(raw: readonly CompileLeaf[], sourceText?: string)
     } else throw new CompileError(`An among-filter at byte ${leaf.start_byte} names no distance, attack, moment or back-reference right beside it.`);
     index = at - 1;
   }
+  for (const { at, ref, start_byte } of restrictionTargets) bindRestriction(leaves, at, ref, start_byte, attackers);
   const kept = leaves.flatMap((leaf, index) => dropped.has(index) ? [] : [{ leaf, focus: focusAt[index] ?? null, subject: subjectFocusAt[index] ?? null, level: focusLevelAt[index]! }]);
   const out = kept.map((item) => settleDestination(item.leaf, item.subject, item.focus));
   return {

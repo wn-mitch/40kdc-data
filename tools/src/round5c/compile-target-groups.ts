@@ -116,7 +116,8 @@ export function groupedTargetRestrictions(list: readonly CompileLeaf[], parts: r
     const own = parts.filter((at) => groupOf(at) === position).map((at) => list[at]!);
     const eligibility = conditions.flatMap((item) => {
       if (!item.eachTarget) return groupOf(item.index) === position ? [item.node] : [];
-      const before = heads.filter((other) => other.index < item.index);
+      // Counted in targets, not groups: "Two X units" is one group of two targets.
+      const before = heads.filter((other) => other.index < item.index).flatMap((other) => other.names);
       if (before.length < 2) throw new CompileError("A condition about each target follows only one target; name it on that target.");
       return head.index < item.index ? [item.node] : [];
     });
