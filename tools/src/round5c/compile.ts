@@ -53,6 +53,7 @@ import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
 import { momentsUnderUse } from "./compile-nested-moment.js";
+import { gatedMoment, usabilityGates } from "./compile-usability-gate.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
@@ -436,6 +437,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // The last source sentence holding an optional-use: moments opened after it ("If you do, … when this unit …") depend on the use and stay mandatory.
   let optionalSentence = -1;
   // "You can spend YP …" read later as "if you spent YP during this use", or by a trigger later in the ability: the spend is the optional part, not the use.
+  const usabilityAt = usabilityGates(list);
+  const usabilityNodes: Node[] = [];
   const optionalSpend = flatLeaves(list).some(isSpendRead);
   // An optional spend is offered by its own part, so it takes no clause gate and no instead clause's place (compile-optional-cost.ts).
   const optionalSpends = optionalSpendLeaves(list);
@@ -558,6 +561,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       // In the TARGET fragment no attack is being made: "target" is the candidate unit, the eligibility's default subject.
       // Each target (subject each-target) is the candidate of every group it is copied into (compile-target-groups.ts).
       // An each-target condition in RESTRICTIONS ("Each unit targeted with this Stratagem must …") is eligibility too.
+      // A Stratagem's battle-round restriction is when it can be used: it joins the WHEN moment's condition (compile-usability-gate.ts).
+      else if (usabilityAt.has(index)) usabilityNodes.push(condition(leaf));
       else if (leaf.role === "CONDITION" && (leaf.fragment === "TARGET" || (leaf.fragment === "RESTRICTIONS" && leaf.parameters.subject === "each-target"))) {
         const candidate = leaf.parameters.subject === "target" || leaf.parameters.subject === "each-target";
         targetConditions.push({ index, eachTarget: leaf.parameters.subject === "each-target", node: condition(candidate ? { ...leaf, parameters: { ...leaf.parameters, subject: "this-unit" } } : leaf) });
@@ -1244,6 +1249,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     }
     return moment;
   });
+  moments.forEach((moment, position) => { if (list[triggerIndexes[position]!]!.fragment === "WHEN") moments[position] = gatedMoment(moment, usabilityNodes); });
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
   const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
   let entryTrigger = asTrigger(leading);
