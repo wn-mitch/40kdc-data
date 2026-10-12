@@ -112,13 +112,22 @@ describe("eligibility-permission: the triggering unit as subject", () => {
     const moved = { subject: "event-subject", activity: "move", allow: true };
     expect(normalizeFingerprintParameters("eligibility-permission", moved, V)).toEqual(moved);
     expect(() => normalizeFingerprintParameters("eligibility-permission", moved, PREVIOUS)).toThrow();
+    const modelPlain = { subject: "this-model", activity: "move", allow: true };
+    expect(normalizeFingerprintParameters("eligibility-permission", modelPlain, V)).toEqual(normalizeFingerprintParameters("eligibility-permission", modelPlain, PREVIOUS));
   });
 
-  it("binds a permission on the triggering unit after a selection to the selected unit, as an antecedent binds", () => {
+  it("refuses a permission on the triggering unit after a selection, which does not name the moving unit", () => {
     const text = "After a friendly unit is selected to move, it can move within Engagement Range.";
     const selected = at(text, "After a friendly unit is selected to move", "event", { kind: "selected", owner: "friendly", move_types: ["normal"] }, "WHEN");
     const permission = at(text, "it can move within Engagement Range", "eligibility-permission", { subject: "event-subject", activity: "move", allow: true }, "EFFECT");
-    expect(JSON.parse(compiled(text, [selected, permission])).mechanics.effect.target).toBe("event-subject");
+    expect(refused(text, [selected, permission])).toMatch(/no move-ended event precedes it/u);
+  });
+
+  it("refuses a move-through on the triggering unit with no move-ended event before it", () => {
+    const text = "After a friendly unit is selected to move, it can move through models.";
+    const selected = at(text, "After a friendly unit is selected to move", "event", { kind: "selected", owner: "friendly", move_types: ["normal"] }, "WHEN");
+    const through = at(text, "it can move through models", "move-through", { subject: "event-subject", passthrough: "models" }, "EFFECT");
+    expect(refused(text, [selected, through])).toMatch(/no move-ended event precedes it/u);
   });
 
   it("binds a move permission on the triggering unit to that unit after a move-ended trigger", () => {
@@ -150,7 +159,7 @@ describe("move-must-end cannot-end restriction on the triggering unit", () => {
 
   it("refuses the same condition after a selection, which does not name the moving unit", () => {
     const selected = at(text, "After a friendly unit makes a Normal move", "event", { kind: "selected", owner: "friendly", move_types: MOVE_TYPES }, "WHEN");
-    expect(refused(text, cannotEnd(text, selected, "event-subject"))).toMatch(/covers only "engaged" with this unit or model/u);
+    expect(refused(text, cannotEnd(text, selected, "event-subject"))).toMatch(/no move-ended event precedes it/u);
   });
 
   it("refuses the condition on another subject, as before", () => {

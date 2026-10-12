@@ -16,6 +16,7 @@ import { CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
 import { withDesignationExpiry } from "./compile-designation-expiry.js";
 import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, bindDesignationSubjects, condition, duration, foldHitFilters, negate, targetRestrictions } from "./compile-conditions.js";
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
+import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
 import { bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
@@ -279,7 +280,7 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
   let leaves = nameBoundAttacks(qualified);
   // A before-form hit names its unit by the unit-filter after it, so its later "that unit" binds to that unit (compile-weapon-qualified.ts).
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
-  try { leaves = bindBeforeFormHits(leaves, sourceText); leaves = bindBareFilterHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); } catch (error) {
+  try { leaves = bindBeforeFormHits(leaves, sourceText); leaves = bindBareFilterHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); refuseUnmovedEventSubject(leaves); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
   }
