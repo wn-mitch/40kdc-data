@@ -42,9 +42,12 @@ function nextFilter(list: readonly CompileLeaf[], from: number, direction: numbe
   return null;
 }
 
-/** A unit-ref the filter's owner is implied for: "any" is no owner at all. */
-function scoped(filter: CompileLeaf): Record<string, unknown> {
-  const { owner, ...rest } = dslUnitFilter(filter);
+/**
+ * A unit-ref the filter's owner is implied for: "any" is no owner at all. `warlord` allows the Warlord
+ * designation, which only a destroyed model's filter takes here ("the enemy WARLORD was destroyed").
+ */
+function scoped(filter: CompileLeaf, warlord = false): Record<string, unknown> {
+  const { owner, ...rest } = dslUnitFilter(filter, { warlordTest: warlord });
   return owner === "any" ? rest : { owner, ...rest };
 }
 
@@ -107,7 +110,7 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
     let object: Record<string, unknown>;
     if (units) object = scoped(filter);
     else if (container === "after") object = { level: "model", member_of: scoped(filter) };
-    else object = { ...scoped(filter), level: "model" };
+    else object = { ...scoped(filter, true), level: "model" };
     let proximity: Record<string, unknown> | undefined;
     if (units && named === "after" && positioned) {
       proximity = proximityOf(following!);

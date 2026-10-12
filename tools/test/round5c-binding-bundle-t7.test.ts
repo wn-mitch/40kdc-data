@@ -104,8 +104,9 @@ describe("per selected-unit usage lowers to the unit selection's cap (8553 shape
     expect(errors.join(" ")).toContain("per-selected-unit usage on a model selection has no reading");
   });
 
-  it("refuses a per selected-unit usage whose selected unit's attacks are designated", () => {
-    const errors = errorsOf("Shooting phase. Select one ALPHA unit. Each time a friendly unit makes an attack that targets that unit, add 1 to the Hit roll. Once per turn, the same unit can only be selected.", [
+  it("lowers a designated selection's cap to designate-target's select, counted across bearers", () => {
+    const text = "Shooting phase. Select one ALPHA unit. Each time a friendly unit makes an attack that targets that unit, add 1 to the Hit roll. Once per turn, the same unit can only be selected.";
+    const mechanics = mechanicsOf(text, [
       ["Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
       ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
       ["ALPHA unit", "unit-filter", { side: "enemy", keywords: ["ALPHA"] }],
@@ -113,7 +114,25 @@ describe("per selected-unit usage lowers to the unit selection's cap (8553 shape
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
       ["Once per turn", "usage-limit", { frequency: "once-per-turn", per: "selected-unit" }],
     ]);
-    expect(errors.join(" ")).toContain("designated has no selection cap");
+    const designate = mechanics.effect.effect;
+    expect(designate.type).toBe("designate-target");
+    expect(designate.select.selection_limit).toEqual({ count: 1, period: "turn" });
+    expect(mechanics.usage).toBeUndefined();
+  });
+
+  it("keeps a bearer's own per-unit usage on the ability alongside the selected-unit cap (8553 bearer shape)", () => {
+    const text = "Shooting phase. Select one ALPHA unit. Each time a friendly unit makes an attack that targets that unit, add 1 to the Hit roll. Once per turn, the same unit can only be selected. Once per turn, this unit can use this ability.";
+    const mechanics = mechanicsOf(text, [
+      ["Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
+      ["Select one", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["ALPHA unit", "unit-filter", { side: "enemy", keywords: ["ALPHA"] }],
+      ["Each time a friendly unit makes an attack that targets that unit", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "any", target: "that-unit" }],
+      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ["Once per turn, the same unit", "usage-limit", { frequency: "once-per-turn", per: "selected-unit" }],
+      ["Once per turn, this unit", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
+    ]);
+    expect(mechanics.effect.effect.select.selection_limit).toEqual({ count: 1, period: "turn" });
+    expect(mechanics.usage).toMatchObject({ frequency: "once-per-turn", per: "unit" });
   });
 });
 
@@ -142,15 +161,37 @@ describe("a model's attack that targets that unit lowers with the selected unit 
   });
 });
 
-describe("attack whose defender is the following filter is refused until a lowering binds it (8166 shape)", () => {
-  it("refuses instead of dropping the target", () => {
-    const errors = errorsOf("While the bearer is within 3\" of one or more friendly DEATH GUARD VEHICLE units, each time one of those VEHICLE units makes a ranged attack that targets an enemy unit visible to the bearer, re-roll a Wound roll of 1.", [
-      ["While the bearer is within 3\" of one or more friendly DEATH GUARD VEHICLE units", "unit-position", { kind: "within", inches: 3, of: "matching-unit", subject: "this-model", negated: false, of_keywords: ["DEATH GUARD", "VEHICLE"], of_side: "friendly" }],
-      ["one of those VEHICLE units", "unit-filter", { side: "friendly", keywords: ["VEHICLE"], among: "matched-units" }],
-      ["makes a ranged attack that targets", "attack", { direction: "makes", unit: "friendly-unit", attack_type: "ranged", target: "following-filter" }],
-      ["enemy unit", "unit-filter", { side: "enemy" }],
-    ]);
-    expect(errors.join(" ")).toContain("no defender binding yet");
+describe("attack whose defender is the following filter binds visible to that defender (8166 shape)", () => {
+  const TEXT = "While the bearer is within 3\" of one or more friendly DEATH GUARD VEHICLE units, each time one of those VEHICLE units makes a ranged attack that targets an enemy unit visible to the bearer, re-roll a Wound roll of 1.";
+  const ITEMS = (attack: Record<string, unknown> = { direction: "makes", unit: "friendly-unit", attack_type: "ranged", target: "following-filter" }): Array<[string, string, Record<string, unknown>, string?]> => [
+    ["While the bearer is within 3\" of one or more friendly DEATH GUARD VEHICLE units", "unit-position", { kind: "within", inches: 3, of: "matching-unit", subject: "this-model", negated: false, of_keywords: ["DEATH GUARD", "VEHICLE"], of_side: "friendly" }],
+    ["one of those VEHICLE units", "unit-filter", { side: "friendly", keywords: ["VEHICLE"], among: "matched-units" }],
+    ["makes a ranged attack that targets", "attack", attack],
+    ["an enemy unit", "unit-filter", { side: "enemy" }],
+    ["visible to the bearer", "visible", { subject: "antecedent", to: "this-model" }],
+    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
+  ];
+
+  it("binds the visible subject to the defender, and the defender is an enemy unit", () => {
+    const mechanics = mechanicsOf(TEXT, ITEMS());
+    const conditions = JSON.stringify(mechanics.effect);
+    expect(conditions).toContain("\"type\":\"visible\",\"parameters\":{\"subject\":\"defender\",\"to\":\"this-model\"}");
+    expect(conditions).toContain("\"owner\":\"enemy\"");
+  });
+
+  it("refuses a following-filter target with no unit-filter right after the attack", () => {
+    const errors = errorsOf(TEXT, ITEMS().filter((item) => item[0] !== "an enemy unit"));
+    expect(errors.join(" ")).toContain("needs an enemy or friendly unit-filter right after it");
+  });
+
+  it("refuses visible on an enemy filter that follows an attack naming no target, rather than binding it to this model", () => {
+    const errors = errorsOf(TEXT, ITEMS({ direction: "makes", unit: "friendly-unit", attack_type: "ranged" }));
+    expect(errors.join(" ")).toContain("the attack has no target");
+  });
+
+  it("refuses a defender filter that says neither friendly nor enemy", () => {
+    const errors = errorsOf(TEXT, ITEMS().map((item) => item[0] === "an enemy unit" ? ["an enemy unit", "unit-filter", { side: "any" }] as [string, string, Record<string, unknown>] : item));
+    expect(errors.join(" ")).toContain("must say friendly or enemy");
   });
 });
 
@@ -212,6 +253,52 @@ describe("for-each including the target: the keyword narrows only the other unit
     const mechanics = mechanicsOf(TEXT, ITEMS().map((item) => item[0] === "enemy BRAVO unit" ? ["enemy BRAVO unit", "unit-filter", { side: "enemy", keywords: ["BRAVO"], excluded_keywords: ["CHARACTER"] }] as [string, string, Record<string, unknown>] : item));
     expect(mechanics.effect.effect.selector.excluded_keywords).toBeUndefined();
     expect(JSON.stringify(mechanics.effect.effect.selector.eligibility)).toContain("\"CHARACTER\"");
+  });
+});
+
+describe("destroyed Warlord: the destruction object takes the Warlord designation (7891 shape)", () => {
+  const TEXT = "Fight phase. Your unit makes a melee attack. After your unit has fought, if the enemy WARLORD was destroyed as a result of those attacks, each enemy unit within 6 of your unit must take a Battle-shock test.";
+  const ITEMS = (activity: string, filter: Record<string, unknown> = { side: "enemy" }): Array<[string, string, Record<string, unknown>, string?]> => [
+    ["Fight phase", "phase-window", { phase: "fight", turn: "your" }],
+    ["makes a melee attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "melee" }],
+    ["After your unit has fought", "event", { kind: "attacks-resolved" }],
+    ["the enemy", "unit-filter", filter],
+    ["WARLORD", "designated-filter", { subject: "antecedent", tag: "warlord" }],
+    ["was destroyed as a result of those attacks", "unit-activity", { activities: [activity], named: "before", container: "none", destroyer: "this-unit" }],
+    ["each enemy unit", "unit-filter", { side: "enemy" }],
+    ["within 6 of your unit", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "antecedent", negated: false }],
+    ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],
+  ];
+
+  it("compiles the destroyed Warlord as model-destroyed with object_owner enemy and the Warlord designation", () => {
+    const result = compileItems(TEXT, ITEMS("destroyed-models-by-triggering-attacks"));
+    expect(result.ok).toBe(true);
+    const happened = JSON.stringify(result.ok ? result.mechanics : {});
+    expect(happened).toContain('"event":"model-destroyed","object":{"owner":"enemy","designated":"warlord","level":"model"}');
+    expect(happened).toContain('"filter":{"by":"this-unit"},"window":"event"');
+  });
+
+  it("refuses the Warlord designation on a destroyed unit, which is not a model", () => {
+    const errors = errorsOf(TEXT, ITEMS("destroyed-units-by-triggering-attacks"));
+    expect(errors.join(" ")).toContain("naming the Warlord");
+  });
+
+  it("refuses the Warlord designation on an effect's units outside a Warlord destruction", () => {
+    const errors = errorsOf("Fight phase. Each enemy WARLORD must take a Battle-shock test.", [
+      ["Fight phase", "phase-window", { phase: "fight", turn: "your" }],
+      ["Each enemy", "unit-filter", { side: "enemy" }],
+      ["WARLORD", "designated-filter", { subject: "antecedent", tag: "warlord" }],
+      ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],
+    ]);
+    expect(errors.join(" ")).toContain("naming the Warlord");
+  });
+});
+
+describe("for-each including the target cannot range from the bearer (7269 refusal)", () => {
+  it("refuses a distance on the including quantifier at the family, so the compile refusal is never reached through reviewed leaves", () => {
+    const version = currentFamilyVersion("for-each-unit-select");
+    expect(() => normalizeFingerprintParameters("for-each-unit-select", { including: "target", scope: "enemy", distance: "within", inches: 3 }, version)).toThrow();
+    expect(() => normalizeFingerprintParameters("for-each-unit-select", { including: "target" }, version)).not.toThrow();
   });
 });
 

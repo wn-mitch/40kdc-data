@@ -272,7 +272,7 @@ export function designationKeywords(filter: UnitFilter): Node {
 }
 
 /** The selected unit and the effects on attacks against it, as the DSL's designate-target. */
-export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null): Node {
+export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null): Node {
   if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
   if (selection.parameters.within_origin !== undefined) throw new CompileError("A designated target measured from its bearer's Transport has no designate-target shape yet.");
   const keywords = designationKeywords((selection.parameters.filter ?? {}) as UnitFilter);
@@ -295,6 +295,8 @@ export function designation(selection: CompileLeaf, leaves: readonly CompileLeaf
       ...(selection.parameters.visible === true ? { visibility_required: true } : {}),
       // "Select one enemy unit hit by those attacks": which units can be designated.
       ...(eligibility ? { eligibility } : {}),
+      // "The same enemy unit can only be affected once per turn": counted across every bearer (compile-selection-limit.ts).
+      ...(selectionLimit ? { selection_limit: selectionLimit } : {}),
     },
     applies: { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body },
     ...(lasting ? { duration: lasting } : {}),

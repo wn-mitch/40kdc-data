@@ -598,9 +598,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       }
       else if (leaf.role === "EVENT") {
         if (leaf.family_id === "attack") {
-          // "that targets an enemy unit visible to the bearer": the defender is the following filter. No lowering
-          // binds it yet, and an unbound target would be dropped, so the record refuses.
-          if (leaf.parameters.target === "following-filter") errors.push("An attack whose target is the unit-filter after it has no defender binding yet.");
+          // "that targets an enemy unit visible to the bearer": the defender is the unit-filter right after it
+          // (compile-unit-filters.ts folds it as attack_target_named). Without that filter the target would be dropped.
+          if (leaf.parameters.target === "following-filter" && !list.some((other, at) => at > index && other.parameters.attack_target_named === true && other.fragment === leaf.fragment && at === index + 1)) {
+            errors.push("An attack whose target is the unit-filter after it needs an enemy or friendly unit-filter right after it.");
+          }
           // An attack whose properties compile-attack-properties.ts framed has its type on each of them;
           // a back-reference repeats its antecedent's type only where that one's gate does not reach.
           const gate = addsAttackGate(leaf) ? attackTypeCondition(leaf) : null;
@@ -968,9 +970,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     else if (selections[0]!.parameters.target_kind === "model") errors.push("A per-selected-unit usage on a model selection has no reading.");
     else if (partStarts.length > 0 || list.some((leaf) => leaf.family_id === "persistent-designation-open")) {
       errors.push("A per-selected-unit usage with parts or a persistent designation has no reading yet.");
-    } else if (planned.some((item) => item.selected)) {
-      // Attacks against the selected unit make it a designate-target, whose select has no selection_limit field.
-      errors.push("A per-selected-unit usage on a unit whose attacks are designated has no selection cap in designate-target yet.");
     } else {
       const { index } = selectedUnitUsages[0]!;
       const at = usageIndexes.indexOf(index);
@@ -1115,7 +1114,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
-    body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility));
+    body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit));
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.

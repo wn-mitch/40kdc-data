@@ -1,3 +1,4 @@
+import { DESTRUCTION_ACTIVITIES } from "./family-extensions-17-triggering-destruction.js";
 import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -275,6 +276,11 @@ function linkedToFilter(leaves: readonly CompileLeaf[], at: number, sourceText: 
   return gap === undefined || LINKING_VERB.test(gap);
 }
 
+/** A destruction by the triggering attacks (family-extensions-17-triggering-destruction.ts). */
+function isDestructionActivity(leaf: CompileLeaf): boolean {
+  return leaf.family_id === "unit-activity" && ((leaf.parameters.activities as unknown[] | undefined) ?? []).some((activity) => (DESTRUCTION_ACTIVITIES as readonly unknown[]).includes(activity));
+}
+
 /**
  * The index of the first leaf after a filter's owner leaves, when the filter sits right after the
  * effect at `index` in the same sentence. A filter in a later sentence ("… is marked. Friendly K units'
@@ -286,6 +292,10 @@ function afterFilter(leaves: readonly CompileLeaf[], index: number, sourceText?:
   if (!ANY_UNIT_KEYS[leaf.family_id] || filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return undefined;
   if (sourceText !== undefined && leaf.end_byte !== undefined && filter.start_byte !== undefined
     && /[.;!?]/u.test(Buffer.from(sourceText, "utf8").subarray(leaf.end_byte, filter.start_byte).toString("utf8"))) return undefined;
+  // "If the enemy WARLORD was destroyed as a result of those attacks": the filter before a destruction verb names what
+  // was destroyed (compile-triggering-destruction.ts), so it is no effect's unit.
+  const verb = leaves[index + 2];
+  if (verb?.fragment === leaf.fragment && isDestructionActivity(verb)) return undefined;
   let at = index + 2;
   while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at += 1;
   return at;
@@ -360,8 +370,34 @@ function unitFilterBetween(leaves: readonly CompileLeaf[], from: number, to: num
   return false;
 }
 
+/**
+ * Whether an attack earlier in the leaf's fragment names its target by the unit-filter right after it
+ * ("makes a ranged attack that targets an enemy unit"): that filter is the defender. Bound before the
+ * filters fold (compile-unit-filters.ts), so the filter is still a plain unit-filter here.
+ */
+function defenderNamedBy(leaves: readonly CompileLeaf[], index: number): boolean {
+  const fragment = leaves[index]!.fragment;
+  return leaves.slice(0, index).some((other, at) => other.family_id === "attack" && other.parameters.target === "following-filter" && other.fragment === fragment
+    && leaves[at + 1]?.family_id === "unit-filter" && leaves[at + 1]!.fragment === fragment);
+}
+
+/** An enemy unit-filter right before the anaphor that follows an attack made by this record, which names no target. */
+function unnamedAttackFilter(leaves: readonly CompileLeaf[], index: number): boolean {
+  const filter = leaves[index - 1];
+  const attack = leaves[index - 2];
+  return filter?.family_id === "unit-filter" && filter.parameters.side === "enemy" && filter.fragment === leaves[index]!.fragment
+    && attack?.family_id === "attack" && attack.parameters.direction === "makes" && attack.parameters.target === undefined && attack.fragment === filter.fragment;
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
+  // "makes a ranged attack that targets an enemy unit visible to the bearer": the unit the attack names after it is the defender.
+  if (leaves[index]!.family_id === "visible" && defenderNamedBy(leaves, index)) return "defender";
+  // "makes an attack that targets an enemy unit visible to the bearer" written without the target: the enemy filter after
+  // the attack would name a unit no attack names, and the anaphor would fall back to this model. Refuse instead.
+  if (leaves[index]!.family_id === "visible" && unnamedAttackFilter(leaves, index)) {
+    throw new CompileError(`visible at byte ${leaves[index]!.start_byte} points back to a unit the attack before it does not name; the attack has no target.`);
+  }
   if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   const momentUnit = onMomentUnit(leaves, index, sourceText);
@@ -385,6 +421,10 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // "Friendly X units' attacks that target that unit": a filter right before an attack-property
   // scope names whose attacks, even after a selection the rest of the record points to.
   if (leaves[index]!.family_id === "weapon-property-scope" && bareFilter(leaves, index)) return FILTERED_UNITS;
+  // "each enemy unit within 6 of your unit …" right after its own filter, in a record that also destroys units by the
+  // triggering attacks ("if the enemy WARLORD was destroyed …"): the filter names the units, not the selection.
+  if (leaves[index]!.family_id === "unit-position" && leaves[index]!.role === "CONDITION" && bareFilter(leaves, index)
+    && leaves[index - 1]?.family_id === "unit-filter" && leaves.some(isDestructionActivity)) return FILTERED_UNITS;
   if (earlier.some((other) => other.family_id === "select-unit")) return "selected-unit";
   // "Redeploy up to three friendly units": a set-up whose selection comes after it, in the same part.
   if (selectionFollowsVerb(leaves, index) !== null) return verbFirstSelection(leaves, index);
@@ -466,6 +506,8 @@ function anyUnitKey(leaf: CompileLeaf, key: string): boolean {
  * mortal wounds names a selected unit as `that-unit` (`compile-fragments.ts` MORTAL_TARGETS).
  */
 function boundValue(leaf: CompileLeaf, key: string, role: string): string | null {
+  // visible's subject takes the attack's defender named by the following filter (defenderNamedBy).
+  if (role === "defender" && leaf.family_id === "visible" && key === "subject") return role;
   if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
   if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;

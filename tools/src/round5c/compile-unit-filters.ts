@@ -414,6 +414,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     } else if (leaf.family_id === "select-unit" && openAura(next)) {
       out.push(leaf);
       reach(out, next) && (index += 1);
+    } else if (isFilter(leaf) && followsTargetingAttack(out.at(-1), leaf)) {
+      // "makes a ranged attack that targets an enemy unit visible to the bearer": the filter the attack names is its
+      // defender. Its side is always said, so it is the owner check on the defender; `visible` after it binds to it (compile-antecedent.ts).
+      if (leaf.parameters.side === "any") throw new CompileError("A unit-filter naming an attack's target must say friendly or enemy.");
+      out.push({ ...leaf, family_id: "unit-filter-target", parameters: { ...leaf.parameters, owner_explicit: true, attack_target_named: true } });
     } else if (isFilter(leaf) && followedBy(out.at(-1), leaf)) {
       // "within 8\" of a" + "friendly unengaged unit": the other unit of the distance or engagement
       // before it. A "from your army" after it is the filter's own wording.
@@ -665,6 +670,11 @@ function nestedEngagedChain(list: readonly CompileLeaf[], index: number, filter:
     throw new CompileError("An engaged-with chain takes one level of nesting; a further engaged state after its partner unit has no DSL form.");
   }
   return { partner: dslUnitFilter(partner), at };
+}
+
+/** An attack whose target is the unit-filter right after it (attack target following-filter), in the filter's fragment. */
+function followsTargetingAttack(prev: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  return prev?.family_id === "attack" && prev.parameters.target === "following-filter" && prev.fragment === filter.fragment;
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */
