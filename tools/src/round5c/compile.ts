@@ -1237,15 +1237,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (place !== "same") item.node = durationPart(bound!, item.node);
     }
   }
-  // Sentences after a for-each's that open with "Then" happen once, after the loop (compile-for-each-tail.ts).
+  // A sentence after a for-each's happens once, after the loop, only when both rules agree: it opens with "Then"
+  // and names no unit of the loop (compile-for-each-tail.ts), and it is an effect on the bearer's own unit or model.
   const thenTail = partStarts.length === 0 && selections.length === 0 ? forEachTail(list, places, planned, forEachLeaf, sourceText) : [];
   // A for-each loop repeats the effects of its own sentence. An effect on a fixed recipient in a later sentence
-  // ("Then, your unit suffers 3D3 mortal wounds") happens once, after the loop.
+  // ("Then, your unit suffers 3D3 mortal wounds") is the loop's tail when thenTail also holds.
   const loopAt = forEachLeaf ? list.indexOf(forEachLeaf) : -1;
   const fixedRecipientTail = forEachLeaf && partStarts.length === 0
     ? planned.filter((item) => item.index > loopAt && rawOf[item.index]! > rawOf[loopAt]! && (item.node.target === "this-unit" || item.node.target === "this-model"))
     : [];
-  const afterLoop = planned.filter((item) => thenTail.includes(item) || fixedRecipientTail.includes(item));
+  const afterLoop = planned.filter((item) => thenTail.includes(item) && fixedRecipientTail.includes(item));
   // A banded effect after the loop has no DSL shape: it would resolve against the loop's roll or run once per unit.
   if (afterLoop.some((item) => item.gate.some(isRollMarker))) errors.push("A roll-result band on a later sentence's effect on the bearer's unit has no DSL shape after a for-each-unit loop.");
   if (errors.length > 0) return { ok: false, signature, errors };
