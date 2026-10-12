@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_16_STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP } from "../src/round5c/family-extensions-16-stratagem-target-alternatives-followup.js";
 import { createValidator } from "../src/schema-loader.js";
 
 /**
@@ -106,12 +108,18 @@ describe("eligibility-permission: the triggering unit as subject", () => {
   // The version that first accepts event-subject: the lowest one that does, not the current top (later versions widen it further).
   const accepts = (version: number) => { try { normalizeFingerprintParameters("eligibility-permission", { subject: "event-subject", activity: "move", allow: true }, version); return true; } catch { return false; } };
   const V = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, at) => at + 1).find(accepts)!;
-  const PREVIOUS = V - 1;
+  // The version just before this follow-up's extension; later extensions may sit above it.
+  const AT = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, index) => currentFamilyVersion("eligibility-permission") - index).find((version) => {
+    const extension = familyExtension("eligibility-permission", version);
+    return extension !== undefined && FAMILY_EXTENSIONS_16_STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP.includes(extension);
+  })!;
+  const PREVIOUS = AT - 1;
 
   it("keeps every value the previous version accepted, and accepts event-subject only from this version", () => {
     const plain = { subject: "this-unit", activity: "move", allow: true };
     expect(normalizeFingerprintParameters("eligibility-permission", plain, V)).toEqual(normalizeFingerprintParameters("eligibility-permission", plain, PREVIOUS));
     const moved = { subject: "event-subject", activity: "move", allow: true };
+    expect(normalizeFingerprintParameters("eligibility-permission", moved, AT)).toEqual(moved);
     expect(normalizeFingerprintParameters("eligibility-permission", moved, V)).toEqual(moved);
     expect(() => normalizeFingerprintParameters("eligibility-permission", moved, PREVIOUS)).toThrow();
     const modelPlain = { subject: "this-model", activity: "move", allow: true };

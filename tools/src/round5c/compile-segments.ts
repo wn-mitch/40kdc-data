@@ -193,9 +193,28 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   // ("When this unit destroys a …") is not one of that frame's attacks.
   // A labelled part ("Bestial Forms: …") is a named rule of its own, so the list's header does not gate it either.
   const labelled = new Set(sentences.filter((_sentence, position) => labels[position]).map((sentence) => sentence[0]!));
+  // "While this model is leading a unit, …. When …, …": a first sentence that opens with "While" frames the whole
+  // ability, so its leading-unit condition is copied into each later part, unless that part opens with
+  // "In addition," (it states its own frame) or already holds a leading-unit leaf of its own.
+  const firstSentence = sentences[firstEffectful]!;
+  const firstEffectAt = firstSentence.findIndex((leaf) => leaf.role === "EFFECT" || leaf.role === "EVENT");
+  const whileFrame = /^while\b/iu.test(sentenceWords(leaves, starts[firstEffectful]!, firstSentence, sourceText))
+    ? firstSentence.slice(0, firstEffectAt).filter((leaf) => leaf.role === "CONDITION" && leaf.family_id === "leading-unit") : [];
+  // A part's own opening sentence (its first leaf; parts are built before the header is prepended).
+  const opensInAddition = (part: readonly CompileLeaf[]) => {
+    const position = sentences.findIndex((sentence) => sentence.includes(part[0]!));
+    return position !== -1 && IN_ADDITION.test(sentenceWords(leaves, starts[position]!, sentences[position]!, sourceText));
+  };
   const frame = leadingFrame(leaves, parts[0]!);
-  return parts.map((part, at) => armyOnly(part) ? part : (attackFrame || labelled.has(part[0]!)) && at > 0 ? part
-    : [...header, ...(at > 0 && frame !== null && namesFrameUnit(part, frame, sourceText) ? [frame] : []), ...part]);
+  // A later part holds the frame the record opens with: the "While" frame, or the leading-unit frame a part naming "that unit" is about.
+  const frameFor = (part: CompileLeaf[], at: number, byThatUnit: boolean): CompileLeaf[] => {
+    if (at <= 0) return [];
+    if (whileFrame.length > 0 && !opensInAddition(part) && !part.some((leaf) => leaf.family_id === "leading-unit")) return whileFrame;
+    return byThatUnit && frame !== null && namesFrameUnit(part, frame, sourceText) ? [frame] : [];
+  };
+  return parts.map((part, at) => armyOnly(part) ? part
+    : (attackFrame || labelled.has(part[0]!)) && at > 0 ? [...frameFor(part, at, false), ...part]
+    : [...header, ...frameFor(part, at, true), ...part]);
 }
 
 /**

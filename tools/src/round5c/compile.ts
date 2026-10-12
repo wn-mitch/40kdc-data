@@ -10,6 +10,7 @@ import { checkAbilityRollUses } from "./compile-ability-roll.js";
 import type { ManoeuvreMenus } from "./named-ability-checks.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldCountsAsMoved } from "./compile-counts-as-moved.js";
+import { foldFightNext } from "./compile-fight-next.js";
 import { foldPassthroughUsed, refuseUnboundIfItDoes } from "./compile-passthrough-used.js";
 import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { bindWhenSubject, nestedWhenMoments } from "./compile-when-subject.js";
@@ -369,7 +370,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
-    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText)), sourceText));
+    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]);
     refuseUnboundWeaponScope(list);

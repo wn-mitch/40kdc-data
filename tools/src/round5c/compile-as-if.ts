@@ -11,6 +11,9 @@ const AS_IF_BY_PHASE: Record<string, string> = {
   shooting: "shooting-phase", fight: "fight-phase", movement: "movement-phase", charge: "charge-phase", command: "command-phase",
 };
 
+/** The phase in which each eligible activity is tested. */
+const ELIGIBLE_PHASE: Record<string, string> = { "declare-charge": "charge", shoot: "shooting", fight: "fight" };
+
 const wording = (leaf: CompileLeaf, bytes: Buffer) => bytes.subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
 
 /**
@@ -31,7 +34,21 @@ export function foldAsIfPhases(leaves: readonly CompileLeaf[], sourceText: strin
     const at = list.slice(0, index).map((other, position) => ({ other, position })).reverse()
       .find(({ other }) => (other.family_id === "eligibility-permission" || other.family_id === "make-move") && (other.fragment ?? null) === (leaf.fragment ?? null)
         && !/[.!?](?:\s|$)/u.test(bytes.subarray(other.end_byte, leaf.start_byte).toString("utf8")))?.position;
-    if (at === undefined) throw new CompileError(`"${wording(leaf, bytes)}" names a phase hypothetically, but no permission before it in its sentence takes it.`);
+    if (at === undefined) {
+      // "would be eligible to declare a charge … if it were your Charge phase": the eligible test is itself the
+      // hypothetical one, so a phase that matches its activity is redundant and the window drops out.
+      const test = list.slice(0, index).reverse()
+        .find((other) => other.family_id === "eligible" && (other.fragment ?? null) === (leaf.fragment ?? null)
+          && !/[.!?](?:\s|$)/u.test(bytes.subarray(other.end_byte, leaf.start_byte).toString("utf8")));
+      if (test !== undefined) {
+        if (leaf.parameters.turn !== "your") throw new CompileError(`"${wording(leaf, bytes)}" names the ${String(leaf.parameters.turn ?? "unspecified")} turn hypothetically; an eligible condition is tested in your own turn, so only turn: your folds.`);
+        if (test.parameters.negated === true || test.parameters.at !== undefined) throw new CompileError(`"${wording(leaf, bytes)}" names a phase hypothetically for an eligible condition that is negated or timed; only a plain eligible condition takes it.`);
+        if (ELIGIBLE_PHASE[String(test.parameters.to)] !== phase) throw new CompileError(`"${wording(leaf, bytes)}" names the ${phase} phase, but the eligible condition before it is about ${String(test.parameters.to)}.`);
+        drop.add(index);
+        return;
+      }
+      throw new CompileError(`"${wording(leaf, bytes)}" names a phase hypothetically, but no permission before it in its sentence takes it.`);
+    }
     const permission = list[at]!;
     const table = permission.family_id === "make-move" ? MOVE_AS_IF_BY_PHASE : AS_IF_BY_PHASE;
     const asIf = table[phase];

@@ -518,6 +518,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
           ...(despite && despite.length > 0 ? { despite } : {}),
           ...(asIf ? { as_if: asIf } : {}),
           ...(stratagem ? { stratagem } : {}),
+          // A fight permission's reach ("models within 3" are eligible to fight") and its next-to-fight order.
+          ...(leaf.parameters.reach !== undefined ? { reach: closed(leaf, "reach") } : {}),
+          ...(leaf.parameters.next === true ? { next: true } : {}),
           // An embark permission's destination (compile-permission-destination.ts).
           ...(leaf.parameters.into !== undefined ? { into: permissionDestination(leaf) } : {}),
           // A folded counts-as-moved leaf (compile-counts-as-moved.ts): the units count as having made this move.
