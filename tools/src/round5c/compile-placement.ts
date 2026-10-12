@@ -145,6 +145,8 @@ export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: stri
 const BLANK_LINE = /[\r\n][ \t]*[\r\n]/u;
 /** A line break between two leaves. */
 const LINE_BREAK = /[\r\n]/u;
+/** The gap opens an "Or:" alternative ("…mortal wounds**.\rOr: If …"). */
+const ALTERNATIVE_START = /\bor\s*:/iu;
 
 /**
  * The clauses one result band decides: its own clause, then each following clause that opens after a
@@ -169,7 +171,8 @@ export function bandRunClauses(list: readonly CompileLeaf[], places: readonly Pl
     const previous = list[at - 1]!;
     if (sourceText === undefined || previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) break;
     const gap = exactSpan(sourceText, previous.end_byte, leaf.start_byte);
-    if (BLANK_LINE.test(gap) || !(BULLET.test(gap) || (introducesBlock && LINE_BREAK.test(gap)))) break;
+    // An "Or:" line is an alternative to the band's list, not one of its lines: the run stops before it.
+    if (BLANK_LINE.test(gap) || ALTERNATIVE_START.test(gap) || !(BULLET.test(gap) || (introducesBlock && LINE_BREAK.test(gap)))) break;
     current = places[at]!.clause;
     clauses.push(current);
   }

@@ -2,6 +2,7 @@ import { isContainerOpener } from "./compile-containers.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { blastRatingRefused } from "./contracts.js";
 import { qualifierOf } from "./compile-weapon-scopes.js";
+import { foldQualifiedKeywordMenus } from "./compile-keyword-menu.js";
 
 /**
  * Keyword-less weapon-ability-grant frames ("ranged weapons equipped by models in this unit have
@@ -48,7 +49,7 @@ function runAfter(list: readonly CompileLeaf[], index: number, runs: readonly nu
 }
 
 export function foldWeaponKeywords(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  const { list, forced } = absorbMenuOpeners(input, sourceText);
+  const { list, forced } = absorbMenuOpeners(foldQualifiedKeywordMenus(input, sourceText), sourceText);
   if (!list.some((leaf) => leaf.family_id === KEYWORD)) {
     if (list.some(isFrame)) throw new CompileError("A weapon-ability-grant without a keyword needs weapon-ability-keyword leaves to grant.");
     return [...list];

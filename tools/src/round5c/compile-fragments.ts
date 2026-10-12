@@ -1,3 +1,4 @@
+import type { KeywordOption } from "./compile-keyword-menu.js";
 /**
  * One fixed DSL fragment per leaf family. The composition rules in `compile.ts` decide how the
  * fragments combine; nothing here depends on the other leaves of an ability.
@@ -287,6 +288,21 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const incoming = leaf.parameters.incoming;
       // A frame folded with its keyword leaves (compile-weapon-keywords.ts) carries `keywords`; a menu grants one of them.
       const keywords = Array.isArray(leaf.parameters.keywords) ? leaf.parameters.keywords as string[] : [closed(leaf, "keyword")];
+      if (leaf.parameters.keyword_choice === true && Array.isArray(leaf.parameters.option_groups)) {
+        // Options of one or more runs, each run with its own qualifier, under the group's opening condition (compile-keyword-menu.ts).
+        const { keywords: _keywords, keyword_choice: _choice, choice_label: _label, option_groups: groups, ...frame } = leaf.parameters as Record<string, unknown> & { option_groups: KeywordOption[] };
+        const menu: Node = { type: "choice", options: groups.map((group) => {
+          const grants = group.keywords.map((keyword, at) => {
+            const grant = effect({ ...leaf, parameters: { ...frame, keyword } }, context);
+            const qualifier = group.qualifiers[at];
+            return qualifier ? { type: "conditional", condition: condition(qualifier), effect: grant } : grant;
+          });
+          const body: Node = grants.length === 1 ? grants[0]! : { type: "sequence", steps: grants };
+          return group.gate ? { type: "conditional", condition: condition(group.gate), effect: body } : body;
+        }) };
+        if (leaf.parameters.choice_label !== undefined) menu.choice_label = closed(leaf, "choice_label");
+        return menu;
+      }
       if (leaf.parameters.keyword_choice === true) {
         // A menu option may carry the target qualifier printed after it (compile-weapon-keywords.ts): that option is conditional.
         const { keywords: _keywords, keyword_choice: _choice, choice_label: _label, option_conditions: conditions, ...frame } = leaf.parameters as Record<string, unknown> & { option_conditions?: CompileLeaf[] };

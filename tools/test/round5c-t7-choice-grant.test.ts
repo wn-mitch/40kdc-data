@@ -217,3 +217,54 @@ describe("Round 5C t7 choice and grant bundle", () => {
     expect(() => at("apply-mark", { subject: "antecedent", tag: "shaken" })).not.toThrow();
   });
 });
+
+// 10152: an "Or:" line after a banded sentence is an alternative, so the band does not decide it. Without an
+// authored choice leaf at the "Or:", the line stays outside the roll; it must never join the band's list.
+describe("Round 5C t7 result band and an Or line", () => {
+  it("stops the band's block run at an Or line", () => {
+    const text = "Select one enemy unit. Roll one D6: On a 2+: That unit suffers 1 mortal wound.\rOr: That unit suffers 2 mortal wounds.";
+    const effect = mechanicsOf(text, [
+      ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: true }],
+      ["Roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }],
+      ["That unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "2" }],
+    ]).effect;
+    expect(effect.effect.steps[0]).toMatchObject({ type: "dice-gated", on_success: { modifier: { count: 1 } } });
+    expect(effect.effect.steps[1]).toMatchObject({ type: "mortal-wounds", modifier: { count: 2 } });
+  });
+});
+
+// 10121: a menu whose third option holds two qualified keyword runs joined by "and" under an opening condition.
+// The qualifiers are target unit-keyword leaves, as the authored record holds them (fabricated keywords here).
+describe("Round 5C t7 keyword menu with a two-run option", () => {
+  const text = "Select one of the following for this unit's attacks to have: [Lethal Hits: ALPHA]. Or: [Sustained Hits 1: non-ALPHA]. Or: If the bravo doctrine is active for this unit, [Lethal Hits: ALPHA] and [Sustained Hits 1: non-ALPHA].";
+  const target = (negated: boolean): Record<string, unknown> => ({ keywords: ["ALPHA"], subject: "target", negated });
+  // `second` is the qualifier of the second option's run; null leaves that run unqualified.
+  const items = (second: Record<string, unknown> | null): Item[] => [
+    ["Select one of the following", "choice-open", { min_choices: 1, max_choices: 1, choice_label: "attacks ability" }],
+    ["for this unit's attacks to have", "weapon-ability-grant", { subject: "this-unit", weapon_type: "all" }],
+    ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+    ["ALPHA]", "unit-keyword", target(false)],
+    ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+    ...(second === null ? [] : [["non-ALPHA]", "unit-keyword", second] as Item]),
+    ["the bravo doctrine is active for this unit", "rule-active", { rule: "bravo-doctrine", negated: false }],
+    ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+    ["ALPHA]", "unit-keyword", target(false)],
+    ["Sustained Hits 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+    ["non-ALPHA]", "unit-keyword", target(true)],
+  ];
+
+  it("folds three options into one choice, the third option a sequence of two qualified grants under its condition", () => {
+    const effect = mechanicsOf(text, items(target(true))).effect;
+    expect(effect.type).toBe("choice");
+    expect(effect.options).toHaveLength(3);
+    expect(effect.options[2]).toMatchObject({ type: "conditional", effect: { type: "sequence" } });
+    expect(effect.options[2].effect.steps).toHaveLength(2);
+    expect(effect.options[2].effect.steps.map((step: any) => step.effect.modifier.abilities)).toEqual([["Lethal Hits"], ["Sustained Hits 1"]]);
+  });
+
+  it("refuses a menu where one run has its qualifier and another run in the menu has none", () => {
+    expect(errorsOf(text, items(null))).toMatch(/some runs qualified and some not/u);
+  });
+});
