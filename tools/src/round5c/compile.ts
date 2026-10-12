@@ -52,6 +52,7 @@ import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp, isPlacedLimit } 
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
+import { momentsUnderUse } from "./compile-nested-moment.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
 import { compileGranted } from "./compile-granted.js";
@@ -1266,15 +1267,26 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // part's moment, after an earlier effect, limits only that part.
     const usageAt = usageIndexes.length === 1 && firstEffectIndex !== -1 && usageIndexes[0]! > firstEffectIndex ? usageIndexes[0]! : -1;
     const usagePart = usageAt === -1 ? -1 : partStarts.findIndex((part) => part.index > usageAt && !planned.some((item) => item.index > usageAt && item.index < part.index));
+    // A moment under the use the first moment offers ("If you do: … When …") nests in the entry part for the phase.
+    const under = entryTrigger ? momentsUnderUse(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length) : new Set<number>();
+    under.delete(usagePart);
+    const nestedSteps: Node[] = [];
     partStarts.forEach((part, position) => {
       const own = pieces[position + 1]!;
-      partSteps.push({
+      const node: Node = {
         type: "ability-part", trigger: asTrigger(part.moments.map((index) => moments[index]!)), effect: own.length === 1 ? own[0]! : { type: "sequence", steps: own },
         ...(position === usagePart ? { usage: usages[0] } : {}),
-      });
+      };
+      if (under.has(position)) nestedSteps.push({ ...node, duration: "phase" });
+      else partSteps.push(node);
     });
+    if (nestedSteps.length) {
+      const entry = partSteps[0]!;
+      const inner = entry.effect as Node;
+      partSteps[0] = { ...entry, effect: { type: "sequence", steps: [...(inner.type === "sequence" ? inner.steps as Node[] : [inner]), ...nestedSteps] } };
+    }
     if (usagePart !== -1) usages.splice(0);
-    body = { type: "sequence", steps: partSteps };
+    body = partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };
     entryTrigger = null;
   }
   let resolved: ReturnType<typeof resolveEntry>;
