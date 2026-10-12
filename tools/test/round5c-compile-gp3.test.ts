@@ -183,3 +183,67 @@ describe("an Or: choice between keyword grants keeps each option's own condition
     expect(errorsOf(text, frameless)).toEqual(["A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it."]);
   });
 });
+
+describe("a phase end after a destruction nests under it (compile-nested-moment.ts, compile-delayed-destruction.ts)", () => {
+  const roll: Piece[] = [
+    ["roll one D6", "dice-roll", { dice: "D6" }],
+    ["on a 2+", "roll-result", { from: 2 }],
+    ["set this model back up on the battlefield", "set-up", { subject: "this-model", to: "battlefield" }],
+  ];
+  const text = "The first time this model is destroyed, remove it from play. Then, at the end of the phase, roll one D6: on a 2+, set this model back up on the battlefield.";
+  const head: Piece[] = [
+    ["The first time", "usage-limit", { frequency: "first-this-battle", per: "model" }],
+    ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
+    ["remove it from play", "destroy-models", { recipient: "this-model", count: "1", remove_from_play: true }],
+    ["at the end of the phase", "event", { kind: "phase-end", phase: "any", turn: "either" }],
+    ...roll,
+  ];
+
+  it("nests the end of that phase in the destruction's part", () => {
+    const mechanics = mechanicsOf(text, head);
+    expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
+    expect(mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "model-destroyed" }, effect: { type: "sequence", steps: [
+      { type: "destroy-models" },
+      { type: "ability-part", trigger: { event: "phase-ended" }, duration: "phase", effect: { type: "dice-gated" } },
+    ] } });
+  });
+
+  it("refuses a first-time destruction with no usage limit", () => {
+    const errors = errorsOf(text, head.filter((piece) => piece[1] !== "usage-limit"));
+    expect(errors).toEqual(["A \"first time\" limit with no usage limit has no DSL form; the ability would fire on every destruction."]);
+  });
+
+  it("keeps a phase end that names its phase as a sibling part", () => {
+    const named = text.replace("at the end of the phase", "at the end of your Fight phase");
+    const pieces = head.map((piece): Piece => piece[0] === "at the end of the phase" ? ["at the end of your Fight phase", "event", { kind: "phase-end", phase: "fight", turn: "your" }] : piece);
+    const steps = mechanicsOf(named, pieces).effect.steps as Array<Record<string, any>>;
+    expect(steps.map((step) => step.trigger.event)).toEqual(["model-destroyed", "phase-ended"]);
+  });
+
+  it("nests a named model's destruction followed by the end of the phase in the same sentence", () => {
+    const named = "The first time a model in this unit is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield.";
+    const pieces: Piece[] = [
+      ["The first time", "usage-limit", { frequency: "first-this-battle", per: "model" }],
+      ["a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["at the end of the phase", "event", { kind: "phase-end", phase: "any", turn: "either" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["set this model back up on the battlefield", "set-up", { subject: "this-model", to: "battlefield" }],
+    ];
+    const mechanics = mechanicsOf(named, pieces);
+    expect(mechanics.trigger).toMatchObject({ event: "model-destroyed" });
+    expect(mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "phase-ended" }, duration: "phase", effect: { type: "dice-gated" } });
+  });
+
+  it("still refuses a named model's repeated destruction followed by the end of the phase", () => {
+    const named = "Each time a model in this unit is destroyed, roll one D6 at the end of the phase. On a 2+, set this model back up on the battlefield.";
+    const errors = errorsOf(named, [
+      ["a model in this unit is destroyed", "event", { kind: "model-destroyed" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["at the end of the phase", "event", { kind: "phase-end", phase: "any", turn: "either" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["set this model back up on the battlefield", "set-up", { subject: "this-model", to: "battlefield" }],
+    ]);
+    expect(errors.join(" ")).toContain("has no DSL form");
+  });
+});

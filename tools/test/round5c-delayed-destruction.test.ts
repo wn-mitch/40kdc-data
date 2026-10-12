@@ -221,8 +221,8 @@ describe("Delayed destruction: a destruction, a Leadership test, and a phase-end
   });
 });
 
-describe("Delayed destruction: parts that keep today's compile", () => {
-  it("T5: a destruction, then a removal and the phase-end: two parts, as before", () => {
+describe("Delayed destruction: a phase end after \"then\" nests under the destruction", () => {
+  it("T5: a destruction, then a removal and the phase-end: the phase end nests in the destruction's part", () => {
     const text = "When this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const mechanics = mechanicsOf(placed(text,
       ["this model is destroyed", "event", { kind: "this-model-destroyed" }],
@@ -232,9 +232,11 @@ describe("Delayed destruction: parts that keep today's compile", () => {
       ["On a 2+", "roll-result", { from: 2, to: 6 }],
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
-    const parts = mechanics.effect.steps as Array<Record<string, any>>;
-    expect(parts.map((part) => part.trigger.event)).toEqual(["model-destroyed", "phase-ended"]);
-    expect(parts[1]!.trigger.condition).toBeUndefined();
+    expect(mechanics.effect.trigger.event).toBe("model-destroyed");
+    const [removal, later] = mechanics.effect.effect.steps as Array<Record<string, any>>;
+    expect(removal!.type).toBe("destroy-models");
+    expect(later).toMatchObject({ type: "ability-part", trigger: { event: "phase-ended" }, duration: "phase" });
+    expect(later!.trigger.condition).toBeUndefined();
   });
 
   it("T5b: with the usage limit before the first effect, the usage is on the entry, not on either part", () => {
@@ -249,8 +251,8 @@ describe("Delayed destruction: parts that keep today's compile", () => {
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
     expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
-    const parts = mechanics.effect.steps as Array<Record<string, any>>;
-    expect(parts.every((part) => part.usage === undefined)).toBe(true);
+    expect(mechanics.effect.usage).toBeUndefined();
+    expect((mechanics.effect.effect.steps as Array<Record<string, any>>).every((part) => part.usage === undefined)).toBe(true);
   });
 });
 
@@ -394,7 +396,7 @@ describe("Delayed destruction follow-up: a named model's destruction is refused,
     expect(result.ok ? [] : result.errors).toContain(NAMED_MODEL_ERROR);
   });
 
-  it("T1b: the same named destruction with a first-time usage limit is still refused (the destruction is not this model's)", () => {
+  it("T1b: the same named destruction with a first-time usage limit nests the phase end (the happened lowering counts only this model)", () => {
     const text = "The first time a model in this unit is destroyed, at the end of the phase, roll one D6: On a 2+, set this model back up.";
     const result = compileLeaves(placed(text,
       [...FIRST_TIME],
@@ -403,8 +405,11 @@ describe("Delayed destruction follow-up: a named model's destruction is refused,
       ...PHASE_END_ROLL,
       ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", min_enemy_distance: 1 }],
     ), text);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? [] : result.errors).toContain(NAMED_MODEL_ERROR);
+    expect(result.ok).toBe(true);
+    const mechanics = result.ok ? result.mechanics as unknown as Record<string, any> : {};
+    expect(mechanics.trigger).toMatchObject({ event: "model-destroyed" });
+    expect(mechanics.effect).toMatchObject({ type: "ability-part", trigger: { event: "phase-ended" }, duration: "phase" });
+    expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
   });
 
   it("T1c: a named destruction joined to the phase end by 'or' keeps the trigger list (a genuine alternative)", () => {
@@ -448,7 +453,7 @@ describe("Delayed destruction follow-up: a named model's destruction is refused,
 describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 / 7586 leaves", () => {
   const SET_UP = ["set this model back up", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", min_enemy_distance: 1 }] as [string, string, Record<string, unknown>];
 
-  it("T3 (753 with a usage limit): the usage is on the entry, destroy-models sits in the first part, the set-up in the second", () => {
+  it("T3 (753 with a usage limit): the usage is on the entry, destroy-models sits in the destruction's part, the set-up in the phase end nested in it", () => {
     const text = "The first time this model is destroyed, remove it from play, then, at the end of the phase, roll one D6: On a 2+, set this model back up, with D6 wounds remaining.";
     const mechanics = mechanicsOf(placed(text,
       [...FIRST_TIME],
@@ -461,11 +466,12 @@ describe("Delayed destruction follow-up: the 753 part path and the 1643 / 3644 /
       ["with D6 wounds remaining", "wounds-remaining", { value: "D6" }],
     ), text);
     expect(mechanics.usage).toEqual({ frequency: "first-this-battle", per: "model" });
-    const parts = mechanics.effect.steps as Array<Record<string, any>>;
-    expect(parts.map((part) => part.trigger.event)).toEqual(["model-destroyed", "phase-ended"]);
-    expect(JSON.stringify(parts[0])).toContain("destroy-models");
-    expect(JSON.stringify(parts[1])).toContain("set-up");
-    expect(JSON.stringify(parts[1])).toContain('"wounds_remaining":"D6"');
+    expect(mechanics.effect.trigger.event).toBe("model-destroyed");
+    const [removal, later] = mechanics.effect.effect.steps as Array<Record<string, any>>;
+    expect(removal!.type).toBe("destroy-models");
+    expect(later!.trigger.event).toBe("phase-ended");
+    expect(JSON.stringify(later)).toContain("set-up");
+    expect(JSON.stringify(later)).toContain('"wounds_remaining":"D6"');
   });
 
   it("T4 (1643 shape, D3 wounds): lowers to one phase-ended trigger with the happened condition, the usage, and the D3 wounds", () => {

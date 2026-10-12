@@ -52,7 +52,7 @@ import { foldSetUpLimits, foldSetUpPlacement, isForbiddenSetUp, isPlacedLimit } 
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { alternativeMoments, joinSegments, sentenceSegments, STRATAGEM_HEADER } from "./compile-segments.js";
 import { planDelayedDestruction } from "./compile-delayed-destruction.js";
-import { momentsUnderUse } from "./compile-nested-moment.js";
+import { momentsAfterDestruction, momentsUnderUse } from "./compile-nested-moment.js";
 import { gatedMoment, usabilityGates } from "./compile-usability-gate.js";
 import { triggerMoveEnd, type MoveEndRule } from "./compile-move-end.js";
 import { attachMoveEndNearest, bindEngagedPermissions, isBonusNode } from "./compile-move-end-nearest.js";
@@ -989,7 +989,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     else partStarts.push({ index, moments: [position] });
   });
   // "The first time this model is destroyed, at the end of the phase": one moment (compile-delayed-destruction.ts).
-  const delayed = planDelayedDestruction(list, triggerIndexes, partStarts, sourceText);
+  // "Then, at the end of the phase" after a destruction nests under it instead (momentsAfterDestruction below).
+  const afterDestruction = momentsAfterDestruction(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length);
+  const delayed = afterDestruction.size > 0 ? { errors: [], lowered: new Map(), dropped: new Set<number>(), nested: new Set<number>() } : planDelayedDestruction(list, triggerIndexes, partStarts, sourceText);
   errors.push(...delayed.errors);
   // The attack-window fold applies to a single-part ability; with later parts the durations stay conflicting.
   if (partStarts.length && fold !== null) { if (fold !== "refused") errors.push(CONFLICTING_DURATIONS); fold = null; }
@@ -1257,6 +1259,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
   const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
   let entryTrigger = asTrigger(leading);
+  // The end of the phase in which a named model was destroyed: the destruction's part holds the phase end for that phase.
+  for (const position of delayed.nested) body = { type: "ability-part", trigger: moments[position]!, effect: body, duration: "phase" };
   let foldedPhase = false;
   if (fold !== null && fold !== "refused") {
     // The attack moments end at the attack sequence; the other moments and the phase stay on the entry.
@@ -1278,7 +1282,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const usageAt = usageIndexes.length === 1 && firstEffectIndex !== -1 && usageIndexes[0]! > firstEffectIndex ? usageIndexes[0]! : -1;
     const usagePart = usageAt === -1 ? -1 : partStarts.findIndex((part) => part.index > usageAt && !planned.some((item) => item.index > usageAt && item.index < part.index));
     // A moment under the use the first moment offers ("If you do: … When …") nests in the entry part for the phase.
-    const under = entryTrigger ? momentsUnderUse(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length) : new Set<number>();
+    const under = entryTrigger ? new Set([...momentsUnderUse(list, triggerIndexes, partStarts, firstEffectIndex, sourceText, durations.length), ...afterDestruction]) : new Set<number>();
     under.delete(usagePart);
     const nestedSteps: Node[] = [];
     partStarts.forEach((part, position) => {
