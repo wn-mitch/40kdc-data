@@ -13,11 +13,19 @@ export type Placement = { sentence: number; clause: number };
 
 export const ordered = (leaves: readonly CompileLeaf[]) => [...leaves].sort((left, right) => left.start_byte - right.start_byte);
 
+/** A span that ends in sentence punctuation (a full stop, semicolon or colon, then at most emphasis marks and spaces). */
+const SENTENCE_END = /[.;:][\s*]*$/u;
+
 function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string | undefined): { sentence: boolean; and: boolean } {
   if (previous.fragment !== undefined && next.fragment !== undefined && previous.fragment !== next.fragment) return { sentence: true, and: false };
-  if (sourceText === undefined || previous.end_byte === undefined || next.start_byte <= previous.end_byte) return { sentence: false, and: false };
+  if (sourceText === undefined || previous.end_byte === undefined || next.start_byte < previous.end_byte) return { sentence: false, and: false };
+  // A leaf whose own span ends in the full stop ("... on an unmodified 3+.") closes its sentence when a moment
+  // opens the next one with no space ("3+.When this unit ..."), so no gap bytes carry the break. Other leaves
+  // (the items of a list that share their lead-in's conditions) keep their sentence.
+  const closes = next.family_id === "event" && previous.end_byte > previous.start_byte && SENTENCE_END.test(exactSpan(sourceText, previous.start_byte, previous.end_byte));
+  if (next.start_byte === previous.end_byte) return { sentence: closes, and: false };
   const gap = exactSpan(sourceText, previous.end_byte, next.start_byte);
-  return { sentence: /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  return { sentence: closes || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
 }
 
 /**

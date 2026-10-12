@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { bindAntecedents } from "../src/round5c/compile-antecedent.js";
 import { foldDestroyedByFilter } from "../src/round5c/compile-destroying-attack.js";
+import { placements } from "../src/round5c/compile-placement.js";
 import { isSameAttackResolved } from "../src/round5c/compile-weapon-qualified.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
@@ -171,6 +172,35 @@ describe("Round 5C destroyer filter after a unit-destroyed moment", () => {
     expect(() => foldDestroyedByFilter(out, { owner: "enemy" })).toThrow("already has a subject");
   });
 
+  // A filter that opens the next sentence ("Friendly BETA units' attacks ...") is that sentence's subject,
+  // never the recipient of the earlier effect, and it is the nearer unit for the scope after it.
+  const NEXT_SENTENCE: Item[] = [
+    ["Friendly BETA units", "unit-filter", { side: "friendly", keywords: ["BETA"] }],
+    ["attacks", "weapon-property-scope", { subject: "antecedent", weapon_type: "all" }],
+    ["target a marked unit", "unit-mark", { mark: "afflicted", subject: "target", negated: false }],
+    ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+  ];
+  const TEXT_NEXT = "When a friendly ALPHA unit is destroyed by an enemy unit. That enemy unit is marked. Friendly BETA units' attacks that target a marked unit have [Lethal Hits].";
+
+  it("leaves a filter in the next sentence out of the mark's recipient", () => {
+    const steps = compiled(TEXT_NEXT, [ALPHA, destroyedUnit(), ENEMY, marked(), ...NEXT_SENTENCE]).effect.steps as Array<Record<string, any>>;
+    expect(steps[0]).toMatchObject({ type: "designate", target: "event-subject" });
+    expect(steps[1]!.effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["BETA"] } });
+  });
+
+  it("keeps the destroyer filter for a scope whose nearer filter is not the destroyer's", () => {
+    const text = "When a friendly ALPHA unit is destroyed by an enemy unit. That enemy unit is marked until the end of the battle. Friendly BETA units' attacks that target a marked unit have [Lethal Hits].";
+    const items = [ALPHA, destroyedUnit(), ENEMY, marked(), ["until the end of the battle", "duration", { endpoint: "end-of-battle" }] as Item, ...NEXT_SENTENCE];
+    const mechanics = compiled(text, items);
+    expect(mechanics.effect.steps[0]).toMatchObject({ type: "designate", target: "event-subject" });
+    expect(mechanics.scope).toMatchObject({ duration: "battle" });
+  });
+
+  it("still refuses a scope's 'that ALPHA unit' with no nearer filter in between", () => {
+    const text = "When a friendly ALPHA unit is destroyed by an enemy unit. That ALPHA unit's attacks have [Lethal Hits].";
+    expect(refused(text, [ALPHA, destroyedUnit(), ENEMY, ["attacks", "weapon-property-scope", { subject: "antecedent", weapon_type: "all" }], ["Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }]])).toContain("names the destroyed unit's keywords");
+  });
+
   it("binds a membership that names 'that enemy unit' to the destroyer after a destroyed-by moment", () => {
     const text = "When a friendly ALPHA unit is destroyed by an enemy unit. That enemy unit's Character models are marked.";
     const leaves = placed(text, [ALPHA, destroyedUnit(), ENEMY]);
@@ -284,6 +314,37 @@ describe("Round 5C destruction gate scoped to its own part", () => {
     expect(steps[0]).toMatchObject({ type: "roll-result", modifier: { roll: "wound", critical_on: 4 } });
     expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "attacks-resolved", filter: { kind: "fight" } } });
     expect(steps[1]!.effect).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [{ type: "happened", parameters: { event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: "this-unit" }, window: "event" } }] } });
+  });
+});
+
+// The sentence break is carried by the first leaf's own span ("... 4+.") and the next sentence follows with
+// no space, as in the stored 8370 text, so no gap bytes mark it.
+describe("Round 5C a leaf that closes its sentence with its own full stop", () => {
+  const text = "When this unit is selected to fight, this unit's GAMMA attacks score a critical wound on an unmodified 4+.When this unit has fought, if those attacks did not slay an enemy trooper, one trooper in this unit is removed.";
+  const items: Item[] = [
+    ["When this unit is selected to fight", "event", { kind: "selected", to: "fight", subject: "this-unit" }],
+    ["this unit's GAMMA attacks score a critical wound on an unmodified 4+.", "critical-hit-threshold", { value: 4, roll: "wound" }],
+    ["When this unit has fought", "event", { kind: "attacks-resolved", action_kind: "fight", subject: "this-unit" }],
+    ["did not slay an", "unit-activity", { negated: true, activities: ["destroyed-models-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-unit" }],
+    ["enemy trooper", "unit-filter", { side: "enemy", level: "model" }],
+    ["one trooper in this unit is removed", "destroy-models", { recipient: "this-unit", count: "1" }],
+  ];
+
+  it("starts a new sentence at the next moment, so the earlier effect is not gated by its condition", () => {
+    const steps = compiled(text, items).effect.steps as Array<Record<string, any>>;
+    expect(steps[0]!.effect).toMatchObject({ type: "roll-result" });
+    expect(steps[1]!.effect).toMatchObject({ type: "conditional", condition: { operator: "not" }, effect: { type: "destroy-models" } });
+  });
+
+  it("numbers the sentences apart, and keeps leaves with no punctuation between them in one sentence", () => {
+    const places = placements(placed(text, items), text);
+    expect(places[1]!.sentence).not.toBe(places[2]!.sentence);
+    const plain = "this unit's GAMMA attacks score a critical wound on an unmodified 4+ and one trooper in this unit is removed";
+    const joined = placements(placed(plain, [
+      ["this unit's GAMMA attacks score a critical wound on an unmodified 4+", "critical-hit-threshold", { value: 4, roll: "wound" }],
+      ["one trooper in this unit is removed", "destroy-models", { recipient: "this-unit", count: "1" }],
+    ]), plain);
+    expect(joined[0]!.sentence).toBe(joined[1]!.sentence);
   });
 });
 

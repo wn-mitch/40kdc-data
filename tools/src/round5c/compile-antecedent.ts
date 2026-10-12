@@ -275,11 +275,17 @@ function linkedToFilter(leaves: readonly CompileLeaf[], at: number, sourceText: 
   return gap === undefined || LINKING_VERB.test(gap);
 }
 
-/** The index of the first leaf after a filter's owner leaves, when the filter sits right after the effect at `index`. */
-function afterFilter(leaves: readonly CompileLeaf[], index: number): number | undefined {
+/**
+ * The index of the first leaf after a filter's owner leaves, when the filter sits right after the
+ * effect at `index` in the same sentence. A filter in a later sentence ("… is marked. Friendly K units'
+ * attacks …") opens that sentence; it never describes the earlier effect.
+ */
+function afterFilter(leaves: readonly CompileLeaf[], index: number, sourceText?: string): number | undefined {
   const leaf = leaves[index]!;
   const filter = leaves[index + 1];
   if (!ANY_UNIT_KEYS[leaf.family_id] || filter?.family_id !== "unit-filter" || filter.fragment !== leaf.fragment) return undefined;
+  if (sourceText !== undefined && leaf.end_byte !== undefined && filter.start_byte !== undefined
+    && /[.;!?]/u.test(Buffer.from(sourceText, "utf8").subarray(leaf.end_byte, filter.start_byte).toString("utf8"))) return undefined;
   let at = index + 2;
   while (leaves[at]?.family_id === "unit-owner" && leaves[at]!.fragment === leaf.fragment) at += 1;
   return at;
@@ -291,7 +297,7 @@ function afterFilter(leaves: readonly CompileLeaf[], index: number): number | un
  * "from your army") claims it instead.
  */
 export function postfixFilter(leaves: readonly CompileLeaf[], index: number, sourceText?: string): boolean {
-  const at = afterFilter(leaves, index);
+  const at = afterFilter(leaves, index, sourceText);
   if (at === undefined) return false;
   const leaf = leaves[index]!;
   const next = leaves[at];
@@ -307,7 +313,7 @@ export function postfixFilter(leaves: readonly CompileLeaf[], index: number, sou
  * unit to point to, so binding it would fall back to this unit.
  */
 function claimedByLaterEffect(leaves: readonly CompileLeaf[], index: number, sourceText: string | undefined): boolean {
-  const at = afterFilter(leaves, index);
+  const at = afterFilter(leaves, index, sourceText);
   const next = at === undefined ? undefined : leaves[at];
   return next !== undefined && next.fragment === leaves[index]!.fragment && next.role === "EFFECT"
     && Object.values(next.parameters).includes("antecedent") && linkedToFilter(leaves, at!, sourceText);
@@ -348,6 +354,12 @@ function verbFirstSelection(leaves: readonly CompileLeaf[], index: number): stri
   return "selected-unit";
 }
 
+/** Whether a unit-filter sits at an index in [from, to). */
+function unitFilterBetween(leaves: readonly CompileLeaf[], from: number, to: number): boolean {
+  for (let at = from; at < to; at += 1) if (leaves[at]?.family_id === "unit-filter") return true;
+  return false;
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
@@ -360,7 +372,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // Checked before the Stratagem-target and bare-filter rules, which would otherwise take the antecedent.
   let destroyedAt = -1;
   for (let at = 0; at < index; at += 1) if (momentNamesUnit(leaves, at)) destroyedAt = at;
-  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null) {
+  // A unit-filter between the destroyer filter and the antecedent is the nearer unit, so the later rules take it.
+  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null && !unitFilterBetween(leaves, destroyedAt + 2, index)) {
     refuseDestroyedUnitAntecedent(leaves, destroyedAt, leaves[index]!, sourceText);
     return "event-subject";
   }
