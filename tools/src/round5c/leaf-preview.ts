@@ -21,7 +21,9 @@ export function previewLeaf(value: unknown): { text: string | null; problem: str
     const normalized = normalizeFingerprintParameters(input.family_id, input.parameters as Record<string, unknown>, version);
     // "This ability" binds to its record's id at compile; on its own the leaf reads as "this ability".
     const own = input.family_id === "unit-has-ability" && normalized.own === true;
-    const parameters = own ? { ...Object.fromEntries(Object.entries(normalized).filter(([key]) => key !== "own")), ability: OWN_PREVIEW_ID } : normalized;
+    const bound = own ? { ...Object.fromEntries(Object.entries(normalized).filter(([key]) => key !== "own")), ability: OWN_PREVIEW_ID } : normalized;
+    // A leaf that names the units of a unit-filter before it reads, on its own, as a friendly unit.
+    const parameters = Object.values(bound).includes("filtered-units") && bound.subject_filter === undefined ? { ...bound, subject_filter: { owner: "friendly" } } : bound;
     const fragment = leafFragment({ role: familyRole(input.family_id, version), family_id: input.family_id, family_version: version, parameters, start_byte: 0 });
     const described = fragment.kind === "implicit" ? fragment.note
       : fragment.kind === "duration" ? durationClauses(fragment.duration).trail || durationClauses(fragment.duration).lead || "for the rest of the battle"

@@ -110,7 +110,7 @@ describe("move-end-nearest version 3: the enemy unit the trigger names", () => {
 });
 
 describe("unit-state version 15: a this-model subject can be engaged", () => {
-  const current = () => currentFamilyVersion("unit-state");
+  const current = () => 15;
   const engagedThisModel = { states: ["engaged"], subject: "this-model", negated: false };
 
   it("accepts an engaged this-model condition only from version 15", () => {
@@ -136,7 +136,7 @@ describe("unit-state version 15: a this-model subject can be engaged", () => {
     }
   });
 
-  it("refuses every other this-model state, and a negated, qualified or dated this-model engagement", () => {
+  it("refuses, at version 15, every other this-model state and a negated, qualified or dated this-model engagement", () => {
     expect(() => normalizeFingerprintParameters("unit-state", { states: ["battle-shocked"], subject: "this-model", negated: false }, current())).toThrow(/only being on the battlefield/u);
     expect(() => normalizeFingerprintParameters("unit-state", { states: ["engaged", "on-battlefield"], subject: "this-model", negated: false }, current())).toThrow(/only being on the battlefield/u);
     expect(() => normalizeFingerprintParameters("unit-state", { ...engagedThisModel, negated: true }, current())).toThrow(/not negated/u);

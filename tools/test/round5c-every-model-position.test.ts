@@ -33,10 +33,17 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 }
 
 const POSITION = "unit-position";
-const VERSION = currentFamilyVersion(POSITION);
+/** The unit-position version this wave's extension introduced (later extensions may sit above it). */
+const VERSION = (() => {
+  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
+    const extension = familyExtension(POSITION, version);
+    if (extension !== undefined && FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION.includes(extension)) return version;
+  }
+  throw new Error("The every-model-position extension does not extend unit-position.");
+})();
 /** The version just before the one that added models; later extensions may sit above it. */
 const BEFORE_MODELS = (() => {
-  for (let version = VERSION; version > 1; version -= 1) {
+  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
     const extension = familyExtension(POSITION, version);
     if (extension !== undefined && FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION.includes(extension)) return version - 1;
   }

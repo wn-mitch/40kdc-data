@@ -113,6 +113,15 @@ export function gateFilter(leaves: readonly CompileLeaf[], index: number): boole
 }
 
 /**
+ * A condition whose units the author named as the unit-filter before it (subject filtered-units
+ * written on the leaf), not a value the binder assigned (`antecedent_keys`).
+ */
+export function namesFilteredUnits(leaf: CompileLeaf | undefined): boolean {
+  return leaf !== undefined && leaf.role === "CONDITION" && Object.values(leaf.parameters).includes(FILTERED_UNITS)
+    && !(leaf.antecedent_keys ?? []).includes("subject");
+}
+
+/**
  * A leaf a bare filter's description runs through on its way to the moment it describes: a
  * condition, a "from your army", or the unit-filter a following-filter distance measures to.
  */
@@ -139,6 +148,8 @@ export function momentOfFilter(leaves: readonly CompileLeaf[], filterIndex: numb
   if (before && before.fragment === filter.fragment && (FILTER_ANCHORS.has(before.family_id) || before.family_id === "unit-filter")) return null;
   let at = filterIndex + 1;
   while (describes(leaves, at, filter.fragment)) at += 1;
+  // A condition that names the filter's units outright (subject filtered-units) makes them the units it is about, not the moment's.
+  if (leaves.slice(filterIndex + 1, at).some(namesFilteredUnits)) return null;
   const moment = leaves[at];
   // An ownerless moment, or one its filter's own side owns ("an enemy model" + "selects its targets").
   return moment?.family_id === "event" && moment.fragment === filter.fragment && moment.parameters.subject === undefined
@@ -324,7 +335,7 @@ export function postfixFilter(leaves: readonly CompileLeaf[], index: number, sou
   const next = leaves[at];
   // A back-referring effect after the filter takes it as its own prefix ("Friendly X units have …").
   return !(next && next.fragment === leaf.fragment
-    && (FILTER_CLAIMANTS.has(next.family_id)
+    && (FILTER_CLAIMANTS.has(next.family_id) || namesFilteredUnits(next)
       || (next.role === "EFFECT" && Object.values(next.parameters).includes("antecedent") && linkedToFilter(leaves, at, sourceText))));
 }
 

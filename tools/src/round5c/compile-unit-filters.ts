@@ -74,7 +74,7 @@ export function assertOneFilterState(states: readonly string[] | undefined, held
 export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean; warlordTarget?: boolean } = {}): Record<string, unknown> {
   // "one of those X units": the matched set, which bindMatchedPools attached (compile-matched-set.ts).
   if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
-  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
+  const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; other_than?: string; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
   // A Warlord designation has a shape for a test (warlordTest) and for an attack's target (warlordTarget, compile-conditions.ts).
   if (p.designated === "warlord" && options.warlordTest !== true && options.warlordTarget !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
@@ -95,7 +95,7 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(p.visible === true ? { visible: true } : {}),
     // "engaged with an enemy unit engaged with a friendly CHARACTER unit": the unit this one is engaged with (nestedEngagedChain).
     ...(p.nested_engaged_with !== undefined ? { engaged_with: p.nested_engaged_with } : {}),
-    ...(p.other === true ? { excluding: "this-unit" } : {}),
+    ...(p.other === true ? { excluding: p.other_than === "event-subject" ? "event-subject" : "this-unit" } : {}),
     ...(filter.parameters.level === "model" ? { level: "model" } : {}),
     // "Character models in this unit" (groupMembership): the unit the models belong to.
     ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),

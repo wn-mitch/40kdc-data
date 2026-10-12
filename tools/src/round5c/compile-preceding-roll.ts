@@ -1,4 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { namesFilteredUnits } from "./compile-antecedent.js";
+import { dslUnitFilter } from "./compile-unit-filters.js";
 
 /** Rolls an event can name that a roll-modifier can change too. */
 const MODIFIABLE_ROLLS = new Set(["hit", "wound", "charge", "advance", "save", "leadership", "battle-shock", "damage", "hazard", "psychic", "desperate-escape"]);
@@ -17,6 +19,27 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
 }
 
 /**
+ * "adding 1 to the result if there are one or more" + "friendly X models" + "within 6\"": the
+ * unit-filter between a change to a preceding roll and the condition that names its units (subject
+ * filtered-units, authored) folds into that condition, so the change is followed by one condition
+ * leaf, which can attach to it. A condition whose units the binder assigned (the antecedent form) is not folded.
+ */
+function foldFilteredChangeConditions(leaves: readonly CompileLeaf[]): CompileLeaf[] {
+  const out: CompileLeaf[] = [];
+  for (let index = 0; index < leaves.length; index += 1) {
+    const leaf = leaves[index]!;
+    const filter = leaves[index + 1];
+    const condition = leaves[index + 2];
+    out.push(leaf);
+    if (leaf.family_id !== "roll-modifier" || leaf.parameters.roll !== "preceding" || filter?.family_id !== "unit-filter" || condition?.role !== "CONDITION") continue;
+    if (filter.fragment !== leaf.fragment || condition.fragment !== leaf.fragment || !namesFilteredUnits(condition)) continue;
+    out.push({ ...condition, start_byte: filter.start_byte, parameters: { ...condition.parameters, subject_filter: dslUnitFilter(filter) } });
+    index += 2;
+  }
+  return out;
+}
+
+/**
  * Bind each roll-modifier whose roll is `preceding` ("adding 1 to the result", "with +1 to that
  * roll") to the nearest roll before it in the record. A test or a roll event names the roll it
  * changes. The ability's own dice roll takes the change into its dice ("D6" + "+1" → "D6+1"),
@@ -26,7 +49,7 @@ function rollOf(leaf: CompileLeaf): { kind: "dice" } | { kind: "named"; roll: st
  * condition would otherwise gate the whole roll).
  */
 export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
-  const leaves = bindTestTakers(foldTestModifiers(input, sourceText));
+  const leaves = bindTestTakers(foldFilteredChangeConditions(foldTestModifiers(input, sourceText)));
   if (!leaves.some((leaf) => leaf.family_id === "roll-modifier" && leaf.parameters.roll === "preceding")) return [...leaves];
   const out = [...leaves];
   const dropped = new Set<number>();

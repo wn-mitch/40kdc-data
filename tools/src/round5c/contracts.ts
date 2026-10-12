@@ -29,6 +29,7 @@ import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-famil
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
 import { ENGAGEMENT_RELATION_FAMILIES } from "./family-extensions-16-engagement-relation.js";
+import { CONDITION_EXCLUSION_FAMILIES } from "./family-extensions-20-unit-state-and-presence-values.js";
 import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./family-extensions-16-otherwise-else-branch.js";
 import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./family-extensions-19-roll-prohibition.js";
 import { normalizeWeaponHasAbilityParameters, WEAPON_HAS_ABILITY_FAMILIES } from "./weapon-has-ability-family.js";
@@ -118,6 +119,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...PSYCHIC_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
   ...ENGAGEMENT_RELATION_FAMILIES,
+  ...CONDITION_EXCLUSION_FAMILIES,
   ...OTHERWISE_FAMILIES,
   ...ROLL_PROHIBITION_FAMILIES,
   ...WEAPON_HAS_ABILITY_FAMILIES,

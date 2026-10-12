@@ -40,6 +40,7 @@ import { selectionLimitFor } from "./compile-selection-limit.js";
 import { boundSelectionPair, independentPairRefusal, independentSelectionPair } from "./compile-bound-selection.js";
 import { bearerModelMax } from "./compile-bearer-size.js";
 import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
+import { foldConditionExclusions } from "./compile-condition-exclusions.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters, mergeStackedFilters } from "./compile-unit-filters.js";
 import { foldWarlordTests, gatesTriggerOnWarlord } from "./compile-warlord-test.js";
@@ -370,7 +371,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
-    list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
+    list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]);
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);
     refuseDistanceWithoutWeapon(list);
