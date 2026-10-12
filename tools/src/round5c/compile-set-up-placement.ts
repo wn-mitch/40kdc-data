@@ -146,7 +146,10 @@ export function foldSetUpPlacement(leaves: readonly CompileLeaf[], sourceText: s
     let limits = 0;
     for (let next = last + 1; next < result.length; next++) {
       const candidate = result[next]!;
-      const between = gap(result[next - 1]!, candidate, sourceText);
+      // "Remove your <unit-filter among> unit from the battlefield and then set it back up …": the owner's own span holds the
+      // among-filter that names its unit (bindTargetRefs binds it), so the run starts after that wording.
+      if (containedAmong(ownerLeaf, candidate)) continue;
+      const between = gap(containedAmong(ownerLeaf, result[next - 1]!) ? ownerLeaf : result[next - 1]!, candidate, sourceText);
       if (stepsOverAmong(candidate, result[next + 1], ownerLeaf, between, sourceText)) continue;
       if (!isLimit(candidate) || !sameFragment(ownerLeaf, candidate) || between === null || !LIMIT_GLUE.test(between)) break;
       checkLimit(candidate, ownerSubject);
@@ -191,6 +194,12 @@ function permissionLead(result: readonly CompileLeaf[], at: number, sourceText: 
   if (lead === null || !PERMISSION_LEAD.test(lead)) return null;
   if (filterAt !== null && gap(result[filterAt]!, set, sourceText)?.trim() !== "") return null;
   return { anchorAt, filterAt };
+}
+
+/** An among-filter that lies inside the span of the set-up (or add-unit) that its reference names the unit of. */
+function containedAmong(owner: CompileLeaf, leaf: CompileLeaf): boolean {
+  return leaf !== owner && leaf.family_id === "unit-filter" && leaf.parameters.among === AMONG_TARGETS && sameFragment(owner, leaf)
+    && owner.end_byte !== undefined && leaf.end_byte !== undefined && leaf.start_byte >= owner.start_byte && leaf.end_byte <= owner.end_byte;
 }
 
 /**

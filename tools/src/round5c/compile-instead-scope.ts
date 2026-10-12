@@ -1,3 +1,4 @@
+import { exactSpan } from "./contracts.js";
 import { addsAttackGate } from "./compile-attack-backref.js";
 import { attackTypeCondition } from "./compile-conditions.js";
 import type { CompileLeaf } from "./compile-fragments.js";
@@ -43,4 +44,12 @@ export function conditionedInsteadAfter(list: readonly CompileLeaf[], places: re
   return list.some((leaf, at) => leaf.family_id === "instead" && leaf.parameters.choice !== true && places[at]!.sentence > sentence
     && list.some((other, from) => from < at && other.role === "CONDITION" && other.family_id !== "roll-result" && other.family_id !== "target-is-selected"
       && places[from]!.sentence === places[at]!.sentence));
+}
+
+/** "this unit" / "this model" / "your unit" / "your model": wording that names the bearer. */
+const BEARER_WORDING = /\b(?:this|your) (?:unit|model)\b/iu;
+
+/** Whether a leaf's own source wording names the bearer, so its this-unit subject is the bearer and not a taker said another way. */
+export function namesBearer(leaf: CompileLeaf, sourceText: string | undefined): boolean {
+  return sourceText !== undefined && leaf.end_byte !== undefined && BEARER_WORDING.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte));
 }

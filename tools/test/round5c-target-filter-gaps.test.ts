@@ -109,3 +109,70 @@ describe("a leading destroyer filter and the object filter that restates the obj
     expect(errorsOf(text, pieces).join(" ")).toContain("A unit-filter needs a select-unit or attack right before it");
   });
 });
+
+describe("a later Stratagem target measured from an earlier target (compile-target-refs.ts)", () => {
+  const text = "Start of your Movement phase. One ALPHA unit from your army and up to three friendly BETA units within 6\" of that ALPHA unit. Until the end of the phase, those BETA units add 1 to their Move characteristic.";
+  const pieces = (position: Piece): Piece[] => [
+    ["Start of your Movement phase", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "WHEN"],
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+    ["from your army", "unit-owner", { owner: "friendly" }, "TARGET"],
+    ["up to three", "stratagem-target", { count: "up-to", count_max: 3 }, "TARGET"],
+    ["friendly BETA units", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "TARGET"],
+    position,
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
+    ["those BETA units", "unit-filter", { side: "friendly", keywords: ["BETA"], among: "stratagem-targets", targets: "any" }, "EFFECT"],
+    ["add 1 to their Move characteristic", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 1, weapon_type: "all" }, "EFFECT"],
+  ];
+
+  it("binds an antecedent distance to the first target", () => {
+    const mechanics = mechanicsOf(text, pieces(["within 6\" of that ALPHA unit", "unit-position", { kind: "within", inches: 6, subject: "target", of: "antecedent", negated: false }, "TARGET"]));
+    expect(JSON.stringify(mechanics)).not.toContain("this-unit");
+    const result = compileLeaves(placed(text, pieces(["within 6\" of that ALPHA unit", "unit-position", { kind: "within", inches: 6, subject: "target", of: "antecedent", negated: false }, "TARGET"])), text);
+    const second = (result.ok ? (result.core as any).target_restrictions : [])[1];
+    expect(JSON.stringify(second.eligibility)).toContain('{"type":"within","parameters":{"of":{"stratagem_target":"first"},"range":{"inches":6}}}');
+  });
+});
+
+describe("a set-up that holds the among-filter naming its unit folds the placement limits after it (compile-set-up-placement.ts)", () => {
+  const text = "Movement phase. One friendly ALPHA unit, and one friendly BETA model. Remove your ALPHA unit from the battlefield and then set it back up anywhere on the battlefield that is wholly within 6\" of your BETA model and not within Engagement Range of one or more enemy units.";
+  const base = (setUp: Piece): Piece[] => [
+    ["Movement phase", "use-window", { your_phases: ["movement"], opponent_phases: [], either_phases: [] }, "WHEN"],
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }, "TARGET"],
+    ["one", "stratagem-target", { count: "one" }, "TARGET"],
+    ["friendly BETA model", "unit-filter", { side: "friendly", keywords: ["BETA"], level: "model" }, "TARGET"],
+    setUp,
+    ["your ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"], among: "stratagem-targets", targets: "one" }, "EFFECT"],
+    ["wholly within 6\" of", "unit-position", { kind: "within", inches: 6, of: "following-filter", subject: "antecedent", negated: false, wholly: true }, "EFFECT"],
+    ["your BETA model", "unit-filter", { side: "friendly", keywords: ["BETA"], level: "model", among: "stratagem-targets", targets: "one" }, "EFFECT"],
+    ["not within Engagement Range of one or more enemy units", "unit-state", { states: ["engaged"], subject: "antecedent", negated: true }, "EFFECT"],
+  ];
+  // The set-up's own wording opens at "Remove" so the among-filter sits inside its span; the limits come after its end.
+  const containing: Piece = ["Remove your ALPHA unit from the battlefield and then set it back up anywhere on the battlefield", "set-up", { subject: "antecedent", to: "battlefield", from: "battlefield" }, "EFFECT"];
+
+  /** `placed` walks forward, so the nested among-filter is moved ahead of the set-up that contains it. */
+  function leavesOf(setUp: Piece): CompileLeaf[] {
+    const all = placed(text, base(setUp).filter((piece) => piece !== setUp && piece[0] !== "your ALPHA unit"));
+    const [set] = placed(text, [setUp]);
+    const [among] = placed(text, [["your ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"], among: "stratagem-targets", targets: "one" }, "EFFECT"]]);
+    return [...all, set!, among!].sort((left, right) => left.start_byte - right.start_byte || (right.end_byte ?? 0) - (left.end_byte ?? 0));
+  }
+
+  it("binds the set-up to the unit target and folds the near and unengaged limits", () => {
+    const result = compileLeaves(leavesOf(containing), text);
+    expect(result.ok ? [] : result.errors).toEqual([]);
+    if (!result.ok) return;
+    const effect = (result.mechanics as unknown as Record<string, any>).effect;
+    expect(effect).toMatchObject({ type: "set-up", target: { stratagem_target: "first" } });
+    expect(effect.modifier.near).toEqual([{ of: { stratagem_target: "second" }, range: { inches: 6 }, wholly: true }]);
+    expect(effect.modifier.placement).toBe("unengaged");
+  });
+
+  it("still refuses a bare set-up when no among-filter names its unit target", () => {
+    const bare: Piece = ["Remove your ALPHA unit from the battlefield and then set it back up anywhere on the battlefield", "set-up", { subject: "antecedent", to: "battlefield", from: "battlefield" }, "EFFECT"];
+    const result = compileLeaves(placed(text, base(bare).filter((piece) => piece[0] !== "your ALPHA unit")), text);
+    // The bare "it" names the last target, a model; a set-up places a unit.
+    expect(result.ok ? [] : result.errors.join(" ")).toMatch(/model-level Stratagem target/u);
+  });
+});

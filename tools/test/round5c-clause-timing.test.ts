@@ -246,15 +246,27 @@ describe("Parenthesised 'or' replaces a test modifier (7100 shape)", () => {
     expect(mechanics.effect).toEqual({ type: "test", target: "this-unit", modifier: { test: "battle-shock", modifier: -1 } });
   });
 
-  it("refuses an instead whose condition names this unit when the test is another unit's", () => {
+  const bearerLeaves = (text: string, wording: string) => placed(text,
+    ["Each enemy unit must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }],
+    ["subtracting 1 from that test", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }],
+    ["or", "instead", {}],
+    ["subtracting 2", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 2 }],
+    [wording, "unit-keyword", { keywords: ["PSYKER"], subject: "this-unit", negated: false }]);
+
+  it("keeps an instead whose condition says this unit when the test is another unit's: the bearer's size picks the penalty", () => {
+    // 9199 shape: "-2 … if this unit has 13+ models" is about the bearer, so the -1 and -2 must not stack.
     const text = "Each enemy unit must take a Battle-shock test, subtracting 1 from that test (or subtracting 2 if this unit is a PSYKER).";
-    const leaves = placed(text,
-      ["Each enemy unit must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }],
-      ["subtracting 1 from that test", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 1 }],
-      ["or", "instead", {}],
-      ["subtracting 2", "roll-modifier", { roll: "battle-shock", operation: "subtract", value: 2 }],
-      ["if this unit is a PSYKER", "unit-keyword", { keywords: ["PSYKER"], subject: "this-unit", negated: false }]);
-    const result = compileLeaves(leaves, text);
+    const tests = nodesOf(mechanicsOf(bearerLeaves(text, "if this unit is a PSYKER"), text), "conditional");
+    expect(tests).toHaveLength(2);
+    expect(tests[1]!.condition.operands.at(-1)).toEqual({ type: "has-keyword", parameters: { all_of: ["PSYKER"] } });
+    expect(JSON.stringify(tests[0]!.condition)).toContain('"all_of":["PSYKER"]');
+    expect(tests[0]!.effect.target).toBe("recipient");
+    expect(tests[1]!.effect.target).toBe("recipient");
+  });
+
+  it("refuses an instead whose this-unit condition is worded as another unit", () => {
+    const text = "Each enemy unit must take a Battle-shock test, subtracting 1 from that test (or subtracting 2 if that unit is a PSYKER).";
+    const result = compileLeaves(bearerLeaves(text, "if that unit is a PSYKER"), text);
     expect(result.ok).toBe(false);
     expect(result.errors.join(" ")).toContain("another unit's test");
   });

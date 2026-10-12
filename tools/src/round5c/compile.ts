@@ -74,7 +74,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
-import { conditionedInsteadAfter, inheritAttackFrame } from "./compile-instead-attack-gate.js";
+import { conditionedInsteadAfter, inheritAttackFrame, namesBearer } from "./compile-instead-scope.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -403,7 +403,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const effectSentences = new Set(list.flatMap((leaf, index) => leaf.role === "EFFECT" ? [places[index]!.sentence] : []));
   const firstSentence = Math.min(...effectSentences);
   // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so A gates only the first sentence;
-  // as an ability-wide gate it would also guard the replacement (compile-instead-attack-gate.ts).
+  // as an ability-wide gate it would also guard the replacement (compile-instead-scope.ts).
   const firstGateIsOwn = conditionedInsteadAfter(list, places, firstSentence);
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
@@ -911,10 +911,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
       continue;
     }
-    // A change to a test someone else takes ("each enemy unit must take a test, subtracting 1 (or 2 if this unit is …)"):
-    // the replacement's condition must name that taker, not this unit, or it would test the wrong unit.
+    // A change to a test someone else takes ("each enemy unit must take a test, subtracting 1 (or 2 if that unit is …)"):
+    // the replacement's condition names that taker. A condition on this unit stays when its own wording says the bearer
+    // ("-2 … if this unit has 13+ models"), since this-unit is then the bearer and not a mislabelled taker.
     if (typeof replaced.leaf.parameters.test_taker === "string" && list.some((leaf, at) => leaf.role === "CONDITION"
-      && places[at]!.clause === places[replacement.index]!.clause && ["this-unit", "this-model"].includes(String(leaf.parameters.subject)))) {
+      && places[at]!.clause === places[replacement.index]!.clause && ["this-unit", "this-model"].includes(String(leaf.parameters.subject))
+      && !namesBearer(leaf, sourceText))) {
       errors.push("\"Instead\" names this unit in a change to another unit's test; the replacement's condition must name that test's taker.");
       continue;
     }
