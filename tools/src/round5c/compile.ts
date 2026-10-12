@@ -413,6 +413,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const usageScopes = new Set<string>();
   // Per-model usage-limits: on a model selection each caps the selected model (selection_limit); otherwise they stay usages.
   const modelUsages: Array<{ leaf: CompileLeaf; index: number }> = [];
+  // Per-selected-unit usage-limits ("once per turn" counted per unit selected): the selection's own cap (compile-selection-limit.ts).
+  const selectedUnitUsages: Array<{ leaf: CompileLeaf; index: number }> = [];
   let optional = false;
   // The last source sentence holding an optional-use: moments opened after it ("If you do, … when this unit …") depend on the use and stay mandatory.
   let optionalSentence = -1;
@@ -565,6 +567,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           usageIndexes.push(index);
           if (leaf.parameters.per !== undefined) usageScopes.add(String(leaf.parameters.per));
           if (leaf.parameters.per === "model") modelUsages.push({ leaf, index });
+          if (leaf.parameters.per === "selected-unit") selectedUnitUsages.push({ leaf, index });
         } else if (leaf.family_id === "usage-scope") usageScopes.add(String(leaf.parameters.per));
         else if (leaf.family_id === "optional-use" && designationOptional.has(index)) { /* the designation's own choice: its opener is wrapped optional */ }
         else if (leaf.family_id === "optional-use") {
@@ -595,6 +598,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       }
       else if (leaf.role === "EVENT") {
         if (leaf.family_id === "attack") {
+          // "that targets an enemy unit visible to the bearer": the defender is the following filter. No lowering
+          // binds it yet, and an unbound target would be dropped, so the record refuses.
+          if (leaf.parameters.target === "following-filter") errors.push("An attack whose target is the unit-filter after it has no defender binding yet.");
           // An attack whose properties compile-attack-properties.ts framed has its type on each of them;
           // a back-reference repeats its antecedent's type only where that one's gate does not reach.
           const gate = addsAttackGate(leaf) ? attackTypeCondition(leaf) : null;
@@ -954,6 +960,26 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       selectionLimit = attempt(() => selectionLimitFor(modelUsages[0]!.leaf, list)) as Node | null;
     }
   }
+  // "Once per turn" counted per selected unit (8553): the cap is the one unit selection's selection_limit,
+  // counted across every bearer, so the usage is not the ability's. Other shapes have no reading and refuse.
+  if (selectedUnitUsages.length) {
+    if (selectedUnitUsages.length > 1) errors.push("More than one per-selected-unit usage limit; the selection has one cap.");
+    else if (selections.length !== 1) errors.push("A per-selected-unit usage needs exactly one unit selection.");
+    else if (selections[0]!.parameters.target_kind === "model") errors.push("A per-selected-unit usage on a model selection has no reading.");
+    else if (partStarts.length > 0 || list.some((leaf) => leaf.family_id === "persistent-designation-open")) {
+      errors.push("A per-selected-unit usage with parts or a persistent designation has no reading yet.");
+    } else if (planned.some((item) => item.selected)) {
+      // Attacks against the selected unit make it a designate-target, whose select has no selection_limit field.
+      errors.push("A per-selected-unit usage on a unit whose attacks are designated has no selection cap in designate-target yet.");
+    } else {
+      const { index } = selectedUnitUsages[0]!;
+      const at = usageIndexes.indexOf(index);
+      usages.splice(at, 1);
+      usageIndexes.splice(at, 1);
+      usageScopes.delete("selected-unit");
+      selectionLimit = attempt(() => selectionLimitFor(selectedUnitUsages[0]!.leaf, list)) as Node | null;
+    }
+  }
   // "One or more units from your army with this ability": once for the army (compile-holder-abilities.ts).
   applyHolderAllowance(list, triggers, options.abilityId, usages, usageScopes);
   if (usages.length > 1) errors.push("More than one usage limit; the entry has one usage.");
@@ -989,8 +1015,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // "Each time that VEHICLE model makes an attack": an attack gate on a model selection has no decided
   // binding; compiled as-is the gate is dropped (the same drop a unit selection shows, pre-existing).
   // A designated model's attacks ("that targets that model") keep their own refusal, below.
+  // "that VEHICLE model makes an attack" (unit that-unit) is the selected model's own attack: it lowers with
+  // the selection's unit as attacker (attackerOf), so only other attackers on a model selection refuse here.
   if (selections.some((leaf) => leaf.parameters.target_kind === "model") && !list.some((leaf) => leaf.family_id === "target-is-selected")
-    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes")) {
+    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes" && leaf.parameters.unit !== "that-unit")) {
     errors.push("An attack made by a selected model has no decided binding yet; compiling it would drop the attack gate.");
   }
   // "Select one other X model": the selector excludes only the bearer's unit, which is the selected model's only when it has one model.

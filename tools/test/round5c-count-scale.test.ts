@@ -378,8 +378,10 @@ describe("Round 5C per-unit dice around a reference unit", () => {
     expect(mechanicsOf(leaves({ side: "any", other: true }), text).effect.selector.owner).toBe("any");
   });
 
-  it("refuses keywords that would narrow the target too", () => {
-    expect(errorsOf(leaves({ side: "enemy", other: true, keywords: ["ALPHA"] }), text)).toMatch(/cannot narrow by keyword/u);
+  it("keeps keywords off the target: they narrow only the other units", () => {
+    const selector = mechanicsOf(leaves({ side: "enemy", other: true, keywords: ["ALPHA"] }), text).effect.selector;
+    expect(selector.keywords).toBeUndefined();
+    expect(JSON.stringify(selector.eligibility)).toContain("\"all_of\":[\"ALPHA\"]");
   });
 
   it("measures an ordinary quantifier's range to the attack's target", () => {

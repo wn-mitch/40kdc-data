@@ -134,9 +134,12 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
     // any unit the rest names. "Other" there is other than the target, which the target branch holds.
     const { other: _other, ...rest } = filter;
     if (leaf.parameters.distance === "within" || leaf.parameters.engaged_with !== undefined) throw new CompileError("A for-each that also takes the target cannot range from the bearer; the range would narrow the target too.");
-    if (rest.keywords?.length || rest.excluded_keywords?.length) throw new CompileError("A for-each that also takes the target cannot narrow by keyword; the keywords would narrow the target too.");
-    const others = filterEligibility(rest, within);
-    if (!others) throw new CompileError("A for-each that also takes the target needs a range or a filter naming the other units.");
+    // The keywords narrow only the other units ("the target unit and every other enemy INFANTRY unit within 3"):
+    // the target is taken whatever its keywords, so they stay off the selector and join the others' gate.
+    const positional = filterEligibility(rest, within);
+    if (!positional) throw new CompileError("A for-each that also takes the target needs a range or a filter naming the other units.");
+    const keywordGate = keywordGateOf(filter);
+    const others = keywordGate.length ? { operator: "and", operands: [positional, ...keywordGate] } : positional;
     eligibility = { operator: "or", operands: [{ type: "same-unit", parameters: { as: "defender" } }, others] };
   } else eligibility = filterEligibility(filter, gated);
   return {
@@ -144,8 +147,8 @@ export function wrapForEachUnit(leaf: CompileLeaf, body: Node): Node {
     selector: {
       // A quantifier over "each unit" of either side takes any unit.
       owner: scope === "friendly" ? "friendly" : scope === "any" ? "any" : "enemy",
-      ...(filter.keywords?.length ? { keywords: filter.keywords } : {}),
-      ...(filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
+      ...(leaf.parameters.including !== "target" && filter.keywords?.length ? { keywords: filter.keywords } : {}),
+      ...(leaf.parameters.including !== "target" && filter.excluded_keywords?.length ? { excluded_keywords: filter.excluded_keywords } : {}),
       ...(eligibility ? { eligibility } : {}),
       ...(leaf.parameters.distance === "within" ? { within_inches: closed(leaf, "inches") } : {}),
       ...(leaf.parameters.engaged_with !== undefined ? { engagement_relation: "engaged-with-bearer", reference: leaf.parameters.engaged_with === "this-model" ? "bearer" : "bearer-unit" } : {}),
@@ -181,6 +184,14 @@ function filterEligibility(filter: UnitFilter, extra: Node | null = null): Node 
     ...(extra ? [extra] : []),
   ];
   return checks.length === 0 ? null : checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
+}
+
+/** A unit filter's all-of keywords and each excluded keyword, as eligibility checks on one candidate. */
+function keywordGateOf(filter: UnitFilter): Node[] {
+  return [
+    ...(filter.keywords?.length ? [{ type: "has-keyword", parameters: { all_of: filter.keywords } }] : []),
+    ...(filter.excluded_keywords ?? []).map((keyword) => ({ operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: [keyword] } }] })),
+  ];
 }
 
 

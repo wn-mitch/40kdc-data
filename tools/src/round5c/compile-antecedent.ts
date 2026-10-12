@@ -396,6 +396,10 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // In a Stratagem's WHEN clause, "an enemy unit ends a move" + "within 8\" of …": the moment's
   // unit, not the Stratagem's target, which only the later clauses name.
   const inWhen = leaves[index]!.fragment === "WHEN" && moment?.fragment === "WHEN";
+  // "Each time a ranged attack is allocated to a model, … that model" in a Stratagem: the allocated model is the
+  // moment's object, not the Stratagem's target. A bare filter before the anaphor still wins (checked above).
+  const allocation = earlier.filter((other) => other.family_id === "event" && other.parameters.kind === "damage-allocated" && other.fragment === leaves[index]!.fragment).at(-1);
+  if (allocation && !inWhen) return "event-object";
   // With several targets, the target in focus (compile-target-refs.ts bindTargetRefs) instead.
   if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return focus?.(index) ?? "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,

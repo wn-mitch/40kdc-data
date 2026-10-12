@@ -4,6 +4,7 @@
  * acting unit. Used from `compile.ts` and the containers.
  */
 
+import { attackTypeCondition } from "./compile-conditions.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
@@ -171,6 +172,11 @@ export function trigger(leaf: CompileLeaf): Node {
   // A list of roll kinds is several triggers; a caller that takes one trigger must use triggerLeaves().
   if (Array.isArray(leaf.parameters.rolls)) throw new CompileError("A moment that names several rolls lowers to one trigger per roll; it cannot be one trigger.");
   const node = eventTrigger(leaf);
+  // "each time a ranged attack is allocated to a model": the allocated attack's type is the trigger's condition.
+  if (leaf.family_id === "event" && leaf.parameters.attack_type !== undefined) {
+    const type = attackTypeCondition({ ...leaf, parameters: { attack_type: closed(leaf, "attack_type") } });
+    if (type) node.condition = node.condition === undefined ? type : { operator: "and", operands: [node.condition, type] };
+  }
   // "Those attacks": the moment's attacks, which a later effect names (compile-bound-attacks.ts).
   if (leaf.parameters.binds_event_variable !== undefined && leaf.family_id === "event") node.binds_event_variable = closed(leaf, "binds_event_variable");
   // A folded unit-filter (compile-unit-filters.ts) names the unit whose action fires it.

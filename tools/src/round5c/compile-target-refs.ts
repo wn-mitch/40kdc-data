@@ -93,6 +93,14 @@ function matchedNames(filter: CompileLeaf, heads: readonly TargetHead[]): Match[
  * A bare "your unit" (no keywords) that matches several targets, the first among them, is the
  * first target when the record has no target modes; any other ambiguity refuses.
  */
+/** Whether the head that names `name` picks several targets: an up-to count, or a count_max above one. */
+function isMultiCountHead(heads: readonly TargetHead[], name: string): boolean {
+  const head = heads.find((item) => item.names.includes(name));
+  const parameters = head?.selector?.parameters;
+  if (parameters === undefined || head?.selector?.family_id !== "stratagem-target") return false;
+  return parameters.count === "up-to" || Number(parameters.count_max ?? 1) > 1;
+}
+
 function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: string; singular: boolean } {
   const matches = matchedNames(filter, heads);
   const names = matches.map((match) => match.name);
@@ -108,6 +116,9 @@ function referenceOf(filter: CompileLeaf, heads: readonly TargetHead[]): { ref: 
     if (matches[0]!.gate) throw new CompileError(`An among-filter at byte ${filter.start_byte} names one target, which has its keywords only in some of its alternatives.`);
     return { ref: targetRef(names[0]!), singular: true };
   }
+  // "one of those WAR DOG units" over one "up to three" head: the head is one target that holds several units,
+  // so a plural pick takes that head whole. A singular head or a fixed count keeps the refusal below.
+  if (matches.length === 1 && !matches[0]!.gate && isMultiCountHead(heads, names[0]!)) return { ref: targetRefs(pick as "every" | "any", matches), singular: false };
   if (matches.length < 2) throw new CompileError(`An among-filter at byte ${filter.start_byte} names ${pick === "every" ? "every" : "any one"} of several targets but matches only ${names[0]}.`);
   return { ref: targetRefs(pick as "every" | "any", matches), singular: false };
 }

@@ -250,7 +250,7 @@ describe("Round 5C model selection with an attack gate", () => {
       ["Select one friendly", "select-unit", { distance: "any", visible: false }],
       ["ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
       ["Each model can only be selected for this ability once per turn", "usage-limit", { frequency: "once-per-turn", per: "model" }],
-      ["Each time that ALPHA model makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }],
+      ["Each time that ALPHA model makes an attack", "attack", { direction: "makes", unit: "this-model", attack_type: "any" }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
     ], text);
     expect(result.ok).toBe(false);
