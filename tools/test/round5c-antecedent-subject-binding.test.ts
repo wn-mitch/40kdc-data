@@ -459,8 +459,9 @@ describe("authoring-only shapes the leaves already express (SS-G)", () => {
     const wound = gated.effect.steps.at(-1);
     expect(wound.condition.operands.map((operand: any) => operand.type).sort()).toEqual(["roll-result", "same-unit"]);
     expect(wound.effect.target).toBe("event-subject");
-    // Without the second leaf the Wound penalty is gated on the failed test alone.
-    const ungated = mechanicsOf(text, base([]));
+    // Without the second leaf and without "as well" (which compile-attack-continuation.ts reads as the earlier
+    // sentence's attacks) the Wound penalty is gated on the failed test alone.
+    const ungated = mechanicsOf(text.replace(" as well", ""), base([]));
     expect(ungated.effect.steps.at(-1).condition.type).toBe("roll-result");
   });
 

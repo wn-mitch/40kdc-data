@@ -35,6 +35,7 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
   return result.mechanics as unknown as Record<string, any>;
 }
 
+const FAB = { faction_id: "fab", source_type: "stratagem", catalog: { faction: [{ name: "Plasma rifle", type: "ranged" as const }] } };
 const SCOPE_ERROR = "An attack-property scope needs a following weapon property in its clause.";
 const NO_GRANT_ERROR = "\"Such a weapon\" has no earlier keyword grant to name the weapons it gave the keyword to.";
 const scope = (wording: string, weaponType?: string): [string, string, Record<string, unknown>] =>
@@ -188,17 +189,46 @@ describe("a weapon scope printed before its recipient chain", () => {
     expect(result.ok ? [] : result.errors).toEqual([SCOPE_ERROR]);
   });
 
-  it("refuses a scope that names its weapons by name, which the hoist never moves", () => {
-    const list = placed(ALPHA_TEXT,
-      scope("Ranged weapons equipped by", "ranged"),
+  // A scope's weapon_name is legitimate (weapon-property-scope carries one weapon name), but the name needs the
+  // record's faction to resolve, and the hoist never moves a scope that names its weapons.
+  const named = () => placed(ALPHA_TEXT,
+    scope("Ranged weapons equipped by", "ranged"),
+    ["ALPHA, BETA and GAMMA models", "unit-filter", { side: "friendly", any_keywords: ["ALPHA", "BETA", "GAMMA"], level: "model" }],
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["IGNORES COVER", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+  ).map((leaf) => leaf.family_id === "weapon-property-scope" ? { ...leaf, parameters: { ...leaf.parameters, weapon_name: "plasma rifle" } } : leaf);
+
+  it("never hoists a scope that names its weapons by name", () => {
+    const list = named();
+    expect(hoistWeaponRecipients(list, ALPHA_TEXT).map((leaf) => leaf.family_id)).toEqual(list.map((leaf) => leaf.family_id));
+  });
+
+  it("refuses a scope that names a weapon when the record has no faction to look it up in", () => {
+    const result = resultOf(named(), ALPHA_TEXT);
+    expect(result.ok ? [] : result.errors).toEqual(["Named weapons need the record's faction to look them up."]);
+  });
+
+  it("still refuses the scope for the unhoisted chain once a faction resolves the name", () => {
+    const text = "Plasma rifle weapons equipped by ALPHA, BETA and GAMMA models from your army have the IGNORES COVER ability.";
+    const list = placed(text,
+      scope("Plasma rifle weapons", "ranged"),
       ["ALPHA, BETA and GAMMA models", "unit-filter", { side: "friendly", any_keywords: ["ALPHA", "BETA", "GAMMA"], level: "model" }],
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["IGNORES COVER", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
-    ).map((leaf) => leaf.family_id === "weapon-property-scope" ? { ...leaf, parameters: { ...leaf.parameters, weapon_name: "plasma rifle" } } : leaf);
-    const hoisted = hoistWeaponRecipients(list, ALPHA_TEXT);
-    expect(hoisted.map((leaf) => leaf.family_id)).toEqual(list.map((leaf) => leaf.family_id));
-    const result = resultOf(list, ALPHA_TEXT);
+    ).map((leaf) => leaf.family_id === "weapon-property-scope" ? { ...leaf, parameters: { ...leaf.parameters, weapon_name: "Plasma rifle" } } : leaf);
+    const result = compileLeaves(list, text, { weapons: FAB });
     expect(result.ok ? [] : result.errors).toEqual([SCOPE_ERROR]);
+  });
+
+  it("compiles a named scope that has its recipient in front, once a faction resolves the name", () => {
+    const text = "Your unit's Plasma rifle weapons have the IGNORES COVER ability.";
+    const list = placed(text,
+      ["Your unit's Plasma rifle weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged" }],
+      ["IGNORES COVER", "weapon-ability-keyword", { keyword: "Ignores Cover" }],
+    ).map((leaf) => leaf.family_id === "weapon-property-scope" ? { ...leaf, parameters: { ...leaf.parameters, weapon_name: "Plasma rifle" } } : leaf);
+    const result = compileLeaves(list, text, { weapons: FAB });
+    expect(result.ok ? [] : result.errors).toEqual([]);
+    expect(JSON.stringify(result.ok ? result.mechanics : null)).toContain("Plasma rifle");
   });
 });
 

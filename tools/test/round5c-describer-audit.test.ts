@@ -68,6 +68,8 @@ describe("Round 5C leaf describer audit", () => {
       // Version 3's own ("this ability") gives the audit a value to try, which earlier versions'
       // open ability id did not; its subject collides as unit-owner's does.
       "unit-has-ability": { unrendered: [], colliding: ["subject"], problems: 0 },
+      // Reads only as a note that the weapon already has the earlier grant's ability; the grant's rating (granted_rating) is not in it.
+      "weapon-has-ability": { unrendered: ["granted_rating"], colliding: [], problems: 0 },
       "same-unit": { unrendered: [], colliding: ["subject"], problems: 0 },
       // A mark on the selected objective marker needs the select leaf that binds the marker, so alone it
       // has no text (555 combinations); a clear reads as "no longer" and does not name its applier.
@@ -95,10 +97,10 @@ describe("Round 5C leaf describer audit", () => {
       // The event-subject subject (family-extensions-16-stratagem-target-alternatives-followup.ts) adds 132 problem
       // combinations: the same count the this-unit and this-model subjects give together (264) before it.
       // The filtered-units subject (family-extensions-20-embarked-units-state-subject-and-moves.ts) names the units of the
-      // unit-filter before the leaf, so a leaf alone has no unit to name: each combination with it is a problem on its own.
-      "eligibility-permission": { unrendered: [], colliding: [], problems: 1518 },
-      // The filtered-units subject and the disembark mode: as above, a move alone has no filter to take its units from.
-      "make-move": { unrendered: [], colliding: [], problems: 1326 },
+      // unit-filter before the leaf; on its own the preview reads them as friendly units (leaf-preview.ts), so only the
+      // combinations whose `into` needs another leaf stay problems: 132 for each of the four subjects (this-unit, this-model,
+      // event-subject, filtered-units), 528 in all.
+      "eligibility-permission": { unrendered: [], colliding: [], problems: 528 },
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
       // embarked-permission takes only this-unit and gates nothing; its one leaf reads the same as none.
       "embarked-permission": { unrendered: [], colliding: [], problems: 1 },

@@ -281,12 +281,12 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
     expect(message).toMatch(/different recipients or weapon types/u);
   });
 
-  it("refuses a weapon roll after a named scope, since the roll modifier takes no weapon name", () => {
+  it("refuses a weapon roll after a named scope, since the roll modifier takes one weapon name", () => {
     const text = "Your unit's Zap lasguns and Zap pistols weapons have +1 to Hit rolls.";
     const message = refusalOf(placed(text,
       ["Your unit's Zap lasguns and Zap pistols weapons", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap lasgun", "Zap pistol"] }],
       ["have +1 to Hit rolls", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text);
-    expect(message).toMatch(/A roll modifier cannot be scoped to named weapons/u);
+    expect(message).toMatch(/A roll modifier cannot be scoped to a list of named weapons/u);
   });
 
   it("refuses a weapon ability removal after a named scope, since the removal takes no weapon name", () => {
