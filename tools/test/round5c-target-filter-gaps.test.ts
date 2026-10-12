@@ -80,3 +80,32 @@ describe("an attack-target filter after a condition names the target the attack 
     expect(errorsOf(text, wrongSide).join(" ")).toContain("A unit-filter needs a select-unit or attack right before it");
   });
 });
+
+describe("a leading destroyer filter and the object filter that restates the object owner (compile-unit-filters.ts)", () => {
+  const text = "Just after a BETA unit from your army destroys an enemy unit, that unit can make a Normal move of up to 3\".";
+  const destroyed = (extra: Record<string, unknown> = {}): Piece[] => [
+    ["BETA unit", "unit-filter", { side: "friendly", keywords: ["BETA"] }, "WHEN"],
+    ["from your army", "unit-owner", { owner: "friendly" }, "WHEN"],
+    ["destroys an", "event", { kind: "unit-destroyed", by: "antecedent", object_owner: "enemy" }, "WHEN"],
+    ["enemy unit", "unit-filter", { side: "enemy", ...extra }, "WHEN"],
+    ["that unit can make a Normal move of up to 3\"", "make-move", { subject: "antecedent", move_type: "normal", distance: 3 }, "EFFECT"],
+  ];
+
+  it("names the filter before the owner as the destroyer and the enemy as the object", () => {
+    const result = compileLeaves(placed(text, destroyed()), text);
+    expect(result.ok ? [] : result.errors).toEqual([]);
+    if (!result.ok) return;
+    const mechanics = result.mechanics as unknown as Record<string, any>;
+    expect(mechanics.trigger).toMatchObject({ event: "destroyed", subject: { owner: "friendly", all_of: ["BETA"] }, object: { owner: "enemy" } });
+  });
+
+  it("refuses an object filter that adds keywords the moment does not say", () => {
+    expect(errorsOf(text, destroyed({ keywords: ["GAMMA"] })).join(" ")).toContain("A unit-filter needs a select-unit or attack right before it");
+  });
+
+  it("refuses an object filter of the other side than the object owner", () => {
+    const pieces = destroyed();
+    pieces[3] = ["enemy unit", "unit-filter", { side: "friendly" }, "WHEN"];
+    expect(errorsOf(text, pieces).join(" ")).toContain("A unit-filter needs a select-unit or attack right before it");
+  });
+});

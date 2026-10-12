@@ -601,6 +601,8 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // "each time an attack is allocated to an enemy model, if this unit has K and that enemy model is a" +
       // "MONSTER unit": the filter after a condition names the target the attack's own filter already named.
       if (Object.keys(filterOf(leaf)).length > 0) out.push({ ...leaf, family_id: "unit-filter-target" });
+    } else if (isFilter(leaf) && restatesObjectOwner(out.at(-1), leaf)) {
+      // "destroys an" (object_owner enemy) + "enemy unit": the filter only repeats the owner the moment already names.
     } else if (isFilter(leaf) && postfixRecipient(out.at(-1))) {
       // "Add 1 to the Strength characteristic of" + "**K** models from your army": the units the
       // effect before it applies to. A "from your army" after it is the filter's own wording.
@@ -725,6 +727,13 @@ function renamedAttackTarget(out: readonly CompileLeaf[], list: readonly Compile
   const named = list[list.findIndex((leaf) => leaf.family_id === "attack" && leaf.start_byte === attack.start_byte && leaf.fragment === attack.fragment) + 1];
   return isFilter(named) && named.fragment === filter.fragment && named.parameters.side === filter.parameters.side
     && named.parameters.level === filter.parameters.level && filter.parameters.side !== "any";
+}
+
+/** A side-only unit-filter right after a moment whose object owner is already that side. */
+function restatesObjectOwner(event: CompileLeaf | undefined, filter: CompileLeaf): boolean {
+  return event?.family_id === "event" && event.fragment === filter.fragment && event.parameters.object_filter === undefined
+    && event.parameters.object_owner !== undefined && event.parameters.object_owner === filter.parameters.side
+    && Object.keys(filterOf(filter)).length === 0 && filter.parameters.level === undefined;
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */
