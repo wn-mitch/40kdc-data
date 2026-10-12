@@ -12,7 +12,9 @@ import { loadWeaponCatalog, type WeaponCatalog, type WeaponRecord } from "./weap
 
 export type WeaponNameContext = { faction_id: string; source_type: string; catalog?: WeaponCatalog };
 
-const NAME_LEAVES = new Set(["characteristic-modifier", "weapon-property-scope"]);
+const NAME_LEAVES = new Set(["characteristic-modifier", "weapon-property-scope", "roll-modifier"]);
+/** Leaves that may name one weapon (weapon_name) in wording of their own; a stat change's weapon_name is not resolved here. */
+const SINGLE_NAME_LEAVES = new Set(["weapon-property-scope", "roll-modifier"]);
 const SET_LEAVES = new Set(["characteristic-set", "characteristic-modifier"]);
 /** Words a named-weapon span may hold besides the names and their weapon noun. */
 const CONNECTIVES = new Set(["and", "or", "the", "a", "an"]);
@@ -36,26 +38,72 @@ function namePattern(folded: string): RegExp {
  */
 const STAT_PREFIX = /^add\s+\d+\s+to\s+the\s+[a-z' ]+?\s+characteristic\s+of\s+/u;
 
-/** 3e and 3f: every name's words are in the span, and nothing else but connectives, a weapon noun and the scope wording is. */
-function checkSpan(names: readonly string[], folded: readonly string[], span: string, statPrefix: boolean): void {
+/** How a leaf's wording holds its names: a list in a scope or stat change, one name in a scope, or the weapons a roll is made for. */
+export type NameForm = "names" | "scope" | "roll";
+/** A roll modifier's own roll, sign and amount, which its wording must repeat. */
+export type RollWording = { roll: unknown; operation: unknown; value: unknown };
+
+/** A possessive lead, up to four words ("this unit's", "your unit's:", "that enemy unit's"). */
+const POSSESSIVE = /^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s:?\s+/u;
+/** A pronoun lead ("its Bloody Twins weapon"). */
+const PRONOUN_LEAD = /^(?:its|their|your|his)\s+/u;
+/** The weapon noun after the names, then an optional verb: "weapons", "weapon", "weapon has:", "weapons have". */
+const NOUN_TAIL = /\s+weapons?(?:\s+(?:has|have)\s*:?)?$/u;
+/** A roll modifier's phrase before its weapons ("+1 to hazard rolls made for its"), with emphasis marks already removed. */
+const ROLL_PREFIX = /^(?:(?:has|have|gets?)\s+)?([+-])(\d+)\s+to\s+(?:the\s+)?(hit|wound|damage|hazard)\s+rolls?\s+made\s+(?:for|with)\s+(?:its|their|your|his)\s+/u;
+
+/** The lead a scope's wording may open with: a possessive, else a pronoun. */
+const stripLead = (text: string) => POSSESSIVE.test(text) ? text.replace(POSSESSIVE, "") : text.replace(PRONOUN_LEAD, "");
+
+/** What is left of a named-weapon wording once the names (as "§") and the weapon noun are taken out must be connectives only. */
+function refuseStray(left: string): void {
+  const stray = left.replace(/,/gu, " ").split(" ").filter((word) => word !== "" && !CONNECTIVES.has(word));
+  if (stray.length > 0) throw new CompileError(`The wording names words that are not weapons: ${stray.join(", ")}.`);
+}
+
+/** The roll phrase of a roll modifier's wording must match the leaf's roll, sign and amount; returns the wording after it. */
+function rollRemainder(text: string, roll: RollWording): string {
+  const match = ROLL_PREFIX.exec(text);
+  if (!match) throw new CompileError("A roll modifier names weapons as \"+N to <roll> rolls made for its <weapons>\"; the wording does not.");
+  if (match[3] !== roll.roll) throw new CompileError(`The wording is a ${match[3]} roll, not the leaf's ${String(roll.roll)} roll.`);
+  if ((match[1] === "-") !== (roll.operation === "subtract")) throw new CompileError("The wording's sign does not match the leaf's operation.");
+  if (match[2] !== String(roll.value)) throw new CompileError("The wording's amount does not match the leaf's value.");
+  return text.slice(match[0].length);
+}
+
+/**
+ * 3e and 3f: every name's words are in the span, and nothing else but connectives, a weapon noun and the scope wording is.
+ * `scope` (one name) and `roll` (the weapons a roll is made for) replace the names by a marker first, so a name that
+ * holds an apostrophe-s is never read as a possessive, and check the lead and the noun tail exactly.
+ */
+function checkSpan(names: readonly string[], folded: readonly string[], span: string, statPrefix: boolean, form: NameForm, roll?: RollWording): void {
   const text = foldName(span);
   for (let index = 0; index < names.length; index += 1) {
     for (const token of folded[index]!.split(" ")) {
       if (!text.includes(token)) throw new CompileError(`The wording does not name ${names[index]}: "${token}" is not in it.`);
     }
   }
+  const marked = (wording: string) => [...folded].sort((a, b) => b.length - a.length).reduce((left, name) => left.replace(namePattern(name), "§"), wording);
+  if (form === "scope") {
+    refuseStray(stripLead(marked(text).replace(/^all\s+/u, "")).replace(NOUN_TAIL, "").replaceAll("§", " "));
+    return;
+  }
+  if (form === "roll") {
+    if (roll === undefined) throw new CompileError("A roll modifier's named weapons need the roll they are named for.");
+    refuseStray(marked(rollRemainder(text.replaceAll("*", ""), roll)).replace(NOUN_TAIL, "").replaceAll("§", " "));
+    return;
+  }
   const wording = statPrefix ? text.replace(STAT_PREFIX, "") : text;
-  let left = wording.replace(/^all\s+/u, "").replace(/^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s\s+/u, "").replace(/\s+weapons?$/u, "")
+  let left = stripLead(wording.replace(/^all\s+/u, "")).replace(/\s+weapons?$/u, "")
     .replace(/equipped by models in your unit/gu, " ");
   for (const folded1 of [...folded].sort((a, b) => b.length - a.length)) left = left.replace(namePattern(folded1), " ");
-  const stray = left.replace(/,/gu, " ").split(" ").filter((word) => word !== "" && !CONNECTIVES.has(word));
-  if (stray.length > 0) throw new CompileError(`The wording names words that are not weapons: ${stray.join(", ")}.`);
+  refuseStray(left);
 }
 
 /** The printed spelling of each name in its lookup scope (3b, 3c, 3d). */
 export function resolveNames(
   names: readonly string[],
-  use: { weapon_type: unknown; subject: unknown; span?: string; authored: boolean; statPrefix?: boolean },
+  use: { weapon_type: unknown; subject: unknown; span?: string; authored: boolean; statPrefix?: boolean; form?: NameForm; roll?: RollWording },
   ctx: WeaponNameContext,
   abilityId: string | undefined,
 ): string[] {
@@ -63,7 +111,7 @@ export function resolveNames(
   if (new Set(folded).size !== folded.length) throw new CompileError("Two named weapons are the same weapon after folding case and dashes.");
   if (use.authored) {
     if (use.span === undefined) throw new CompileError("Named weapons need the wording they are named in.");
-    checkSpan(names, folded, use.span, use.statPrefix === true);
+    checkSpan(names, folded, use.span, use.statPrefix === true, use.form ?? "names", use.roll);
   }
   const catalog = ctx.catalog ?? loadWeaponCatalog(ctx.faction_id, abilityId);
   const ownSubject = (use.subject === "this-unit" || use.subject === "this-model") && ctx.source_type === "unit";
@@ -86,16 +134,25 @@ function spanOf(leaf: CompileLeaf, sourceText: string | undefined): string | und
   return sourceText === undefined || leaf.end_byte === undefined ? undefined : Buffer.from(sourceText, "utf8").subarray(leaf.start_byte, leaf.end_byte).toString("utf8");
 }
 
-/** Resolve every named-weapon leaf the record prints, with its own wording as the span. */
+/**
+ * Resolve every named-weapon leaf the record prints, with its own wording as the span. A scope or a
+ * roll modifier may name one weapon (weapon_name) as well as a list; a stat change's weapon_name is
+ * not resolved here.
+ */
 export function resolveAuthoredNames(list: readonly CompileLeaf[], sourceText: string | undefined, ctx: WeaponNameContext | undefined, abilityId: string | undefined): CompileLeaf[] {
   return list.map((leaf) => {
-    if (!NAME_LEAVES.has(leaf.family_id) || leaf.parameters.weapon_names === undefined) return leaf;
+    if (!NAME_LEAVES.has(leaf.family_id)) return leaf;
+    const parameters = leaf.parameters;
+    const single = SINGLE_NAME_LEAVES.has(leaf.family_id) && parameters.weapon_name !== undefined;
+    if (parameters.weapon_names === undefined && !single) return leaf;
     if (ctx === undefined) throw new CompileError("Named weapons need the record's faction to look them up.");
-    const names = leaf.parameters.weapon_names as string[];
     // A characteristic change names its weapons after the stat phrase ("add 3 to the Attacks characteristic of X and Y").
     const statPrefix = leaf.family_id === "characteristic-modifier";
-    const printed = resolveNames(names, { weapon_type: leaf.parameters.weapon_type, subject: leaf.parameters.subject, span: spanOf(leaf, sourceText), authored: true, statPrefix }, ctx, abilityId);
-    return { ...leaf, parameters: { ...leaf.parameters, weapon_names: printed } };
+    const form: NameForm = leaf.family_id === "roll-modifier" ? "roll" : single ? "scope" : "names";
+    const names = single ? [String(parameters.weapon_name)] : parameters.weapon_names as string[];
+    const roll = form === "roll" ? { roll: parameters.roll, operation: parameters.operation, value: parameters.value } : undefined;
+    const printed = resolveNames(names, { weapon_type: parameters.weapon_type ?? "all", subject: parameters.subject, span: spanOf(leaf, sourceText), authored: true, statPrefix, form, roll }, ctx, abilityId);
+    return { ...leaf, parameters: { ...parameters, ...(single ? { weapon_name: printed[0] } : { weapon_names: printed }) } };
   });
 }
 

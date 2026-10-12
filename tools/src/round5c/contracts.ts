@@ -31,6 +31,7 @@ import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from 
 import { ENGAGEMENT_RELATION_FAMILIES } from "./family-extensions-16-engagement-relation.js";
 import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./family-extensions-16-otherwise-else-branch.js";
 import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./family-extensions-19-roll-prohibition.js";
+import { normalizeWeaponHasAbilityParameters, WEAPON_HAS_ABILITY_FAMILIES } from "./weapon-has-ability-family.js";
 import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
@@ -118,6 +119,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...ENGAGEMENT_RELATION_FAMILIES,
   ...OTHERWISE_FAMILIES,
   ...ROLL_PROHIBITION_FAMILIES,
+  ...WEAPON_HAS_ABILITY_FAMILIES,
   ...ARMY_INCLUDES_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
@@ -216,6 +218,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeCountsAsMovedParameters(family, input)
     ?? normalizeOtherwiseParameters(family, input)
     ?? normalizeRollProhibitionParameters(family, input)
+    ?? normalizeWeaponHasAbilityParameters(family, input)
     ?? normalizeMovePassthroughUsedParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);

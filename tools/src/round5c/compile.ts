@@ -80,6 +80,7 @@ import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapO
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
+import { foldWeaponAlreadyHas } from "./compile-weapon-already-has.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies, tradesSuppressedRule } from "./compile-cross-family-instead.js";
 import { inheritRollGates } from "./compile-roll-gates.js";
@@ -351,7 +352,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText)), sourceText));
-    const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)));
+    const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
     refuseSelectionAcrossMoment(list);

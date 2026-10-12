@@ -37,6 +37,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "on-fail-open") return { kind: "implicit", note: "No separate text: the effects after it are risk-reward's on_fail." };
   if (leaf.family_id === "menu-action") return { kind: "implicit", note: "No separate text: its id, label and cost open one resource-action-menu action; the trigger and effect leaves after it are that action's own." };
   if (leaf.family_id === "weapon-property-scope") return { kind: "implicit", note: "No separate text: identifies the recipient and weapon scope of the following property; grants nothing by itself." };
+  if (leaf.family_id === "weapon-has-ability") return { kind: "implicit", note: "Reads: the weapon already has the ability the grant before it gave; the sentence after it then changes only those weapons." };
   if (leaf.family_id === "returned-model-exclusion") return { kind: "implicit", note: `Exclude individual returned models with any of these keywords: ${(leaf.parameters.keywords as string[]).join(", ")}; do not exclude their whole unit.` };
   if (leaf.family_id === "wounds-remaining") {
     const value = leaf.parameters.value;

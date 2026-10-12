@@ -230,14 +230,33 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         const { rolls, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
         return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
       }
+      // "+1 to hazard rolls made for its X and Y weapons" (compile-weapon-names.ts): the same change per named weapon, one step each.
+      if (Array.isArray(leaf.parameters.weapon_names)) {
+        const { weapon_names: names, ...rest } = leaf.parameters as Record<string, unknown> & { weapon_names: string[] };
+        return { type: "sequence", steps: names.map((name) => effect({ ...leaf, parameters: { ...rest, weapon_name: name } }, context)) };
+      }
       const roll = abilityRollOf(leaf) ?? closed(leaf, "roll");
-      return { type: "roll-modifier", target: rollTarget(roll), modifier: { roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...weaponScope(leaf) } };
+      return {
+        type: "roll-modifier", target: rollTarget(roll),
+        modifier: {
+          roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...weaponScope(leaf),
+          ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
+        },
+      };
     }
     case "critical-hit-threshold": {
       const value = closed(leaf, "value");
       if (typeof value !== "number") throw new CompileError("critical-hit-threshold needs a numeric threshold before it can compile.");
       const roll = leaf.parameters.roll === undefined ? "hit" : closed(leaf, "roll");
-      return { type: "roll-result", target: rollTarget(roll), modifier: { roll, critical_on: value } };
+      // Folded from "if such a weapon already has that ability" (compile-weapon-already-has.ts): only the weapons that print the keyword.
+      return {
+        type: "roll-result", target: rollTarget(roll),
+        modifier: {
+          roll, critical_on: value,
+          ...(leaf.parameters.weapon_type !== undefined ? { weapon_type: closed(leaf, "weapon_type") } : {}),
+          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
+        },
+      };
     }
     case "resource-action": {
       const resource = closed(leaf, "resource");
@@ -268,6 +287,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
         modifier: {
           stat: characteristic, operation: "set", value: closed(leaf, "value"), ...(weaponType && weaponType !== "all" ? { weapon_type: weaponType } : {}),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
+          ...(leaf.parameters.weapon_keyword !== undefined ? { weapon_keyword: closed(leaf, "weapon_keyword") } : {}),
         },
       };
     }
