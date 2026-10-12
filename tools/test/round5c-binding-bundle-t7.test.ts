@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_16_T7_BINDING_BUNDLE } from "../src/round5c/family-extensions-16-t7-binding-bundle.js";
 
 /** Leaves placed by their wording in `text`, in order (fabricated wording, not rules text). */
 function compileItems(text: string, items: Array<[string, string, Record<string, unknown>, string?]>) {
@@ -28,7 +30,14 @@ function errorsOf(text: string, items: Array<[string, string, Record<string, unk
   return result.ok ? [] : result.errors;
 }
 
-const PREVIOUS = (family: string) => currentFamilyVersion(family) - 1;
+/** The version just before this bundle's extension of `family`; later extensions may sit above it. */
+const PREVIOUS = (family: string) => {
+  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
+    const extension = familyExtension(family, version);
+    if (extension !== undefined && FAMILY_EXTENSIONS_16_T7_BINDING_BUNDLE.includes(extension)) return version - 1;
+  }
+  throw new Error(`The binding bundle does not extend ${family}.`);
+};
 
 describe("usage-limit per selected-unit (version 5 widens per only)", () => {
   it("accepts per selected-unit at the current version and not at the one before", () => {
