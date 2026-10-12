@@ -247,3 +247,33 @@ describe("a phase end after a destruction nests under it (compile-nested-moment.
     expect(errors.join(" ")).toContain("has no DSL form");
   });
 });
+
+describe("a reserves arrival pairs with a set-up in an earlier sentence of its own option (compile.ts)", () => {
+  const text = "Choose one of these options:\n**Alpha**\nIn your Command phase, if this unit is unengaged, you can use this ability. If you do:\n- Place this unit in reserves.\n- This unit can make an ingress move in your next Movement phase (including in your first turn).\n**Beta**\nThis unit has +1 OC.";
+  const pieces: Piece[] = [
+    ["Choose one of these options", "choice-open", { choice_label: "options", min_choices: 1, max_choices: 1 }],
+    ["Alpha", "named-option", { label: "Alpha" }],
+    ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
+    ["if this unit is unengaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }],
+    ["you can use this ability", "optional-use", { who: "you" }],
+    ["Place this unit in reserves", "set-up", { subject: "this-unit", to: "strategic-reserves" }],
+    ["This unit can make an ingress move", "make-move", { subject: "this-unit", move_type: "ingress" }],
+    ["in your next Movement phase", "phase-window", { phase: "movement", turn: "your" }],
+    ["including in your first turn", "reserves-arrival", { allow_first_round: true }],
+    ["Beta", "named-option", { label: "Beta" }],
+    ["This unit has +1 OC", "characteristic-modifier", stat("OC", 1)],
+  ];
+
+  it("binds the arrival to the set-up of the sentence before it", () => {
+    const options = mechanicsOf(text, pieces).effect.options as Array<Record<string, any>>;
+    const alpha = JSON.stringify(options[0]);
+    expect(alpha).toContain('"type":"set-up"');
+    expect(alpha).toContain('"arrives":"next-movement-phase"');
+    expect(alpha).toContain('"allow_first_round":true');
+  });
+
+  it("still refuses an arrival whose option holds no set-up", () => {
+    const errors = errorsOf(text, pieces.filter((piece) => piece[0] !== "Place this unit in reserves"));
+    expect(errors.join(" ")).toContain("A reserves arrival has no set-up before it.");
+  });
+});

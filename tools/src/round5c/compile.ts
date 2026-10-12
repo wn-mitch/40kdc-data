@@ -727,7 +727,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // earlier in the same sentence wins; failing that, the first set-up after it in its sentence (1339's
   // "Remove your unit from the battlefield" is a different sentence from its battlefield set-up).
   for (const [index, leaf] of list.entries()) {
-    if (leaf.family_id !== "reserves-arrival") continue;
+    // An arrival inside a container option is paired by that option's own compile (nestedPart), which sees the option's earlier sentences.
+    if (leaf.family_id !== "reserves-arrival" || consumedByContainer.has(index)) continue;
     const sentence = places[index]!.sentence;
     const setUps = planned.filter((item) => item.node.type === "set-up");
     // A set-up inside a named-option container of the same sentence ("choose one: set up …; or …") is
