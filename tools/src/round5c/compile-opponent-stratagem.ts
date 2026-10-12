@@ -18,6 +18,16 @@ const isTargetMoment = (leaf: CompileLeaf | undefined): leaf is CompileLeaf =>
   leaf?.family_id === "event" && leaf.parameters.kind === "targets-selected";
 
 /**
+ * A moment whose object a unit-filter and range after it can name: a targeting, or a spend that
+ * applies a designation ("spend 1 Foo token to Empower a friendly unit within 9\" of this unit").
+ */
+const takesObjectRange = (leaf: CompileLeaf | undefined): leaf is CompileLeaf =>
+  (leaf?.family_id === "event" && leaf.parameters.kind === "resource-spent" && leaf.parameters.tag !== undefined) || isTargetMoment(leaf);
+
+/** A side-less aura range ("within 9\" of this unit") after a spend: the same range a position leaf states. */
+const isAuraRange = (leaf: CompileLeaf | undefined): leaf is CompileLeaf => leaf?.family_id === "aura-range" && leaf.parameters.side === undefined;
+
+/**
  * "a rival picks a squad from its force within 12\" of this model": a targets-selected
  * moment, the unit-filter naming the targeted unit, then a within range (subject antecedent: the
  * unit that filter matched) from this unit or model. The range becomes the target filter's
@@ -36,7 +46,7 @@ export function foldObjectRange(list: readonly CompileLeaf[], sourceText?: strin
       && moment.fragment === filter!.fragment && sameSentence(sourceText, moment.end_byte, filter!.start_byte)) {
       throw new CompileError("A range from the unit a moment targets needs that unit's unit-filter between the moment and the range, in the same sentence.");
     }
-    const pairs = isTargetMoment(moment) && filter?.family_id === "unit-filter" && isWithin(range)
+    const pairs = takesObjectRange(moment) && filter?.family_id === "unit-filter" && (isWithin(range) || (moment.parameters.kind === "resource-spent" && isAuraRange(range)))
       && moment.fragment === filter.fragment && filter.fragment === range!.fragment
       && sameSentence(sourceText, moment.end_byte, filter.start_byte)
       && sameSentence(sourceText, filter.end_byte, range!.start_byte);
@@ -47,8 +57,10 @@ export function foldObjectRange(list: readonly CompileLeaf[], sourceText?: strin
     if (moment.parameters.object !== undefined || moment.parameters.object_filter !== undefined) {
       throw new CompileError("A targets-selected moment that already names what it was done to cannot take a unit-filter and range after it.");
     }
+    if (range!.parameters.wholly === true && range!.family_id === "aura-range") throw new CompileError("A spend's unit range is an aura, which cannot say wholly within.");
+    if (range!.parameters.range_cap_inches !== undefined) throw new CompileError("A spend's unit range is an aura, which cannot cap the range.");
     if (range!.parameters.negated === true) throw new CompileError("A range from the unit a moment targets cannot be negated; the target is within the range or not.");
-    const of = range!.parameters.of;
+    const of = range!.parameters.of ?? (range!.family_id === "aura-range" ? "this-unit" : undefined);
     if (of !== "this-model" && of !== "this-unit") throw new CompileError(`A targeted unit's range is measured from this unit or this model, not ${JSON.stringify(of)}.`);
     if (typeof range!.parameters.inches !== "number") throw new CompileError("A targeted unit's range needs its inches.");
     const within = {

@@ -44,11 +44,13 @@ export function foldAuraMoments(list: readonly CompileLeaf[], sourceText?: strin
     // "chosen by a Gadget": the chosen unit is the moment's object, and any owner may choose it.
     const targeted = sameAura && moment!.parameters.kind === "targets-selected" && moment!.parameters.object === ANTECEDENT
       && moment!.parameters.action_kind === "stratagem" && moment!.parameters.subject === undefined;
-    if (!fits && !targeted) {
+    // "when you spend 1 Foo token to Empower that friendly unit": the empowered unit is the moment's object.
+    const spent = sameAura && moment!.parameters.kind === "resource-spent" && moment!.parameters.object === ANTECEDENT && moment!.parameters.tag !== undefined;
+    if (!fits && !targeted && !spent) {
       out.push(filter);
       continue;
     }
-    if (targeted) {
+    if (targeted || spent) {
       if (aura!.parameters.wholly === true || aura!.parameters.range_cap_inches !== undefined) {
         throw new CompileError("A moment of an aura's recipient becomes a trigger's object range, which cannot say wholly within or cap the range.");
       }
@@ -56,7 +58,7 @@ export function foldAuraMoments(list: readonly CompileLeaf[], sourceText?: strin
       const { object: _object, ...rest } = moment!.parameters;
       out.push({
         ...moment!,
-        parameters: { ...rest, owner: moment!.parameters.owner ?? "any", object_filter: { ...dslUnitFilter(filter), within: { of: aura!.parameters.of ?? "this-unit", range: { inches: aura!.parameters.inches } } } },
+        parameters: { ...rest, ...(spent ? {} : { owner: moment!.parameters.owner ?? "any" }), object_filter: { ...dslUnitFilter(filter), within: { of: aura!.parameters.of ?? "this-unit", range: { inches: aura!.parameters.inches } } } },
       });
       index += 2;
       continue;

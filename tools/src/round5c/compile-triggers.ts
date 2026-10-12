@@ -8,6 +8,7 @@ import { attackTypeCondition } from "./compile-conditions.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { OWNED_EVENT_KINDS } from "./event-family.js";
 import { TRIGGER_ROLL_KINDS } from "./dice-families.js";
+import { ANTECEDENT } from "./antecedent-families.js";
 
 type Node = Record<string, unknown>;
 
@@ -107,6 +108,25 @@ function usedTrigger(leaf: CompileLeaf): Node {
   };
 }
 
+/**
+ * "When you spend 1 Foo token to Empower …", "… to perform a Baz Manoeuvre": the pool spent and, when
+ * the leaf names it, what the spend was for (filter.kind or filter.tag) and the unit it serves.
+ * A spend for an earlier leaf's unit takes that unit from its folded filter (compile-named-ability.ts).
+ */
+function spentTrigger(leaf: CompileLeaf): Node {
+  const object = leaf.parameters.object;
+  if (object === ANTECEDENT) throw new CompileError("A spend for an earlier leaf's unit needs that unit's filter and range right before the spend or right after it, in its sentence.");
+  return {
+    event: "resource-spent",
+    filter: {
+      pool: closed(leaf, "pool"),
+      ...(leaf.parameters.activity !== undefined ? { kind: closed(leaf, "activity") } : {}),
+      ...(leaf.parameters.tag !== undefined ? { tag: closed(leaf, "tag") } : {}),
+    },
+    ...(object !== undefined ? { object: closed(leaf, "object") } : {}),
+  };
+}
+
 /** Version 7 kinds that need one extra filter field the bare `TRIGGERS` table cannot carry. */
 const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "turn-ended": turnEndedTrigger,
@@ -123,7 +143,7 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   }),
   "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),
   "resource-gained": (leaf) => ({ event: "resource-gained", filter: { pool: closed(leaf, "pool") } }),
-  "resource-spent": (leaf) => ({ event: "resource-spent", filter: { pool: closed(leaf, "pool") } }),
+  "resource-spent": spentTrigger,
 };
 
 export function kindKey(leaf: CompileLeaf): string {
