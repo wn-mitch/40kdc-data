@@ -304,3 +304,31 @@ describe("a weapon scope's recipient chain may stack filters after an attack sen
     expect(errorsOf(text, enemy).length).toBeGreaterThan(0);
   });
 });
+
+describe("an instead after a suppressed rule trades it for the effects that follow (compile-cross-family-instead.ts)", () => {
+  const text = "This unit does not have the KEYA ability, but instead, each time a model in this unit makes an attack, re-roll the Hit roll and re-roll a Wound roll of 1.";
+  const pieces: Piece[] = [
+    ["This unit does not have the KEYA ability", "rule-state", { subject: "this-unit", direction: "suppressed", rule_kind: "core-rule", rule: "fights-first" }],
+    ["instead", "instead", {}],
+    ["each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
+    ["re-roll the Hit roll", "reroll", { roll: "hit", subset: "all", weapon_type: "all" }],
+    ["re-roll a Wound roll of 1", "reroll", { roll: "wound", subset: "ones", weapon_type: "all" }],
+  ];
+
+  it("applies the loss and both re-rolls, each ungated", () => {
+    const steps = mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>;
+    expect(steps.map((step) => step.type)).toEqual(["rule-state", "re-roll", "re-roll"]);
+  });
+
+  it("keeps the refusal when the instead after a suppressed rule has a condition of its own", () => {
+    const conditioned = "This unit does not have the KEYA ability, but if this unit has KEYB, re-roll the Hit roll and re-roll a Wound roll of 1 instead.";
+    const errors = errorsOf(conditioned, [pieces[0]!, ["if this unit has KEYB", "unit-keyword", keyword("KEYB")], pieces[3]!, pieces[4]!, pieces[1]!]);
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
+  it("keeps the refusal when the effect before instead is not a suppressed rule", () => {
+    const other = "This unit has +1 OC, but instead, re-roll the Hit roll and re-roll a Wound roll of 1.";
+    const errors = errorsOf(other, [["This unit has +1 OC", "characteristic-modifier", stat("OC", 1)], pieces[1]!, pieces[3]!, pieces[4]!].map((piece, at): Piece => at === 1 ? ["instead", "instead", {}] : piece as Piece));
+    expect(errors.join(" ")).toContain("Instead");
+  });
+});

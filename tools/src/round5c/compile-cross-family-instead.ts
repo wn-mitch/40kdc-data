@@ -63,3 +63,19 @@ export function replaceAcrossFamilies<T extends CrossFamilyItem>(
   replacement.replaces = true;
   return null;
 }
+
+/**
+ * "This unit does not have the K ability, but instead, each time … re-roll … and re-roll …": an "instead" whose clause
+ * opens with a suppressed rule (a rule-state with direction suppressed) as its only effect before the word, and is
+ * followed in its sentence by effects. The suppressed rule is what the unit gives up, not a default the clause replaces;
+ * the trade has no condition, so nothing is gated and the effects after "instead" (one or several, across the
+ * sentence's clauses) apply beside the loss. An "instead" with a condition on any of these effects, after any other
+ * effect, or followed by no effect is not a trade and keeps the replacement rules.
+ */
+export function tradesSuppressedRule<T extends CrossFamilyItem>(planned: readonly T[], places: readonly Placement[], combinator: number): boolean {
+  const { sentence, clause } = places[combinator]!;
+  const before = planned.filter((item) => item.index < combinator && places[item.index]!.clause === clause);
+  const after = planned.filter((item) => item.index > combinator && places[item.index]!.sentence === sentence);
+  return before.length === 1 && after.length > 0 && before[0]!.leaf.family_id === "rule-state" && before[0]!.leaf.parameters.direction === "suppressed"
+    && !before[0]!.replaces && [...before, ...after].every((item) => item.gate.length === 0);
+}

@@ -75,7 +75,7 @@ import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
-import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
+import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies, tradesSuppressedRule } from "./compile-cross-family-instead.js";
 import { inheritRollGates } from "./compile-roll-gates.js";
 import { conditionedInsteadAfter, ifGatedConditions, inheritAttackFrame, namesBearer, sentenceIfGates } from "./compile-instead-scope.js";
 
@@ -801,6 +801,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // "Do not roll to gain a point, you gain a point instead" (a named ability's own roll): the prohibition shares the
     // clause with the effect that replaces it, so the clause holds two effects and the other one is the replacement.
     const abilityProhibition = own.length === 2 && own.some((item) => item.leaf.family_id === "roll-prohibition" && typeof item.leaf.parameters.roll === "object");
+    // "This unit does not have K, but instead, … and …": the loss of a rule is traded for what follows it, and the
+    // trade has no condition of its own, so the effects after "instead" apply beside the loss (compile-cross-family-instead.ts).
+    if (list[combinator]!.parameters.choice !== true && tradesSuppressedRule(planned, places, combinator)) continue;
     const candidates = abilityProhibition ? own.filter((item) => item.leaf.family_id !== "roll-prohibition") : own;
     if (candidates.length !== 1) {
       errors.push(`"Instead" needs exactly one effect in its clause; found ${own.length}.`);
