@@ -413,6 +413,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // Per-model usage-limits: on a model selection each caps the selected model (selection_limit); otherwise they stay usages.
   const modelUsages: Array<{ leaf: CompileLeaf; index: number }> = [];
   let optional = false;
+  // The last source sentence holding an optional-use: moments opened after it ("If you do, … when this unit …") depend on the use and stay mandatory.
+  let optionalSentence = -1;
   // "You can spend YP …" read later as "if you spent YP during this use", or by a trigger later in the ability: the spend is the optional part, not the use.
   const optionalSpend = flatLeaves(list).some(isSpendRead);
   // An optional spend is offered by its own part, so it takes no clause gate and no instead clause's place (compile-optional-cost.ts).
@@ -567,7 +569,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "optional-use") {
           // "You can also target one …": that later target is optional, not the Stratagem's use.
           const group = optionalTargetGroup(list, index);
-          if (group === null) optional = optional || !optionalSpend;
+          if (group === null) {
+            optional = optional || !optionalSpend;
+            if (!optionalSpend) optionalSentence = Math.max(optionalSentence, rawOf[index]!);
+          }
           else optionalTargets.add(group);
         }
         else if (leaf.family_id === "rules-bundle-marker") rulesBundle = true;
@@ -1119,8 +1124,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body) ? windowPeriod(list) : null;
   // "That X unit": the WHEN moment's unit must have the keywords the target names.
   const bound = targetParts.find((leaf) => leaf.family_id === "triggering-target");
-  const moments = triggers.map((node) => {
-    const moment: Node = optional ? { ...node, optional: true } : { ...node };
+  const offerMoments = triggerIndexes.some((index) => rawOf[index]! <= optionalSentence);
+  const moments = triggers.map((node, position) => {
+    // Only the moments of the sentence that offers the use (or the WHEN clauses before it) are the player's choice.
+    // When every moment comes after the offer ("you can use this ability. If you do, when …"), no moment
+    // decides the use, so the choice stays on them: a mandatory trigger would lose it.
+    const decidesUse = optional && (!offerMoments || rawOf[triggerIndexes[position]!]! <= optionalSentence);
+    const moment: Node = decidesUse ? { ...node, optional: true } : { ...node };
     // The keywords narrow whoever acted: a filter subject gains all_of; this unit gets a keyword condition.
     if (bound && bound.parameters.match === "all" && (bound.parameters.keywords as string[]).length) {
       const keywords = bound.parameters.keywords as string[];
