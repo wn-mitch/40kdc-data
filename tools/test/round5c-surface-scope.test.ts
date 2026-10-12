@@ -12,12 +12,13 @@ import { refreshSources } from "../src/round5c/source.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { applyChatReview } from "../src/round5c/review-apply.js";
 import { undoBatch } from "../src/round5c/review.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 import { inScope, parseScope } from "../src/round5c/surface-scope.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 const WILL = humanActor("will", "test");
 // Fabricated fixture prose only.
-const D6 = { family_id: "dice-roll", family_version: 5, parameters: { dice: "D6" } };
+const D6 = { family_id: "dice-roll", family_version: currentFamilyVersion("dice-roll"), parameters: { dice: "D6" } };
 
 const roots: string[] = [];
 afterEach(() => {

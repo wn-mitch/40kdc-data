@@ -164,10 +164,16 @@ describe("Round 5C own-roll conditional change, refusals", () => {
       ROLL, ADD, ADD, ["if your unit is a INFANTRY unit", ...INFANTRY_UNIT], ["on a 4+", "roll-result", { from: 4 }], GAIN(1))).toMatch(/unconditional and a conditional change/u);
   });
 
-  it("refuses a conditional change to a roll of several dice", () => {
+  it("refuses a conditional change to a per-model roll of several dice", () => {
+    expect(errorOf("Roll six D6, adding 1 to the result if your unit is a INFANTRY unit: for each 5+, you gain 1CP.",
+      ["Roll six D6", "dice-roll", { dice: "D6", per_model: "this-unit" }], ADD, ["if your unit is a INFANTRY unit", ...INFANTRY_UNIT],
+      ["for each 5+", "roll-result", { from: 5 }], GAIN(1))).toMatch(/roll of several dice/u);
+  });
+
+  it("refuses a conditional change to a counted roll whose success does not score mortal wounds", () => {
     expect(errorOf("Roll six D6, adding 1 to the result if your unit is a INFANTRY unit: for each 5+, you gain 1CP.",
       ["Roll six D6", "dice-roll", { dice: "D6", count: 6 }], ADD, ["if your unit is a INFANTRY unit", ...INFANTRY_UNIT],
-      ["for each 5+", "roll-result", { from: 5 }], GAIN(1))).toMatch(/roll of several dice/u);
+      ["for each 5+", "roll-result", { from: 5 }], GAIN(1))).toMatch(/folds only into mortal wounds/u);
   });
 
   it("keeps refusing an unconditional subtraction", () => {

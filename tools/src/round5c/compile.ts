@@ -28,6 +28,7 @@ import { bandRunClauses, bulletBreaks, commaItems, ordered, placements, rawSente
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
+import { foldAlternativePools } from "./compile-dice-variants.js";
 import { inheritClauseBands } from "./compile-clause-band.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
@@ -220,6 +221,9 @@ function isAdvanceInPlace(node: Node): boolean {
     && Number(modifier.value) === 6 && modifier.weapon_type === undefined;
 }
 
+/** Words that narrow which models a per-model roll covers; a per_model roll counts every model of its unit. */
+const NARROWED_PER_MODEL = /\b(?:engaged|engagement range|within|that (?:is|are|has|have|made|was|were))\b/iu;
+
 type PlannedEffect = { index: number; leaf: CompileLeaf; node: Node; gate: Node[]; selected: boolean; replaces: boolean };
 
 /**
@@ -348,7 +352,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldByAbility(foldAuraMoments(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
-    const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText)), sourceText);
+    const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText)), sourceText));
@@ -664,7 +668,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
           if (leaf.parameters.target === "that-unit" && attackTargetBinding(list, index) === "selected") scope("selected");
         } else if (leaf.family_id === "select-unit") selections.push(leaf);
         else if (leaf.family_id === "for-each-unit-select") forEachLeaf = leaf;
-        else if (leaf.family_id === "dice-roll") rolls.push(leaf);
+        else if (leaf.family_id === "dice-roll") {
+          rolls.push(leaf);
+          // per_model counts every model of its unit; wording that narrows the models ("engaged with that enemy unit") would be dropped.
+          if (leaf.parameters.per_model !== undefined && sourceText !== undefined && leaf.end_byte !== undefined
+            && NARROWED_PER_MODEL.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte))) {
+            errors.push("A dice-roll per_model counts every model of its unit, but its wording narrows the models; author the bare quantifier (for-each-unit-select, a model unit-filter, membership, and the narrowing condition).");
+          }
+        }
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
           // A list of roll kinds is one trigger per kind (compile-triggers.ts triggerLeaves).
           // A Stratagem's effect moment is a part under its WHEN moment (compile-when-subject.ts), not another trigger.
@@ -1190,13 +1201,22 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     }
   }
   // Sentences after a for-each's that open with "Then" happen once, after the loop (compile-for-each-tail.ts).
-  const afterLoop = partStarts.length === 0 && selections.length === 0 ? forEachTail(list, places, planned, forEachLeaf, sourceText) : [];
+  const thenTail = partStarts.length === 0 && selections.length === 0 ? forEachTail(list, places, planned, forEachLeaf, sourceText) : [];
+  // A for-each loop repeats the effects of its own sentence. An effect on a fixed recipient in a later sentence
+  // ("Then, your unit suffers 3D3 mortal wounds") happens once, after the loop.
+  const loopAt = forEachLeaf ? list.indexOf(forEachLeaf) : -1;
+  const fixedRecipientTail = forEachLeaf && partStarts.length === 0
+    ? planned.filter((item) => item.index > loopAt && rawOf[item.index]! > rawOf[loopAt]! && (item.node.target === "this-unit" || item.node.target === "this-model"))
+    : [];
+  const afterLoop = planned.filter((item) => thenTail.includes(item) || fixedRecipientTail.includes(item));
   const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
     // A conditional change's condition is compiled here, where its roll is resolved (compile-dice.ts).
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
+      const poolLeaf = leaf.parameters.pool_condition as CompileLeaf | undefined;
+      if (poolLeaf !== undefined) return { ...leaf, parameters: { ...leaf.parameters, pool_condition: condition(poolLeaf) } };
       const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf } | undefined;
       if (bonus === undefined) return leaf;
       return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonus.leaf) } } };

@@ -53,7 +53,7 @@ export function bindPrecedingRolls(input: readonly CompileLeaf[], sourceText?: s
     // A condition between the roll and the change ("roll one D6 if X, adding 1") gates the roll itself.
     if (conditionBetween(out, at, index)) throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
     if (adjacent === "refuse") throw new CompileError("A conditional change to this ability's own roll has no DSL shape yet.");
-    if (dice.parameters.count !== undefined || dice.parameters.per_model !== undefined) throw new CompileError("A change to a roll of several dice has no DSL shape.");
+    if ((dice.parameters.count !== undefined || dice.parameters.per_model !== undefined) && !attaches) throw new CompileError("An unconditional change to a roll of several dice has no DSL shape.");
     if (attaches) {
       if (typeof value !== "number" || value < 1 || (leaf.parameters.operation !== "add" && leaf.parameters.operation !== "subtract")) {
         throw new CompileError("Only adding or subtracting a number folds into this ability's own roll as a conditional bonus.");
@@ -79,6 +79,10 @@ const isClauseCondition = (leaf: CompileLeaf | undefined, change: CompileLeaf): 
 
 /** A condition between the roll and the change: it gates the whole roll. */
 function conditionBetween(leaves: readonly CompileLeaf[], dice: number, change: number): boolean {
+  // A for-each-unit-select between the roll and the change counts the units the roll is made for: the
+  // conditions after it narrow those units, not the roll.
+  const quantifier = leaves.slice(dice + 1, change).findIndex((leaf) => leaf.family_id === "for-each-unit-select");
+  if (quantifier !== -1) return leaves.slice(dice + 1, dice + 1 + quantifier).some((leaf) => isClauseCondition(leaf, leaves[change]!));
   return leaves.slice(dice + 1, change).some((leaf) => isClauseCondition(leaf, leaves[change]!));
 }
 

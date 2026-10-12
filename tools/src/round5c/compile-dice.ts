@@ -1,5 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { DICE_FACES } from "./dice-families.js";
+import { perDieConditionalRolls, resolveAlternativePools } from "./compile-dice-variants.js";
 
 /**
  * Result bands of a roll. A roll-result leaf compiles to a marker condition that clause binding
@@ -14,7 +15,7 @@ import { DICE_FACES } from "./dice-families.js";
 type Node = Record<string, unknown>;
 export type Planned = { index: number; leaf: CompileLeaf; node: Node; gate: Node[] };
 
-const ROLL = "__roll-result";
+export const ROLL = "__roll-result";
 
 export function rollMarker(leaf: CompileLeaf): Node {
   return { type: ROLL, from: leaf.parameters.from, ...(leaf.parameters.to === undefined ? {} : { to: leaf.parameters.to }) };
@@ -37,7 +38,7 @@ const body = (items: Planned[]): Node => {
  * that unit suffers 1 mortal wound", or one D6 for each model in this unit). The DSL expresses this only for mortal wounds, as a count
  * per success of a roll of `count` D6; anything else rolled per die has no DSL shape yet.
  */
-function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node): Node[] {
+export function perSuccess(planned: Planned[], banded: Planned[], dice: string, count: number, bound: boolean, perModel?: string, forEach?: Node): Node[] {
   if (dice !== "D6") throw new CompileError(`Rolling ${count} ${dice} has no DSL shape; only several D6 fold into a count per success.`);
   if (bound) throw new CompileError("A roll of several dice cannot also bind a roll_var.");
   for (const item of banded) {
@@ -79,6 +80,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     if (rolls.length) throw new CompileError("A roll has no result band (\"on a 4+\") saying what it decides.");
     return planned.map((item) => gated(item.gate, item.node));
   }
+  if (rolls.length > 1 && rolls[0]!.parameters.pool_condition === undefined && rolls.slice(1).every((roll) => roll.parameters.pool_condition !== undefined)) return resolveAlternativePools(planned, global, banded, rolls);
   if (rolls.length !== 1) throw new CompileError(`Result bands need exactly one roll; found ${rolls.length}.`);
   // A change to the roll that holds only under a condition (compile-preceding-roll.ts): two rolls, one per side.
   const conditional = rolls[0]!.parameters.conditional_bonus as ConditionalBonus | undefined;
@@ -201,17 +203,17 @@ type Row = { band: Band; items: Planned[] };
 type RollNames = { rollVar?: string; kind?: string };
 
 /** The one result band an effect is gated by, as the roll marker holds it. */
-function markerOf(item: Planned): Node {
+export function markerOf(item: Planned): Node {
   const markers = item.gate.filter(isRollMarker);
   if (markers.length !== 1) throw new CompileError("One effect is gated by two result bands.");
   return markers[0]!;
 }
 
 /** An effect cloned for one side of the roll, with its band marker taken out of its gate. */
-const stripMarkers = (item: Planned): Planned => ({ ...item, node: structuredClone(item.node), gate: item.gate.filter((node) => !isRollMarker(node)) });
+export const stripMarkers = (item: Planned): Planned => ({ ...item, node: structuredClone(item.node), gate: item.gate.filter((node) => !isRollMarker(node)) });
 
 /** A band as the marker writes it, with `to` defaulting to `top`. */
-const bandOfMarker = (marker: Node, top: number): Band => ({ from: Number(marker.from), to: Number(marker.to ?? top) });
+export const bandOfMarker = (marker: Node, top: number): Band => ({ from: Number(marker.from), to: Number(marker.to ?? top) });
 
 /** Rows of effects that share one band, in first-seen order. */
 function groupRows(entries: Array<{ band: Band; item: Planned }>): Row[] {
@@ -262,6 +264,8 @@ function bandedRoll(rows: Row[], dice: string, faces: number, names: RollNames):
  */
 function resolveConditionalRolls(planned: Planned[], global: Node[], banded: Planned[], roll: CompileLeaf, bonus: ConditionalBonus): Node[] {
   if (roll.parameters.count !== undefined || roll.parameters.per_model !== undefined || roll.parameters.for_each !== undefined) {
+    // Only a plain count of dice folds. A per-model or per-unit roll that adds a bonus stays refused (BRIEF: per-model dice).
+    if (roll.parameters.count !== undefined && roll.parameters.per_model === undefined && roll.parameters.for_each === undefined) return perDieConditionalRolls(planned, banded, roll, bonus);
     throw new CompileError("A conditional change to a roll of several dice has no DSL shape.");
   }
   if (Number(roll.parameters.bonus ?? 0) !== 0) throw new CompileError("An unconditional and a conditional change to one roll have no DSL shape yet.");

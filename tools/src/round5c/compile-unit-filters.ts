@@ -192,7 +192,7 @@ const union = (left: string[] | undefined, right: string[] | undefined) => [...n
  * unit" + "(excluding **DAMNED** units)"), or null when they cannot be one: different sides,
  * models against units, or two any-of lists (one unit-filter holds a single any-of).
  */
-function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | null {
+export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | null {
   const a = first.parameters as FilterParameters;
   const b = second.parameters as FilterParameters;
   // A matched set is its own filter: merging would drop its among and pool silently.
@@ -234,6 +234,11 @@ function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLeaf | nu
   // "that INQUISITOR Leader unit": the attached-Leader membership holds for the merged filter.
   const attached = (a as Record<string, unknown>).attached_to ?? (b as Record<string, unknown>).attached_to;
   if (attached !== undefined) parameters.attached_to = attached;
+  // "model in this unit" + "(excluding K models)": the unit the models belong to survives the merge.
+  const memberA = (a as { member_of?: string }).member_of;
+  const memberB = (b as { member_of?: string }).member_of;
+  if (memberA !== undefined && memberB !== undefined && memberA !== memberB) return null;
+  if ((memberA ?? memberB) !== undefined) parameters.member_of = memberA ?? memberB;
   // "Bondsman-affected" from one filter and a unit from the other: the designation and its applier go together.
   if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
   if (a.designated_by !== undefined && b.designated_by !== undefined && a.designated_by !== b.designated_by) return null;
@@ -455,6 +460,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     } else if (leaf.family_id === "select-unit" && openAura(next)) {
       out.push(leaf);
       reach(out, next) && (index += 1);
+    } else if (isFilter(leaf) && leaf.parameters.level === "model" && out.at(-1)?.family_id === "roll-auto-result"
+      && out.at(-1)!.parameters.subject === undefined && out.at(-1)!.parameters.subject_filter === undefined && out.at(-1)!.fragment === leaf.fragment) {
+      // "change the result of one Hit roll … made for a" + "model in that unit (excluding K models)": the models whose rolls it is.
+      const roll = out.at(-1)!;
+      out[out.length - 1] = { ...roll, end_byte: Math.max(roll.end_byte ?? 0, leaf.end_byte ?? 0), parameters: { ...roll.parameters, subject_filter: dslUnitFilter(leaf) } };
     } else if (isFilter(leaf) && followsTargetingAttack(out.at(-1), leaf)) {
       // "makes a ranged attack that targets an enemy unit visible to the bearer": the filter the attack names is its
       // defender. Its side is always said, so it is the owner check on the defender; `visible` after it binds to it (compile-antecedent.ts).

@@ -217,6 +217,7 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       if (leaf.parameters.count === 1) modifier.count = 1;
       if (outcome === "succeeds-on") modifier.succeeds_on = closed(leaf, "value");
       else if (outcome === "counts-as-6") modifier.result = 6;
+      else if (outcome === "fails-on") modifier.fails_on = closed(leaf, "value");
       else modifier.result = "pass";
       const weaponType = leaf.parameters.weapon_type === undefined ? undefined : closed(leaf, "weapon_type");
       if (weaponType && weaponType !== "all") modifier.weapon_type = weaponType;
@@ -239,7 +240,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return {
         type: "roll-modifier", target: rollTarget(roll),
         modifier: {
-          roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"), ...weaponScope(leaf),
+          roll, operation: closed(leaf, "operation"), value: closed(leaf, "value"),
+          ...(leaf.parameters.cap !== undefined ? { cap: closed(leaf, "cap") } : {}), ...weaponScope(leaf),
           ...(leaf.parameters.weapon_name !== undefined ? { weapon_name: closed(leaf, "weapon_name") } : {}),
         },
       };
