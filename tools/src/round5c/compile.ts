@@ -76,7 +76,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
-import { conditionedInsteadAfter, ifGatedConditions, inheritAttackFrame, namesBearer } from "./compile-instead-scope.js";
+import { conditionedInsteadAfter, ifGatedConditions, inheritAttackFrame, namesBearer, sentenceIfGates } from "./compile-instead-scope.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -406,7 +406,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const firstSentence = Math.min(...effectSentences);
   // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so an "if" condition of the first
   // sentence gates that sentence only; as an ability-wide gate it would also guard the replacement (compile-instead-scope.ts).
-  const ownGates = conditionedInsteadAfter(list, places, firstSentence) ? ifGatedConditions(list, places, firstSentence, sourceText) : new Set<number>();
+  const ownGates = conditionedInsteadAfter(list, places, firstSentence) ? ifGatedConditions(list, places, firstSentence, sourceText) : sentenceIfGates(list, places, rawSentences(list, sourceText), firstSentence, sourceText);
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
   const global: Node[] = [];
