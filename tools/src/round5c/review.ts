@@ -5,7 +5,7 @@ import { hashJson } from "../round4/hash.js";
 
 import { currentFamilyVersion, familyRole, LEAF_ROLES, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
-import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
+import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
@@ -158,7 +158,7 @@ function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number
     FROM proposals
     JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE ${filter}
+    WHERE ${filter} AND ${BODY_SPAN_SQL}
       AND ((proposals.status IN ('pending', 'unresolved') AND NOT ${RESTATES_ACTIVE_ANNOTATION})
         OR (proposals.status = 'accepted' AND proposals.role = 'CONNECTIVE'))
     GROUP BY abilities.id, proposals.status, proposals.role
@@ -484,6 +484,7 @@ function assertProposalMatchesDecision(proposal: ProposalRow, decision: ParsedDe
 function activeAnnotationsOverlapping(
   db: DatabaseSync,
   abilityVersionId: number,
+  fragment: string,
   startByte: number,
   endByte: number,
 ): AnnotationRow[] {
@@ -497,10 +498,11 @@ function activeAnnotationsOverlapping(
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND ${TRUSTED_ANNOTATION}
       AND source_spans.ability_version_id = ?
+      AND source_spans.fragment = ?
       AND source_spans.start_byte < ?
       AND ? < source_spans.end_byte
     ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
-  `).all(abilityVersionId, endByte, startByte) as AnnotationRow[];
+  `).all(abilityVersionId, fragment, endByte, startByte) as AnnotationRow[];
 }
 
 /**
@@ -591,7 +593,7 @@ function validateOverlap(
   if (structural) {
     conflict("A reviewed structural constituent already accounts for these bytes; undo or correct it before painting a leaf over it.");
   }
-  const overlaps = activeAnnotationsOverlapping(db, decision.ability_version_id, decision.start_byte, decision.end_byte);
+  const overlaps = activeAnnotationsOverlapping(db, decision.ability_version_id, decision.fragment, decision.start_byte, decision.end_byte);
   for (const annotation of overlaps) {
     if (correctedAnnotation?.id === annotation.id || merged.includes(annotation.id)) continue;
     if (annotation.role === decision.role) {

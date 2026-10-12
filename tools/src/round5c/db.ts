@@ -9,6 +9,7 @@ import { exactSpan, seedReviewedFamilies } from "./contracts.js";
 import { upgradeFamilyVersions } from "./family-versions.js";
 import { backfillFamilyCandidates } from "./ontology-store.js";
 import { COMPILED_SCHEMA, COMPILED_TABLES, upgradeCompiledCore } from "./compiled.js";
+import { NAME_FRAGMENT } from "./compile-name.js";
 import { LEAF_PROPOSAL_KINDS_MARKER, LEAF_PROPOSALS_SCHEMA, LEAVES_SCHEMA, LEAVES_TABLES } from "./leaves-schema.js";
 import { normalizedSurface } from "./matching.js";
 import { EXTENSION_SCHEMA, EXTENSION_TABLES } from "./schema-ext.js";
@@ -917,7 +918,17 @@ export function parseStoredFragments(serialized: string): StoredFragment[] {
   });
 }
 
-/** Insert or recover one source-bound span after exact source and fragment validation. */
+/**
+ * SQL condition for a `source_spans` join that reads body offsets (source_text bytes). A NAME span's
+ * offsets index the name column, so every body-offset reader adds this condition.
+ */
+export const BODY_SPAN_SQL = `source_spans.fragment <> '${NAME_FRAGMENT}'`;
+
+/**
+ * Insert or recover one source-bound span after exact source and fragment validation. A `NAME`
+ * span indexes the record's name column, not source_text: its offsets are name bytes, its text must
+ * sit at them in the name, and no fragment of source_text contains it (fragments_json has no NAME entry).
+ */
 export function insertSpan(
   db: DatabaseSync,
   abilityVersionId: number,
@@ -926,24 +937,34 @@ export function insertSpan(
   endByte: number,
   exactText: string,
 ): number {
-  const abilityStatement = db.prepare("SELECT source_text, fragments_json FROM abilities WHERE id = ?");
+  const abilityStatement = db.prepare("SELECT source_text, fragments_json, name FROM abilities WHERE id = ?");
   const ability = abilityStatement.get(abilityVersionId) as
-    | { source_text: string; fragments_json: string }
+    | { source_text: string; fragments_json: string; name: string | null }
     | undefined;
   if (!ability) throw new RangeError(`Unknown ability version ${abilityVersionId}.`);
 
-  const sourceText = exactSpan(ability.source_text, startByte, endByte);
-  if (sourceText !== exactText) throw new TypeError("Span text does not exactly match the persisted source bytes.");
-  const sourceFragment = parseStoredFragments(ability.fragments_json).find(
-    (item) => item.fragment === fragment && startByte >= item.start_byte && endByte <= item.end_byte,
-  );
-  if (!sourceFragment) throw new RangeError("Source span must be wholly contained in one declared source fragment.");
-  if (
-    exactSpan(ability.source_text, sourceFragment.start_byte, sourceFragment.end_byte) !== sourceFragment.text
-  ) {
-    throw new Error("Persisted source fragment bytes do not match the ability source.");
+  if (fragment === NAME_FRAGMENT) {
+    if (ability.name === null) throw new RangeError("A NAME span needs a record with a name.");
+    if (!Number.isSafeInteger(startByte) || !Number.isSafeInteger(endByte) || startByte < 0 || endByte <= startByte
+      || endByte > Buffer.byteLength(ability.name, "utf8")) {
+      throw new RangeError("A NAME span lies outside the record's name.");
+    }
+    if (exactSpan(ability.name, startByte, endByte) !== exactText) {
+      throw new TypeError("Span text does not exactly match the persisted name bytes.");
+    }
+  } else {
+    const sourceText = exactSpan(ability.source_text, startByte, endByte);
+    if (sourceText !== exactText) throw new TypeError("Span text does not exactly match the persisted source bytes.");
+    const sourceFragment = parseStoredFragments(ability.fragments_json).find(
+      (item) => item.fragment === fragment && startByte >= item.start_byte && endByte <= item.end_byte,
+    );
+    if (!sourceFragment) throw new RangeError("Source span must be wholly contained in one declared source fragment.");
+    if (
+      exactSpan(ability.source_text, sourceFragment.start_byte, sourceFragment.end_byte) !== sourceFragment.text
+    ) {
+      throw new Error("Persisted source fragment bytes do not match the ability source.");
+    }
   }
-
 
   const insert = db.prepare(
     "INSERT OR IGNORE INTO source_spans (ability_version_id, fragment, start_byte, end_byte, exact_text, normalized_surface) VALUES (?, ?, ?, ?, ?, ?)",

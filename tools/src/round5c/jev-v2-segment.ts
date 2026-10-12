@@ -2,6 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import type { LeafRole } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
+import { BODY_SPAN_SQL } from "./db.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { topK } from "./leaf-knn.js";
 import { leafBoard, leafSurface, untiledRuns } from "./leaves.js";
@@ -196,6 +197,7 @@ function tiledCalibrationSample(db: DatabaseSync, embedder: Embedder, maxAbiliti
     const spans = db.prepare(`
       SELECT source_spans.start_byte, source_spans.end_byte FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
       WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND source_spans.ability_version_id = ?
+        AND ${BODY_SPAN_SQL}
       ORDER BY source_spans.start_byte
     `).all(row.id) as Array<{ start_byte: number; end_byte: number }>;
     if (spans.length < 2) continue; // need at least one real internal boundary to be informative

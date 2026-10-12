@@ -6,6 +6,7 @@ import { HUMAN_REVIEWERS } from "./authority.js";
 import { compileLeaves } from "./compile.js";
 import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
+import { BODY_SPAN_SQL } from "./db.js";
 import { tiledSources } from "./leaf-view.js";
 import { round5cDataRoot } from "./entries.js";
 import { ownAbilityIds } from "./own-abilities.js";
@@ -42,8 +43,8 @@ export type FamilyStatus = {
 export function familyStatus(db: DatabaseSync): FamilyStatus[] {
   const evidence = new Map(rows<{ family_id: string; occurrences: number; wordings: number; texts: number; human: number; derived: number; machine: number }>(db, `
     SELECT fingerprints.family_id, sum(annotations.authority_kind <> 'machine') AS occurrences,
-      count(DISTINCT CASE WHEN ${TRUSTED} THEN source_spans.normalized_surface END) AS wordings,
-      count(DISTINCT CASE WHEN ${TRUSTED} THEN abilities.source_hash END) AS texts,
+      count(DISTINCT CASE WHEN ${TRUSTED} AND ${BODY_SPAN_SQL} THEN source_spans.normalized_surface END) AS wordings,
+      count(DISTINCT CASE WHEN ${TRUSTED} AND ${BODY_SPAN_SQL} THEN abilities.source_hash END) AS texts,
       sum(annotations.authority_kind = 'human') AS human, sum(annotations.authority_kind = 'derived') AS derived,
       sum(annotations.authority_kind = 'machine') AS machine
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id

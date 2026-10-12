@@ -5,6 +5,7 @@ import { familyFitsKind, REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition
 import { mapWithConcurrency } from "./concurrency.js";
 import { askChoiceRanked, askMany, clip, JevBudget, JEV_MODEL, NONE_OF_THESE, type JevClient } from "./jev-core.js";
 import { choices, type Property } from "./leaf-prefill.js";
+import { BODY_SPAN_SQL } from "./db.js";
 import { leafSurfaceKey } from "./matching.js";
 
 /**
@@ -48,7 +49,7 @@ function trustedWordings(db: DatabaseSync): Map<string, Example[]> {
     SELECT fingerprints.family_id, source_spans.exact_text
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
-    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived')
+    WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND ${BODY_SPAN_SQL}
   `).all() as Array<{ family_id: string; exact_text: string }>) {
     const surface = leafSurfaceKey(row.exact_text);
     if (!surface) continue;

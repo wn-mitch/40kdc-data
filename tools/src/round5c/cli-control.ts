@@ -4,7 +4,7 @@ import type { DatabaseSync } from "node:sqlite";
 import { authorityAudit } from "./authority-migration.js";
 import { REVIEWED_FAMILY_REGISTRY } from "./contracts.js";
 import { getCurrentCoverage } from "./coverage.js";
-import { backupBeforeLiveRun, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
+import { BODY_SPAN_SQL, backupBeforeLiveRun, getDataEpoch, openWorkbench, openWorkbenchReadOnly, workbenchPath } from "./db.js";
 import { applyChatReviewFile } from "./review-apply.js";
 import { planPilotStep, reportPilotStep, runPilotStep, type PilotStepOptions } from "./pilot.js";
 import { classificationHealth, familyStatus, frontier, FRONTIER_KINDS, gapsReport, leafCompleteTexts, readQuery, reviewSessions, segmentationHealth, type FrontierKind } from "./control-reads.js";
@@ -93,7 +93,9 @@ export function projectStatus(db: DatabaseSync): Record<string, unknown> {
     WHERE annotations.status = 'active' AND abilities.current = 1 GROUP BY 1
   `).all() as Array<{ authority: string; n: number }>).map((row) => [row.authority, row.n]));
   const familyEvidence = db.prepare(`
-    SELECT fingerprints.family_id, count(*) AS occurrences, count(DISTINCT source_spans.normalized_surface) AS wordings, count(DISTINCT abilities.source_hash) AS texts,
+    SELECT fingerprints.family_id, count(*) AS occurrences,
+      count(DISTINCT CASE WHEN ${BODY_SPAN_SQL} THEN source_spans.normalized_surface END) AS wordings,
+      count(DISTINCT CASE WHEN ${BODY_SPAN_SQL} THEN abilities.source_hash END) AS texts,
       sum(annotations.authority_kind = 'human') AS human
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
