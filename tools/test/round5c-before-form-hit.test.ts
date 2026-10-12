@@ -151,7 +151,11 @@ describe("a before-form hit binds the unit it hit (B)", () => {
     ), charged);
     const lastStep = (mechanics: Record<string, any>) => mechanics.effect.effect.effect.steps.at(-1);
     expect(lastStep(roll({ subject: "antecedent" }))).toEqual({ type: "roll-modifier", target: "recipient", modifier: { roll: "charge", operation: "subtract", value: 2 } });
-    expect(lastStep(roll({})).target).toBe("this-unit");
+    // Without the antecedent the modifier belongs to the bearer's unit, which the loop does not iterate: it runs once, after the loop.
+    const unbound = roll({}).effect.effect;
+    expect(unbound.type).toBe("sequence");
+    expect(unbound.steps.at(-1)).toMatchObject({ type: "roll-modifier", target: "this-unit" });
+    expect(unbound.steps[0].type).toBe("for-each-unit");
   });
 
   it("refuses a before-form hit with no unit-filter after it", () => {

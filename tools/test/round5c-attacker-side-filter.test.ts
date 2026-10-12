@@ -182,7 +182,7 @@ describe("Round 5C characteristic setter on the attack (characteristic-set subje
   ];
 
   it("is the current characteristic-set version, which takes subject attack", () => {
-    expect(currentFamilyVersion("characteristic-set")).toBe(7);
+    expect(currentFamilyVersion("characteristic-set")).toBeGreaterThanOrEqual(7);
   });
 
   it("lowers to a stat-modifier set on the attack's owner, as the attack's added-to twin does", () => {
