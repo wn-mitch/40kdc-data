@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION } from "../src/round5c/family-extensions-16-every-model-position.js";
 import { describeCondition } from "../src/translate/condition.js";
 
 /**
@@ -32,6 +34,14 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 
 const POSITION = "unit-position";
 const VERSION = currentFamilyVersion(POSITION);
+/** The version just before the one that added models; later extensions may sit above it. */
+const BEFORE_MODELS = (() => {
+  for (let version = VERSION; version > 1; version -= 1) {
+    const extension = familyExtension(POSITION, version);
+    if (extension !== undefined && FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION.includes(extension)) return version - 1;
+  }
+  throw new Error("The every-model extension is not registered.");
+})();
 const WITHIN = { kind: "within", inches: 3, negated: false };
 
 describe("unit-position models every: family version", () => {
@@ -49,7 +59,7 @@ describe("unit-position models every: family version", () => {
 
   it("is not accepted by the previous version: models is new in this version", () => {
     const filter = { ...WITHIN, of: "following-filter", subject: "this-unit", models: "every" };
-    expect(() => normalizeFingerprintParameters(POSITION, filter, VERSION - 1)).toThrow();
+    expect(() => normalizeFingerprintParameters(POSITION, filter, BEFORE_MODELS)).toThrow();
   });
 
   it("leaves a leaf without models normalizing exactly as the previous version does", () => {

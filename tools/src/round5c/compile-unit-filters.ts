@@ -522,7 +522,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // "While a friendly WAR DOG model is within 9\" of this model": each such model is the
       // recipient (compile-model-level.ts wrapModelAura), not the unit it belongs to.
       const models = leaf.parameters.level === "model" ? { model_recipient: modelRecipientFilter(leaf, dslUnitFilter(leaf)) } : {};
-      out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura", { models: true }), filter: filterOf(leaf), ...models } });
+      // A region grant ("the area within 6\" of this model is held in a rule region") reaches units of either side:
+      // its filter may say any, and wrapAura lowers it to one counts-as over every unit within the range.
+      const regionGrant = leaf.parameters.side === "any" && leaf.parameters.level !== "model" && list.slice(index + 2).some((later) =>
+        later.family_id === "counts-as" && later.parameters.region !== undefined && later.fragment === leaf.fragment);
+      out.push({ ...next!, parameters: { ...next!.parameters, side: side(leaf, "an aura", { models: true, anySide: regionGrant }), filter: filterOf(leaf), ...models } });
       index += 1;
     } else if (openTarget(leaf) && isFilter(next)) {
       // "One" + "friendly ADEPTA SORORITAS unit" (+ "from your army"): a Stratagem's TARGET.

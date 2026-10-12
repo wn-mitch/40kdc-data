@@ -65,6 +65,19 @@ export function alternativesCheck(list: readonly FilterAlternative[] | undefined
   };
 }
 
+/**
+ * An aura over units of either side has no DSL aura target. The one body it can have is a region
+ * grant (`counts-as` in a rule region): the same node with its target the units of either side
+ * within the range of the ability's model, so the rule is said once.
+ */
+function anySideRegionGrant(leaf: CompileLeaf, body: Node, modifier: Node, eligible: Node): Node {
+  const grant = (body.modifier ?? {}) as Node;
+  if (body.type !== "counts-as" || grant.in_region === undefined) throw new CompileError("A unit-filter for an aura must say friendly or enemy.");
+  if (Object.keys(eligible).length || modifier.range_cap !== undefined) throw new CompileError("An aura over units of either side names no keyword, state or range cap; the region takes every unit within the range.");
+  const of = leaf.parameters.of;
+  return { ...body, target: { owner: "any", within: { range: { inches: modifier.range }, ...(of !== undefined ? { of } : {}), ...(modifier.wholly === true ? { wholly: true } : {}) } } };
+}
+
 export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   const modifier: Node = { range: closed(leaf, "inches"), effect: body };
   // Version 3: a folded unit-filter (compile-unit-filters.ts) carries the keywords as `filter`.
@@ -88,6 +101,7 @@ export function wrapAura(leaf: CompileLeaf, body: Node): Node {
   if (Object.keys(eligible).length) modifier.eligible = eligible;
   // Version 2 (batch 7a): the aura's range, extensions included, never exceeds this many inches.
   if (leaf.parameters.range_cap_inches !== undefined) modifier.range_cap = closed(leaf, "range_cap_inches");
+  if (closed(leaf, "side") === "any") return anySideRegionGrant(leaf, body, modifier, eligible);
   return { type: "aura", target: closed(leaf, "side") === "friendly" ? "friendly-within-aura" : "enemy-within-aura", modifier };
 }
 

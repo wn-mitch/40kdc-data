@@ -5396,7 +5396,7 @@
   "data/enrichment/chaos-daemons/abilities.json#greater-daemon-of-khorne-chaos-daemons#effect/effect": {
     "type": "counts-as",
     "target": {
-      "owner": "friendly",
+      "owner": "any",
       "within": {
         "range": {
           "inches": 6
@@ -5414,7 +5414,7 @@
   "data/enrichment/chaos-daemons/abilities.json#greater-daemon-of-nurgle-chaos-daemons#effect/effect": {
     "type": "counts-as",
     "target": {
-      "owner": "friendly",
+      "owner": "any",
       "within": {
         "range": {
           "inches": 6
@@ -5432,7 +5432,7 @@
   "data/enrichment/chaos-daemons/abilities.json#greater-daemon-of-slaanesh-chaos-daemons#effect/effect": {
     "type": "counts-as",
     "target": {
-      "owner": "friendly",
+      "owner": "any",
       "within": {
         "range": {
           "inches": 6
@@ -5450,7 +5450,7 @@
   "data/enrichment/chaos-daemons/abilities.json#greater-daemon-of-tzeentch-chaos-daemons#effect/effect": {
     "type": "counts-as",
     "target": {
-      "owner": "friendly",
+      "owner": "any",
       "within": {
         "range": {
           "inches": 6

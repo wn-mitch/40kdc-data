@@ -471,7 +471,9 @@ export function condition(leaf: CompileLeaf): Node {
         const node = leaf.parameters.of === "objective"
           ? pred("within", { of: { objective: objectiveFilter(leaf) }, range: inchesOnly() }, subject)
           : leaf.parameters.of === "enemy-deployment-zone"
-          ? pred("within", { of: { territory: "enemy-deployment-zone" }, range: inchesOnly() }, subject)
+          ? pred("within", { of: { territory: "enemy-deployment-zone" }, range: inchesOnly(), ...wholly }, subject)
+          : leaf.parameters.of === "battlefield-centre"
+          ? pred("within", { of: "battlefield-centre", range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "marker"
           ? pred("within", { of: { marker: closed(leaf, "of_marker") }, range: inchesOnly(), ...wholly }, subject)
           : leaf.parameters.of === "battlefield-edge"

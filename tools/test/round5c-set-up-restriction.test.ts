@@ -2,10 +2,21 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_16_SET_UP_RESTRICTION } from "../src/round5c/family-extensions-16-set-up-restriction.js";
 import { designationLabel, DESIGNATION_IDS } from "../src/translate/designations.js";
 import { describeEffect, type Effect } from "../src/translate/index.js";
 
 type Item = [string, string, Record<string, unknown>];
+
+/** The unit-position version that added the enemy deployment zone as a beyond-only place; later versions widen it. */
+const ZONE_BEYOND_ONLY = (() => {
+  for (let version = currentFamilyVersion("unit-position"); version > 1; version -= 1) {
+    const extension = familyExtension("unit-position", version);
+    if (extension !== undefined && FAMILY_EXTENSIONS_16_SET_UP_RESTRICTION.includes(extension)) return version;
+  }
+  throw new Error("The set-up restriction extension of unit-position is not registered.");
+})();
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
@@ -56,10 +67,16 @@ describe("Wave 10 family versions: unit-size dice, objective and zone distances,
   });
 
   it("measures a beyond distance from the enemy deployment zone, and no within distance from it", () => {
-    const position = currentFamilyVersion("unit-position");
+    const position = ZONE_BEYOND_ONLY;
     expect(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position))
       .toMatchObject({ of: "enemy-deployment-zone", inches: 8 });
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position)).toThrow(/beyond distance/u);
+    // A later version widens it to a within distance; the beyond form keeps normalizing the same.
+    const current = currentFamilyVersion("unit-position");
+    expect(normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, current))
+      .toMatchObject({ kind: "within", of: "enemy-deployment-zone" });
+    expect(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, current))
+      .toEqual(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position));
   });
 
   it("names units that carry or lack a designation, with their side, and refuses them on other places", () => {
@@ -263,7 +280,7 @@ describe("Wave 10 designated-unit distances and deployment-zone distances (SS4, 
     expect(words).toContain("your opponent's deployment zone");
   });
 
-  it("refuses a within distance from the enemy deployment zone, which the set-up has no form for", () => {
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position"))).toThrow();
+  it("refuses a within distance from the enemy deployment zone in the version that had no form for it", () => {
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "this-unit", negated: false }, ZONE_BEYOND_ONLY)).toThrow();
   });
 });
