@@ -4,6 +4,7 @@ import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { resolveAuthoredNames } from "../src/round5c/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { familyExtension } from "../src/round5c/family-extensions.js";
+import { FAMILY_EXTENSIONS_20_WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION } from "../src/round5c/family-extensions-20-weapon-scope-name-keyword-exclusion.js";
 import type { WeaponCatalog } from "../src/round5c/weapon-catalog.js";
 
 /**
@@ -59,8 +60,10 @@ describe("family versions: weapon-property-scope weapon_name, characteristic-set
   const norm = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters, currentFamilyVersion(family));
 
   it("tracks the extension as the current version, positionally", () => {
+    // Later extensions may sit above this one, so find its version by identity, not as the current one.
     for (const family of ["weapon-property-scope", "characteristic-set", "roll-modifier"]) {
-      const extension = familyExtension(family, currentFamilyVersion(family));
+      const versions = Array.from({ length: currentFamilyVersion(family) }, (_, at) => at + 1);
+      const extension = versions.map((version) => familyExtension(family, version)).find((found) => found !== undefined && FAMILY_EXTENSIONS_20_WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION.includes(found));
       expect(extension?.description).toMatch(/^As the previous version, plus weapon_/u);
     }
   });
