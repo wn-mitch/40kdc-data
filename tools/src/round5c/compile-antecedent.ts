@@ -3,6 +3,7 @@ import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
+import { exclusionOnly } from "./compile-select-exclusions.js";
 import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
@@ -473,6 +474,9 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
     // unless it is the other unit a condition measures to (a following filter).
     const lastSelect = earlier.map((other) => other.family_id === "select-unit").lastIndexOf(true);
     const filterAt = bareFilterAt(leaves, index);
+    // An exclusion-only filter ("(you cannot select a unit that can FLY)") narrows the selection and names no unit, so
+    // "that unit" is the selected one; the select-exclusion fold (compile-select-exclusions.ts) claims it or refuses.
+    if (filterAt > lastSelect && exclusionOnly(leaves[filterAt])) return "selected-unit";
     const measured = filterAt > 0 && awaitsFollowingFilter(leaves[filterAt - 1]!.parameters);
     return filterAt > lastSelect && !measured ? FILTERED_UNITS : "selected-unit";
   }
