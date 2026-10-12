@@ -142,6 +142,25 @@ describe("foldPassthroughUsed and the through gate", () => {
     expect(describeTrigger(step.trigger)).toContain('moves through terrain over 4" tall');
   });
 
+  it("gates only the moment after the tall-terrain move when the move-throughs before it are split by terrain", () => {
+    // Two move-throughs precede the tall one (a non-titanic permission and a 4-inch terrain permission). The
+    // qualifier names the nearest move-through, the tall move, so the gate lands on that move's moment alone.
+    const split = "Each time this model makes a Normal move, it can move through models and sections of terrain features that are 4\" or less in height. It can also move through tall ridges, but if it does, after it has moved, roll one D6: on a 1, this model is Battle-shocked.";
+    const mechanics = compiled(split, [
+      ENDED,
+      ["it can move through models", "move-through", { subject: "this-model", passthrough: "non-titanic-models", applies_to_moves: ["normal"] }],
+      ["sections of terrain features that are 4\" or less in height", "move-through", { subject: "this-model", passthrough: "terrain-le-4", applies_to_moves: ["normal"] }],
+      TALL_MOVE,
+      QUALIFIER,
+      AFTER,
+      ...ROLL,
+    ]);
+    const steps = mechanics.effect.steps as Array<Record<string, any>>;
+    expect(steps.filter((step) => step.trigger?.filter?.through !== undefined)).toHaveLength(1);
+    expect(throughStep(mechanics)!.trigger).toEqual({ event: "move-ended", subject: "this-model", filter: { through: "tall-terrain" } });
+    expect(JSON.stringify(steps[0])).toContain("terrain-le-4");
+  });
+
   it("does not mutate the leaves it folds", () => {
     // The permission names its mover, as bindAntecedents leaves it.
     const named: Item = ["after it has moved", "event", { kind: "move-ended", subject: "this-model" }];
