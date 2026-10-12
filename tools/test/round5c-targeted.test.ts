@@ -172,3 +172,133 @@ describe("Round 5C past targeting", () => {
     expect(ranged).toBe("the triggering unit has selected the unit as a target of its ranged attacks");
   });
 });
+
+/** Fabricated wording for a targeted-then-aura shape: an enemy unit's ranged attack on a friendly unit within range of the bearer. */
+describe("Round 5C targeted unit measured from the bearer", () => {
+  const text = "Once per turn, in your opponent's Shooting phase, when an enemy unit makes a ranged attack that targets a friendly FOOTSOLDIER unit within 3\" of this model, and that enemy unit has shot, this model can shoot as if it were your Shooting phase, and it must shoot that enemy unit with all of its weapons, while it is eligible to shoot.";
+  const leaves = (...tail: Array<[string, string, Record<string, unknown>]>) => placed(text,
+    ["Once per turn", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
+    ["in your opponent's Shooting phase", "phase-window", { phase: "shooting", turn: "opponent" }],
+    ["an enemy unit", "unit-filter", { side: "enemy" }],
+    ["makes a ranged attack that targets", "targeted", { subject: "event-subject", object: "following-filter", window: "event", attack_type: "ranged" }],
+    ["a friendly FOOTSOLDIER unit", "unit-filter", { side: "friendly", keywords: ["FOOTSOLDIER"] }],
+    ...tail,
+  );
+  const fromBearer = [
+    ["within 3\" of this model", "aura-range", { inches: 3, of: "this-model" }] as [string, string, Record<string, unknown>],
+    ["that enemy unit has shot", "event", { kind: "enemy-has-shot" }] as [string, string, Record<string, unknown>],
+    ["this model can shoot as if it were your Shooting phase", "eligibility-permission", { subject: "this-model", activity: "shoot", allow: true, as_if: "shooting-phase" }] as [string, string, Record<string, unknown>],
+    ["it must shoot that enemy unit with all of its weapons", "targeting-restriction", { may: "must-target", kind: "shoot", weapon_type: "all", target: "event-subject", by: "this-model" }] as [string, string, Record<string, unknown>],
+    ["while it is eligible to shoot", "eligible", { to: "shoot" }] as [string, string, Record<string, unknown>],
+  ];
+
+  it("folds the bearer-measured aura into the targeted unit-filter as that filter's within", () => {
+    const mechanics = compiled(leaves(...fromBearer), text).mechanics as Record<string, any>;
+    expect(mechanics.trigger).toMatchObject({ event: "attacks-resolved", subject: { owner: "enemy" }, filter: { kind: "shoot" } });
+    expect(mechanics.trigger.object).toBeUndefined();
+    expect(mechanics.effect.condition.operands[1]).toEqual({ type: "happened", parameters: {
+      event: "targets-selected", subject: "event-subject",
+      object: { owner: "friendly", all_of: ["FOOTSOLDIER"], within: { of: "this-model", range: { inches: 3 } } },
+      filter: { kind: "attack", attack_type: "ranged" }, window: "event",
+    } });
+  });
+});
+
+describe("Round 5C targeted unit measured from the bearer: shapes and refusals", () => {
+  const shot = [
+    ["within 3\" of this model", "aura-range", { inches: 3, of: "this-model" }] as [string, string, Record<string, unknown>],
+    ["that enemy unit has shot", "event", { kind: "enemy-has-shot" }] as [string, string, Record<string, unknown>],
+    ["this model can shoot as if it were your Shooting phase", "eligibility-permission", { subject: "this-model", activity: "shoot", allow: true, as_if: "shooting-phase" }] as [string, string, Record<string, unknown>],
+    ["it must shoot that enemy unit with all of its weapons", "targeting-restriction", { may: "must-target", kind: "shoot", weapon_type: "all", target: "event-subject", by: "this-model" }] as [string, string, Record<string, unknown>],
+    ["while it is eligible to shoot", "eligible", { to: "shoot" }] as [string, string, Record<string, unknown>],
+  ];
+  const sentence = "Once per turn, in your opponent's Shooting phase, when an enemy unit makes a ranged attack that targets a friendly FOOTSOLDIER unit within 3\" of this model, and that enemy unit has shot, this model can shoot as if it were your Shooting phase, and it must shoot that enemy unit with all of its weapons, while it is eligible to shoot.";
+  const base = (text: string, filter: Record<string, unknown>, ...tail: Array<[string, string, Record<string, unknown>]>) => placed(text,
+    ["Once per turn", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
+    ["in your opponent's Shooting phase", "phase-window", { phase: "shooting", turn: "opponent" }],
+    ["an enemy unit", "unit-filter", { side: "enemy" }],
+    ["makes a ranged attack that targets", "targeted", { subject: "event-subject", object: "following-filter", window: "event", attack_type: "ranged" }],
+    ["a friendly FOOTSOLDIER unit", "unit-filter", { side: "friendly", ...filter }],
+    ...tail,
+  );
+
+  it("does not wrap the bearer's unit as an aura over the targeted unit", () => {
+    const mechanics = compiled(base(sentence, { keywords: ["FOOTSOLDIER"] }, ...shot), sentence).mechanics as Record<string, any>;
+    expect(mechanics.effect?.type).not.toBe("aura");
+    expect(JSON.stringify(mechanics.effect.effect)).not.toContain("FOOTSOLDIER");
+  });
+
+  it("keeps of this-model on the folded within when the leader is attached", () => {
+    const leading = "While this model is leading a unit, ";
+    const text = leading + sentence;
+    const list = placed(text,
+      ["While this model is leading a unit", "leading-unit", { subject: "this-model", attachment: "leading" }],
+      ["Once per turn", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
+      ["in your opponent's Shooting phase", "phase-window", { phase: "shooting", turn: "opponent" }],
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      ["makes a ranged attack that targets", "targeted", { subject: "event-subject", object: "following-filter", window: "event", attack_type: "ranged" }],
+      ["a friendly FOOTSOLDIER unit", "unit-filter", { side: "friendly", keywords: ["FOOTSOLDIER"] }],
+      ...shot,
+    );
+    const happened = JSON.stringify((compiled(list, text).mechanics as Record<string, any>).effect.condition);
+    expect(happened).toContain('"within":{"of":"this-model","range":{"inches":3}}');
+    expect(happened).not.toContain('"of":"this-unit"');
+  });
+
+  it("folds a wholly-within aura into the targeted filter's within", () => {
+    const wholly = sentence.replace("within 3\"", "wholly within 3\"");
+    const list = base(wholly, { keywords: ["FOOTSOLDIER"] }, ["wholly within 3\" of this model", "aura-range", { inches: 3, of: "this-model", wholly: true }], ...shot.slice(1));
+    const condition = (compiled(list, wholly).mechanics as Record<string, any>).effect.condition.operands[1];
+    expect(condition.parameters.object.within).toEqual({ of: "this-model", range: { inches: 3 }, wholly: true });
+  });
+
+  it("refuses the fold when the aura's keywords, cap, side, visibility or of are not the filter's to carry", () => {
+    const refusal = (filter: Record<string, unknown>, aura: Record<string, unknown>) => {
+      const list = base(sentence, filter, ["within 3\" of this model", "aura-range", { inches: 3, ...aura }], ...shot.slice(1));
+      const result = compileLeaves(list, sentence);
+      return result.ok ? "compiled" : result.errors.join();
+    };
+    expect(refusal({ keywords: ["FOOTSOLDIER"] }, { side: "friendly", keywords: ["FOOTSOLDIER"], of: "this-model" })).toMatch(/already names its keywords/u);
+    expect(refusal({ keywords: ["FOOTSOLDIER"] }, { of: "this-model", range_cap_inches: 6 })).toMatch(/no range cap/u);
+    expect(refusal({ keywords: ["FOOTSOLDIER"] }, { side: "enemy", of: "this-model" })).toMatch(/side differs from the unit-filter before it/u);
+    expect(refusal({ keywords: ["FOOTSOLDIER"], visible: true }, { of: "this-model" })).toMatch(/whether or not they are visible/u);
+    expect(refusal({ keywords: ["FOOTSOLDIER"] }, {})).toMatch(/needs of: this-unit or this-model/u);
+    expect(refusal({ keywords: ["FOOTSOLDIER"], level: "model" }, { of: "this-model" })).toMatch(/targeted model filter/u);
+  });
+
+  it("still refuses a side-less aura with no unit-filter before it", () => {
+    const text = "When an enemy unit has shot, if that unit targeted a friendly GROX unit this phase, your unit can make a Normal move of up to 3\" within 3\" of this model.";
+    const result = compileLeaves(placed(text,
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["has shot", "event", hasShot],
+      ["if that unit targeted a friendly GROX unit this phase", "targeted", { subject: "antecedent", object: "this-unit", window: "phase" }],
+      ["within 3\" of this model", "aura-range", { inches: 3, of: "this-model" }],
+    ), text);
+    expect(result.ok ? "" : result.errors.join()).toMatch(/aura-range without a side needs a unit-filter right before it/u);
+  });
+
+  it("keeps a side-less aura after a non-targeted unit-filter as an aura", () => {
+    const text = "While a friendly ALPHA unit is within 6\" of this model, each time a model in that unit makes an attack, re-roll a Hit roll of 1.";
+    const effect = (compiled(placed(text,
+      ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
+      ["is within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
+      ["each time a model in that unit makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }],
+      ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }]), text).mechanics as Record<string, any>).effect;
+    expect(effect.type).toBe("aura");
+  });
+
+  it("compiles the 7829 shape: the same targeted aura under a keyword-named bearer with a usage scope", () => {
+    const guns = "Once per turn, per unit, in your opponent's Shooting phase, when an enemy unit makes a ranged attack that targets a friendly HERETIC ASTARTES unit within 3\" of this model, and that enemy unit has shot, this model can shoot as if it were your Shooting phase, and it must shoot that enemy unit with all of its weapons, while it is eligible to shoot.";
+    const list = placed(guns,
+      ["Once per turn", "usage-limit", { frequency: "once-per-turn" }],
+      ["per unit", "usage-scope", { per: "unit" }],
+      ["in your opponent's Shooting phase", "phase-window", { phase: "shooting", turn: "opponent" }],
+      ["an enemy unit", "unit-filter", { side: "enemy" }],
+      ["makes a ranged attack that targets", "targeted", { subject: "event-subject", object: "following-filter", window: "event", attack_type: "ranged" }],
+      ["a friendly HERETIC ASTARTES unit", "unit-filter", { side: "friendly", keywords: ["HERETIC ASTARTES"] }],
+      ...shot,
+    );
+    const mechanics = compiled(list, guns).mechanics as Record<string, any>;
+    expect(mechanics.effect.condition.operands[1].parameters.object).toEqual({ owner: "friendly", all_of: ["HERETIC ASTARTES"], within: { of: "this-model", range: { inches: 3 } } });
+  });
+});

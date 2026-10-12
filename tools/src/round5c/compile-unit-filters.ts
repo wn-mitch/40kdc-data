@@ -15,6 +15,7 @@ import { foldSelectExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
 import { isBackref } from "./compile-attack-backref.js";
+import { measuresTargetedFilter, targetedWithin } from "./compile-targeted-within.js";
 import { destroyingAttackBefore, destroyedByFilterAfter, destroyerSideOf, foldDestroyedByFilter, foldDestroyingAttack } from "./compile-destroying-attack.js";
 
 /**
@@ -424,8 +425,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       const end = list[at - 1]!.end_byte ?? condition.end_byte;
       const named = chain ? { ...leaf, parameters: { ...leaf.parameters, nested_engaged_with: chain.partner } } : leaf;
       // "If a friendly X model is your Warlord": only army-includes reads a Warlord test, and only at muster.
-      out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: dslUnitFilter(named, { warlordTest: condition.family_id === "army-includes" }) } };
-      index = at - 1;
+      const filterNode = dslUnitFilter(named, { warlordTest: condition.family_id === "army-includes" });
+      if (measuresTargetedFilter(condition, list[at], leaf)) {
+        // "that targeted a friendly X unit" + "within 3\" of this model": the aura is the filter's within (compile-targeted-within.ts).
+        out[out.length - 1] = targetedWithin(condition, filterNode, leaf, list[at]!, end);
+        index = at;
+      } else {
+        out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: filterNode } };
+        index = at - 1;
+      }
     } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
       // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
       // "from your army" of the same side after it is the filter's own wording.
