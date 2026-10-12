@@ -156,3 +156,30 @@ describe("a standing grant sentence is its own part (compile-segments.ts standin
     expect(mechanics.effect).toMatchObject({ type: "ability-grant" });
   });
 });
+
+describe("an Or: choice between keyword grants keeps each option's own condition (compile-weapon-keywords.ts)", () => {
+  const text = "This unit's attacks:Have [LETHAL HITS], if this unit is calm. Or: have [SUSTAINED HITS 1], if this unit is rattled.";
+  const frame = { subject: "this-unit", weapon_type: "all" };
+  const pieces: Piece[] = [
+    ["This unit's attacks", "weapon-ability-grant", frame],
+    ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
+    ["if this unit is calm", "unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: true }],
+    ["Or", "instead", { choice: true }],
+    ["have", "weapon-ability-grant", frame],
+    ["SUSTAINED HITS 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+    ["if this unit is rattled", "unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }],
+  ];
+  const rattled = { type: "unit-state", parameters: { state: "battle-shocked" } };
+
+  it("gates the first option by its own trailing condition and the second by its own", () => {
+    const options = mechanicsOf(text, pieces).effect.options as Array<Record<string, any>>;
+    expect(options).toHaveLength(2);
+    expect(options[0]).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [rattled] }, effect: { modifier: { abilities: ["Lethal Hits"] } } });
+    expect(options[1]).toMatchObject({ type: "conditional", condition: rattled, effect: { modifier: { abilities: ["Sustained Hits 1"] } } });
+  });
+
+  it("still refuses a keyword run with no frame to grant it", () => {
+    const frameless = pieces.filter((piece) => piece[0] !== "have");
+    expect(errorsOf(text, frameless)).toEqual(["A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it."]);
+  });
+});

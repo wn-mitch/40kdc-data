@@ -79,7 +79,10 @@ export function foldWeaponKeywords(input: readonly CompileLeaf[], sourceText?: s
       }
     }
     const keywords = run.map((at) => list[at]!.parameters.keyword as string);
-    folded.set(index, { ...leaf, parameters: { ...leaf.parameters, keywords, keyword_choice: choice && keywords.length > 1 } });
+    // The grant ends where its last keyword does, so the text after it (", if this unit is …") is in its own sentence.
+    const last = list[run.at(-1)!]!;
+    const end = run[0]! > index && last.end_byte !== undefined && last.end_byte > (leaf.end_byte ?? 0) ? last.end_byte : leaf.end_byte;
+    folded.set(index, { ...leaf, end_byte: end, parameters: { ...leaf.parameters, keywords, keyword_choice: choice && keywords.length > 1 } });
   }
   const claimed = new Set([...claims.values()]);
   if (runs.some((run) => !claimed.has(run))) throw new CompileError("A weapon-ability-keyword leaf has no weapon-ability-grant frame saying which weapons gain it.");
