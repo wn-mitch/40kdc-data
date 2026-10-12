@@ -413,7 +413,9 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       const count = String(closed(leaf, "count"));
       // Version 5: "(to a maximum of 6 mortal wounds)" caps the total.
       const cap = leaf.parameters.max === undefined ? {} : { max: closed(leaf, "max") };
-      return { type: "mortal-wounds", target: MORTAL_TARGETS[String(closed(leaf, "recipient"))], modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap } };
+      // "that enemy unit" under a later moment: the unit the Stratagem's WHEN moment bound (compile-when-subject.ts).
+      const target = typeof leaf.parameters.recipient_var === "string" ? { event_var: leaf.parameters.recipient_var } : MORTAL_TARGETS[String(closed(leaf, "recipient"))];
+      return { type: "mortal-wounds", target, modifier: { count: /^\d+$/u.test(count) ? Number(count) : count, ...cap } };
     }
     case "fight-on-death": {
       const act = leaf.family_version >= 2 ? closed(leaf, "act") : "fight";

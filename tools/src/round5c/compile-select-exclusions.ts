@@ -7,8 +7,10 @@ const isFilter = (leaf: CompileLeaf | undefined) => leaf?.family_id === "unit-fi
  * "select one enemy unit within 8\" of the bearer's unit (excluding **MONSTER** units)": an
  * exclusion-only unit-filter after a selection's distance folds into the selection's filter. This
  * pass moves that exclusion to sit right after its select (or merges it into the filter there), so
- * the select fold reads one filter. The exclusion must name the selection's side, and at most one
- * distance may sit between the select and the exclusion; otherwise it stays where it is and refuses.
+ * the select fold reads one filter. The exclusion must name the selection's side, and only conditions on the
+ * selected unit (distances and model counts) may sit between the select and the exclusion ("that has 6 or
+ * fewer models that is wholly within 6\" of this unit (you cannot select a unit that can FLY)"); otherwise
+ * it stays where it is and refuses.
  */
 export function foldSelectExclusions(
   input: readonly CompileLeaf[],
@@ -20,7 +22,7 @@ export function foldSelectExclusions(
     if (select.family_id !== "select-unit") continue;
     const base = isFilter(list[index + 1]) && list[index + 1]!.fragment === select.fragment ? index + 1 : null;
     let cursor = base === null ? index + 1 : index + 2;
-    if (selectionDistance(list[cursor], select)) cursor += 1;
+    while (selectionCondition(list[cursor], select)) cursor += 1;
     const exclusion = list[cursor];
     if (!exclusionOnly(exclusion) || exclusion!.fragment !== select.fragment) continue;
     const selectedSide = select.parameters.scope ?? (base === null ? undefined : list[base]!.parameters.side);
@@ -40,11 +42,14 @@ export function foldSelectExclusions(
   return list;
 }
 
-/** A distance a selection's exclusion may sit past: a side-less aura-range, or a unit-position measured to the selection's own units. */
-function selectionDistance(leaf: CompileLeaf | undefined, select: CompileLeaf): boolean {
+/**
+ * A condition on the selected unit a selection's exclusion may sit past: a side-less aura-range, a unit-position
+ * measured to the selection's own units, or a model count of the selected unit.
+ */
+function selectionCondition(leaf: CompileLeaf | undefined, select: CompileLeaf): boolean {
   if (leaf === undefined || leaf.fragment !== select.fragment || awaitsFollowingFilter(leaf.parameters)) return false;
   if (leaf.family_id === "aura-range") return leaf.parameters.side === undefined;
-  return leaf.family_id === "unit-position" && ["selected-unit", "antecedent", "target"].includes(String(leaf.parameters.subject));
+  return (leaf.family_id === "unit-position" || leaf.family_id === "model-count") && ["selected-unit", "antecedent", "target"].includes(String(leaf.parameters.subject));
 }
 
 /** Parameters an exclusion-only unit-filter may carry: the side it names and the keywords it excludes. */

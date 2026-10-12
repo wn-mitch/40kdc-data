@@ -193,7 +193,26 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   // ("When this unit destroys a …") is not one of that frame's attacks.
   // A labelled part ("Bestial Forms: …") is a named rule of its own, so the list's header does not gate it either.
   const labelled = new Set(sentences.filter((_sentence, position) => labels[position]).map((sentence) => sentence[0]!));
-  return parts.map((part, at) => armyOnly(part) ? part : (attackFrame || labelled.has(part[0]!)) && at > 0 ? part : [...header, ...part]);
+  const frame = leadingFrame(leaves, parts[0]!);
+  return parts.map((part, at) => armyOnly(part) ? part : (attackFrame || labelled.has(part[0]!)) && at > 0 ? part
+    : [...header, ...(at > 0 && frame !== null && namesFrameUnit(part, frame, sourceText) ? [frame] : []), ...part]);
+}
+
+/**
+ * "While this model is leading a unit, …": the record's first leaf, when it is a leading-unit condition, frames the
+ * unit the later sentences call "that unit". Null when the record opens any other way.
+ */
+function leadingFrame(leaves: readonly CompileLeaf[], first: readonly CompileLeaf[]): CompileLeaf | null {
+  const leaf = first[0];
+  return leaf !== undefined && leaf === leaves[0] && leaf.role === "CONDITION" && leaf.family_id === "leading-unit" ? leaf : null;
+}
+
+/** A later part that says "that unit" is about the unit the frame names, and holds only while the frame does; a part with its own leading-unit condition keeps it. */
+function namesFrameUnit(part: readonly CompileLeaf[], frame: CompileLeaf, sourceText: string): boolean {
+  if (part.some((leaf) => leaf.family_id === frame.family_id)) return false;
+  const first = part[0]!;
+  const last = part.at(-1)!;
+  return /\bthat unit\b/iu.test(between(sourceText, first.start_byte, last.end_byte ?? first.start_byte));
 }
 
 type PartResult = { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node | Node[] } };

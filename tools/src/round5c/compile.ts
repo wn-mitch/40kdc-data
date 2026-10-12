@@ -10,6 +10,10 @@ import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldCountsAsMoved } from "./compile-counts-as-moved.js";
 import { foldPassthroughUsed, refuseUnboundIfItDoes } from "./compile-passthrough-used.js";
 import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
+import { bindWhenSubject, nestedWhenMoments } from "./compile-when-subject.js";
+import { inheritAttackFrames } from "./compile-attack-continuation.js";
+import { bandMoments } from "./compile-band-moment.js";
+import { forEachTail } from "./compile-for-each-tail.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { bindArmyAntecedents, armyCoreChecks, foldArmyAttachments, foldArmyPer, resolveArmyGroups } from "./compile-army.js";
@@ -294,7 +298,11 @@ function compileRecord(given: readonly CompileLeaf[], sourceText?: string, optio
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }
-  let leaves = nameBoundAttacks(qualified);
+  let leaves: CompileLeaf[];
+  try { leaves = bindWhenSubject(nameBoundAttacks(qualified), sourceText); } catch (error) {
+    if (!(error instanceof CompileError)) throw error;
+    return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
+  }
   // A before-form hit names its unit by the unit-filter after it, so its later "that unit" binds to that unit (compile-weapon-qualified.ts).
   // Optional-spend pairing is checked over the whole record: a spend in one sentence can pair with a read in another.
   try { leaves = bindBeforeFormHits(leaves, sourceText); leaves = bindBareFilterHits(leaves, sourceText); checkOptionalCosts(leaves, sourceText); refuseBeforeFormAnaphors(leaves); refuseUnmovedEventSubject(leaves); } catch (error) {
@@ -426,6 +434,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let selectedGlobally = false;
   const triggers: Node[] = [];
   const triggerIndexes: number[] = [];
+  const nestedMoments = nestedWhenMoments(list);
+  const nestedTriggers: Node[] = [];
+  // A moment inside a result band is a part of that band, never a trigger of the ability (compile-band-moment.ts).
+  const inBand = bandMoments(list, places);
+  const bandTriggers = new Map<number, Node[]>();
   const durations: string[] = [];
   const durationAt: number[] = [];
   const selections: CompileLeaf[] = [];
@@ -650,15 +663,19 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         else if (leaf.family_id === "dice-roll") rolls.push(leaf);
         else if (!(leaf.family_id === "event" && ATTACK_EVENTS.has(String(leaf.parameters.kind)))) {
           // A list of roll kinds is one trigger per kind (compile-triggers.ts triggerLeaves).
-          for (const each of triggerLeaves(leaf)) {
-            triggers.push(withDestroyedObject(trigger(each), placesFromEventObject));
-            triggerIndexes.push(index);
-          }
+          // A Stratagem's effect moment is a part under its WHEN moment (compile-when-subject.ts), not another trigger.
+          const own = nestedMoments.has(index);
+          const band = inBand.has(index);
+          const place = (node: Node) => {
+            if (band) bandTriggers.set(index, [...(bandTriggers.get(index) ?? []), node]);
+            else if (own) nestedTriggers.push(node);
+            else { triggers.push(node); triggerIndexes.push(index); }
+          };
+          for (const each of triggerLeaves(leaf)) place(withDestroyedObject(trigger(each), placesFromEventObject));
           // "At the start or end of this unit's move": the other end is an alternative moment.
           if (leaf.family_id === "event" && typeof leaf.parameters.also === "string") {
             const { also, ...rest } = leaf.parameters;
-            triggers.push(trigger({ ...leaf, parameters: { ...rest, kind: also } }));
-            triggerIndexes.push(index);
+            place(trigger({ ...leaf, parameters: { ...rest, kind: also } }));
           }
         }
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
@@ -700,6 +717,26 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       replaces: false,
     });
   });
+  // A moment inside a result band holds the effects after it in its sentence as one part of that band's outcome.
+  for (const [momentAt, effectAt] of inBand) {
+    const members = planned.filter((item) => effectAt.includes(item.index));
+    if (members.length === 0) {
+      errors.push("A moment inside a result band has no effect it can hold.");
+      continue;
+    }
+    if (members.some((item) => JSON.stringify(item.gate) !== JSON.stringify(members[0]!.gate))) {
+      errors.push("The effects after a moment inside a result band take different conditions; they have no common reading.");
+      continue;
+    }
+    const moments = bandTriggers.get(momentAt) ?? [];
+    const inner = members.map((item) => item.node);
+    const part: Node = { type: "ability-part", trigger: moments.length === 1 ? moments[0]! : moments, effect: inner.length === 1 ? inner[0]! : { type: "sequence", steps: inner } };
+    const first = members[0]!;
+    planned.splice(planned.indexOf(first), 1, { ...first, node: part });
+    for (const item of members.slice(1)) planned.splice(planned.indexOf(item), 1);
+  }
+  // "…, subtract 1 from the Wound roll as well": the earlier sentence's attacks (compile-attack-continuation.ts).
+  attempt(() => inheritAttackFrames(list, places, planned, sourceText, condition));
   // A move-end nearest or a replacing move-must-end is an effect in its own right (it changes the move).
   const movesEnd = list.some((leaf) => leaf.family_id === "move-end-nearest" || (leaf.family_id === "move-must-end" && leaf.parameters.replaces === true));
   if (list.every((leaf) => leaf.role !== "EFFECT") && !movesEnd) errors.push("There is no effect leaf to compile.");
@@ -1138,7 +1175,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (place !== "same") item.node = durationPart(bound!, item.node);
     }
   }
-  const pieceItems = planned.filter((item) => !designatedSpends.includes(item));
+  // Sentences after a for-each's that open with "Then" happen once, after the loop (compile-for-each-tail.ts).
+  const afterLoop = partStarts.length === 0 && selections.length === 0 ? forEachTail(list, places, planned, forEachLeaf, sourceText) : [];
+  const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
@@ -1188,6 +1227,13 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       body = gated(perUnit, body!);
     }
   }
+  // A Stratagem's effect moment holds the selection printed before it, never the reverse: "Select one … unit. When it
+  // declares a charge, …" selects at the WHEN moment, and the later moment is the selected unit's.
+  const selectsBeforeMoment = [...nestedMoments].some((moment) => list.some((leaf, at) => at < moment && (leaf.family_id === "select-unit" || leaf.family_id === "for-each-unit-select")));
+  if (nestedTriggers.length && selectsBeforeMoment) {
+    body = { type: "ability-part", trigger: nestedTriggers.length === 1 ? nestedTriggers[0]! : nestedTriggers, effect: gated(global, body!) };
+    global.splice(0, global.length);
+  }
   const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
 
   if (selections.length === 1 && selected.length > 0) {
@@ -1217,7 +1263,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       selectionLimit,
     });
   }
-  else if (forEachLeaf) { const each = forEachLeaf; body = attempt(() => wrapForEachUnit(each, body!)); }
+  else if (forEachLeaf) {
+    const each = forEachLeaf;
+    body = attempt(() => wrapForEachUnit(each, body!));
+    if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
+  }
   if (!body) return { ok: false, signature, errors };
   if (auraLeaf) { const aura: CompileLeaf = auraLeaf; body = attempt(() => aura.parameters.model_recipient !== undefined ? wrapModelAura(aura, body!, triggers) : wrapAura(aura, body!)); }
   if (leaderLeaf) { const leader = leaderLeaf; body = attempt(() => wrapLeaderTarget(leader, body!)); }
@@ -1230,7 +1280,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   if (rulesBundle) body = wrapRulesBundle(body);
   const stratagem = list.some((leaf) => STRATAGEM_FAMILIES.has(leaf.family_id));
-  const behavior = auraLeaf ? "aura" : triggers.length ? "reactive" : optional || stratagem ? "activated" : "passive";
+  const behavior = auraLeaf ? "aura" : triggers.length || bandTriggers.size ? "reactive" : optional || stratagem ? "activated" : "passive";
   // A used or triggered ability with no printed duration lasts for its window's period. A passive
   // ability gated on a phase already holds only in that phase, and an aura only while in range.
   const period = durations.length === 0 && (behavior === "reactive" || behavior === "activated") && hasLastingEffect(body) ? windowPeriod(list) : null;
@@ -1319,7 +1369,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   let resolved: ReturnType<typeof resolveEntry>;
   try {
-    resolved = resolveEntry(gated(global, foldConditionalTestModifiers(body)), entryTrigger, target, severalTargets(list));
+    const effect = gated(global, foldConditionalTestModifiers(body));
+    const nestedNow = nestedTriggers.length > 0 && !selectsBeforeMoment;
+    resolved = resolveEntry(nestedNow ? { type: "ability-part", trigger: asTrigger(nestedTriggers), effect } : effect, entryTrigger, target, severalTargets(list));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
