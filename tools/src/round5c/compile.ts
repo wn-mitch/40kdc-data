@@ -291,10 +291,21 @@ export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: strin
   // An ability the record prints as granted compiles alone, as its holder's own (compile-granted.ts).
   // "This ability" inside a granted body is the granted one, not the record, so a body gets no id.
   const compiled = compileGranted(bound, sourceText, (host, text) => compileRecord(host, text, options), (body, text) => compileLeaves(body, text), options.abilityId);
+  if (compiled.ok && containsRollMarker(compiled.mechanics)) {
+    return { ok: false, signature: compiled.signature, errors: ["A roll-result band was left unresolved in the compiled output."] };
+  }
   if (compiled.ok && gatesTriggerOnWarlord(compiled.mechanics)) {
     return { ok: false, signature: compiled.signature, errors: ["A Warlord gate on an army list covers a trigger-based ability; the trigger sentence is a separate rule and this record cannot be split here."] };
   }
   return compiled;
+}
+
+/** True when any node of a compiled tree is still the internal roll-result marker (never valid DSL). */
+function containsRollMarker(value: unknown): boolean {
+  if (Array.isArray(value)) return value.some(containsRollMarker);
+  if (value === null || typeof value !== "object") return false;
+  const record = value as Record<string, unknown>;
+  return record.type === "__roll-result" || Object.values(record).some(containsRollMarker);
 }
 
 function compileRecord(given: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
@@ -1209,6 +1220,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     ? planned.filter((item) => item.index > loopAt && rawOf[item.index]! > rawOf[loopAt]! && (item.node.target === "this-unit" || item.node.target === "this-model"))
     : [];
   const afterLoop = planned.filter((item) => thenTail.includes(item) || fixedRecipientTail.includes(item));
+  // A banded effect after the loop has no DSL shape: it would resolve against the loop's roll or run once per unit.
+  if (afterLoop.some((item) => item.gate.some(isRollMarker))) errors.push("A roll-result band on a later sentence's effect on the bearer's unit has no DSL shape after a for-each-unit loop.");
+  if (errors.length > 0) return { ok: false, signature, errors };
   const pieceItems = planned.filter((item) => !designatedSpends.includes(item) && !afterLoop.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
     pieceItems.filter((item) => partOf(item.index) === part),

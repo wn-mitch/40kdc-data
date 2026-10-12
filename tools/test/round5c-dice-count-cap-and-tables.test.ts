@@ -348,6 +348,22 @@ describe("S6 loop scope", () => {
     validates(mechanics.effect);
   });
 
+  it("a later sentence with its own roll band on the bearer's unit is refused, never a raw marker", () => {
+    const text = `${head} On a 6, this unit suffers 2 mortal wounds.`;
+    const result = compileItems(text, [...loop, ["On a 6", "roll-result", { from: 6 }], ["this unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "this-unit", count: "2" }]]);
+    expect(result.ok ? JSON.stringify(result.mechanics) : "").not.toContain("__roll-result");
+    expect(result.ok).toBe(false);
+  });
+
+  it("a bearer roll-modifier in a later sentence stays in the loop's own sequence (pinned; not hoisted after it)", () => {
+    const text = `${head} Then, add 1 to hit rolls made by this unit.`;
+    const result = compileItems(text, [...loop, ["add 1 to hit rolls made by this unit", "roll-modifier", { operation: "add", value: 1, rolls: ["hit"], recipient: "this-unit" }]]);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = (result.mechanics as unknown as Record<string, any>).effect;
+    expect(effect.type).toBe("for-each-unit");
+    expect(effect.effect.steps.map((step: any) => step.type)).toEqual(["dice-gated", "roll-modifier"]);
+  });
+
   it("a later sentence's effect on the iterated unit stays inside the loop", () => {
     const mechanics = mechanicsOf(`${head} Then, that enemy unit suffers 2 mortal wounds.`, [...loop, ["that enemy unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "2" }]]);
     expect(mechanics.effect.type).toBe("for-each-unit");
