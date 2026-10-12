@@ -15,6 +15,16 @@ export type PlannedLike = { index: number; leaf: CompileLeaf; node: Node; gate: 
 /** Structural equality of two gate lists (gates are JSON nodes). */
 const sameGate = (left: Node[], right: Node[]) => JSON.stringify(left) === JSON.stringify(right);
 
+/** The pool a named ability's own roll pays out, and the amount: the Blood Tithe point its roll gains on a pass. */
+const ABILITY_ROLL_POOL = "blood-tithe-pool";
+const ABILITY_ROLL_AMOUNT = 1;
+
+/** The prohibited roll as wording: a roll kind by name, or the roll a named ability makes. */
+export function prohibitedRollName(roll: unknown): string {
+  if (roll !== null && typeof roll === "object") return `the roll of ${String((roll as { ability: unknown }).ability)}`;
+  return String(roll);
+}
+
 /**
  * "Do not roll <roll> …. Instead, <auto-result>": the instead replaces the roll the prohibition names.
  * Accepted only for a roll-auto-result that passes automatically on that same roll, with the same condition
@@ -29,7 +39,9 @@ export function replaceProhibitedRoll(
   if (list.some((leaf, at) => leaf.family_id === "dice-roll" && places[at]!.sentence === sentence)) {
     return "A roll prohibition shares its sentence with a dice roll; retire the dice roll it forbids.";
   }
-  const roll = String(previous.leaf.parameters.roll);
+  const prohibited = previous.leaf.parameters.roll;
+  if (prohibited !== null && typeof prohibited === "object") return replaceProhibitedAbilityRoll(planned, previous, replacement, boundDuration, conflictingDurations, String((prohibited as { ability: unknown }).ability));
+  const roll = String(prohibited);
   const leaf = replacement.leaf;
   if (leaf.family_id !== "roll-auto-result" || leaf.parameters.outcome !== "auto-pass" || leaf.parameters.rolls !== undefined || leaf.parameters.roll !== roll) {
     return `"Instead" after a roll prohibition replaces only the roll it names (${roll}).`;
@@ -39,6 +51,30 @@ export function replaceProhibitedRoll(
   }
   if (boundDuration.has(previous.index)) return conflictingDurations;
   if (replacement.gate.length === 0) replacement.gate = [...previous.gate];
+  planned.splice(planned.indexOf(previous), 1);
+  return null;
+}
+
+/**
+ * "Do not roll to gain <pool>. Instead, <gain>" after a named ability's own roll: the instead gains only the pool
+ * that roll pays out, and the roll is made to pass, so the ability's own gain follows from the pass. The DSL output
+ * is the roll-result pass on that roll alone; no gain is emitted beside it (it would be counted twice).
+ */
+function replaceProhibitedAbilityRoll(
+  planned: PlannedLike[], previous: PlannedLike, replacement: PlannedLike, boundDuration: Map<number, string>,
+  conflictingDurations: string, ability: string,
+): string | null {
+  const leaf = replacement.leaf;
+  if (leaf.family_id !== "resource-gain") return `"Instead" after a roll prohibition of ${prohibitedRollName({ ability })} must gain its pool.`;
+  if (leaf.parameters.pool !== ABILITY_ROLL_POOL || leaf.parameters.amount !== ABILITY_ROLL_AMOUNT) {
+    return `"Instead" after a roll prohibition of ${prohibitedRollName({ ability })} gains only ${ABILITY_ROLL_AMOUNT} point of ${ABILITY_ROLL_POOL}.`;
+  }
+  if (replacement.gate.length > 0 && !sameGate(replacement.gate, previous.gate)) {
+    return "\"Instead\" after a roll prohibition needs the same condition as the prohibition.";
+  }
+  if (boundDuration.has(previous.index)) return conflictingDurations;
+  if (replacement.gate.length === 0) replacement.gate = [...previous.gate];
+  replacement.node = { type: "roll-result", target: "this-unit", modifier: { roll: { of_ability: ability }, result: "pass" } };
   planned.splice(planned.indexOf(previous), 1);
   return null;
 }

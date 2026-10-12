@@ -8,6 +8,7 @@ import { checkAbilityRollUses } from "./compile-ability-roll.js";
 import type { ManoeuvreMenus } from "./named-ability-checks.js";
 import { foldAsIfPhases } from "./compile-as-if.js";
 import { foldCountsAsMoved } from "./compile-counts-as-moved.js";
+import { foldPassthroughUsed, refuseUnboundIfItDoes } from "./compile-passthrough-used.js";
 import { foldBoundAttacks, nameBoundAttacks } from "./compile-bound-attacks.js";
 import { chooseBetweenGroups } from "./compile-choice-groups.js";
 import { addsAttackGate, attackTargetBinding, isBackref, resolveAttackBackrefs } from "./compile-attack-backref.js";
@@ -71,7 +72,7 @@ import { checkOptionalCosts, flatLeaves, isSpendRead, optionalSpendLeaves, wrapO
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
-import { replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
+import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -323,6 +324,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let list: CompileLeaf[];
   try {
     refuseBlastRating(leaves, sourceText);
+    refuseUnboundIfItDoes(leaves, sourceText);
     // "that weapon" names the weapon an earlier select-weapon bound, or the attacks an earlier keyword grant gave (compile-weapon-antecedent.ts).
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
@@ -331,7 +333,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const bound = foldCountScales(bindDesignationSubjects(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText)), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
-    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText));
+    const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldDestroyFilters(bindEquippedCounts(bound), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)));
     list = withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(bindTargetedTarget(filtered), sourceText)))]);
     refuseUnboundWeaponScope(list);
@@ -778,16 +780,20 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (others.length > 1) errors.push(`"Instead" needs exactly one effect besides the move-end in its clause; found ${others.length}.`);
       continue;
     }
-    if (own.length !== 1) {
+    // "Do not roll to gain a point, you gain a point instead" (a named ability's own roll): the prohibition shares the
+    // clause with the effect that replaces it, so the clause holds two effects and the other one is the replacement.
+    const abilityProhibition = own.length === 2 && own.some((item) => item.leaf.family_id === "roll-prohibition" && typeof item.leaf.parameters.roll === "object");
+    const candidates = abilityProhibition ? own.filter((item) => item.leaf.family_id !== "roll-prohibition") : own;
+    if (candidates.length !== 1) {
       errors.push(`"Instead" needs exactly one effect in its clause; found ${own.length}.`);
       continue;
     }
-    const replacement = own[0]!;
+    const replacement = candidates[0]!;
     // "Add 1 to S and 3 to Range. While …, add 2 to S and 6 to Range instead": the instead replaces the earlier
     // sentence's effects as a group, so each effect under the same condition in the instead sentence is a replacement
     // and each effect of the sentence before is a default that holds only when the condition does not.
     const sameGate = (item: PlannedEffect) => JSON.stringify(item.gate) === JSON.stringify(replacement.gate);
-    const siblings = planned.filter((item) => item !== replacement && item.index < replacement.index && !item.replaces
+    const siblings = planned.filter((item) => item !== replacement && item.index < replacement.index && !item.replaces && !(abilityProhibition && item.leaf.family_id === "roll-prohibition")
       && places[item.index]!.sentence === places[replacement.index]!.sentence && sameGate(item) && !optionalSpends.has(item.leaf));
     // "…, instead of up to two" names the default it replaces after the word, so there is no earlier group to find.
     const namesDefault = sourceText !== undefined && /^\s*of\b/u.test(Buffer.from(sourceText, "utf8").subarray(list[combinator]!.end_byte).toString("utf8"));
@@ -920,7 +926,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const rolled = list.some((leaf, at) => leaf.family_id === "dice-roll" && places[at]!.sentence === sentence);
     errors.push(rolled
       ? "A roll prohibition shares its sentence with a dice roll; retire the dice roll it forbids."
-      : `"Do not roll ${String(item.leaf.parameters.roll)}" has no "instead" saying what happens in its place.`);
+      : `"Do not roll ${prohibitedRollName(item.leaf.parameters.roll)}" has no "instead" saying what happens in its place.`);
   }
   planned.splice(0, planned.length, ...planned.filter((entry) => entry.leaf.family_id !== "roll-prohibition"));
 

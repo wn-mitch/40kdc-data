@@ -7,6 +7,7 @@ import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { usageFor } from "./restriction-families.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { namesSelection } from "./compile-targeting-history.js";
+import { prohibitedRollName } from "./compile-roll-prohibition.js";
 
 type Node = Record<string, unknown>;
 
@@ -75,7 +76,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     return { kind: "implicit", note: `Stat adjustment ${JSON.stringify(leaf.parameters)} needs a reviewed recipient and, for weapon stats, weapon scope.` };
   }
   if (leaf.family_id === "roll-prohibition") {
-    return { kind: "implicit", note: `No separate text: the roll named here (${String(leaf.parameters.roll)}) is not made; the Instead after it says what happens in its place.` };
+    return { kind: "implicit", note: `No separate text: the roll named here (${prohibitedRollName(leaf.parameters.roll)}) is not made; the Instead after it says what happens in its place.` };
   }
   if (leaf.role === "EFFECT") return { kind: "effect", node: effect(leaf, { attached: false, incoming: false }) };
   if (leaf.role === "COMBINATOR") {

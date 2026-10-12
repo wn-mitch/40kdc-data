@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import type { ValidationResult } from "./validate.js";
 import { checkTargetProfiles } from "./integrity-target-profiles.js";
 import { checkWeaponGrantRefs } from "./integrity-weapon-grant.js";
+import { checkOfAbilityRollRefs } from "./integrity-of-ability-roll.js";
 import { checkDslShapes } from "./integrity-shapes.js";
 import { checkAuraRangeRefs } from "./integrity-aura-ranges.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
@@ -726,6 +727,8 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       // unreadable file: reported by schema validation
     }
   }
+  // A roll a named ability makes (of_ability) must name one of these ids.
+  await checkOfAbilityRollRefs(root, result, new Set([...abilityRecordIds, ...coreAbilities]));
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(

@@ -18,6 +18,7 @@ import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from ".
 import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
 import { COUNTS_AS_MOVED_FAMILIES, normalizeCountsAsMovedParameters } from "./family-extensions-16-counts-as-moved.js";
+import { MOVE_PASSTHROUGH_USED_FAMILIES, normalizeMovePassthroughUsedParameters } from "./family-extensions-16-t7-new-gaps.js";
 import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
 import { normalizeSetUpRestrictionParameters, SET_UP_RESTRICTION_FAMILIES } from "./family-extensions-16-set-up-restriction.js";
@@ -129,6 +130,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   AURA_RANGE_V3,
   SELECT_UNIT_V2,
   ...EMBARKED_PERMISSION_FAMILIES,
+  ...MOVE_PASSTHROUGH_USED_FAMILIES,
 ]));
 
 /** The version new fingerprints and model requests use for a family. */
@@ -213,7 +215,8 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeEmbarkedPermissionParameters(family, input)
     ?? normalizeCountsAsMovedParameters(family, input)
     ?? normalizeOtherwiseParameters(family, input)
-    ?? normalizeRollProhibitionParameters(family, input);
+    ?? normalizeRollProhibitionParameters(family, input)
+    ?? normalizeMovePassthroughUsedParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }
