@@ -233,7 +233,7 @@ describe("a hypothetical phase on an eligible test", () => {
   });
 });
 
-describe("a While frame reaches the later moment sentences", () => {
+describe("a While frame reaches the later moment sentences that say that unit", () => {
   const leading = { subject: "this-model", attachment: "leading" };
   const frame = (text: string, ...rest: Item[]) => sentenceSegments(placed(text,
     ["While this model is leading a unit", "leading-unit", leading],
@@ -242,11 +242,17 @@ describe("a While frame reaches the later moment sentences", () => {
   const hasFrame = (part: CompileLeaf[]) => part.filter((leaf) => leaf.family_id === "leading-unit").length;
 
   it("copies the leading-unit condition into a later part that opens its own moment", () => {
-    const text = "While this model is leading a unit, models in that unit can move far. When it ends, add 1 to the Hit roll.";
-    const parts = frame(text, ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])!;
+    const text = "While this model is leading a unit, models in that unit can move far. When it ends, add 1 to the Hit roll of models in that unit.";
+    const parts = frame(text, ["add 1 to the Hit roll of models in that unit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])!;
     expect(parts).toHaveLength(2);
     expect(parts.map(hasFrame)).toEqual([1, 1]);
     expect(parts[1]![0]!.family_id).toBe("leading-unit");
+  });
+
+  it("copies nothing into a later part that never says that unit", () => {
+    const text = "While this model is leading a unit, models in that unit can move far. When it ends, add 1 to the Hit roll.";
+    const parts = frame(text, ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }])!;
+    expect(parts.map(hasFrame)).toEqual([1, 0]);
   });
 
   it("does not copy it into a part that opens with \"In addition,\"", () => {
@@ -273,24 +279,24 @@ describe("a While frame reaches the later moment sentences", () => {
   });
 
   it("copies only leading-unit, not another condition of the first sentence", () => {
-    const text = "While this model is leading a unit and is battle-shocked, models in that unit can move far. When it ends, add 1 to the Hit roll.";
+    const text = "While this model is leading a unit and is battle-shocked, models in that unit can move far. When it ends, add 1 to the Hit roll of models in that unit.";
     const list = placed(text,
       ["While this model is leading a unit", "leading-unit", leading],
       ["is battle-shocked", "unit-state", { subject: "this-unit", states: ["battle-shocked"], negated: false }],
       ["models in that unit can move far", "make-move", { subject: "this-unit", move_type: "normal" }],
-      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+      ["add 1 to the Hit roll of models in that unit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
     const parts = sentenceSegments(list, text)!;
     expect(parts[1]!.map((leaf) => leaf.family_id)).toEqual(["leading-unit", "roll-modifier"]);
   });
 
   it("reads the part's own opening sentence, not a header sentence before it", () => {
     // The header sentence opens with "In addition,"; the later part does not, so it still inherits.
-    const text = "In addition, ALPHA model only. While this model is leading a unit, models in that unit can move far. When it ends, add 1 to the Hit roll.";
+    const text = "In addition, ALPHA model only. While this model is leading a unit, models in that unit can move far. When it ends, add 1 to the Hit roll of models in that unit.";
     const list = placed(text,
       ["ALPHA model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
       ["While this model is leading a unit", "leading-unit", leading],
       ["models in that unit can move far", "make-move", { subject: "this-unit", move_type: "normal" }],
-      ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
+      ["add 1 to the Hit roll of models in that unit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
     const parts = sentenceSegments(list, text);
     expect(parts).not.toBeNull();
     expect(parts![1]!.filter((leaf) => leaf.family_id === "leading-unit")).toHaveLength(1);

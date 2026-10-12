@@ -200,6 +200,9 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const firstEffectAt = firstSentence.findIndex((leaf) => leaf.role === "EFFECT" || leaf.role === "EVENT");
   const whileFrame = /^while\b/iu.test(sentenceWords(leaves, starts[firstEffectful]!, firstSentence, sourceText))
     ? firstSentence.slice(0, firstEffectAt).filter((leaf) => leaf.role === "CONDITION" && leaf.family_id === "leading-unit") : [];
+  // Whether a sentence of the part, with its lead-in, says "that unit".
+  const partSaysThatUnit = (part: readonly CompileLeaf[]) => sentences.some((sentence, position) => sentence.some((leaf) => part.includes(leaf))
+    && /\bthat unit\b/iu.test(sentenceWords(leaves, starts[position]!, sentence, sourceText)));
   // A part's own opening sentence (its first leaf; parts are built before the header is prepended).
   const opensInAddition = (part: readonly CompileLeaf[]) => {
     const position = sentences.findIndex((sentence) => sentence.includes(part[0]!));
@@ -209,7 +212,8 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   // A later part holds the frame the record opens with: the "While" frame, or the leading-unit frame a part naming "that unit" is about.
   const frameFor = (part: CompileLeaf[], at: number, byThatUnit: boolean): CompileLeaf[] => {
     if (at <= 0) return [];
-    if (whileFrame.length > 0 && !opensInAddition(part) && !part.some((leaf) => leaf.family_id === "leading-unit")) return whileFrame;
+    // Only a part that says "that unit" is about the unit the frame names; a sentence that never refers back is not gated.
+    if (whileFrame.length > 0 && !opensInAddition(part) && !part.some((leaf) => leaf.family_id === "leading-unit") && partSaysThatUnit(part)) return whileFrame;
     return byThatUnit && frame !== null && namesFrameUnit(part, frame, sourceText) ? [frame] : [];
   };
   return parts.map((part, at) => armyOnly(part) ? part
@@ -228,7 +232,11 @@ function leadingFrame(leaves: readonly CompileLeaf[], first: readonly CompileLea
 
 /** A later part that says "that unit" is about the unit the frame names, and holds only while the frame does; a part with its own leading-unit condition keeps it. */
 function namesFrameUnit(part: readonly CompileLeaf[], frame: CompileLeaf, sourceText: string): boolean {
-  if (part.some((leaf) => leaf.family_id === frame.family_id)) return false;
+  return !part.some((leaf) => leaf.family_id === frame.family_id) && saysThatUnit(part, sourceText);
+}
+
+/** Whether the part's own wording says "that unit". */
+function saysThatUnit(part: readonly CompileLeaf[], sourceText: string): boolean {
   const first = part[0]!;
   const last = part.at(-1)!;
   return /\bthat unit\b/iu.test(between(sourceText, first.start_byte, last.end_byte ?? first.start_byte));
