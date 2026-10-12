@@ -38,7 +38,7 @@ function compiled(leaves: CompileLeaf[]) {
 
 describe("move-through typed passthrough (version 2)", () => {
   it("is the current move-through version, with the string tokens still accepted", () => {
-    expect(TYPED).toBe(3);
+    expect(TYPED).toBeGreaterThanOrEqual(3);
     expect(compiled([leaf(TYPED, { subject: "this-unit", passthrough: "models" })]).mechanics.effect)
       .toEqual({ type: "move-modifier", target: "this-unit", modifier: { passthrough: ["models"] } });
   });
@@ -82,10 +82,11 @@ describe("move-through typed passthrough (version 2)", () => {
     expect(separate.ok).toBe(false);
   });
 
+  // The typed item came with version 3 of move-through; the version before that is two below the current one.
   it("refuses the typed item on the version before it, which only takes string tokens", () => {
     expect(() => normalizeFingerprintParameters("move-through", {
       subject: "this-unit", passthrough: { kind: "models", owner: "enemy" },
-    }, TYPED - 1)).toThrow();
+    }, TYPED - 2)).toThrow();
   });
 
   it("refuses a typed item of kind terrain, which this version does not widen", () => {

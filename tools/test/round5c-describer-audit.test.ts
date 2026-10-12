@@ -88,7 +88,9 @@ describe("Round 5C leaf describer audit", () => {
       // never shows; the omitted-subject collision is the same one every widened predicate has.
       // into names the Transport a record's other leaves give (an antecedent, a following filter, a bound selection), or this unit;
       // a leaf alone has no unit to name for the first three, so each of those combinations is a problem on its own.
-      "eligibility-permission": { unrendered: [], colliding: [], problems: 264 },
+      // The event-subject subject (family-extensions-16-stratagem-target-alternatives-followup.ts) adds 132 problem
+      // combinations: the same count the this-unit and this-model subjects give together (264) before it.
+      "eligibility-permission": { unrendered: [], colliding: [], problems: 396 },
       eligible: { unrendered: ["at"], colliding: ["subject"], problems: 0 },
       // embarked-permission takes only this-unit and gates nothing; its one leaf reads the same as none.
       "embarked-permission": { unrendered: [], colliding: [], problems: 1 },

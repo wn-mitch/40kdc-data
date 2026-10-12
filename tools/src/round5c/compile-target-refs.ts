@@ -157,8 +157,8 @@ function bind(leaf: CompileLeaf, keys: readonly string[], ref: string): CompileL
 }
 
 const FOLLOWING_KEYS = ["of", "with", "target", "to", "by", "object", "into"];
-/** Wording that points back to several units at once. */
-const PLURAL = /\b(?:those|both|either|each of)\b/iu;
+/** Wording that points back to several units at once: "those", "both", "either", "each of", "them" and "the targeted units". Bare "each" and "models" are not here: singular "each time a model" leaves are valid in several-target records. */
+const PLURAL = /\b(?:those|both|either|each of|them|the targeted units)\b/iu;
 
 /**
  * "One **X** unit within 6\" of a friendly **Y** unit that was selected as the target of …": the

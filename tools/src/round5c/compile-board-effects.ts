@@ -26,7 +26,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "move-distance":
       return { type: "move-modifier", target: closed(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), distance_bonus: closed(leaf, "bonus") } };
     case "move-through": {
-      const modifier: Node = { passthrough: [closed(leaf, "passthrough")] };
+      // A pair of listed tokens (family-extensions-16-stratagem-target-alternatives-followup.ts) is one list.
+      const modifier: Node = { passthrough: Array.isArray(leaf.parameters.passthrough) ? [...leaf.parameters.passthrough] : [closed(leaf, "passthrough")] };
       if (leaf.parameters.applies_to_moves !== undefined) modifier.applies_to_moves = closed(leaf, "applies_to_moves");
       if (leaf.parameters.ignore_vertical !== undefined) modifier.ignore_vertical = closed(leaf, "ignore_vertical");
       return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier };

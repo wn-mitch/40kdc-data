@@ -37,7 +37,7 @@ export function triggerMoveEnd(
   if (!rule.cannot) return positiveChargeEnd(list, rule, condition);
   if (rule.conditions.length !== 1) return refuse("\"Cannot end that move\" with no move before it needs exactly one condition: engaged, or within a distance of a unit-filter.");
   const leaf = list[rule.conditions[0]!]!;
-  if (isEngaged(leaf)) {
+  if (isEngaged(leaf) && engagedSubjectIsMoved(list, rule.index, leaf)) {
     if (rule.replaces) return refuse("\"Instead of\" on a cannot-end restriction with no move before it needs a distance condition, not engaged.");
     return noEndInEngagement(list, rule, placed, stopBetween, leaf);
   }
@@ -94,11 +94,23 @@ function positiveChargeEnd(
   return { node: { type: "move-modifier", target: EVENT_SUBJECT, modifier: { applies_to_moves: ["charge"], ends_when: where } } };
 }
 
-/** Engaged with this unit or this model. A model subject binds to a move that names that model (noEndInEngagement). */
+/**
+ * Engaged with this unit or this model, or with the triggering unit of a move-ended event. A model subject
+ * binds to a move that names that model (noEndInEngagement).
+ */
 function isEngaged(leaf: CompileLeaf): boolean {
   const params = leaf.parameters;
   return leaf.family_id === "unit-state" && Array.isArray(params.states) && params.states.length === 1 && params.states[0] === "engaged"
-    && (params.subject === "this-unit" || params.subject === "this-model");
+    && (params.subject === "this-unit" || params.subject === "this-model" || params.subject === EVENT_SUBJECT);
+}
+
+/**
+ * An event-subject condition names the moving unit only when the nearest earlier event is a move-ended
+ * event. A selected event's subject is the selected unit, which is not the unit that moved.
+ */
+function engagedSubjectIsMoved(list: readonly CompileLeaf[], index: number, leaf: CompileLeaf): boolean {
+  if (leaf.parameters.subject !== EVENT_SUBJECT) return true;
+  return moveTriggerBefore(list, index)?.parameters.kind === "move-ended";
 }
 
 /** A unit-position within a distance, this unit, measured to the unit-filter right after it. */
