@@ -140,3 +140,30 @@ export function shapeSignature(leaves: readonly CompileLeaf[], sourceText?: stri
   const places = placements(list, sourceText);
   return list.map((leaf, index) => `${index > 0 && places[index]!.clause !== places[index - 1]!.clause ? "| " : index > 0 ? "· " : ""}${signaturePart(leaf)}`).join(" ");
 }
+
+/** Blank line in the source between two leaves: a paragraph break ends a bullet run. */
+const BLANK_LINE = /[\r\n][ \t]*[\r\n]/u;
+
+/**
+ * The clauses one result band decides: its own clause, then each following clause that opens after a
+ * bullet glyph (■ ▪ •) in the source, so a printed bullet list under "On a 2+:" is one band. The run
+ * ends at the first leaf that does not open a bulleted clause, at another roll-result leaf, at an
+ * event leaf (a new moment), or at a blank line in the source. `places` and `list` are index-aligned.
+ */
+export function bandRunClauses(list: readonly CompileLeaf[], places: readonly Placement[], sourceText: string | undefined, bandIndex: number): number[] {
+  const own = places[bandIndex]!.clause;
+  const clauses = [own];
+  let current = own;
+  for (let at = bandIndex + 1; at < list.length; at += 1) {
+    const leaf = list[at]!;
+    if (leaf.role === "EVENT" || (leaf.role === "CONDITION" && leaf.family_id === "roll-result")) break;
+    if (places[at]!.clause === current) continue;
+    const previous = list[at - 1]!;
+    if (sourceText === undefined || previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) break;
+    const gap = exactSpan(sourceText, previous.end_byte, leaf.start_byte);
+    if (!BULLET.test(gap) || BLANK_LINE.test(gap)) break;
+    current = places[at]!.clause;
+    clauses.push(current);
+  }
+  return clauses;
+}

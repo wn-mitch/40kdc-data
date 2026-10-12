@@ -98,3 +98,37 @@ describe("additive option qualifier", () => {
     expect(() => normalizeFingerprintParameters("additive-option", { keyword: "x" }, 1)).toThrow(/parameters must be exactly/);
   });
 });
+
+/*
+ * A unit-filter between the activation and its qualifier names the activation's units ("that sample option is
+ * active for friendly SAMPLE units, in addition to any other sample option"). Fabricated wording throughout.
+ */
+const FILTER_TEXT = "Sample hero: select one sample option to be active for friendly SAMPLE units until the start of your next Command phase, in addition to any other sample option.";
+const CHOSEN: Piece = ["select one sample option to be active for", "ability-activate", { subject: "this-unit", ability: "sample-options-ability", choose: { count: 1 } }];
+const SAMPLE_UNITS: Piece = ["friendly SAMPLE units", "unit-filter", { side: "friendly", keywords: ["SAMPLE"] }, "CONDITION"];
+
+describe("additive option with a unit-filter between activation and qualifier", () => {
+  it("folds the filter onto the activation as its recipients, and drops the filter leaf", () => {
+    const result = compileLeaves(leavesIn(FILTER_TEXT, [CHOSEN, SAMPLE_UNITS, DURATION, QUALIFIER]), FILTER_TEXT);
+    expect(result.ok ? true : result.errors).toBe(true);
+    const json = JSON.stringify(result.ok ? result.mechanics : {});
+    expect(json).toContain('"SAMPLE"');
+    expect(json).not.toContain("exclusive");
+  });
+
+  it("refuses a filter when the activation already names its own units", () => {
+    const errors = refused(FILTER_TEXT, [["select one sample option to be active for", "ability-activate", { subject: "selected-unit", ability: "sample-options-ability", choose: { count: 1 } }], SAMPLE_UNITS, DURATION, QUALIFIER]);
+    expect(errors.join(" ")).toMatch(/names its own units/);
+  });
+
+  it("refuses two filters between the activation and its qualifier", () => {
+    const text = "Sample hero: select one sample option to be active for friendly SAMPLE units and enemy SAMPLE units until the start of your next Command phase, in addition to any other sample option.";
+    const errors = refused(text, [CHOSEN, ["friendly SAMPLE units", "unit-filter", { side: "friendly", keywords: ["SAMPLE"] }, "CONDITION"], ["enemy SAMPLE units", "unit-filter", { side: "enemy", keywords: ["SAMPLE"] }, "CONDITION"], DURATION, QUALIFIER]);
+    expect(errors.join(" ")).toMatch(/only a duration/);
+  });
+
+  it("refuses a select-unit between the activation and its qualifier", () => {
+    const errors = refused(FILTER_TEXT, [CHOSEN, ["friendly SAMPLE units", "select-unit", { scope: "friendly", distance: "any" }], DURATION, QUALIFIER]);
+    expect(errors.join(" ")).toMatch(/no additive form|only a duration/);
+  });
+});

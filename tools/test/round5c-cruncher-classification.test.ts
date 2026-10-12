@@ -23,6 +23,13 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
+  it("counts a stance selection allowance as outside the damage path, but an unlisted unmodelled type stays a gap", () => {
+    const allowance = effectToBuffs({ type: "stance-selection-capacity", scope: "army", stance_id: "doctrine", additional_selections: 1 }, source, ctx).unsupported;
+    const unlisted = effectToBuffs({ type: "example-unmodelled", target: "this-unit", modifier: {} }, source, ctx).unsupported;
+    expect(classifyUnsupported(allowance)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    expect(classifyUnsupported(unlisted)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
   it("counts an eligibility permission as outside the damage path, but keeps an unmodelled core-ability grant a real gap", () => {
     const permission = effectToBuffs({ type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true } }, source, ctx).unsupported;
     const grant = effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } }, source, ctx).unsupported;

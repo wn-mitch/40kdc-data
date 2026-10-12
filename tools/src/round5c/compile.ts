@@ -1,3 +1,4 @@
+import { exactSpan } from "./contracts.js";
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
 import { checkAbilityUsedWindows, foldAuraMoments, foldByAbility, namedAbilityChecks } from "./compile-named-ability.js";
@@ -18,7 +19,7 @@ import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, b
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
-import { bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
+import { bandRunClauses, bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
@@ -250,6 +251,14 @@ export type CompileOptions = {
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
+/** A condition written as an "If …" or "While …" clause that opens its sentence (after a full stop, colon, semicolon or line break). */
+function opensIfSentence(sourceText: string, leaf: CompileLeaf): boolean {
+  if (leaf.end_byte === undefined || !IF_CLAUSE.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte))) return false;
+  const before = Buffer.from(sourceText, "utf8").subarray(Math.max(0, leaf.start_byte - 12), leaf.start_byte).toString("utf8");
+  return /(?:^|[.;:\r\n])[\s*]*$/u.test(before);
+}
+const IF_CLAUSE = /^(?:if|while)\b/iu;
+
 export function compileLeaves(leaves: readonly CompileLeaf[], sourceText?: string, options: CompileOptions = {}): Compiled {
   // A span over the record's name compiles as its own part, beside the body (compile-name.ts).
   if (leaves.some((leaf) => leaf.fragment === NAME_FRAGMENT)) {
@@ -514,6 +523,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), node]);
       // A result band decides only the effects of its own clause, wherever it sits in it.
       } else if (node !== "selected" && node.type === "__roll-result") {
+        for (const bandClause of bandRunClauses(list, places, sourceText, index)) clauseGates.set(bandClause, [...(clauseGates.get(bandClause) ?? []), node]);
+      // An "If …" sentence before an "Or:" player's pick ("If A, X. Or: If B, Y.") gates only its own option. A
+      // condition inside a sentence ("…, if this unit is …"), a trigger, or a scope heading ("This unit's melee attacks:")
+      // still gates the whole ability.
+      } else if (node !== "selected" && leading && sourceText !== undefined && opensIfSentence(sourceText, list[index]!)
+        && list.some((other, at) => at > index && other.role === "COMBINATOR" && other.parameters.choice === true && places[at]!.clause !== clause)) {
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
       } else if (!effectSentences.has(sentence) || (sentence === firstSentence && leading)) {
         if (node === "selected") selectedGlobally = true;
@@ -696,9 +711,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     if (leaf.family_id !== "reserves-arrival") continue;
     const sentence = places[index]!.sentence;
     const setUps = planned.filter((item) => item.node.type === "set-up");
+    // A set-up inside a named-option container of the same sentence ("choose one: set up …; or …") is
+    // reached through the container's node, so the arrival binds the set-up node the option holds.
+    // The option's own set-up leaf must sit in the arrival's sentence, after its container.
+    const nested = planned.filter((item) => item.node.type !== "set-up" && item.index < index).flatMap((item) => setUpsWithin(item.node).map((node) => ({ index: item.index, node })));
+    const nestedSetUp = nested.at(-1);
+    const nestedSentence = nestedSetUp !== undefined && list.some((other, at) => at > nestedSetUp.index && at < index && other.family_id === "set-up" && places[at]!.sentence === sentence);
     const setUp = setUps.filter((item) => item.index < index && places[item.index]!.sentence === sentence).at(-1)
       ?? setUps.find((item) => item.index > index && places[item.index]!.sentence === sentence)
-      ?? setUps.filter((item) => item.index < index).at(-1);
+      ?? setUps.filter((item) => item.index < index).at(-1)
+      ?? (nestedSentence ? nestedSetUp : undefined);
     if (!setUp) { errors.push("A reserves arrival has no set-up before it."); continue; }
     const modifier = setUp.node.modifier as Node;
     modifier.arrives = "next-movement-phase";
@@ -1282,3 +1304,10 @@ function namesSelected(node: unknown): boolean {
   return record.target === "selected-unit" || Object.values(record).some(namesSelected);
 }
 
+/** Every set-up node inside a planned node, depth-first, in source order of the tree. */
+function setUpsWithin(node: unknown): Node[] {
+  if (node === null || typeof node !== "object") return [];
+  if (Array.isArray(node)) return node.flatMap((item) => setUpsWithin(item));
+  const record = node as Node;
+  return [...(record.type === "set-up" ? [record] : []), ...Object.values(record).flatMap((value) => setUpsWithin(value))];
+}

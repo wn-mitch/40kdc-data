@@ -234,8 +234,21 @@ describe("Round 5C \"Or:\" between options of different kinds (sub-shape D)", ()
   });
 
   it("refuses to split roll result bands across the choice", () => {
-    const rolled = "When this unit is selected to shoot, roll one D6: On a 2+, this unit can make a Normal move of up to D6. Or: On a 2+, those ranged attacks do not prevent this unit from being hidden.";
+    const rolled = "When this unit is selected to shoot, roll one D6: On a 2+, this unit can make a Normal move of up to D6. Or: On a 3+, those ranged attacks do not prevent this unit from being hidden.";
     expect(errorsOf(rolled,
+      ["When this unit is selected to shoot", "event", { kind: "selected-to-shoot" }],
+      ["roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["this unit can make a Normal move of up to D6", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
+      ["Or:", "instead", { choice: true }],
+      ["On a 3+", "roll-result", { from: 3 }],
+      ["those ranged attacks", "attack-filter", THOSE_RANGED],
+      hidden("do not prevent this unit from being hidden", "this-unit"))).toMatch(/different roll results/u);
+  });
+
+  it("hoists a band both groups share above the choice", () => {
+    const rolled = "When this unit is selected to shoot, roll one D6: On a 2+, this unit can make a Normal move of up to D6. Or: On a 2+, those ranged attacks do not prevent this unit from being hidden.";
+    const mechanics = mechanicsOf(rolled,
       ["When this unit is selected to shoot", "event", { kind: "selected-to-shoot" }],
       ["roll one D6", "dice-roll", { dice: "D6" }],
       ["On a 2+", "roll-result", { from: 2 }],
@@ -243,7 +256,9 @@ describe("Round 5C \"Or:\" between options of different kinds (sub-shape D)", ()
       ["Or:", "instead", { choice: true }],
       ["On a 2+", "roll-result", { from: 2 }],
       ["those ranged attacks", "attack-filter", THOSE_RANGED],
-      hidden("do not prevent this unit from being hidden", "this-unit"))).toMatch(/roll results/u);
+      hidden("do not prevent this unit from being hidden", "this-unit"));
+    expect(JSON.stringify(mechanics.effect)).toContain('"type":"choice"');
+    expect(JSON.stringify(mechanics.effect)).toMatch(/dice|roll/u);
   });
 });
 

@@ -107,8 +107,9 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
  * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
  * shape" (the conservative default) rather than being assumed out of scope. */
 /** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
-// Effects that change no attack's damage: healing, moving, placement, eligibility permissions.
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier"]);
+// Effects that change no attack's damage: healing, moving, placement, eligibility permissions, and how many
+// times a stance may be selected.
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity"]);
 // Which objective an ability picks decides control, never an attack's damage.
 const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;

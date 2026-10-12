@@ -442,6 +442,16 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
       consumed.add(cursor);
     }
     if (current.length) groups.push(current);
+    // A choice whose option ends in a move-must-end ("…, provided every model … ends that move …") compiles each
+    // option as a whole ability, so its move-end and its conditions stay with the move they end. A sentence after
+    // the last move option with no move of its own ("Until the end of the turn, …") is no option: it goes back to
+    // the ordinary pipeline, as the "in either case" sentence after the options does.
+    const moveEndOption = leaf.family_id === "choice-open" && groups.some((group) => group.some((item) => item.family_id === "move-must-end"));
+    if (moveEndOption) {
+      while (groups.length > 1 && !groups.at(-1)!.some((item) => item.family_id === "make-move")) {
+        for (const returned of groups.pop()!) consumed.delete(list.indexOf(returned));
+      }
+    }
     // resource-action-menu-open's own actions must each lead with a menu-action marker; a
     // trailing sentence that doesn't (Battle Focus's own "at the end of the round, clear the
     // pool" ability-part) is not one of its actions — give those leaves back to the ordinary
@@ -480,7 +490,7 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     // can cut one option in two, so those keep refusing a non-effect leaf.
     const outer = nestedCompiler;
     const bulletCertain = leaf.family_id === "choice-open" && bulletBoundaries > 0 && sentenceBoundaries === 0;
-    if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain) nestedCompiler = null;
+    if (!byMarker && !SINGLE_BODY_CONTAINERS.has(leaf.family_id) && !bulletCertain && !moveEndOption) nestedCompiler = null;
     try {
       let node = buildContainer(leaf, sentences, replacementTailOf);
       // "you can select up to one …" establishes the designation only if the controlling player chooses to.

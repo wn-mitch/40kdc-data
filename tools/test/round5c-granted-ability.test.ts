@@ -178,6 +178,16 @@ describe("Round 5C printed granted abilities", () => {
     expect(effect.modifier.definition.effect.steps.map((step: any) => step.type)).toEqual(["invulnerable-save", "feel-no-pain"]);
   });
 
+  it("continues a body with a colon-led line and a period before an Or: line", () => {
+    const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** While this unit is selected, roll one D6:\nOn a 2+, this unit has a 5+ invulnerable save. This ability is used once per turn.\nOr: This unit has Feel No Pain 5+.";
+    const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),
+      ["On a 2+, this unit has a 5+ invulnerable save", "invulnerable-save", { subject: "this-unit", threshold: 5 }],
+      ["Or: This unit has Feel No Pain 5+", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }]), text);
+    const effect = result.mechanics.effect as Record<string, any>;
+    expect(effect.type).toBe("ability-grant");
+    expect(effect.modifier.definition.effect.steps.map((step: any) => step.type)).toEqual(["invulnerable-save", "feel-no-pain"]);
+  });
+
   it("does not extend a host paragraph over an Or: line", () => {
     const text = "Friendly GLOOM WARDENS units have the following ability:\n**Shade Ward:** This unit has a 5+ invulnerable save.\nThis model has Feel No Pain 5+.\nOr: This unit has a 4+ invulnerable save.";
     const result = compiled(placed(text, WARDENS, header("have the following ability", "one"), label("Shade Ward", "Shade Ward"),

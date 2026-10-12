@@ -379,6 +379,15 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
     } else if (leaf.family_id === "move-end-nearest") {
       // An objective destination names no unit: it takes no filter, and a filter after it is left for its own rule.
       out.push(leaf);
+    } else if (leaf.family_id === "for-each-unit-select" && !bareForEach(leaf) && leaf.parameters.filter === undefined && isFilter(next) && next!.fragment === leaf.fragment
+      && (leaf.parameters.scope === undefined || leaf.parameters.scope === next!.parameters.side)) {
+      // "For each enemy unit" + "ALPHA unit within 6\" of this model": the filter after a quantifier that already
+      // names its side narrows the units each pass takes, and a range after the filter folds in as for a bare quantifier.
+      // The quantifier keeps its printed distance; only the side and the filter come from the unit-filter.
+      if (next!.parameters.side === "any") throw new CompileError("A unit-filter whose units each pass takes must say friendly or enemy.");
+      out.push({ ...leaf, parameters: { ...leaf.parameters, scope: side(next!, "a for-each", { anySide: true }), filter: filterOf(next!) } });
+      index += 1;
+      if (reach(out, list[index + 1])) index += 1;
     } else if (bareForEach(leaf) && isFilter(next) && next!.fragment === leaf.fragment) {
       // "for each" + "enemy unit" (+ "within 6\" of this model" | "engaged with your unit"): the
       // units each pass takes, folded into the quantifier as select-unit's filter is.
