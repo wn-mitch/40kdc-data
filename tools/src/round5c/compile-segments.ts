@@ -73,14 +73,37 @@ function sentenceBreak(previous: CompileLeaf, next: CompileLeaf, sourceText: str
   return mark === undefined ? null : mark === ":" ? "list" : "stop";
 }
 
+/** The source between a sentence and the leaf before it (the whole lead-in for the first sentence). */
+function sentenceGap(leaves: readonly CompileLeaf[], start: number, sentence: readonly CompileLeaf[], sourceText: string): string {
+  const first = sentence[0]!;
+  const from = start === 0 ? 0 : leaves[start - 1]!.end_byte ?? first.start_byte;
+  return between(sourceText, from, first.start_byte);
+}
+
 /** A sentence's words: the source after its break, through its last leaf. */
 function sentenceWords(leaves: readonly CompileLeaf[], start: number, sentence: readonly CompileLeaf[], sourceText: string): string {
   const first = sentence[0]!;
   const last = sentence.at(-1)!;
-  const from = start === 0 ? 0 : leaves[start - 1]!.end_byte ?? first.start_byte;
-  const gap = between(sourceText, from, first.start_byte);
+  const gap = sentenceGap(leaves, start, sentence, sourceText);
   const lead = gap.slice(Math.max(...[".", ";", ":"].map((mark) => gap.lastIndexOf(mark))) + 1);
   return `${lead}${between(sourceText, first.start_byte, last.end_byte ?? first.start_byte)}`.replace(/^[\s*#■•\-–—]+/u, "");
+}
+
+/** A bullet mark in a sentence's lead-in: ■ or •, or a dash or asterisk that opens a line. */
+const BULLET = /[■•]|(?:^|\n)[ \t]*[-*–—](?=\s)/u;
+/** A plain label that opens its own source line: "Bestial Forms: …" (a bold granted-ability name is not one). */
+const LABEL = /^[ \t]*(?!Or:)[A-Z][A-Za-z' ]{0,40}:/u;
+
+/**
+ * Whether a sentence starts its own source line with a label. The gap before it must hold a
+ * newline, and the label is the text from that newline through the sentence's opening words.
+ */
+function labelLine(leaves: readonly CompileLeaf[], start: number, sentence: readonly CompileLeaf[], sourceText: string): boolean {
+  const gap = sentenceGap(leaves, start, sentence, sourceText);
+  const newline = gap.lastIndexOf("\n");
+  if (newline === -1) return false;
+  const opening = `${gap.slice(newline + 1)}${between(sourceText, sentence[0]!.start_byte, sentence.at(-1)!.end_byte ?? sentence[0]!.start_byte)}`;
+  return LABEL.test(opening);
 }
 
 /**
@@ -112,13 +135,34 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   const firstEffectful = sentences.findIndex(hasEffect);
   if (firstEffectful === -1) return null;
   const header = sentences.slice(0, firstEffectful).flat();
-  if (header.some((leaf) => leaf.role === "EVENT" || HEADER_ONCE.has(leaf.family_id))) return null;
+  // An attack frame in the header ("This model's melee attacks … can:") is the list's own frame, which
+  // a Stratagem's header also takes: a Stratagem's header keeps refusing a moment.
+  const stratagem = leaves.some((leaf) => STRATAGEM_HEADER.has(leaf.family_id));
+  const attackHeader = (leaf: CompileLeaf) => leaf.role === "EVENT" && leaf.family_id === "attack" && !stratagem;
+  const attackFrame = header.some(attackHeader);
+  if (header.some((leaf) => (leaf.role === "EVENT" && !attackHeader(leaf)) || HEADER_ONCE.has(leaf.family_id))) return null;
 
+  // A colon's list runs until a sentence ends it: a bullet-free sentence that opens a moment or
+  // "In addition," (rule a), or one that starts its own line with a label (rule b). Such a
+  // sentence starts a part; a label line is never a list item.
+  const moments: boolean[] = [];
+  const labels: boolean[] = [];
+  const inList: boolean[] = [];
+  sentences.forEach((sentence, position) => {
+    const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
+    const bulleted = BULLET.test(sentenceGap(leaves, starts[position]!, sentence, sourceText));
+    const moment = IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words));
+    const label = labelLine(leaves, starts[position]!, sentence, sourceText);
+    const ends = !bulleted && (moment || label);
+    moments.push(moment);
+    labels.push(label);
+    inList.push(!label && (listed[position]! || (position > 0 && inList[position - 1]! && !ends)));
+  });
   const parts: CompileLeaf[][] = [[]];
   sentences.forEach((sentence, position) => {
     const words = sentenceWords(leaves, starts[position]!, sentence, sourceText);
-    const opensPart = position > firstEffectful && !listed.slice(0, position + 1).includes(true) && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
-      IN_ADDITION.test(words) || (MOMENT_OPENER.test(words) && !TIED_BACK.test(words))) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
+    const opensPart = position > firstEffectful && !inList[position] && parts.at(-1)!.some((leaf) => leaf.role === "EFFECT") && (
+      moments[position] || labels[position]) && !REFERS_BACK.test(words.replace(/^in addition,\s*/iu, "").split(",")[0]!) && !SUCH.test(words);
     // "None of these models can be your WARLORD" after a composition rule: the group it points back
     // to is that rule's (compile-army.ts), so the sentence stays in that rule's part.
     const pointsBack = armyOnly(sentence) && parts.at(-1)!.some((leaf) => leaf.family_id === "army-construction" && leaf.parameters.rule === "composition")
@@ -132,8 +176,16 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   }
   if (!hasEffect(parts.at(-1)!) && parts.length > 1) parts.splice(-2, 2, [...parts.at(-2)!, ...parts.at(-1)!]);
   if (parts.length < 2) return null;
-  // An army-construction rule is about the list, not the units a header names.
-  return parts.map((part) => armyOnly(part) ? part : [...header, ...part]);
+  // A Warlord gate in the header ("If a friendly X model is your Warlord, … have:") would gate every
+  // part, and a moment that follows the list is not gated by the army. The ability stays one part,
+  // which gatesTriggerOnWarlord (compile-warlord-test.ts) refuses.
+  if (header.some((leaf) => leaf.family_id === "designated-filter" && leaf.parameters.tag === "warlord")) return null;
+  // An army-construction rule is about the list, not the units a header names. An attack frame in the
+  // header gates the list it introduces (the first part) only: a later part with its own moment
+  // ("When this unit destroys a …") is not one of that frame's attacks.
+  // A labelled part ("Bestial Forms: …") is a named rule of its own, so the list's header does not gate it either.
+  const labelled = new Set(sentences.filter((_sentence, position) => labels[position]).map((sentence) => sentence[0]!));
+  return parts.map((part, at) => armyOnly(part) ? part : (attackFrame || labelled.has(part[0]!)) && at > 0 ? part : [...header, ...part]);
 }
 
 type PartResult = { mechanics: Mechanics; checks: CoreCheck[]; core?: { target_restrictions: Node | Node[] } };

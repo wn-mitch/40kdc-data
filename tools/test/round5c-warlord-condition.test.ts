@@ -229,7 +229,7 @@ describe("Warlord test refused on an aura, a for-each and a unit-filter target (
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]), text).join()).toMatch(warlordRefusal);
   });
 
-  it("refuses a Warlord unit-filter as an attack's target through the unit-filter-target path", () => {
+  it("compiles a Warlord unit-filter as an attack's target: the defender is the Warlord's unit (T7 SS-L)", () => {
     const text = "Each time a model in this unit makes an attack that targets the enemy WARLORD, add 1 to the Hit roll.";
     const [attack, roll] = placed(text,
       ["Each time a model in this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
@@ -238,7 +238,8 @@ describe("Warlord test refused on an aura, a for-each and a unit-filter target (
     const wording = "that targets the enemy WARLORD";
     const start = text.indexOf(wording);
     const target: CompileLeaf = { role: "CONDITION", family_id: "unit-filter-target", family_version: 1, parameters: { side: "enemy", designated: "warlord" }, start_byte: start, end_byte: start + wording.length, fragment: "RAW_TEXT" };
-    expect(errorsOf([attack!, target, roll!], text).join()).toMatch(/Warlord/);
+    const effect = compiledEffect([attack!, target, roll!], text).effect;
+    expect(JSON.stringify(effect)).toContain('{"type":"designated","parameters":{"subject":"defender","tag":"warlord"}}');
   });
 });
 

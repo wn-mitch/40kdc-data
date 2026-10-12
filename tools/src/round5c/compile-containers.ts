@@ -393,17 +393,18 @@ export type ContainerPlan = { nodes: Map<number, Node>; consumed: Set<number> };
  */
 export function planContainers(
   list: readonly CompileLeaf[], sentenceOf: readonly number[], nested: ((leaves: readonly CompileLeaf[], objective?: string) => Node) | null = null, bullets: readonly boolean[] = [],
+  commas: readonly boolean[] = [],
 ): ContainerPlan {
   const outer = nestedCompiler;
   nestedCompiler = nested;
   try {
-    return planContainerNodes(list, sentenceOf, bullets);
+    return planContainerNodes(list, sentenceOf, bullets, commas);
   } finally {
     nestedCompiler = outer;
   }
 }
 
-function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[]): ContainerPlan {
+function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly number[], bullets: readonly boolean[], commas: readonly boolean[]): ContainerPlan {
   const nodes = new Map<number, Node>();
   const consumed = new Set<number>();
   const replacements = findReplacementOpeners(list, (leaf) => LEADING_CONTAINERS.has(leaf.family_id));
@@ -428,7 +429,9 @@ function planContainerNodes(list: readonly CompileLeaf[], sentenceOf: readonly n
     for (let cursor = index + 1; cursor < list.length && (replacement !== undefined || !LEADING_CONTAINERS.has(list[cursor]!.family_id)); cursor += 1) {
       const sentence = sentenceOf[cursor]!;
       const bulletStarts = leaf.family_id === "choice-open" && bullets[cursor] === true;
-      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts;
+      // Each item of a colon-introduced comma list is an option of its own (compile-placement.ts commaItems).
+      const itemStarts = leaf.family_id === "choice-open" && commas[cursor] === true;
+      const starts = byMarker ? list[cursor]!.family_id === "named-option" : currentSentence === null || sentence !== currentSentence || bulletStarts || itemStarts;
       if (starts) {
         if (currentSentence !== null) {
           if (bulletStarts) bulletBoundaries += 1;

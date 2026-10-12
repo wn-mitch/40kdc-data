@@ -30,15 +30,22 @@ function namePattern(folded: string): RegExp {
   return new RegExp(`(?<![a-z'-])${tokens.join("\\s+")}s?(?![a-z'-])`, "gu");
 }
 
+/**
+ * The stat phrase before named weapons in a characteristic change ("add 3 to the Attacks
+ * characteristic of"), anchored at the start. Its words are the change's, not the weapons'.
+ */
+const STAT_PREFIX = /^add\s+\d+\s+to\s+the\s+[a-z' ]+?\s+characteristic\s+of\s+/u;
+
 /** 3e and 3f: every name's words are in the span, and nothing else but connectives, a weapon noun and the scope wording is. */
-function checkSpan(names: readonly string[], folded: readonly string[], span: string): void {
+function checkSpan(names: readonly string[], folded: readonly string[], span: string, statPrefix: boolean): void {
   const text = foldName(span);
   for (let index = 0; index < names.length; index += 1) {
     for (const token of folded[index]!.split(" ")) {
       if (!text.includes(token)) throw new CompileError(`The wording does not name ${names[index]}: "${token}" is not in it.`);
     }
   }
-  let left = text.replace(/^all\s+/u, "").replace(/^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s\s+/u, "").replace(/\s+weapons?$/u, "")
+  const wording = statPrefix ? text.replace(STAT_PREFIX, "") : text;
+  let left = wording.replace(/^all\s+/u, "").replace(/^(?:[a-z'-]+\s+){0,3}?[a-z'-]+'s\s+/u, "").replace(/\s+weapons?$/u, "")
     .replace(/equipped by models in your unit/gu, " ");
   for (const folded1 of [...folded].sort((a, b) => b.length - a.length)) left = left.replace(namePattern(folded1), " ");
   const stray = left.replace(/,/gu, " ").split(" ").filter((word) => word !== "" && !CONNECTIVES.has(word));
@@ -48,7 +55,7 @@ function checkSpan(names: readonly string[], folded: readonly string[], span: st
 /** The printed spelling of each name in its lookup scope (3b, 3c, 3d). */
 export function resolveNames(
   names: readonly string[],
-  use: { weapon_type: unknown; subject: unknown; span?: string; authored: boolean },
+  use: { weapon_type: unknown; subject: unknown; span?: string; authored: boolean; statPrefix?: boolean },
   ctx: WeaponNameContext,
   abilityId: string | undefined,
 ): string[] {
@@ -56,7 +63,7 @@ export function resolveNames(
   if (new Set(folded).size !== folded.length) throw new CompileError("Two named weapons are the same weapon after folding case and dashes.");
   if (use.authored) {
     if (use.span === undefined) throw new CompileError("Named weapons need the wording they are named in.");
-    checkSpan(names, folded, use.span);
+    checkSpan(names, folded, use.span, use.statPrefix === true);
   }
   const catalog = ctx.catalog ?? loadWeaponCatalog(ctx.faction_id, abilityId);
   const ownSubject = (use.subject === "this-unit" || use.subject === "this-model") && ctx.source_type === "unit";
@@ -85,7 +92,9 @@ export function resolveAuthoredNames(list: readonly CompileLeaf[], sourceText: s
     if (!NAME_LEAVES.has(leaf.family_id) || leaf.parameters.weapon_names === undefined) return leaf;
     if (ctx === undefined) throw new CompileError("Named weapons need the record's faction to look them up.");
     const names = leaf.parameters.weapon_names as string[];
-    const printed = resolveNames(names, { weapon_type: leaf.parameters.weapon_type, subject: leaf.parameters.subject, span: spanOf(leaf, sourceText), authored: true }, ctx, abilityId);
+    // A characteristic change names its weapons after the stat phrase ("add 3 to the Attacks characteristic of X and Y").
+    const statPrefix = leaf.family_id === "characteristic-modifier";
+    const printed = resolveNames(names, { weapon_type: leaf.parameters.weapon_type, subject: leaf.parameters.subject, span: spanOf(leaf, sourceText), authored: true, statPrefix }, ctx, abilityId);
     return { ...leaf, parameters: { ...leaf.parameters, weapon_names: printed } };
   });
 }

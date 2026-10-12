@@ -12,18 +12,20 @@ import { DESTRUCTION_ACTIVITIES } from "./family-extensions-17-triggering-destru
  */
 
 const UNITS = "destroyed-units-by-triggering-attacks";
+const MODELS = "destroyed-models-by-triggering-attacks";
 /** Moments whose attacks are those of the unit or units they name: attacks resolved, or an enemy having shot. */
 const ATTACK_MOMENTS = new Set(["attacks-resolved", "enemy-has-shot"]);
 /** Unit-ref roles a destroyed unit can be measured from at destruction. */
 const POSITION_OF = new Set(["this-unit", "event-subject", "stratagem-target", "attacker", "defender", "selected-unit", "recipient"]);
 
-function destructionActivity(leaf: CompileLeaf): string | undefined {
+/** The destruction activities a leaf names, in the family's order: a destroyed unit, a destroyed model, or both. */
+function destructionActivities(leaf: CompileLeaf): string[] {
   const activities = Array.isArray(leaf.parameters.activities) ? leaf.parameters.activities as unknown[] : [];
-  return activities.find((activity): activity is string => (DESTRUCTION_ACTIVITIES as readonly unknown[]).includes(activity));
+  return (DESTRUCTION_ACTIVITIES as readonly string[]).filter((activity) => activities.includes(activity));
 }
 
 export function isTriggeringDestruction(leaf: CompileLeaf | undefined): boolean {
-  return leaf?.family_id === "unit-activity" && destructionActivity(leaf) !== undefined;
+  return leaf?.family_id === "unit-activity" && destructionActivities(leaf).length > 0;
 }
 
 /** A moment the destroyer's attacks come from: a Stratagem's target, or an attack or attacks-resolved moment. */
@@ -93,10 +95,16 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
   input.forEach((leaf, index) => {
     if (!isTriggeringDestruction(leaf)) return;
     if (firstUsageGatedByDestruction(input)) throw new CompileError("A first-time usage limit cannot wait on a destruction that is not the trigger: the limit would be spent when the trigger fires, even with no destruction.");
-    const units = destructionActivity(leaf) === UNITS;
-    const { named, container, destroyer } = leaf.parameters as { named: string; container: string; destroyer: unknown };
-    if (units && (named === "none" || container !== "none")) throw new CompileError("A destroyed unit is named by a unit-filter before or after its verb; it has no container.");
-    if (!units && named === "none" && container === "none") throw new CompileError("A destroyed model names a unit-filter: its own, or the unit it was in.");
+    const activities = destructionActivities(leaf);
+    const pair = activities.length === 2;
+    const { named, container, destroyer, keywords } = leaf.parameters as { named: string; container: string; destroyer: unknown; keywords?: string[] };
+    if (pair && (named === "none" || container !== "none")) throw new CompileError("A destruction of a unit or a model names one unit-filter before or after its verb, with no container.");
+    if (keywords !== undefined && (container === "after" || !activities.includes(MODELS))) throw new CompileError("Destroyed models' keywords name a model-level unit-filter, with no container.");
+    for (const activity of activities) {
+      const units = activity === UNITS;
+      if (units && (named === "none" || container !== "none")) throw new CompileError("A destroyed unit is named by a unit-filter before or after its verb; it has no container.");
+      if (!units && named === "none" && container === "none") throw new CompileError("A destroyed model names a unit-filter: its own, or the unit it was in.");
+    }
     if (named !== "none" && container === "after") throw new CompileError("A destruction activity takes one unit-filter; it names the destroyed thing or its unit, not both.");
     if (!momentFor(destroyer, input)) throw new CompileError("Destroyed by those attacks needs a moment whose attacks it names: the attacks resolved, an enemy having shot, or the Stratagem's target.");
     const at = nextFilter(input, index, named === "before" ? -1 : 1, leaf.fragment);
@@ -104,30 +112,34 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
     if (claimed.has(at)) throw new CompileError("Two destruction activities name one unit-filter.");
     claimed.add(at);
     const filter = input[at]!;
-    if (units && filter.parameters.level === "model") throw new CompileError("A destroyed unit is a unit; a model-level unit-filter names destroyed models.");
+    if (activities.includes(UNITS) && filter.parameters.level === "model") throw new CompileError("A destroyed unit is a unit; a model-level unit-filter names destroyed models.");
     const following = input[at + 1];
     const positioned = distanceFollows(following, leaf.fragment);
-    let object: Record<string, unknown>;
-    if (units) object = scoped(filter);
-    else if (container === "after") object = { level: "model", member_of: scoped(filter) };
-    else object = { ...scoped(filter, true), level: "model" };
-    let proximity: Record<string, unknown> | undefined;
-    if (units && named === "after" && positioned) {
-      proximity = proximityOf(following!);
-      dropped.add(at + 1);
+    const destructions: Array<{ event: string; object: Record<string, unknown>; proximity?: Record<string, unknown> }> = [];
+    for (const activity of activities) {
+      const units = activity === UNITS;
+      let object: Record<string, unknown>;
+      if (units) object = scoped(filter);
+      else if (container === "after") object = { level: "model", member_of: scoped(filter) };
+      else object = { ...scoped(filter, true), level: "model", ...(keywords !== undefined ? { all_of: keywords } : {}) };
+      let proximity: Record<string, unknown> | undefined;
+      if (units && named === "after" && positioned) proximity = proximityOf(following!);
+      if (!units && positioned) throw new CompileError("A distance after a destroyed model has no DSL shape; a destroyed unit takes one.");
+      destructions.push({ event: units ? "destroyed" : "model-destroyed", object, ...(proximity ? { proximity } : {}) });
     }
-    if (units && named === "after" && !positioned && following?.family_id === "unit-filter" && following.fragment === leaf.fragment) {
+    const proximityTaken = destructions.some((destruction) => destruction.proximity !== undefined);
+    if (proximityTaken) dropped.add(at + 1);
+    if (named === "after" && !positioned && following?.family_id === "unit-filter" && following.fragment === leaf.fragment && activities.includes(UNITS)) {
       throw new CompileError("A unit-filter after a destroyed unit's filter names another unit the activity does not account for.");
     }
-    if (!units && positioned) throw new CompileError("A distance after a destroyed model has no DSL shape; a destroyed unit takes one.");
     // The folded leaf covers the words of the filter it took, so the gap to a neighbouring leaf is the
     // text between the two halves: "or" there joins them as alternatives (compile-alternative-conditions.ts).
-    const covered = [leaf, filter, ...(proximity ? [following!] : [])];
+    const covered = [leaf, filter, ...(proximityTaken ? [following!] : [])];
     replaced.set(index, {
       ...leaf,
       start_byte: Math.min(...covered.map((item) => item.start_byte)),
       end_byte: Math.max(...covered.map((item) => item.end_byte ?? item.start_byte)),
-      parameters: { ...leaf.parameters, destruction: { object, ...(proximity ? { proximity } : {}) } },
+      parameters: { ...leaf.parameters, destructions },
     });
     // A container filter stays in the list when the leaf after it binds to it ("that unit"); the
     // activity still names the same unit. Otherwise the filter is consumed here.
@@ -137,16 +149,19 @@ export function foldTriggeringDestruction(input: readonly CompileLeaf[]): Compil
   return input.flatMap((leaf, index) => dropped.has(index) ? [] : [replaced.get(index) ?? leaf]);
 }
 
-/** The DSL `happened` parameters of a folded destruction activity: what was destroyed, by whom, in the event's own window. */
-export function lowerTriggeringDestruction(leaf: CompileLeaf): Record<string, unknown> {
-  const destruction = leaf.parameters.destruction as { object: Record<string, unknown>; proximity?: Record<string, unknown> } | undefined;
-  if (!destruction) throw new CompileError("A destruction activity names no unit-filter beside it.");
-  const units = destructionActivity(leaf) === UNITS;
-  return {
-    event: units ? "destroyed" : "model-destroyed",
-    object: destruction.object,
+/**
+ * The DSL `happened` parameters of a folded destruction leaf, one per destruction activity it
+ * names (a destroyed unit or a destroyed model; any one of them happened): what was destroyed, by
+ * whom, in the event's own window.
+ */
+export function lowerTriggeringDestructions(leaf: CompileLeaf): Record<string, unknown>[] {
+  const destructions = leaf.parameters.destructions as Array<{ event: string; object: Record<string, unknown>; proximity?: Record<string, unknown> }> | undefined;
+  if (!destructions?.length) throw new CompileError("A destruction activity names no unit-filter beside it.");
+  return destructions.map(({ event, object, proximity }) => ({
+    event,
+    object,
     filter: { by: String(leaf.parameters.destroyer) },
     window: "event",
-    ...(destruction.proximity ? { proximity: destruction.proximity } : {}),
-  };
+    ...(proximity ? { proximity } : {}),
+  }));
 }

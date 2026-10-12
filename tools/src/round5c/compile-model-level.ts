@@ -37,6 +37,21 @@ export function destroyedObject(moment: CompileLeaf | undefined, filter: Compile
 }
 
 /**
+ * "When this unit destroys a" + "enemy CHARACTER model": a model-destroyed event with a model-level
+ * unit-filter right after it in the same sentence. The filter names the destroyed model, so it
+ * folds into the event's object (compile-unit-filters.ts foldDestroyedModelAfter).
+ */
+export function destroyedModelAfter(event: CompileLeaf | undefined, filter: CompileLeaf | undefined): boolean {
+  // An object the event can name: a friendly or enemy owner and unit keywords, and nothing else. Any other
+  // filter ("an enemy model (excluding MONSTER models)", a side-less one) keeps its own fold.
+  const plain = filter !== undefined && (filter.parameters.side === "friendly" || filter.parameters.side === "enemy")
+    && Array.isArray(filter.parameters.keywords) && filter.parameters.keywords.length > 0
+    && Object.keys(filter.parameters).every((key) => ["side", "keywords", "level"].includes(key) || filter.parameters[key] === undefined);
+  return event?.family_id === "event" && event.parameters.kind === "model-destroyed" && filter?.family_id === "unit-filter"
+    && filter.parameters.level === "model" && plain && event.fragment === filter.fragment && event.end_byte !== undefined && filter.start_byte >= event.end_byte;
+}
+
+/**
  * The folded filter as what a destroyed moment destroyed. A bare model destruction is a model in
  * this unit ("a CULT model in your unit is destroyed"), which the filter narrows; one with an
  * owner ("a friendly X model … is destroyed") is any such model. A unit's destruction cannot be a
@@ -161,11 +176,17 @@ export function groupMembership(input: readonly CompileLeaf[]): CompileLeaf[] {
     const at = after >= 0 ? after : modelFilterBeside(list, index, 1);
     if (at < 0) return;
     const filter = list[at]!;
-    if (list.some((other) => other.fragment === leaf.fragment && COUNTING.has(other.family_id))) return;
+    // "within 12\" of a CRYPTEK model in your unit" after a reference to the selected unit: the
+    // unit the reference's model shares is the selected unit, not the bearer's (compile-unit-filters.ts).
+    const reference = list[at - 1];
+    const selectedReference = reference?.family_id === "unit-position" && reference.fragment === filter.fragment
+      && reference.parameters.of === "following-filter" && reference.parameters.subject === "selected-unit";
+    if (!selectedReference && list.some((other) => other.fragment === leaf.fragment && COUNTING.has(other.family_id))) return;
     if (list[at - 1]?.family_id === "select-unit") return;
     if (filter.parameters.member_of !== undefined) throw new CompileError("A unit-filter takes one membership; two are not decided.");
     if (filter.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
-    const of = membershipOf(leaf, list);
+    if (selectedReference && leaf.parameters.relation !== "in") throw new CompileError("A selected model's membership is only being a model of its unit.");
+    const of = selectedReference ? "selected-unit" : membershipOf(leaf, list);
     // The effect after the pair names this model as its subject. The membership's group is the
     // filter's units, which a this-model effect does not take (design 3.2 rule 7).
     const effect = nextEffectAfter(list, Math.max(index, at));

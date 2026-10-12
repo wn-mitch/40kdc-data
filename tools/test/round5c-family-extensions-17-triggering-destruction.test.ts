@@ -302,10 +302,11 @@ describe("destroyed by the triggering attacks: leaf checks", () => {
     ])).toThrow(/needs destroyer/);
   });
 
-  it("refuses two destruction activities in one leaf, or one beside an older activity", () => {
+  it("refuses a destruction activity beside an older activity; a leaf may name a destroyed unit or a destroyed model (T7)", () => {
+    // Both destruction activities on one leaf are the destroyed unit or model of one verb (family-extensions-16-t7-segmentation-leaf-bundle.ts).
     expect(() => placed("if those attacks destroyed an enemy unit.", [
       ["those attacks destroyed", "unit-activity", { activities: [UNITS, MODELS], named: "after", container: "none", destroyer: "this-unit", negated: false }],
-    ])).toThrow(/one destruction activity per leaf/);
+    ])).not.toThrow();
     expect(() => placed("if those attacks destroyed an enemy unit.", [
       ["those attacks destroyed", "unit-activity", { activities: [UNITS, "fought-this-phase"], named: "after", container: "none", destroyer: "this-unit", negated: false }],
     ])).toThrow(/one destruction activity per leaf/);

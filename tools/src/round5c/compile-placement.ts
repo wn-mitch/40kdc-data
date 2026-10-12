@@ -56,6 +56,29 @@ export function bulletBreaks(leaves: readonly CompileLeaf[], sourceText: string 
   });
 }
 
+/** The gap between two list items: a comma, with optional "and"/"or" and the markup around a bracketed keyword. */
+const COMMA_GAP = /^[\s\]\[*]*,[\s\]\[*]*(?:(?:and|or)\s+)?[\s\]\[*]*$/u;
+/** The gap from a colon-introduced menu's opener to its first item, which holds the colon. */
+const COLON_GAP = /^[^.;]*:[\s\]\[*]*$/u;
+
+/**
+ * Items of a colon-introduced comma list: "select one of the following abilities: [A], [B] or [C]".
+ * The first item follows its opener across a colon; each later item follows the one before it across
+ * a comma. Each item is a leaf of its own option (compile-containers.ts), so the list is not one sentence.
+ */
+export function commaItems(leaves: readonly CompileLeaf[], sourceText: string | undefined): boolean[] {
+  const items = leaves.map(() => false);
+  if (sourceText === undefined) return items;
+  leaves.forEach((leaf, index) => {
+    const previous = leaves[index - 1];
+    if (index === 0 || previous === undefined || previous.end_byte === undefined || leaf.start_byte <= previous.end_byte) return;
+    const gap = exactSpan(sourceText, previous.end_byte, leaf.start_byte);
+    if (previous.family_id === "choice-open" && COLON_GAP.test(gap)) items[index] = true;
+    else if (items[index - 1] && COMMA_GAP.test(gap)) items[index] = true;
+  });
+  return items;
+}
+
 /**
  * The sentence of each leaf before effect-less sentences join the next effectful one: a new sentence
  * starts at a full stop, semicolon or colon in the source, or where the source fragment changes.

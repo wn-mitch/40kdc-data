@@ -8,7 +8,7 @@ import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
 import { MATCHED_UNITS } from "./family-extensions-16-those-enemy-units-role.js";
-import { destroyedFilter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
+import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
@@ -69,11 +69,12 @@ export function assertOneFilterState(states: readonly string[] | undefined, held
  */
 // A "your Warlord" test is refused unless the caller passes `warlordTest` (the S2 gate in
 // compile-warlord-test.ts): every other caller would drop or misread it.
-export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean } = {}): Record<string, unknown> {
+export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: boolean; warlordTarget?: boolean } = {}): Record<string, unknown> {
   // "one of those X units": the matched set, which bindMatchedPools attached (compile-matched-set.ts).
   if (filter.parameters.among === MATCHED_UNITS) return matchedPoolOf(filter);
   const p = filter.parameters as { side: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; other?: boolean; visible?: boolean; held_in?: string; alternatives?: FilterAlternative[]; designated?: string; designated_by?: string; member_of?: string; nested_engaged_with?: Record<string, unknown> };
-  if (p.designated === "warlord" && options.warlordTest !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
+  // A Warlord designation has a shape for a test (warlordTest) and for an attack's target (warlordTarget, compile-conditions.ts).
+  if (p.designated === "warlord" && options.warlordTest !== true && options.warlordTarget !== true) throw new CompileError("A unit-filter naming the Warlord has no shape here; only a Warlord test after a unit-filter compiles.");
   const held = p.held_in === undefined ? undefined : HELD_STATES[p.held_in];
   if (p.held_in !== undefined && held === undefined) throw new CompileError(`A unit held in ${p.held_in} has no DSL unit-state.`);
   assertOneFilterState(p.states, held);
@@ -347,6 +348,23 @@ function targetNamingFilter(leaf: CompileLeaf): CompileLeaf {
   return { ...leaf, family_id: "unit-filter-target", parameters: { ...rest, owner_explicit: true, binds_defender: true } };
 }
 
+/**
+ * The model-level unit-filter after a model-destroyed event as the event's object: its side is the
+ * destroyed model's owner, its keywords the model's unit keywords. A filter with any other
+ * wording, or an event that already names an object, has no shape here.
+ */
+function foldDestroyedModelAfter(event: CompileLeaf, filter: CompileLeaf): CompileLeaf {
+  const named = event.parameters;
+  if (named.object_owner !== undefined || named.object_keywords !== undefined || named.object_filter !== undefined || named.subject_filter !== undefined) {
+    throw new CompileError("A destroyed model named after its event needs an event that names no object of its own.");
+  }
+  const side = filter.parameters.side;
+  if (side !== "friendly" && side !== "enemy") throw new CompileError("A destroyed model named after its event must say friendly or enemy.");
+  const keywords = filter.parameters.keywords;
+  if (!Array.isArray(keywords) || keywords.length === 0) throw new CompileError("A destroyed model named after its event needs unit keywords.");
+  return { ...event, parameters: { ...named, object_owner: side, object_keywords: keywords } };
+}
+
 export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!input0.some((leaf) => isFilter(leaf) || openSelect(leaf) || openAura(leaf) || openTarget(leaf) || isTriggeringDestruction(leaf) || leaf.family_id === "for-each-unit-select" || leaf.family_id === "move-end-nearest")) return [...input0];
   // "if those attacks destroyed an enemy unit" pairs its destroyed unit before the merges below (compile-triggering-destruction.ts).
@@ -448,6 +466,9 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
         out[out.length - 1] = { ...condition, end_byte: end, parameters: { ...condition.parameters, following_filter: filterNode } };
         index = at - 1;
       }
+    } else if (isFilter(leaf) && destroyedModelAfter(out.at(-1), leaf)) {
+      // "when this unit destroys a" + "enemy CHARACTER model": the destroyed model's owner and keywords.
+      out[out.length - 1] = foldDestroyedModelAfter(out.at(-1)!, leaf);
     } else if (isFilter(leaf) && rollOwnerEvent(out.at(-1), leaf)) {
       // "when a saving throw is failed for a" + "friendly VEHICLE model": whose roll it is. A
       // "from your army" of the same side after it is the filter's own wording.

@@ -238,7 +238,12 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.by === "filtered-units" && leaf.parameters.subject_filter === undefined) throw new CompileError("event by names the units of a unit-filter, but none sits right before it.");
   if (leaf.parameters.by !== undefined) node.subject = leaf.parameters.by === "enemy" ? { owner: "enemy" } : closed(leaf, "by");
   // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
-  if (leaf.parameters.object_owner !== undefined) node.object = { owner: closed(leaf, "object_owner"), ...(node.event === "model-destroyed" ? { level: "model" } : {}) };
+  // "When this unit destroys a CHARACTER model": the destroyed model's unit keywords (compile-unit-filters.ts folds them in).
+  if (leaf.parameters.object_owner !== undefined) node.object = {
+    owner: closed(leaf, "object_owner"),
+    ...(leaf.parameters.object_keywords !== undefined ? { all_of: closed(leaf, "object_keywords") } : {}),
+    ...(node.event === "model-destroyed" ? { level: "model" } : {}),
+  };
   // "An attack made with this model's quake cannon destroys": the attacks that destroy (compile-weapon-qualified.ts).
   if (leaf.parameters.destroy_filter !== undefined) {
     if (node.filter !== undefined) throw new CompileError("A destruction already has a filter; it cannot also name its attacks.");

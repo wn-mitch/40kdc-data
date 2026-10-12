@@ -20,7 +20,7 @@ import { activationWindowCondition, allOf, ATTACK_EVENTS, attackTypeCondition, b
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
 import { trigger, triggerLeaves, withDestroyedObject } from "./compile-triggers.js";
-import { bandRunClauses, bulletBreaks, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
+import { bandRunClauses, bulletBreaks, commaItems, ordered, placements, rawSentences, shapeSignature } from "./compile-placement.js";
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
@@ -383,7 +383,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective) => nestedPart(group, sourceText, options, objective), bulletBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective) => nestedPart(group, sourceText, options, objective), bulletBreaks(list, sourceText), commaItems(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

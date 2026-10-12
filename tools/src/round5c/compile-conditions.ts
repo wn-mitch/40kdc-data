@@ -11,7 +11,7 @@ import { isSelectionRef } from "./compile-pair-eligibility.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { everyModelFlag } from "./compile-every-model.js";
 import { isOneTargetRef } from "./compile-target-refs.js";
-import { isTriggeringDestruction, lowerTriggeringDestruction } from "./compile-triggering-destruction.js";
+import { isTriggeringDestruction, lowerTriggeringDestructions } from "./compile-triggering-destruction.js";
 import { abilityChecks, alternativesCheck, stateCheck } from "./compile-wrappers.js";
 import { attackedChecks, namesSelection, targetingCondition } from "./compile-targeting-history.js";
 import { dslAlternatives } from "./compile-filter-alternatives.js";
@@ -360,7 +360,10 @@ export function condition(leaf: CompileLeaf): Node {
       return abilityUsedCondition(leaf);
     case "unit-activity": {
       // "if those attacks destroyed an enemy unit": the folded destruction (compile-triggering-destruction.ts), which names no subject.
-      if (isTriggeringDestruction(leaf)) return polarity(leaf, { type: "happened", parameters: lowerTriggeringDestruction(leaf) });
+      if (isTriggeringDestruction(leaf)) {
+        const happened = lowerTriggeringDestructions(leaf).map((parameters) => ({ type: "happened", parameters }));
+        return polarity(leaf, happened.length === 1 ? happened[0]! : anyOf(happened));
+      }
       // Version 3 (batch 6) widens subject beyond this-unit/target.
       const subject = leaf.family_version >= 3 ? widenedWho(closed(leaf, "subject")) : who;
       // Version 4 names several activities: any of them, and negated none of them.
@@ -391,7 +394,7 @@ export function condition(leaf: CompileLeaf): Node {
       } };
     case "unit-filter-target": {
       // A who folded onto an attack's target ("that targets a VEHICLE unit"): each of its fields, said of the defender.
-      const filter = dslUnitFilter(leaf) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[]; has_ability?: string[] };
+      const filter = dslUnitFilter(leaf, { warlordTarget: true }) as { owner: string; all_of?: string[]; any_of?: string[]; none_of?: string[]; state?: string; excluding?: string; visible?: true; any_of_filters?: Node[]; has_ability?: string[]; designated?: string };
       if (filter.visible) throw new CompileError("An attack's target is already visible to the attacker; drop visible from its unit-filter.");
       const checks: Node[] = [
         ...(filter.all_of ? [pred("has-keyword", { all_of: filter.all_of }, "defender")] : []),
@@ -404,6 +407,8 @@ export function condition(leaf: CompileLeaf): Node {
         // X unit") says its side as well; after an attack this unit makes, an enemy target is implied.
         ...(leaf.parameters.owner_explicit === true && filter.owner !== "any" ? [pred("owned-by", { owner: filter.owner }, "defender")] : []),
         ...(filter.has_ability ?? []).map((ability) => pred("has-ability", { ability }, "defender")),
+        // "targets the enemy WARLORD": the target contains the Warlord model (the designated condition's warlord tag).
+        ...(filter.designated === "warlord" ? [pred("designated", { tag: "warlord" }, "defender")] : []),
       ];
       if (checks.length === 0) throw new CompileError("An attack's target unit-filter that names only a side says nothing the attack does not.");
       return checks.length === 1 ? checks[0]! : { operator: "and", operands: checks };
