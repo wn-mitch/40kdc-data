@@ -389,6 +389,24 @@ function unnamedAttackFilter(leaves: readonly CompileLeaf[], index: number): boo
     && attack?.family_id === "attack" && attack.parameters.direction === "makes" && attack.parameters.target === undefined && attack.fragment === filter.fragment;
 }
 
+/**
+ * "Friendly X units are eligible to declare a charge" + "in a turn in which they Advanced": a condition
+ * right after an effect whose units a bare unit-filter names tests each of those units, not the record's
+ * own unit. Null when no such effect precedes it in its sentence, or its keys cannot name a recipient.
+ */
+function recipientOfFilteredEffect(leaves: readonly CompileLeaf[], index: number, focus: ((index: number) => string | null) | undefined, sourceText: string | undefined): string | null {
+  const leaf = leaves[index]!;
+  if (leaf.family_id !== "unit-activity" || leaf.role !== "CONDITION") return null;
+  let at = index - 1;
+  while (at >= 0 && leaves[at]!.fragment === leaf.fragment && leaves[at]!.role === "CONDITION" && hasAntecedent(leaves[at]!)) at -= 1;
+  const effect = leaves[at];
+  if (effect === undefined || effect.fragment !== leaf.fragment || effect.role !== "EFFECT" || !hasAntecedent(effect)) return null;
+  if (sourceText !== undefined && effect.end_byte !== undefined && leaf.start_byte !== undefined
+    && /[.;!?]/u.test(Buffer.from(sourceText, "utf8").subarray(effect.end_byte, leaf.start_byte).toString("utf8"))) return null;
+  if (antecedentRole(leaves, at, focus, sourceText) !== FILTERED_UNITS) return null;
+  return antecedentKeys(leaf.family_id, leaf.parameters).every((key) => boundValue(leaf, key, AURA_RECIPIENT) !== null) ? AURA_RECIPIENT : null;
+}
+
 /** The role an earlier leaf of the record gives an anaphor, in order of precedence. */
 function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (index: number) => string | null, sourceText?: string): string | null {
   // "makes a ranged attack that targets an enemy unit visible to the bearer": the unit the attack names after it is the defender.
@@ -399,6 +417,9 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
     throw new CompileError(`visible at byte ${leaves[index]!.start_byte} points back to a unit the attack before it does not name; the attack has no target.`);
   }
   if (postfixFilter(leaves, index, sourceText)) return FILTERED_UNITS;
+  // "… are eligible to declare a charge" + "in a turn in which they Advanced": each unit the effect's filter names.
+  const filteredRecipient = recipientOfFilteredEffect(leaves, index, focus, sourceText);
+  if (filteredRecipient !== null) return filteredRecipient;
   // "an enemy unit" + "engaged with this unit" + "is selected to fight": the moment's unit.
   const momentUnit = onMomentUnit(leaves, index, sourceText);
   if (momentUnit !== null) return momentUnit;
@@ -463,6 +484,8 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "make-move": ["subject"], "set-up": ["subject"], "apply-mark": ["subject"], test: ["target"],
   "damage-reduction": ["subject"],
   "counts-as": ["subject"],
+  // "**K** units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back": every unit the filter matches.
+  "act-after-move": ["subject"],
 };
 const ANY_UNIT_CONDITION_KEYS: Readonly<Record<string, readonly string[]>> = {
   "unit-state": ["subject", "with"], "unit-activity": ["subject"], "unit-position": ["subject", "of"], "unit-keyword": ["subject"], "hit-by-attacks": ["subject"],

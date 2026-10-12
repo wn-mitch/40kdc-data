@@ -198,3 +198,44 @@ describe("Round 5C a filter after a characteristic change, and a later roll that
     expect(bindAntecedents(list, undefined, auraText)[0]!.parameters.subject).toBe("this-unit");
   });
 });
+
+describe("Round 5C act-after-move that points back to the units a filter or a selection named", () => {
+  // Fabricated wording of the 3711 and 6821 shapes.
+  const filterText = "Friendly FOO BAR units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back.";
+  const filtered = (subject: string) => placedIn(filterText,
+    ["Friendly FOO BAR units", "unit-filter", { side: "friendly", keywords: ["FOO", "BAR"] }],
+    ["from your army", "unit-owner", { owner: "friendly" }],
+    ["are eligible to shoot and declare a charge in a turn in which they Fell Back", "act-after-move", { subject, moves: ["fall-back"], acts: ["shoot", "charge"] }]);
+
+  it("gives every unit the filter names the permissions, exactly as a filtered recipient would", () => {
+    const result = compileLeaves(filtered("antecedent"), filterText);
+    expect(result.ok).toBe(true);
+    const steps = (result as any).mechanics.effect.steps as Array<Record<string, any>>;
+    expect(steps.map((step) => step.modifier)).toEqual([
+      { activity: "shoot", allow: true, after: ["fall-back"] },
+      { activity: "declare-charge", allow: true, after: ["fall-back"] },
+    ]);
+    for (const step of steps) expect(step.target).toEqual({ owner: "friendly", all_of: ["FOO", "BAR"] });
+  });
+
+  it("keeps a subject that is not an antecedent as the record's own unit, ignoring the filter", () => {
+    const result = compileLeaves(filtered("this-unit"), filterText);
+    expect(JSON.stringify(result)).not.toContain('"owner":"friendly"');
+  });
+
+  it("names a menu option's selected unit instead of the bearer's", () => {
+    const text = "You can select one friendly FOO unit; that unit is eligible to shoot in a turn in which it Fell Back.";
+    const list = (subject: string) => placedIn(text,
+      ["select one", "select-unit", { distance: "any", visible: false }],
+      ["friendly FOO unit", "unit-filter", { side: "friendly", keywords: ["FOO"] }],
+      ["that unit is eligible to shoot in a turn in which it Fell Back", "act-after-move", { subject, moves: ["fall-back"], acts: ["shoot"] }]);
+    const effect = (subject: string) => (compileLeaves(list(subject), text) as any).mechanics.effect;
+    expect(effect("antecedent").effect).toMatchObject({ type: "permission", target: "selected-unit" });
+    expect(effect("this-unit").effect).toMatchObject({ type: "permission", target: "this-unit" });
+  });
+
+  it("refuses a Stratagem effect that points back to no unit at all", () => {
+    const only = placedIn("are eligible to shoot after falling back", ["are eligible to shoot after falling back", "act-after-move", { subject: "antecedent", moves: ["fall-back"], acts: ["shoot"] }, "EFFECT"]);
+    expect(compileLeaves(only, "are eligible to shoot after falling back")).toMatchObject({ ok: false, errors: [expect.stringMatching(/no earlier leaf selects a unit/u)] });
+  });
+});

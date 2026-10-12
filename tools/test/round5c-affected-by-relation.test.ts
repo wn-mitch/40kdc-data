@@ -92,14 +92,27 @@ describe("apply-mark@4 by: a designation applied by a unit", () => {
 });
 
 describe("unit-filter@8 designated and designated_by", () => {
-  it("names the affected units of a Duty as the permission target, and refuses the Advanced test on them", () => {
+  it("names the affected units of a Duty as the permission target, and tests each affected unit's Advance", () => {
     const permissionOnly = placed(DUTY_TEXT,
       ["While a model is affected by this ability", "unit-filter", AFFECTED],
       ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
     );
     expect(JSON.stringify(mechanicsOf(permissionOnly, DUTY_TEXT).effect)).toContain('"designated":"bondsman-affected","designated_by":"this-unit"');
-    // The Advanced test would be bound to the affected units as a group, so any one of them would satisfy it.
-    expect(() => mechanicsOf(duty(AFFECTED), DUTY_TEXT)).toThrow(/no leaf binds it to that/u);
+    // The Advanced test binds to each affected unit (recipient), not to the group or to the bearer.
+    const effect = mechanicsOf(duty(AFFECTED), DUTY_TEXT).effect;
+    expect(effect.type).toBe("conditional");
+    expect(effect.condition).toEqual({ type: "happened", parameters: { subject: "recipient", event: "move-ended", filter: { move_types: ["advance"] }, window: "turn" } });
+    expect(effect.effect.target).toEqual({ owner: "friendly", level: "model", designated: "bondsman-affected", designated_by: "this-unit" });
+  });
+
+  it("still refuses an Advanced test in a later sentence, which the designated filter's effect does not govern", () => {
+    const text = "While a model is affected by this ability, it is eligible to declare a charge. In a turn in which it Advanced.";
+    const leaves = placed(text,
+      ["While a model is affected by this ability", "unit-filter", AFFECTED],
+      ["it is eligible to declare a charge", "eligibility-permission", { subject: "antecedent", activity: "declare-charge", allow: true, despite: "advanced" }],
+      ["In a turn in which it Advanced", "unit-activity", { activities: ["advanced-this-turn"], subject: "antecedent", negated: false }],
+    );
+    expect(() => mechanicsOf(leaves, text)).toThrow(/no leaf binds it to that/u);
   });
 
   it("keeps a plain unit-filter's permission target free of designation fields", () => {
