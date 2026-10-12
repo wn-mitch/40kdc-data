@@ -69,6 +69,7 @@ import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-window.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
+import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -830,7 +831,17 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       // "It can move up to 6\" instead of up to 3\"": the default it replaces is another rule's,
       // printed after "instead of", so the clause's effect already says the new value.
       const named = sourceText !== undefined && /^\s*of\b/u.test(Buffer.from(sourceText, "utf8").subarray(list[combinator]!.end_byte).toString("utf8"));
-      if (!named) errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
+      if (!named) {
+        // "Recover up to 3 lost wounds or, if it is a KEYWORD unit, return models instead": a restoration pair
+        // across families (compile-cross-family-instead.ts). Any other pair has no candidates and keeps the refusal.
+        const cands = crossFamilyCandidates(planned, places, optionalSpends, replacement);
+        if (cands.length === 0) errors.push(`"Instead" has no earlier ${replacement.leaf.family_id} effect to replace.`);
+        else if (cands.length > 1) errors.push(`"Instead" cannot tell which of ${cands.length} earlier effects it replaces.`);
+        else {
+          const problem = replaceAcrossFamilies(planned, places, boundDuration, replacement, cands[0]!);
+          if (problem !== null) errors.push(problem);
+        }
+      }
       continue;
     }
     // "Re-roll Hit rolls of 1. Or: if …, re-roll Hit rolls": the player picks one of the two, each
@@ -849,10 +860,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       continue;
     }
     replaced.gate = [...replaced.gate, negate(alternative)];
-    // A result band that gates the replaced effect ("on a 2+ … instead") covers its replacement too:
-    // the replacement joins the same roll (compile-dice.ts), and the band stays out of its condition.
-    const band = replaced.gate.filter(isRollMarker);
-    if (band.length === 1 && !replacement.gate.some(isRollMarker)) replacement.gate = [...band, ...replacement.gate];
+    // A result band that gates the replaced effect ("on a 2+ … instead") covers its replacement too (inheritBand).
+    inheritBand(replaced, replacement);
     replacement.replaces = true;
   }
 

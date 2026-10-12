@@ -3,18 +3,24 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 const qualifier = (leaf: CompileLeaf) => leaf.role === "CONDITION" && leaf.family_id === "returned-model-exclusion";
 const clauseBoundary = /[.;:■▪•]|\b(?:and|or)\b/iu;
 
+/** A non-choice "instead" is passed over backward, so an exclusion after it binds the replacement it follows. */
+const replacementInstead = (leaf: CompileLeaf) => leaf.role === "COMBINATOR" && leaf.family_id === "instead" && leaf.parameters.choice !== true;
+
 /** Only the nearest effect in the same source clause can own a model exclusion. */
 function candidate(leaves: readonly CompileLeaf[], at: number, direction: -1 | 1, source: Buffer): number | null {
   const exclusion = leaves[at]!;
   let previous = exclusion;
   for (let index = at + direction; index >= 0 && index < leaves.length; index += direction) {
     const leaf = leaves[index]!;
-    if (leaf.fragment !== exclusion.fragment || leaf.role === "EVENT" || leaf.role === "COMBINATOR") return null;
+    if (leaf.fragment !== exclusion.fragment) return null;
+    const passOver = direction === -1 && replacementInstead(leaf);
+    if (!passOver && (leaf.role === "EVENT" || leaf.role === "COMBINATOR")) return null;
     const left = direction === -1 ? leaf : previous;
     const right = direction === -1 ? previous : leaf;
     if (left.end_byte === undefined) throw new CompileError("A returned-model exclusion needs source span ends to verify its clause.");
     if (clauseBoundary.test(source.subarray(left.end_byte, right.start_byte).toString("utf8"))) return null;
     previous = leaf;
+    if (passOver) continue;
     if (leaf.role === "EFFECT") return leaf.family_id === "return-models" ? index : null;
   }
   return null;
