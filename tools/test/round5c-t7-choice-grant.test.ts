@@ -67,7 +67,7 @@ describe("Round 5C t7 choice and grant bundle", () => {
   });
 
   // 9103: a result band over a printed bullet list decides every bullet effect, not only the first.
-  const BAND_TEXT = `Select one enemy unit. Roll one D6: On a 2+, that unit suffers 1 mortal wound.\n${BULLET} That unit suffers D3 mortal wounds.\n${BULLET} That unit suffers 2 mortal wounds.\nThat unit suffers 3 mortal wounds.`;
+  const BAND_TEXT = `Select one enemy unit. Roll one D6: On a 2+, that unit suffers 1 mortal wound.\n${BULLET} That unit suffers D3 mortal wounds.\n${BULLET} That unit suffers 2 mortal wounds.\n\nThat unit suffers 3 mortal wounds.`;
   const BAND_ITEMS: Item[] = [
     ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: true }],
     ["Roll one D6", "dice-roll", { dice: "D6" }],
@@ -77,6 +77,21 @@ describe("Round 5C t7 choice and grant bundle", () => {
     ["That unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "2" }],
     ["That unit suffers 3 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "3" }],
   ];
+
+  // 9103 prints its block as separate lines under "On a 2+:", with no bullet glyphs.
+  it("gates the lines of a block printed under a band, with no bullet glyphs", () => {
+    const text = "Select one enemy unit. Roll one D6: On a 2+: That unit suffers 1 mortal wound.\rThat unit cannot be hidden.\rThat unit suffers 2 mortal wounds.";
+    const effect = mechanicsOf(text, [
+      ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: true }],
+      ["Roll one D6", "dice-roll", { dice: "D6" }],
+      ["On a 2+", "roll-result", { from: 2 }],
+      ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }],
+      ["That unit cannot be hidden", "mortal-wounds", { recipient: "that-unit", count: "D3" }],
+      ["That unit suffers 2 mortal wounds", "mortal-wounds", { recipient: "that-unit", count: "2" }],
+    ]).effect;
+    expect(effect.effect.type).toBe("dice-gated");
+    expect(effect.effect.on_success.steps.map((step: any) => step.modifier.count)).toEqual([1, "D3", 2]);
+  });
 
   it("gates every bullet of the band's run, and leaves the sentence after the list ungated", () => {
     const effect = mechanicsOf(BAND_TEXT, BAND_ITEMS).effect;
