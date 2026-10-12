@@ -597,6 +597,10 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       // attack's target, also past the weapon the attack is made with ("with a melta weapon against
       // a VEHICLE unit"). "an enemy unit" alone adds nothing an attack's target is not already.
       if (Object.keys(filterOf(leaf)).length > 0 || leaf.parameters.side === "friendly") out.push({ ...leaf, family_id: "unit-filter-target" });
+    } else if (isFilter(leaf) && renamedAttackTarget(out, list, leaf)) {
+      // "each time an attack is allocated to an enemy model, if this unit has K and that enemy model is a" +
+      // "MONSTER unit": the filter after a condition names the target the attack's own filter already named.
+      if (Object.keys(filterOf(leaf)).length > 0) out.push({ ...leaf, family_id: "unit-filter-target" });
     } else if (isFilter(leaf) && postfixRecipient(out.at(-1))) {
       // "Add 1 to the Strength characteristic of" + "**K** models from your army": the units the
       // effect before it applies to. A "from your army" after it is the filter's own wording.
@@ -705,6 +709,22 @@ function nestedEngagedChain(list: readonly CompileLeaf[], index: number, filter:
 /** An attack whose target is the unit-filter right after it (attack target following-filter), in the filter's fragment. */
 function followsTargetingAttack(prev: CompileLeaf | undefined, filter: CompileLeaf): boolean {
   return prev?.family_id === "attack" && prev.parameters.target === "following-filter" && prev.fragment === filter.fragment;
+}
+
+/**
+ * A unit-filter right after a condition that re-names the target an earlier attack of its fragment named by the filter
+ * right after it ("that enemy model is a MONSTER" after "each time an attack is allocated to an enemy model"). It must
+ * say the same side and level as the filter the attack named, and no other moment may come between the attack and it.
+ */
+function renamedAttackTarget(out: readonly CompileLeaf[], list: readonly CompileLeaf[], filter: CompileLeaf): boolean {
+  const before = out.at(-1);
+  if (before?.role !== "CONDITION" || before.fragment !== filter.fragment || before.family_id === "unit-filter-target") return false;
+  const attackAt = out.map((leaf) => leaf.family_id === "attack" && leaf.fragment === filter.fragment).lastIndexOf(true);
+  if (attackAt === -1 || out.slice(attackAt + 1).some((leaf) => leaf.role === "EVENT" && leaf.fragment === filter.fragment)) return false;
+  const attack = out[attackAt]!;
+  const named = list[list.findIndex((leaf) => leaf.family_id === "attack" && leaf.start_byte === attack.start_byte && leaf.fragment === attack.fragment) + 1];
+  return isFilter(named) && named.fragment === filter.fragment && named.parameters.side === filter.parameters.side
+    && named.parameters.level === filter.parameters.level && filter.parameters.side !== "any";
 }
 
 /** The index past any "from your army" of the filter's own side right after it. */

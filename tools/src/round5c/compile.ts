@@ -74,7 +74,7 @@ import { attackFold, isAttackMoment, triggerWindow } from "./compile-attack-wind
 import { bindMatchedPools } from "./compile-matched-set.js";
 import { prohibitedRollName, replaceProhibitedRoll, selectedMoveRestrictionReplacing } from "./compile-roll-prohibition.js";
 import { crossFamilyCandidates, inheritBand, replaceAcrossFamilies } from "./compile-cross-family-instead.js";
-import { inheritAttackFrame } from "./compile-instead-attack-gate.js";
+import { conditionedInsteadAfter, inheritAttackFrame } from "./compile-instead-attack-gate.js";
 
 export { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
@@ -402,6 +402,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
 
   const effectSentences = new Set(list.flatMap((leaf, index) => leaf.role === "EFFECT" ? [places[index]!.sentence] : []));
   const firstSentence = Math.min(...effectSentences);
+  // "If A, do X. If B, do Y instead.": the instead sentence has its own condition, so A gates only the first sentence;
+  // as an ability-wide gate it would also guard the replacement (compile-instead-attack-gate.ts).
+  const firstGateIsOwn = conditionedInsteadAfter(list, places, firstSentence);
   const firstEffect = (sentence: number) => list.findIndex((leaf, index) => leaf.role === "EFFECT" && places[index]!.sentence === sentence);
   const attached = list.some((leaf) => leaf.family_id === "leading-unit");
   const global: Node[] = [];
@@ -575,6 +578,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       // "If a friendly X unit is …, that unit's …": a per-recipient condition (compile-antecedent.ts)
       // is about the units of its own sentence's effect, so it gates only that sentence.
       else if (leaf.role === "CONDITION" && perRecipient && effectSentences.has(sentence) && Object.values(leaf.parameters).includes("recipient")) {
+        sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
+      }
+      else if (leaf.role === "CONDITION" && firstGateIsOwn && sentence === firstSentence && leading && leaf.family_id !== "roll-result" && !(leaf.family_id === "target-is-selected" && !namesSelection(leaf))) {
         sentenceGates.set(sentence, [...(sentenceGates.get(sentence) ?? []), condition(leaf)]);
       }
       else if (leaf.role === "CONDITION") scope(leaf.family_id === "target-is-selected" && !namesSelection(leaf) ? "selected" : leaf.family_id === "roll-result" ? rollMarker(leaf) : condition(leaf));

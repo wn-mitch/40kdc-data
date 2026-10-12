@@ -34,3 +34,13 @@ export function inheritAttackFrame(
   const inherited = replaced.gate.filter((node) => frames.includes(JSON.stringify(node)));
   if (inherited.length > 0) replacement.gate = [...inherited, ...replacement.gate];
 }
+
+/**
+ * Whether a sentence after `sentence` holds an "instead" and a condition of its own before it ("If B, … instead"),
+ * so the replacement says on its own when it applies. A choice ("Or:") and a roll band are not such conditions.
+ */
+export function conditionedInsteadAfter(list: readonly CompileLeaf[], places: readonly Placement[], sentence: number): boolean {
+  return list.some((leaf, at) => leaf.family_id === "instead" && leaf.parameters.choice !== true && places[at]!.sentence > sentence
+    && list.some((other, from) => from < at && other.role === "CONDITION" && other.family_id !== "roll-result" && other.family_id !== "target-is-selected"
+      && places[from]!.sentence === places[at]!.sentence));
+}
