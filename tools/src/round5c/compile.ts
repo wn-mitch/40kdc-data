@@ -22,6 +22,7 @@ import { bulletBreaks, ordered, placements, rawSentences, shapeSignature } from 
 import { otherwiseElse, refuseOtherwiseGates } from "./compile-otherwise.js";
 import { bindDurations, CONFLICTING_DURATIONS, durationPart, NO_ROLL_AFTER_ADVANCE, NO_ROLL_PLUS_SIX, placeInWindow, refuseTestAfterMark } from "./compile-durations.js";
 import { isRollMarker, resolveRolls, rollMarker } from "./compile-dice.js";
+import { inheritClauseBands } from "./compile-clause-band.js";
 import { isContainerOpener, planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
 import { designation, selectionHasFilter, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle, WRAP_CONDITION_FAMILIES } from "./compile-wrappers.js";
@@ -628,6 +629,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       } else if (leaf.role !== "EFFECT") throw new CompileError(`Role ${leaf.role} cannot compile.`);
     });
   });
+  // A result band decides the later clauses of its sentence too ("on a 5+, X and must Y"), compile-clause-band.ts.
+  inheritClauseBands(clauseGates, places, new Set(list.flatMap((leaf, at) => leaf.family_id === "fight-on-death" ? [places[at]!.sentence] : [])));
 
   // "a model in that unit makes an attack": the aura's recipient, else the selected unit, else the
   // unit of the moment the ability fires on, else this unit (a led unit).
@@ -774,7 +777,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       const defaultSentence = before.length > 0 ? Math.max(...before.map((item) => places[item.index]!.sentence)) : null;
       const defaults = before.filter((item) => places[item.index]!.sentence === defaultSentence);
       const families = new Set(group.map((item) => item.leaf.family_id));
-      const alternative = allOf(replacement.gate);
+      const alternative = allOf(replacement.gate.filter((node) => !isRollMarker(node)));
       if (defaults.length === 0 || defaults.some((item) => !families.has(item.leaf.family_id))) {
         errors.push(`"Instead" over ${group.length} effects needs the sentence before it to hold the effects it replaces.`);
         continue;
@@ -868,9 +871,16 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       planned.splice(planned.indexOf(replacement), 1);
       continue;
     }
-    const alternative = allOf(replacement.gate);
+    const alternative = allOf(replacement.gate.filter((node) => !isRollMarker(node)));
     if (!alternative) {
       errors.push(`"Instead" needs a condition in its clause saying when ${replacement.leaf.family_id} is replaced.`);
+      continue;
+    }
+    // A change to a test someone else takes ("each enemy unit must take a test, subtracting 1 (or 2 if this unit is …)"):
+    // the replacement's condition must name that taker, not this unit, or it would test the wrong unit.
+    if (typeof replaced.leaf.parameters.test_taker === "string" && list.some((leaf, at) => leaf.role === "CONDITION"
+      && places[at]!.clause === places[replacement.index]!.clause && ["this-unit", "this-model"].includes(String(leaf.parameters.subject)))) {
+      errors.push("\"Instead\" names this unit in a change to another unit's test; the replacement's condition must name that test's taker.");
       continue;
     }
     replaced.gate = [...replaced.gate, negate(alternative)];
@@ -999,7 +1009,11 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   }
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
   // mortal wounds, say); with it, every effect must be limited to those attacks.
-  if (selections.length === 1 && selected.length > 0 && selected.length !== planned.length) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
+  // An optional spend before a designated selection is lifted out of its body (see designatedSpends below); one after it is not.
+  const unlimitedItem = (item: PlannedEffect) => !optionalSpends.has(item.leaf);
+  const designatedSpends = selections.length === 1 && selected.length > 0 ? planned.filter((item) => optionalSpends.has(item.leaf) && item.leaf.start_byte < selections[0]!.start_byte) : [];
+  if (selections.length === 1 && selected.length > 0 && (selected.filter(unlimitedItem).length !== planned.filter(unlimitedItem).length
+    || planned.some((item) => optionalSpends.has(item.leaf) && !designatedSpends.includes(item)))) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
   // "Select one enemy X unit" with the bearer's attacks not aimed at it: the filter would narrow the
@@ -1057,8 +1071,9 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       if (place !== "same") item.node = durationPart(bound!, item.node);
     }
   }
+  const pieceItems = planned.filter((item) => !designatedSpends.includes(item));
   const pieces = [0, ...partStarts.map((_, position) => position + 1)].map((part) => attempt(() => resolveRolls(
-    planned.filter((item) => partOf(item.index) === part),
+    pieceItems.filter((item) => partOf(item.index) === part),
     part === 0 ? global : [],
     // A conditional change's condition is compiled here, where its roll is resolved (compile-dice.ts).
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
@@ -1082,7 +1097,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
   let windowHead: Node | null = null;
   if (window !== null) {
-    const inside = planned.filter((item) => partOf(item.index) === 0).map((item) => windowInside.get(item.index) === true);
+    const inside = pieceItems.filter((item) => partOf(item.index) === 0).map((item) => windowInside.get(item.index) === true);
     if (inside.length !== steps.length) { errors.push("A window's effects have no decided order yet."); return { ok: false, signature, errors }; }
     const within = steps.filter((_, at) => inside[at]);
     if (within.length === 0) { errors.push("A moment with a window has no effect inside the window."); return { ok: false, signature, errors }; }
@@ -1115,6 +1130,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const attackGates = global.filter((node) => node.type === "attack-is" || isAttackerGate(node));
     if (attackGates.length) global.splice(0, global.length, ...global.filter((node) => !attackGates.includes(node)));
     body = attempt(() => designation(selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit));
+    // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
+    if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }
   // "Select one enemy unit to be this model's prey": a persistent designation makes that selection itself.
   // A designation's own select, possibly wrapped optional, is the body's, not a select around it.

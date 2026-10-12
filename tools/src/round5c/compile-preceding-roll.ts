@@ -136,9 +136,18 @@ export function trailingTestCondition(leaves: readonly CompileLeaf[], change: nu
  */
 function bindTestTakers(leaves: readonly CompileLeaf[]): readonly CompileLeaf[] {
   return leaves.map((leaf, index) => {
-    // Past the conditions on the change ("if that enemy unit is Battle-shocked, subtract 1 …").
+    // Past the conditions on the change ("if that enemy unit is Battle-shocked, subtract 1 …"). Past an "instead"
+    // and the change it replaces too ("subtracting 1 from that test (or subtracting 2 …)"): the replacement has
+    // the same test as the change it replaces.
     let at = index - 1;
-    while (leaves[at]?.role === "CONDITION" && leaves[at]!.fragment === leaf.fragment) at -= 1;
+    let replacing = false;
+    while (leaves[at] !== undefined && leaves[at]!.fragment === leaf.fragment) {
+      const above = leaves[at]!;
+      if (above.role === "CONDITION") at -= 1;
+      else if (above.family_id === "instead") { replacing = true; at -= 1; }
+      else if (replacing && above.family_id === "roll-modifier") at -= 1;
+      else break;
+    }
     const test = leaves[at];
     if (leaf.family_id !== "roll-modifier" || test?.family_id !== "test" || test.fragment !== leaf.fragment) return leaf;
     const roll = leaf.parameters.roll === "preceding" ? test.parameters.test : leaf.parameters.roll;
@@ -160,6 +169,9 @@ function foldTestModifiers(leaves: readonly CompileLeaf[], sourceText: string | 
   leaves.forEach((leaf, index) => {
     const test = out.at(-1);
     const value = leaf.parameters.value;
+    // A change that an "instead" later in its fragment replaces (compile-preceding-roll.ts replacedByInstead) stays a
+    // roll-modifier leaf, so the replacement has the change to replace.
+    if (replacedByInstead(leaves, index)) { out.push(leaf); return; }
     // A change with a condition trailing it ("subtracting 1 from that test if X") stays a leaf: compile.ts
     // attaches the condition to the change, so the test is not made unconditional by it.
     const trailing = trailingTestCondition(leaves, index, sourceText);
@@ -175,6 +187,24 @@ function foldTestModifiers(leaves: readonly CompileLeaf[], sourceText: string | 
     out.push(leaf);
   });
   return out;
+}
+
+/**
+ * Whether an "instead" later in the change's fragment replaces it: the next roll-modifier after the
+ * "instead" is a change to the same roll ("subtracting 1 from that test (or subtracting 2 if …)").
+ */
+export function replacedByInstead(leaves: readonly CompileLeaf[], change: number): boolean {
+  const leaf = leaves[change];
+  if (leaf?.family_id !== "roll-modifier") return false;
+  for (let at = change + 1; at < leaves.length; at += 1) {
+    const other = leaves[at]!;
+    if (other.fragment !== leaf.fragment) return false;
+    if (other.family_id === "instead") {
+      const replacement = leaves.slice(at + 1).find((item) => item.fragment === leaf.fragment && item.role !== "CONDITION");
+      return replacement?.family_id === "roll-modifier" && replacement.parameters.roll === leaf.parameters.roll;
+    }
+  }
+  return false;
 }
 
 type Node = Record<string, unknown>;
@@ -210,7 +240,10 @@ export function foldConditionalTestModifiers(node: Node): Node {
       const outer = gated ? [gated.condition as Node] : [];
       const both = (side: Node): Node => outer.length === 0 ? side : { operator: "and", operands: [...outer, side] };
       steps[steps.length - 1] = { type: "conditional", condition: both(step.condition as Node), effect: { ...test, modifier: { ...testModifier, modifier: value } } };
-      steps.push({ type: "conditional", condition: both({ operator: "not", operands: [step.condition] }), effect: test });
+      // The other side of this change is the test as taken unless the earlier split already took the other alternative
+      // ("subtracting 1 …, or subtracting 2 if X": the earlier side is "not X", so this change's other side is never taken).
+      const complementary = gated !== undefined && JSON.stringify(gated.condition) === JSON.stringify({ operator: "not", operands: [{ operator: "not", operands: [step.condition] }] });
+      if (!complementary) steps.push({ type: "conditional", condition: both({ operator: "not", operands: [step.condition] }), effect: test });
     }
     return steps.length === 1 ? steps[0]! : { ...node, steps };
   }
