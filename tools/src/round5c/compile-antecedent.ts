@@ -5,6 +5,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { awaitsFollowingFilter } from "./family-extensions-11.js";
 import { destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
 import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
+import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 import { placements } from "./compile-placement.js";
 
@@ -86,7 +87,7 @@ export function bareFilter(leaves: readonly CompileLeaf[], index: number): boole
   // "If your army includes a X unit, friendly Y units …": the filter before this one is the army-includes
   // condition's own following filter, so this filter still stands alone.
   const conditionsFilter = before?.family_id === "unit-filter" && leaves[at - 2]?.family_id === "army-includes" && leaves[at - 2]!.fragment === leaf.fragment;
-  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter));
+  const anchored = before !== undefined && before.fragment === leaf.fragment && (FILTER_ANCHORS.has(before.family_id) || (before.family_id === "unit-filter" && !gateFilter(leaves, at - 1) && !conditionsFilter && !claimedByEmbarkedState(leaves, at, leaf.fragment)));
   return !anchored || filter.parameters.member_of !== undefined;
 }
 

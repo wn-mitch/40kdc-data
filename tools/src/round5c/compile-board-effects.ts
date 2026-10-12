@@ -21,6 +21,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.counts_as_move !== undefined) modifier.counts_as_move = closed(leaf, "counts_as_move");
       // Folded from "as if it were your Movement phase" after the move (compile-as-if.ts).
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
+      // Version 6: the disembark mode ("an assault disembark move").
+      if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
       return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-distance":

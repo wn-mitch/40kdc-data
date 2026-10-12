@@ -1241,6 +1241,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const selectionPart = partStarts.length && selections.length === 1 ? partOf(list.indexOf(selections[0]!)) : null;
   // The selection's eligibility: each condition on the selected unit, read by the select that wraps it (below).
   const eligibility = eligibilityIndexes.length ? attempt(() => allOf(eligibilityIndexes.map((at) => condition(eligibilityLeaf(list[at]!))))) : null;
+  // A condition the selection cannot say is a refusal, not an eligibility left off the selection.
+  if (eligibilityIndexes.length && eligibility === null) return { ok: false, signature, errors };
   if (selectionPart !== null && selectionPart > 0) {
     const own = pieces[selectionPart]!;
     // A designated selection takes its eligibility in designation() below, so the part's select takes it only otherwise.

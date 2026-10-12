@@ -10,7 +10,7 @@ import { dslAlternative, type FilterAlternative, normalizeAlternatives, singleKe
 
 type FilterParameters = {
   side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean;
-  level?: string; held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[];
+  level?: string; held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; embarked_in?: string;
 };
 
 const sorted = (list: readonly string[] | undefined) => [...(list ?? [])].sort();
@@ -36,6 +36,8 @@ export function alternativeFilter(filters: readonly CompileLeaf[]): CompileLeaf 
   if (!same((p) => p.held_in) || !same((p) => p.visible === true) || !same((p) => p.other === true)) fail("differ in where a unit is held, visibility or \"other\"");
   if (!same((p) => sorted(p.excluded_all_keywords)) || !same((p) => sorted(p.excluded_abilities))) fail("exclude different keyword sets or abilities");
   if (!same((p) => sorted(p.abilities))) fail("require different abilities");
+  // The merged filter carries no Transport; units embarked within a unit cannot be one of several alternatives.
+  if (params.some((p) => p.embarked_in !== undefined)) fail("name units embarked within a unit");
   if (params.some((p) => p.any_keywords?.length || p.alternatives?.length)) fail("already hold alternatives of their own");
   const common = {
     keywords: shared(params.map((p) => p.keywords)),

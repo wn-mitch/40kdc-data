@@ -11,6 +11,7 @@ import { MATCHED_UNITS } from "./family-extensions-16-those-enemy-units-role.js"
 import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
+import { claimedByEmbarkedState, embarkedStateBefore, foldEmbarkedExclusion } from "./compile-embarked-exclusion.js";
 import { foldSelectExclusions } from "./compile-select-exclusions.js";
 import { foldTriggeringDestruction, isTriggeringDestruction } from "./compile-triggering-destruction.js";
 import { attackFrameRolls, defenderCompareAfter, foldAttackFrame, subjectlessRoll, targetFrameBefore } from "./compile-attack-frame.js";
@@ -99,6 +100,8 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(p.member_of !== undefined ? { member_of: p.member_of } : {}),
     // "that Leader unit" (unit-filter@13 attached_to): units that are part of this unit and have the Leader ability.
     ...(filter.parameters.attached_to !== undefined ? attachedLeaders(filter) : {}),
+    // "units embarked within this unit" (unit-filter@13): the Transport the units are embarked within.
+    ...(filter.parameters.embarked_in !== undefined ? { embarked_in: filter.parameters.embarked_in } : {}),
     // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
     ...(p.designated !== undefined ? { designated: p.designated } : {}),
     ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
@@ -160,6 +163,7 @@ function filterOf(filter: CompileLeaf): Record<string, unknown> {
   if (rest.designated !== undefined || rest.not_designated !== undefined) throw new CompileError("A unit-filter naming units by a designation has no selection or aura shape yet.");
   if (rest.member_of !== undefined) throw new CompileError("A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.");
   if (rest.attached_to !== undefined) throw new CompileError("A unit-filter for attached Leaders has no selection, aura or Stratagem target shape yet.");
+  if (rest.embarked_in !== undefined) throw new CompileError("A unit-filter naming units embarked within a unit has no selection, aura or Stratagem target shape yet.");
   if (heldIn === undefined) return rest;
   const held = HELD_STATES[String(heldIn)];
   if (held === undefined) throw new CompileError(`A unit held in ${String(heldIn)} has no DSL unit-state.`);
@@ -182,7 +186,7 @@ function reach(out: CompileLeaf[], range: CompileLeaf | undefined): boolean {
 
 type FilterParameters = {
   among?: string; side?: string; keywords?: string[]; any_keywords?: string[]; excluded_keywords?: string[]; states?: string[]; visible?: boolean; other?: boolean; level?: string;
-  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string;
+  held_in?: string; abilities?: string[]; excluded_abilities?: string[]; excluded_all_keywords?: string[]; alternatives?: FilterAlternative[]; datasheets?: string[]; designated?: string; designated_by?: string; embarked_in?: string;
 };
 
 const union = (left: string[] | undefined, right: string[] | undefined) => [...new Set([...(left ?? []), ...(right ?? [])])].sort();
@@ -206,6 +210,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if ([a.any_keywords, b.any_keywords, a.alternatives, b.alternatives].filter((list) => list?.length).length > 1) return null;
   if (a.excluded_all_keywords !== undefined && b.excluded_all_keywords !== undefined && JSON.stringify(a.excluded_all_keywords) !== JSON.stringify(b.excluded_all_keywords)) return null;
   if (a.datasheets !== undefined && b.datasheets !== undefined) return null;
+  // Units embarked within different Transports are different sets; one filter names one Transport.
+  if (a.embarked_in !== undefined && b.embarked_in !== undefined && a.embarked_in !== b.embarked_in) return null;
   const parameters: Record<string, unknown> = { side: [...sides][0] ?? "any" };
   const keywords = union(a.keywords, b.keywords);
   const excluded = union(a.excluded_keywords, b.excluded_keywords);
@@ -239,6 +245,8 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   const memberB = (b as { member_of?: string }).member_of;
   if (memberA !== undefined && memberB !== undefined && memberA !== memberB) return null;
   if ((memberA ?? memberB) !== undefined) parameters.member_of = memberA ?? memberB;
+  const embarkedIn = a.embarked_in ?? b.embarked_in;
+  if (embarkedIn !== undefined) parameters.embarked_in = embarkedIn;
   // "Bondsman-affected" from one filter and a unit from the other: the designation and its applier go together.
   if (a.designated !== undefined && b.designated !== undefined && a.designated !== b.designated) return null;
   if (a.designated_by !== undefined && b.designated_by !== undefined && a.designated_by !== b.designated_by) return null;
@@ -301,6 +309,8 @@ export function mergeStackedFilters(list: readonly CompileLeaf[], sourceText?: s
       // Two target filters with an "or" (or "Alternatively") between them and no stratagem-target leaf
       // name a second mode the compiler cannot place; joined by no connective they would merge into one target.
       if (sourceText !== undefined && leaf.fragment === "TARGET") refuseUnnamedMode(sourceText, group.filter, candidate!, list);
+      // "Transport unit" + "BATTLELINE unit" + "embarked within it": the second filter is the unit the state is about, not the Transport's own.
+      if (claimedByEmbarkedState(list, next, leaf.fragment)) break;
       const combined = mergedFilter(group.filter, candidate!);
       if (combined === null) break;
       // The merged filter's wording runs to the last filter it took in ("(excluding X)" included).
@@ -404,6 +414,11 @@ export function foldUnitFilters(input0: readonly CompileLeaf[], sourceText?: str
       if (frame?.family_id !== "attack" || frame.parameters.attacker_filter !== undefined) throw new CompileError("An attack exclusion needs an attack frame right before it with no attacker of its own.");
       if (leaf.parameters.side === "any") throw new CompileError("A unit-filter whose units receive an effect must say friendly or enemy.");
       out[out.length - 1] = { ...frame, parameters: { ...frame.parameters, attacker_filter: attackerFilter(leaf, frame) } };
+      continue;
+    }
+    if (isFilter(leaf) && embarkedStateBefore(out.at(-1), leaf)) {
+      // "TORMENTORS units embarked within it" + "(excluding Battle-shocked units)": the exclusion narrows the embarked units.
+      out[out.length - 1] = foldEmbarkedExclusion(out.at(-1)!, leaf, dslUnitFilter(leaf));
       continue;
     }
     if (leaf.family_id === "move-end-nearest" && destinationOf(leaf) === "following-filter") {

@@ -266,6 +266,12 @@ function withFilter(node: unknown, filter: Node): unknown {
   return node;
 }
 
+/** A unit-state "embarked within <Transport>": the one state embarked, with the Transport named. */
+function isEmbarkedWithin(leaf: CompileLeaf): boolean {
+  const states = leaf.parameters.states;
+  return Array.isArray(states) && states.length === 1 && states[0] === "embarked" && leaf.parameters.with !== undefined;
+}
+
 export function condition(leaf: CompileLeaf): Node {
   // "While an enemy unit is within Engagement Range of this unit": the units of the folded filter
   // (compile-unit-filters.ts), as the DSL's "any unit that …" filter in place of a fixed role.
@@ -273,8 +279,12 @@ export function condition(leaf: CompileLeaf): Node {
     const filter = leaf.parameters.subject_filter as Node | undefined;
     if (filter === undefined) throw new CompileError(`${leaf.family_id} names the units of a unit-filter, but none sits right before it.`);
     const { subject_filter: _filter, ...rest } = leaf.parameters;
-    const parameters = Object.fromEntries(Object.entries(rest).map(([key, value]) => [key, value === "filtered-units" ? FILTER_STAND_IN : value]));
-    return withFilter(condition({ ...leaf, parameters }), filter) as Node;
+    // Version 16: "a BIG MEK model is embarked within this unit" is that filter's units, embarked within the named Transport.
+    const withTransport = leaf.family_id === "unit-state" && isEmbarkedWithin(leaf);
+    const { with: transport, ...withoutTransport } = rest;
+    const parameters = Object.fromEntries(Object.entries(withTransport ? withoutTransport : rest).map(([key, value]) => [key, value === "filtered-units" ? FILTER_STAND_IN : value]));
+    if (withTransport && filter.embarked_in !== undefined && filter.embarked_in !== transport) throw new CompileError("A unit-filter embarked within one unit and a state embarked within another name different Transports; one DSL filter holds one.");
+    return withFilter(condition({ ...leaf, parameters }), withTransport ? { ...filter, embarked_in: transport } : filter) as Node;
   }
   // Alternatives folded by compile-alternative-conditions.ts: any one of them, each its own conditions together.
   if (leaf.family_id === "__any-of") {
@@ -330,6 +340,7 @@ export function condition(leaf: CompileLeaf): Node {
         if (leaf.parameters.at !== undefined && (STRENGTH_STATES[state] || state === "carrying-units" || state === "embarked")) throw new CompileError(`unit-state ${state} has no DSL form for an earlier point (at).`);
         if (STRENGTH_STATES[state]) return pred("strength", { below: STRENGTH_STATES[state] }, subject);
         // Version 13: the subject is embarked within some Transport (the state itself, not the units it carries).
+        if (state === "embarked" && leaf.parameters.with !== undefined) throw new CompileError("DSL_GAP: a named unit embarked within a named Transport has no DSL form; unit-state has no embarked-within reference.");
         if (state === "embarked") return pred("unit-state", { state: "embarked" }, subject);
         // Version 7: some unit is embarked within the subject (a Transport carries units).
         if (state === "carrying-units") return { type: "unit-state", parameters: { subject: { embarked_in: subject ?? "this-unit" }, state: "embarked" } };
