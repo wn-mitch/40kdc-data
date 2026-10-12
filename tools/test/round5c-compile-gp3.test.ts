@@ -6,18 +6,18 @@ import { currentFamilyVersion, familyRole } from "../src/round5c/contracts.js";
 // Fabricated wording only. The compiler reads the punctuation and joining words between leaves,
 // so each shape keeps the structure of a record with invented words.
 
-type Piece = [wording: string, family: string, parameters: Record<string, unknown>];
+type Piece = [wording: string, family: string, parameters: Record<string, unknown>, fragment?: string];
 
 /** Leaves at the byte offsets of their wording in `text`, in order. */
 function placed(text: string, pieces: Piece[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
-  return pieces.map(([wording, family, parameters]) => {
+  return pieces.map(([wording, family, parameters, fragment]) => {
     const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
     const version = currentFamilyVersion(family);
-    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
+    return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: fragment ?? "RAW_TEXT" };
   });
 }
 
@@ -330,5 +330,61 @@ describe("an instead after a suppressed rule trades it for the effects that foll
     const other = "This unit has +1 OC, but instead, re-roll the Hit roll and re-roll a Wound roll of 1.";
     const errors = errorsOf(other, [["This unit has +1 OC", "characteristic-modifier", stat("OC", 1)], pieces[1]!, pieces[3]!, pieces[4]!].map((piece, at): Piece => at === 1 ? ["instead", "instead", {}] : piece as Piece));
     expect(errors.join(" ")).toContain("Instead");
+  });
+});
+
+describe("a window beside a later moment, and a parenthetical's duration (compile-durations.ts, compile.ts)", () => {
+  const text = "Until the end of the phase, each time your unit makes a Normal move, you can ignore modifiers to its Move and, until the end of the turn, each time a model in your unit makes such a move, it can move through models (when doing so, such a model cannot end a Normal move within Engagement Range of them).";
+  const pieces: Piece[] = [
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
+    ["each time your unit makes a Normal move", "event", { kind: "move-ended", move_types: ["normal"] }],
+    ["you can", "optional-use", { who: "you" }],
+    ["ignore modifiers to its Move", "ignore-modifiers", { subject: "this-unit", what: "characteristics", stats: ["M"] }],
+    ["until the end of the turn", "duration", { endpoint: "end-of-turn" }],
+    ["each time a model in your unit makes such a move", "event", { kind: "move-ended", move_types: ["normal"] }],
+    ["it can move through models", "move-through", { subject: "antecedent", passthrough: "models" }],
+    ["cannot end a Normal move", "move-must-end", { match: "all", polarity: "cannot", move_types: ["normal"] }],
+    ["within Engagement Range of them", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }],
+  ];
+
+  it("keeps the window as the first moment's lifetime and the later moment's own duration", () => {
+    const steps = mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>;
+    expect(steps).toHaveLength(2);
+    expect(steps[0]).toMatchObject({ type: "ability-part", duration: "phase", trigger: { event: "move-ended" }, effect: { type: "ignore-modifiers" } });
+    expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "move-ended" } });
+  });
+
+  it("gives the parenthetical's move-end rule the turn duration of the clause it belongs to", () => {
+    const later = (mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>)[1]!;
+    const parts = later.effect.steps as Array<Record<string, any>>;
+    expect(parts.map((part) => part.duration)).toEqual(["turn", "turn"]);
+    expect(JSON.stringify(parts[1])).toContain("no_end_in_engagement");
+  });
+
+  it("keeps one ability-wide duration when the later moment prints none", () => {
+    const bare = text.replace("until the end of the turn, ", "");
+    const mechanics = mechanicsOf(bare, pieces.filter((piece) => piece[0] !== "until the end of the turn"));
+    expect(mechanics.scope.duration).toBe("phase");
+  });});
+
+describe("a Stratagem's RESTRICTIONS belong to its first part (compile.ts partOf)", () => {
+  const text = "At the start of the phase.\nIf it is a KEYA unit, it has +1 OC. When this unit is set up, it has +2 OC.\nIf a KEYB unit is targeted with this Stratagem, it has -1 M.";
+  const pieces: Piece[] = [
+    ["At the start of the phase", "event", { kind: "phase-start", phase: "any" }, "WHEN"],
+    ["If it is a KEYA unit", "unit-keyword", keyword("KEYA"), "EFFECT"],
+    ["it has +1 OC", "characteristic-modifier", stat("OC", 1), "EFFECT"],
+    ["When this unit is set up", "event", { kind: "set-up" }, "EFFECT"],
+    ["it has +2 OC", "characteristic-modifier", stat("OC", 2), "EFFECT"],
+    ["If a KEYB unit is targeted with this Stratagem", "unit-keyword", keyword("KEYB"), "RESTRICTIONS"],
+    ["it has -1 M", "characteristic-modifier", { ...stat("M", 1), operation: "subtract" }, "RESTRICTIONS"],
+  ];
+
+  it("applies the restriction with the entry moment, not inside the later moment", () => {
+    const steps = mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>;
+    expect(steps).toHaveLength(2);
+    expect(JSON.stringify(steps[0])).toContain('"operation":"subtract"');
+    expect(JSON.stringify(steps[0])).toContain("KEYB");
+    expect(JSON.stringify(steps[1])).not.toContain("KEYB");
+    expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "set-up" } });
   });
 });

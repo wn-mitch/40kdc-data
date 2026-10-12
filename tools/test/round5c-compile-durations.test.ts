@@ -214,7 +214,7 @@ describe("bound durations on fabricated sentences", () => {
     expect(result.ok ? [] : result.errors).toContain("Conflicting durations.");
   });
 
-  it("R6: a window in one part with a later moment (after an effect) refuses", () => {
+  it("R6: a window in one part with a later moment (after an effect) is two parts, each with its own duration", () => {
     const text = "Until the end of the phase, when your unit Advances, add 6 to Move, and when your unit ends an Advance, until the end of the turn, grant ASSAULT.";
     const leaves = placed(text,
       ["Until the end of the phase", "duration", DURATION_PHASE],
@@ -224,8 +224,10 @@ describe("bound durations on fabricated sentences", () => {
       ["until the end of the turn", "duration", DURATION_TURN],
       ["grant ASSAULT", "weapon-ability-grant", ASSAULT]);
     const result = compileLeaves(leaves, text);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? [] : result.errors).toContain("A moment with a window in a compound ability has no reading yet.");
+    expect(result.ok).toBe(true);
+    const steps = result.ok ? (result.mechanics.effect as unknown as { steps: Array<Record<string, any>> }).steps : [];
+    expect(steps[0]).toMatchObject({ type: "ability-part", duration: "phase", trigger: { event: "move-started" } });
+    expect(steps[1]).toMatchObject({ type: "ability-part", trigger: { event: "move-ended" }, effect: { type: "ability-part", duration: "turn" } });
   });
 
   it("R3: a set-up moment beside another moment, scoping a set-up effect, refuses", () => {

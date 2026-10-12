@@ -1,6 +1,7 @@
 import { duration } from "./compile-conditions.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import type { Placement } from "./compile-placement.js";
+import { exactSpan } from "./contracts.js";
 
 /**
  * Several printed durations in one ability: each planned effect takes the duration its own clause
@@ -32,17 +33,35 @@ export type DurationBinding = {
 };
 
 /**
+ * Whether a clause opens with a parenthesis in the source ("…, it can move through models (when doing so, such a
+ * model can …)"): the parenthetical goes on the clause before it, so it has the duration that clause has.
+ */
+function opensParenthetical(list: readonly CompileLeaf[], places: readonly Placement[], clause: number, sourceText: string | undefined): boolean {
+  if (sourceText === undefined) return false;
+  const first = list.findIndex((_, at) => places[at]!.clause === clause);
+  const previous = list[first - 1];
+  if (first < 1 || previous?.end_byte === undefined || previous.end_byte > list[first]!.start_byte || places[first - 1]!.sentence !== places[first]!.sentence) return false;
+  const gap = exactSpan(sourceText, previous.end_byte, list[first]!.start_byte);
+  return gap.includes("(") && !gap.includes(")") && !/[.;:]/u.test(gap);
+}
+
+/**
  * Binds each effect to the one DURATION leaf of its clause (B1), else of its sentence (B2).
  * Two in one clause, or two in a sentence with the clause having none, refuse: the leaves do not
  * say which duration the effect has. A duration in another sentence is not applied (B3).
  */
-export function bindDurations(list: readonly CompileLeaf[], places: readonly Placement[], durationAt: readonly number[], effectAt: readonly number[], momentAt: readonly number[]): DurationBinding {
+export function bindDurations(list: readonly CompileLeaf[], places: readonly Placement[], durationAt: readonly number[], effectAt: readonly number[], momentAt: readonly number[], sourceText?: string): DurationBinding {
   const effects = new Map<number, string>();
   const windows = new Map<number, string>();
   const fail = (): DurationBinding => ({ effects, windows, error: CONFLICTING_DURATIONS });
   for (const at of effectAt) {
     const { clause, sentence } = places[at]!;
-    const inClause = durationAt.filter((item) => places[item]!.clause === clause);
+    let inClause = durationAt.filter((item) => places[item]!.clause === clause);
+    // A parenthetical with no duration of its own has the duration of the clause it belongs to.
+    for (let before = clause; inClause.length === 0 && before > 0 && opensParenthetical(list, places, before, sourceText); ) {
+      before -= 1;
+      inClause = durationAt.filter((item) => places[item]!.clause === before);
+    }
     if (inClause.length > 1) return fail();
     const pick = inClause.length === 1 ? inClause : durationAt.filter((item) => places[item]!.sentence === sentence);
     if (pick.length > 1) return fail();

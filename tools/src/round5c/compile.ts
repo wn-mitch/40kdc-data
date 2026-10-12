@@ -93,7 +93,9 @@ export { CompileError, type CompileLeaf } from "./compile-fragments.js";
  *   the rules below apply inside each part.
  * - Binding. Conditions before the ability's first effect gate every effect. A condition
  *   before a later sentence's first effect gates that sentence; any other condition gates only
- *   the effects of its own clause, in either word order ("if X, add 1" or "add 1 if X").
+ *   the effects of its own clause, in either word order ("if X, add 1" or "add 1 if X"). An "If" that opens
+ *   its sentence gates that sentence only when a later sentence is independent of it (compile-instead-scope.ts
+ *   sentenceIfGates). The conditions before a roll gate every result band of it (compile-roll-gates.ts).
  * - Attacks. An attack leaf applies to the effects after it: melee or ranged gates them, the
  *   attacking model sets their target, and an attack that targets this unit moves hit, wound
  *   and damage modifiers onto the attacker.
@@ -709,7 +711,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   const split = fold === null && new Set(durations).size > 1;
   const firstEffectAt = list.findIndex((leaf) => leaf.role === "EFFECT");
   const leadingAt = [...new Set(triggerIndexes.filter((index) => firstEffectAt === -1 || index < firstEffectAt))];
-  const binding = split ? bindDurations(list, places, durationAt, planned.map((item) => item.index), leadingAt) : null;
+  const binding = split ? bindDurations(list, places, durationAt, planned.map((item) => item.index), leadingAt, sourceText) : null;
   if (binding?.error) errors.push(binding.error);
   const boundDuration = new Map<number, string>(binding?.effects ?? []);
   const windows = binding?.windows ?? new Map<number, string>();
@@ -769,6 +771,12 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
       const { sentence, clause } = places[rule.index]!;
       const at = planned.findIndex((item) => item.index > rule.index);
       const entry = { index: rule.index, leaf: list[rule.index]!, node: end.node, gate: [...(sentenceGates.get(sentence) ?? []), ...(clauseGates.get(clause) ?? [])], selected: selectedGlobally || selectedSentences.has(sentence) || selectedClauses.has(clause), replaces: false };
+      // The rule is an effect of its clause, so it takes that clause's duration like any planned effect.
+      if (split) {
+        const bound = bindDurations(list, places, durationAt, [rule.index], [], sourceText);
+        if (bound.error) errors.push(bound.error);
+        for (const [item, name] of bound.effects) boundDuration.set(item, name);
+      }
       if (at === -1) planned.push(entry); else planned.splice(at, 0, entry);
       continue;
     }
@@ -1102,7 +1110,6 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
     if (rolls.length || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
     if (usages.length) errors.push("A usage limit in an ability with several durations has no reading yet.");
-    if (window !== null && partStarts.length) errors.push("A moment with a window in a compound ability has no reading yet.");
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
   }
@@ -1114,7 +1121,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (!attackMoment && list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
   if (errors.length > 0) return { ok: false, signature, errors };
 
-  const partOf = (index: number) => partStarts.filter((part) => part.index < index).length;
+  // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
+  const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
   // lasts as long as the window is left bare (the window part carries it); a shorter one nests, a longer one is a sibling.
   const windowInside = new Map<number, boolean>();
@@ -1122,6 +1130,8 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     for (const item of planned) {
       const bound = boundDuration.get(item.index);
       if (window === null) { if (bound !== undefined) item.node = durationPart(bound, item.node); continue; }
+      // A later part has a moment of its own: its effects take their own duration as a part of theirs (the window is the first moment's).
+      if (partOf(item.index) > 0 && bound !== undefined) { windowInside.set(item.index, false); item.node = durationPart(bound, item.node); continue; }
       const place = attempt(() => placeInWindow(bound, window));
       if (place === null) return { ok: false, signature, errors };
       windowInside.set(item.index, place !== "outside");
@@ -1279,7 +1289,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (windowHead) { windowHead.trigger = entryTrigger; entryTrigger = null; }
   if (partStarts.length) {
     // The first part fires on the ability's leading moment, if it has one; each later part on its own.
-    const first = pieces[0]!;
+    const first = steps;
     const partSteps: Node[] = entryTrigger ? [{ type: "ability-part", trigger: entryTrigger, effect: body }] : first;
     // "The first time the bearer's unit destroys an enemy unit": a usage limit right before a later
     // part's moment, after an earlier effect, limits only that part.
