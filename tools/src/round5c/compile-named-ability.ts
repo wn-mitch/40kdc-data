@@ -8,6 +8,8 @@ import type { CoreCheck } from "./core-checks.js";
 import { abilityRollOf, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { ANTECEDENT } from "./antecedent-families.js";
+import { FILTERED_UNITS } from "./compile-antecedent.js";
+import { setUpWindow } from "./compile-history-values.js";
 
 type Node = Record<string, unknown>;
 
@@ -90,7 +92,10 @@ const BY_ABILITY_MOMENTS = new Set(["targets-selected", "move-ended", "move-star
 export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === "by-ability")) return [...list];
   const out: CompileLeaf[] = [];
-  for (const leaf of list) {
+  const consumed = new Set<number>();
+  for (let index = 0; index < list.length; index += 1) {
+    const leaf = list[index]!;
+    if (consumed.has(index)) continue;
     if (leaf.family_id !== "by-ability") {
       out.push(leaf);
       continue;
@@ -98,6 +103,15 @@ export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string)
     const between: CompileLeaf[] = [];
     while (out.length && out.at(-1)!.fragment === leaf.fragment && (out.at(-1)!.family_id === "unit-filter" || out.at(-1)!.family_id === "unit-owner")) between.unshift(out.pop()!);
     const moment = out.at(-1);
+    // "set up using the Foo ability of a X model": a set-up activity is a host too (viaAbility).
+    if (moment?.family_id === "unit-activity" && moment.fragment === leaf.fragment && setUpWindow(moment) !== undefined && sameSentence(sourceText, moment.end_byte, leaf.start_byte)) {
+      if (moment.parameters.via_ability !== undefined) throw new CompileError(`by-ability at byte ${leaf.start_byte} names an ability for a set-up that already names one.`);
+      const folded = viaAbility(moment, leaf, between, list, index, sourceText);
+      out[out.length - 1] = folded.host;
+      out.push(...folded.keep);
+      if (folded.following !== undefined) consumed.add(folded.following);
+      continue;
+    }
     if (moment?.family_id !== "event" || moment.fragment !== leaf.fragment || !BY_ABILITY_MOMENTS.has(String(moment.parameters.kind))
       || !sameSentence(sourceText, moment.end_byte, leaf.start_byte)) {
       throw new CompileError(`by-ability at byte ${leaf.start_byte} names the ability a moment happened through, but no move, selection, set-up or targeting sits before it in its clause.`);
@@ -120,6 +134,44 @@ export function foldByAbility(list: readonly CompileLeaf[], sourceText?: string)
     out[out.length - 1] = { ...moment, parameters: { ...moment.parameters, by_ability: id } };
   }
   return out;
+}
+
+/**
+ * The unit-filter that names whose ability a set-up went through: a friendly or enemy side and
+ * keywords (and optionally model level), as the unit-filter of a targeting's selecting ability.
+ */
+function viaFilter(filter: CompileLeaf): Node {
+  const { side, keywords, ...extra } = filter.parameters as { side: string; keywords?: string[] } & Node;
+  const { level, ...other } = extra;
+  if (side !== "friendly" && side !== "enemy") throw new CompileError("The unit whose ability set this unit up must be friendly or enemy.");
+  if (!keywords?.length || Object.keys(other).length || (level !== undefined && level !== "model")) {
+    throw new CompileError("The unit whose ability set this unit up is named only by its side, its keywords and optionally model level; the DSL holds nothing else.");
+  }
+  return { owner: side, all_of: [...keywords].sort(), ...(level === "model" ? { level } : {}) };
+}
+
+/**
+ * A set-up activity folded with the ability it went through: the unit-filter between the two, or the
+ * one right after the by-ability leaf, names whose ability. The filter leaf stays in the list when the
+ * leaf after it binds to it ("that started the turn on the battlefield"), as for a destruction.
+ */
+function viaAbility(host: CompileLeaf, leaf: CompileLeaf, between: readonly CompileLeaf[], list: readonly CompileLeaf[], index: number, sourceText?: string): { host: CompileLeaf; keep: CompileLeaf[]; following?: number } {
+  const filters = between.filter((item) => item.family_id === "unit-filter");
+  if (between.some((item) => item.family_id !== "unit-filter")) throw new CompileError("by-ability on a set-up takes the unit-filter of the unit whose ability it is; an owner leaf between them has no reading.");
+  const after = list[index + 1];
+  const trailing = after?.family_id === "unit-filter" && after.fragment === leaf.fragment && sameSentence(sourceText, leaf.end_byte, after.start_byte) ? index + 1 : undefined;
+  if (filters.length > 1 || (filters.length === 1 && trailing !== undefined)) throw new CompileError("by-ability on a set-up names the unit whose ability it is by one unit-filter, before or after it.");
+  const filter = filters[0] ?? (trailing === undefined ? undefined : list[trailing]!);
+  const bound = filter === undefined ? undefined : list[(trailing ?? index) + 1];
+  // The leaf after it binds to the filter's units when it holds an anaphor (bound later by bindAntecedents) or an already-bound reference.
+  const bindsIt = bound !== undefined && filter !== undefined && bound.fragment === leaf.fragment && sameSentence(sourceText, filter.end_byte, bound.start_byte) && Object.values(bound.parameters).some((value) => value === FILTERED_UNITS || value === ANTECEDENT);
+  const covered = [host, leaf, ...(filter ? [filter] : [])];
+  const via = { id: String(leaf.parameters.id), ...(filter ? { filter: viaFilter(filter) } : {}) };
+  return {
+    host: { ...host, end_byte: Math.max(...covered.map((item) => item.end_byte ?? item.start_byte)), parameters: { ...host.parameters, via_ability: via } },
+    keep: filter !== undefined && bindsIt && trailing === undefined ? [...between] : [],
+    ...(trailing !== undefined && !bindsIt ? { following: trailing } : {}),
+  };
 }
 
 /** The `happened` condition of an `ability-used` leaf: used in the window, or being used now. */
@@ -165,6 +217,9 @@ export function namedAbilityChecks(list: readonly CompileLeaf[]): CoreCheck[] {
       if (p.by_ability !== undefined) checks.push({ kind: "named-ability", parameters: { id: p.by_ability, activity: "ability", ...(typeof p.subject === "string" ? { subject: p.subject } : {}) } });
       return checks;
     }
+    // A set-up through a named ability: the ability is the other unit's, so the check names no subject.
+    const via = p.via_ability as { id: string } | undefined;
+    if (leaf.family_id === "unit-activity" && via !== undefined) return [{ kind: "named-ability", parameters: { id: via.id, activity: "ability" } }];
     if (leaf.family_id === "ability-used" && p.id !== undefined) return [{ kind: "named-ability", parameters: { id: p.id, activity: p.activity, subject: p.subject } }];
     // A roll of a named ability's own dice: the id must be an ability of the record's faction (or a core one).
     const rolled = abilityRollOf(leaf)?.of_ability;

@@ -18,6 +18,8 @@ describe("Round 5C leaf describer audit", () => {
       "resource-action": { unrendered: [], colliding: [], problems: 32 },
       // It folds into the used-manoeuvre moment before it, so on its own it has no DSL fragment.
       "manoeuvre-own-roll": { unrendered: [], colliding: [], problems: 1 },
+      // It folds into the windowed destruction or set-up activity before it (compile-history-window.ts), so on its own it has no DSL fragment.
+      "history-window": { unrendered: [], colliding: [], problems: 3 },
       // "but if it does" folds into the move-ended moment after it (compile-passthrough-used.ts), so on its own it has no DSL fragment.
       "move-passthrough-used": { unrendered: [], colliding: [], problems: 1 },
       // Phase-edge durations compile only for the five scope.duration values; the other six

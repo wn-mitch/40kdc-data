@@ -33,6 +33,7 @@ import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./family-exten
 import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./family-extensions-19-roll-prohibition.js";
 import { normalizeWeaponHasAbilityParameters, WEAPON_HAS_ABILITY_FAMILIES } from "./weapon-has-ability-family.js";
 import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
+import { HISTORY_WINDOW_FAMILIES, normalizeHistoryWindowParameters } from "./history-window-family.js";
 import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
 import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
 import { CHARACTERISTIC_AMOUNT_FAMILIES, normalizeCharacteristicAmountParameters } from "./characteristic-amount-families.js";
@@ -121,6 +122,7 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...ROLL_PROHIBITION_FAMILIES,
   ...WEAPON_HAS_ABILITY_FAMILIES,
   ...ARMY_INCLUDES_FAMILIES,
+  ...HISTORY_WINDOW_FAMILIES,
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
   ...GRANTED_FAMILIES,
@@ -214,6 +216,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeEquippedWeaponParameters(family, input)
     ?? normalizeNamedWargearParameters(family, input)
     ?? normalizeArmyIncludesParameters(family, input)
+    ?? normalizeHistoryWindowParameters(family, input)
     ?? normalizeEmbarkedPermissionParameters(family, input)
     ?? normalizeCountsAsMovedParameters(family, input)
     ?? normalizeOtherwiseParameters(family, input)

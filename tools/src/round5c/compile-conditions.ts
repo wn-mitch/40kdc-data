@@ -88,6 +88,13 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
   }),
   // "targets the enemy unit that just destroyed your unit": the subject destroyed the Stratagem's target (compile-triggering-destruction.ts guards the record).
   "destroyed-stratagem-target": (subject) => ({ event: "destroyed", object: "stratagem-target", filter: { by: subject ?? "this-unit" }, window: "battle" }),
+  // Wave 10: "lost a wound as a result of those attacks" (the attacks of the moment, by its subject).
+  "lost-wounds-to-triggering-attacks": (subject) => ({ event: "damage-allocated", object: subject ?? "this-unit", filter: { by: "event-subject" }, window: "event" }),
+  // Wave 10: "suffers mortal wounds as a result of this ability", and the models they destroy.
+  "suffered-mortal-wounds-from-this-ability": (subject) => ({ event: "damage-allocated", object: subject ?? "this-unit", filter: { attack_type: "mortal" }, window: "event" }),
+  "lost-models-to-own-mortal-wounds": (subject) => ({ event: "model-destroyed", object: { level: "model", member_of: subject ?? "this-unit" }, filter: { attack_type: "mortal" }, window: "event" }),
+  // Wave 10: "was charged this turn": the unit was the target of a declared charge.
+  "was-charged-this-turn": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "charge" }, window: "turn" }),
   // Past targeting: targeted by any unit's attacks this phase, and attacks the subject made at this unit.
   "targeted-by-attacks-this-phase": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "attack" }, window: "phase" }),
   "made-attacks-targeting-this-phase": (subject) => {
@@ -383,12 +390,17 @@ export function condition(leaf: CompileLeaf): Node {
       const activities = leaf.family_version >= 4 ? closed(leaf, "activities") as string[] : [String(closed(leaf, "activity"))];
       // Version 15: "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
       if (checkStratagemActivity(leaf, activities)) return polarity(leaf, stratagemTargetedAnyOf(leaf, subject));
-      return polarity(leaf, anyOf(activities.map((activity) => {
+      const own = anyOf(activities.map((activity) => {
         const history = HISTORY[activity];
         if (history) return { type: "happened", parameters: history(subject, leaf.parameters.attack_type as string | undefined) };
         const [event, filter, window] = ACTIVITIES[activity]!;
         return pred("happened", { event, ...(Object.keys(filter).length ? { filter: structuredClone(filter) } : {}), window }, subject);
-      })));
+      }));
+      // A set-up through a named ability (compile-named-ability.ts): the set-up, and a use of that ability aimed at this unit in the same window.
+      const via = leaf.parameters.via_ability as { id: string; filter?: Node } | undefined;
+      if (via === undefined) return polarity(leaf, own);
+      const used: Node = { type: "happened", parameters: { event: "used", subject: via.filter ?? { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "ability", id: via.id }, window: ACTIVITIES[activities[0]!]![2] } };
+      return polarity(leaf, { operator: "and", operands: [own, used] });
     }
     // "If you spent YP during this use", "if you spent no YP in that turn" (compile-optional-cost.ts).
     case "optional-cost-paid":

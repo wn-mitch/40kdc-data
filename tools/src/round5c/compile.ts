@@ -1,6 +1,8 @@
 import { exactSpan } from "./contracts.js";
 import { foldActivationPicks, retargetMenu } from "./compile-activation.js";
 import { AURA_RECIPIENT, bindAntecedents, momentNamesUnit } from "./compile-antecedent.js";
+import { refuseHistoryValueWithoutSource } from "./compile-history-values.js";
+import { foldHistoryWindow } from "./compile-history-window.js";
 import { checkAbilityUsedWindows, foldAuraMoments, foldByAbility, namedAbilityChecks } from "./compile-named-ability.js";
 import { foldObjectRange, foldStratagemTail } from "./compile-opponent-stratagem.js";
 import { foldManoeuvreOwnRoll, manoeuvreLookupFor } from "./compile-manoeuvre-own-roll.js";
@@ -362,7 +364,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // An antecedent frame takes its recipient and weapon type from the frame before it (bindFrameAntecedents).
     const weaponBound = bindFrameAntecedents(ordered(bindWeaponAntecedents(bindEarlierNamed(resolveAuthoredNames(leaves, sourceText, options.weapons, options.abilityId), options.weapons, options.abilityId))));
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
-    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldByAbility(foldAuraMoments(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
+    const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(ordered(weaponBound)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     const bound = foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(refs.leaves, sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText);
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
@@ -373,6 +375,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseSelectionAcrossMoment(list);
     refuseDistanceWithoutWeapon(list);
     refuseEmbarkDestination(list);
+    refuseHistoryValueWithoutSource(list);
     // "This ability can be used even if this unit is embarked": the designation before it may be chosen while embarked (compile-embarked-permission.ts).
     list = foldEmbarkedPermission(list);
     // A roll of a named ability's own dice needs that ability used in its clause before it (compile-ability-roll.ts).
