@@ -65,6 +65,12 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			return false
 		}
 	}
+	// Weapon-name gate: permissive when the context carries no weaponNames.
+	if wn, ok := w["weaponName"].(string); ok && ctx["weaponNames"] != nil {
+		if !containsAny(getList(ctx, "weaponNames"), wn) {
+			return false
+		}
+	}
 	return true
 }
 
@@ -88,6 +94,12 @@ type extraKw struct {
 }
 
 type fnpState struct{ threshold float64 }
+
+// rankedValue is a best-wins value with the rank of the source that set it.
+type rankedValue struct {
+	value float64
+	rank  int
+}
 type invState struct{ threshold float64 }
 
 type resolved struct {
@@ -104,6 +116,14 @@ type resolved struct {
 	damageReductionRank                         int
 	invulnerable                                *invState
 	invulnerableRank                            int
+	// critThresholds holds the lowest critical threshold per roll ("hit"/"wound").
+	critThresholds map[string]rankedValue
+	// ignoreModifiers holds the rank of the source per roll whose negative modifiers are ignored.
+	ignoreModifiers map[string]int
+	// skillMod sums WS/BS characteristic improvements.
+	skillMod map[string]float64
+	// saveCharacteristic is the ability-set Save; nil keeps the printed one.
+	saveCharacteristic *rankedValue
 }
 
 type contribAcc struct {
@@ -113,7 +133,12 @@ type contribAcc struct {
 
 // resolveBuffs collapses a flat buff stack into a resolved-modifiers read-out.
 func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
-	out := &resolved{rerolls: map[string]rerollEntry{}}
+	out := &resolved{
+		rerolls:         map[string]rerollEntry{},
+		critThresholds:  map[string]rankedValue{},
+		ignoreModifiers: map[string]int{},
+		skillMod:        map[string]float64{"WS": 0, "BS": 0},
+	}
 
 	var hitContribs, woundContribs []contribAcc
 	for _, bAny := range buffs {
@@ -197,11 +222,46 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				out.invulnerable = &invState{threshold}
 				out.invulnerableRank = rankOf(source)
 			}
+		case "crit-threshold":
+			roll := getStr(c, "roll")
+			cur, exists := out.critThresholds[roll]
+			if !exists || val < cur.value || (val == cur.value && rankOf(source) < cur.rank) {
+				out.critThresholds[roll] = rankedValue{val, rankOf(source)}
+			}
+		case "ignore-modifiers":
+			roll := getStr(c, "roll")
+			cur, exists := out.ignoreModifiers[roll]
+			if !exists || rankOf(source) < cur {
+				out.ignoreModifiers[roll] = rankOf(source)
+			}
+		case "skill-mod":
+			out.skillMod[getStr(c, "stat")] += val
+		case "save-characteristic":
+			sc := out.saveCharacteristic
+			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
+				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
+			}
 		}
 	}
-	out.hitMod = capModifier(hitContribs)
-	out.woundMod = capModifier(woundContribs)
+	_, ignoreHit := out.ignoreModifiers["hit"]
+	_, ignoreWound := out.ignoreModifiers["wound"]
+	out.hitMod = capModifier(keptContribs(hitContribs, ignoreHit))
+	out.woundMod = capModifier(keptContribs(woundContribs, ignoreWound))
 	return out
+}
+
+// keptContribs drops the negative modifiers of an ignored roll; its positive ones still apply.
+func keptContribs(contribs []contribAcc, ignored bool) []contribAcc {
+	if !ignored {
+		return contribs
+	}
+	kept := make([]contribAcc, 0, len(contribs))
+	for _, c := range contribs {
+		if c.value > 0 {
+			kept = append(kept, c)
+		}
+	}
+	return kept
 }
 
 func capModifier(contribs []contribAcc) float64 {

@@ -72,7 +72,7 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
     }
 }
 
-/// Merge two applicabilities: `phases` intersect, roll type and keyword gates narrow.
+/// Merge two applicabilities: `phases` intersect; roll type, keyword and weapon-name gates narrow.
 pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
     let mut out = a.clone();
     if let Some(bp) = b.get("phases").and_then(Value::as_array) {
@@ -86,6 +86,7 @@ pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
         "rollType",
         "requiresTargetKeyword",
         "requiresAttackerKeyword",
+        "weaponName",
     ] {
         if let Some(v) = b
             .get(k)
@@ -162,6 +163,18 @@ fn describe_contribution(c: &Value) -> String {
         }
         "damage-reduction" => format!("-{} damage", fmt_num(js_number(Some(v)))),
         "invulnerable-save" => format!("{}+ invuln", fmt_num(js_number(c.get("threshold")))),
+        "crit-threshold" => format!(
+            "critical {} on {}+",
+            js_string(c.get("roll")),
+            fmt_num(js_number(Some(v)))
+        ),
+        "ignore-modifiers" => format!("ignore {} modifiers", js_string(c.get("roll"))),
+        "skill-mod" => format!(
+            "{} improved by {}",
+            js_string(c.get("stat")),
+            fmt_num(js_number(Some(v)))
+        ),
+        "save-characteristic" => format!("{}+ save", fmt_num(js_number(Some(v)))),
         _ => "cover".to_string(),
     }
 }

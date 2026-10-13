@@ -337,6 +337,7 @@ mod tests {
             army_faction: None,
             battle_size: None,
             attacker_guided: None,
+            weapon_names: None,
         }
     }
 

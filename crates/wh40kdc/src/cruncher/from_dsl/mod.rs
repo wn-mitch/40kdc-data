@@ -15,6 +15,7 @@
 
 mod applicability;
 mod conditions;
+mod damage_leaves;
 mod js;
 mod leaves;
 mod levers;
@@ -377,6 +378,9 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             levers::enumerate_named_options(node, opts, out, &group, 1);
         }
         Some("resource-action-menu") => levers::enumerate_menu_actions(node, opts, out),
+        Some("roll-result") => damage_leaves::roll_result(node, opts, out),
+        Some("ignore-modifiers") => damage_leaves::ignore_modifiers(node, opts, out),
+        Some("ability-grant") => damage_leaves::ability_grant(node, opts, out),
         _ => out.unsupported(
             format!(
                 "effect type \"{}\" is not modelled by the buff layer",

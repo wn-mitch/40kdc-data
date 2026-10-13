@@ -606,6 +606,323 @@
           "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve"
         ]
       }
+    },
+    {
+      "_comment": "Fabricated critical threshold on the unit's own hit rolls.",
+      "abilityId": "fabricated-crit-five",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-crit-five",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": 5
+        }
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "crit-threshold",
+            "roll": "hit",
+            "value": 5
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "_comment": "Fabricated fixed hit result: only a critical threshold is modelled.",
+      "abilityId": "fabricated-hits-on-five",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-hits-on-five",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "succeeds_on": 5
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "roll-result on \"hit\": only a critical threshold on hit or wound rolls is modelled"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated fixed Advance roll: off the damage path.",
+      "abilityId": "fabricated-advance-six",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-advance-six",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "advance",
+          "result": 6
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "roll-result on \"advance\" is outside the damage path"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated rule ignoring WS/BS and hit/wound modifiers: one lever per roll.",
+      "abilityId": "fabricated-ignore-modifiers",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-ignore-modifiers",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "characteristics",
+              "stats": [
+                "WS",
+                "BS"
+              ]
+            }
+          },
+          {
+            "type": "ignore-modifiers",
+            "target": "this-unit",
+            "modifier": {
+              "what": "rolls",
+              "rolls": [
+                "hit",
+                "wound"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "ignore-modifiers",
+            "roll": "hit"
+          },
+          {
+            "type": "ignore-modifiers",
+            "roll": "hit"
+          },
+          {
+            "type": "ignore-modifiers",
+            "roll": "wound"
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "_comment": "Fabricated BS and WS improvements on the unit's own attacks; a BS set has no delta.",
+      "abilityId": "fabricated-skill",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "BS",
+              "operation": "improve",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "WS",
+              "operation": "improve",
+              "value": 1,
+              "weapon_type": "melee"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "BS",
+              "operation": "set",
+              "value": 3
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "skill-mod",
+            "stat": "BS",
+            "value": 1
+          },
+          {
+            "type": "skill-mod",
+            "stat": "WS",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "stat-modifier BS: operation \"set\" not supported"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated weapon-named lifts: gated on the weapon's name rather than refused; a named Range lift is off the damage path.",
+      "abilityId": "fabricated-named-weapon",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-named-weapon",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "improve",
+              "value": 1,
+              "weapon_type": "melee",
+              "weapon_name": "fabricated blade"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "Range",
+              "operation": "add",
+              "value": 6,
+              "weapon_name": "fabricated gun"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "attacks-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "stat-modifier on \"Range\" is outside the damage path"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated defender-side rules seen from the attacker: Stealth, a set Save and a worsened incoming AP contribute nothing to the unit's own attacks.",
+      "abilityId": "fabricated-defences",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-defences",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 3
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "AP",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "M",
+              "operation": "set",
+              "value": 8
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "scouts",
+              "value": 6
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
+          "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target",
+          "stat-modifier on \"M\" is outside the damage path",
+          "effect type \"ability-grant\" is not modelled by the buff layer"
+        ]
+      }
     }
   ]
 }

@@ -109,6 +109,14 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     ctx: EngineContext = dict(input["context"])
     if ctx.get("targetKeywords") is None:
         ctx["targetKeywords"] = target_keywords
+    if ctx.get("weaponNames") is None:
+        # Lower-cased, de-duplicated weapon and profile names drive `applicableWhen.weaponName`.
+        names = [
+            n.lower()
+            for n in (weapon.get("name"), weapon_profile.get("name"))
+            if isinstance(n, str)
+        ]
+        ctx["weaponNames"] = list(dict.fromkeys(names))
 
     # Auto-inject weapon-keyword buffs from the attacker profile, then append
     # the caller-supplied stack. resolve_buffs deduplicates and ranks them.
@@ -158,9 +166,25 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     # save bonus, and it only applies to ranged attacks (ignored by ignores-cover
     # and irrelevant to auto-hitting Torrent weapons, which take no hit roll).
     ignores_cover = _find_keyword(resolved, "ignores-cover") is not None
-    covered = resolved["cover"]["active"] and not ignores_cover and not is_melee
+    # Ignoring hit modifiers also ignores the cover penalty.
+    covered = (
+        resolved["cover"]["active"]
+        and not ignores_cover
+        and not is_melee
+        and "hit" not in resolved["ignoreModifiers"]
+    )
     cover_hit_penalty = -1 if covered else 0
-    hit_stat = stats.get("WS") if is_melee else stats.get("BS")
+    printed_hit_stat = stats.get("WS") if is_melee else stats.get("BS")
+    # A WS/BS improvement changes the characteristic itself, floored at 2+.
+    skill_mod = resolved["skillMod"]["WS" if is_melee else "BS"]["value"]
+    hit_stat = (
+        max(2, printed_hit_stat - skill_mod)
+        if isinstance(printed_hit_stat, (int, float))
+        and not isinstance(printed_hit_stat, bool)
+        and skill_mod != 0
+        else printed_hit_stat
+    )
+    crit_hit_threshold = min(6, (resolved["critThresholds"].get("hit") or {}).get("value", 6))
     torrent = _find_keyword(resolved, "torrent") is not None
     if torrent:
         hits = attacks
@@ -179,15 +203,17 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             reroll=(resolved["rerolls"].get("hit") or {}).get("subset", "none"),
             auto_fail_on_one=True,
             auto_pass_on_six=True,
-            crit_threshold=6,
+            crit_threshold=crit_hit_threshold,
         )
         hits = attacks * probs[0]
         crit_hits = attacks * probs[1]
         reroll_label = (resolved["rerolls"].get("hit") or {}).get("subset", "none")
         cover_text = ", cover -1" if covered else ""
+        crit_text = f", crit {crit_hit_threshold}+" if crit_hit_threshold < 6 else ""
         hits_detail = (
             f"{'WS' if is_melee else 'BS'}{hit_stat}+ "
-            f"(mod {_signed(resolved['hitMod']['value'])}{cover_text}, reroll {reroll_label}) → "
+            f"(mod {_signed(resolved['hitMod']['value'])}{cover_text}, "
+            f"reroll {reroll_label}{crit_text}) → "
             f"P(hit)={probs[0]:.4f}, P(crit)={probs[1]:.4f}"
         )
     sustained = _find_keyword(resolved, "sustained-hits")
@@ -211,7 +237,9 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             threshold = _js_number(params.get("threshold"))
             if math.isfinite(threshold):
                 anti_threshold = threshold
-    crit_wound_threshold = min(6, anti_threshold)
+    crit_wound_threshold = min(
+        6, anti_threshold, (resolved["critThresholds"].get("wound") or {}).get("value", 6)
+    )
 
     has_lethal = _find_keyword(resolved, "lethal-hits") is not None
     hits_for_wound_roll = hits - crit_hits if has_lethal else hits
@@ -251,9 +279,12 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
 
     # 4. Saves
     ap_mod = resolved["apMod"]["value"]
-    ap = stats["AP"] + ap_mod
+    # Worsening AP stops at 0.
+    ap = min(0, stats["AP"] + ap_mod)
     save_mod = resolved["saveMod"]["value"]
-    armor_target_raw = unit_profile["Sv"] - ap - save_mod
+    save_characteristic = resolved["saveCharacteristic"]
+    sv = save_characteristic["value"] if save_characteristic is not None else unit_profile["Sv"]
+    armor_target_raw = sv - ap - save_mod
     # Cover is a hit penalty (11e), applied in the hits stage above — it no
     # longer touches the save here.
     armor_final = _clamp(armor_target_raw, 2, 7)
@@ -286,7 +317,8 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     )
     p_saved = 0.0 if effective_save_target >= 7 else save_probs[0]
     unsaved = regular_wounds_for_saves * (1 - p_saved)
-    detail_parts = [f"Sv{unit_profile['Sv']}+, AP{_signed(ap)}"]
+    set_text = " (set)" if sv != unit_profile["Sv"] else ""
+    detail_parts = [f"Sv{sv}+{set_text}, AP{_signed(ap)}"]
     if ap_mod != 0:
         detail_parts.append(f" (apmod {_signed(ap_mod)})")
     if save_mod != 0:

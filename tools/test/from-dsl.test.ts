@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { effectToBuffs, parseKeywordGrant } from "../src/cruncher/from-dsl.js";
-import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
+import { resolveBuffs, type BuffSource, type EngineContext } from "../src/cruncher/buffs.js";
 
 const armyRule: BuffSource = {
   kind: "ability",
@@ -352,14 +352,16 @@ describe("effectToBuffs: named-region-state", () => {
 describe("effectToBuffs: unhonorable narrowing filters fail safe", () => {
   // A weapon-name / model filter the cruncher can't resolve here must NOT apply
   // the buff unfiltered (silent over-apply); it surfaces as `unsupported`.
-  it("stat-modifier with weapon_name → unsupported, not applied", () => {
+  it("stat-modifier with weapon_name → applied, gated on that weapon's attacks", () => {
     const r = effectToBuffs(
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapon_name: "power fist" } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapon_name: "Power Fist" } },
       unitRule, { phase: "fight", attackerStationary: false },
     );
-    expect(r.applied).toEqual([]);
-    expect(r.unsupported).toHaveLength(1);
-    expect(r.unsupported[0].reason).toContain("weapon_name");
+    expect(r.unsupported).toEqual([]);
+    expect(r.applied).toEqual([{ source: unitRule, applicableWhen: { weaponName: "power fist" }, contribution: { type: "attacks-mod", value: 1 } }]);
+    const ctx = { phase: "fight" as const };
+    expect(resolveBuffs(r.applied, { ...ctx, weaponNames: ["power fist"] }).attacksMod.value).toBe(1);
+    expect(resolveBuffs(r.applied, { ...ctx, weaponNames: ["close combat weapon"] }).attacksMod.value).toBe(0);
   });
 
   it("roll-modifier with model_filter → unsupported", () => {
@@ -1331,7 +1333,11 @@ describe("effectToBuffs: AP stat-modifier", () => {
     );
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toHaveLength(1);
-    expect(result.unsupported[0].reason).toMatch(/defender-side AP reduction/);
+    expect(result.unsupported[0].reason).toMatch(/defender-side stat; applies when the buffed unit is the target/);
+    // The same rule worsens the AP of attacks against the buffed unit.
+    const asTarget = effectToBuffs({ type: "stat-modifier", target: "attacker", modifier: { stat: "AP", operation: "worsen", value: 1 } }, unitRule, ctx, "target");
+    expect(asTarget.unsupported).toEqual([]);
+    expect(asTarget.applied.map((buff) => buff.contribution)).toEqual([{ type: "ap-mod", value: 1 }]);
   });
 });
 

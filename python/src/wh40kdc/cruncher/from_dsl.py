@@ -20,6 +20,7 @@ from __future__ import annotations
 import math
 from typing import Any, TypeGuard
 
+from wh40kdc.cruncher import from_dsl_levers as _levers
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
 from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
@@ -378,6 +379,12 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # `usage.repeatable_if_different_unit`) can fire in the same phase,
         # so no shared `group`/`maxActivations` cap is attached here.
         _enumerate_menu_actions(node, source, opts, out)
+    elif node_type == "roll-result":
+        _levers.translate_roll_result(node, source, opts, out)
+    elif node_type == "ignore-modifiers":
+        _levers.translate_ignore_modifiers(node, source, opts, out)
+    elif node_type == "ability-grant":
+        _levers.translate_ability_grant(node, source, opts, out)
     else:
         # Unknown effect — record it. Covers ability-grant, deep-strike,
         # mortal-wounds, cp-gain, movement-modifier, etc.
@@ -478,7 +485,13 @@ def _translate_reroll(
         return
     if roll in ("hit", "wound", "save", "damage") and subset in ("ones", "all-failures"):
         out["applied"].append(
-            {"source": source, "contribution": {"type": "reroll", "roll": roll, "subset": subset}}
+            with_applicability(
+                {
+                    "source": source,
+                    "contribution": {"type": "reroll", "roll": roll, "subset": subset},
+                },
+                weapon_name_applicability(modifier),
+            )
         )
         return
     out["unsupported"].append(
@@ -562,7 +575,10 @@ def _translate_roll_modifier(
         )
         return
     out["applied"].append(
-        {"source": source, "contribution": {"type": contribution_type, "value": value}}
+        with_applicability(
+            {"source": source, "contribution": {"type": contribution_type, "value": value}},
+            weapon_name_applicability(modifier),
+        )
     )
 
 
@@ -589,31 +605,101 @@ def _translate_stat_modifier(
     stat = modifier.get("stat")
     is_on_buffed_unit = _applies_to_buffed_unit(node, opts["perspective"])
     # `attack_type: melee|ranged` scopes the mod to that attack — express it
-    # as a phase gate.
-    applicability = _attack_type_applicability(modifier)
+    # as a phase gate — and `weapon_name` to the attacks of that weapon.
+    applicability = combine_optional(
+        _attack_type_applicability(modifier), weapon_name_applicability(modifier)
+    )
 
     def emit(contribution: dict[str, Any]) -> None:
-        buff: Buff = {"source": source, "contribution": contribution}
-        if applicability:
-            buff = {**buff, "applicableWhen": applicability}
-        out["applied"].append(buff)
+        out["applied"].append(
+            with_applicability({"source": source, "contribution": contribution}, applicability)
+        )
 
     # AP has an inverted sign convention and offensive/defensive variants.
     if stat == "AP":
         _translate_ap_modifier(node, modifier, opts, out, emit)
         return
 
-    # Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
-    # (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
-    if stat == "BS":
-        if opts["perspective"] != "target" or _classify_target(node) != "attacker":
+    # WS/BS on the attacker is a defender-side rule: it penalises incoming hit rolls of that
+    # attack type (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective. On the
+    # buffed unit it changes the characteristic its own attacks hit on.
+    if stat in ("BS", "WS"):
+        phases = ["shooting" if stat == "BS" else "fight"]
+        if _classify_target(node) == "attacker":
+            if opts["perspective"] != "target":
+                return
+            skill = _signed_value(modifier)
+            if skill is not None:
+                out["applied"].append(
+                    {
+                        "source": source,
+                        "applicableWhen": {"phases": phases},
+                        "contribution": {"type": "hit-mod", "value": skill},
+                    }
+                )
             return
-        bs = _signed_value(modifier)
-        if bs is not None:
-            out["applied"].append(
-                {"source": source, "contribution": {"type": "hit-mod", "value": bs}}
+        if opts["perspective"] != "attacker" or not is_on_buffed_unit:
+            return
+        operation = modifier.get("operation")
+        # Only a numeric value sizes the change; a missing or null one is not read as 0.
+        raw = _numeric_value(modifier)
+        improvement = raw if operation == "improve" else -raw if operation == "worsen" else math.nan
+        if not math.isfinite(improvement):
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        f'stat-modifier {stat}: operation "{_js_str(operation)}" not supported'
+                    ),
+                    "effectFragment": node,
+                }
             )
+            return
+        emit({"type": "skill-mod", "stat": stat, "value": _intify(improvement + 0.0)})
         return
+
+    # Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off
+    # the damage path, and a set A/S/T has no single delta.
+    if modifier.get("operation") == "set":
+        if stat == "Sv":
+            if opts["perspective"] != "target":
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "stat-modifier Sv: defender-side stat; applies when the "
+                            "buffed unit is the target"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
+            save_value = _numeric_value(modifier)
+            if not is_on_buffed_unit:
+                return
+            if math.isfinite(save_value) and save_value.is_integer() and 2 <= save_value <= 6:
+                emit({"type": "save-characteristic", "value": int(save_value)})
+            elif math.isnan(save_value):
+                out["unsupported"].append(
+                    {"reason": "stat-modifier Sv: set has no numeric value", "effectFragment": node}
+                )
+            else:
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            f'stat-modifier Sv: set value "{_num_str(save_value)}" '
+                            "is not a save characteristic"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+            return
+        if stat not in ("A", "S", "T", "D"):
+            out["unsupported"].append(
+                {
+                    "reason": f'stat-modifier on "{_js_str(stat)}" is outside the damage path',
+                    "effectFragment": node,
+                }
+            )
+            return
 
     value = _signed_value(modifier)
     if value is None:
@@ -684,17 +770,33 @@ def _translate_ap_modifier(
     emit: Any,
 ) -> None:
     """AP stat-modifier: offensive (self/unit target) → attacker-side
-    ``ap-mod``; defensive (``target: "attacker"``) → unsupported."""
+    ``ap-mod``; defensive (``target: "attacker"``) → an ``ap-mod`` on incoming
+    attacks under the target perspective (the engine floors AP at 0)."""
     if _classify_target(node) == "attacker":
-        out["unsupported"].append(
-            {
-                "reason": (
-                    "stat-modifier AP on the attacker: defender-side AP reduction "
-                    "is not modelled by the buff layer"
-                ),
-                "effectFragment": node,
-            }
-        )
+        if opts["perspective"] != "target":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "stat-modifier AP on the attacker: defender-side stat; applies when "
+                        "the buffed unit is the target"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        incoming_delta = _ap_delta(modifier)
+        if incoming_delta is None:
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        f'stat-modifier AP: operation "{_js_str(modifier.get("operation"))}" '
+                        "not supported"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        emit({"type": "ap-mod", "value": incoming_delta})
         return
     if opts["perspective"] != "attacker" or not _applies_to_buffed_unit(node, "attacker"):
         return
@@ -853,11 +955,11 @@ def _attack_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | Non
     return None
 
 
-#: Narrowing keys that scope a buff to a named weapon or a model subset the
+#: Narrowing keys that scope a buff to a weapon or a model subset the
 #: cruncher can't resolve at translation time. Applying the buff unfiltered
 #: would silently OVER-APPLY it, so it surfaces as unsupported instead.
+#: ``weapon_name`` is not here: it gates on the attacking weapon's name.
 _UNHONORABLE_NARROWING = (
-    "weapon_name",
     "weapon_profile",
     "weapon_keyword",
     "weapon_ref",
@@ -872,6 +974,32 @@ def _unhonorable_narrowing(modifier: dict[str, Any]) -> str | None:
         if modifier.get(k) is not None:
             return k
     return None
+
+
+def _numeric_value(modifier: dict[str, Any]) -> float:
+    """``modifier.value`` when it is a number (JS ``typeof value === "number"``), else NaN."""
+    value = modifier.get("value")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return float(value)
+    return math.nan
+
+
+def weapon_name_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
+    """Gate a buff on the attacking weapon's (lower-cased) ``weapon_name``."""
+    name = modifier.get("weapon_name")
+    return {"weaponName": name.lower()} if isinstance(name, str) else None
+
+
+def combine_optional(a: dict[str, Any] | None, b: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Combine two optional applicabilities (TS ``combineOptional``)."""
+    if a and b:
+        return _combine_applicability(a, b)
+    return a if a is not None else b
+
+
+def with_applicability(buff: Buff, applicability: dict[str, Any] | None) -> Buff:
+    """Attach ``applicability`` to ``buff`` when present."""
+    return {**buff, "applicableWhen": applicability} if applicability else buff
 
 
 def _translate_damage_reduction(
@@ -1524,6 +1652,8 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["requiresTargetKeyword"] = b["requiresTargetKeyword"]
     if b.get("requiresAttackerKeyword"):
         out["requiresAttackerKeyword"] = b["requiresAttackerKeyword"]
+    if b.get("weaponName"):
+        out["weaponName"] = b["weaponName"]
     return out
 
 
@@ -1582,6 +1712,14 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"-{_num_str(c['value'])} damage"
     if ctype == "invulnerable-save":
         return f"{_num_str(c['threshold'])}+ invuln"
+    if ctype == "crit-threshold":
+        return f"critical {c['roll']} on {_num_str(c['value'])}+"
+    if ctype == "ignore-modifiers":
+        return f"ignore {c['roll']} modifiers"
+    if ctype == "skill-mod":
+        return f"{c['stat']} improved by {_num_str(c['value'])}"
+    if ctype == "save-characteristic":
+        return f"{_num_str(c['value'])}+ save"
     return "cover"
 
 

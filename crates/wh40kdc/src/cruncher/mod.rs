@@ -37,6 +37,7 @@
 //!         army_faction: None,
 //!         battle_size: None,
 //!         attacker_guided: None,
+//!         weapon_names: None,
 //!     },
 //! };
 //! let out = crunch(&input, None).expect("crunch succeeds");
@@ -48,6 +49,7 @@ pub mod buffs;
 pub mod engine;
 pub mod from_dsl;
 pub mod from_keyword;
+mod resolved;
 
 pub use attribution::{attribute_stages, AttributedStage, StageLift};
 pub use buffs::{

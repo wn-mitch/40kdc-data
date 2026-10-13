@@ -96,6 +96,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   const ctx: EngineContext = {
     ...input.context,
     targetKeywords: input.context.targetKeywords ?? targetKeywords,
+    weaponNames: input.context.weaponNames ?? [...new Set([input.attacker.weapon.name, weaponProfile.name].map((name) => name.toLowerCase()))],
   };
 
   // Auto-inject weapon-keyword buffs from the attacker profile, then append
@@ -129,10 +130,15 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   // save bonus. Ranged-only, negated by ignores-cover, and moot for auto-hitting
   // Torrent weapons (no hit roll).
   const ignoresCover = !!findKeyword(resolved, "ignores-cover");
+  // Ignoring hit modifiers also ignores the cover penalty.
   const covered =
-    resolved.cover.active && !ignoresCover && !isMelee;
+    resolved.cover.active && !ignoresCover && !isMelee && !resolved.ignoreModifiers.hit;
   const coverHitPenalty = covered ? -1 : 0;
-  const hitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  const printedHitStat = isMelee ? weaponProfile.stats.WS : weaponProfile.stats.BS;
+  // A WS/BS improvement changes the characteristic itself, floored at 2+.
+  const skillMod = resolved.skillMod[isMelee ? "WS" : "BS"].value;
+  const hitStat = typeof printedHitStat === "number" && skillMod !== 0 ? Math.max(2, printedHitStat - skillMod) : printedHitStat;
+  const critHitThreshold = Math.min(6, resolved.critThresholds.hit?.value ?? 6);
   const torrent = !!findKeyword(resolved, "torrent");
   let hits: number;
   let critHits: number;
@@ -153,11 +159,11 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
       reroll: resolved.rerolls.hit?.subset ?? "none",
       autoFailOnOne: true,
       autoPassOnSix: true,
-      critThreshold: 6,
+      critThreshold: critHitThreshold,
     });
     hits = attacks * probs.pass;
     critHits = attacks * probs.crit;
-    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
+    hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
   }
   const sustained = findKeyword(resolved, "sustained-hits");
   if (sustained) {
@@ -179,7 +185,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
       if (Number.isFinite(threshold)) antiThreshold = threshold;
     }
   }
-  const critWoundThreshold = Math.min(6, antiThreshold);
+  const critWoundThreshold = Math.min(6, antiThreshold, resolved.critThresholds.wound?.value ?? 6);
 
   const hasLethal = !!findKeyword(resolved, "lethal-hits");
   const hitsForWoundRoll = hasLethal ? hits - critHits : hits;
@@ -208,9 +214,11 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
 
   // 4. Saves
   const apMod = resolved.apMod.value;
-  const AP = weaponProfile.stats.AP + apMod;
+  // Worsening AP stops at 0.
+  const AP = Math.min(0, weaponProfile.stats.AP + apMod);
   const saveMod = resolved.saveMod.value;
-  const armorTargetRaw = unitProfile.Sv - AP - saveMod;
+  const Sv = resolved.saveCharacteristic?.value ?? unitProfile.Sv;
+  const armorTargetRaw = Sv - AP - saveMod;
   // Cover is a hit penalty (11e), applied in the hits stage above — it no
   // longer touches the save here.
   const armorFinal = clamp(armorTargetRaw, 2, 7);
@@ -242,7 +250,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
   stages.push({
     name: "unsaved",
     expected: unsaved,
-    detail: `Sv${unitProfile.Sv}+, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
+    detail: `Sv${Sv}+${Sv !== unitProfile.Sv ? " (set)" : ""}, AP${signed(AP)}${apMod !== 0 ? ` (apmod ${signed(apMod)})` : ""}${saveMod !== 0 ? `, savemod ${signed(saveMod)}` : ""}${abilityInvuln !== null ? `, invuln ${abilityInvuln}+ (ability)` : ""} → effective ${effectiveSaveTarget}+ (P(save)=${pSaved.toFixed(4)})`,
   });
 
   // 5. Damage

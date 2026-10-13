@@ -139,6 +139,144 @@
         ],
         "unsupportedReasons": []
       }
+    },
+    {
+      "_comment": "Fabricated defender-side rules on the attacked unit: Stealth and the benefit of cover each give cover, a granted Feel No Pain, a set Save, and a worsened incoming AP.",
+      "abilityId": "fabricated-defences",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-defences",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "stealth"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "benefit-of-cover"
+            }
+          },
+          {
+            "type": "ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "feel-no-pain",
+              "value": 5
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-model",
+            "modifier": {
+              "stat": "Sv",
+              "operation": "set",
+              "value": 3
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "AP",
+              "operation": "worsen",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "cover"
+          },
+          {
+            "type": "cover"
+          },
+          {
+            "type": "feel-no-pain",
+            "threshold": 5
+          },
+          {
+            "type": "save-characteristic",
+            "value": 3
+          },
+          {
+            "type": "ap-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "_comment": "Fabricated penalties to attackers' WS and BS: hit modifiers gated to the matching phase. The unit's own critical threshold does not apply to attacks against it.",
+      "abilityId": "fabricated-skill-penalty",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-skill-penalty",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "target",
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "WS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "attacker",
+            "modifier": {
+              "stat": "BS",
+              "operation": "worsen",
+              "value": 1
+            }
+          },
+          {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "critical_on": 5
+            }
+          }
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": -1
+          },
+          {
+            "type": "hit-mod",
+            "value": -1
+          }
+        ],
+        "unsupportedReasons": []
+      }
     }
   ]
 }

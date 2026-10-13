@@ -224,6 +224,18 @@ pub fn crunch(
     if ctx.target_keywords.is_none() {
         ctx.target_keywords = Some(target_keywords.clone());
     }
+    if ctx.weapon_names.is_none() {
+        let mut names: Vec<String> = Vec::with_capacity(2);
+        for name in [
+            input.attacker.weapon.name.to_lowercase(),
+            weapon_profile.name.to_lowercase(),
+        ] {
+            if !names.contains(&name) {
+                names.push(name);
+            }
+        }
+        ctx.weapon_names = Some(names);
+    }
 
     // Auto-inject weapon-keyword buffs from the attacker profile, then append
     // the caller-supplied stack. resolve_buffs deduplicates and ranks them.
@@ -280,13 +292,36 @@ pub fn crunch(
     // save bonus. Ranged-only, negated by ignores-cover, moot for auto-hitting
     // Torrent weapons (no hit roll).
     let ignores_cover = find_extra_keyword(&resolved, "ignores-cover").is_some();
-    let covered = resolved.cover.active && !ignores_cover && !is_melee;
+    // Ignoring hit modifiers also ignores the cover penalty.
+    let covered = resolved.cover.active
+        && !ignores_cover
+        && !is_melee
+        && resolved.ignore_modifiers.hit.is_none();
     let cover_hit_penalty = if covered { -1.0 } else { 0.0 };
-    let hit_stat_opt = if is_melee {
+    let printed_hit_stat = if is_melee {
         weapon_profile.stats.ws
     } else {
         weapon_profile.stats.bs
     };
+    // A WS/BS improvement changes the characteristic itself, floored at 2+.
+    let skill_mod = if is_melee {
+        resolved.skill_mod.ws.value
+    } else {
+        resolved.skill_mod.bs.value
+    };
+    let hit_stat_opt = printed_hit_stat.map(|stat| {
+        if skill_mod != 0.0 {
+            (stat as f64 - skill_mod).max(2.0) as i64
+        } else {
+            stat
+        }
+    });
+    let crit_hit_threshold = resolved
+        .crit_thresholds
+        .hit
+        .as_ref()
+        .map_or(6.0, |t| t.value)
+        .min(6.0) as i64;
     let torrent = find_extra_keyword(&resolved, "torrent").is_some();
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
         (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
@@ -307,12 +342,12 @@ pub fn crunch(
                 .map_or(RerollKind::None, RerollKind::from_subset),
             auto_fail_on_one: true,
             auto_pass_on_six: true,
-            crit_threshold: 6,
+            crit_threshold: crit_hit_threshold,
         });
         let hits = attacks * probs.pass;
         let crits = attacks * probs.crit;
         let detail = format!(
-            "{}{}+ (mod {}{}, reroll {}) → P(hit)={:.4}, P(crit)={:.4}",
+            "{}{}+ (mod {}{}, reroll {}{}) → P(hit)={:.4}, P(crit)={:.4}",
             if is_melee { "WS" } else { "BS" },
             hit_stat,
             signed(resolved.hit_mod.value),
@@ -326,6 +361,11 @@ pub fn crunch(
                     super::buffs::RerollSubset::AllFailures => "all-failures",
                 })
                 .unwrap_or("none"),
+            if crit_hit_threshold < 6 {
+                format!(", crit {crit_hit_threshold}+")
+            } else {
+                String::new()
+            },
             probs.pass,
             probs.crit,
         );
@@ -366,7 +406,13 @@ pub fn crunch(
             }
         }
     }
-    let crit_wound_threshold = anti_threshold.min(6);
+    let crit_wound_threshold = anti_threshold.min(6).min(
+        resolved
+            .crit_thresholds
+            .wound
+            .as_ref()
+            .map_or(6.0, |t| t.value) as i64,
+    );
 
     let has_lethal = find_extra_keyword(&resolved, "lethal-hits").is_some();
     let hits_for_wound_roll = if has_lethal { hits - crit_hits } else { hits };
@@ -427,9 +473,15 @@ pub fn crunch(
 
     // 4. Saves
     let ap_mod = resolved.ap_mod.value;
-    let ap = weapon_profile.stats.ap as f64 + ap_mod;
+    // Worsening AP stops at 0.
+    let ap = (weapon_profile.stats.ap as f64 + ap_mod).min(0.0);
     let save_mod = resolved.save_mod.value;
-    let armor_target_raw = unit_profile.sv as f64 - ap - save_mod;
+    let printed_sv = unit_profile.sv as f64;
+    let sv = resolved
+        .save_characteristic
+        .as_ref()
+        .map_or(printed_sv, |s| s.value);
+    let armor_target_raw = sv - ap - save_mod;
     // Cover is a hit penalty (11e), applied in the hits stage above — it no
     // longer touches the save here.
     let armor_final = clamp(armor_target_raw, 2.0, 7.0);
@@ -480,8 +532,9 @@ pub fn crunch(
         name: StageName::Unsaved,
         expected: unsaved,
         detail: format!(
-            "Sv{}+, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
-            unit_profile.sv,
+            "Sv{}+{}, AP{}{}{}{} → effective {}+ (P(save)={:.4})",
+            sv,
+            if sv != printed_sv { " (set)" } else { "" },
             signed(ap),
             if ap_mod != 0.0 {
                 format!(" (apmod {})", signed(ap_mod))

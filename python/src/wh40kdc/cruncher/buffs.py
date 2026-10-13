@@ -26,7 +26,9 @@ ResolvedModifiers = dict[str, Any]
 #: The engine context (TS ``EngineContext``). Beyond phase/timing/attacker state it may carry
 #: ``armyFaction`` (Army Faction id), ``battleSize`` (``incursion`` / ``strike-force`` /
 #: ``onslaught``) and ``attackerGuided`` (the attacker is Guided); each drives its condition
-#: and leaves it "unknown" when absent.
+#: and leaves it "unknown" when absent. ``weaponNames`` (lower-cased names of the attacking
+#: weapon and its profile) drives ``applicableWhen.weaponName``; absent leaves weapon-name gates
+#: permissive.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.
@@ -76,6 +78,10 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     distance = ctx.get("distanceInches")
     if max_range is not None and distance is not None and distance > max_range:
         return False
+    weapon_name = w.get("weaponName")
+    weapon_names = ctx.get("weaponNames")
+    if weapon_name is not None and weapon_names is not None and weapon_name not in weapon_names:
+        return False
     return True
 
 
@@ -107,6 +113,14 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "apMod": {"value": 0, "sources": []},
         "damageReduction": {"value": 0, "dominantSource": None},
         "invulnerable": None,
+        # Lowest critical threshold granted per roll; absent rolls crit on a 6.
+        "critThresholds": {},
+        # Rolls whose negative modifiers the attacker ignores.
+        "ignoreModifiers": {},
+        # Summed WS/BS characteristic improvements.
+        "skillMod": {"WS": {"value": 0, "sources": []}, "BS": {"value": 0, "sources": []}},
+        # Ability-set Save characteristic; None keeps the printed one.
+        "saveCharacteristic": None,
     }
 
     # Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -187,9 +201,36 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 )
             ):
                 out["invulnerable"] = {"threshold": c["threshold"], "dominantSource": source}
+        elif ctype == "crit-threshold":
+            cur = out["critThresholds"].get(c["roll"])
+            if (
+                cur is None
+                or c["value"] < cur["value"]
+                or (c["value"] == cur["value"] and _rank(source) < _rank(cur["dominantSource"]))
+            ):
+                out["critThresholds"][c["roll"]] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "ignore-modifiers":
+            cur = out["ignoreModifiers"].get(c["roll"])
+            if cur is None or _rank(source) < _rank(cur["dominantSource"]):
+                out["ignoreModifiers"][c["roll"]] = {"dominantSource": source}
+        elif ctype == "skill-mod":
+            out["skillMod"][c["stat"]]["value"] += c["value"]
+            out["skillMod"][c["stat"]]["sources"].append(source)
+        elif ctype == "save-characteristic":
+            sc = out["saveCharacteristic"]
+            if (
+                sc is None
+                or c["value"] < sc["value"]
+                or (c["value"] == sc["value"] and _rank(source) < _rank(sc["dominantSource"]))
+            ):
+                out["saveCharacteristic"] = {"value": c["value"], "dominantSource": source}
 
-    out["hitMod"] = _cap_modifier(hit_contribs)
-    out["woundMod"] = _cap_modifier(wound_contribs)
+    # An ignored roll keeps only its positive modifiers.
+    def kept(contribs: list[dict[str, Any]], ignored: bool) -> list[dict[str, Any]]:
+        return [c for c in contribs if c["value"] > 0] if ignored else contribs
+
+    out["hitMod"] = _cap_modifier(kept(hit_contribs, "hit" in out["ignoreModifiers"]))
+    out["woundMod"] = _cap_modifier(kept(wound_contribs, "wound" in out["ignoreModifiers"]))
 
     return out
 

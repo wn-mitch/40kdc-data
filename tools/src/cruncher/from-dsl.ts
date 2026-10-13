@@ -377,6 +377,15 @@ function walk(
     case "resource-action-menu":
       enumerateMenuActions(currentNode, source, opts, out);
       return;
+    case "roll-result":
+      translateRollResult(currentNode, source, opts, out);
+      return;
+    case "ignore-modifiers":
+      translateIgnoreModifiers(currentNode, source, opts, out);
+      return;
+    case "ability-grant":
+      translateAbilityGrant(currentNode, source, opts, out);
+      return;
     default:
       out.unsupported.push({
         reason: `effect type "${String(type)}" is not modelled by the buff layer`,
@@ -483,7 +492,7 @@ function translateReroll(
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")
   ) {
-    out.applied.push({ source, contribution: { type: "reroll", roll, subset } });
+    out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, weaponNameApplicability(modifier)));
     return;
   }
   out.unsupported.push({
@@ -544,18 +553,19 @@ function translateRollModifier(
       return;
     }
   }
+  const named = weaponNameApplicability(modifier);
   switch (roll) {
     case "hit":
-      out.applied.push({ source, contribution: { type: "hit-mod", value } });
+      out.applied.push(withApplicability({ source, contribution: { type: "hit-mod", value } }, named));
       return;
     case "wound":
-      out.applied.push({ source, contribution: { type: "wound-mod", value } });
+      out.applied.push(withApplicability({ source, contribution: { type: "wound-mod", value } }, named));
       return;
     case "save":
-      out.applied.push({ source, contribution: { type: "save-mod", value } });
+      out.applied.push(withApplicability({ source, contribution: { type: "save-mod", value } }, named));
       return;
     case "damage":
-      out.applied.push({ source, contribution: { type: "damage-mod", value } });
+      out.applied.push(withApplicability({ source, contribution: { type: "damage-mod", value } }, named));
       return;
     default:
       out.unsupported.push({
@@ -587,11 +597,11 @@ function translateStatModifier(
   const stat = modifier.stat;
   const isOnBuffedUnit = appliesToBuffedUnit(node, opts.perspective);
   // `attack_type: melee|ranged` scopes the mod to that attack — express it as a
-  // phase gate so e.g. a melee +1 Attack doesn't fire in the shooting phase.
-  const applicability = attackTypeApplicability(modifier);
+  // phase gate so e.g. a melee +1 Attack doesn't fire in the shooting phase —
+  // and `weapon_name` to the attacks of that weapon.
+  const applicability = combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier));
   const emit = (contribution: BuffContribution): void => {
-    const buff: Buff = { source, contribution };
-    out.applied.push(applicability ? { ...buff, applicableWhen: applicability } : buff);
+    out.applied.push(withApplicability({ source, contribution }, applicability));
   };
 
   // AP has an inverted sign convention (stored negative; more negative = more
@@ -602,13 +612,47 @@ function translateStatModifier(
     return;
   }
 
-  // Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
-  // (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
-  if (stat === "BS") {
-    if (opts.perspective !== "target" || classifyTarget(node) !== "attacker") return;
-    const bs = signedValue(modifier);
-    if (bs !== null) out.applied.push({ source, contribution: { type: "hit-mod", value: bs } });
+  // WS/BS on the attacker is a defender-side rule: it penalises incoming hit rolls of that attack
+  // type (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective. On the buffed unit
+  // it changes the characteristic its own attacks hit on.
+  if (stat === "BS" || stat === "WS") {
+    const phases: Phase[] = [stat === "BS" ? "shooting" : "fight"];
+    if (classifyTarget(node) === "attacker") {
+      if (opts.perspective !== "target") return;
+      const skill = signedValue(modifier);
+      if (skill !== null) out.applied.push({ source, applicableWhen: { phases }, contribution: { type: "hit-mod", value: skill } });
+      return;
+    }
+    if (opts.perspective !== "attacker" || !isOnBuffedUnit) return;
+    const amount = typeof modifier.value === "number" ? modifier.value : NaN;
+    const improvement = modifier.operation === "improve" ? amount : modifier.operation === "worsen" ? -amount : NaN;
+    if (!Number.isFinite(improvement)) {
+      out.unsupported.push({ reason: `stat-modifier ${stat}: operation "${String(modifier.operation)}" not supported`, effectFragment: node });
+      return;
+    }
+    emit({ type: "skill-mod", stat, value: improvement });
     return;
+  }
+
+  // Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off the
+  // damage path, and a set A/S/T has no single delta.
+  if (modifier.operation === "set") {
+    if (stat === "Sv") {
+      if (opts.perspective !== "target") {
+        out.unsupported.push({ reason: "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+        return;
+      }
+      const saveValue = typeof modifier.value === "number" ? modifier.value : NaN;
+      if (!isOnBuffedUnit) return;
+      if (Number.isInteger(saveValue) && saveValue >= 2 && saveValue <= 6) emit({ type: "save-characteristic", value: saveValue });
+      else if (Number.isNaN(saveValue)) out.unsupported.push({ reason: "stat-modifier Sv: set has no numeric value", effectFragment: node });
+      else out.unsupported.push({ reason: `stat-modifier Sv: set value "${saveValue}" is not a save characteristic`, effectFragment: node });
+      return;
+    }
+    if (stat !== "A" && stat !== "S" && stat !== "T" && stat !== "D") {
+      out.unsupported.push({ reason: `stat-modifier on "${String(stat)}" is outside the damage path`, effectFragment: node });
+      return;
+    }
   }
 
   const value = signedValue(modifier);
@@ -686,11 +730,17 @@ function translateApModifier(
   emit: (contribution: BuffContribution) => void,
 ): void {
   if (classifyTarget(node) === "attacker") {
-    out.unsupported.push({
-      reason:
-        "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
-      effectFragment: node,
-    });
+    // Worsening the AP of attacks against the buffed unit; the engine floors AP at 0.
+    if (opts.perspective !== "target") {
+      out.unsupported.push({ reason: "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+      return;
+    }
+    const incomingDelta = apDelta(modifier);
+    if (incomingDelta === null) {
+      out.unsupported.push({ reason: `stat-modifier AP: operation "${String(modifier.operation)}" not supported`, effectFragment: node });
+      return;
+    }
+    emit({ type: "ap-mod", value: incomingDelta });
     return;
   }
   if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
@@ -842,11 +892,88 @@ function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplica
  * here). When present on a damage-path leaf, applying the buff unfiltered would
  * silently OVER-APPLY it, so we surface it as `unsupported` instead — the data
  * stays faithful for other consumers; the optimizer just doesn't assume it.
- * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate.
+ * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate —
+ * and neither is `weapon_name`, which gates on the attacking weapon's name.
  */
-const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
+const UNHONORABLE_NARROWING = ["weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
 function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
   return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
+}
+
+function weaponNameApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
+  return typeof modifier.weapon_name === "string" ? { weaponName: modifier.weapon_name.toLowerCase() } : undefined;
+}
+
+function combineOptional(a: BuffApplicability | undefined, b: BuffApplicability | undefined): BuffApplicability | undefined {
+  return a && b ? combineApplicability(a, b) : (a ?? b);
+}
+
+function withApplicability(buff: Buff, applicability: BuffApplicability | undefined): Buff {
+  return applicability ? { ...buff, applicableWhen: applicability } : buff;
+}
+
+/**
+ * A changed roll result. Only a critical threshold on the buffed unit's own hit or wound roll is in
+ * the damage math; a fixed result for any other roll (advance, battle-shock, ...) is outside it.
+ */
+function translateRollResult(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const modifier = isObject(node.modifier) ? node.modifier : {};
+  const roll = modifier.roll;
+  if (roll !== "hit" && roll !== "wound" && roll !== "save" && roll !== "damage") {
+    out.unsupported.push({ reason: `roll-result on "${rollLabel(roll)}" is outside the damage path`, effectFragment: node });
+    return;
+  }
+  const narrowed = unhonorableNarrowing(modifier);
+  if (narrowed) {
+    out.unsupported.push({ reason: `roll-result: narrows by "${narrowed}" which the cruncher can't resolve here`, effectFragment: node });
+    return;
+  }
+  const critical = Number(modifier.critical_on);
+  const onlyCritical = Object.keys(modifier).every((key) => ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name"].includes(key));
+  if ((roll !== "hit" && roll !== "wound") || !onlyCritical || !Number.isInteger(critical) || critical < 2 || critical > 6) {
+    out.unsupported.push({ reason: `roll-result on "${roll}": only a critical threshold on hit or wound rolls is modelled`, effectFragment: node });
+    return;
+  }
+  if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
+  const applicability = combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier));
+  out.applied.push(withApplicability({ source, contribution: { type: "crit-threshold", roll, value: critical } }, applicability));
+}
+
+/**
+ * Ignoring modifiers to the buffed unit's own hit or wound rolls. Ignoring WS/BS modifiers is the
+ * same lever here: the buff layer changes WS/BS for incoming attacks only through hit modifiers.
+ */
+function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const modifier = isObject(node.modifier) ? node.modifier : {};
+  const listed = modifier.what === "rolls" ? modifier.rolls : modifier.what === "characteristics" ? modifier.stats : undefined;
+  const rolls = Array.isArray(listed) ? listed.map((item) => (item === "WS" || item === "BS" ? "hit" : item)) : [];
+  if (rolls.length === 0 || rolls.some((roll) => roll !== "hit" && roll !== "wound")) {
+    out.unsupported.push({ reason: "ignore-modifiers: only hit and wound rolls and WS/BS are modelled", effectFragment: node });
+    return;
+  }
+  if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
+  for (const roll of new Set(rolls as ("hit" | "wound")[])) out.applied.push({ source, contribution: { type: "ignore-modifiers", roll } });
+}
+
+/**
+ * The core abilities the buff layer models on the unit being attacked: Stealth and the benefit of
+ * cover (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
+ * they contribute nothing to the buffed unit's own attacks.
+ */
+function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const modifier = isObject(node.modifier) ? node.modifier : {};
+  const ability = modifier.ability;
+  const fnp = Number(modifier.value);
+  const contribution: BuffContribution | null =
+    ability === "stealth" || ability === "benefit-of-cover" ? { type: "cover" }
+    : ability === "feel-no-pain" && Number.isInteger(fnp) && fnp >= 2 && fnp <= 6 ? { type: "feel-no-pain", threshold: fnp }
+    : null;
+  if (contribution === null) {
+    out.unsupported.push({ reason: `effect type "ability-grant" is not modelled by the buff layer`, effectFragment: node });
+    return;
+  }
+  if (opts.perspective !== "target" || classifyTarget(node) !== "self") return;
+  out.applied.push({ source, contribution });
 }
 
 /**
@@ -1426,6 +1553,7 @@ function combineApplicability(a: BuffApplicability, b: BuffApplicability): BuffA
   if (b.rollType) out.rollType = b.rollType;
   if (b.requiresTargetKeyword) out.requiresTargetKeyword = b.requiresTargetKeyword;
   if (b.requiresAttackerKeyword) out.requiresAttackerKeyword = b.requiresAttackerKeyword;
+  if (b.weaponName) out.weaponName = b.weaponName;
   return out;
 }
 
@@ -1484,6 +1612,14 @@ function describeContribution(c: BuffContribution): string {
       return `${c.threshold}+ invuln`;
     case "cover":
       return "cover";
+    case "crit-threshold":
+      return `critical ${c.roll} on ${c.value}+`;
+    case "ignore-modifiers":
+      return `ignore ${c.roll} modifiers`;
+    case "skill-mod":
+      return `${c.stat} improved by ${c.value}`;
+    case "save-characteristic":
+      return `${c.value}+ save`;
   }
 }
 

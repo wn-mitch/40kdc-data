@@ -135,6 +135,16 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		}
 		ctx["targetKeywords"] = tk
 	}
+	if ctx["weaponNames"] == nil {
+		// Lower-cased, de-duplicated weapon and profile names drive applicableWhen.weaponName.
+		names := []any{}
+		for _, v := range []any{weapon["name"], weaponProfile["name"]} {
+			if name, ok := v.(string); ok && !containsAny(names, lower(name)) {
+				names = append(names, lower(name))
+			}
+		}
+		ctx["weaponNames"] = names
+	}
 
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
 	allBuffs := append(append([]any{}, profBuffs...), getList(input, "buffs")...)
@@ -185,7 +195,9 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 
 	// 2. Hits
 	ignoresCover := res.findKeyword("ignores-cover") != nil
-	covered := res.coverActive && !ignoresCover && !isMelee
+	// Ignoring hit modifiers also ignores the cover penalty.
+	_, ignoreHit := res.ignoreModifiers["hit"]
+	covered := res.coverActive && !ignoresCover && !isMelee && !ignoreHit
 	coverHitPenalty := 0.0
 	if covered {
 		coverHitPenalty = -1
@@ -210,8 +222,20 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 			return nil, nil, &crunchError{"crunch: weapon " + getStr(weapon, "id") + " missing " + ws}
 		}
 		hitStatN, _ := num(hitStat)
+		// A WS/BS improvement changes the characteristic itself, floored at 2+.
+		skillStat := "BS"
+		if isMelee {
+			skillStat = "WS"
+		}
+		if skillMod := res.skillMod[skillStat]; skillMod != 0 {
+			hitStatN = math.Max(2, hitStatN-skillMod)
+		}
+		critHitThreshold := 6.0
+		if crit, ok := res.critThresholds["hit"]; ok {
+			critHitThreshold = math.Min(6, crit.value)
+		}
 		hitModifier := res.hitMod + coverHitPenalty
-		passP, critP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, 6)
+		passP, critP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
 		hits = attacks * passP
 		critHits = attacks * critP
 	}
@@ -246,6 +270,9 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		}
 	}
 	critWoundThreshold := math.Min(6, antiThreshold)
+	if crit, ok := res.critThresholds["wound"]; ok {
+		critWoundThreshold = math.Min(critWoundThreshold, crit.value)
+	}
 	hasLethal := res.findKeyword("lethal-hits") != nil
 	hitsForWoundRoll := hits
 	lethalAutoWounds := 0.0
@@ -270,8 +297,13 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	stages = append(stages, stage("wounds", totalWounds))
 
 	// 4. Saves
-	ap := numOr0(stats["AP"]) + res.apMod
-	armorTargetRaw := numOr0(unitProfile["Sv"]) - ap - res.saveMod
+	// Worsening AP stops at 0.
+	ap := math.Min(0, numOr0(stats["AP"])+res.apMod)
+	sv := numOr0(unitProfile["Sv"])
+	if res.saveCharacteristic != nil {
+		sv = res.saveCharacteristic.value
+	}
+	armorTargetRaw := sv - ap - res.saveMod
 	armorFinal := clampF(armorTargetRaw, 2, 7)
 	var effectiveInvuln *float64
 	// Attack-scoped invuln (issue #87): a ranged-/melee-only save applies only to

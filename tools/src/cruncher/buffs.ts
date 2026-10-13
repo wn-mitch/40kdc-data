@@ -89,7 +89,21 @@ export type BuffContribution =
    * picks the better of `printed Sv after AP/cover` and `effective invuln`
    * (invuln bypasses both AP and cover).
    */
-  | { type: "invulnerable-save"; threshold: number };
+  | { type: "invulnerable-save"; threshold: number }
+  /** Attacker-side: an unmodified roll of `value`+ is a critical hit/wound. Lowest wins. */
+  | { type: "crit-threshold"; roll: "hit" | "wound"; value: number }
+  /**
+   * Attacker-side: the attacker ignores every negative modifier to this roll (and, for hits, the
+   * benefit of cover). Positive modifiers still apply.
+   */
+  | { type: "ignore-modifiers"; roll: "hit" | "wound" }
+  /**
+   * Attacker-side: improve the WS or BS characteristic by `value` (a characteristic change, so not
+   * capped like a hit-roll modifier). The engine floors the characteristic at 2+.
+   */
+  | { type: "skill-mod"; stat: "WS" | "BS"; value: number }
+  /** Defender-side: the Save characteristic becomes `value`+. Best (lowest) wins. */
+  | { type: "save-characteristic"; value: number };
 
 /** Optional gating; the resolver drops buffs whose gate fails. */
 export type BuffApplicability = {
@@ -106,6 +120,11 @@ export type BuffApplicability = {
    * so callers that don't track distance keep their current behavior.
    */
   maxRangeInches?: number;
+  /**
+   * Only attacks with the weapon of this name (lower case). Permissive when the caller leaves
+   * `EngineContext.weaponNames` undefined; the engine always sets it.
+   */
+  weaponName?: string;
 };
 
 /** A single buff: where it came from, when it applies, what it contributes. */
@@ -173,6 +192,11 @@ export type EngineContext = {
    * Drives the `guided` condition; undefined leaves it "unknown".
    */
   attackerGuided?: boolean;
+  /**
+   * Lower-cased names of the attacking weapon and its profile. Drives
+   * `applicableWhen.weaponName`; undefined leaves weapon-name gates permissive.
+   */
+  weaponNames?: ReadonlyArray<string>;
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */
@@ -212,6 +236,14 @@ export type ResolvedModifiers = {
    * `invuln_sv` from the profile in that case.
    */
   invulnerable: { threshold: number; dominantSource: BuffSource } | null;
+  /** Lowest critical threshold granted per roll; absent rolls crit on a 6. */
+  critThresholds: Partial<Record<"hit" | "wound", { value: number; dominantSource: BuffSource }>>;
+  /** Rolls whose negative modifiers the attacker ignores. */
+  ignoreModifiers: Partial<Record<"hit" | "wound", { dominantSource: BuffSource }>>;
+  /** Summed WS/BS characteristic improvements. */
+  skillMod: Record<"WS" | "BS", { value: number; sources: BuffSource[] }>;
+  /** Ability-set Save characteristic; `null` keeps the printed one. */
+  saveCharacteristic: { value: number; dominantSource: BuffSource } | null;
 };
 
 /** Stable ordering used to break ties when multiple buffs claim the same field. */
@@ -255,6 +287,7 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
   ) {
     return false;
   }
+  if (w.weaponName !== undefined && ctx.weaponNames !== undefined && !ctx.weaponNames.includes(w.weaponName)) return false;
   return true;
 }
 
@@ -282,6 +315,10 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     apMod: { value: 0, sources: [] },
     damageReduction: { value: 0, dominantSource: null },
     invulnerable: null,
+    critThresholds: {},
+    ignoreModifiers: {},
+    skillMod: { WS: { value: 0, sources: [] }, BS: { value: 0, sources: [] } },
+    saveCharacteristic: null,
   };
 
   // Hit / wound mods: sum, then cap at ±1, with dominant source picked from
@@ -384,11 +421,38 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
           out.invulnerable = { threshold: c.threshold, dominantSource: b.source };
         }
         break;
+      case "crit-threshold": {
+        const cur = out.critThresholds[c.roll];
+        if (!cur || c.value < cur.value || (c.value === cur.value && rank(b.source) < rank(cur.dominantSource))) {
+          out.critThresholds[c.roll] = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      }
+      case "ignore-modifiers": {
+        const cur = out.ignoreModifiers[c.roll];
+        if (!cur || rank(b.source) < rank(cur.dominantSource)) out.ignoreModifiers[c.roll] = { dominantSource: b.source };
+        break;
+      }
+      case "skill-mod":
+        out.skillMod[c.stat].value += c.value;
+        out.skillMod[c.stat].sources.push(b.source);
+        break;
+      case "save-characteristic":
+        if (
+          out.saveCharacteristic === null ||
+          c.value < out.saveCharacteristic.value ||
+          (c.value === out.saveCharacteristic.value && rank(b.source) < rank(out.saveCharacteristic.dominantSource))
+        ) {
+          out.saveCharacteristic = { value: c.value, dominantSource: b.source };
+        }
+        break;
     }
   }
 
-  out.hitMod = capModifier(hitContribs);
-  out.woundMod = capModifier(woundContribs);
+  // An ignored roll keeps only its positive modifiers.
+  const kept = (contribs: { value: number; source: BuffSource }[], ignored: boolean) => (ignored ? contribs.filter((c) => c.value > 0) : contribs);
+  out.hitMod = capModifier(kept(hitContribs, out.ignoreModifiers.hit !== undefined));
+  out.woundMod = capModifier(kept(woundContribs, out.ignoreModifiers.wound !== undefined));
 
   return out;
 }

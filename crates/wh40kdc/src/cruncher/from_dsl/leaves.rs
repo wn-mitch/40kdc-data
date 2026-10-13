@@ -4,15 +4,18 @@
 
 use serde_json::{json, Value};
 
+use super::damage_leaves::{
+    combine_optional, set_modifier, skill_modifier, weapon_name_applicability,
+};
 use super::js::*;
 use super::TranslationPerspective::{Attacker, Target};
 use super::{applies_to_buffed_unit, buff, classify_target, walk, Out, Side, WalkOpts};
 use crate::cruncher::buffs::WeaponKeywordRef;
 
-/// Narrowing keys that scope a buff to a named weapon or a model subset the cruncher cannot
-/// resolve here; applying the buff unfiltered would over-apply it.
+/// Narrowing keys that scope a buff to a weapon or a model subset the cruncher cannot resolve
+/// here; applying the buff unfiltered would over-apply it. `weapon_type`/`attack_type` map to a
+/// phase gate and `weapon_name` gates on the attacking weapon's name, so neither is listed.
 const UNHONORABLE_NARROWING: &[&str] = &[
-    "weapon_name",
     "weapon_profile",
     "weapon_keyword",
     "weapon_ref",
@@ -21,7 +24,7 @@ const UNHONORABLE_NARROWING: &[&str] = &[
     "model_scope",
 ];
 
-fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
+pub(super) fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
     UNHONORABLE_NARROWING
         .iter()
         .copied()
@@ -29,7 +32,7 @@ fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
 }
 
 /// A roll kind for a diagnostic: "hit", or the ability whose dice it is.
-fn roll_label(roll: Option<&Value>) -> String {
+pub(super) fn roll_label(roll: Option<&Value>) -> String {
     match object(roll)
         .and_then(|r| r.get("of_ability"))
         .and_then(Value::as_str)
@@ -56,10 +59,15 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     }
     let roll = m.get("roll");
-    // A `value: 1` on a re-roll unambiguously means "re-roll rolls of 1".
+    // A `value: 1` on a re-roll unambiguously means "re-roll rolls of 1". An unrestricted optional
+    // re-roll (`result_scope: "any-result"`, no `subset`) is "all-failures" to the expected-value
+    // engine: a rational player re-rolls only failures.
     let one = Value::from("ones");
+    let all_failures = Value::from("all-failures");
     let subset = if m.get("value").and_then(Value::as_f64) == Some(1.0) {
         Some(&one)
+    } else if m.get("subset").is_none() && is_str(m, "result_scope", "any-result") {
+        Some(&all_failures)
     } else {
         m.get("subset")
     };
@@ -79,10 +87,12 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if matches!(r, Some("hit" | "wound" | "save" | "damage"))
         && matches!(s, Some("ones" | "all-failures"))
     {
-        out.applied.push(buff(
+        emit(
             opts,
+            out,
+            &weapon_name_applicability(m),
             json!({ "type": "reroll", "roll": r, "subset": s }),
-        ));
+        );
         return;
     }
     out.unsupported(
@@ -147,12 +157,16 @@ pub(super) fn roll_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             return;
         }
     };
-    out.applied
-        .push(buff(opts, json!({ "type": ty, "value": value })));
+    emit(
+        opts,
+        out,
+        &weapon_name_applicability(m),
+        json!({ "type": ty, "value": value }),
+    );
 }
 
 /// `attack_type` (or `weapon_type`) melee/ranged as the phase that attack happens in.
-fn attack_type_applicability(m: &Obj) -> Option<Value> {
+pub(super) fn attack_type_applicability(m: &Obj) -> Option<Value> {
     let kind = present(m, "attack_type").or_else(|| m.get("weapon_type"));
     phase_gate(kind.and_then(Value::as_str))
 }
@@ -165,7 +179,7 @@ fn phase_gate(kind: Option<&str>) -> Option<Value> {
     }
 }
 
-fn emit(opts: &WalkOpts, out: &mut Out, gate: &Option<Value>, contribution: Value) {
+pub(super) fn emit(opts: &WalkOpts, out: &mut Out, gate: &Option<Value>, contribution: Value) {
     let mut b = buff(opts, contribution);
     if let Some(g) = gate {
         b["applicableWhen"] = g.clone();
@@ -187,15 +201,31 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     let stat = m.get("stat");
     let on_buffed = applies_to_buffed_unit(node, opts.perspective);
-    let gate = attack_type_applicability(m);
+    // `attack_type: melee|ranged` scopes the mod to that attack's phase, and `weapon_name` to the
+    // attacks of that weapon.
+    let gate = combine_optional(attack_type_applicability(m), weapon_name_applicability(m));
+    let unsupported_operation = |what: &str| {
+        format!(
+            "stat-modifier {what}: operation \"{}\" not supported",
+            js_string(m.get("operation"))
+        )
+    };
     match stat.and_then(Value::as_str) {
         // AP is stored negative and has offensive/defensive variants.
         Some("AP") => {
+            // Worsening the AP of attacks against the buffed unit; the engine floors AP at 0.
             if classify_target(node) == Side::Attacker {
-                out.unsupported(
-                    "stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer",
-                    node,
-                );
+                if opts.perspective != Target {
+                    out.unsupported(
+                        "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target",
+                        node,
+                    );
+                    return;
+                }
+                match ap_delta(m) {
+                    Some(d) => emit(opts, out, &gate, json!({ "type": "ap-mod", "value": d })),
+                    None => out.unsupported(unsupported_operation("AP"), node),
+                }
                 return;
             }
             if opts.perspective != Attacker || !applies_to_buffed_unit(node, Attacker) {
@@ -203,28 +233,21 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
             match ap_delta(m) {
                 Some(d) => emit(opts, out, &gate, json!({ "type": "ap-mod", "value": d })),
-                None => out.unsupported(
-                    format!(
-                        "stat-modifier AP: operation \"{}\" not supported",
-                        js_string(m.get("operation"))
-                    ),
-                    node,
-                ),
+                None => out.unsupported(unsupported_operation("AP"), node),
             }
             return;
         }
-        // Ballistic Skill on the attacker penalises incoming hit rolls: a hit-mod when targeted.
-        Some("BS") => {
-            if opts.perspective != Target || classify_target(node) != Side::Attacker {
-                return;
-            }
-            if let Some(bs) = signed_value(m) {
-                out.applied
-                    .push(buff(opts, json!({ "type": "hit-mod", "value": bs })));
-            }
+        // WS/BS on the attacker penalises incoming hit rolls of that attack type: a hit-mod gated
+        // to its phase when targeted. On the buffed unit it changes the characteristic its own
+        // attacks hit on.
+        Some(skill @ ("BS" | "WS")) => {
+            skill_modifier(node, m, skill, on_buffed, &gate, opts, out);
             return;
         }
         _ => {}
+    }
+    if is_str(m, "operation", "set") && set_modifier(node, m, on_buffed, &gate, opts, out) {
+        return;
     }
     let Some(value) = signed_value(m) else {
         out.unsupported(

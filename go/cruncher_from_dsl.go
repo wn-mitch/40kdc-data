@@ -280,6 +280,12 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		// usage.repeatable_if_different_unit) can fire in the same phase, so
 		// no shared group/maxActivations cap is attached here.
 		enumerateMenuActions(n, source, opts, out)
+	case "roll-result":
+		translateRollResult(n, source, opts, out)
+	case "ignore-modifiers":
+		translateIgnoreModifiers(n, source, opts, out)
+	case "ability-grant":
+		translateAbilityGrant(n, source, opts, out)
 	default:
 		out.unsupported = append(out.unsupported, unsup("effect type \""+jsStr(n["type"])+"\" is not modelled by the buff layer", n))
 	}
@@ -819,7 +825,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
 		(subset == "ones" || subset == "all-failures") {
-		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}})
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, weaponNameApplicability(modifier)))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
@@ -867,7 +873,7 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 		out.unsupported = append(out.unsupported, unsup("roll-modifier on \""+rollLabel(modifier["roll"])+"\" is outside the damage path", node))
 		return
 	}
-	out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}})
+	out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}}, weaponNameApplicability(modifier)))
 }
 
 func translateStatModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -882,14 +888,11 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 	}
 	stat, _ := modifier["stat"].(string)
 	isOnBuffedUnit := appliesToBuffedUnit(node, opts.perspective)
-	applicability := attackTypeApplicability(modifier)
+	// attack_type scopes the mod to that attack's phase, and weapon_name to that weapon's attacks.
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier))
 
 	emit := func(contribution map[string]any) {
-		buff := map[string]any{"source": source, "contribution": contribution}
-		if applicability != nil {
-			buff["applicableWhen"] = applicability
-		}
-		out.applied = append(out.applied, buff)
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": contribution}, applicability))
 	}
 
 	if stat == "AP" {
@@ -897,16 +900,25 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 
-	// Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
-	// (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
-	if stat == "BS" {
-		if opts.perspective != "target" || classifyTarget(node) != "attacker" {
+	// WS/BS on the attacker is a defender-side rule: it penalises incoming hit rolls of that attack
+	// type (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective. On the buffed unit
+	// it changes the characteristic its own attacks hit on.
+	if stat == "BS" || stat == "WS" {
+		translateSkillModifier(node, source, modifier, stat, isOnBuffedUnit, opts, out, emit)
+		return
+	}
+
+	// Setting the Save characteristic is defender-side; any other set stat outside A/S/T is off the
+	// damage path, and a set A/S/T has no single delta.
+	if modifier["operation"] == "set" {
+		if stat == "Sv" {
+			translateSaveSet(node, modifier, isOnBuffedUnit, opts, out, emit)
 			return
 		}
-		if bs, ok := signedValue(modifier); ok {
-			out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "hit-mod", "value": bs}})
+		if stat != "A" && stat != "S" && stat != "T" && stat != "D" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
+			return
 		}
-		return
 	}
 
 	value, ok := signedValue(modifier)
@@ -950,7 +962,17 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 
 func translateAPModifier(node, modifier map[string]any, opts dslOpts, out *effectTranslation, emit func(map[string]any)) {
 	if classifyTarget(node) == "attacker" {
-		out.unsupported = append(out.unsupported, unsup("stat-modifier AP on the attacker: defender-side AP reduction is not modelled by the buff layer", node))
+		// Worsening the AP of attacks against the buffed unit; the engine floors AP at 0.
+		if opts.perspective != "target" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target", node))
+			return
+		}
+		incoming, ok := apDelta(modifier)
+		if !ok {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier AP: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
+			return
+		}
+		emit(map[string]any{"type": "ap-mod", "value": incoming})
 		return
 	}
 	if opts.perspective != "attacker" || !appliesToBuffedUnit(node, "attacker") {
@@ -1082,8 +1104,10 @@ func attackTypeApplicability(modifier map[string]any) map[string]any {
 	return nil
 }
 
+// unhonorableNarrowingKeys scope a buff to a weapon or model subset the cruncher can't resolve;
+// weapon_name is not among them: it gates on the attacking weapon's name.
 var unhonorableNarrowingKeys = []string{
-	"weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter",
+	"weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter",
 	"model_filter", "model_scope",
 }
 
@@ -1347,6 +1371,9 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	if v, ok := b["requiresAttackerKeyword"]; ok && v != nil {
 		out["requiresAttackerKeyword"] = v
 	}
+	if v, ok := b["weaponName"].(string); ok && v != "" {
+		out["weaponName"] = v
+	}
 	return out
 }
 
@@ -1417,6 +1444,14 @@ func describeContribution(c map[string]any) string {
 		return "-" + numStr(c["value"]) + " damage"
 	case "invulnerable-save":
 		return numStr(c["threshold"]) + "+ invuln"
+	case "crit-threshold":
+		return "critical " + getStr(c, "roll") + " on " + numStr(c["value"]) + "+"
+	case "ignore-modifiers":
+		return "ignore " + getStr(c, "roll") + " modifiers"
+	case "skill-mod":
+		return getStr(c, "stat") + " improved by " + numStr(c["value"])
+	case "save-characteristic":
+		return numStr(c["value"]) + "+ save"
 	}
 	return "cover"
 }

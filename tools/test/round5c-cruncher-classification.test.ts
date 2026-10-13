@@ -32,7 +32,7 @@ describe("pipeline-8b cruncher unsupported classification", () => {
 
   it("counts an eligibility permission as outside the damage path, but keeps an unmodelled core-ability grant a real gap", () => {
     const permission = effectToBuffs({ type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true } }, source, ctx).unsupported;
-    const grant = effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability: "stealth" } }, source, ctx).unsupported;
+    const grant = effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability: "firing-deck", value: 2 } }, source, ctx).unsupported;
     expect(classifyUnsupported(permission)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
     expect(classifyUnsupported(grant)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });
@@ -76,7 +76,8 @@ describe("pipeline-8b cruncher unsupported classification", () => {
   it("separates deployment grants and non-combat roll results from damage-path ones", () => {
     expect(classify({ type: "ability-grant", target: "this-unit", modifier: { ability: "scouts", value: 6 } })).toEqual(outside);
     expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "advance", result: 6 } })).toEqual(outside);
-    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } })).toEqual(gap);
+    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
+    expect(classify({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 5 } })).toEqual(gap);
   });
 
   it("does not count a defender Toughness lift the target perspective models", () => {
