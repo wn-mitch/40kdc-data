@@ -194,6 +194,8 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: name,
             buffs: sub.applied,
             group: None,
+            requires: None,
+            cap_raise: None,
         });
     }
 }
@@ -216,6 +218,8 @@ pub(super) fn enumerate_choice(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: label_for_buffs(&buffs),
             buffs,
             group: Some((format!("{}?choice", opts.ability_id), max)),
+            requires: None,
+            cap_raise: None,
         });
     }
 }
@@ -260,6 +264,8 @@ fn push_named(
         label: name,
         buffs,
         group: Some((group.to_string(), max)),
+        requires: None,
+        cap_raise: None,
     });
 }
 
@@ -309,6 +315,8 @@ pub(super) fn enumerate_roll_allocation(node: &Obj, opts: &WalkOpts, out: &mut O
             label: name,
             buffs,
             group: Some((opts.ability_id.clone(), max)),
+            requires: None,
+            cap_raise: None,
         });
     }
     true
@@ -368,6 +376,8 @@ pub(super) fn enumerate_menu_actions(node: &Obj, opts: &WalkOpts, out: &mut Out)
             label,
             buffs,
             group: None,
+            requires: None,
+            cap_raise: None,
         });
     }
 }
@@ -398,6 +408,8 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             label: label_for_buffs(&buffs),
             buffs,
             group: None,
+            requires: None,
+            cap_raise: None,
         });
     }
 }

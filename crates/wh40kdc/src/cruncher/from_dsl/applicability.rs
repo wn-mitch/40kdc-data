@@ -72,7 +72,8 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
     }
 }
 
-/// Merge two applicabilities: `phases` intersect; roll type, keyword and weapon-name gates narrow.
+/// Merge two applicabilities: `phases` intersect; roll type, keyword and weapon gates narrow;
+/// excluded target keywords union.
 pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
     let mut out = a.clone();
     if let Some(bp) = b.get("phases").and_then(Value::as_array) {
@@ -87,6 +88,7 @@ pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
         "requiresTargetKeyword",
         "requiresAttackerKeyword",
         "weaponName",
+        "weaponKeyword",
     ] {
         if let Some(v) = b
             .get(k)
@@ -94,6 +96,20 @@ pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
         {
             out.insert(k.into(), v.clone());
         }
+    }
+    // Excluded target keywords union, first occurrence first.
+    if let Some(bx) = b.get("excludedTargetKeywords").and_then(Value::as_array) {
+        let mut union: Vec<Value> = a
+            .get("excludedTargetKeywords")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default();
+        for k in bx {
+            if !union.contains(k) {
+                union.push(k.clone());
+            }
+        }
+        out.insert("excludedTargetKeywords".into(), Value::Array(union));
     }
     out
 }

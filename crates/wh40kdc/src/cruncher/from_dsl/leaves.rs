@@ -5,7 +5,7 @@
 use serde_json::{json, Value};
 
 use super::damage_leaves::{
-    combine_optional, set_modifier, skill_modifier, weapon_name_applicability,
+    combine_optional, set_modifier, skill_modifier, weapon_applicability, weapon_keyword_id,
 };
 use super::js::*;
 use super::TranslationPerspective::{Attacker, Target};
@@ -14,10 +14,10 @@ use crate::cruncher::buffs::WeaponKeywordRef;
 
 /// Narrowing keys that scope a buff to a weapon or a model subset the cruncher cannot resolve
 /// here; applying the buff unfiltered would over-apply it. `weapon_type`/`attack_type` map to a
-/// phase gate and `weapon_name` gates on the attacking weapon's name, so neither is listed.
+/// phase gate, `weapon_name` gates on the attacking weapon's name and a readable `weapon_keyword`
+/// on its abilities, so none is listed.
 const UNHONORABLE_NARROWING: &[&str] = &[
     "weapon_profile",
-    "weapon_keyword",
     "weapon_ref",
     "weapon_filter",
     "model_filter",
@@ -29,6 +29,12 @@ pub(super) fn unhonorable_narrowing(m: &Obj) -> Option<&'static str> {
         .iter()
         .copied()
         .find(|k| present(m, k).is_some())
+        // A weapon keyword the catalog parser cannot read would gate on nothing.
+        .or_else(|| {
+            (present(m, "weapon_keyword").is_some()
+                && weapon_keyword_id(m.get("weapon_keyword")).is_none())
+            .then_some("weapon_keyword")
+        })
 }
 
 /// A roll kind for a diagnostic: "hit", or the ability whose dice it is.
@@ -90,7 +96,7 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         emit(
             opts,
             out,
-            &weapon_name_applicability(m),
+            &weapon_applicability(m),
             json!({ "type": "reroll", "roll": r, "subset": s }),
         );
         return;
@@ -160,7 +166,7 @@ pub(super) fn roll_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     emit(
         opts,
         out,
-        &weapon_name_applicability(m),
+        &weapon_applicability(m),
         json!({ "type": ty, "value": value }),
     );
 }
@@ -203,7 +209,7 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let on_buffed = applies_to_buffed_unit(node, opts.perspective);
     // `attack_type: melee|ranged` scopes the mod to that attack's phase, and `weapon_name` to the
     // attacks of that weapon.
-    let gate = combine_optional(attack_type_applicability(m), weapon_name_applicability(m));
+    let gate = combine_optional(attack_type_applicability(m), weapon_applicability(m));
     let unsupported_operation = |what: &str| {
         format!(
             "stat-modifier {what}: operation \"{}\" not supported",
@@ -367,10 +373,10 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
-    // A selector by keyword would apply the grant to every weapon of the unit: refuse it (as the
-    // TS cruncher does) rather than over-apply it.
-    if m.get("weapon_keyword")
-        .is_some_and(|value| !value.is_null())
+    // A selector by keyword reaches only the weapons with that ability; one the catalog parser
+    // cannot read would apply the grant to every weapon, so it is refused rather than over-applied.
+    if present(m, "weapon_keyword").is_some()
+        && weapon_keyword_id(m.get("weapon_keyword")).is_none()
     {
         out.unsupported("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node);
         return;
@@ -386,7 +392,10 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         .iter()
         .filter_map(Value::as_str)
         .collect();
-    let gate = phase_gate(m.get("weapon_type").and_then(Value::as_str));
+    let gate = combine_optional(
+        phase_gate(m.get("weapon_type").and_then(Value::as_str)),
+        weapon_applicability(m),
+    );
     for raw in raws {
         let Some(r) = parse_keyword_grant(raw) else {
             out.unsupported.push((

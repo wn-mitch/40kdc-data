@@ -338,6 +338,7 @@ mod tests {
             battle_size: None,
             attacker_guided: None,
             weapon_names: None,
+            weapon_keywords: None,
         }
     }
 

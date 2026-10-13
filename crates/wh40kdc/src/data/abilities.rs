@@ -147,6 +147,33 @@ fn is_aura_scope(range: &str) -> bool {
     range.starts_with("aura-") || range == "any-on-battlefield" || range == "any-visible"
 }
 
+/// Whether an effect can reach a unit other than its own: an aura, a unit-filter target
+/// (friendly or enemy), or a unit selection. The translator decides what of it reaches the input
+/// unit. Mirrors TS `reachesOtherUnits`.
+pub(crate) fn reaches_other_units(effect: &Value) -> bool {
+    match effect {
+        Value::Array(a) => a.iter().any(reaches_other_units),
+        Value::Object(node) => {
+            if matches!(
+                node.get("type").and_then(Value::as_str),
+                Some("aura" | "select-units")
+            ) {
+                return true;
+            }
+            if let Some(Value::Object(target)) = node.get("target") {
+                if matches!(
+                    target.get("owner").and_then(Value::as_str),
+                    Some("friendly" | "enemy")
+                ) {
+                    return true;
+                }
+            }
+            node.values().any(reaches_other_units)
+        }
+        _ => false,
+    }
+}
+
 impl Dataset {
     /// A unit resolved within `faction` when one is known (unit ids are shared across
     /// factions), else the first registered copy.
@@ -253,7 +280,9 @@ impl Dataset {
                 );
             }
         }
-        // 6. Supporting units: only aura-scoped abilities reach the input unit.
+        // 6. Supporting units: only abilities that can reach another unit (an aura, a friendly or
+        // enemy unit filter, a unit selection); one that only names its own unit describes a buff
+        // that never reaches the input unit.
         for support_id in &input.supporting_unit_ids {
             let Some(supporter) = self.resolve_unit(support_id, Some(&faction_id)) else {
                 continue;
@@ -263,7 +292,11 @@ impl Dataset {
                 // the TS resolver reads the raw record.
                 let scope = serde_json::to_value(&ability.scope).unwrap_or(Value::Null);
                 let range = scope.get("range").and_then(Value::as_str).unwrap_or("");
-                if !is_aura_scope(range) {
+                if !is_aura_scope(range)
+                    && !reaches_other_units(
+                        &serde_json::to_value(&ability.effect).unwrap_or(Value::Null),
+                    )
+                {
                     continue;
                 }
                 let source = EligibleAbilitySource::Support {

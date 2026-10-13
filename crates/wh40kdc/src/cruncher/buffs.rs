@@ -14,6 +14,7 @@ use serde_json::Value;
 
 use crate::Phase;
 
+use super::gates::live_buffs;
 pub use super::resolved::{
     CappedMod, CoverState, CritThresholds, ExtraKeywordEntry, FeelNoPainState, HighestMod,
     IgnoredRolls, InvulnerableState, RerollState, Rerolls, ResolvedModifiers, SkillMods, SummedMod,
@@ -234,6 +235,10 @@ pub struct BuffApplicability {
     /// Attacker must carry this keyword (case-insensitive).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_attacker_keyword: Option<String>,
+    /// Target must carry none of these keywords (case-insensitive). Permissive when the target's
+    /// keywords are unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excluded_target_keywords: Option<Vec<String>>,
     /// Range-gated abilities (DSL `scope.range_inches`): the buff applies only
     /// when the target is within this many inches. Permissive when the caller
     /// leaves `EngineContext::distance_inches` unset.
@@ -243,6 +248,11 @@ pub struct BuffApplicability {
     /// `EngineContext::weapon_names` unset; the engine always sets it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_name: Option<String>,
+    /// Only attacks with a weapon that has this weapon ability (catalog keyword id, e.g.
+    /// `"lethal-hits"`), printed or granted by another live buff. Permissive when the caller
+    /// leaves `EngineContext::weapon_keywords` unset; the engine always sets it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keyword: Option<String>,
 }
 
 /// A single buff: where it came from, when it applies, what it contributes.
@@ -307,6 +317,11 @@ pub struct EngineContext {
     /// `applicable_when.weapon_name`; `None` leaves weapon-name gates permissive.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_names: Option<Vec<String>>,
+    /// Catalog keyword ids printed on the attacking weapon profile. Drives
+    /// `applicable_when.weapon_keyword` together with the keywords live buffs grant; `None`
+    /// leaves weapon-keyword gates permissive.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keywords: Option<Vec<String>>,
 }
 
 impl EngineContext {
@@ -328,6 +343,7 @@ impl EngineContext {
             battle_size: None,
             attacker_guided: None,
             weapon_names: None,
+            weapon_keywords: None,
         }
     }
 }
@@ -351,55 +367,6 @@ fn rank(source: &BuffSource) -> u32 {
     }
 }
 
-fn applies(buff: &Buff, ctx: &EngineContext) -> bool {
-    let Some(w) = buff.applicable_when.as_ref() else {
-        return true;
-    };
-    if let Some(phases) = &w.phases {
-        if !phases.is_empty() && !phases.contains(&ctx.phase) {
-            return false;
-        }
-    }
-    if let (Some(want), BuffContribution::Reroll { roll, .. }) = (w.roll_type, &buff.contribution) {
-        if *roll != want {
-            return false;
-        }
-    }
-    if let Some(req) = &w.requires_target_keyword {
-        let req_lower = req.to_lowercase();
-        let ok = ctx
-            .target_keywords
-            .as_ref()
-            .is_some_and(|kws| kws.iter().any(|k| k == &req_lower));
-        if !ok {
-            return false;
-        }
-    }
-    if let Some(req) = &w.requires_attacker_keyword {
-        let req_lower = req.to_lowercase();
-        let ok = ctx
-            .attacker_keywords
-            .as_ref()
-            .is_some_and(|kws| kws.iter().any(|k| k == &req_lower));
-        if !ok {
-            return false;
-        }
-    }
-    // Range gate: drop only when the distance is known and exceeds the range.
-    // Unknown distance is permissive.
-    if let (Some(max), Some(dist)) = (w.max_range_inches, ctx.distance_inches) {
-        if dist > max {
-            return false;
-        }
-    }
-    if let (Some(name), Some(names)) = (&w.weapon_name, &ctx.weapon_names) {
-        if !names.contains(name) {
-            return false;
-        }
-    }
-    true
-}
-
 /// Collapse a flat buff stack into a [`ResolvedModifiers`] read-out. Pure
 /// function; the engine — and any UI that wants to render the resolved table
 /// before crunching — both go through this.
@@ -408,7 +375,7 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
     let mut hit_contribs: Vec<Contribution> = Vec::new();
     let mut wound_contribs: Vec<Contribution> = Vec::new();
 
-    for b in buffs.iter().filter(|b| applies(b, ctx)) {
+    for b in live_buffs(buffs, ctx) {
         match &b.contribution {
             BuffContribution::HitMod { value } => {
                 hit_contribs.push(Contribution {

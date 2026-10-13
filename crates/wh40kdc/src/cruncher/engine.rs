@@ -236,6 +236,16 @@ pub fn crunch(
         }
         ctx.weapon_names = Some(names);
     }
+    if ctx.weapon_keywords.is_none() {
+        let mut keywords: Vec<String> = Vec::new();
+        for kref in &weapon_profile.keywords {
+            let id = kref.keyword_id.to_string();
+            if !keywords.contains(&id) {
+                keywords.push(id);
+            }
+        }
+        ctx.weapon_keywords = Some(keywords);
+    }
 
     // Auto-inject weapon-keyword buffs from the attacker profile, then append
     // the caller-supplied stack. resolve_buffs deduplicates and ranks them.

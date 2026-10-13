@@ -19,6 +19,7 @@ mod damage_leaves;
 mod js;
 mod leaves;
 mod levers;
+mod selection;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
@@ -55,11 +56,29 @@ pub struct ActivatableBuff {
     pub id: String,
     /// Human label for the lever (option name, or a summary of its buffs).
     pub label: String,
-    /// Contributions this activation adds when the player opts in (at least one).
+    /// Contributions this activation adds when the player opts in (at least one, or none for a
+    /// [`cap_raise`](Self::cap_raise) lever).
     pub buffs: Vec<Buff>,
     /// Set when the lever belongs to a mutually-limited pool.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group: Option<ActivatableGroupRef>,
+    /// The lever raises the cap of another ability's lever pool instead of adding buffs ("select
+    /// one more augmentation").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cap_raise: Option<CapRaise>,
+    /// DSL fragments the player vouches for when opting in, in the order they apply: a unit
+    /// selection (its range, visibility and eligibility), a gating roll, a model count. Absent
+    /// when the lever assumes nothing beyond the choice itself.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub requires: Option<Vec<Value>>,
+}
+
+/// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
+/// as the DSL does, `by` the extra activations.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct CapRaise {
+    pub ability: String,
+    pub by: i64,
 }
 
 /// The result of [`effect_to_buffs`].
@@ -86,6 +105,8 @@ pub(crate) struct Lever {
     label: String,
     buffs: Vec<Value>,
     group: Option<(String, i64)>,
+    requires: Option<Vec<Value>>,
+    cap_raise: Option<(String, i64)>,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -202,6 +223,8 @@ fn finish(out: Out) -> EffectTranslation {
                     id,
                     max_activations,
                 }),
+                cap_raise: l.cap_raise.map(|(ability, by)| CapRaise { ability, by }),
+                requires: l.requires,
             })
             .collect(),
     }
@@ -222,13 +245,46 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
         out.unsupported(MODEL_SCOPED_REASON, current);
         return;
     }
+    // A unit selection reaching the selected unit is a player lever; its eligibility is what the
+    // player vouches for, so it is planned before the fidelity check below.
+    if is_str(current, "type", "select-units") {
+        let plan = selection::plan_selection(current, opts);
+        if !matches!(plan, selection::SelectionPlan::None) {
+            selection::translate_selection(plan, current, opts, out);
+            return;
+        }
+    }
     if has_unresolved_fidelity_binding(current) {
         out.unsupported(FIDELITY_BINDING_REASON, current);
         return;
     }
     // A scaled or bound value has no fixed size here: applying the printed value would misstate it.
     if let Some(reason) = unsized_value_reason(current) {
+        // A capped scaling is a lever at its cap; the player vouches for the count that reaches it.
+        if let Some(at_cap) = selection::scaled_to_cap(current) {
+            let requires = vec![current.get("scaling").cloned().unwrap_or(Value::Null)];
+            let id = format!("{}#at-cap", opts.ability_id);
+            selection::offer_lever(
+                &Value::Object(at_cap),
+                opts,
+                out,
+                id,
+                "At its maximum",
+                requires,
+                None,
+            );
+            return;
+        }
         out.unsupported(reason, current);
+        return;
+    }
+    // An ability another unit provides reaches the crunched unit only through a friendly filter,
+    // an aura's recipient or a selection; its own unit and model are the provider.
+    if selection::targets_provider(current, opts) {
+        return;
+    }
+    // A friendly filter's keywords must hold on the crunched unit when its keywords are known.
+    if selection::friendly_filter_excludes(current, opts) {
         return;
     }
     // A target filter of alternatives reaches the unit only when one alternative matches it.
@@ -242,6 +298,22 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     }
     // An `incoming` change modifies attacks made against its target: the attacker's side of them.
     let modifier = object(current.get("modifier"));
+    // On the defender it changes every friendly attack against that unit, the buffed unit's among
+    // them, so the attacker perspective reads it as a change for friendly units; the target
+    // perspective has no such attack.
+    if modifier.is_some_and(|m| is_true(m, "incoming"))
+        && classify_target(current) == Side::Defender
+    {
+        if opts.perspective == TranslationPerspective::Attacker {
+            let mut m = modifier.cloned().unwrap_or_default();
+            m.remove("incoming");
+            let mut owned = current.clone();
+            owned.insert("target".into(), json!({ "owner": "friendly" }));
+            owned.insert("modifier".into(), Value::Object(m));
+            walk(&Value::Object(owned), opts, out);
+        }
+        return;
+    }
     if modifier.is_some_and(|m| is_true(m, "incoming")) && classify_target(current) == Side::Buffed
     {
         if opts.perspective == TranslationPerspective::Attacker {
@@ -359,6 +431,8 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         ),
                         buffs: sub.applied,
                         group: None,
+                        requires: None,
+                        cap_raise: None,
                     });
                 }
             } else {
@@ -381,6 +455,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("roll-result") => damage_leaves::roll_result(node, opts, out),
         Some("ignore-modifiers") => damage_leaves::ignore_modifiers(node, opts, out),
         Some("ability-grant") => damage_leaves::ability_grant(node, opts, out),
+        Some("ability-modifier") => selection::ability_modifier(node, opts, out),
         _ => out.unsupported(
             format!(
                 "effect type \"{}\" is not modelled by the buff layer",

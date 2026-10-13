@@ -115,13 +115,23 @@ fn a_modifier_with_a_weapon_type_and_a_weapon_name_keeps_both_gates() {
 }
 
 #[test]
-fn a_crit_threshold_narrowed_by_a_weapon_keyword_is_refused() {
-    let result = translate(
+fn a_crit_threshold_narrowed_by_a_weapon_keyword_is_gated_on_it_and_an_unreadable_one_refused() {
+    let gated = translate(
         json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapon_keyword": "Pistol" } }),
         TranslationPerspective::Attacker,
     );
-    assert!(result.applied.is_empty());
-    let reasons: Vec<&str> = result
+    assert!(gated.unsupported.is_empty());
+    let want = BuffApplicability {
+        weapon_keyword: Some("pistol".into()),
+        ..Default::default()
+    };
+    assert_eq!(gates(&gated), vec![Some(want)]);
+    let unreadable = translate(
+        json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapon_keyword": "" } }),
+        TranslationPerspective::Attacker,
+    );
+    assert!(unreadable.applied.is_empty());
+    let reasons: Vec<&str> = unreadable
         .unsupported
         .iter()
         .map(|u| u.reason.as_str())

@@ -411,8 +411,7 @@
     },
     "scaling": {
      "per": 1,
-     "of": "models-embarked-in-bearer",
-     "max_value": 22
+     "of": "models-embarked-in-bearer"
     }
    },
    "source": {

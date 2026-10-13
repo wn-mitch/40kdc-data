@@ -1,24 +1,35 @@
 //! Leaf translators for critical thresholds (`roll-result`), ignored modifiers
 //! (`ignore-modifiers`) and the core abilities the buff layer models on an attacked unit
-//! (`ability-grant`), plus the `weapon_name` applicability gate. Mirrors `translateRollResult`,
-//! `translateIgnoreModifiers`, `translateAbilityGrant`, `weaponNameApplicability` and
-//! `combineOptional` in `tools/src/cruncher/from-dsl.ts`.
+//! (`ability-grant`), plus the `weapon_name`/`weapon_keyword` applicability gate. Mirrors
+//! `translateRollResult`, `translateIgnoreModifiers`, `translateAbilityGrant`,
+//! `weaponApplicability` and `combineOptional` in `tools/src/cruncher/from-dsl.ts`.
 
 use serde_json::{json, Value};
 
 use super::applicability::combine;
 use super::js::*;
 use super::leaves::{
-    attack_type_applicability, emit, roll_label, signed_value, unhonorable_narrowing,
+    attack_type_applicability, emit, parse_keyword_grant, roll_label, signed_value,
+    unhonorable_narrowing,
 };
 use super::TranslationPerspective::{Attacker, Target};
 use super::{applies_to_buffed_unit, buff, classify_target, walk, Out, Side, WalkOpts};
 
-/// `weapon_name` as a gate on the attacking weapon's (lower-cased) name.
-pub(super) fn weapon_name_applicability(m: &Obj) -> Option<Value> {
-    m.get("weapon_name")
-        .and_then(Value::as_str)
-        .map(|name| json!({ "weaponName": name.to_lowercase() }))
+/// The catalog keyword id a `weapon_keyword` selector names ("Lethal Hits" → "lethal-hits").
+pub(super) fn weapon_keyword_id(raw: Option<&Value>) -> Option<String> {
+    parse_keyword_grant(raw?.as_str()?).map(|r| r.keyword_id)
+}
+
+/// The weapon-name and weapon-keyword gates a modifier's weapon selectors put on its buffs.
+pub(super) fn weapon_applicability(m: &Obj) -> Option<Value> {
+    let mut out = Obj::new();
+    if let Some(name) = m.get("weapon_name").and_then(Value::as_str) {
+        out.insert("weaponName".into(), Value::from(name.to_lowercase()));
+    }
+    if let Some(keyword) = weapon_keyword_id(m.get("weapon_keyword")) {
+        out.insert("weaponKeyword".into(), Value::from(keyword));
+    }
+    (!out.is_empty()).then_some(Value::Object(out))
 }
 
 /// Both gates merged, or whichever one is present.
@@ -65,6 +76,7 @@ pub(super) fn roll_result(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             "attack_type",
             "weapon_type",
             "weapon_name",
+            "weapon_keyword",
         ]
         .contains(&k.as_str())
     });
@@ -78,7 +90,7 @@ pub(super) fn roll_result(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if opts.perspective != Attacker || !applies_to_buffed_unit(node, Attacker) {
         return;
     }
-    let gate = combine_optional(attack_type_applicability(m), weapon_name_applicability(m));
+    let gate = combine_optional(attack_type_applicability(m), weapon_applicability(m));
     emit(
         opts,
         out,

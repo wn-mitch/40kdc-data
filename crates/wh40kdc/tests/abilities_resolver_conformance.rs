@@ -135,6 +135,8 @@ fn run_dsl_corpus(filename: &str) {
                         "id": a.id,
                         "label": a.label,
                         "group": a.group,
+                        "requires": a.requires,
+                        "capRaise": a.cap_raise,
                         "buffs": a.buffs.iter().map(|b| serde_json::to_value(&b.contribution).unwrap()).collect::<Vec<_>>(),
                     })
                 })
@@ -145,10 +147,11 @@ fn run_dsl_corpus(filename: &str) {
                 .iter()
                 .map(|e| {
                     let mut e = e.clone();
-                    e.as_object_mut()
-                        .unwrap()
-                        .entry("group")
-                        .or_insert(Value::Null);
+                    // An expected lever omits `group`, `requires` and `capRaise` when it has none.
+                    let o = e.as_object_mut().unwrap();
+                    for key in ["group", "requires", "capRaise"] {
+                        o.entry(key).or_insert(Value::Null);
+                    }
                     e
                 })
                 .collect();
