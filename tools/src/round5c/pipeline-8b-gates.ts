@@ -157,6 +157,9 @@ export function isNonDamageEffect(node: unknown): boolean {
     case "stat-modifier":
       return typeof modifier.stat === "string" && !DAMAGE_STATS.has(modifier.stat);
     case "ability-grant":
+      // A printed grant is judged by the body it carries.
+      if (modifier.definition !== undefined) return isNonDamageEffect(modifier.definition);
+      return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
     case "ability-activate":
       return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
     case "rule-state":
@@ -183,19 +186,53 @@ export function isOutsideDamagePath(item: EffectTranslation["unsupported"][numbe
 
 const DEFENDER_CHECK_SOURCE: BuffSource = { kind: "ability", abilityId: "defender-check", abilityKind: "unit" };
 
-export function classifyUnsupported(unsupported: EffectTranslation["unsupported"]): { honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number } {
+/** The effect of the ability record a grant names, or undefined when no record of the faction has that id. */
+export type GrantedRecordEffect = (abilityId: string) => unknown;
+
+/**
+ * Whether a grant of an ability record changes no attack: the record resolves and its own effect
+ * is wholly off the damage path. The cruncher does not pull a granted record's buffs onto the
+ * holders, so a record with any damage effect stays a gap, as does a name no record has.
+ */
+function isNonDamageRecordGrant(item: EffectTranslation["unsupported"][number], recordEffect: GrantedRecordEffect | undefined, depth: number): boolean {
+  if (recordEffect === undefined || depth >= 4 || !UNMODELLED_EFFECT_TYPE.test(item.reason)) return false;
+  const fragment = item.effectFragment as { type?: unknown; modifier?: { ability?: unknown; definition?: unknown } } | undefined;
+  const ability = fragment?.type === "ability-grant" && fragment.modifier?.definition === undefined ? fragment.modifier?.ability : undefined;
+  if (typeof ability !== "string") return false;
+  const effect = recordEffect(ability);
+  if (effect === undefined) return false;
+  const translation = effectToBuffs(effect, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT);
+  if (translation.applied.length > 0 || translation.activatable.length > 0) return false;
+  const counts = classifyUnsupported(translation.unsupported, recordEffect, depth + 1);
+  return counts.unrecognizedShape === 0 && counts.honestUnknown === 0;
+}
+
+/** Granted records resolve the way the gated ability itself does: in its faction, then its parent's. */
+function grantedRecordEffect(dataRoot: string, factionId: string): GrantedRecordEffect {
+  return (abilityId) => {
+    try {
+      return (resolveCheckedEntity(dataRoot, factionId, abilityId).entry as { effect?: unknown }).effect;
+    } catch {
+      return undefined;
+    }
+  };
+}
+
+export function classifyUnsupported(
+  unsupported: EffectTranslation["unsupported"], recordEffect?: GrantedRecordEffect, depth = 0,
+): { honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number } {
   let honestUnknown = 0;
   let outsideDamagePath = 0;
   let unrecognizedShape = 0;
   for (const item of unsupported) {
     if (DEFENDER_SIDE_STAT.test(item.reason)) {
       // Counted only as whatever the target perspective still cannot model.
-      const asTarget = classifyUnsupported(effectToBuffs(item.effectFragment, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT, "target").unsupported);
+      const asTarget = classifyUnsupported(effectToBuffs(item.effectFragment, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT, "target").unsupported, recordEffect, depth);
       honestUnknown += asTarget.honestUnknown;
       outsideDamagePath += asTarget.outsideDamagePath;
       unrecognizedShape += asTarget.unrecognizedShape;
     } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)) honestUnknown += 1;
-    else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
+    else if (isOutsideDamagePath(item) || isNonDamageRecordGrant(item, recordEffect, depth)) outsideDamagePath += 1;
     else unrecognizedShape += 1;
   }
   return { honestUnknown, outsideDamagePath, unrecognizedShape };
@@ -247,11 +284,12 @@ async function gateCompiledAbility(
   // should be able to model but can't parse — a real gap.
   const source: BuffSource = { kind: "ability", abilityId, abilityKind: "unit" };
   const newTranslation = effectToBuffs(compiled.mechanics.effect, source, CRUNCHER_CONTEXT);
-  const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported);
+  const recordEffect = grantedRecordEffect(dataRoot, factionId);
+  const { honestUnknown, outsideDamagePath, unrecognizedShape } = classifyUnsupported(newTranslation.unsupported, recordEffect);
   const crunchShapeOk = unrecognizedShape === 0;
   if (!crunchShapeOk) {
     const reasons = newTranslation.unsupported
-      .filter((item) => !HONEST_UNKNOWN_CONDITION.test(item.reason) && !isOutsideDamagePath(item))
+      .filter((item) => classifyUnsupported([item], recordEffect).unrecognizedShape > 0)
       .map((item) => item.reason);
     failures.push({ faction_id: factionId, ability_id: abilityId, reason: "cruncher-unrecognized-shape", detail: [...new Set(reasons)].join("; ").slice(0, 300) });
   }

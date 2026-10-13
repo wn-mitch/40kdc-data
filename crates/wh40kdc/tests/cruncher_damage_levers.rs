@@ -271,3 +271,48 @@ fn an_any_result_reroll_is_all_failures_unless_its_value_is_one() {
     // Without the result scope, a missing subset is still outside the damage path.
     assert_eq!(subset(json!({ "roll": "wound" })), Vec::<Value>::new());
 }
+
+#[test]
+fn a_printed_grant_to_friendly_units_translates_its_body_for_the_holders() {
+    let body = json!({ "type": "re-roll", "target": "this-unit", "modifier": { "roll": "hit", "subset": "ones" } });
+    let grant = |target: Value| {
+        json!({
+            "type": "ability-grant",
+            "target": target,
+            "modifier": { "ability": "fabricated-granted", "definition": body.clone() },
+        })
+    };
+    let friendly = translate(
+        grant(json!({ "owner": "friendly", "all_of": ["EXAMPLE"] })),
+        TranslationPerspective::Attacker,
+    );
+    let contributions: Vec<Value> = friendly
+        .applied
+        .iter()
+        .map(|b| serde_json::to_value(&b.contribution).unwrap())
+        .collect();
+    assert_eq!(
+        contributions,
+        vec![json!({ "type": "reroll", "roll": "hit", "subset": "ones" })]
+    );
+    assert!(friendly.unsupported.is_empty());
+    // Holders bound to an event are not resolved; enemy holders contribute nothing.
+    let bound = translate(
+        grant(json!("event-subject")),
+        TranslationPerspective::Attacker,
+    );
+    assert!(bound.applied.is_empty());
+    assert_eq!(
+        bound
+            .unsupported
+            .iter()
+            .map(|u| u.reason.as_str())
+            .collect::<Vec<_>>(),
+        vec!["ability-grant: the units holding the granted ability are not resolved"]
+    );
+    let enemy = translate(
+        grant(json!({ "owner": "enemy", "all_of": ["EXAMPLE"] })),
+        TranslationPerspective::Attacker,
+    );
+    assert!(enemy.applied.is_empty() && enemy.unsupported.is_empty());
+}

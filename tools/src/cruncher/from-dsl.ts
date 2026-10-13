@@ -956,12 +956,21 @@ function translateIgnoreModifiers(node: Record<string, unknown>, source: BuffSou
 }
 
 /**
- * The core abilities the buff layer models on the unit being attacked: Stealth and the benefit of
+ * A printed grant (`definition`) translates its body for the holders. Otherwise, the core abilities
+ * the buff layer models on the unit being attacked: Stealth and the benefit of
  * cover (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
  * they contribute nothing to the buffed unit's own attacks.
  */
 function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
   const modifier = isObject(node.modifier) ? node.modifier : {};
+  // A printed grant carries the granted ability's body: it is the holders' own ability, so it
+  // reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
+  if (isObject(modifier.definition)) {
+    const holders = classifyTarget(node);
+    if (holders === "self") walk(modifier.definition, source, opts, out);
+    else if (holders === "unknown") out.unsupported.push({ reason: "ability-grant: the units holding the granted ability are not resolved", effectFragment: node });
+    return;
+  }
   const ability = modifier.ability;
   const fnp = Number(modifier.value);
   const contribution: BuffContribution | null =

@@ -189,12 +189,23 @@ func translateIgnoreModifiers(node, source map[string]any, opts dslOpts, out *ef
 	}
 }
 
-// translateAbilityGrant handles the core abilities the buff layer models on the unit being
-// attacked: Stealth and the benefit of cover (Stealth gives the benefit of cover) and Feel No
-// Pain. Like the other defender-side leaves, they contribute nothing to the buffed unit's own
-// attacks.
+// translateAbilityGrant translates a printed grant's (`definition`) body for the holders.
+// Otherwise it handles the core abilities the buff layer models on the unit being attacked:
+// Stealth and the benefit of cover (Stealth gives the benefit of cover) and Feel No Pain. Like
+// the other defender-side leaves, they contribute nothing to the buffed unit's own attacks.
 func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	modifier := modifierOrEmpty(node)
+	// A printed grant carries the granted ability's body: it is the holders' own ability, so it
+	// reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
+	if definition, ok := modifier["definition"].(map[string]any); ok {
+		switch classifyTarget(node) {
+		case "self":
+			dslWalk(definition, source, opts, out)
+		case "unknown":
+			out.unsupported = append(out.unsupported, unsup("ability-grant: the units holding the granted ability are not resolved", node))
+		}
+		return
+	}
 	ability := modifier["ability"]
 	fnp := jsNumber(modifier["value"])
 	var contribution map[string]any

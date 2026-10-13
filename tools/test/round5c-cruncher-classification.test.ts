@@ -84,6 +84,28 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classify({ type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
   });
 
+  it("judges a printed grant by the body it carries", () => {
+    const grant = (body: Record<string, unknown>) => ({ type: "ability-grant", target: { owner: "friendly", all_of: ["EXAMPLE"] }, modifier: { ability: "fabricated-terror", definition: body } });
+    expect(classify(grant({ type: "test", target: "this-unit", modifier: { test: "battle-shock" } }))).toEqual(outside);
+    const reroll = effectToBuffs(grant({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } }), source, ctx);
+    expect(reroll.unsupported).toEqual([]);
+    expect(reroll.applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
+  });
+
+  it("counts a record grant off the damage path only when the named record resolves and changes no attack", () => {
+    const records: Record<string, unknown> = {
+      "fabricated-cost-rule": { type: "cost-modifier", target: "this-unit", modifier: { of: "stratagem", operation: "increase", amount: 1 } },
+      "fabricated-reroll-rule": { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+    };
+    const grantOf = (ability: string) => effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability } }, source, ctx).unsupported;
+    const resolve = (id: string) => records[id];
+    expect(classifyUnsupported(grantOf("fabricated-cost-rule"), resolve)).toEqual(outside);
+    // The cruncher does not pull a granted record's buffs onto its holders, so a damage record stays a gap.
+    expect(classifyUnsupported(grantOf("fabricated-reroll-rule"), resolve)).toEqual(gap);
+    expect(classifyUnsupported(grantOf("fabricated-missing-rule"), resolve)).toEqual(gap);
+    expect(classifyUnsupported(grantOf("fabricated-cost-rule"))).toEqual(gap);
+  });
+
   it("still counts an honest runtime unknown as its own bucket, not outside the damage path", () => {
     const { unsupported } = effectToBuffs(
       { type: "conditional", condition: { type: "designated", parameters: { subject: "defender", tag: "X" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },

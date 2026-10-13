@@ -923,6 +923,81 @@
           "effect type \"ability-grant\" is not modelled by the buff layer"
         ]
       }
+    },
+    {
+      "_comment": "Fabricated printed grant to friendly units: the holders translate the granted body as their own ability.",
+      "abilityId": "fabricated-printed-grant",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-printed-grant",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "EXAMPLE"
+          ]
+        },
+        "modifier": {
+          "ability": "fabricated-granted",
+          "definition": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "reroll",
+            "roll": "hit",
+            "subset": "ones"
+          }
+        ],
+        "unsupportedReasons": []
+      }
+    },
+    {
+      "_comment": "Fabricated printed grant whose holders are bound to an event: not resolved.",
+      "abilityId": "fabricated-printed-grant-bound",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-printed-grant-bound",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "event-subject",
+        "modifier": {
+          "ability": "fabricated-granted",
+          "definition": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "ability-grant: the units holding the granted ability are not resolved"
+        ]
+      }
     }
   ]
 }

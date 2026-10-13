@@ -133,12 +133,30 @@ def translate_ignore_modifiers(
 def translate_ability_grant(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: dict[str, Any]
 ) -> None:
-    """The core abilities the buff layer models on the unit being attacked: Stealth and the
-    benefit of cover (Stealth gives the benefit of cover) and Feel No Pain. Like the other
-    defender-side leaves, they contribute nothing to the buffed unit's own attacks."""
+    """A printed grant (``definition``) translates its body for the holders. Otherwise, the core
+    abilities the buff layer models on the unit being attacked: Stealth and the benefit of cover
+    (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
+    they contribute nothing to the buffed unit's own attacks."""
     from wh40kdc.cruncher import from_dsl as dsl
 
     modifier = _modifier(node)
+    # A printed grant carries the granted ability's body: it is the holders' own ability, so it
+    # reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
+    definition = modifier.get("definition")
+    if isinstance(definition, dict):
+        holders = dsl._classify_target(node)
+        if holders == "self":
+            dsl._walk(definition, source, opts, out)
+        elif holders == "unknown":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "ability-grant: the units holding the granted ability are not resolved"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+        return
     ability = modifier.get("ability")
     fnp = dsl._js_number(modifier.get("value"))
     contribution: dict[str, Any] | None

@@ -12,7 +12,7 @@ use super::leaves::{
     attack_type_applicability, emit, roll_label, signed_value, unhonorable_narrowing,
 };
 use super::TranslationPerspective::{Attacker, Target};
-use super::{applies_to_buffed_unit, buff, classify_target, Out, Side, WalkOpts};
+use super::{applies_to_buffed_unit, buff, classify_target, walk, Out, Side, WalkOpts};
 
 /// `weapon_name` as a gate on the attacking weapon's (lower-cased) name.
 pub(super) fn weapon_name_applicability(m: &Obj) -> Option<Value> {
@@ -126,12 +126,26 @@ pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
 }
 
-/// The core abilities the buff layer models on the unit being attacked: Stealth and the benefit
-/// of cover (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side
-/// leaves, they contribute nothing to the buffed unit's own attacks.
+/// A printed grant (`definition`) translates its body for the holders. Otherwise, the core
+/// abilities the buff layer models on the unit being attacked: Stealth and the benefit of cover
+/// (Stealth gives the benefit of cover) and Feel No Pain. Like the other defender-side leaves,
+/// they contribute nothing to the buffed unit's own attacks.
 pub(super) fn ability_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
     let m = object(node.get("modifier")).unwrap_or(&empty);
+    // A printed grant carries the granted ability's body: it is the holders' own ability, so it
+    // reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
+    if let Some(definition) = m.get("definition").filter(|d| d.is_object()) {
+        match classify_target(node) {
+            Side::Buffed => walk(definition, opts, out),
+            Side::Unknown => out.unsupported(
+                "ability-grant: the units holding the granted ability are not resolved",
+                node,
+            ),
+            Side::Attacker | Side::Defender => {}
+        }
+        return;
+    }
     let fnp = js_number(m.get("value"));
     let contribution = match m.get("ability").and_then(Value::as_str) {
         Some("stealth" | "benefit-of-cover") => json!({ "type": "cover" }),

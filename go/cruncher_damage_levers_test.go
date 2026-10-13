@@ -140,3 +140,27 @@ func TestLeversWeaponNamedAttacksLiftReachesOnlyThatWeapon(t *testing.T) {
 		t.Fatalf("other weapon attacks = %v, want 10", got)
 	}
 }
+
+func TestLeversPrintedGrantToFriendlyUnitsTranslatesItsBodyForTheHolders(t *testing.T) {
+	grant := func(target any) map[string]any {
+		body := map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}}
+		return map[string]any{"type": "ability-grant", "target": target, "modifier": map[string]any{"ability": "fabricated-granted", "definition": body}}
+	}
+	friendly := effectToBuffs(grant(map[string]any{"owner": "friendly", "all_of": []any{"EXAMPLE"}}), leverSource(), shootingCtx(), "attacker")
+	if len(friendly.applied) != 1 || len(friendly.unsupported) != 0 {
+		t.Fatalf("friendly = %#v / %#v", friendly.applied, friendly.unsupported)
+	}
+	want := map[string]any{"type": "reroll", "roll": "hit", "subset": "ones"}
+	if got := friendly.applied[0].(map[string]any)["contribution"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("friendly contribution = %#v", got)
+	}
+	// Holders bound to an event are not resolved; enemy holders contribute nothing.
+	bound := effectToBuffs(grant("event-subject"), leverSource(), shootingCtx(), "attacker")
+	if len(bound.applied) != 0 || len(bound.unsupported) != 1 || bound.unsupported[0].(map[string]any)["reason"] != "ability-grant: the units holding the granted ability are not resolved" {
+		t.Fatalf("bound = %#v / %#v", bound.applied, bound.unsupported)
+	}
+	enemy := effectToBuffs(grant(map[string]any{"owner": "enemy", "all_of": []any{"EXAMPLE"}}), leverSource(), shootingCtx(), "attacker")
+	if len(enemy.applied) != 0 || len(enemy.unsupported) != 0 {
+		t.Fatalf("enemy = %#v / %#v", enemy.applied, enemy.unsupported)
+	}
+}

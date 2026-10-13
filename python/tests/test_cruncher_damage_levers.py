@@ -205,3 +205,30 @@ def test_weapon_named_attacks_lift_reaches_only_that_weapon(dataset: Any) -> Non
 
     assert _stages(dataset, lift("Bolt Rifles"))["attacks"] == 15
     assert _stages(dataset, lift("Fabricated Gun"))["attacks"] == 10
+
+
+def test_printed_grant_to_friendly_units_translates_its_body_for_the_holders() -> None:
+    body = {"type": "re-roll", "target": "this-unit", "modifier": {"roll": "hit", "subset": "ones"}}
+
+    def grant(target: Any) -> dict[str, Any]:
+        return {
+            "type": "ability-grant",
+            "target": target,
+            "modifier": {"ability": "fabricated-granted", "definition": body},
+        }
+
+    friendly = effect_to_buffs(
+        grant({"owner": "friendly", "all_of": ["EXAMPLE"]}), SOURCE, SHOOTING
+    )
+    assert [b["contribution"] for b in friendly["applied"]] == [
+        {"type": "reroll", "roll": "hit", "subset": "ones"}
+    ]
+    assert friendly["unsupported"] == []
+    # Holders bound to an event are not resolved; enemy holders contribute nothing.
+    bound = effect_to_buffs(grant("event-subject"), SOURCE, SHOOTING)
+    assert bound["applied"] == []
+    assert [item["reason"] for item in bound["unsupported"]] == [
+        "ability-grant: the units holding the granted ability are not resolved"
+    ]
+    enemy = effect_to_buffs(grant({"owner": "enemy", "all_of": ["EXAMPLE"]}), SOURCE, SHOOTING)
+    assert enemy["applied"] == [] and enemy["unsupported"] == []
