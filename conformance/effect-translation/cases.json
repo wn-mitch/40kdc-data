@@ -10062,23 +10062,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#215",
-    "effect": {
-      "type": "weapon-grant",
-      "target": "this-model",
-      "modifier": {
-        "weapon_id": "da-krunch"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "This model gains 1 Da Krunch weapon."
-    }
-  },
-  {
-    "caseId": "daemon-lord-of-khorne-chaos-daemons#216",
+    "caseId": "daemon-lord-of-khorne-chaos-daemons#215",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -10118,7 +10102,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#217",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#216",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -10231,7 +10215,7 @@
     }
   },
   {
-    "caseId": "daemonic-fury-khorne-daemonkin-world-eaters#218",
+    "caseId": "daemonic-fury-khorne-daemonkin-world-eaters#217",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10311,7 +10295,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-emperors-children#219",
+    "caseId": "daemonic-patrons-emperors-children#218",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10371,7 +10355,7 @@
     }
   },
   {
-    "caseId": "damaged#220",
+    "caseId": "damaged#219",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10401,7 +10385,7 @@
     }
   },
   {
-    "caseId": "damaged-objective-control#221",
+    "caseId": "damaged-objective-control#220",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10431,7 +10415,7 @@
     }
   },
   {
-    "caseId": "dark-pacts-chaos-space-marines#222",
+    "caseId": "dark-pacts-chaos-space-marines#221",
     "effect": {
       "type": "risk-reward",
       "reward": {
@@ -10493,7 +10477,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#223",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#222",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10538,7 +10522,7 @@
     }
   },
   {
-    "caseId": "dauntless-champions-grey-knights#224",
+    "caseId": "dauntless-champions-grey-knights#223",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10591,7 +10575,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#225",
+    "caseId": "dauntless-defenders-imperial-knights#224",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10638,7 +10622,7 @@
     }
   },
   {
-    "caseId": "death-begets-vengeance-wrath-of-the-doomed-blood-angels#226",
+    "caseId": "death-begets-vengeance-wrath-of-the-doomed-blood-angels#225",
     "effect": {
       "type": "persistent-designation",
       "designation": "death-begets-vengeance-hated",
@@ -10675,7 +10659,7 @@
     }
   },
   {
-    "caseId": "deathstrike-missile-astra-militarum#227",
+    "caseId": "deathstrike-missile-astra-militarum#226",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10720,7 +10704,7 @@
     }
   },
   {
-    "caseId": "deceptive-glamour-changehost-of-deceit-thousand-sons#228",
+    "caseId": "deceptive-glamour-changehost-of-deceit-thousand-sons#227",
     "effect": {
       "type": "targeting",
       "target": {
@@ -10756,7 +10740,7 @@
     }
   },
   {
-    "caseId": "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann#229",
+    "caseId": "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann#228",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10784,7 +10768,7 @@
     }
   },
   {
-    "caseId": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium#230",
+    "caseId": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium#229",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10847,7 +10831,7 @@
     }
   },
   {
-    "caseId": "delight-in-agony-elegant-brutes-emperors-children#231",
+    "caseId": "delight-in-agony-elegant-brutes-emperors-children#230",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10889,7 +10873,7 @@
     }
   },
   {
-    "caseId": "downtrodden-orks#232",
+    "caseId": "downtrodden-orks#231",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -10915,7 +10899,7 @@
     }
   },
   {
-    "caseId": "drain-life-necrons#233",
+    "caseId": "drain-life-necrons#232",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -10953,7 +10937,7 @@
     }
   },
   {
-    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#234",
+    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#233",
     "effect": {
       "type": "add-unit",
       "target": "stratagem-target",
@@ -10980,7 +10964,7 @@
     }
   },
   {
-    "caseId": "drop-pod-assault-adeptus-astartes#235",
+    "caseId": "drop-pod-assault-adeptus-astartes#234",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11037,7 +11021,7 @@
     }
   },
   {
-    "caseId": "ds8-support-turret-tau-empire#236",
+    "caseId": "ds8-support-turret-tau-empire#235",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11080,7 +11064,7 @@
     }
   },
   {
-    "caseId": "dynamic-breakthrough-rapid-evisceration-emperors-children#237",
+    "caseId": "dynamic-breakthrough-rapid-evisceration-emperors-children#236",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -11104,108 +11088,23 @@
     }
   },
   {
-    "caseId": "eadbanger-wurrband-orks#238",
+    "caseId": "eadbanger-wurrband-orks#237",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "PSYKER"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "eadbanger"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 2,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "S",
-              "operation": "set",
-              "value": 6,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "AP",
-              "operation": "set",
-              "value": 1,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "D",
-              "operation": "set",
-              "value": 3,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "abilities": [
-                "Hazardous",
-                "Precision",
-                "Psychic"
-              ],
-              "weapon_name": "’Eadbanger"
-            }
-          }
-        ]
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "eadbanger-wurrband"
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the unit is an ORKS PSYKER unit:\n  -> This model gains 1 Eadbanger weapon.\n  -> Set the Attacks characteristic of ranged ’Eadbanger weapons equipped by this model to 2.\n  -> Set the Strength characteristic of ranged ’Eadbanger weapons equipped by this model to 6.\n  -> Set the Armour Penetration characteristic of ranged ’Eadbanger weapons equipped by this model to -1.\n  -> Set the Damage characteristic of ranged ’Eadbanger weapons equipped by this model to 3.\n  -> ’Eadbanger weapons equipped by this model gain [HAZARDOUS] and [PRECISION] and [PSYCHIC]."
+      "text": "This model gains 1 'Eadbanger weapon."
     }
   },
   {
-    "caseId": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes#239",
+    "caseId": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11238,7 +11137,7 @@
     }
   },
   {
-    "caseId": "egotistical-power-grand-coven-thousand-sons#240",
+    "caseId": "egotistical-power-grand-coven-thousand-sons#239",
     "effect": {
       "type": "choice",
       "options": [
@@ -11285,7 +11184,7 @@
     }
   },
   {
-    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#241",
+    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#240",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -11304,7 +11203,7 @@
     }
   },
   {
-    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#242",
+    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11353,7 +11252,7 @@
     }
   },
   {
-    "caseId": "eyes-of-the-cult-xenocult-masses-genestealer-cults#243",
+    "caseId": "eyes-of-the-cult-xenocult-masses-genestealer-cults#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11394,7 +11293,7 @@
     }
   },
   {
-    "caseId": "fail-safe-detonator-retaliation-cadre-tau-empire#244",
+    "caseId": "fail-safe-detonator-retaliation-cadre-tau-empire#243",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11478,7 +11377,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#245",
+    "caseId": "fates-in-flux-chaos-daemons#244",
     "effect": {
       "type": "resource-die",
       "target": "this-unit",
@@ -11507,7 +11406,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#246",
+    "caseId": "ferocious-show-off-green-tide-orks#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11575,7 +11474,7 @@
     }
   },
   {
-    "caseId": "fleshy-curse-cabal-of-chaos-chaos-space-marines#247",
+    "caseId": "fleshy-curse-cabal-of-chaos-chaos-space-marines#246",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -11647,7 +11546,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#248",
+    "caseId": "flow-of-magic-thousand-sons#247",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -11818,7 +11717,7 @@
     }
   },
   {
-    "caseId": "flyin-headbutt-flyboyz-orks#249",
+    "caseId": "flyin-headbutt-flyboyz-orks#248",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11996,7 +11895,7 @@
     }
   },
   {
-    "caseId": "furious-onslaught-world-eaters#250",
+    "caseId": "furious-onslaught-world-eaters#249",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12034,7 +11933,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#251",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#250",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -12055,7 +11954,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-khorne-chaos-daemons#252",
+    "caseId": "greater-daemon-of-khorne-chaos-daemons#251",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12106,7 +12005,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-nurgle-chaos-daemons#253",
+    "caseId": "greater-daemon-of-nurgle-chaos-daemons#252",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12157,7 +12056,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#254",
+    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#253",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12208,7 +12107,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#255",
+    "caseId": "grot-shields-runt-swarm-orks#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12365,13 +12264,12 @@
     }
   },
   {
-    "caseId": "gun-drone-tau-empire#256",
+    "caseId": "gun-drone-tau-empire#255",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "twin-pulse-carbine",
-        "count": 1
+        "weapon_id": "twin-pulse-carbine-drone"
       }
     },
     "scope": {
@@ -12382,7 +12280,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#257",
+    "caseId": "hallowed-ground-grey-knights#256",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -12609,7 +12507,7 @@
     }
   },
   {
-    "caseId": "hammer-aflame-grey-knights#258",
+    "caseId": "hammer-aflame-grey-knights#257",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12687,7 +12585,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#259",
+    "caseId": "headlong-destruction-chaos-space-marines#258",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12715,7 +12613,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#260",
+    "caseId": "heroes-of-legend-imperial-knights#259",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12742,7 +12640,7 @@
     }
   },
   {
-    "caseId": "holy-vanguard-adepta-sororitas#261",
+    "caseId": "holy-vanguard-adepta-sororitas#260",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12789,7 +12687,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#262",
+    "caseId": "icon-of-khorne-world-eaters#261",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12831,7 +12729,7 @@
     }
   },
   {
-    "caseId": "icon-of-war-khorne-daemonkin-world-eaters#263",
+    "caseId": "icon-of-war-khorne-daemonkin-world-eaters#262",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12906,7 +12804,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#264",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#263",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -12928,7 +12826,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#265",
+    "caseId": "infested-war-zone-runt-swarm-orks#264",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13003,7 +12901,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#266",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#265",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -13030,7 +12928,7 @@
     }
   },
   {
-    "caseId": "kill-team-agents-of-the-imperium#267",
+    "caseId": "kill-team-agents-of-the-imperium#266",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -13049,7 +12947,7 @@
     }
   },
   {
-    "caseId": "killing-blow-tau-empire#268",
+    "caseId": "killing-blow-tau-empire#267",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13112,7 +13010,7 @@
     }
   },
   {
-    "caseId": "let-loose-the-wolves-space-wolves#269",
+    "caseId": "let-loose-the-wolves-space-wolves#268",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -13136,7 +13034,7 @@
     }
   },
   {
-    "caseId": "loyal-protector-astra-militarum#270",
+    "caseId": "loyal-protector-astra-militarum#269",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13180,7 +13078,7 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#271",
+    "caseId": "madcap-artillery-orks#270",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13358,7 +13256,7 @@
     }
   },
   {
-    "caseId": "martial-mastery-adeptus-custodes#272",
+    "caseId": "martial-mastery-adeptus-custodes#271",
     "effect": {
       "type": "stance-select",
       "mode": "re-selectable",
@@ -13407,6 +13305,22 @@
     },
     "expected": {
       "text": "Until the end of the battle round:\n  -> At the start of the battle round, select one:\n    - Critical Hits on 5+: if the unit has the Martial Katah ability, the unit scores Critical Hits on Hit rolls of 5+ with melee weapons.\n    - Improved Armour Penetration: improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1."
+    }
+  },
+  {
+    "caseId": "missile-drone-tau-empire#272",
+    "effect": {
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "missile-pod-drone"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This model gains 1 Missile Pod weapon."
     }
   },
   {
@@ -23002,6 +22916,817 @@
     }
   },
   {
+    "caseId": "fidelity/army-rule-composition-permission",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include friendly ALPHA units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-forbidden",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "none_of": [
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include friendly ALPHA units (excluding BETA units)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "datasheets": [
+          "alpha-squad",
+          "beta-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include Alpha Squad or Beta Squad units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 2,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "datasheets": [
+          "alpha-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include at most 2 friendly ALPHA units (Alpha Squad only)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-unique-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "unique",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "level": "model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include only one friendly ALPHA model."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-warlord-forbidden-group",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "any_of": [
+          "ALPHA",
+          "BETA"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "rule": "warlord-forbidden"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly models with the ALPHA or BETA keyword cannot be your Warlord."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-enhancement-source",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "enhancement-source"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units can only be given Enhancements from this Detachment."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements from this Detachment do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-unit-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements on all friendly ALPHA units do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-reserves",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "strategic-reserves-points"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units do not count toward the points limit for Strategic Reserves."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "CHARACTER"
+          ],
+          "none_of": [
+            "EPIC HERO"
+          ],
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly CHARACTER unit (excluding EPIC HERO units) with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer-models",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS"
+          ],
+          "level": "model",
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly ADEPTUS model with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-can-lead",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-model",
+      "modifier": {
+        "rule": "attachment",
+        "can_lead": {
+          "owner": "friendly",
+          "any_of": [
+            "ALPHA",
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can also be attached to friendly units with the ALPHA or BETA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ],
+            "none_of": [
+              "BETA"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes an ALPHA unit (excluding BETA units), when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-min",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "min": 2
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes 2 or more ALPHA units, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "any_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA or BETA keyword, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-all",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA and BETA keywords, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your army includes an ALPHA unit, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ],
+                "level": "model"
+              },
+              "every": true
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless every model in your army has the ALPHA keyword, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-faction-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "alpha-legion"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          },
+          "per": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "exempt_from": [
+            "retinue-limit"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your Army Faction is ALPHA LEGION, when resolving this use, your army can include at most 1 friendly GAMMA unit for each friendly ALPHA unit in your army; they do not count toward the Retinue limit."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-name",
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": "this-model",
+      "object": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "weapon_name": "quake cannon"
+      }
+    },
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "blood-tithe-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model destroys an enemy model with a quake cannon attack, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-keyword",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "weapon_keyword": "PSYCHIC"
+      }
+    },
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "blood-tithe-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy unit with a [PSYCHIC] weapon, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-event",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with its just-resolved melee attacks, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-fight-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-fight-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Fight phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-shooting-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-shooting-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Shooting phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-opponent-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-opponent-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your opponent's next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-start-of-opponent-next-command-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-start-of-opponent-next-command-phase"
+    },
+    "expected": {
+      "text": "Until the start of your opponent's next Command phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
     "caseId": "model-destroyed-by-destroyer",
     "effect": {
       "type": "stat-modifier",
@@ -24009,614 +24734,6 @@
     }
   },
   {
-    "caseId": "fidelity/army-rule-composition-permission",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "composition",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, your army can include friendly ALPHA units."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-composition-forbidden",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "composition",
-        "max": 0,
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ],
-          "none_of": [
-            "BETA"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, your army cannot include friendly ALPHA units (excluding BETA units)."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-composition-datasheets",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "composition",
-        "max": 0,
-        "datasheets": [
-          "alpha-squad",
-          "beta-squad"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, your army cannot include Alpha Squad or Beta Squad units."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-composition-datasheets-with",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "composition",
-        "max": 2,
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ]
-        },
-        "datasheets": [
-          "alpha-squad"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, your army can include at most 2 friendly ALPHA units (Alpha Squad only)."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-unique-with",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "unique",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ],
-          "level": "model"
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, your army can include only one friendly ALPHA model."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-warlord-forbidden-group",
-    "effect": {
-      "type": "army-rule",
-      "target": {
-        "owner": "friendly",
-        "any_of": [
-          "ALPHA",
-          "BETA"
-        ],
-        "level": "model"
-      },
-      "modifier": {
-        "rule": "warlord-forbidden"
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, all friendly models with the ALPHA or BETA keyword cannot be your Warlord."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-enhancement-source",
-    "effect": {
-      "type": "army-rule",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "ALPHA"
-        ]
-      },
-      "modifier": {
-        "rule": "enhancement-source"
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, all friendly ALPHA units can only be given Enhancements from this Detachment."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-limit-exemption-enhancements",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "limit-exemption",
-        "exempt_from": [
-          "enhancement-limit"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, Enhancements from this Detachment do not count toward your army's Enhancement limit."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-limit-exemption-unit-enhancements",
-    "effect": {
-      "type": "army-rule",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "ALPHA"
-        ]
-      },
-      "modifier": {
-        "rule": "limit-exemption",
-        "exempt_from": [
-          "enhancement-limit"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, Enhancements on all friendly ALPHA units do not count toward your army's Enhancement limit."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-limit-exemption-reserves",
-    "effect": {
-      "type": "army-rule",
-      "target": {
-        "owner": "friendly",
-        "all_of": [
-          "ALPHA"
-        ]
-      },
-      "modifier": {
-        "rule": "limit-exemption",
-        "exempt_from": [
-          "strategic-reserves-points"
-        ]
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, all friendly ALPHA units do not count toward the points limit for Strategic Reserves."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-attachment-transfer",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "attachment",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "CHARACTER"
-          ],
-          "none_of": [
-            "EPIC HERO"
-          ],
-          "has_ability": [
-            "leader"
-          ]
-        },
-        "attach_as": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, a friendly CHARACTER unit (excluding EPIC HERO units) with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-attachment-transfer-models",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-unit",
-      "modifier": {
-        "rule": "attachment",
-        "with": {
-          "owner": "friendly",
-          "all_of": [
-            "ADEPTUS"
-          ],
-          "level": "model",
-          "has_ability": [
-            "leader"
-          ]
-        },
-        "attach_as": {
-          "owner": "friendly",
-          "all_of": [
-            "ALPHA"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, a friendly ADEPTUS model with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
-    }
-  },
-  {
-    "caseId": "fidelity/army-rule-attachment-can-lead",
-    "effect": {
-      "type": "army-rule",
-      "target": "this-model",
-      "modifier": {
-        "rule": "attachment",
-        "can_lead": {
-          "owner": "friendly",
-          "any_of": [
-            "ALPHA",
-            "BETA"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "When resolving this use, this model can also be attached to friendly units with the ALPHA or BETA keyword."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-includes",
-        "parameters": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "ALPHA"
-            ],
-            "none_of": [
-              "BETA"
-            ]
-          }
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 0,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "If your army includes an ALPHA unit (excluding BETA units), when resolving this use, your army cannot include friendly GAMMA units."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes-min",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-includes",
-        "parameters": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "ALPHA"
-            ]
-          },
-          "min": 2
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 0,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "If your army includes 2 or more ALPHA units, when resolving this use, your army cannot include friendly GAMMA units."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes-every",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-includes",
-        "parameters": {
-          "filter": {
-            "owner": "friendly",
-            "any_of": [
-              "ALPHA",
-              "BETA"
-            ],
-            "level": "model"
-          },
-          "every": true
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 1,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "If every model in your army has the ALPHA or BETA keyword, when resolving this use, your army can include at most 1 friendly GAMMA unit."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes-every-all",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "army-includes",
-        "parameters": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "ALPHA",
-              "BETA"
-            ],
-            "level": "model"
-          },
-          "every": true
-        }
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 1,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "If every model in your army has the ALPHA and BETA keywords, when resolving this use, your army can include at most 1 friendly GAMMA unit."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes-negated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "army-includes",
-            "parameters": {
-              "filter": {
-                "owner": "friendly",
-                "all_of": [
-                  "ALPHA"
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 0,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "Unless your army includes an ALPHA unit, when resolving this use, your army cannot include friendly GAMMA units."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-includes-every-negated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "army-includes",
-            "parameters": {
-              "filter": {
-                "owner": "friendly",
-                "all_of": [
-                  "ALPHA"
-                ],
-                "level": "model"
-              },
-              "every": true
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 0,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          }
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "Unless every model in your army has the ALPHA keyword, when resolving this use, your army cannot include friendly GAMMA units."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-army-faction-negated",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "not",
-        "operands": [
-          {
-            "type": "army-faction",
-            "parameters": {
-              "faction": "alpha-legion"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "army-rule",
-        "target": "this-unit",
-        "modifier": {
-          "rule": "composition",
-          "max": 1,
-          "with": {
-            "owner": "friendly",
-            "all_of": [
-              "GAMMA"
-            ]
-          },
-          "per": {
-            "owner": "friendly",
-            "all_of": [
-              "ALPHA"
-            ]
-          },
-          "exempt_from": [
-            "retinue-limit"
-          ]
-        }
-      }
-    },
-    "scope": {
-      "duration": "resolution"
-    },
-    "expected": {
-      "text": "Unless your Army Faction is ALPHA LEGION, when resolving this use, your army can include at most 1 friendly GAMMA unit for each friendly ALPHA unit in your army; they do not count toward the Retinue limit."
-    }
-  },
-  {
     "caseId": "fidelity/select-weapon-named",
     "effect": {
       "type": "select-weapon",
@@ -25482,8 +25599,7 @@
     "expected": {
       "text": "While the target unit is not the Warlord, the unit gets +1 to Hit rolls."
     }
-  }
-,
+  },
   {
     "caseId": "stratagem-targeted-restriction-fabricated#0",
     "effect": {
@@ -25542,8 +25658,7 @@
     "expected": {
       "text": "Unless the unit has been targeted with the Alpha Strike Fabricated Stratagem this phase or if the unit has been targeted with the Beta Strike Fabricated Stratagem this phase, you gain 1CP."
     }
-  }
-,
+  },
   {
     "caseId": "stratagem-targeted-object-range-fabricated#0",
     "effect": {
@@ -25578,8 +25693,7 @@
     "expected": {
       "text": "When an enemy unit within 12\" of this model is targeted with a Stratagem, you gain 1CP."
     }
-  }
-,
+  },
   {
     "caseId": "stratagem-targeted-aura-recipient-fabricated#0",
     "effect": {
@@ -25616,135 +25730,6 @@
     "behavior": "triggered",
     "expected": {
       "text": "When a friendly LEAGUES OF VOTANN unit within 6\" of this model is targeted with a Stratagem, you gain 1CP."
-    }
-  },
-  {
-    "caseId": "fidelity/trigger-destroyed-weapon-name",
-    "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "model-destroyed",
-        "subject": "this-model",
-        "object": {
-          "owner": "enemy",
-          "level": "model"
-        },
-        "filter": {
-          "weapon_name": "quake cannon"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "blood-tithe-pool",
-          "amount": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "-> Each time this model destroys an enemy model with a quake cannon attack: you gain 1 Blood Tithe point."
-    }
-  },
-  {
-    "caseId": "fidelity/trigger-destroyed-weapon-keyword",
-    "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "destroyed",
-        "subject": "this-unit",
-        "object": {
-          "owner": "enemy"
-        },
-        "filter": {
-          "weapon_keyword": "PSYCHIC"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "blood-tithe-pool",
-          "amount": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "-> Each time the unit destroys an enemy unit with a [PSYCHIC] weapon: you gain 1 Blood Tithe point."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-destroyed-melee-event",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "destroyed",
-          "object": {
-            "owner": "enemy"
-          },
-          "filter": {
-            "by": "this-unit",
-            "attack_type": "melee"
-          },
-          "window": "event"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "blood-tithe-pool",
-          "amount": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "If the unit has destroyed 1+ enemy units with its just-resolved melee attacks, you gain 1 Blood Tithe point."
-    }
-  },
-  {
-    "caseId": "fidelity/condition-destroyed-melee-phase",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "destroyed",
-          "object": {
-            "owner": "enemy"
-          },
-          "filter": {
-            "by": "this-unit",
-            "attack_type": "melee"
-          },
-          "window": "phase"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "blood-tithe-pool",
-          "amount": 1
-        }
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, you gain 1 Blood Tithe point."
     }
   },
   {
@@ -25849,86 +25834,6 @@
     },
     "expected": {
       "text": "Add 1 to the unit's Attacks characteristic for every 5 enemy models within 6\" (counted when the rule applies)."
-    }
-  },
-  {
-    "caseId": "fidelity/duration-until-end-of-your-next-fight-phase",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "until-end-of-your-next-fight-phase"
-    },
-    "expected": {
-      "text": "Until the end of your next Fight phase, the unit has the Feel No Pain 5+ ability."
-    }
-  },
-  {
-    "caseId": "fidelity/duration-until-end-of-your-next-shooting-phase",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "until-end-of-your-next-shooting-phase"
-    },
-    "expected": {
-      "text": "Until the end of your next Shooting phase, the unit has the Feel No Pain 5+ ability."
-    }
-  },
-  {
-    "caseId": "fidelity/duration-until-end-of-your-next-movement-phase",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "until-end-of-your-next-movement-phase"
-    },
-    "expected": {
-      "text": "Until the end of your next Movement phase, the unit has the Feel No Pain 5+ ability."
-    }
-  },
-  {
-    "caseId": "fidelity/duration-until-end-of-opponent-next-movement-phase",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "until-end-of-opponent-next-movement-phase"
-    },
-    "expected": {
-      "text": "Until the end of your opponent's next Movement phase, the unit has the Feel No Pain 5+ ability."
-    }
-  },
-  {
-    "caseId": "fidelity/duration-until-start-of-opponent-next-command-phase",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "this-unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "duration": "until-start-of-opponent-next-command-phase"
-    },
-    "expected": {
-      "text": "Until the start of your opponent's next Command phase, the unit has the Feel No Pain 5+ ability."
     }
   },
   {

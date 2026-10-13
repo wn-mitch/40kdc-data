@@ -130,7 +130,7 @@
   },
   {
     "name": "stale-future-index",
-    "decode_token": "AR0AgIl6",
+    "decode_token": "AR4AgIl6",
     "expected_decode": {
       "ok": false,
       "reason": "stale-registry"

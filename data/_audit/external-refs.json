@@ -62,15 +62,15 @@
       }
     },
     "weapon": {
-      "entities": 3287,
-      "with_external_refs": 3157,
+      "entities": 3295,
+      "with_external_refs": 3165,
       "covered_entities_by_namespace": {
         "bsdata": 2680,
-        "mfm": 3103
+        "mfm": 3111
       },
       "references_by_namespace": {
         "bsdata": 3175,
-        "mfm": 3507
+        "mfm": 3515
       }
     },
     "wargear": {
@@ -4433,6 +4433,21 @@
     },
     {
       "namespace": "mfm",
+      "id": "189ee391-f402-4ad1-a044-2106662c7948",
+      "targets": [
+        {
+          "entity_type": "wargear",
+          "id": "mv15-gun-drone"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-pulse-blaster-drone",
+          "faction_id": "tau-empire"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "19bef32c-bfb4-4ff1-bd4b-91b005dcd4f3",
       "targets": [
         {
@@ -4821,6 +4836,21 @@
           "entity_type": "weapon",
           "id": "heat-lance",
           "faction_id": "drukhari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "21d80668-7582-4409-af0a-dd65c1292ff9",
+      "targets": [
+        {
+          "entity_type": "wargear",
+          "id": "missile-drone"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "missile-pod-drone",
+          "faction_id": "tau-empire"
         }
       ]
     },
@@ -7679,6 +7709,21 @@
           "entity_type": "weapon",
           "id": "ministorum-heavy-flamer",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "7b869f23-60c0-4d2a-8d4d-b6dbe9fff367",
+      "targets": [
+        {
+          "entity_type": "wargear",
+          "id": "gun-drone"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "twin-pulse-carbine-drone",
+          "faction_id": "tau-empire"
         }
       ]
     },
@@ -11024,6 +11069,21 @@
           "entity_type": "weapon",
           "id": "diseased-claws-and-teeth",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e63aac10-6f51-4d7d-afff-4ef394b32978",
+      "targets": [
+        {
+          "entity_type": "wargear",
+          "id": "recon-drone"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "drone-burst-cannon-drone",
+          "faction_id": "tau-empire"
         }
       ]
     },
