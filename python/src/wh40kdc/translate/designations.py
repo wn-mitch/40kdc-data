@@ -203,7 +203,8 @@ _DESIGNATION_TERMS: dict[str, dict[str, str]] = {
     "warlord": {"adjective": "the Warlord"},
 }
 
-#: Designations only list building sets (the model chosen as Warlord): a rule may test them, never apply them.
+#: Designations only list building sets (the model chosen as Warlord): a rule may test them,
+#: never apply them.
 LIST_BUILDING_DESIGNATIONS: frozenset[str] = frozenset({"warlord"})
 
 

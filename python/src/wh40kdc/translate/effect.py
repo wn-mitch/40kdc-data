@@ -38,7 +38,7 @@ from wh40kdc.translate.effect_inline import (
     stance_pick,
     usage_clause,
 )
-from wh40kdc.translate.effect_leaf import definition_part, defined_grant_head, is_defined_grant
+from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
 from wh40kdc.translate.effect_region import (
     capacity_clause,
     describe_menu_action,

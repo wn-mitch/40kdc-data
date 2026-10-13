@@ -585,9 +585,11 @@ def _army_includes(p: P, negated: bool) -> str:
         any_ = [_str(x) for x in f.get("any_of") or []] if isinstance(f.get("any_of"), list) else []
         words = _or_list(any_) if any_ else _and_list(all_)
         plural = "s" if len(all_) > 1 and not any_ else ""
-        return f"{'not ' if negated else ''}every {noun} in your army has the {words} keyword{plural}"
+        not_word = "not " if negated else ""
+        return f"{not_word}every {noun} in your army has the {words} keyword{plural}"
     one = unit_filter_phrase(f)
-    minimum = p.get("min") if p.get("min") is not None else 1
+    raw_min = p.get("min")
+    minimum = raw_min if raw_min is not None else 1
     if minimum > 1:
         bare = re.sub(r"^an? ", "", one, count=1)
         plural_noun = re.sub(r"\b(unit|model)\b", r"\1s", bare, count=1)

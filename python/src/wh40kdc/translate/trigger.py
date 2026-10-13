@@ -560,7 +560,9 @@ def _destroy_attack_phrase(t: AbilityTrigger, f: dict[str, Any]) -> str:
     if _truthy(f.get("weapon_keyword")):
         return f" with a [{_str(f['weapon_keyword']).upper()}] weapon"
     if t.get("event") == "model-destroyed" and _truthy(f.get("attack_type")):
-        return " in melee" if f["attack_type"] == "melee" else f" with a {_str(f['attack_type'])} attack"
+        if f["attack_type"] == "melee":
+            return " in melee"
+        return f" with a {_str(f['attack_type'])} attack"
     return ""
 
 

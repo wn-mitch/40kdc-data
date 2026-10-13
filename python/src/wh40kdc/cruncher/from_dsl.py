@@ -787,17 +787,24 @@ def _translate_keyword_grant(
     modifier = node.get("modifier")
     if not _is_object(modifier):
         return
-    # A selector by keyword would apply the grant to every weapon of the unit: refuse it rather than over-apply it.
+    # A selector by keyword would apply the grant to every weapon of the unit: refuse it rather
+    # than over-apply it.
     if modifier.get("weapon_keyword") is not None:
         out["unsupported"].append({
-            "reason": "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve",
+            "reason": (
+                "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher "
+                "cannot resolve"
+            ),
             "effectFragment": node,
         })
         return
     removes = modifier.get("removes")
     for keyword in [k for k in removes if isinstance(k, str)] if isinstance(removes, list) else []:
         out["unsupported"].append({
-            "reason": f'weapon-ability-removal: the cruncher does not model removing a weapon ability ("{keyword}")',
+            "reason": (
+                "weapon-ability-removal: the cruncher does not model removing a weapon ability "
+                f'("{keyword}")'
+            ),
             "effectFragment": {"removes": [keyword]},
         })
     abilities = modifier.get("abilities")
@@ -1854,7 +1861,9 @@ def parse_keyword_grant(raw: str) -> dict[str, Any] | None:
         return None
 
     # Anti-X N+ → { anti, target_keyword: X, threshold: N }; X may be "A/B" or "non-A".
-    anti_match = re.match(r"^anti-([A-Z][A-Z\s-]*(?:/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$", trimmed, re.IGNORECASE)
+    anti_match = re.match(
+        r"^anti-([A-Z][A-Z\s-]*(?:/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$", trimmed, re.IGNORECASE
+    )
     if anti_match:
         return {
             "keyword_id": "anti",

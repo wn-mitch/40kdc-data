@@ -1,4 +1,7 @@
-"""Describer wording for eligible to embark within a named Transport (pinned against the TS reference)."""
+"""Describer wording for eligible to embark within a named Transport.
+
+Pinned against the TS reference.
+"""
 
 from __future__ import annotations
 
@@ -17,7 +20,14 @@ def test_embark_within_negated_by_the_not_operator() -> None:
     condition = {
         "operator": "not",
         "operands": [
-            {"type": "eligible", "parameters": {"subject": "this-unit", "to": "embark-within", "transport": "this-unit"}}
+            {
+                "type": "eligible",
+                "parameters": {
+                    "subject": "this-unit",
+                    "to": "embark-within",
+                    "transport": "this-unit",
+                },
+            }
         ],
     }
     assert describe_condition(condition) == "the unit is not able to embark within that Transport"

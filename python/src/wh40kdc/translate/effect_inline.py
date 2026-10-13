@@ -140,9 +140,12 @@ def usage_clause(u: Any) -> str:
 
 
 def _scaling_clause(s: dict[str, Any]) -> str:
-    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\""), with a timing note when on apply."""
+    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\""), with a
+    timing note when on apply."""
     clause = _scaling_wording(s)
-    return f"{clause} (counted when the rule applies)" if s.get("evaluated") == "on-apply" else clause
+    if s.get("evaluated") == "on-apply":
+        return f"{clause} (counted when the rule applies)"
+    return clause
 
 
 def _scaling_wording(s: dict[str, Any]) -> str:

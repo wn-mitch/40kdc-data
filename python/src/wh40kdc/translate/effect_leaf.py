@@ -158,8 +158,13 @@ def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         )
     if has_weapon(m):
         # A weapon exclusion names the one weapon the change skips.
-        other = f" other than \"{jstr(m['exclude_weapon_name'])}\"" if m.get("exclude_weapon_name") is not None else ""
-        what = f"the {stat} of {weapon_noun(m)}{other} equipped by {weapon_holder(e.get('target'), ctx)}"
+        other = (
+            f" other than \"{jstr(m['exclude_weapon_name'])}\""
+            if m.get("exclude_weapon_name") is not None
+            else ""
+        )
+        holder = weapon_holder(e.get("target"), ctx)
+        what = f"the {stat} of {weapon_noun(m)}{other} equipped by {holder}"
         return f"{_stat_change(m, what)}{_bounds(m)}"
     return f"{_stat_change(m, of_or_possessive(subj, stat))}{_bounds(m)}"
 
@@ -393,8 +398,16 @@ def _keyword_grant(m: dict[str, Any], subj: str) -> str:
 
 def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     # A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
-    gained = " and ".join(bracket_keyword(a) for a in m["abilities"]) if isinstance(m.get("abilities"), list) else ""
-    lost = " and ".join(bracket_keyword(a) for a in m["removes"]) if isinstance(m.get("removes"), list) else ""
+    gained = (
+        " and ".join(bracket_keyword(a) for a in m["abilities"])
+        if isinstance(m.get("abilities"), list)
+        else ""
+    )
+    lost = (
+        " and ".join(bracket_keyword(a) for a in m["removes"])
+        if isinstance(m.get("removes"), list)
+        else ""
+    )
     increment = (
         " (a weapon that already has that ability adds the ratings together)"
         if m.get("if_present") == "increment"
@@ -494,8 +507,12 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
 
 
 def _weapon_ability_range(m: dict[str, Any], subj: str) -> str:
-    """A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire)."""
-    return f"{of_or_possessive(subj, 'attacks')} benefit from {bracket_keyword(m.get('keyword'))} when the target is within the weapon's range"
+    """A weapon ability's test out to the attacking weapon's full range, not half of it
+    (Rapid Fire)."""
+    return (
+        f"{of_or_possessive(subj, 'attacks')} benefit from {bracket_keyword(m.get('keyword'))} "
+        "when the target is within the weapon's range"
+    )
 
 
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:

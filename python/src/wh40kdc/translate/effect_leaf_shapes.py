@@ -154,8 +154,8 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
     if m.get("all_options") is True:
         return f"every option of {label} is active for {subj}{consumed}"
     if isinstance(m.get("options"), list):
-        names = _and_list(_option_names(m["options"]))
-        return f"the {names} options of {label} are active for {subj}{exclusive}{consumed}"
+        active = _and_list(_option_names(m["options"]))
+        return f"the {active} options of {label} are active for {subj}{exclusive}{consumed}"
     if m.get("option") is None:
         return f"{subj} {v(subj, 'resolves')} the {label} ability now{instead}"
     return (

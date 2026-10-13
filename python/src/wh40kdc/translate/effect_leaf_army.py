@@ -181,7 +181,8 @@ def army_rule(m: dict[str, Any], subj: str, ctx: Ctx, target: Any = None) -> str
 
 def _limit_exemption(m: dict[str, Any], subj: str, target: Any) -> str:
     """Limits the rule's units (or this Detachment's Enhancements) are left out of."""
-    items = m.get("exempt_from") if isinstance(m.get("exempt_from"), list) else []
+    exempt_from = m.get("exempt_from")
+    items = exempt_from if isinstance(exempt_from, list) else []
     parts = []
     for item in items:
         if item == "enhancement-limit":

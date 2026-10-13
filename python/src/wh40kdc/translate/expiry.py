@@ -28,8 +28,12 @@ _TRAILS: dict[str, str] = {
     "until-end-of-your-next-fight-phase": "until the end of your next Fight phase",
     "until-end-of-your-next-shooting-phase": "until the end of your next Shooting phase",
     "until-end-of-your-next-movement-phase": "until the end of your next Movement phase",
-    "until-end-of-opponent-next-movement-phase": "until the end of your opponent's next Movement phase",
-    "until-start-of-opponent-next-command-phase": "until the start of your opponent's next Command phase",
+    "until-end-of-opponent-next-movement-phase": (
+        "until the end of your opponent's next Movement phase"
+    ),
+    "until-start-of-opponent-next-command-phase": (
+        "until the start of your opponent's next Command phase"
+    ),
 }
 
 

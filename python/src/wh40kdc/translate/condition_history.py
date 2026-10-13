@@ -84,7 +84,9 @@ def _describe_happened(p: P, negated: bool) -> str:
         # A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
         if _str(f.get("kind")) == "stratagem" and f.get("id") is not None:
             target = unit_ref_phrase(p["object"]) if p.get("object") is not None else "the unit"
-            return _with_window(f"{target} {has} been targeted with the {id_label(f['id'])} Stratagem", window)
+            return _with_window(
+                f"{target} {has} been targeted with the {id_label(f['id'])} Stratagem", window
+            )
         # Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
         atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
         if p.get("object") is not None:
@@ -179,7 +181,9 @@ def _describe_happened(p: P, negated: bool) -> str:
             return f"{neg}destroyed by any attack"
         # "this model": the destroyed model is this one, not any model of the unit.
         if p.get("object") == "this-model":
-            return _with_window("this model was not destroyed" if negated else "this model was destroyed", window)
+            return _with_window(
+                "this model was not destroyed" if negated else "this model was destroyed", window
+            )
         victim = _obj(p.get("object"))
         kws = (
             f"{' '.join(_str(k) for k in victim['all_of'])} "
@@ -229,8 +233,8 @@ def _describe_happened(p: P, negated: bool) -> str:
         if which is not None:
             return f"{neg}{_with_window(f'{who} used {which}', window)}"
         what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
-        kind = f.get("kind") if f.get("kind") is not None else "ability"
-        return f"{neg}{_with_window(f'{who} used {what}{dekebab(_str(kind))}', window)}"
+        used_kind = _str(f["kind"]) if f.get("kind") is not None else "ability"
+        return f"{neg}{_with_window(f'{who} used {what}{dekebab(used_kind)}', window)}"
     if event == "objective-gained":
         return f"{neg}you newly control {_str(n)}+ objectives {_window_phrase(window)}".rstrip()
     if event == "designation-changed":
