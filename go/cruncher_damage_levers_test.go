@@ -82,8 +82,15 @@ func TestLeversKeepPhaseAndWeaponNameGates(t *testing.T) {
 	}
 }
 
-func TestLeversRefuseCritThresholdNarrowedByWeaponKeyword(t *testing.T) {
-	out := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapon_keyword": "Pistol"}}, leverSource(), shootingCtx(), "attacker")
+func TestLeversGateCritThresholdOnWeaponKeywordAndRefuseUnreadableOne(t *testing.T) {
+	gated := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapon_keyword": "Pistol"}}, leverSource(), shootingCtx(), "attacker")
+	if len(gated.unsupported) != 0 {
+		t.Fatalf("unsupported = %#v", gated.unsupported)
+	}
+	if got, want := applicabilities(gated.applied), []any{map[string]any{"weaponKeyword": "pistol"}}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("applicableWhen = %#v, want %#v", got, want)
+	}
+	out := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapon_keyword": ""}}, leverSource(), shootingCtx(), "attacker")
 	if len(out.applied) != 0 {
 		t.Fatalf("applied = %#v", out.applied)
 	}

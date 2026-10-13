@@ -196,6 +196,9 @@ func buffSourceFromEligible(entry map[string]any) map[string]any {
 	if kind == "attached" {
 		return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "attached", "sourceUnitId": source["unitId"]}
 	}
+	if kind == "support" {
+		return map[string]any{"kind": "ability", "abilityId": ability.ID(), "abilityKind": "support", "sourceUnitId": source["sourceUnitId"]}
+	}
 	abilityKind := kind
 	if kind == "detachment-stratagem" {
 		abilityKind = "detachment-stratagem"

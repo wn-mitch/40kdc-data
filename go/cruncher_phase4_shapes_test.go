@@ -75,7 +75,7 @@ func TestPhase4UnsizedValuesAreNotApplied(t *testing.T) {
 		{`{"type":"roll","dice":"D3","roll_var":"r","effect":{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":{"roll_var":"r"}}}}`, `value is set by a bound roll`},
 		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":{"incursion":1,"strike-force":2,"onslaught":3}}}`, `value is set by the battle size`},
 		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":{"count_of":"battle-round"}}}`, `value is set by the number of battle-round`},
-		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":2},"scaling":{"per":1,"of":"models-embarked-in-bearer","max_value":22}}`, `scales with models-embarked-in-bearer`},
+		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":2},"scaling":{"per":1,"of":"models-embarked-in-bearer"}}`, `scales with models-embarked-in-bearer`},
 		{`{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1,"weapon_ref":{"weapon_var":"blade"}}}`, `weapon_ref`},
 	}
 	for _, c := range cases {

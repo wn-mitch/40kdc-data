@@ -96,6 +96,14 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		out.unsupported = append(out.unsupported, unsup(modelScopedReason, n))
 		return
 	}
+	// A unit selection reaching the selected unit is a player lever; its eligibility is what the
+	// player vouches for, so it is planned before the fidelity check below.
+	if n["type"] == "select-units" {
+		if plan := planSelection(n, source, opts.perspective, opts.context); plan.kind != "none" {
+			translateSelection(plan, n, source, opts, out)
+			return
+		}
+	}
 	if hasUnresolvedFidelityBinding(n) {
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
 		return
@@ -103,7 +111,24 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	// A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
 	// applying the printed value would over- or under-state it.
 	if reason := unsizedValueReason(n); reason != "" {
+		// A capped scaling ("+2 A per embarked model, to a maximum of +22") is a lever at its cap;
+		// the player vouches for the count that reaches it.
+		if atCap := scaledToCap(n); atCap != nil {
+			offerLever(atCap, source, opts, out, leverSpec{id: opts.abilityID + "#at-cap", label: "At its maximum", requires: []any{n["scaling"]}})
+			return
+		}
 		out.unsupported = append(out.unsupported, unsup(reason, n))
+		return
+	}
+	// An ability another unit provides reaches the crunched unit only through a friendly filter,
+	// an aura's recipient or a selection; its own unit and model are the provider, not the
+	// crunched unit.
+	if t, ok := n["target"].(string); ok && isProvidedByAnotherUnit(source) && providerTargets[t] {
+		return
+	}
+	// A friendly filter's keywords ("friendly BLOOD LEGIONS units") must hold on the crunched unit
+	// when its keywords are known; unknown keywords leave the filter permissive.
+	if friendlyFilterExcludes(n, opts) {
 		return
 	}
 	// A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
@@ -118,6 +143,25 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	// An `incoming` change modifies attacks made against its target. On the buffed unit it is the
 	// attacker's side of those attacks, which the `target: "attacker"` form already models; it never
 	// modifies the buffed unit's own attacks.
+	// On the defender it changes every friendly attack against that unit, the buffed unit's among
+	// them, so the attacker perspective reads it as a change for friendly units; the target
+	// perspective has no such attack.
+	if m, ok := getMap(n, "modifier"); ok && m != nil && m["incoming"] == true && classifyTarget(n) == "defender" {
+		if opts.perspective != "attacker" {
+			return
+		}
+		stripped := make(map[string]any, len(m))
+		for k, v := range m {
+			if k != "incoming" {
+				stripped[k] = v
+			}
+		}
+		redirected := cloneMap(n)
+		redirected["target"] = map[string]any{"owner": "friendly"}
+		redirected["modifier"] = stripped
+		dslWalk(redirected, source, opts, out)
+		return
+	}
 	if m, ok := getMap(n, "modifier"); ok && m != nil && m["incoming"] == true && classifyTarget(n) == "self" {
 		if opts.perspective == "attacker" {
 			return
@@ -286,6 +330,8 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		translateIgnoreModifiers(n, source, opts, out)
 	case "ability-grant":
 		translateAbilityGrant(n, source, opts, out)
+	case "ability-modifier":
+		translateAbilityModifier(n, source, opts, out)
 	default:
 		out.unsupported = append(out.unsupported, unsup("effect type \""+jsStr(n["type"])+"\" is not modelled by the buff layer", n))
 	}
@@ -825,7 +871,7 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 	}
 	if (roll == "hit" || roll == "wound" || roll == "save" || roll == "damage") &&
 		(subset == "ones" || subset == "all-failures") {
-		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, weaponNameApplicability(modifier)))
+		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "reroll", "roll": roll, "subset": subset}}, weaponApplicability(modifier)))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("re-roll on \""+rollLabel(modifier["roll"])+"\" (subset \""+jsStr(modifier["subset"])+"\") is outside the damage path", node))
@@ -873,7 +919,7 @@ func translateRollModifier(node, source map[string]any, opts dslOpts, out *effec
 		out.unsupported = append(out.unsupported, unsup("roll-modifier on \""+rollLabel(modifier["roll"])+"\" is outside the damage path", node))
 		return
 	}
-	out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}}, weaponNameApplicability(modifier)))
+	out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": ct, "value": value}}, weaponApplicability(modifier)))
 }
 
 func translateStatModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -889,7 +935,7 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 	stat, _ := modifier["stat"].(string)
 	isOnBuffedUnit := appliesToBuffedUnit(node, opts.perspective)
 	// attack_type scopes the mod to that attack's phase, and weapon_name to that weapon's attacks.
-	applicability := combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier))
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
 
 	emit := func(contribution map[string]any) {
 		out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": contribution}, applicability))
@@ -1037,8 +1083,9 @@ func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effec
 	if !ok {
 		return
 	}
-	// A selector by keyword would apply the grant to every weapon of the unit: refuse it rather than over-apply it.
-	if modifier["weapon_keyword"] != nil {
+	// A selector by keyword reaches only the weapons with that ability; one the catalog parser
+	// cannot read would apply the grant to every weapon, so it is refused rather than over-applied.
+	if _, readable := weaponKeywordID(modifier["weapon_keyword"]); modifier["weapon_keyword"] != nil && !readable {
 		out.unsupported = append(out.unsupported, unsup("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node))
 		return
 	}
@@ -1053,7 +1100,7 @@ func translateKeywordGrant(node, source map[string]any, opts dslOpts, out *effec
 	if len(raws) == 0 {
 		return
 	}
-	applicability := weaponTypeApplicability(modifier)
+	applicability := combineOptional(weaponTypeApplicability(modifier), weaponApplicability(modifier))
 	for _, raw := range raws {
 		ref := parseKeywordGrant(raw)
 		if ref == nil {
@@ -1105,9 +1152,10 @@ func attackTypeApplicability(modifier map[string]any) map[string]any {
 }
 
 // unhonorableNarrowingKeys scope a buff to a weapon or model subset the cruncher can't resolve;
-// weapon_name is not among them: it gates on the attacking weapon's name.
+// weapon_name is not among them (it gates on the attacking weapon's name), nor is weapon_keyword
+// (it gates on the weapon's abilities, see weaponApplicability).
 var unhonorableNarrowingKeys = []string{
-	"weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter",
+	"weapon_profile", "weapon_ref", "weapon_filter",
 	"model_filter", "model_scope",
 }
 
@@ -1116,6 +1164,10 @@ func unhonorableNarrowing(modifier map[string]any) string {
 		if modifier[k] != nil {
 			return k
 		}
+	}
+	// A weapon keyword the catalog parser cannot read would gate on nothing.
+	if _, readable := weaponKeywordID(modifier["weapon_keyword"]); modifier["weapon_keyword"] != nil && !readable {
+		return "weapon_keyword"
 	}
 	return ""
 }
@@ -1373,6 +1425,18 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	}
 	if v, ok := b["weaponName"].(string); ok && v != "" {
 		out["weaponName"] = v
+	}
+	if v, ok := b["weaponKeyword"].(string); ok && v != "" {
+		out["weaponKeyword"] = v
+	}
+	if bx, ok := asList(b["excludedTargetKeywords"]); ok {
+		union := []any{}
+		for _, k := range append(append([]any{}, getList(a, "excludedTargetKeywords")...), bx...) {
+			if !containsAnyV(union, k) {
+				union = append(union, k)
+			}
+		}
+		out["excludedTargetKeywords"] = union
 	}
 	return out
 }

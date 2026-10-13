@@ -21,11 +21,13 @@ import math
 from typing import Any, TypeGuard
 
 from wh40kdc.cruncher import from_dsl_levers as _levers
+from wh40kdc.cruncher import from_dsl_selection as _selection
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
 from wh40kdc.cruncher.from_dsl_shapes import (
     UNSUPPORTED_SHAPE_REASONS,
     enumerate_roll_allocation,
     roll_label,
+    scaled_to_cap,
     unsized_value_reason,
 )
 
@@ -167,6 +169,13 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         return
     if opts.get("defaultTarget") is not None and "target" not in node:
         node = {**node, "target": opts["defaultTarget"]}
+    # A unit selection reaching the selected unit is a player lever; its eligibility is what the
+    # player vouches for, so it is planned before the fidelity check below.
+    if node.get("type") == "select-units":
+        plan = _selection.plan_selection(node, source, opts["perspective"], opts["context"])
+        if plan["kind"] != "none":
+            _selection.translate_selection(plan, node, source, opts, out)
+            return
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
         return
@@ -174,7 +183,36 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     # size here: applying the printed value would over- or under-state it.
     unsized = unsized_value_reason(node)
     if unsized is not None:
+        # A capped scaling ("+2 A per embarked model, to a maximum of +22") is a lever at its cap;
+        # the player vouches for the count that reaches it.
+        at_cap = scaled_to_cap(node)
+        if at_cap is not None:
+            _selection.offer_lever(
+                at_cap,
+                source,
+                opts,
+                out,
+                {
+                    "id": f"{opts['abilityId']}#at-cap",
+                    "label": "At its maximum",
+                    "requires": [node.get("scaling")],
+                },
+            )
+            return
         out["unsupported"].append({"reason": unsized, "effectFragment": node})
+        return
+    # An ability another unit provides reaches the crunched unit only through a friendly filter,
+    # an aura's recipient or a selection; its own unit and model are the provider, not the
+    # crunched unit.
+    if (
+        _selection.is_provided_by_another_unit(source)
+        and isinstance(node.get("target"), str)
+        and node["target"] in _selection.PROVIDER_TARGETS
+    ):
+        return
+    # A friendly filter's keywords ("friendly BLOOD LEGIONS units") must hold on the crunched unit
+    # when its keywords are known; unknown keywords leave the filter permissive.
+    if _selection.friendly_filter_excludes(node, opts):
         return
     # A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
     # reaches the unit only when one alternative matches its keywords.
@@ -187,7 +225,20 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     # An `incoming` change modifies attacks made against its target. On the buffed unit it is the
     # attacker's side of those attacks, which the `target: "attacker"` form already models; it never
     # modifies the buffed unit's own attacks.
+    # On the defender it changes every friendly attack against that unit, the buffed unit's among
+    # them, so the attacker perspective reads it as a change for friendly units; the target
+    # perspective has no such attack.
     node_modifier = node.get("modifier")
+    if (
+        _is_object(node_modifier)
+        and node_modifier.get("incoming") is True
+        and _classify_target(node) == "defender"
+    ):
+        if opts["perspective"] != "attacker":
+            return
+        stripped = {k: v for k, v in node_modifier.items() if k != "incoming"}
+        _walk({**node, "target": {"owner": "friendly"}, "modifier": stripped}, source, opts, out)
+        return
     if (
         _is_object(node_modifier)
         and node_modifier.get("incoming") is True
@@ -385,6 +436,8 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         _levers.translate_ignore_modifiers(node, source, opts, out)
     elif node_type == "ability-grant":
         _levers.translate_ability_grant(node, source, opts, out)
+    elif node_type == "ability-modifier":
+        _levers.translate_ability_modifier(node, source, opts, out)
     else:
         # Unknown effect — record it. Covers ability-grant, deep-strike,
         # mortal-wounds, cp-gain, movement-modifier, etc.
@@ -490,7 +543,7 @@ def _translate_reroll(
                     "source": source,
                     "contribution": {"type": "reroll", "roll": roll, "subset": subset},
                 },
-                weapon_name_applicability(modifier),
+                weapon_applicability(modifier),
             )
         )
         return
@@ -577,7 +630,7 @@ def _translate_roll_modifier(
     out["applied"].append(
         with_applicability(
             {"source": source, "contribution": {"type": contribution_type, "value": value}},
-            weapon_name_applicability(modifier),
+            weapon_applicability(modifier),
         )
     )
 
@@ -607,7 +660,7 @@ def _translate_stat_modifier(
     # `attack_type: melee|ranged` scopes the mod to that attack — express it
     # as a phase gate — and `weapon_name` to the attacks of that weapon.
     applicability = combine_optional(
-        _attack_type_applicability(modifier), weapon_name_applicability(modifier)
+        _attack_type_applicability(modifier), weapon_applicability(modifier)
     )
 
     def emit(contribution: dict[str, Any]) -> None:
@@ -889,9 +942,12 @@ def _translate_keyword_grant(
     modifier = node.get("modifier")
     if not _is_object(modifier):
         return
-    # A selector by keyword would apply the grant to every weapon of the unit: refuse it rather
-    # than over-apply it.
-    if modifier.get("weapon_keyword") is not None:
+    # A selector by keyword reaches only the weapons with that ability; one the catalog parser
+    # cannot read would apply the grant to every weapon, so it is refused rather than over-applied.
+    if (
+        modifier.get("weapon_keyword") is not None
+        and weapon_keyword_id(modifier.get("weapon_keyword")) is None
+    ):
         out["unsupported"].append({
             "reason": (
                 "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher "
@@ -913,7 +969,9 @@ def _translate_keyword_grant(
     raws = [k for k in abilities if isinstance(k, str)] if isinstance(abilities, list) else []
     if not raws:
         return
-    applicability = _weapon_type_applicability(modifier)
+    applicability = combine_optional(
+        _weapon_type_applicability(modifier), weapon_applicability(modifier)
+    )
     for raw in raws:
         ref = parse_keyword_grant(raw)
         if ref is None:
@@ -958,10 +1016,10 @@ def _attack_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | Non
 #: Narrowing keys that scope a buff to a weapon or a model subset the
 #: cruncher can't resolve at translation time. Applying the buff unfiltered
 #: would silently OVER-APPLY it, so it surfaces as unsupported instead.
-#: ``weapon_name`` is not here: it gates on the attacking weapon's name.
+#: ``weapon_name`` is not here: it gates on the attacking weapon's name; nor is
+#: ``weapon_keyword``, which gates on the weapon's abilities (see :func:`weapon_applicability`).
 _UNHONORABLE_NARROWING = (
     "weapon_profile",
-    "weapon_keyword",
     "weapon_ref",
     "weapon_filter",
     "model_filter",
@@ -973,6 +1031,12 @@ def _unhonorable_narrowing(modifier: dict[str, Any]) -> str | None:
     for k in _UNHONORABLE_NARROWING:
         if modifier.get(k) is not None:
             return k
+    # A weapon keyword the catalog parser cannot read would gate on nothing.
+    if (
+        modifier.get("weapon_keyword") is not None
+        and weapon_keyword_id(modifier.get("weapon_keyword")) is None
+    ):
+        return "weapon_keyword"
     return None
 
 
@@ -984,10 +1048,27 @@ def _numeric_value(modifier: dict[str, Any]) -> float:
     return math.nan
 
 
-def weapon_name_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
-    """Gate a buff on the attacking weapon's (lower-cased) ``weapon_name``."""
+def weapon_keyword_id(raw: Any) -> str | None:
+    """The catalog keyword id a ``weapon_keyword`` selector names.
+
+    ("Lethal Hits" → "lethal-hits"); None when the keyword parser cannot read it.
+    """
+    if not isinstance(raw, str):
+        return None
+    ref = parse_keyword_grant(raw)
+    return ref["keyword_id"] if ref is not None else None
+
+
+def weapon_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
+    """The weapon-name and weapon-keyword gates a modifier's weapon selectors put on its buffs."""
+    out: dict[str, Any] = {}
     name = modifier.get("weapon_name")
-    return {"weaponName": name.lower()} if isinstance(name, str) else None
+    if isinstance(name, str):
+        out["weaponName"] = name.lower()
+    keyword = weapon_keyword_id(modifier.get("weapon_keyword"))
+    if keyword is not None:
+        out["weaponKeyword"] = keyword
+    return out or None
 
 
 def combine_optional(a: dict[str, Any] | None, b: dict[str, Any] | None) -> dict[str, Any] | None:
@@ -1654,6 +1735,12 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["requiresAttackerKeyword"] = b["requiresAttackerKeyword"]
     if b.get("weaponName"):
         out["weaponName"] = b["weaponName"]
+    if b.get("weaponKeyword"):
+        out["weaponKeyword"] = b["weaponKeyword"]
+    if b.get("excludedTargetKeywords") is not None:
+        out["excludedTargetKeywords"] = list(
+            dict.fromkeys([*(a.get("excludedTargetKeywords") or []), *b["excludedTargetKeywords"]])
+        )
     return out
 
 

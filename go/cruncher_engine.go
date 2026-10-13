@@ -145,6 +145,17 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		}
 		ctx["weaponNames"] = names
 	}
+	if ctx["weaponKeywords"] == nil {
+		// The profile's catalog keyword ids drive applicableWhen.weaponKeyword.
+		keywords := []any{}
+		for _, refAny := range getList(weaponProfile, "keywords") {
+			ref, _ := asMap(refAny)
+			if id, ok := ref["keyword_id"].(string); ok && !containsAny(keywords, id) {
+				keywords = append(keywords, id)
+			}
+		}
+		ctx["weaponKeywords"] = keywords
+	}
 
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
 	allBuffs := append(append([]any{}, profBuffs...), getList(input, "buffs")...)

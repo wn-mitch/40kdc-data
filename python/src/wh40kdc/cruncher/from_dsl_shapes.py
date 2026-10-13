@@ -81,6 +81,35 @@ def unsized_value_reason(node: dict[str, Any]) -> str | None:
     return None
 
 
+def scaled_to_cap(node: dict[str, Any]) -> dict[str, Any] | None:
+    """A scaled leaf with a cap, as the leaf at that cap: the scaled field set to ``max_value``
+    and the scaling removed. None when the scaling has no positive integer cap, the scaled field
+    is not a plain number, or another size is bound."""
+    scaling = node.get("scaling")
+    modifier = node.get("modifier")
+    if not isinstance(scaling, dict) or not isinstance(modifier, dict):
+        return None
+    cap = scaling.get("max_value")
+    if not isinstance(cap, (int, float)) or isinstance(cap, bool):
+        return None
+    if not float(cap).is_integer() or cap <= 0:
+        return None
+    field = scaling["field"] if "field" in scaling else "value"
+    if not isinstance(field, str) or field not in _SIZED_FIELDS:
+        return None
+    if not _is_number(modifier.get(field)):
+        return None
+    if any(isinstance(modifier.get(other), dict) for other in _SIZED_FIELDS):
+        return None
+    rest = {k: v for k, v in node.items() if k != "scaling"}
+    return {**rest, "modifier": {**modifier, field: cap}}
+
+
+def _is_number(value: Any) -> bool:
+    """JS ``typeof value === "number"`` for JSON values."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
 Collect = Callable[[Any, BuffSource, dict[str, Any], dict[str, Any], list[Buff]], None]
 
 

@@ -3,8 +3,8 @@ and ``ability-grant`` leaves: critical thresholds, ignored hit/wound modifiers, 
 abilities the buff layer models on the unit being attacked.
 
 Python mirror of ``translateRollResult`` / ``translateIgnoreModifiers`` /
-``translateAbilityGrant`` in ``tools/src/cruncher/from-dsl.ts``. The shared helpers they use
-(target classification, narrowing, applicability) live in
+``translateAbilityGrant`` / ``translateAbilityModifier`` in ``tools/src/cruncher/from-dsl.ts``.
+The shared helpers they use (target classification, narrowing, applicability) live in
 :mod:`wh40kdc.cruncher.from_dsl`, which imports this module; the import here is deferred to
 call time to keep the two modules free of an import cycle.
 """
@@ -19,7 +19,7 @@ from wh40kdc.cruncher.from_dsl_shapes import roll_label
 
 #: Modifier keys a critical-threshold-only ``roll-result`` may carry.
 _CRITICAL_ONLY_KEYS = frozenset(
-    ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name"]
+    ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name", "weapon_keyword"]
 )
 
 
@@ -79,7 +79,7 @@ def translate_roll_result(
     if opts["perspective"] != "attacker" or not dsl._applies_to_buffed_unit(node, "attacker"):
         return
     applicability = dsl.combine_optional(
-        dsl._attack_type_applicability(modifier), dsl.weapon_name_applicability(modifier)
+        dsl._attack_type_applicability(modifier), dsl.weapon_applicability(modifier)
     )
     out["applied"].append(
         dsl.with_applicability(
@@ -177,3 +177,49 @@ def translate_ability_grant(
     if opts["perspective"] != "target" or dsl._classify_target(node) != "self":
         return
     out["applied"].append({"source": source, "contribution": contribution})
+
+
+def translate_ability_modifier(
+    node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: dict[str, Any]
+) -> None:
+    """A change to another ability. Adding selections to the crunched unit's own ability raises
+    the cap of the lever pool that ability offers, which the consumer resolves by the ability's
+    name; other aspects are not modelled."""
+    from wh40kdc.cruncher import from_dsl as dsl
+
+    modifier = node.get("modifier")
+    if isinstance(modifier, dict):
+        by = modifier.get("value")
+        ability = modifier.get("ability")
+        if (
+            modifier.get("aspect") == "selections"
+            and modifier.get("operation") == "add"
+            and isinstance(ability, str)
+            and isinstance(by, (int, float))
+            and not isinstance(by, bool)
+            and float(by).is_integer()
+            and by > 0
+        ):
+            if not dsl._applies_to_buffed_unit(node, opts["perspective"]):
+                return
+            count = int(by)
+            label = (
+                f"One more {ability} selection"
+                if count == 1
+                else f"{count} more {ability} selections"
+            )
+            out["activatable"].append(
+                {
+                    "id": f"{opts['abilityId']}#cap",
+                    "label": label,
+                    "buffs": [],
+                    "capRaise": {"ability": ability, "by": count},
+                }
+            )
+            return
+    out["unsupported"].append(
+        {
+            "reason": 'effect type "ability-modifier" is not modelled by the buff layer',
+            "effectFragment": node,
+        }
+    )

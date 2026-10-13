@@ -159,19 +159,23 @@ func runDSLCorpus(t *testing.T, filename string) {
 					buffs = append(buffs, bm["contribution"])
 				}
 				acts = append(acts, map[string]any{
-					"id":    a["id"],
-					"label": a["label"],
-					"group": a["group"],
-					"buffs": orEmpty(buffs),
+					"id":       a["id"],
+					"label":    a["label"],
+					"group":    a["group"],
+					"requires": a["requires"],
+					"capRaise": a["capRaise"],
+					"buffs":    orEmpty(buffs),
 				})
 			}
-			// Normalise expected entries so a missing "group" reads as null.
+			// An expected lever omits "group", "requires" and "capRaise" when it has none.
 			var expActs []any
 			for _, eAny := range getList(expected, "activatable") {
 				e, _ := asMap(eAny)
 				ne := cloneMap(e)
-				if _, has := ne["group"]; !has {
-					ne["group"] = nil
+				for _, key := range []string{"group", "requires", "capRaise"} {
+					if _, has := ne[key]; !has {
+						ne[key] = nil
+					}
 				}
 				expActs = append(expActs, ne)
 			}

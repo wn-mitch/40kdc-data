@@ -1,6 +1,7 @@
 package wh40kdc
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -89,7 +90,7 @@ func TestNamedRegionQualifiedBranchIsUnsupported(t *testing.T) {
 	}
 }
 
-func TestNamedRegionWeaponKeywordNarrowingIsUnsupported(t *testing.T) {
+func TestNamedRegionRerollGatesOnTheWeaponKeywordItNames(t *testing.T) {
 	out := effectToBuffs(
 		namedRegionEffect([]any{"THOUSAND SONS"}, "and", map[string]any{
 			"type":   "re-roll",
@@ -104,17 +105,18 @@ func TestNamedRegionWeaponKeywordNarrowingIsUnsupported(t *testing.T) {
 		map[string]any{"phase": "shooting", "attackerKeywords": []any{"thousand sons"}},
 		"attacker",
 	)
-	if len(out.applied) != 0 {
-		t.Fatalf("applied = %#v", out.applied)
-	}
-	found := false
 	for _, raw := range out.unsupported {
-		if strings.Contains(raw.(map[string]any)["reason"].(string), `weapon_keyword" which the cruncher can't resolve here`) {
-			found = true
+		if strings.Contains(raw.(map[string]any)["reason"].(string), "weapon_keyword") {
+			t.Fatalf("unsupported = %#v", out.unsupported)
 		}
 	}
-	if !found {
-		t.Fatalf("unsupported = %#v", out.unsupported)
+	var gates []any
+	for _, raw := range out.applied {
+		when, _ := raw.(map[string]any)["applicableWhen"].(map[string]any)
+		gates = append(gates, when["weaponKeyword"])
+	}
+	if !reflect.DeepEqual(gates, []any{"psychic"}) {
+		t.Fatalf("weaponKeyword gates = %#v", gates)
 	}
 }
 

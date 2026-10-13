@@ -28,7 +28,9 @@ ResolvedModifiers = dict[str, Any]
 #: ``onslaught``) and ``attackerGuided`` (the attacker is Guided); each drives its condition
 #: and leaves it "unknown" when absent. ``weaponNames`` (lower-cased names of the attacking
 #: weapon and its profile) drives ``applicableWhen.weaponName``; absent leaves weapon-name gates
-#: permissive.
+#: permissive. ``weaponKeywords`` (catalog keyword ids printed on the attacking profile) drives
+#: ``applicableWhen.weaponKeyword`` together with keywords live buffs grant; absent leaves
+#: weapon-keyword gates permissive.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.
@@ -68,6 +70,11 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         target = ctx.get("targetKeywords") or []
         if w["requiresTargetKeyword"].lower() not in target:
             return False
+    excluded = w.get("excludedTargetKeywords")
+    target_keywords = ctx.get("targetKeywords")
+    if excluded and target_keywords is not None:
+        if any(keyword.lower() in target_keywords for keyword in excluded):
+            return False
     if w.get("requiresAttackerKeyword"):
         attacker = ctx.get("attackerKeywords") or []
         if w["requiresAttackerKeyword"].lower() not in attacker:
@@ -85,6 +92,38 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
     return True
 
 
+def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
+    """The buffs whose gates hold.
+
+    A weapon-keyword gate reads the weapon's printed keywords plus the keywords other live buffs
+    grant, so one pass is repeated until no further gated buff joins ("weapons with Lethal Hits
+    gain Rapid Fire 1" sees a granted Lethal Hits).
+    """
+    weapon_keywords = ctx.get("weaponKeywords")
+
+    def gated(b: Buff) -> bool:
+        return (b.get("applicableWhen") or {}).get("weaponKeyword") is not None
+
+    live = [b for b in buffs if (not gated(b) or weapon_keywords is None) and _applies(b, ctx)]
+    if weapon_keywords is None:
+        return live
+    pending = [b for b in buffs if gated(b) and _applies(b, ctx)]
+    joined: list[Buff] = []
+    while True:
+        keywords = set(weapon_keywords)
+        for b in [*live, *joined]:
+            if b["contribution"].get("type") == "extra-keyword":
+                keywords.add(b["contribution"]["keywordRef"]["keyword_id"])
+        nxt = [b for b in pending if b["applicableWhen"]["weaponKeyword"] in keywords]
+        if not nxt:
+            break
+        joined.extend(nxt)
+        pending = [b for b in pending if not any(b is j for j in nxt)]
+    # Keep the caller's order so ranking ties break as they did before.
+    kept = [*live, *joined]
+    return [b for b in buffs if any(b is k for k in kept)]
+
+
 def _key_of(ref: dict[str, Any]) -> str:
     return f"{ref.get('keyword_id')}::{json.dumps(ref.get('parameters') or {})}"
 
@@ -95,7 +134,7 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
     Pure function; the engine — and any UI that wants to render the resolved
     table before crunching — both go through this.
     """
-    live = [b for b in buffs if _applies(b, ctx)]
+    live = _live_buffs(buffs, ctx)
 
     out: ResolvedModifiers = {
         "hitMod": {"value": 0, "dominantSource": None},

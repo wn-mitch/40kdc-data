@@ -52,6 +52,15 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			return false
 		}
 	}
+	// Excluded target keywords: permissive when the target's keywords are unknown.
+	if excluded, ok := asList(w["excludedTargetKeywords"]); ok && len(excluded) > 0 && ctx["targetKeywords"] != nil {
+		target := getList(ctx, "targetKeywords")
+		for _, k := range excluded {
+			if ks, ok := k.(string); ok && containsAny(target, lower(ks)) {
+				return false
+			}
+		}
+	}
 	if rk := getStr(w, "requiresAttackerKeyword"); rk != "" {
 		if !containsAny(getList(ctx, "attackerKeywords"), lower(rk)) {
 			return false
@@ -72,6 +81,73 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 		}
 	}
 	return true
+}
+
+// weaponKeywordGate is the buff's applicableWhen.weaponKeyword, if it carries one.
+func weaponKeywordGate(buff map[string]any) (string, bool) {
+	w, _ := getMap(buff, "applicableWhen")
+	k, ok := w["weaponKeyword"].(string)
+	return k, ok
+}
+
+// liveBuffs reports, per buff, whether its gates hold. A weapon-keyword gate
+// reads the weapon's printed keywords plus the keywords other live buffs grant,
+// so one pass is repeated until no further gated buff joins ("weapons with
+// Lethal Hits gain Rapid Fire 1" sees a granted Lethal Hits). Permissive when
+// the context carries no weaponKeywords.
+func liveBuffs(buffs []any, ctx map[string]any) []bool {
+	live := make([]bool, len(buffs))
+	pending := make([]bool, len(buffs))
+	gatedByKeyword := ctx["weaponKeywords"] != nil
+	for i, bAny := range buffs {
+		b, _ := asMap(bAny)
+		_, gated := weaponKeywordGate(b)
+		if !buffApplies(b, ctx) {
+			continue
+		}
+		if gated && gatedByKeyword {
+			pending[i] = true
+		} else {
+			live[i] = true
+		}
+	}
+	if !gatedByKeyword {
+		return live
+	}
+	for {
+		keywords := map[string]bool{}
+		for _, k := range getList(ctx, "weaponKeywords") {
+			if ks, ok := k.(string); ok {
+				keywords[ks] = true
+			}
+		}
+		for i, bAny := range buffs {
+			if !live[i] {
+				continue
+			}
+			b, _ := asMap(bAny)
+			c, _ := getMap(b, "contribution")
+			if getStr(c, "type") == "extra-keyword" {
+				ref, _ := getMap(c, "keywordRef")
+				keywords[getStr(ref, "keyword_id")] = true
+			}
+		}
+		joined := false
+		for i, bAny := range buffs {
+			if !pending[i] {
+				continue
+			}
+			b, _ := asMap(bAny)
+			if k, _ := weaponKeywordGate(b); keywords[k] {
+				pending[i] = false
+				live[i] = true
+				joined = true
+			}
+		}
+		if !joined {
+			return live
+		}
+	}
 }
 
 func keyOf(ref map[string]any) string {
@@ -141,9 +217,10 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 	}
 
 	var hitContribs, woundContribs []contribAcc
-	for _, bAny := range buffs {
+	live := liveBuffs(buffs, ctx)
+	for i, bAny := range buffs {
 		b, _ := asMap(bAny)
-		if !buffApplies(b, ctx) {
+		if !live[i] {
 			continue
 		}
 		c, _ := getMap(b, "contribution")

@@ -73,7 +73,7 @@ def test_named_region_qualified_branch_is_explicitly_unsupported() -> None:
     assert any("qualified replacement" in item["reason"] for item in result["unsupported"])
 
 
-def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
+def test_named_region_reroll_gates_on_the_weapon_keyword_it_names() -> None:
     result = effect_to_buffs(
         _named_region(
             ["THOUSAND SONS"],
@@ -87,11 +87,9 @@ def test_named_region_weapon_keyword_narrowing_is_not_applied_broadly() -> None:
         _source(),
         {"phase": "shooting", "attackerKeywords": ["thousand sons"]},
     )
-    assert result["applied"] == []
-    assert any(
-        "weapon_keyword\" which the cruncher can't resolve here" in item["reason"]
-        for item in result["unsupported"]
-    )
+    assert [item for item in result["unsupported"] if "weapon_keyword" in item["reason"]] == []
+    gates = [(buff.get("applicableWhen") or {}).get("weaponKeyword") for buff in result["applied"]]
+    assert gates == ["psychic"]
 
 
 def test_count_capped_reroll_is_not_applied_as_unlimited() -> None:

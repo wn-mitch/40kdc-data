@@ -8,14 +8,36 @@ import "math"
 // tools/src/cruncher/from-dsl.ts.
 
 // criticalOnlyKeys are the modifier keys a critical-threshold-only roll-result may carry.
-var criticalOnlyKeys = map[string]bool{"roll": true, "critical_on": true, "attack_type": true, "weapon_type": true, "weapon_name": true}
+var criticalOnlyKeys = map[string]bool{"roll": true, "critical_on": true, "attack_type": true, "weapon_type": true, "weapon_name": true, "weapon_keyword": true}
 
-// weaponNameApplicability gates a buff on the attacking weapon's (lower-cased) weapon_name.
-func weaponNameApplicability(modifier map[string]any) map[string]any {
-	if name, ok := modifier["weapon_name"].(string); ok {
-		return map[string]any{"weaponName": lower(name)}
+// weaponKeywordID is the catalog keyword id a weapon_keyword selector names
+// ("Lethal Hits" -> "lethal-hits"); ok is false when the parser cannot read it.
+func weaponKeywordID(raw any) (string, bool) {
+	s, ok := raw.(string)
+	if !ok {
+		return "", false
 	}
-	return nil
+	ref := parseKeywordGrant(s)
+	if ref == nil {
+		return "", false
+	}
+	return getStr(ref, "keyword_id"), true
+}
+
+// weaponApplicability is the weapon-name and weapon-keyword gates a modifier's
+// weapon selectors put on its buffs (nil when it has neither).
+func weaponApplicability(modifier map[string]any) map[string]any {
+	out := map[string]any{}
+	if name, ok := modifier["weapon_name"].(string); ok {
+		out["weaponName"] = lower(name)
+	}
+	if keyword, ok := weaponKeywordID(modifier["weapon_keyword"]); ok {
+		out["weaponKeyword"] = keyword
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
 }
 
 // combineOptional combines two optional applicabilities (TS combineOptional).
@@ -143,7 +165,7 @@ func translateRollResult(node, source map[string]any, opts dslOpts, out *effectT
 	if opts.perspective != "attacker" || !appliesToBuffedUnit(node, "attacker") {
 		return
 	}
-	applicability := combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier))
+	applicability := combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier))
 	out.applied = append(out.applied, withApplicability(map[string]any{"source": source, "contribution": map[string]any{"type": "crit-threshold", "roll": roll, "value": critical}}, applicability))
 }
 
@@ -223,4 +245,33 @@ func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effec
 		return
 	}
 	out.applied = append(out.applied, map[string]any{"source": source, "contribution": contribution})
+}
+
+// translateAbilityModifier handles a change to another ability. Adding
+// selections to the crunched unit's own ability raises the cap of the lever pool
+// that ability offers, which the consumer resolves by the ability's name; other
+// aspects are not modelled.
+func translateAbilityModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
+	if modifier, ok := getMap(node, "modifier"); ok && modifier != nil {
+		ability, isStr := modifier["ability"].(string)
+		by, isNum := modifier["value"].(float64)
+		if modifier["aspect"] == "selections" && modifier["operation"] == "add" && isStr &&
+			isNum && by == math.Trunc(by) && !math.IsInf(by, 0) && by > 0 {
+			if !appliesToBuffedUnit(node, opts.perspective) {
+				return
+			}
+			label := jsStr(by) + " more " + ability + " selections"
+			if by == 1 {
+				label = "One more " + ability + " selection"
+			}
+			out.activatable = append(out.activatable, map[string]any{
+				"id":       opts.abilityID + "#cap",
+				"label":    label,
+				"buffs":    []any{},
+				"capRaise": map[string]any{"ability": ability, "by": by},
+			})
+			return
+		}
+	}
+	out.unsupported = append(out.unsupported, unsup(`effect type "ability-modifier" is not modelled by the buff layer`, node))
 }

@@ -9,7 +9,8 @@ Resolution order — stable for snapshot tests:
    ability referenced by ``stratagem.ability_id`` (if any).
 4. **unit** — abilities listed in ``unit.ability_ids``.
 5. **attached** — abilities of each attached member (pulled in full).
-6. **support** — abilities on supporting units whose scope range is an aura.
+6. **support** — abilities on supporting units that can reach another unit (an aura scope, or
+   an effect naming an aura, a unit selection or a friendly/enemy unit filter).
 
 Each step phase-filters via the ``Dataset.phases_for`` index.
 
@@ -158,7 +159,9 @@ def resolve_eligible_abilities(
                 }
             )
 
-    # 6. Supporting units — only aura-scoped abilities.
+    # 6. Supporting units — only abilities that can reach another unit (an aura, a friendly or
+    # enemy unit filter, a unit selection); an ability that only names its own unit describes a
+    # buff that never reaches the input unit.
     for support_id in input.get("supportingUnitIds") or []:
         supporter = resolve_unit(support_id, faction_id)
         if supporter is None:
@@ -166,7 +169,9 @@ def resolve_eligible_abilities(
         for ability in supporter.abilities:
             if not phase_matches(ability):
                 continue
-            if not _is_aura_scope((ability.raw.get("scope") or {}).get("range")):
+            if not _is_aura_scope(
+                (ability.raw.get("scope") or {}).get("range")
+            ) and not reaches_other_units(ability.raw.get("effect")):
                 continue
             push_unique(
                 {
@@ -183,6 +188,22 @@ def resolve_eligible_abilities(
 def _rated(rating: Any) -> dict[str, Any]:
     """``{"rating": r}`` for a rated rule the owning unit prints, else nothing."""
     return {} if rating is None else {"rating": rating}
+
+
+def reaches_other_units(effect: Any) -> bool:
+    """Whether an effect can reach a unit other than its own: an aura, a unit-filter target
+    (friendly or enemy), or a unit selection. The translator decides what of it reaches the
+    input unit."""
+    if isinstance(effect, list):
+        return any(reaches_other_units(child) for child in effect)
+    if not isinstance(effect, dict):
+        return False
+    if effect.get("type") in ("aura", "select-units"):
+        return True
+    target = effect.get("target")
+    if isinstance(target, dict) and target.get("owner") in ("friendly", "enemy"):
+        return True
+    return any(reaches_other_units(child) for child in effect.values())
 
 
 def _is_aura_scope(range_: Any) -> bool:

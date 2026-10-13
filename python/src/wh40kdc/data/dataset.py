@@ -35,10 +35,17 @@ def _buff_source_from_eligible(entry: dict[str, Any]) -> dict[str, Any]:
             "abilityKind": "attached",
             "sourceUnitId": entry["source"]["unitId"],
         }
+    if kind == "support":
+        return {
+            "kind": "ability",
+            "abilityId": ability_id,
+            "abilityKind": "support",
+            "sourceUnitId": entry["source"]["sourceUnitId"],
+        }
     if kind == "detachment-stratagem":
         ability_kind = "detachment-stratagem"
     else:
-        ability_kind = kind  # army / detachment / unit / support
+        ability_kind = kind  # army / detachment / unit
     return {"kind": "ability", "abilityId": ability_id, "abilityKind": ability_kind}
 
 
@@ -490,15 +497,49 @@ class Dataset:
         the activatable gates the DSL models as dice-pool options, ``choice``
         branches, or timing-gated activations. Returns
         ``{"buffs": [StackableBuff], "groups": [StackableBuffGroup]}``.
+
+        A lever may also carry ``cost`` (``{"cp"}`` for a Stratagem, ``{"points"}`` for an
+        Enhancement), ``requires`` (DSL fragments the player vouches for), ``requiresLever`` (the
+        lever providing it) and ``raisesCap`` (``{"group", "by"}``: it raises a pool's cap instead
+        of adding buffs). Supporting units' levers are opt-in and name the supporting unit in
+        their source's ``sourceUnitId``.
         """
+        from wh40kdc.data.lever_providers import (
+            AbilityLevers,
+            ability_levers,
+            combined_keywords_lower,
+            combined_unit,
+            enhancement_levers,
+            resolve_cap_raises,
+        )
+
         buffs: list[dict[str, Any]] = []
-        groups: dict[str, dict[str, Any]] = {}
+        groups: list[dict[str, Any]] = []
+        cap_raises: dict[int, Any] = {}
+
+        def take(levers: AbilityLevers) -> None:
+            buffs.extend(levers.buffs)
+            for group in levers.groups:
+                if not any(g["id"] == group["id"] for g in groups):
+                    groups.append(group)
+            cap_raises.update(levers.cap_raises)
+
+        unit_id = input.get("unitId") or ""
+        unit, faction_id, combined = combined_unit(self, input)
+
+        # Surface the attachment fact and the combined unit's keywords to the DSL translator so
+        # `is-attached` conditions and keyword filters ("friendly BLOOD LEGIONS units") evaluate.
+        # Clone — never mutate the caller's context. An explicitly-set value wins.
         ctx = self._derived_context(input, context)
+        if ctx.get("attackerKeywords") is None and combined:
+            ctx["attackerKeywords"] = combined_keywords_lower(combined)
 
         # Intrinsic weapon-profile keywords — always on. Weapon ids are
         # shared across factions with divergent stats, so resolve within the
         # input unit's faction (get_any fallback for a cross-faction id).
-        weapon_faction = self._weapon_faction(input)
+        weapon_faction = input.get("factionId")
+        if weapon_faction is None and unit is not None:
+            weapon_faction = unit.raw.get("faction_id")
         for ref in input.get("weaponProfiles") or []:
             weapon = (
                 self.weapons.get_in_faction(ref["weaponId"], weapon_faction)
@@ -520,47 +561,48 @@ class Dataset:
                 }
             )
 
-        for entry in self.eligible_abilities(input, ctx["phase"]):
-            source = _buff_source_from_eligible(entry)
-            translation = entry["ability"].describe_buffs(
-                source, ctx, "attacker", entry.get("rating")
-            )
-            # Stratagems cost CP — opt-in, not on by default.
-            is_stratagem = entry["source"]["kind"] == "detachment-stratagem"
-
-            if translation["applied"]:
-                buffs.append(
-                    {
-                        "id": f"{entry['source']['kind']}:{entry['ability'].id}",
-                        "label": entry["ability"].name,
-                        "buffs": translation["applied"],
-                        "enabled": not is_stratagem,
-                        "source": source,
-                    }
+        eligible = self.eligible_abilities(input, ctx["phase"])
+        # A record the unit already holds is not granted again by another ability.
+        held = {entry["ability"].id for entry in eligible if entry["source"]["kind"] != "support"}
+        for entry in eligible:
+            kind = entry["source"]["kind"]
+            take(
+                ability_levers(
+                    self,
+                    ability=entry["ability"],
+                    source=_buff_source_from_eligible(entry),
+                    rating=entry.get("rating"),
+                    ctx=ctx,
+                    faction_id=faction_id,
+                    id_base=f"{kind}:{entry['ability'].id}",
+                    label=entry["ability"].name,
+                    # Another unit's ability reaches this one only where the player places it
+                    # (range, selection), so its levers are opt-in.
+                    enabled=kind != "support",
+                    # Stratagems cost CP — opt-in, not on by default.
+                    gate=(
+                        {"cost": {"cp": entry["source"]["cpCost"]}}
+                        if kind == "detachment-stratagem"
+                        else None
+                    ),
+                    held=held,
                 )
+            )
 
-            for act in translation["activatable"]:
-                group_id = None
-                if act.get("group"):
-                    group_id = act["group"]["id"]
-                    if group_id not in groups:
-                        groups[group_id] = {
-                            "id": group_id,
-                            "label": entry["ability"].name,
-                            "maxActivations": act["group"]["maxActivations"],
-                        }
-                lever = {
-                    "id": act["id"],
-                    "label": f"{entry['ability'].name} — {act['label']}",
-                    "buffs": act["buffs"],
-                    "enabled": False,
-                    "source": source,
-                }
-                if group_id is not None:
-                    lever["group"] = group_id
-                buffs.append(lever)
+        # Enhancements a character in the combined unit could take from the detachment.
+        take(
+            enhancement_levers(
+                self,
+                detachment_id=input.get("detachmentId"),
+                crunched_unit_id=unit_id,
+                bearers=combined,
+                ctx=ctx,
+                faction_id=faction_id,
+                held=held,
+            )
+        )
 
-        return {"buffs": buffs, "groups": list(groups.values())}
+        return {"buffs": resolve_cap_raises(buffs, cap_raises, groups), "groups": groups}
 
     def _weapon_faction(self, input: dict[str, Any]) -> str | None:
         """The faction to scope ``weaponProfiles`` lookups by: the explicit

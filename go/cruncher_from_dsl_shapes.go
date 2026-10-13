@@ -1,5 +1,7 @@
 package wh40kdc
 
+import "math"
+
 // Cruncher support for the phase-4 shapes: the `roll` allocation that stands in
 // for dice-pool-allocation, and the diagnostics for values the buff engine
 // cannot size. Mirror of the phase-4 additions to tools/src/cruncher/from-dsl.ts.
@@ -104,4 +106,55 @@ func unsizedValueReason(node map[string]any) string {
 		return t + ": its " + field + " is set by " + what + "; not resolved by the buff engine"
 	}
 	return ""
+}
+
+// scaledToCap is a scaled leaf with a cap, as the leaf at that cap: the scaled
+// field set to max_value and the scaling removed. nil when the scaling has no
+// positive integer cap, the scaled field is not a plain number, or another size
+// is bound.
+func scaledToCap(node map[string]any) map[string]any {
+	scaling, ok := node["scaling"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	modifier, ok := node["modifier"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	capValue, ok := scaling["max_value"].(float64)
+	if !ok || capValue != math.Trunc(capValue) || math.IsInf(capValue, 0) || capValue <= 0 {
+		return nil
+	}
+	field := "value"
+	if raw, has := scaling["field"]; has {
+		s, isStr := raw.(string)
+		if !isStr {
+			return nil
+		}
+		field = s
+	}
+	known := false
+	for _, f := range sizedFields {
+		if f == field {
+			known = true
+		}
+	}
+	if _, isNum := modifier[field].(float64); !known || !isNum {
+		return nil
+	}
+	for _, other := range sizedFields {
+		if _, bound := modifier[other].(map[string]any); bound {
+			return nil
+		}
+	}
+	rest := make(map[string]any, len(node))
+	for k, v := range node {
+		if k != "scaling" {
+			rest[k] = v
+		}
+	}
+	capped := cloneMap(modifier)
+	capped[field] = capValue
+	rest["modifier"] = capped
+	return rest
 }

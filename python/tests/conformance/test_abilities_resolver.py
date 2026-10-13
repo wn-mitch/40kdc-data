@@ -62,11 +62,17 @@ def _run_dsl_corpus(dataset: Any, filename: str) -> None:
                     "id": a["id"],
                     "label": a["label"],
                     "group": a.get("group"),
+                    "requires": a.get("requires"),
+                    "capRaise": a.get("capRaise"),
                     "buffs": [b["contribution"] for b in a["buffs"]],
                 }
                 for a in result["activatable"]
             ]
-            expected_acts = [{**e, "group": e.get("group")} for e in c["expected"]["activatable"]]
+            # An expected lever omits `group`, `requires` and `capRaise` when it has none.
+            expected_acts = [
+                {"group": None, "requires": None, "capRaise": None, **e}
+                for e in c["expected"]["activatable"]
+            ]
             assert acts == expected_acts, f"{c['abilityId']} ({perspective})"
 
 

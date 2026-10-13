@@ -117,6 +117,11 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             if isinstance(n, str)
         ]
         ctx["weaponNames"] = list(dict.fromkeys(names))
+    if ctx.get("weaponKeywords") is None:
+        # The profile's catalog keyword ids drive `applicableWhen.weaponKeyword`.
+        ctx["weaponKeywords"] = list(
+            dict.fromkeys(ref["keyword_id"] for ref in weapon_profile.get("keywords") or [])
+        )
 
     # Auto-inject weapon-keyword buffs from the attacker profile, then append
     # the caller-supplied stack. resolve_buffs deduplicates and ranks them.

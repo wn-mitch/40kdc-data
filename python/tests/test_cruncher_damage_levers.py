@@ -109,18 +109,26 @@ def test_phase_and_weapon_name_gates_both_survive() -> None:
     ]
 
 
-def test_crit_threshold_narrowed_by_weapon_keyword_is_refused() -> None:
-    result = effect_to_buffs(
-        {
-            "type": "roll-result",
-            "target": "this-unit",
-            "modifier": {"roll": "hit", "critical_on": 5, "weapon_keyword": "Pistol"},
-        },
-        SOURCE,
-        SHOOTING,
-    )
-    assert result["applied"] == []
-    assert [item["reason"] for item in result["unsupported"]] == [
+def test_crit_threshold_narrowed_by_weapon_keyword_gates_and_unreadable_one_is_refused() -> None:
+    def crit(keyword: Any) -> dict[str, Any]:
+        return effect_to_buffs(
+            {
+                "type": "roll-result",
+                "target": "this-unit",
+                "modifier": {"roll": "hit", "critical_on": 5, "weapon_keyword": keyword},
+            },
+            SOURCE,
+            SHOOTING,
+        )
+
+    gated = crit("Pistol")
+    assert gated["unsupported"] == []
+    assert [buff.get("applicableWhen") for buff in gated["applied"]] == [
+        {"weaponKeyword": "pistol"}
+    ]
+    unreadable = crit("")
+    assert unreadable["applied"] == []
+    assert [item["reason"] for item in unreadable["unsupported"]] == [
         'roll-result: narrows by "weapon_keyword" which the cruncher can\'t resolve here'
     ]
 
