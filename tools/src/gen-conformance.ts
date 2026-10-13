@@ -3762,6 +3762,12 @@ function genEffectTranslation(): void {
     const scope = { duration };
     cases.push({ caseId: `fidelity/duration-${duration}`, effect, scope, expected: { text: describeAbility({ effect, scope } as Parameters<typeof describeAbility>[0]) } });
   }
+  // Hand-written cases pinned by individual compiler and describer changes (fabricated wording):
+  // their inputs live beside this generator so a regeneration keeps them.
+  const appended = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "gen-conformance-appended-cases.json"), "utf8")) as Record<string, unknown>[];
+  for (const example of appended) {
+    cases.push({ ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
+  }
   writeJson(join(CONFORMANCE, "effect-translation", "cases.json"), cases);
   console.log(
     `effect-translation/cases.json: ${cases.length} cases (${seen.size} node types)`,
