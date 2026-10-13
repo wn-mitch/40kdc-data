@@ -185,12 +185,12 @@ describe("Round 5C crunch gate: effects off the damage path", () => {
     expect([...cost, ...uses].every(isOutsideDamagePath)).toBe(true);
   });
 
-  it("counts an aura range lift as off the damage path, but still counts an extra selection", () => {
+  it("counts an aura range lift as off the damage path, and offers an extra selection as a cap-raising lever", () => {
     const range = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-aura", aspect: "range", operation: "add", value: 3 } });
-    const selections = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-menu", aspect: "selections", operation: "add", value: 1 } });
     expect(range.length).toBeGreaterThan(0);
     expect(range.every(isOutsideDamagePath)).toBe(true);
-    expect(selections.length).toBeGreaterThan(0);
-    expect(selections.some((item) => !isOutsideDamagePath(item))).toBe(true);
+    const selections = effectToBuffs({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-menu", aspect: "selections", operation: "add", value: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {});
+    expect(selections.unsupported).toEqual([]);
+    expect(selections.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "some-menu", by: 1 }]);
   });
 });

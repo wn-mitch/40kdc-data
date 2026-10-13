@@ -328,7 +328,7 @@ describe("effectToBuffs: named-region-state", () => {
     );
   });
 
-  it("keeps Flow of Magic weapon narrowing unsupported", () => {
+  it("gates Flow of Magic's re-roll on the weapon keyword it names", () => {
     const result = effectToBuffs(
       namedRegion(
         ["THOUSAND SONS"],
@@ -342,10 +342,8 @@ describe("effectToBuffs: named-region-state", () => {
       unitRule,
       { phase: "shooting", attackerKeywords: ["thousand sons"] },
     );
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((entry) => entry.reason)).toContain(
-      're-roll: narrows by "weapon_keyword" which the cruncher can\'t resolve here',
-    );
+    expect(result.unsupported.map((entry) => entry.reason).filter((reason) => reason.includes("weapon_keyword"))).toEqual([]);
+    expect(result.applied.map((buff) => buff.applicableWhen?.weaponKeyword)).toEqual(["psychic"]);
   });
 });
 

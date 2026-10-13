@@ -59,10 +59,10 @@ describe("pipeline-8b cruncher unsupported classification", () => {
   const gap = { honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 };
   const outside = { honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 };
 
-  it("looks through a predicated selection: a battle-shock test is off the damage path, a re-roll inside it is not", () => {
+  it("looks through a predicated selection: a battle-shock test is off the damage path, a re-roll inside it is a lever", () => {
     const selector = { owner: "enemy", count: 1, eligibility: { type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: "this-unit" } } };
     expect(classify({ type: "select-units", selector, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock", modifier: -1 } } })).toEqual(outside);
-    expect(classify({ type: "select-units", selector: { ...selector, owner: "friendly" }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual(gap);
+    expect(classify({ type: "select-units", selector: { ...selector, owner: "friendly" }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
   });
 
   it("counts a dice table off the damage path only when no outcome touches an attack", () => {
@@ -92,16 +92,25 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(reroll.applied.map((buff) => buff.contribution)).toEqual([{ type: "reroll", roll: "hit", subset: "ones" }]);
   });
 
-  it("counts a record grant off the damage path only when the named record resolves and changes no attack", () => {
+  it("counts a record grant by the record: off the path when it changes no attack, covered when it reaches the unit", () => {
     const records: Record<string, unknown> = {
       "fabricated-cost-rule": { type: "cost-modifier", target: "this-unit", modifier: { of: "stratagem", operation: "increase", amount: 1 } },
       "fabricated-reroll-rule": { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+      "fabricated-half-rule": { type: "sequence", steps: [
+        { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+        { type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 5 } },
+      ] },
     };
-    const grantOf = (ability: string) => effectToBuffs({ type: "ability-grant", target: "this-unit", modifier: { ability } }, source, ctx).unsupported;
+    const grantOf = (ability: string, target: unknown = "this-unit") => effectToBuffs({ type: "ability-grant", target, modifier: { ability } }, source, ctx).unsupported;
     const resolve = (id: string) => records[id];
     expect(classifyUnsupported(grantOf("fabricated-cost-rule"), resolve)).toEqual(outside);
-    // The cruncher does not pull a granted record's buffs onto its holders, so a damage record stays a gap.
-    expect(classifyUnsupported(grantOf("fabricated-reroll-rule"), resolve)).toEqual(gap);
+    // stackableBuffsFor pulls a record granted to the unit onto it as levers.
+    expect(classifyUnsupported(grantOf("fabricated-reroll-rule"), resolve)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
+    expect(classifyUnsupported(grantOf("fabricated-reroll-rule", { owner: "friendly", all_of: ["EXAMPLE"] }), resolve)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
+    // What the granted record itself cannot model still counts.
+    expect(classifyUnsupported(grantOf("fabricated-half-rule"), resolve)).toEqual(gap);
+    // A damage record granted to an enemy unit is not pulled onto the crunched unit.
+    expect(classifyUnsupported(grantOf("fabricated-reroll-rule", { owner: "enemy" }), resolve)).toEqual(gap);
     expect(classifyUnsupported(grantOf("fabricated-missing-rule"), resolve)).toEqual(gap);
     expect(classifyUnsupported(grantOf("fabricated-cost-rule"))).toEqual(gap);
   });

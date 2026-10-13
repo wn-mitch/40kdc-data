@@ -262,7 +262,7 @@ describe("describer and cruncher for removals", () => {
     expect(stat).toBe("Improve the Attacks characteristic of ranged weapons with [BLAST] equipped by models in this unit by 1.");
   });
 
-  it("refuses a removal and a keyword selector as unsupported in the cruncher", () => {
+  it("refuses a removal as unsupported in the cruncher and gates a keyword selector on that keyword", () => {
     const source: BuffSource = { kind: "ability", abilityId: "zeta-rule", abilityKind: "unit" };
     const ctx: EngineContext = { phase: "shooting", attackerStationary: false };
     const removal = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes: ["Heavy"], weapon_type: "ranged" } }, source, ctx, "attacker");
@@ -271,10 +271,8 @@ describe("describer and cruncher for removals", () => {
       'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")',
     ]);
     const selector = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Close-quarters"], weapon_keyword: "Torrent" } }, source, ctx, "attacker");
-    expect(selector.applied).toEqual([]);
-    expect(selector.unsupported.map((entry) => entry.reason)).toEqual([
-      "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve",
-    ]);
+    expect(selector.unsupported).toEqual([]);
+    expect(selector.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeyword: "torrent" }]);
   });
 });
 

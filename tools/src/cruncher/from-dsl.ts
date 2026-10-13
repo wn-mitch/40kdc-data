@@ -37,6 +37,7 @@ import type {
   WeaponKeywordRef,
 } from "./buffs.js";
 import type { Phase } from "../generated.js";
+import { planSelection } from "./from-dsl-selection.js";
 
 /** A fragment we couldn't translate. The SPA can render these as warnings. */
 export type UnsupportedFragment = {
@@ -72,10 +73,21 @@ export type ActivatableBuff = {
   id: string;
   /** Human label for the lever (option name, or a summary of its buffs). */
   label: string;
-  /** Contributions this activation adds when the player opts in (≥1). */
+  /** Contributions this activation adds when the player opts in (≥1, or none for a {@link capRaise} lever). */
   buffs: Buff[];
   /** Set when the lever belongs to a mutually-limited pool. */
   group?: ActivatableGroupRef;
+  /**
+   * The lever raises the cap of another ability's lever pool instead of adding buffs ("select one
+   * more augmentation"): `ability` names that ability as the DSL does, `by` the extra activations.
+   */
+  capRaise?: { ability: string; by: number };
+  /**
+   * DSL fragments the player vouches for when opting in, in the order they apply: a unit
+   * selection (its range, visibility and eligibility), a gating roll, a model count. Absent when
+   * the lever assumes nothing beyond the choice itself.
+   */
+  requires?: unknown[];
 };
 
 export type EffectTranslation = {
@@ -193,6 +205,15 @@ function walk(
     out.unsupported.push({ reason: MODEL_SCOPED_REASON, effectFragment: currentNode });
     return;
   }
+  // A unit selection reaching the selected unit is a player lever; its eligibility is what the
+  // player vouches for, so it is planned before the fidelity check below.
+  if (currentNode.type === "select-units") {
+    const plan = planSelection(currentNode, source, opts.perspective, opts.context);
+    if (plan.kind !== "none") {
+      translateSelection(plan, currentNode, source, opts, out);
+      return;
+    }
+  }
   // These typed predicates require a selected model/history/visibility binding.
   // Keep the source representation intact rather than silently widening its buff.
   if (hasUnresolvedFidelityBinding(currentNode)) {
@@ -203,9 +224,22 @@ function walk(
   // applying the printed value would over- or under-state it.
   const unsized = unsizedValueReason(currentNode);
   if (unsized != null) {
+    // A capped scaling ("+2 A per embarked model, to a maximum of +22") is a lever at its cap; the
+    // player vouches for the count that reaches it.
+    const atCap = scaledToCap(currentNode);
+    if (atCap) {
+      offerLever(atCap, source, opts, out, { id: `${opts.abilityId}#at-cap`, label: "At its maximum", requires: [currentNode.scaling] });
+      return;
+    }
     out.unsupported.push({ reason: unsized, effectFragment: currentNode });
     return;
   }
+  // An ability another unit provides reaches the crunched unit only through a friendly filter, an
+  // aura's recipient or a selection; its own unit and model are the provider, not the crunched unit.
+  if (isProvidedByAnotherUnit(source) && typeof currentNode.target === "string" && PROVIDER_TARGETS.has(currentNode.target)) return;
+  // A friendly filter's keywords ("friendly BLOOD LEGIONS units") must hold on the crunched unit
+  // when its keywords are known; unknown keywords leave the filter permissive.
+  if (friendlyFilterExcludes(currentNode, opts)) return;
   // A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
   // reaches the unit only when one alternative matches its keywords.
   const alternatives = alternativesMatch(currentNode, opts);
@@ -217,6 +251,15 @@ function walk(
   // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
   // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
   // modifies the buffed unit's own attacks.
+  // On the defender it changes every friendly attack against that unit, the buffed unit's among
+  // them, so the attacker perspective reads it as a change for friendly units; the target
+  // perspective has no such attack.
+  if (isObject(currentNode.modifier) && currentNode.modifier.incoming === true && classifyTarget(currentNode) === "defender") {
+    if (opts.perspective !== "attacker") return;
+    const { incoming: _incoming, ...modifier } = currentNode.modifier;
+    walk({ ...currentNode, target: { owner: "friendly" }, modifier }, source, opts, out);
+    return;
+  }
   const incoming = isObject(currentNode.modifier) && currentNode.modifier.incoming === true && classifyTarget(currentNode) === "self";
   if (incoming) {
     if (opts.perspective === "attacker") return;
@@ -386,11 +429,59 @@ function walk(
     case "ability-grant":
       translateAbilityGrant(currentNode, source, opts, out);
       return;
+    case "ability-modifier":
+      translateAbilityModifier(currentNode, source, opts, out);
+      return;
     default:
       out.unsupported.push({
         reason: `effect type "${String(type)}" is not modelled by the buff layer`,
         effectFragment: currentNode,
       });
+  }
+}
+
+/**
+ * Offer a planned unit selection as one lever: the buffs its effect gives the crunched unit, gated
+ * on the selected unit's keywords, with the selection (and any roll) in `requires`. Levers nested
+ * in the effect keep their own choice and add the selection to what they require.
+ */
+function translateSelection(
+  plan: ReturnType<typeof planSelection>,
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): void {
+  if (plan.kind === "skip" || plan.kind === "none") return;
+  if (plan.kind === "unsupported") {
+    out.unsupported.push({ reason: plan.reason, effectFragment: node });
+    return;
+  }
+  offerLever(plan.effect, source, opts, out, { id: `${opts.abilityId}#selected`, label: plan.label, requires: plan.requires, applicability: plan.applicability });
+}
+
+/**
+ * Translate `effect` and offer what it gives the crunched unit as one opt-in lever that requires
+ * `lever.requires`. Levers nested in the effect keep their own choice and add those requirements
+ * to theirs; `applicability` gates every buff.
+ */
+function offerLever(
+  effect: unknown,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+  lever: { id: string; label: string; requires: unknown[]; applicability?: BuffApplicability },
+): void {
+  const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+  walk(effect, source, opts, sub);
+  const gate = (buff: Buff): Buff => (lever.applicability ? applyApplicability(buff, lever.applicability) : buff);
+  out.unsupported.push(...sub.unsupported);
+  for (const nested of sub.activatable) {
+    out.activatable.push({ ...nested, buffs: nested.buffs.map(gate), requires: [...lever.requires, ...(nested.requires ?? [])] });
+  }
+  if (sub.applied.length > 0) {
+    const buffs = sub.applied.map(gate);
+    out.activatable.push({ id: lever.id, label: `${lever.label}: ${labelForBuffs(buffs)}`, buffs, requires: lever.requires });
   }
 }
 
@@ -492,7 +583,7 @@ function translateReroll(
     (roll === "hit" || roll === "wound" || roll === "save" || roll === "damage") &&
     (subset === "ones" || subset === "all-failures")
   ) {
-    out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, weaponNameApplicability(modifier)));
+    out.applied.push(withApplicability({ source, contribution: { type: "reroll", roll, subset } }, weaponApplicability(modifier)));
     return;
   }
   out.unsupported.push({
@@ -553,7 +644,7 @@ function translateRollModifier(
       return;
     }
   }
-  const named = weaponNameApplicability(modifier);
+  const named = weaponApplicability(modifier);
   switch (roll) {
     case "hit":
       out.applied.push(withApplicability({ source, contribution: { type: "hit-mod", value } }, named));
@@ -599,7 +690,7 @@ function translateStatModifier(
   // `attack_type: melee|ranged` scopes the mod to that attack — express it as a
   // phase gate so e.g. a melee +1 Attack doesn't fire in the shooting phase —
   // and `weapon_name` to the attacks of that weapon.
-  const applicability = combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier));
+  const applicability = combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier));
   const emit = (contribution: BuffContribution): void => {
     out.applied.push(withApplicability({ source, contribution }, applicability));
   };
@@ -831,9 +922,9 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
-  // A selector by keyword would apply the grant to every weapon of the unit: refuse it, as the
-  // narrowing check does for other families, rather than over-apply it.
-  if (modifier.weapon_keyword != null) {
+  // A selector by keyword reaches only the weapons with that ability; one the catalog parser cannot
+  // read would apply the grant to every weapon, so it is refused rather than over-applied.
+  if (modifier.weapon_keyword != null && weaponKeywordId(modifier.weapon_keyword) === undefined) {
     out.unsupported.push({
       reason: `weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve`,
       effectFragment: node,
@@ -851,7 +942,7 @@ function translateKeywordGrant(
   if (raws.length === 0) return;
   // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only
   // keyword shouldn't fire in the shooting phase. Express it as a phase gate.
-  const applicability = weaponTypeApplicability(modifier);
+  const applicability = combineOptional(weaponTypeApplicability(modifier), weaponApplicability(modifier));
   for (const raw of raws) {
     const ref = parseKeywordGrant(raw);
     if (!ref) {
@@ -895,13 +986,28 @@ function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplica
  * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate —
  * and neither is `weapon_name`, which gates on the attacking weapon's name.
  */
-const UNHONORABLE_NARROWING = ["weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
+const UNHONORABLE_NARROWING = ["weapon_profile", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
 function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
-  return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
+  const narrowed = UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
+  if (narrowed) return narrowed;
+  // A weapon keyword gates by the weapon's abilities (see weaponApplicability); one the catalog
+  // parser cannot read would gate on nothing.
+  if (modifier.weapon_keyword != null && weaponKeywordId(modifier.weapon_keyword) === undefined) return "weapon_keyword";
+  return undefined;
 }
 
-function weaponNameApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
-  return typeof modifier.weapon_name === "string" ? { weaponName: modifier.weapon_name.toLowerCase() } : undefined;
+/** The catalog keyword id a `weapon_keyword` selector names ("Lethal Hits" → "lethal-hits"). */
+function weaponKeywordId(raw: unknown): string | undefined {
+  return typeof raw === "string" ? parseKeywordGrant(raw)?.keyword_id : undefined;
+}
+
+/** The weapon-name and weapon-keyword gates a modifier's weapon selectors put on its buffs. */
+function weaponApplicability(modifier: Record<string, unknown>): BuffApplicability | undefined {
+  const out: BuffApplicability = {};
+  if (typeof modifier.weapon_name === "string") out.weaponName = modifier.weapon_name.toLowerCase();
+  const keyword = weaponKeywordId(modifier.weapon_keyword);
+  if (keyword !== undefined) out.weaponKeyword = keyword;
+  return Object.keys(out).length > 0 ? out : undefined;
 }
 
 function combineOptional(a: BuffApplicability | undefined, b: BuffApplicability | undefined): BuffApplicability | undefined {
@@ -929,13 +1035,13 @@ function translateRollResult(node: Record<string, unknown>, source: BuffSource, 
     return;
   }
   const critical = Number(modifier.critical_on);
-  const onlyCritical = Object.keys(modifier).every((key) => ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name"].includes(key));
+  const onlyCritical = Object.keys(modifier).every((key) => ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name", "weapon_keyword"].includes(key));
   if ((roll !== "hit" && roll !== "wound") || !onlyCritical || !Number.isInteger(critical) || critical < 2 || critical > 6) {
     out.unsupported.push({ reason: `roll-result on "${roll}": only a critical threshold on hit or wound rolls is modelled`, effectFragment: node });
     return;
   }
   if (opts.perspective !== "attacker" || !appliesToBuffedUnit(node, "attacker")) return;
-  const applicability = combineOptional(attackTypeApplicability(modifier), weaponNameApplicability(modifier));
+  const applicability = combineOptional(attackTypeApplicability(modifier), weaponApplicability(modifier));
   out.applied.push(withApplicability({ source, contribution: { type: "crit-threshold", roll, value: critical } }, applicability));
 }
 
@@ -993,6 +1099,24 @@ function translateAbilityGrant(node: Record<string, unknown>, source: BuffSource
  * they surface as `unsupported`. Attacker-perspective walks drop silently
  * (this is a defender stat).
  */
+/**
+ * A change to another ability. Adding selections to the crunched unit's own ability raises the cap
+ * of the lever pool that ability offers, which the consumer resolves by the ability's name; other
+ * aspects are not modelled.
+ */
+function translateAbilityModifier(node: Record<string, unknown>, _source: BuffSource, opts: WalkOpts, out: EffectTranslation): void {
+  const modifier = isObject(node.modifier) ? node.modifier : undefined;
+  const by = modifier?.value;
+  if (modifier?.aspect === "selections" && modifier.operation === "add" && typeof modifier.ability === "string" &&
+    typeof by === "number" && Number.isInteger(by) && by > 0) {
+    if (!appliesToBuffedUnit(node, opts.perspective)) return;
+    const label = by === 1 ? `One more ${modifier.ability} selection` : `${by} more ${modifier.ability} selections`;
+    out.activatable.push({ id: `${opts.abilityId}#cap`, label, buffs: [], capRaise: { ability: modifier.ability, by } });
+    return;
+  }
+  out.unsupported.push({ reason: `effect type "ability-modifier" is not modelled by the buff layer`, effectFragment: node });
+}
+
 function translateDamageReduction(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -1563,6 +1687,8 @@ function combineApplicability(a: BuffApplicability, b: BuffApplicability): BuffA
   if (b.requiresTargetKeyword) out.requiresTargetKeyword = b.requiresTargetKeyword;
   if (b.requiresAttackerKeyword) out.requiresAttackerKeyword = b.requiresAttackerKeyword;
   if (b.weaponName) out.weaponName = b.weaponName;
+  if (b.weaponKeyword) out.weaponKeyword = b.weaponKeyword;
+  if (b.excludedTargetKeywords) out.excludedTargetKeywords = [...new Set([...(a.excludedTargetKeywords ?? []), ...b.excludedTargetKeywords])];
   return out;
 }
 
@@ -1915,6 +2041,24 @@ function unsizedValueReason(node: Record<string, unknown>): string | undefined {
   return undefined;
 }
 
+/**
+ * A scaled leaf with a cap, as the leaf at that cap: the scaled field set to `max_value` and the
+ * scaling removed. Undefined when the scaling has no positive integer cap, the scaled field is not
+ * a plain number, or another size is bound.
+ */
+function scaledToCap(node: Record<string, unknown>): Record<string, unknown> | undefined {
+  const scaling = node.scaling;
+  const modifier = node.modifier;
+  if (!isObject(scaling) || !isObject(modifier)) return undefined;
+  const cap = scaling.max_value;
+  if (typeof cap !== "number" || !Number.isInteger(cap) || cap <= 0) return undefined;
+  const field = scaling.field === undefined ? "value" : scaling.field;
+  if (typeof field !== "string" || !SIZED_FIELDS.includes(field) || typeof modifier[field] !== "number") return undefined;
+  if (SIZED_FIELDS.some((other) => isObject(modifier[other]))) return undefined;
+  const { scaling: _scaling, ...rest } = node;
+  return { ...rest, modifier: { ...modifier, [field]: cap } };
+}
+
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";
 function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
   const selector = isObject(node.selector) ? node.selector : undefined;
@@ -1939,6 +2083,31 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
 function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
   if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
   return isObject(trigger) && ((isObject(trigger.filter) && trigger.filter.by != null) || trigger.source_ability != null);
+}
+
+/** Self targets that, in an ability another unit provides, name that provider. */
+const PROVIDER_TARGETS = new Set(["this-unit", "ability-unit", "this-model"]);
+
+function isProvidedByAnotherUnit(source: BuffSource): boolean {
+  return source.kind === "ability" && source.abilityKind === "support";
+}
+
+/**
+ * Whether a friendly unit-filter target names keywords the crunched unit lacks. Only the plain
+ * keyword fields are read; a filter of alternatives is left to {@link alternativesMatch}, and a
+ * missing keyword list keeps the filter permissive.
+ */
+function friendlyFilterExcludes(node: Record<string, unknown>, opts: WalkOpts): boolean {
+  const target = node.target;
+  if (!isObject(target) || target.owner !== "friendly" || Array.isArray(target.any_of_filters)) return false;
+  const keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
+  if (!isKeywordList(keywords)) return false;
+  const all = isKeywordList(target.all_of) ? target.all_of : [];
+  const any = isKeywordList(target.any_of) ? target.any_of : undefined;
+  const none = isKeywordList(target.none_of) ? target.none_of : [];
+  return !(all.every((keyword) => includesKeyword(keywords, keyword))
+    && (any === undefined || any.some((keyword) => includesKeyword(keywords, keyword)))
+    && !none.some((keyword) => includesKeyword(keywords, keyword)));
 }
 
 const ALTERNATIVES_REASON = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";

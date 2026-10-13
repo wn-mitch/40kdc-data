@@ -253,7 +253,13 @@ describe("Grey Knights fidelity worklist", () => {
     const effect = id === "blessing-of-the-omnissiah-grey-knights" ? a.effect.effect : a.effect;
     const result = effectToBuffs(effect, { kind: "ability", abilityId: id, abilityKind: "unit" }, { phase: "shooting", attackerStationary: false });
     expect(result.applied).toEqual([]);
-    expect(result.unsupported.some((u) => u.reason.includes("predicates are not resolved"))).toBe(true);
+    if (effect.type === "select-units") {
+      // A unit selection is a lever whose eligibility the player vouches for; this one changes no
+      // attack, so it offers no lever either.
+      expect(result.activatable).toEqual([]);
+    } else {
+      expect(result.unsupported.some((u) => u.reason.includes("predicates are not resolved"))).toBe(true);
+    }
   });
 });
 

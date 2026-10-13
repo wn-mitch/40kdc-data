@@ -27,8 +27,8 @@ export type BuffSource =
         | "support";
       /**
        * For `abilityKind: "attached"`, the combined-unit member the ability
-       * came from (so the UI can name it and show its leader/bodyguard role).
-       * Absent for other kinds.
+       * came from (so the UI can name it and show its leader/bodyguard role);
+       * for `"support"`, the other unit that provides it. Absent for other kinds.
        */
       sourceUnitId?: string;
     }
@@ -113,6 +113,8 @@ export type BuffApplicability = {
   requiresTargetKeyword?: string;
   /** Attacker must carry this keyword (case-insensitive). */
   requiresAttackerKeyword?: string;
+  /** Target must carry none of these keywords (case-insensitive). Permissive when the target's keywords are unknown. */
+  excludedTargetKeywords?: string[];
   /**
    * Range-gated abilities (DSL `scope.range_inches`, e.g. a "within 18\"" reroll):
    * the buff applies only when the target is within this many inches. Gate is
@@ -125,6 +127,12 @@ export type BuffApplicability = {
    * `EngineContext.weaponNames` undefined; the engine always sets it.
    */
   weaponName?: string;
+  /**
+   * Only attacks with a weapon that has this weapon ability (catalog keyword id, e.g.
+   * `"lethal-hits"`), printed or granted by another live buff. Permissive when the caller leaves
+   * `EngineContext.weaponKeywords` undefined; the engine always sets it.
+   */
+  weaponKeyword?: string;
 };
 
 /** A single buff: where it came from, when it applies, what it contributes. */
@@ -197,6 +205,12 @@ export type EngineContext = {
    * `applicableWhen.weaponName`; undefined leaves weapon-name gates permissive.
    */
   weaponNames?: ReadonlyArray<string>;
+  /**
+   * Catalog keyword ids printed on the attacking weapon profile. Drives
+   * `applicableWhen.weaponKeyword` together with the keywords live buffs grant; undefined leaves
+   * weapon-keyword gates permissive.
+   */
+  weaponKeywords?: ReadonlyArray<string>;
 };
 
 /** Back-compat alias — `resolveBuffs` accepts the shared engine context. */
@@ -274,6 +288,10 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
     const target = ctx.targetKeywords ?? [];
     if (!target.includes(w.requiresTargetKeyword.toLowerCase())) return false;
   }
+  if (w.excludedTargetKeywords && ctx.targetKeywords) {
+    const target = ctx.targetKeywords;
+    if (w.excludedTargetKeywords.some((keyword) => target.includes(keyword.toLowerCase()))) return false;
+  }
   if (w.requiresAttackerKeyword) {
     const attacker = ctx.attackerKeywords ?? [];
     if (!attacker.includes(w.requiresAttackerKeyword.toLowerCase())) return false;
@@ -292,12 +310,38 @@ function applies(buff: Buff, ctx: ResolveContext): boolean {
 }
 
 /**
+ * The buffs whose gates hold. A weapon-keyword gate reads the weapon's printed keywords plus the
+ * keywords other live buffs grant, so one pass is repeated until no further gated buff joins
+ * ("weapons with Lethal Hits gain Rapid Fire 1" sees a granted Lethal Hits).
+ */
+function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
+  const ungated = buffs.filter((b) => b.applicableWhen?.weaponKeyword === undefined || ctx.weaponKeywords === undefined);
+  const live = ungated.filter((b) => applies(b, ctx));
+  if (ctx.weaponKeywords === undefined) return live;
+  let pending = buffs.filter((b) => b.applicableWhen?.weaponKeyword !== undefined && applies(b, ctx));
+  const joined = new Set<Buff>();
+  for (;;) {
+    const keywords = new Set(ctx.weaponKeywords);
+    for (const b of [...live, ...joined]) {
+      if (b.contribution.type === "extra-keyword") keywords.add(b.contribution.keywordRef.keyword_id);
+    }
+    const next = pending.filter((b) => keywords.has(b.applicableWhen!.weaponKeyword!));
+    if (next.length === 0) break;
+    for (const b of next) joined.add(b);
+    pending = pending.filter((b) => !joined.has(b));
+  }
+  // Keep the caller's order so ranking ties break as they did before.
+  for (const b of live) joined.add(b);
+  return buffs.filter((b) => joined.has(b));
+}
+
+/**
  * Collapse a flat buff stack into a {@link ResolvedModifiers} read-out. Pure
  * function; the engine — and any UI that wants to render the resolved table
  * before crunching — both go through this.
  */
 export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifiers {
-  const live = buffs.filter((b) => applies(b, ctx));
+  const live = liveBuffs(buffs, ctx);
 
   const out: ResolvedModifiers = {
     hitMod: { value: 0, dominantSource: null },

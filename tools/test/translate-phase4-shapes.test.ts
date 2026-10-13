@@ -271,12 +271,12 @@ describe("cruncher: phase-4 shapes", () => {
     expect(after.applied).toEqual([]);
   });
 
-  it("does not apply a value it cannot size: a bound roll, a battle-size value, a count or a scaling", () => {
+  it("does not apply a value it cannot size: a bound roll, a battle-size value, a count or an uncapped scaling", () => {
     const cases: [unknown, RegExp][] = [
       [{ type: "roll", dice: "D3", roll_var: "r", effect: leaf("stat-modifier", { stat: "A", operation: "add", value: { roll_var: "r" } }) }, /value is set by a bound roll/],
       [leaf("stat-modifier", { stat: "A", operation: "add", value: BATTLE_SIZE }), /value is set by the battle size/],
       [leaf("stat-modifier", { stat: "A", operation: "add", value: { count_of: "battle-round" } }), /value is set by the number of battle-round/],
-      [leaf("stat-modifier", { stat: "A", operation: "add", value: 2 }, "this-unit", { scaling: { per: 1, of: "models-embarked-in-bearer", max_value: 22 } }), /scales with models-embarked-in-bearer/],
+      [leaf("stat-modifier", { stat: "A", operation: "add", value: 2 }, "this-unit", { scaling: { per: 1, of: "models-embarked-in-bearer" } }), /scales with models-embarked-in-bearer/],
     ];
     for (const [effect, reason] of cases) {
       const result = effectToBuffs(effect, source, ctx);

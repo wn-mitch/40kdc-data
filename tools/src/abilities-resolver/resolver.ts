@@ -160,14 +160,15 @@ export function resolveEligibleAbilities(
     }
   }
 
-  // 6. Supporting units — only aura-scoped abilities (otherwise the buff
-  // would describe a self-target effect that doesn't reach the input unit).
+  // 6. Supporting units — only abilities that can reach another unit (an aura,
+  // a friendly or enemy unit filter, a unit selection); an ability that only
+  // names its own unit describes a buff that never reaches the input unit.
   for (const supportId of input.supportingUnitIds ?? []) {
     const supporter = resolveUnit(supportId, factionId);
     if (!supporter) continue;
     for (const ability of supporter.abilities) {
       if (!phaseMatches(ability, phase)) continue;
-      if (!isAuraScope(ability.raw.scope?.range)) continue;
+      if (!isAuraScope(ability.raw.scope?.range) && !reachesOtherUnits(ability.raw.effect)) continue;
       pushUnique(out, seen, {
         ability,
         source: { kind: "support", sourceUnitId: supportId },
@@ -207,6 +208,23 @@ function intersect(phases: Phase[], phase: Phase): Phase[] {
 function isAuraScope(range: unknown): boolean {
   if (typeof range !== "string") return false;
   return range.startsWith("aura-") || range === "any-on-battlefield" || range === "any-visible";
+}
+
+/**
+ * Whether an effect can reach a unit other than its own: an aura, a unit-filter target (friendly
+ * or enemy), or a unit selection. The translator decides what of it reaches the input unit.
+ */
+export function reachesOtherUnits(effect: unknown): boolean {
+  if (Array.isArray(effect)) return effect.some(reachesOtherUnits);
+  if (effect === null || typeof effect !== "object") return false;
+  const node = effect as Record<string, unknown>;
+  if (node.type === "aura" || node.type === "select-units") return true;
+  const target = node.target;
+  if (target !== null && typeof target === "object" && !Array.isArray(target)) {
+    const owner = (target as Record<string, unknown>).owner;
+    if (owner === "friendly" || owner === "enemy") return true;
+  }
+  return Object.values(node).some(reachesOtherUnits);
 }
 
 function pushUnique(

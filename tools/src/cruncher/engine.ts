@@ -97,6 +97,7 @@ export function crunch(input: EngineInput, dataset?: Dataset): EngineOutput {
     ...input.context,
     targetKeywords: input.context.targetKeywords ?? targetKeywords,
     weaponNames: input.context.weaponNames ?? [...new Set([input.attacker.weapon.name, weaponProfile.name].map((name) => name.toLowerCase()))],
+    weaponKeywords: input.context.weaponKeywords ?? [...new Set((weaponProfile.keywords ?? []).map((ref) => ref.keyword_id))],
   };
 
   // Auto-inject weapon-keyword buffs from the attacker profile, then append

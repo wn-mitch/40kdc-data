@@ -50,6 +50,14 @@ import { SHARE_REGISTRY } from "../share/registry.generated.js";
 import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import {
+  abilityLevers,
+  combinedKeywordsLower,
+  enhancementLevers,
+  resolveCapRaises,
+  type AbilityLevers,
+  type LeverCost,
+} from "./lever-providers.js";
+import {
   resolveEligibleAbilities,
   type EligibilityInput,
   type EligibleAbility,
@@ -78,6 +86,17 @@ export type StackableBuff = {
   source: BuffSource;
   /** Id of the mutually-limited {@link StackableBuffGroup} this belongs to, if any. */
   group?: string;
+  /** What turning the lever on costs: CP for a Stratagem, points for an Enhancement. */
+  cost?: LeverCost;
+  /**
+   * DSL fragments the player vouches for when turning the lever on (a unit selection's range and
+   * eligibility, a gating roll, the model count a capped bonus needs), in the order they apply.
+   */
+  requires?: unknown[];
+  /** Id of the lever this one needs on (the Stratagem or Enhancement that provides it). */
+  requiresLever?: string;
+  /** Turning the lever on raises the cap of the pool `group` by `by` instead of adding buffs. */
+  raisesCap?: { group: string; by: number };
 };
 
 /** A pool of {@link StackableBuff} levers limited to `maxActivations` at once. */
@@ -636,22 +655,37 @@ export class Dataset {
     context: EngineContext,
   ): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
     const buffs: StackableBuff[] = [];
-    const groups = new Map<string, StackableBuffGroup>();
+    const groups: StackableBuffGroup[] = [];
+    const capRaises = new Map<StackableBuff, { ability: string; by: number }>();
+    const take = (levers: AbilityLevers) => {
+      buffs.push(...levers.buffs);
+      for (const group of levers.groups) if (!groups.some((g) => g.id === group.id)) groups.push(group);
+      for (const [lever, raise] of levers.capRaises) capRaises.set(lever, raise);
+    };
 
-    // Surface the attachment fact to the DSL translator so `is-attached` /
-    // `model-is-leader` conditions can evaluate. Clone — never mutate the
-    // caller's context. An explicitly-set flag wins over the derivation.
+    const unit =
+      (input.factionId ? this.units.getInFaction(input.unitId, input.factionId) : undefined) ??
+      this.units.getAny(input.unitId);
+    const factionId = input.factionId ?? unit?.raw.faction_id ?? "";
+    const members = (input.attachedUnitIds ?? [])
+      .map((id) => this.units.getInFaction(id, factionId) ?? this.units.getAny(id))
+      .filter((view): view is UnitView => view !== undefined);
+    const combined = unit ? [unit, ...members] : members;
+
+    // Surface the attachment fact and the combined unit's keywords to the DSL translator so
+    // `is-attached` conditions and keyword filters ("friendly BLOOD LEGIONS units") evaluate.
+    // Clone — never mutate the caller's context. An explicitly-set value wins over the derivation.
     const ctx: EngineContext = {
       ...context,
       attackerAttached:
         context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
+      attackerKeywords: context.attackerKeywords ?? (combined.length > 0 ? combinedKeywordsLower(combined) : undefined),
     };
 
     // Intrinsic weapon-profile keywords — always on. Weapon ids are shared
     // across factions with divergent stats, so resolve within the input
     // unit's faction (getAny fallback for a genuinely cross-faction id).
-    const weaponFaction =
-      input.factionId ?? this.units.getAny(input.unitId)?.raw.faction_id;
+    const weaponFaction = input.factionId ?? unit?.raw.faction_id;
     for (const ref of input.weaponProfiles ?? []) {
       const weapon =
         (weaponFaction
@@ -669,51 +703,32 @@ export class Dataset {
       });
     }
 
-    for (const entry of this.eligibleAbilities(input, ctx.phase)) {
-      const source = bufferSourceFromEligible(entry);
-      const { applied, activatable } = entry.ability.describeBuffs(
-        source,
+    const eligible = this.eligibleAbilities(input, ctx.phase);
+    // A record the unit already holds is not granted again by another ability.
+    const held = new Set(eligible.filter((entry) => entry.source.kind !== "support").map((entry) => entry.ability.id));
+    for (const entry of eligible) {
+      const stratagem = entry.source.kind === "detachment-stratagem" ? entry.source : undefined;
+      take(abilityLevers(this, {
+        ability: entry.ability,
+        source: bufferSourceFromEligible(entry),
+        rating: entry.rating,
         ctx,
-        "attacker",
-        entry.rating,
-      );
-      // Stratagems cost CP — opt-in, not on by default.
-      const isStratagem = entry.source.kind === "detachment-stratagem";
-
-      if (applied.length > 0) {
-        buffs.push({
-          id: `${entry.source.kind}:${entry.ability.id}`,
-          label: entry.ability.name,
-          buffs: applied,
-          enabled: !isStratagem,
-          source,
-        });
-      }
-
-      for (const act of activatable) {
-        let groupId: string | undefined;
-        if (act.group) {
-          groupId = act.group.id;
-          if (!groups.has(groupId)) {
-            groups.set(groupId, {
-              id: groupId,
-              label: entry.ability.name,
-              maxActivations: act.group.maxActivations,
-            });
-          }
-        }
-        buffs.push({
-          id: act.id,
-          label: `${entry.ability.name} — ${act.label}`,
-          buffs: act.buffs,
-          enabled: false,
-          source,
-          group: groupId,
-        });
-      }
+        factionId,
+        idBase: `${entry.source.kind}:${entry.ability.id}`,
+        label: entry.ability.name,
+        // Another unit's ability reaches this one only where the player places it (range,
+        // selection), so its levers are opt-in.
+        enabled: entry.source.kind !== "support",
+        // Stratagems cost CP — opt-in, not on by default.
+        gate: stratagem ? { cost: { cp: stratagem.cpCost } } : undefined,
+        held,
+      }));
     }
 
-    return { buffs, groups: [...groups.values()] };
+    // Enhancements a character in the combined unit could take from the detachment.
+    take(enhancementLevers(this, { detachmentId: input.detachmentId, crunchedUnitId: input.unitId, bearers: combined, ctx, factionId, held }));
+
+    return { buffs: resolveCapRaises(buffs, capRaises, groups), groups };
   }
 
   /** Shared implementation for buffsFor / defensiveBuffsFor. */
@@ -895,6 +910,6 @@ function bufferSourceFromEligible(entry: EligibleAbility): BuffSource {
         sourceUnitId: entry.source.unitId,
       };
     case "support":
-      return { kind: "ability", abilityId, abilityKind: "support" };
+      return { kind: "ability", abilityId, abilityKind: "support", sourceUnitId: entry.source.sourceUnitId };
   }
 }

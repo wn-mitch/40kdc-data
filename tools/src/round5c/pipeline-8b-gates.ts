@@ -2,6 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
+import { grantedRecordIds } from "../data/lever-providers.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import type { CoverageView } from "./coverage.js";
 import { tiledSources } from "./leaf-view.js";
@@ -189,22 +190,29 @@ const DEFENDER_CHECK_SOURCE: BuffSource = { kind: "ability", abilityId: "defende
 /** The effect of the ability record a grant names, or undefined when no record of the faction has that id. */
 export type GrantedRecordEffect = (abilityId: string) => unknown;
 
+type GateCounts = { honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number };
+
 /**
- * Whether a grant of an ability record changes no attack: the record resolves and its own effect
- * is wholly off the damage path. The cruncher does not pull a granted record's buffs onto the
- * holders, so a record with any damage effect stays a gap, as does a name no record has.
+ * How a grant of an ability record counts, or undefined when the item is not such a grant or the
+ * record does not resolve. A record that changes no attack puts the grant off the damage path. A
+ * grant reaching the crunched unit (its own unit, the aura recipient, a friendly filter) is pulled
+ * onto the unit as levers by `stackableBuffsFor`, so its buffs are covered and only what the record
+ * itself leaves unmodelled counts. A record with damage effects granted elsewhere stays a gap.
  */
-function isNonDamageRecordGrant(item: EffectTranslation["unsupported"][number], recordEffect: GrantedRecordEffect | undefined, depth: number): boolean {
-  if (recordEffect === undefined || depth >= 4 || !UNMODELLED_EFFECT_TYPE.test(item.reason)) return false;
+function recordGrantCounts(item: EffectTranslation["unsupported"][number], recordEffect: GrantedRecordEffect | undefined, depth: number): GateCounts | undefined {
+  if (recordEffect === undefined || depth >= 4 || !UNMODELLED_EFFECT_TYPE.test(item.reason)) return undefined;
   const fragment = item.effectFragment as { type?: unknown; modifier?: { ability?: unknown; definition?: unknown } } | undefined;
   const ability = fragment?.type === "ability-grant" && fragment.modifier?.definition === undefined ? fragment.modifier?.ability : undefined;
-  if (typeof ability !== "string") return false;
+  if (typeof ability !== "string") return undefined;
   const effect = recordEffect(ability);
-  if (effect === undefined) return false;
+  if (effect === undefined) return undefined;
   const translation = effectToBuffs(effect, DEFENDER_CHECK_SOURCE, CRUNCHER_CONTEXT);
-  if (translation.applied.length > 0 || translation.activatable.length > 0) return false;
-  const counts = classifyUnsupported(translation.unsupported, recordEffect, depth + 1);
-  return counts.unrecognizedShape === 0 && counts.honestUnknown === 0;
+  const residual = classifyUnsupported(translation.unsupported, recordEffect, depth + 1);
+  const clean = residual.unrecognizedShape === 0 && residual.honestUnknown === 0;
+  if (translation.applied.length === 0 && translation.activatable.length === 0) {
+    return clean ? { honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 } : undefined;
+  }
+  return grantedRecordIds({ applied: [], unsupported: [item], activatable: [] }).length > 0 ? residual : undefined;
 }
 
 /** Granted records resolve the way the gated ability itself does: in its faction, then its parent's. */
@@ -220,7 +228,7 @@ function grantedRecordEffect(dataRoot: string, factionId: string): GrantedRecord
 
 export function classifyUnsupported(
   unsupported: EffectTranslation["unsupported"], recordEffect?: GrantedRecordEffect, depth = 0,
-): { honestUnknown: number; outsideDamagePath: number; unrecognizedShape: number } {
+): GateCounts {
   let honestUnknown = 0;
   let outsideDamagePath = 0;
   let unrecognizedShape = 0;
@@ -232,8 +240,16 @@ export function classifyUnsupported(
       outsideDamagePath += asTarget.outsideDamagePath;
       unrecognizedShape += asTarget.unrecognizedShape;
     } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)) honestUnknown += 1;
-    else if (isOutsideDamagePath(item) || isNonDamageRecordGrant(item, recordEffect, depth)) outsideDamagePath += 1;
-    else unrecognizedShape += 1;
+    else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
+    else {
+      const granted = recordGrantCounts(item, recordEffect, depth);
+      if (granted === undefined) unrecognizedShape += 1;
+      else {
+        honestUnknown += granted.honestUnknown;
+        outsideDamagePath += granted.outsideDamagePath;
+        unrecognizedShape += granted.unrecognizedShape;
+      }
+    }
   }
   return { honestUnknown, outsideDamagePath, unrecognizedShape };
 }

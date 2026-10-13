@@ -39,10 +39,13 @@ describe("cruncher damage levers: gates the goldens do not project", () => {
     expect(applied.map((buff) => buff.applicableWhen)).toEqual([{ phases: ["fight"], weaponName: "fabricated blade" }]);
   });
 
-  it("refuses a critical threshold narrowed by a weapon keyword rather than applying it to every weapon", () => {
-    const result = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "Pistol" } }, source, shooting);
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((item) => item.reason)).toEqual(['roll-result: narrows by "weapon_keyword" which the cruncher can\'t resolve here']);
+  it("gates a critical threshold narrowed by a weapon keyword on that keyword, and refuses one it cannot read", () => {
+    const gated = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "Pistol" } }, source, shooting);
+    expect(gated.unsupported).toEqual([]);
+    expect(gated.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeyword: "pistol" }]);
+    const unreadable = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "" } }, source, shooting);
+    expect(unreadable.applied).toEqual([]);
+    expect(unreadable.unsupported.map((item) => item.reason)).toEqual(['roll-result: narrows by "weapon_keyword" which the cruncher can\'t resolve here']);
   });
 });
 
