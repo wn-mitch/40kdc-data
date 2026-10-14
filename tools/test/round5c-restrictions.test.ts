@@ -155,7 +155,7 @@ describe("Round 5C restrictions", () => {
       count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY", "WARDENS"], excluded_keywords: ["TITANIC"],
       eligibility: { operator: "and", operands: [
         { operator: "not", operands: [{ type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } }] },
-        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+        { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "engaged" } } }] },
       ] },
     } });
     // The qualifiers say who can be picked, not when the effect applies.
@@ -170,7 +170,7 @@ describe("Round 5C restrictions", () => {
     ]);
     expect(result.core?.target_restrictions).toEqual({ count: "one", selects: "unit", required_keywords: ["WARDENS"], bound_to: "triggering-unit" });
     // The moment's unit is this unit, so "that WARDENS unit" is a keyword condition on it, not any WARDENS unit.
-    expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" }, condition: { type: "has-keyword", parameters: { all_of: ["WARDENS"] } } });
+    expect(result.mechanics.trigger).toEqual({ event: "selected", filter: { to: "shoot" }, condition: { type: "matches", parameters: { filter: { all_of: ["WARDENS"] } } } });
     const attacked = compiled([
       { ...leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["WARDENS", "ORACLES"], match: "any", excluded_keywords: [] }), fragment: "TARGET" },
       { ...leaf("RESTRICTION", "target-binding", { bound_to: "attacked-unit" }), fragment: "TARGET" },
@@ -189,8 +189,8 @@ describe("Round 5C restrictions", () => {
     expect(target.core).toEqual({ target_restrictions: {
       count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY"],
       eligibility: { operator: "and", operands: [
-        { type: "has-keyword", parameters: { any_of: ["ORACLES", "WARDENS"] } },
-        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+        { type: "matches", parameters: { filter: { any_of: ["ORACLES", "WARDENS"] } } },
+        { type: "matches", parameters: { filter: { not_states: ["engaged"] } } },
       ] },
     } });
     // "each time a friendly WARDENS unit" + an event with no owner: the trigger's subject.
@@ -202,7 +202,7 @@ describe("Round 5C restrictions", () => {
       filter({ side: "enemy", keywords: ["VEHICLE"] }),
       leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
     ]);
-    expect(attack.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } } });
+    expect(attack.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { subject: "defender", filter: { all_of: ["VEHICLE"] } } } });
     // "One ADEPTUS CUSTODES model": the who leaf's noun says model.
     expect(compiled([
       { ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" },

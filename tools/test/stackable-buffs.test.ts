@@ -22,7 +22,7 @@ describe("Dataset.stackableBuffsFor", () => {
     expect(bless.every((b) => b.enabled === false)).toBe(true);
     expect(bless.every((b) => b.group === "blessings-of-khorne-world-eaters")).toBe(true);
     const group = groups.find((g) => g.id === "blessings-of-khorne-world-eaters");
-    expect(group).toEqual({ id: "blessings-of-khorne-world-eaters", label: "Blessings of Khorne", maxActivations: 2 });
+    expect(group).toEqual({ id: "blessings-of-khorne-world-eaters", abilityId: "blessings-of-khorne-world-eaters", label: "Blessings of Khorne", maxActivations: 2 });
     // The labels are prefixed with the ability name at the dataset layer.
     expect(bless[0].label).toBe("Blessings of Khorne — Martial Excellence");
   });
@@ -92,12 +92,9 @@ describe("Dataset.stackableBuffsFor", () => {
   });
 });
 
-// Kharn's "Legendary Killer" grants the combined unit melee hit & wound rerolls,
-// gated behind a `model-is-leader` condition. That condition (and the 268 uses
-// of `is-attached`) was unevaluatable until `EngineContext.attackerAttached`
-// carried the attachment fact from `attachedUnitIds` into the DSL translator.
-// These guard that the gated rerolls surface only when an attachment is present.
-describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
+// The source model's actual role governs leading, independently of whichever
+// attached member is selected for the damage calculation.
+describe("source-bound attachment conditions", () => {
   /** The two reroll contributions Legendary Killer should yield, in either order. */
   function legendaryKillerRerolls(buffs: { id: string; buffs: { contribution: unknown }[] }[]) {
     const lever = buffs.find((b) => b.id.endsWith(":legendary-killer-world-eaters"));
@@ -106,7 +103,8 @@ describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
 
   it("reported direction: Berzerkers led by Kharn get his melee rerolls (sourced attached)", () => {
     const { buffs } = ds.stackableBuffsFor(
-      { unitId: "khorne-berzerkers", factionId: "world-eaters", attachedUnitIds: ["kharn-the-betrayer"] },
+      { unitId: "khorne-berzerkers", factionId: "world-eaters", attachedUnitIds: ["kharn-the-betrayer"],
+        attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } },
       { phase: "fight" },
     );
     expect(legendaryKillerRerolls(buffs)).toEqual(
@@ -121,7 +119,8 @@ describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
 
   it("reverse direction: Kharn leading Berzerkers still yields his rerolls (sourced unit)", () => {
     const { buffs } = ds.stackableBuffsFor(
-      { ...KHARN, attachedUnitIds: ["khorne-berzerkers"] },
+      { ...KHARN, attachedUnitIds: ["khorne-berzerkers"],
+        attachmentRoles: { "khorne-berzerkers": "bodyguard", "kharn-the-betrayer": "leader" } },
       { phase: "fight" },
     );
     expect(legendaryKillerRerolls(buffs)).toEqual(
@@ -135,8 +134,7 @@ describe("attachment-gated conditions (is-attached / model-is-leader)", () => {
   });
 
   it("negative control: unattached Kharn yields no Legendary Killer rerolls", () => {
-    // No attachedUnitIds → attackerAttached undefined → model-is-leader stays
-    // "unknown" → the gated rerolls remain unsupported, not surfaced as a buff.
+    // No attachment means the source cannot be leading; no keyword inference.
     const { buffs } = ds.stackableBuffsFor(KHARN, { phase: "fight" });
     expect(legendaryKillerRerolls(buffs)).toEqual([]);
   });

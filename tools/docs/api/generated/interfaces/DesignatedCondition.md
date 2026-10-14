@@ -6,9 +6,9 @@
 
 # Interface: DesignatedCondition
 
-Defined in: [generated.ts:2154](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2154)
+Defined in: [generated.ts:2153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2153)
 
-[designation] The subject carries this designation. With count_min/count_max, counts how many units or objectives carry it.
+[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.
 
 ## Properties
 
@@ -16,28 +16,12 @@ Defined in: [generated.ts:2154](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"designated"`
 
-Defined in: [generated.ts:2155](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2155)
+Defined in: [generated.ts:2154](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2154)
 
 ***
 
 ### parameters
 
-> **parameters**: `object`
+> **parameters**: \{\[`k`: `string`\]: `unknown`; `subject`: \{\[`k`: `string`\]: `unknown`; \}; \} \| \{\[`k`: `string`\]: `unknown`; \}
 
-Defined in: [generated.ts:2156](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2156)
-
-#### subject?
-
-> `optional` **subject?**: [`UnitRef`](../type-aliases/UnitRef.md) \| \{ `objective`: [`ObjectiveFilter`](ObjectiveFilter.md); \}
-
-#### tag
-
-> **tag**: `string`
-
-#### count\_min?
-
-> `optional` **count\_min?**: `number`
-
-#### count\_max?
-
-> `optional` **count\_max?**: `number`
+Defined in: [generated.ts:2155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2155)

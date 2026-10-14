@@ -225,8 +225,8 @@
             </profile>
             <profile name="Sanctity of Purpose" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Unless the target unit is within range of an objective marker, you can re-roll a Wound roll of 1.
-While the target unit is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description">While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
+While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

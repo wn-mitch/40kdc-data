@@ -8,6 +8,6 @@
 
 > **DecodeResult** = \{ `ok`: `true`; `list`: [`ShareList`](../interfaces/ShareList.md); \} \| \{ `ok`: `false`; `reason`: `"malformed"` \| `"stale-registry"`; \}
 
-Defined in: [share/codec.ts:77](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/share/codec.ts#L77)
+Defined in: [share/codec.ts:77](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/codec.ts#L77)
 
 Outcome of decodeShareList: a list, or why it couldn't be read.

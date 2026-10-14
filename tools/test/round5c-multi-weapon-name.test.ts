@@ -74,11 +74,11 @@ describe("Round 5C named weapons: scope over a target gate", () => {
       ...ENEMY_RANGE.map(([w, f, p]) => [w, f, p] as [string, string, Record<string, unknown>]),
       ["+1 S and AP", "characteristic-modifier", { characteristics: ["S", "AP"], operation: "improve", value: 1, weapon_type: "ranged" }]), text);
     expect(mechanics.effect.type).toBe("conditional");
-    expect(mechanics.effect.condition).toEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: { inches: 12 } } });
-    const steps = mechanics.effect.effect.steps as Array<{ modifier: Record<string, unknown> }>;
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: { inches: 12 } } } } });
+    const steps = mechanics.effect.effect.steps as Array<{ modifier: { stat?: unknown; weapons?: { name?: string; type?: string } } }>;
     expect(steps).toHaveLength(12);
-    expect(steps.map((step) => `${String(step.modifier.stat)}:${String(step.modifier.weapon_name)}`)).toContain("AP:Zap sentry volley‐gun");
-    expect(steps.every((step) => step.modifier.weapon_type === "ranged")).toBe(true);
+    expect(steps.map((step) => `${String(step.modifier.stat)}:${String(step.modifier.weapons?.name)}`)).toContain("AP:Zap sentry volley‐gun");
+    expect(steps.every((step) => step.modifier.weapons?.type === "ranged")).toBe(true);
   });
 
   it("emits the printed spelling of a name, not the spelling the wording uses", () => {
@@ -88,7 +88,7 @@ describe("Round 5C named weapons: scope over a target gate", () => {
       ["that targeted", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }],
       ...ENEMY_RANGE.map(([w, f, p]) => [w, f, p] as [string, string, Record<string, unknown>]),
       ["+1 S and AP", "characteristic-modifier", { characteristics: ["S", "AP"], operation: "improve", value: 1, weapon_type: "ranged" }]), text);
-    const names = (mechanics.effect.effect.steps as Array<{ modifier: { weapon_name: string } }>).map((step) => step.modifier.weapon_name);
+    const names = (mechanics.effect.effect.steps as Array<{ modifier: { weapons?: { name?: string } } }>).map((step) => step.modifier.weapons?.name);
     expect(names).toContain("Zap volley‐gun");
     expect(names).not.toContain("Zap volley‑gun");
   });
@@ -201,9 +201,9 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
       ["Zap blade and Fab lance of dawn", "characteristic-modifier", { characteristics: ["A"], operation: "add", value: 3, subject: "this-model", weapon_type: "all", weapon_names: ["Zap blade", "Fab lance of dawn"] }]), text, UNIT);
     expect(mechanics.trigger.optional).toBe(true);
     expect(mechanics.effect.steps[0].type).toBe("resource-spend");
-    const stats = mechanics.effect.steps[1].steps as Array<{ modifier: Record<string, unknown> }>;
-    expect(stats.map((step) => step.modifier.weapon_name)).toEqual(["Zap blade", "Fab lance of dawn"]);
-    expect(stats.every((step) => step.modifier.weapon_type === undefined)).toBe(true);
+    const stats = mechanics.effect.steps[1].steps as Array<{ modifier: { weapons?: { name?: string; type?: string } } }>;
+    expect(stats.map((step) => step.modifier.weapons?.name)).toEqual(["Zap blade", "Fab lance of dawn"]);
+    expect(stats.every((step) => step.modifier.weapons?.type === undefined)).toBe(true);
   });
 
   it("gives a named enhancement change to the disembarked unit, looking the names up in the faction only", () => {
@@ -215,8 +215,8 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
       ["have +1 A", "characteristic-modifier", { characteristics: ["A"], operation: "improve", value: 1 }]), text,
     { faction_id: "fab", source_type: "enhancement", catalog: { faction: FACTION, own: [] } });
     expect(mechanics.trigger.event).toBe("disembarked");
-    const stats = mechanics.effect.steps as Array<{ target: unknown; modifier: Record<string, unknown> }>;
-    expect(stats.map((step) => step.modifier.weapon_name)).toEqual(["Zap lasgun", "Zap pistol"]);
+    const stats = mechanics.effect.steps as Array<{ target: unknown; modifier: { weapons?: { name?: string } } }>;
+    expect(stats.map((step) => step.modifier.weapons?.name)).toEqual(["Zap lasgun", "Zap pistol"]);
     expect(stats.every((step) => step.target === "event-subject")).toBe(true);
   });
 
@@ -239,10 +239,10 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
       ["This model's Zap cannon and Zap missiles", "weapon-property-scope", { subject: "this-model", weapon_type: "ranged", weapon_names: ["Zap cannon", "Zap missile"] }],
       ["have Lethal Hits", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
       ["while targeting a unit within half range", "unit-position", { kind: "within", distance: "half-weapon", of: "attacker", subject: "target", negated: false }]), text, UNIT);
-    expect(mechanics.effect.condition).toEqual({ type: "within", parameters: { subject: "defender", of: "attacker", range: "half-weapon" } });
-    const grants = mechanics.effect.effect.steps as Array<{ type: string; modifier: Record<string, unknown> }>;
-    expect(grants.map((grant) => grant.modifier.weapon_name)).toEqual(["Zap cannon", "Zap missile"]);
-    expect(grants.every((grant) => grant.type === "weapon-ability-grant" && grant.modifier.abilities !== undefined)).toBe(true);
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: "half-weapon" } } } });
+    const grants = mechanics.effect.effect.steps as Array<{ type: string; modifier: { keywords?: unknown[]; weapons?: { name?: string } } }>;
+    expect(grants.map((grant) => grant.modifier.weapons?.name)).toEqual(["Zap cannon", "Zap missile"]);
+    expect(grants.every((grant) => grant.type === "weapon-ability-grant" && grant.modifier.keywords !== undefined)).toBe(true);
   });
 
   it("grants the ability to each named weapon, never to every weapon of the type", () => {
@@ -251,9 +251,9 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
       ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }],
       ["all Zap cannons, Zap missiles and Zap lascannons equipped by models in your unit", "weapon-property-scope", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap cannon", "Zap missile", "Zap lascannon"] }],
       ["have the [PSYCHIC] ability", "weapon-ability-keyword", { keyword: "Psychic" }]), text);
-    const grants = mechanics.effect.steps as Array<{ modifier: Record<string, unknown> }>;
-    expect(grants.map((grant) => grant.modifier.weapon_name)).toEqual(["Zap cannon", "Zap missile", "Zap lascannon"]);
-    expect(grants.every((grant) => grant.modifier.weapon_type === "ranged" && grant.modifier.abilities !== undefined)).toBe(true);
+    const grants = mechanics.effect.steps as Array<{ modifier: { keywords?: unknown[]; weapons?: { name?: string; type?: string } } }>;
+    expect(grants.map((grant) => grant.modifier.weapons?.name)).toEqual(["Zap cannon", "Zap missile", "Zap lascannon"]);
+    expect(grants.every((grant) => grant.modifier.weapons?.type === "ranged" && grant.modifier.keywords !== undefined)).toBe(true);
   });
 
   it("gives 'those weapons' the names of the earlier named-weapon leaves, printed", () => {
@@ -264,8 +264,8 @@ describe("Round 5C named weapons: stat change, grant and binder", () => {
       ["The Attacks characteristic of Zap crushers is 12", "characteristic-set", { subject: "this-model", characteristic: "A", value: 12, weapon_type: "melee", weapon_name: "zap crushers" }],
       ["Improve the Armour Penetration characteristic of those weapons by 1", "characteristic-modifier", { characteristics: ["AP"], operation: "improve", value: 1, subject: "this-model", weapon_type: "melee", weapon: "earlier-named" }]), text);
     const steps = JSON.stringify(mechanics);
-    expect(steps).toContain('"weapon_name":"Zap stompers"');
-    expect(steps).toContain('"weapon_name":"Zap crushers"');
+    expect(steps).toContain('"weapons":{"type":"melee","name":"Zap stompers"}');
+    expect(steps).toContain('"weapons":{"type":"melee","name":"Zap crushers"}');
   });
 
   it("refuses 'those weapons' with no earlier named-weapon leaf, or with earlier leaves of two recipients", () => {
@@ -351,9 +351,9 @@ describe("Round 5C named weapons: a choice of keywords over named weapons", () =
     const mechanics = mechanicsOf(placed(text,
       ["Your unit's Zap cannons and Zap missiles weapons have Lethal Hits or Sustained Hits", "weapon-ability-grant", { subject: "this-unit", weapon_type: "ranged", weapon_names: ["Zap cannon", "Zap missile"], keywords: ["Lethal Hits", "Sustained Hits"], keyword_choice: true }]), text, UNIT);
     expect(mechanics.effect.type).toBe("choice");
-    for (const option of mechanics.effect.options as Array<{ type: string; steps: Array<{ modifier: Record<string, unknown> }> }>) {
+    for (const option of mechanics.effect.options as Array<{ type: string; steps: Array<{ modifier: { weapons?: { name?: string } } }> }>) {
       expect(option.type).toBe("sequence");
-      expect(option.steps.map((step) => step.modifier.weapon_name)).toEqual(["Zap cannon", "Zap missile"]);
+      expect(option.steps.map((step) => step.modifier.weapons?.name)).toEqual(["Zap cannon", "Zap missile"]);
     }
   });
 });

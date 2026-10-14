@@ -11,6 +11,8 @@ import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { trustedWordings } from "../src/round5c/jev-classify.js";
 import { tiledCalibrationSample } from "../src/round5c/jev-v2-segment.js";
 import { tiledSources } from "../src/round5c/leaf-view.js";
+import { runCompileGates } from "../src/round5c/pipeline-8b-gates.js";
+import { localEmbedder } from "../src/round5c/embeddings.js";
 import { propagateDuplicateTexts } from "../src/round5c/propagate.js";
 import { getAbility, progressCounts } from "../src/round5c/review.js";
 import { applyChatReview } from "../src/round5c/review-apply.js";
@@ -268,6 +270,40 @@ describe("Round 5C NAME rows: surfaces, duplicate copies, staleness and ordering
       const renamed = tiledSources(db).find((item) => item.id === id)!;
       const result = compileLeaves(renamed.leaves, renamed.source_text, { name: renamed.name ?? undefined });
       expect(result.ok ? "" : result.errors.join(" ")).toMatch(/no longer matches/);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("compiles an explicitly hash-pinned historical source without making it current", () => {
+    const db = open();
+    try {
+      const id = addAbility(db, "historic-example", null, "Alpha");
+      addLeaf(db, id, "Alpha", "characteristic-set", { ...PARAMETERS, value: 1 });
+      db.prepare("UPDATE abilities SET current = 0 WHERE id = ?").run(id);
+      const hash = hashJson({ text: "Alpha" });
+      const abilityVersionIds = new Set([id]);
+      expect(tiledSources(db, { abilityVersionIds })).toEqual([]);
+      expect(() => tiledSources(db, { historicalSourceHashes: new Map([[id, hash]]) })).toThrow(/explicitly requested/);
+      expect(() => tiledSources(db, { abilityVersionIds, historicalSourceHashes: new Map([[id, "stale"]]) })).toThrow(/pinned historical identity/);
+      const sources = tiledSources(db, { abilityVersionIds, historicalSourceHashes: new Map([[id, hash]]) });
+      expect(sources).toHaveLength(1);
+      expect(sources[0]!.machine_leaves).toBe(0);
+      expect(compileLeaves(sources[0]!.leaves, sources[0]!.source_text).ok).toBe(true);
+      expect(db.prepare("SELECT current, source_hash FROM abilities WHERE id = ?").get(id)).toEqual({ current: 0, source_hash: hash });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("refuses a historical publication identity without its exact source pin", async () => {
+    const db = open();
+    try {
+      const id = addAbility(db, "historic-source", null, "Alpha");
+      await expect(runCompileGates(db, localEmbedder(), 0.55, new Set([id]), {
+        historicalEntityIds: new Map([[id, "preserved-entity"]]),
+      })).rejects.toThrow(/requires a pinned source hash/);
+      expect(db.prepare("SELECT ability_id, current FROM abilities WHERE id = ?").get(id)).toEqual({ ability_id: "historic-source", current: 1 });
     } finally {
       db.close();
     }

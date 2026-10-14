@@ -6607,8 +6607,11 @@
           {
             "keyword_id": "anti",
             "parameters": {
-              "target_keyword": "MONSTER/VEHICLE",
-              "threshold": 4
+              "threshold": 4,
+              "required_target_keywords_any": [
+                "MONSTER",
+                "VEHICLE"
+              ]
             }
           },
           {
@@ -13377,8 +13380,11 @@
           {
             "keyword_id": "anti",
             "parameters": {
-              "target_keyword": "MONSTER/VEHICLE",
-              "threshold": 2
+              "threshold": 2,
+              "required_target_keywords_any": [
+                "MONSTER",
+                "VEHICLE"
+              ]
             }
           }
         ]

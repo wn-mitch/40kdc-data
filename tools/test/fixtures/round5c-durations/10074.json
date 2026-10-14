@@ -106,12 +106,16 @@
       ]
      },
      {
-      "type": "within",
+      "type": "matches",
       "parameters": {
        "subject": "event-subject",
-       "of": "this-model",
-       "range": {
-        "inches": 8
+       "filter": {
+        "within": {
+         "of": "this-model",
+         "range": {
+          "inches": 8
+         }
+        }
        }
       }
      }

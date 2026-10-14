@@ -49,6 +49,24 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2);
 const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
+it("retains a chosen keyword reference without inventing a literal keyword filter", () => {
+  const parameters = normalizeFingerprintParameters("unit-keyword", {
+    chosen_by: "example-adaptation", subject: "this-unit", negated: false,
+  }, 6);
+  const result = compiled([leaf("CONDITION", "unit-keyword", parameters, 6), heal()]);
+  expect(result.mechanics.effect).toMatchObject({
+    type: "conditional",
+    condition: { type: "has-keyword", parameters: { chosen_by: "example-adaptation" } },
+  });
+  expect(parameters).not.toHaveProperty("keywords");
+  expect(() => normalizeFingerprintParameters("unit-keyword", {
+    ...parameters, keywords: ["INFANTRY"],
+  }, 6)).toThrow(/not both/u);
+  expect(() => normalizeFingerprintParameters("unit-keyword", {
+    ...parameters, chosen_by: "not an entity id",
+  }, 6)).toThrow(/kebab-case/u);
+});
+
 describe("Round 5C batch-6 event@7 trigger kinds", () => {
   it("compiles the twelve new bare and filtered game-clock/history moments", () => {
     const cases: Array<[Record<string, unknown>, Record<string, unknown>]> = [
@@ -114,10 +132,10 @@ describe("Round 5C batch-6 predicate families", () => {
 
   it("compiles rule-active, unit-owner, unit-has-ability, same-unit", () => {
     conditionCase("rule-active", { rule: "oath-of-moment" }, { type: "rule-active", parameters: { rule: "oath-of-moment" } });
-    conditionCase("unit-owner", { owner: "enemy" }, { type: "owned-by", parameters: { owner: "enemy" } });
+    conditionCase("unit-owner", { owner: "enemy" }, { type: "matches", parameters: { filter: { owner: "enemy" } } });
     conditionCase("unit-owner", { subject: "defender", owner: "friendly", negated: true },
-      { operator: "not", operands: [{ type: "owned-by", parameters: { subject: "defender", owner: "friendly" } }] });
-    conditionCase("unit-has-ability", { ability: "deep-strike" }, { type: "has-ability", parameters: { ability: "deep-strike" } });
+      { operator: "not", operands: [{ type: "matches", parameters: { subject: "defender", filter: { owner: "friendly" } } }] });
+    conditionCase("unit-has-ability", { ability: "deep-strike" }, { type: "matches", parameters: { filter: { has_ability: ["deep-strike"] } } });
     conditionCase("same-unit", { as: "selected-unit" }, { type: "same-unit", parameters: { as: "selected-unit" } });
   });
 
@@ -136,13 +154,13 @@ describe("Round 5C batch-6 predicate families", () => {
   it("compiles history-compare's tally, value, and pool right sides", () => {
     conditionCase("history-compare", { comparison: "greater-or-equal", right_kind: "value", right_value: 3 }, {
       type: "happened-compare",
-      parameters: { left: { event: "destroyed", object: { owner: "enemy" }, window: "battle" }, comparison: "greater-or-equal", right: { value: 3 } },
+      parameters: { left: { event: "destroyed", object: { owner: "enemy" }, window: "battle" }, comparison: "gte", right: { value: 3 } },
     });
     conditionCase("history-compare", { left_kind: "character", comparison: "greater-than", right_kind: "tally", right_tally_kind: "any" }, {
       type: "happened-compare",
       parameters: {
         left: { event: "destroyed", object: { owner: "enemy", all_of: ["CHARACTER"] }, window: "battle" },
-        comparison: "greater-than",
+        comparison: "gt",
         right: { event: "destroyed", object: { owner: "enemy" }, window: "battle" },
       },
     });
@@ -155,10 +173,10 @@ describe("Round 5C batch-6 predicate families", () => {
   });
 
   it("compiles controls-objective in count mode and more-than-opponent mode", () => {
-    conditionCase("controls-objective", { mode: "count", by: "friendly", count_min: 2 }, { type: "controls", parameters: { by: "friendly", count_min: 2 } });
+    conditionCase("controls-objective", { mode: "count", by: "friendly", count_min: 2 }, { type: "controls", parameters: { by: "friendly", count: { min: 2 } } });
     conditionCase("controls-objective", { mode: "count", objective_role: "central", home_of: "enemy" },
       { type: "controls", parameters: { objective: { role: "central", home_of: "enemy" } } });
-    conditionCase("controls-objective", { mode: "more-than-opponent" }, { type: "controls", parameters: { compare: "more-than-opponent" } });
+    conditionCase("controls-objective", { mode: "more-than-opponent" }, { type: "controls", parameters: { compare: { owner: "enemy", comparison: "gt" } } });
   });
 
   it("rejects controls-objective count fields alongside more-than-opponent", () => {
@@ -167,11 +185,13 @@ describe("Round 5C batch-6 predicate families", () => {
 
   it("compiles attack-filter and attack-compare", () => {
     conditionCase("attack-filter", { attack_type: "ranged" }, { type: "attack-is", parameters: { attack_type: "ranged" } });
-    conditionCase("attack-filter", { weapon_keyword: "BLAST", all_target_same_unit: true }, { type: "attack-is", parameters: { weapon_keyword: "BLAST", all_target_same_unit: true } });
+    conditionCase("attack-filter", { weapon_keyword: "BLAST", all_target_same_unit: true }, { type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "blast" } }, all_target_same_unit: true } });
     conditionCase("attack-compare", { left_of: "attacker", left_stat: "S", comparison: "greater-than", right_kind: "stat", right_of: "defender", right_stat: "T" },
-      { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "greater-than", right: { of: "defender", stat: "T" } } });
+      { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gt", right: { of: "defender", stat: "T" } } });
     conditionCase("attack-compare", { left_of: "attacker", left_stat: "D", comparison: "greater-or-equal", right_kind: "value", right_value: 3 },
-      { type: "attack-compare", parameters: { left: { of: "attacker", stat: "D" }, comparison: "greater-or-equal", right: { value: 3 } } });
+      { type: "attack-compare", parameters: { left: { of: "attacker", stat: "D" }, comparison: "gte", right: { value: 3 } } });
+    conditionCase("attack-compare", { left_of: "attacker", left_stat: "Strength", comparison: "greater-than", right_kind: "stat", right_of: "defender", right_stat: "Toughness" },
+      { type: "attack-compare", parameters: { left: { of: "attacker", stat: "S" }, comparison: "gt", right: { of: "defender", stat: "T" } } });
   });
 
   it("rejects attack-filter with no filter field at all", () => {
@@ -179,11 +199,11 @@ describe("Round 5C batch-6 predicate families", () => {
   });
 
   it("compiles visible, designated-filter, battle-round, battle-size, guided, moved-over", () => {
-    conditionCase("visible", {}, { type: "visible", parameters: {} });
+    conditionCase("visible", {}, { type: "matches", parameters: { filter: { visible: { to: "attacker" } } } });
     conditionCase("visible", { to: "attacker", fully: true, blocked_by: "event-object" }, { type: "visible", parameters: { to: "attacker", fully: true, blocked_by: "event-object" } });
-    conditionCase("designated-filter", { tag: "afflicted" }, { type: "designated", parameters: { tag: "afflicted" } });
+    conditionCase("designated-filter", { tag: "afflicted" }, { type: "matches", parameters: { filter: { designated: "afflicted" } } });
     conditionCase("designated-filter", { subject: "defender", tag: "spotted", by: "this-model", count_min: 1 },
-      { type: "designated", parameters: { subject: "defender", tag: "spotted", by: "this-model", count_min: 1 } });
+      { type: "designated", parameters: { subject: "defender", tag: "spotted", by: "this-model", count: { min: 1 } } });
     conditionCase("battle-round", { min: 3 }, { type: "battle-round", parameters: { min: 3 } });
     conditionCase("battle-round", { min: 1, max: 2 }, { type: "battle-round", parameters: { min: 1, max: 2 } });
     conditionCase("battle-size", { size: "onslaught" }, { type: "battle-size", parameters: { size: "onslaught" } });
@@ -217,20 +237,20 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
   }
 
   it("compiles unit-keyword@2's new subjects, in addition to the old this-unit/target", () => {
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "attacker", negated: false }, 2, { type: "has-keyword", parameters: { subject: "attacker", all_of: ["CHARACTER"] } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "event-subject", negated: false }, 2, { type: "has-keyword", parameters: { subject: "event-subject", all_of: ["CHARACTER"] } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "recipient", negated: false }, 2, { type: "has-keyword", parameters: { subject: "recipient", all_of: ["CHARACTER"] } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "selected-unit", negated: false }, 2, { type: "has-keyword", parameters: { subject: "selected-unit", all_of: ["CHARACTER"] } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-model", negated: false }, 2, { type: "has-keyword", parameters: { subject: "this-model", all_of: ["CHARACTER"] } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "attacker", negated: false }, 2, { type: "matches", parameters: { subject: "attacker", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "event-subject", negated: false }, 2, { type: "matches", parameters: { subject: "event-subject", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "recipient", negated: false }, 2, { type: "matches", parameters: { subject: "recipient", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "selected-unit", negated: false }, 2, { type: "matches", parameters: { subject: "selected-unit", filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-model", negated: false }, 2, { type: "matches", parameters: { subject: "this-model", filter: { all_of: ["CHARACTER"] } } });
     // Old this-unit/target still compile the same way as version 1.
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-unit", negated: false }, 2, { type: "has-keyword", parameters: { all_of: ["CHARACTER"] } });
-    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, 2, { type: "has-keyword", parameters: { subject: "defender", all_of: ["CHARACTER"] } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "this-unit", negated: false }, 2, { type: "matches", parameters: { filter: { all_of: ["CHARACTER"] } } });
+    conditionCase("unit-keyword", { keywords: ["CHARACTER"], subject: "target", negated: false }, 2, { type: "matches", parameters: { subject: "defender", filter: { all_of: ["CHARACTER"] } } });
   });
 
   it("compiles unit-state@4's new subjects for both strength and core states", () => {
     conditionCase("unit-state", { states: ["below-half-strength"], subject: "attacker", negated: false }, 4, { type: "strength", parameters: { subject: "attacker", below: "half" } });
-    conditionCase("unit-state", { states: ["battle-shocked"], subject: "recipient", negated: false }, 4, { type: "unit-state", parameters: { subject: "recipient", state: "battle-shocked" } });
-    conditionCase("unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }, 4, { type: "unit-state", parameters: { subject: "this-model", state: "on-battlefield" } });
+    conditionCase("unit-state", { states: ["battle-shocked"], subject: "recipient", negated: false }, 4, { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } });
+    conditionCase("unit-state", { states: ["on-battlefield"], subject: "this-model", negated: false }, 4, { type: "matches", parameters: { subject: "this-model", filter: { state: "on-battlefield" } } });
   });
 
   it("compiles unit-activity@3's new subjects", () => {
@@ -254,7 +274,7 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
 
   it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {
     conditionCase("unit-position", { kind: "objective-range", controlled_by: "any", subject: "event-subject", negated: false }, 2,
-      { type: "within", parameters: { subject: "event-subject", of: { objective: {} }, range: "objective-control" } });
+      { type: "matches", parameters: { subject: "event-subject", filter: { within: { of: { objective: {} }, range: "objective-control" } } } });
     conditionCase("unit-position", { kind: "closest-eligible", subject: "this-unit", negated: false, to: "selected-unit", range: 9 }, 2,
       { type: "closest", parameters: { among: "eligible-targets", to: "selected-unit", range: { inches: 9 } } });
     // within/beyond still require subject "target"; closest-eligible/objective-range no longer do.
@@ -344,7 +364,7 @@ describe("Round 5C picked rolls and just-destroyed Stratagem targets", () => {
 describe("Round 5C unit-mark@2", () => {
   it("tests for being riled up, which version 1 refused", () => {
     const riled = compiled([leaf("CONDITION", "unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
-    expect(riled.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "designated", parameters: { tag: "riled-up" } } });
+    expect(riled.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "matches", parameters: { filter: { designated: "riled-up" } } } });
     expect(() => normalizeFingerprintParameters("unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 1)).toThrow();
   });
 });

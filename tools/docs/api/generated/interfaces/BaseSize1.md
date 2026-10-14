@@ -6,7 +6,7 @@
 
 # Interface: BaseSize1
 
-Defined in: [generated.ts:4006](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4006)
+Defined in: [generated.ts:6718](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6718)
 
 This model's base. Absent when no base could be resolved for the model.
 
@@ -16,7 +16,7 @@ This model's base. Absent when no base could be resolved for the model.
 
 > **shape**: `"round"` \| `"oval"` \| `"flying-base"` \| `"hull"` \| `"unique"`
 
-Defined in: [generated.ts:4007](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4007)
+Defined in: [generated.ts:6719](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6719)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:4007](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **diameter?**: `number`
 
-Defined in: [generated.ts:4008](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4008)
+Defined in: [generated.ts:6720](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6720)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [generated.ts:4008](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **width?**: `number`
 
-Defined in: [generated.ts:4009](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4009)
+Defined in: [generated.ts:6721](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6721)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [generated.ts:4009](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **length?**: `number`
 
-Defined in: [generated.ts:4010](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4010)
+Defined in: [generated.ts:6722](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6722)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [generated.ts:4010](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **size?**: `"small"` \| `"large"`
 
-Defined in: [generated.ts:4014](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4014)
+Defined in: [generated.ts:6726](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6726)
 
 Flying-base size class, when 'shape' is 'flying-base'.
 
@@ -58,6 +58,6 @@ Flying-base size class, when 'shape' is 'flying-base'.
 
 > `optional` **draft?**: `boolean`
 
-Defined in: [generated.ts:4018](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4018)
+Defined in: [generated.ts:6730](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6730)
 
 True when the entry is provisional/guessed (e.g. a category without authoritative dimensions) and should be revisited.

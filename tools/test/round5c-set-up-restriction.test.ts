@@ -260,10 +260,12 @@ describe("Wave 10 designated-unit distances and deployment-zone distances (SS4, 
     expect(mechanics.effect.modifier.away_from[1]).toEqual({ of: { owner: "enemy", not_designated: "afflicted" }, range: { inches: 9 } });
   });
 
-  it("refuses a designated filter on a selection, which has no designation shape yet", () => {
-    expect(errorsOf("Select one enemy unit that is not AFFLICTED.",
+  it("keeps a designated exclusion on the selection's canonical filter", () => {
+    const mechanics = mechanicsOf("Select one enemy unit that is not AFFLICTED. That unit is pinned.",
       ["Select one enemy unit", "select-unit", { distance: "any", visible: false }],
-      ["that is not AFFLICTED", "unit-filter", { side: "enemy", not_designated: "afflicted" }])).toMatch(/designation/u);
+      ["that is not AFFLICTED", "unit-filter", { side: "enemy", not_designated: "afflicted" }],
+      ["That unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }]);
+    expect(mechanics.effect.selector.filter).toEqual({ owner: "enemy", not_designated: "afflicted" });
   });
 
   it("sets up a unit more than 8\" from the enemy deployment zone and from all enemy units, in deployment (SS5)", () => {
@@ -275,7 +277,7 @@ describe("Wave 10 designated-unit distances and deployment-zone distances (SS4, 
       beyondEnemy("and all enemy units", 8, { subject: "this-unit" }));
     expect(JSON.stringify(mechanics.effect)).toContain("\"type\":\"deployment-window\"");
     expect(mechanics.effect.effect.modifier).toEqual({
-      to: "battlefield", min_enemy_distance: 8, away_from: [{ of: { territory: "enemy-deployment-zone" }, range: { inches: 8 } }],
+      to: "battlefield", min_enemy_distance: { inches: 8 }, away_from: [{ of: { territory: "enemy-deployment-zone" }, range: { inches: 8 } }],
     });
     const words = describeEffect(mechanics.effect as Effect);
     expect(words).toContain("during deployment");

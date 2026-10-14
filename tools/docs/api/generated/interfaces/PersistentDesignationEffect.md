@@ -6,7 +6,7 @@
 
 # Interface: PersistentDesignationEffect
 
-Defined in: [generated.ts:3098](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3098)
+Defined in: [generated.ts:4065](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4065)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "persistent-designation-effect".
@@ -17,7 +17,7 @@ via the `definition` "persistent-designation-effect".
 
 > **type**: `"persistent-designation"`
 
-Defined in: [generated.ts:3099](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3099)
+Defined in: [generated.ts:4066](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4066)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:3099](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **operation?**: `"replace"` \| `"establish"`
 
-Defined in: [generated.ts:3100](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3100)
+Defined in: [generated.ts:4067](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4067)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:3100](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **designation**: `string`
 
-Defined in: [generated.ts:3101](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3101)
+Defined in: [generated.ts:4068](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4068)
 
 ***
 
@@ -41,31 +41,15 @@ Defined in: [generated.ts:3101](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **select**: `object`
 
-Defined in: [generated.ts:3102](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3102)
+Defined in: [generated.ts:4069](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4069)
 
-#### scope
+#### kind
 
-> **scope**: `"enemy-unit"` \| `"objective-marker"`
+> **kind**: `"objective"` \| `"unit"`
 
-#### count?
+#### selector
 
-> `optional` **count?**: `1`
-
-#### timing
-
-> **timing**: `string`
-
-#### selection\_policy
-
-> **selection\_policy**: `"one-time"` \| `"replace-on-destroyed"`
-
-#### allow\_while\_embarked?
-
-> `optional` **allow\_while\_embarked?**: `boolean`
-
-#### bind\_as?
-
-> `optional` **bind\_as?**: `string`
+> **selector**: [`UnitSelector`](UnitSelector.md) \| [`ObjectiveSelector`](ObjectiveSelector.md)
 
 ***
 
@@ -73,37 +57,31 @@ Defined in: [generated.ts:3102](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **consumer?**: `object`
 
-Defined in: [generated.ts:3113](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3113)
-
-Resolve the declared bearer-model or unit beneficiary against the exact retained reference.
+Defined in: [generated.ts:4073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4073)
 
 #### relation
 
 > **relation**: `"attacks-selected-unit"` \| `"within-selected-marker"`
 
-Resolve this relation from the declared beneficiary to its retained unit or marker, not a generic target or nearby object.
-
 #### beneficiary
 
-> **beneficiary**: `"bearer"` \| `"unit"`
-
-#### effect
-
-> **effect**: [`SingleEffect`](../type-aliases/SingleEffect.md) \| [`StanceSelectEffect`](StanceSelectEffect.md) \| [`StanceSelectionCapacityEffect`](StanceSelectionCapacityEffect.md) \| [`ChoiceEffect`](ChoiceEffect.md) \| [`SequenceEffect`](SequenceEffect.md) \| [`RulesBundleEffect`](RulesBundleEffect.md) \| [`NamedEffect`](NamedEffect.md) \| [`AbilityPart`](AbilityPart.md) \| [`DiceGatedEffect`](DiceGatedEffect.md) \| [`DiceTableEffect`](DiceTableEffect.md) \| [`ConditionalEffect`](ConditionalEffect.md) \| [`DicePoolAllocationEffect`](DicePoolAllocationEffect.md) \| [`SelectUnitsEffect`](SelectUnitsEffect.md) \| [`ForEachUnitEffect`](ForEachUnitEffect.md) \| [`MovementModifierEffect`](MovementModifierEffect.md) \| [`AuraEffect`](AuraEffect.md) \| [`DesignateTargetEffect`](DesignateTargetEffect.md) \| [`RiskRewardEffect`](RiskRewardEffect.md) \| [`IssueOrdersEffect`](IssueOrdersEffect.md) \| [`ResourceActionMenuEffect`](ResourceActionMenuEffect.md) \| [`LeaderModelAbilityGrantEffect`](LeaderModelAbilityGrantEffect.md) \| `PersistentDesignationEffect` \| [`NoEffectEffect`](NoEffectEffect.md) \| [`SelectObjectiveEffect`](SelectObjectiveEffect.md) \| [`ForEachObjectiveEffect`](ForEachObjectiveEffect.md) \| [`PairedDesignationEffect`](PairedDesignationEffect.md) \| [`MiracleDieOperationEffect`](MiracleDieOperationEffect.md) \| [`FormationAttachmentGrantEffect`](FormationAttachmentGrantEffect.md) \| [`AttachmentEligibilityInheritEffect`](AttachmentEligibilityInheritEffect.md)
-
-Nested effects apply to the declared beneficiary. An Objective Control set operation assigns the value, not a signed delta.
+> **beneficiary**: `"this-unit"` \| `"this-model"`
 
 #### reference?
 
 > `optional` **reference?**: [`SelectionReference`](SelectionReference.md)
 
+#### effect
+
+> **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
+
 ***
 
 ### duration
 
-> **duration**: `"phase"` \| `"turn"` \| `"battle"` \| `"battle-round"` \| `"until-next-command-phase"`
+> **duration**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:3154](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3154)
+Defined in: [generated.ts:4079](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4079)
 
 ***
 
@@ -111,7 +89,7 @@ Defined in: [generated.ts:3154](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **lifecycle?**: `object`
 
-Defined in: [generated.ts:3155](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3155)
+Defined in: [generated.ts:4080](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4080)
 
 #### replace
 
@@ -123,7 +101,7 @@ Defined in: [generated.ts:3155](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 ##### replace.reference
 
-> **reference**: [`SelectionReference`](SelectionReference.md)
+> **reference**: [`UnitRef`](../type-aliases/UnitRef.md)
 
 ##### replace.optional
 
@@ -133,6 +111,18 @@ Defined in: [generated.ts:3155](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **exclusivity**: `"one-active-per-bearer-unit"`
 
-#### expiry
+***
 
-> **expiry**: `"battle-end"`
+### selection\_policy
+
+> **selection\_policy**: `"one-time"` \| `"replace-on-destroyed"`
+
+Defined in: [generated.ts:4088](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4088)
+
+***
+
+### allow\_while\_embarked?
+
+> `optional` **allow\_while\_embarked?**: `boolean`
+
+Defined in: [generated.ts:4089](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L4089)

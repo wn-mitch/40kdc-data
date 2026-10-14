@@ -205,7 +205,7 @@ describe("attached Leader units (SS-A)", () => {
 
   it("grants the ability to the units attached to this unit as Leaders", () => {
     const mechanics = mechanicsOf(text, items());
-    expect(json(mechanics.effect)).toContain(json({ owner: "friendly", member_of: "this-unit", has_ability: ["leader"] }));
+    expect(mechanics.effect).toMatchObject({ effect: { target: { level: "model", member_of: "this-unit", attachment_role: "leader" } } });
     expect(json(mechanics.effect)).toContain("scouts");
     expect(json(mechanics)).toContain("battle-formations-declared");
     expect(json(mechanics)).toContain(json({ type: "attachment", parameters: { role: "led" } }));
@@ -213,7 +213,7 @@ describe("attached Leader units (SS-A)", () => {
 
   it("carries a keyword on the same filter into the target", () => {
     const mechanics = mechanicsOf(text, items({ side: "friendly", keywords: ["INQUISITOR"], attached_to: "this-unit" }));
-    expect(json(mechanics.effect)).toContain(json({ owner: "friendly", all_of: ["INQUISITOR"], member_of: "this-unit", has_ability: ["leader"] }));
+    expect(mechanics.effect).toMatchObject({ effect: { target: { level: "model", member_of: "this-unit", attachment_role: "leader", all_of: ["INQUISITOR"] } } });
   });
 
   it("merges a stacked keyword filter without dropping the attachment", () => {
@@ -223,18 +223,40 @@ describe("attached Leader units (SS-A)", () => {
       ["an INQUISITOR unit", "unit-filter", { side: "friendly", keywords: ["INQUISITOR"] }],
       ["gains the Scouts 7\" ability", "core-ability-grant", { subject: "antecedent", ability: "scouts", value: 7 }],
     ]);
-    expect(json(mechanics.effect)).toContain("\"has_ability\":[\"leader\"]");
-    expect(json(mechanics.effect)).toContain("\"all_of\":[\"INQUISITOR\"]");
+    expect(json(mechanics.effect)).toContain('"attachment_role":"leader"');
+    expect(json(mechanics.effect)).toContain('"all_of":["INQUISITOR"]');
   });
 
-  it("refuses the attached filter as a selection, an aura or a Stratagem target", () => {
+  it("uses the attached-Leader model filter for a selection and an aura, while static Stratagem TARGET metadata still rejects it", () => {
     const selection = "Select one Leader unit attached to this unit. It gains the Scouts 7\" ability.";
-    const errors = errorsOf(selection, [
+    const selectionMechanics = mechanicsOf(selection, [
       ["Select one", "select-unit", { distance: "any", visible: false }],
       ["Leader unit attached to this unit", "unit-filter", { side: "friendly", attached_to: "this-unit" }],
       ["It gains the Scouts 7\" ability", "core-ability-grant", { subject: "antecedent", ability: "scouts", value: 7 }],
     ]);
-    expect(errors.join(" ")).toMatch(/attached Leaders has no selection, aura or Stratagem target shape/u);
+    expect(selectionMechanics.effect).toMatchObject({
+      type: "select-units",
+      selector: { filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } },
+    });
+
+    const aura = "While a Leader unit attached to this unit is within 6\" of this model, that unit gains the Stealth ability.";
+    const auraMechanics = mechanicsOf(aura, [
+      ["Leader unit attached to this unit", "unit-filter", { side: "friendly", attached_to: "this-unit" }],
+      ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
+      ["that unit gains the Stealth ability", "core-ability-grant", { subject: "antecedent", ability: "stealth" }],
+    ]);
+    expect(auraMechanics.effect).toMatchObject({
+      type: "aura",
+      modifier: { eligible: { level: "model", member_of: "this-unit", attachment_role: "leader" } },
+    });
+
+    const targetErrors = errorsOf("Opponent's Shooting phase, when an enemy unit is selected to shoot. One Leader unit attached to this unit.", [
+      ["Opponent's Shooting phase", "use-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: [] }, "WHEN"],
+      ["when an enemy unit is selected to shoot", "event", { kind: "selected", to: "shoot", owner: "enemy" }, "WHEN"],
+      ["One", "stratagem-target", { count: "one" }, "TARGET"],
+      ["Leader unit attached to this unit", "unit-filter", { side: "friendly", attached_to: "this-unit" }, "TARGET"],
+    ]);
+    expect(targetErrors.join(" ")).toMatch(/no static Stratagem TARGET metadata field/u);
   });
 });
 
@@ -256,7 +278,7 @@ describe("the triggering unit named explicitly (SS-D)", () => {
       ["HAZARDOUS", "weapon-ability-keyword", { keyword: "Hazardous" }, "EFFECT"],
     ]);
     expect(json(mechanics.effect)).toContain("\"target\":\"event-subject\"");
-    expect(json(mechanics.effect)).toContain("Hazardous");
+    expect(json(mechanics.effect)).toContain('"keyword_id":"hazardous"');
     expect(json(mechanics.effect)).not.toContain("\"target\":\"this-unit\"");
   });
 
@@ -266,7 +288,7 @@ describe("the triggering unit named explicitly (SS-D)", () => {
       ["weapons equipped by models in the attacking unit have", "weapon-property-scope", { subject: "event-subject", weapon_type: "all", weapon_keyword: "Psychic" }, "EFFECT"],
       ["HAZARDOUS", "weapon-ability-keyword", { keyword: "Hazardous" }, "EFFECT"],
     ]);
-    expect(json(mechanics.effect)).toContain("Psychic");
+    expect(json(mechanics.effect)).toContain('"keyword_id":"psychic"');
   });
 
   it("refuses event-subject when no moment in the record names a unit", () => {
@@ -357,8 +379,8 @@ describe("'That K unit' naming the friendly unit of the WHEN's distance clause (
     expect(restrictions).toEqual({
       count: "one", side: "your-army", selects: "unit", required_keywords: ["PIONEERS"],
       eligibility: { operator: "and", operands: [
-        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
-        { type: "within", parameters: { of: "event-subject", range: { inches: 8 } } },
+        { type: "matches", parameters: { filter: { not_states: ["engaged"] } } },
+        { type: "matches", parameters: { filter: { within: { of: "event-subject", range: { inches: 8 } } } } },
       ] },
     });
     expect(restrictions.bound_to).toBeUndefined();
@@ -418,24 +440,27 @@ describe("describers read the lowered shapes without raw ids", () => {
   });
 });
 
-describe("attached Leaders have no target or aura shape (SS-A refusals)", () => {
-  it("refuses the filter as a Stratagem target", () => {
+describe("attached Leader model filters in target shapes (SS-A)", () => {
+  it("keeps the static Stratagem TARGET refusal for an attached-Leader relation", () => {
     const errors = errorsOf("Opponent's Shooting phase, when an enemy unit is selected to shoot. One Leader unit attached to this unit.", [
       ["Opponent's Shooting phase", "use-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: [] }, "WHEN"],
       ["when an enemy unit is selected to shoot", "event", { kind: "selected", to: "shoot", owner: "enemy" }, "WHEN"],
       ["One", "stratagem-target", { count: "one" }, "TARGET"],
       ["Leader unit attached to this unit", "unit-filter", { side: "friendly", attached_to: "this-unit" }, "TARGET"],
     ]);
-    expect(errors.join(" ")).toMatch(/attached Leaders has no selection, aura or Stratagem target shape/u);
+    expect(errors.join(" ")).toMatch(/no static Stratagem TARGET metadata field/u);
   });
 
-  it("refuses the filter as an aura's units", () => {
-    const errors = errorsOf("While a Leader unit attached to this unit is within 6\" of this model, that unit gains the Stealth ability.", [
+  it("uses the attached-Leader model filter as an aura's eligible target", () => {
+    const mechanics = mechanicsOf("While a Leader unit attached to this unit is within 6\" of this model, that unit gains the Stealth ability.", [
       ["Leader unit attached to this unit", "unit-filter", { side: "friendly", attached_to: "this-unit" }],
       ["within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
       ["that unit gains the Stealth ability", "core-ability-grant", { subject: "antecedent", ability: "stealth" }],
     ]);
-    expect(errors.join(" ")).toMatch(/attached Leaders/u);
+    expect(mechanics.effect).toMatchObject({
+      type: "aura",
+      modifier: { eligible: { level: "model", member_of: "this-unit", attachment_role: "leader" } },
+    });
   });
 });
 
@@ -497,6 +522,6 @@ describe("authoring-only shapes the leaves already express (SS-G)", () => {
       ["ends a move", "event", { kind: "move-ended" }],
       ["that enemy unit takes a Battle-shock test", "test", { target: "event-subject", test: "battle-shock" }],
     ]);
-    expect(mechanics.effect.condition).toMatchObject({ type: "within", parameters: { subject: "event-subject", of: "this-model", range: "engagement" } });
+    expect(mechanics.effect.condition).toMatchObject({ type: "matches", parameters: { subject: "event-subject", filter: { within: { of: "this-model", range: "engagement" } } } });
   });
 });

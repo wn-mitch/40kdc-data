@@ -55,7 +55,7 @@ describe("targeting-restriction by and target", () => {
 
   it("puts a passive restriction on the unit targeted, with no attacker named", () => {
     const tree = compiled([leaf("targeting-restriction", { may: "cannot-target", kind: "shoot", weapon_type: "ranged", target: "this-unit" })]);
-    expect(first(tree, "targeting")).toEqual({ type: "targeting", target: "this-unit", modifier: { may: "cannot-target", kind: "shoot", weapon_type: "ranged", target: "this-unit" } });
+    expect(first(tree, "targeting")).toEqual({ type: "targeting", target: "this-unit", modifier: { may: "cannot-target", kind: "shoot", weapons: { type: "ranged" }, target: "this-unit" } });
   });
 
   it("lowers every enemy unit as an owner filter on either side", () => {

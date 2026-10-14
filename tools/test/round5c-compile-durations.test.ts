@@ -52,6 +52,18 @@ const DURATION_TURN = { endpoint: "end-of-turn" };
 const MOVE_SIX = { subject: "this-unit", characteristics: ["M"], operation: "add", value: 6, weapon_type: "all" };
 const ASSAULT = { subject: "this-unit", keyword: "Assault", weapon_type: "ranged" };
 
+it("keeps expiry after resolution distinct from a duration during resolution", () => {
+  const compileDuration = (endpoint: string) => {
+    const result = compileLeaves(placed("Wait. Gain Assault.",
+      ["Wait.", "duration", { endpoint }],
+      ["Gain Assault.", "weapon-ability-grant", ASSAULT]));
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    return result.mechanics.scope?.duration;
+  };
+  expect(compileDuration("end-of-this-use")).toBe("resolution");
+  expect(compileDuration("after-this-use")).toBe("after-resolving");
+});
+
 describe("bound durations on the stored records", () => {
   it("3746: the no-roll's +6 folds into it (one move, not two), the grant lasts the turn", () => {
     const mechanics = mechanicsOf(3746);
@@ -140,7 +152,7 @@ describe("bound durations on the stored records", () => {
     expect(compileFixture(3620).ok).toBe(true);
   });
 
-  it("a single-duration record compiles to exactly its pre-change output", () => {
+  it("a single-duration record keeps its canonical baseline mechanics", () => {
     for (const id of [3620, 1596, 2540]) {
       const { baseline_mechanics } = fixture(id);
       expect(mechanicsOf(id), `av ${id}`).toEqual(baseline_mechanics);
@@ -250,7 +262,7 @@ describe("bound durations on fabricated sentences", () => {
     expect(compileLeaves(leaves, text).ok).toBe(true);
   });
 
-  it("3545, 8334, 8554, 10074: set-up triggers beside another moment keep their pre-change output", () => {
+  it("3545, 8334, 8554, 10074: set-up triggers beside another moment keep their canonical baseline mechanics", () => {
     for (const id of [3545, 8334, 8554, 10074]) {
       const { baseline_mechanics } = fixture(id);
       expect(mechanicsOf(id), `av ${id}`).toEqual(baseline_mechanics);

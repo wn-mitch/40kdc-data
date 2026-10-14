@@ -22,6 +22,7 @@ from wh40kdc.translate.condition_refs import (
     dekebab,
     id_label,
     keyword_alternatives,
+    place_ref_phrase,
     range_phrase,
     title_case,
 )
@@ -108,15 +109,35 @@ def dice_case(v: Any) -> str:
 
 
 def bracket_keyword(k: Any) -> str:
-    """A GW weapon keyword token → bracketed caps (``lethal-hits`` → ``[LETHAL HITS]``)."""
-    raw = jstr(k).strip()
-    anti = re.match(r"^anti[\s-]+(.*)$", raw, re.IGNORECASE | re.DOTALL)
-    if anti:
-        m = re.match(r"^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$", anti.group(1), re.IGNORECASE | re.DOTALL)
-        if m:
-            return f"[ANTI-{dekebab(m.group(1)).strip().upper()} {m.group(2)}+]"
-        return f"[ANTI-{dekebab(anti.group(1)).strip().upper()}]"
-    return f"[{dekebab(raw).upper()}]"
+    """Render a structured catalog weapon keyword reference."""
+    if not isinstance(k, dict):
+        return "[?]"
+    keyword_id = k.get("keyword_id")
+    if not isinstance(keyword_id, str):
+        return "[?]"
+    parameters = k.get("parameters")
+    p = parameters if isinstance(parameters, dict) else {}
+    against_values = p.get("required_target_keywords_any")
+    against = (
+        f" (against {or_list([jstr(value) for value in against_values])} units)"
+        if isinstance(against_values, list) and against_values
+        else ""
+    )
+    excluded_values = p.get("excluded_target_keywords")
+    excluding = (
+        f" (excluding {or_list([jstr(value) for value in excluded_values])} units)"
+        if isinstance(excluded_values, list) and excluded_values
+        else ""
+    )
+    if keyword_id == "anti":
+        target = p.get("target_keyword")
+        target_text = f"-{jstr(target).upper()}" if target is not None else ""
+        threshold = p.get("threshold")
+        rating = f" {jstr(threshold)}+" if threshold is not None else ""
+        return f"[ANTI{target_text}{rating}]{against}{excluding}"
+    value = p.get("value")
+    rating = f" {dice_case(value)}" if value is not None else ""
+    return f"[{dekebab(keyword_id).upper()}{rating}]{against}{excluding}"
 
 
 _TEST_NAMES = {"battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape"}
@@ -232,7 +253,8 @@ def resource_noun(pool: Any, label: Any, count: Any = None) -> str:
     if not noun:
         return title_case(base)
     head = title_case("-".join(words[:-1]))
-    return f"{f'{head} ' if head else ''}{noun[0] if one else noun[1]}"
+    prefix = f"{head} " if head else ""
+    return f"{prefix}{noun[0] if one else noun[1]}"
 
 
 _ROLL_NAMES = {
@@ -316,8 +338,12 @@ _ABILITY_LABELS = {
 
 
 def ability_label(id: Any) -> str:
-    """The display name for an ability or Stratagem id: a curated override, else its name
-    part in Title Case."""
+    """Render an ability id or a typed named-ability reference."""
+    if isinstance(id, dict):
+        definition_id = id.get("definition_id")
+        ability_id = id.get("ability_id")
+        if definition_id is not None and ability_id is not None:
+            return f"{id_label(jstr(definition_id))} ({ability_label(ability_id)})"
     return _ABILITY_LABELS.get(jstr(id), id_label(jstr(id)))
 
 
@@ -338,41 +364,72 @@ def weapon_label(id: Any) -> str:
     return _WEAPON_LABELS.get(key, title_case(re.sub(r"-drone$", "", key)))
 
 
+def _weapon_keyword_label(ref: Any) -> str:
+    if not isinstance(ref, dict) or not isinstance(ref.get("keyword_id"), str):
+        return "?"
+    keyword_id = ref["keyword_id"]
+    parameters = ref.get("parameters")
+    if not isinstance(parameters, dict):
+        parameters = {}
+    if keyword_id == "anti" and isinstance(parameters.get("target_keyword"), str):
+        threshold = parameters.get("threshold")
+        suffix = f" {jstr(threshold)}+" if threshold is not None else ""
+        return f"ANTI-{parameters['target_keyword']}{suffix}"
+    label = title_case(keyword_id)
+    value = parameters.get("value")
+    return f"{label} {jstr(value)}" if value is not None else label
+
+
 def weapon_noun(m: dict[str, Any]) -> str:
-    """ "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a weapon filter as a noun."""
-    kind = f"{jstr(m['weapon_type'])} " if m.get("weapon_type") else ""
-    keyword = f" with [{jstr(m['weapon_keyword']).upper()}]" if m.get("weapon_keyword") else ""
-    # A name that already carries the noun ("hellforged weapons") must not read "weapons weapons".
+    """Render the canonical structured ``weapons`` scope."""
+    scope = m.get("weapons")
+    if not isinstance(scope, dict):
+        scope = {}
+    kind = f"{jstr(scope['type'])} " if scope.get("type") else ""
+
+    def keywords(value: Any) -> str:
+        values = value if isinstance(value, list) else [value]
+        return or_list([bracket_keyword(item) for item in values])
+
+    keyword = f" with {keywords(scope['keyword'])}" if scope.get("keyword") is not None else ""
+    exclude_name = (
+        f' other than "{jstr(scope["exclude_name"])}"'
+        if scope.get("exclude_name") is not None
+        else ""
+    )
+    exclude_keyword = (
+        f" (excluding weapons with {keywords(scope['exclude_keyword'])})"
+        if scope.get("exclude_keyword") is not None
+        else ""
+    )
+    exclusion = exclude_name + exclude_keyword
     raw = (
-        re.sub(r"\s+weapons?$", "", jstr(m["weapon_name"]), flags=re.IGNORECASE)
-        if m.get("weapon_name")
+        re.sub(r"\s+weapons?$", "", jstr(scope["name"]), flags=re.IGNORECASE)
+        if scope.get("name")
         else ""
     )
     named = title_case(raw) if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw) else raw
-    ref = m.get("weapon_ref")
-    if ref is not None:
-        # A bound weapon ("the selected weapon") or the weapons picked for a named ability.
-        sel = ref.get("selected_by") if isinstance(ref, dict) else None
-        if sel is not None:
-            ability = sel.get("ability") if isinstance(sel, dict) else None
-            return f"the {kind}weapons selected for {ability_label(ability)}{keyword}"
-        return f"the selected {kind}weapon{keyword}"
-    return f"{kind}{f'{named} ' if named else ''}weapons{keyword}"
+    ref = scope.get("ref")
+    if isinstance(ref, dict):
+        selected = ref.get("selected_by")
+        if isinstance(selected, dict):
+            return (
+                f"the {kind}weapons selected for "
+                f"{ability_label(selected.get('ability'))}{keyword}{exclusion}"
+            )
+        return f"the selected {kind}weapon{keyword}{exclusion}"
+    name = f"{named} " if named else ""
+    return f"{kind}{name}weapons{keyword}{exclusion}"
 
 
 def has_weapon(m: dict[str, Any]) -> bool:
-    """Whether a modifier carries a weapon filter."""
-    return (
-        m.get("weapon_type") is not None
-        or m.get("weapon_name") is not None
-        or m.get("weapon_keyword") is not None
-        or m.get("weapon_ref") is not None
-    )
-
+    """Whether a modifier carries a canonical weapon scope."""
+    return m.get("weapons") is not None
 
 def weapon_roll_scope(m: dict[str, Any]) -> str:
-    """ " with melee weapons" for a roll scoped to a weapon filter, else ""."""
+    """Render the trailing weapon scope on a roll-related effect."""
     return f" with {weapon_noun(m)}" if has_weapon(m) else ""
+
 
 
 _ROLE_SUBJECTS = {
@@ -399,11 +456,19 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     )
     all_of = f.get("all_of")
     all_s = f"{' '.join(jstr(x) for x in all_of)} " if isinstance(all_of, list) else ""
-    noun = "models" if f.get("level") == "model" else "units"
-    # "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+    noun = (
+        f"{'Bodyguard' if f.get('attachment_role') == 'bodyguard' else 'Leader'} models"
+        if f.get("level") == "model" and f.get("attachment_role") in ("bodyguard", "leader")
+        else "models"
+        if f.get("level") == "model"
+        else "units"
+    )
     compact = keyword_alternatives(f)
     s = f"{owner}{or_list(compact)} {noun}" if compact is not None else f"{owner}{all_s}{noun}"
-    # Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+    if isinstance(f.get("model_names"), list):
+        s += f" named {or_list([jstr(name) for name in f['model_names']])}"
+    if isinstance(f.get("unit_ids"), list) and f["unit_ids"]:
+        s += f" with unit ID {or_list([jstr(unit_id) for unit_id in f['unit_ids']])}"
     if isinstance(f.get("any_of_filters"), list) and compact is None:
         alts = [
             re.sub(r"^all ", "", filter_subject(a, ctx), count=1) for a in alternative_filters(f)
@@ -418,12 +483,13 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     within = f.get("within")
     if within is not None:
         w = within if isinstance(within, dict) else {}
-        of = f" of {effect_subject(w['of'], ctx)}" if w.get("of") is not None else ""
+        of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
         wholly = "wholly " if w.get("wholly") is True else ""
         s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
     s += _filter_relations(f, ctx)
-    if f.get("visible") is True:
-        s += " that are visible"
+    visible = f.get("visible")
+    if isinstance(visible, dict) and visible.get("to") is not None:
+        s += f" visible to {effect_subject(visible['to'], ctx)}"
     if f.get("designated") is not None:
         by = (
             f" by {effect_subject(f['designated_by'], ctx)}"
@@ -436,12 +502,12 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     if f.get("state") is not None:
         s += f" that are {_state_phrase(jstr(f['state']))}"
     if isinstance(f.get("not_states"), list):
-        s += f" that are {and_list([_state_phrase(jstr(x), True) for x in f['not_states']])}"
+        s += f" that are {and_list([_state_phrase(jstr(x), True) for x in f['not_states']] )}"
     if f.get("excluding") is not None:
         s += f" other than {effect_subject(f['excluding'], ctx)}"
     bounded = (
         within is not None
-        or f.get("visible") is True
+        or visible is not None
         or f.get("designated") is not None
         or f.get("not_designated") is not None
         or f.get("state") is not None
@@ -455,8 +521,7 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
 
 
 def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
-    """A unit filter's relations to other units and abilities: " embarked within this model",
-    " with the Deep Strike ability"."""
+    """A unit filter's canonical relations to other units and abilities."""
     s = ""
     if isinstance(f.get("has_ability"), list):
         s += f" with the {and_list([ability_label(a) for a in f['has_ability']])} ability"
@@ -465,29 +530,20 @@ def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
     if f.get("embarked_in") is not None:
         s += f" embarked within {effect_subject(f['embarked_in'], ctx)}"
     if f.get("member_of") is not None:
-        s += f" in {effect_subject(f['member_of'], ctx)}"
-
-    # "any other friendly unit": a filter excluding the unit with the ability reads "other".
-    def engaged_with(g: Any) -> str:
-        x = dict(g) if isinstance(g, dict) else {}
-        other = x.get("excluding") in ("this-unit", "this-model")
-        if other:
-            del x["excluding"]
-        phrase = re.sub(r"^all ", "", filter_subject(x, ctx), count=1)
-        phrase = re.sub(r" units\b", " unit", phrase, count=1)
-        phrase = re.sub(r" models\b", " model", phrase, count=1)
-        return f"other {phrase}" if other else phrase
-
-    if f.get("engaged_with") is not None:
-        target = re.sub(
-            r"^an? other ", "another ", _articled(engaged_with(f["engaged_with"])), count=1
+        member = (
+            "the unit"
+            if f["member_of"] == "this-unit"
+            else effect_subject(f["member_of"], ctx)
         )
-        s += f" within Engagement Range of {target}"
+        s += f" in {member}"
+    if f.get("engaged_with") is not None:
+        s += f" within Engagement Range of {effect_subject(f['engaged_with'], ctx)}"
     if f.get("not_engaged_with") is not None:
-        s += f" that are not within Engagement Range of any {engaged_with(f['not_engaged_with'])}"
+        s += (
+            " that are not within Engagement Range of "
+            f"{effect_subject(f['not_engaged_with'], ctx)}"
+        )
     return s
-
-
 def _articled(s: str) -> str:
     return f"{'an' if s[:1].lower() in ('a', 'e', 'i', 'o', 'u') and s else 'a'} {s}"
 

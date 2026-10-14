@@ -6,7 +6,7 @@
 
 # Interface: RollResultCondition
 
-Defined in: [generated.ts:2102](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2102)
+Defined in: [generated.ts:2126](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2126)
 
 [attack] A roll came out this way.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2102](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"roll-result"`
 
-Defined in: [generated.ts:2103](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2103)
+Defined in: [generated.ts:2127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2127)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2103](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:2104](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2104)
+Defined in: [generated.ts:2128](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2128)
 
 #### roll
 
@@ -36,4 +36,4 @@ Defined in: [generated.ts:2104](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### source?
 
-> `optional` **source?**: [`EventBoundReference`](EventBoundReference.md)
+> `optional` **source?**: [`EventBoundReference2`](EventBoundReference2.md)

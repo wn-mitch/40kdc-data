@@ -13,7 +13,6 @@ use super::{
     stance_pick, ty,
 };
 use crate::translate::condition::{condition_lead_in_value, nn, obj, truthy};
-use crate::translate::event_clause;
 
 /// Block translation of a container effect tree (multi-line, two-space indentation).
 pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
@@ -116,21 +115,16 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             let sel = obj(nn(e, "selector"));
             let inner = child(e, "effect");
             let selected = selected_context(ctx, sel);
-            let engagement = select_units_engagement(sel);
             let lead = format!(
                 "Select {}{}",
                 select_units_subject(sel),
                 selection_binding(sel)
             );
-            let header = if engagement.is_empty() {
-                format!("{indent}{arrow}{lead}")
-            } else {
-                format!("{indent}{arrow}{lead}. {engagement}")
-            };
+            let header = format!("{indent}{arrow}{lead}");
             if is_container(obj(Some(inner))) {
                 let header = header.strip_suffix('.').unwrap_or(&header);
                 if select_units_plural(sel) {
-                    let noun = if sv(sel, "target_kind") == Some("model") {
+                    let noun = if sv(obj(sel.get("filter")), "level") == Some("model") {
                         "model"
                     } else {
                         "unit"
@@ -143,16 +137,8 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 return format!("{header}:\n{}", block(inner, depth + 1, &selected));
             }
             let nested = selected_recipient(&inline(inner, &selected), sel);
-            if engagement.is_empty() {
-                format!("{header}: {nested}.")
-            } else {
-                format!("{header} {}.", capitalize(&nested))
-            }
+            format!("{header}: {nested}.")
         }
-        "leader-model-ability-grant" => format!(
-            "{indent}{arrow}{}.",
-            capitalize(&leader_model_ability_grant_clause(e, ctx))
-        ),
         "persistent-designation" => {
             if sv(e, "operation") == Some("replace") {
                 return format!("{indent}{arrow}{}.", capitalize(&persistent_replacement(e)));
@@ -198,7 +184,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 format!("{}, {when}", capitalize(trail))
             };
             let head = format!(
-                "{indent}{arrow}{} one {}{desig}. {when_clause}",
+                "{indent}{arrow}{} {}{desig}. {when_clause}",
                 designation_select_lead(sel, true),
                 designation_target_subject(sel)
             );
@@ -209,18 +195,14 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             format!("{head}, {}.", inline(inner, &recipient))
         }
         "stance-select" => {
-            let when = match sv(e, "select") {
-                Some(s) => capitalize(&event_clause(s)),
-                None => "At the start of your turn".to_string(),
-            };
             let consumable = if sv(e, "mode") == Some("consumable") {
                 " (each may be chosen once per battle)"
             } else {
                 ""
             };
             let mut lines = vec![format!(
-                "{indent}{arrow}{when}, {}{consumable}{}:",
-                stance_pick(e),
+                "{indent}{arrow}{}{consumable}{}:",
+                capitalize(&stance_pick(e)),
                 stance_additive(e)
             )];
             for o in items(e, "options") {

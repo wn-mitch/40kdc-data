@@ -6,7 +6,7 @@
 
 # Interface: TargetProfile
 
-Defined in: [generated.ts:3460](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3460)
+Defined in: [generated.ts:6164](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6164)
 
 A named target archetype for damage comparison. References a real dataset unit (faction_id + unit_id) rather than copying its stat line, so the profile stays in sync with dataset updates. Stats, keywords, and defensive abilities are resolved from the referenced unit at use time.
 
@@ -19,7 +19,7 @@ via the `definition` "target-profile".
 
 > **id**: `string`
 
-Defined in: [generated.ts:3461](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3461)
+Defined in: [generated.ts:6165](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6165)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:3461](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:3462](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3462)
+Defined in: [generated.ts:6166](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6166)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:3462](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **description?**: `string`
 
-Defined in: [generated.ts:3463](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3463)
+Defined in: [generated.ts:6167](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6167)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:3463](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **faction\_id**: `string`
 
-Defined in: [generated.ts:3467](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3467)
+Defined in: [generated.ts:6171](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6171)
 
 Kebab-case identifier
 
@@ -53,7 +53,7 @@ Kebab-case identifier
 
 > **unit\_id**: `string`
 
-Defined in: [generated.ts:3471](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3471)
+Defined in: [generated.ts:6175](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6175)
 
 Kebab-case identifier
 
@@ -63,7 +63,7 @@ Kebab-case identifier
 
 > `optional` **model\_count\_override?**: `number` \| `null`
 
-Defined in: [generated.ts:3475](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3475)
+Defined in: [generated.ts:6179](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6179)
 
 Optional non-default squad size for the comparison. When null/absent, the referenced unit's model_count.min is used.
 
@@ -73,4 +73,4 @@ Optional non-default squad size for the comparison. When null/absent, the refere
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:3476](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3476)
+Defined in: [generated.ts:6180](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6180)

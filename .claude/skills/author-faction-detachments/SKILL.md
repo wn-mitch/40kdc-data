@@ -77,14 +77,36 @@ Mirror the entity shapes already in the faction's files. Key fields:
 Required: `ability_id, name, authored_by:"40kdc-community", game_version,
 ability_type (detachment|enhancement|stratagem), behavior (passive|activated|
 reactive|aura), effect, scope`. Also set `version:"2025-q3", supersedes:null,
-unit_ids:[], faction_id, detachment_id`, and `applies_to`
-(`{required_keywords, excluded_keywords}`) for roster highlighting.
+`unit_ids:[], faction_id, detachment_id`, and `applies_to` as the static,
+human-curated roster-highlighting predicate (`all_of`, `any_of`, `none_of`,
+and/or `not_all_of`; `null`/absent means no highlight, `{}` matches all).
+`applies_to` is not a runtime target.
 
-Effect/condition/scope vocabulary is in
-`schemas/enrichment/ability-dsl/{effect,condition,scope}.schema.json`. `modifier`
-and condition `parameters` are open objects, so encode specifics as extra keys.
-Find a precedent before inventing a shape:
+Effect/condition/scope vocabulary is closed and documented in
+`schemas/enrichment/ability-dsl/{effect,condition,scope}.schema.json`. Do not
+invent keys in `modifier` or condition `parameters`, and do not emit retired
+aliases. Runtime recipients use typed unit references and `unit-filter`:
+`this-model`/`model-in-this-unit` are model references; actual attached
+membership uses `level:"model"`, `member_of`, and
+`attachment_role:"bodyguard"|"leader"`. A reviewed source-family
+`bodyguard_only` parameter may remain in family semantics, but deterministic
+lowering emits that typed filter.
 
+Selectors use one canonical contract: `filter`, optional inclusive `count`
+bounds, optional per-target `limit`, `bind_as`, and event-dependent
+`eligibility`. Use `range` with `range-ref` for reach and `weapon-scope` with
+catalog-backed keyword references for weapon restrictions; do not use
+`scope.range_inches` or flattened weapon fields. Ordinary predicates use
+`matches`; preserve parameterized historical/correlated predicates instead of
+replacing them with unrelated atoms. Board-dependent tests retain explicit
+unknown/permissive behavior when no board state is available.
+
+Stance options require stable `id` plus display `name`. Cross-record links are
+`{ability_id, option_id}` and resolve within the containing ability under the
+faction-local then shared-core policy; never resolve by display label or slug.
+Parent usage allowances and local ability-part triggers are independent.
+
+Find a precedent before proposing a shape:
 ```bash
 # representative effect for a concept, across all factions
 python3 - <<'PY'
@@ -98,14 +120,18 @@ PY
 ```
 
 Established conventions (reuse them for parity-friendly output):
-- heal → `ability-grant {grant_type:"heal-wounds", amount:"D3"}`
-- FNP vs mortals → `feel-no-pain {threshold:5, scope:"mortal"}`
-- dice→MW → `mortal-wounds {dice:"6D6", threshold:4, mortal_per_success:1}` (or `dice-gated`→`mortal-wounds`)
-- weapon keyword → `keyword-grant {keywords:[...], scope:"weapon", attack_type:"ranged"|"melee"}`
-- act after advance/fall-back → `ability-grant {grant_type:"act-after-move", moves:[...], acts:[...]}`
-- grant BATTLELINE etc. for construction → detachment `granted_keywords`, not DSL
-- re-roll → `re-roll {roll:"wound", subset:"ones"|"all-failures"}` (both keys required)
-- "secure objective" → `objective-tag {tag:"secured", source:"this-action"}`
+- heal → typed `heal`/`ability-grant` shape already present in the schema; preserve its
+  target and amount fields.
+- FNP vs mortals → `feel-no-pain` with the schema's typed threshold and scope.
+- dice→MW → `mortal-wounds` with the schema's dice, threshold/comparison, and
+  per-success fields (or `dice-gated` when the roll gates the branch).
+- unit keyword → `keyword-grant` with `keywords`; weapon abilities →
+  `weapon-ability-grant` with catalog-backed `weapon-keyword-ref` entries.
+- grant a core ability → `ability-grant` naming the existing ability entity.
+- grant BATTLELINE etc. for construction → detachment `granted_keywords`, not DSL.
+- re-roll → `re-roll` with its required `roll` and `subset` fields.
+- "secure objective" → the existing typed objective/designation shape; do not invent
+  a keyword grant.
 
 ### Phase-mappings (`data/enrichment/<faction>/phase-mappings.json`)
 

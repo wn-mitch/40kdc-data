@@ -201,7 +201,7 @@ describe("Round 5C embark destination: a bound selection pair whose inner unit e
     const [outerSelect] = [JSON.parse(json).effect];
     const innerSelect = outerSelect.effect;
     expect(innerSelect.selector.eligibility.operands).toContainEqual({ type: "eligible", parameters: { subject: { selection_var: "outer" }, to: "embark-within", transport: "this-unit" } });
-    expect(innerSelect.selector).not.toHaveProperty("within_inches_from");
+    expect(innerSelect.selector).not.toHaveProperty("within");
     expect(json.match(/"inches":6/gu)).toHaveLength(1);
   });
 

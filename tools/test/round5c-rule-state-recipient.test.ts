@@ -60,7 +60,7 @@ describe("Round 5C rule-state subject bound to a filtered set or an aura's recip
     ];
     const result = compileLeaves(stratagem);
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result)).toContain('"condition":{"type":"within","parameters":{"subject":"recipient","of":"this-unit","range":{"inches":9}}}');
+    expect(JSON.stringify(result)).toContain('"condition":{"type":"matches","parameters":{"subject":"recipient","filter":{"within":{"of":"this-unit","range":{"inches":9}}}}}');
   });
 
   it("pins the authored 5828 shape: a suppression of a named ability on a filtered set lasts permanently", () => {

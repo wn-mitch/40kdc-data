@@ -83,9 +83,10 @@ describe("Round 5C family extensions", () => {
 
   it("measures a distance to any friendly unit with the named keywords, other than the subject when it says so", () => {
     const near = (extra: Record<string, unknown>) => leaf("unit-position", { kind: "within", inches: 6, subject: "this-model", negated: false, of: "matching-unit", of_keywords: ["harvester"], of_side: "friendly", ...extra });
-    const within = (tree: unknown) => nodes(tree, (node) => node.type === "within")[0]!.parameters as Record<string, unknown>;
-    expect(within(compiled([near({}), heal()])).of).toEqual({ owner: "friendly", all_of: ["HARVESTER"] });
-    expect(within(compiled([near({ of_other: true }), heal()])).of).toEqual({ owner: "friendly", all_of: ["HARVESTER"], excluding: "this-model" });
+    const ordinary = nodes(compiled([near({}), heal()]), (node) => node.type === "matches")[0]!;
+    expect(ordinary.parameters).toEqual({ subject: "this-model", filter: { within: { of: { owner: "friendly", all_of: ["HARVESTER"] }, range: { inches: 6 } } } });
+    const other = nodes(compiled([near({ of_other: true }), heal()]), (node) => node.type === "matches")[0]!;
+    expect(other.parameters).toEqual({ subject: "this-model", filter: { within: { of: { owner: "friendly", all_of: ["HARVESTER"], excluding: "this-model" }, range: { inches: 6 } } } });
     // The filter belongs only to a measured distance to matching units.
     expect(() => normalize("unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "this-unit", of_keywords: ["HARVESTER"] })).toThrow(/only describes of: matching-unit/u);
     expect(() => normalize("unit-position", { kind: "objective-range", controlled_by: "any", subject: "this-unit", negated: false, of: "matching-unit", of_keywords: ["HARVESTER"], of_side: "friendly" })).toThrow();
@@ -132,8 +133,8 @@ describe("Round 5C family extensions", () => {
 
   it("changes a characteristic by a dice amount, a weapon's Range, or the triggering unit's models", () => {
     const stat = (parameters: Record<string, unknown>, leaves: CompileLeaf[] = []) => nodes(compiled([...leaves, leaf("characteristic-modifier", parameters)]), (node) => node.type === "stat-modifier")[0];
-    expect(stat({ subject: "this-unit", characteristics: ["A"], operation: "add", value: "d3", weapon_type: "melee" })).toMatchObject({ modifier: { stat: "A", value: "D3", weapon_type: "melee" } });
-    expect(stat({ subject: "this-unit", characteristics: ["Range"], operation: "add", value: 6, weapon_type: "ranged" })).toMatchObject({ modifier: { stat: "Range", value: 6, weapon_type: "ranged" } });
+    expect(stat({ subject: "this-unit", characteristics: ["A"], operation: "add", value: "d3", weapon_type: "melee" })).toMatchObject({ modifier: { stat: "A", value: "D3", weapons: { type: "melee" } } });
+    expect(stat({ subject: "this-unit", characteristics: ["Range"], operation: "add", value: 6, weapon_type: "ranged" })).toMatchObject({ modifier: { stat: "Range", value: 6, weapons: { type: "ranged" } } });
     // Range is a weapon characteristic: it needs a reviewed weapon scope before it compiles.
     expect(compileLeaves([leaf("characteristic-modifier", { subject: "this-unit", characteristics: ["Range"], operation: "add", value: 6 })]))
       .toMatchObject({ ok: false, errors: [expect.stringMatching(/weapon scope/u)] });

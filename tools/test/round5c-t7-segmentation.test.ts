@@ -187,7 +187,7 @@ describe("T7 Warlord designation on an attack's target (SS-L)", () => {
       ["the enemy WARLORD", "unit-filter", { side: "enemy", subject: "target", designated: "warlord" }],
       ["you gain 1CP", "resource-action", { resource: "command-point", operation: "gain", amount: 1 }]);
     const mechanics = mechanicsOf(list, text);
-    expect(JSON.stringify(mechanics.effect.condition)).toContain('"designated","parameters":{"subject":"defender","tag":"warlord"}');
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { owner: "enemy", designated: "warlord" } } });
   });
 
   it("refuses a Warlord designation outside a Warlord test and an attack's target (regression pin)", () => {
@@ -318,9 +318,9 @@ describe("T7 option boundaries in a weapon scope (SS-G)", () => {
       ["Attacks that target this unit", "attack", { direction: "targeted", unit: "this-unit" }],
       ["-1 to hit rolls", "roll-modifier", { roll: "hit", operation: "subtract", value: 1, incoming: true }]);
     const mechanics = mechanicsOf(list, text);
-    expect(mechanics.effect.options[0].modifier).toMatchObject({ roll: "hit", weapon_type: "melee" });
+    expect(mechanics.effect.options[0].modifier).toMatchObject({ roll: "hit", weapons: { type: "melee" } });
     expect(mechanics.effect.options[1].target).toBe("attacker");
-    expect(mechanics.effect.options[1].modifier.weapon_type).toBeUndefined();
+    expect(mechanics.effect.options[1].modifier.weapons).toBeUndefined();
   });
 
   it("refuses a bound run followed by an option after an Or: (regression pin)", () => {
@@ -355,6 +355,6 @@ describe("T7 option boundaries in a weapon scope (SS-G)", () => {
       leaf("roll-modifier", { roll: "hit", operation: "subtract", value: 1, subject: "this-unit" }, text.indexOf("-1 to hit"), text.indexOf("-1 to hit") + 9),
     ];
     const mechanics = mechanicsOf(list, text);
-    expect(mechanics.effect.options[1].modifier.weapon_type).toBeUndefined();
+    expect(mechanics.effect.options[1].modifier.weapons).toBeUndefined();
   });
 });

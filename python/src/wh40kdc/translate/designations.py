@@ -100,6 +100,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "pulse-onslaught-shaken",
         "quarry",
         "remains-under-your-control",
+        "righteous",
         "riled-up",
         "riven",
         "sabotaged",

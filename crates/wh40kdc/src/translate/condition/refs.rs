@@ -8,6 +8,17 @@ use crate::translate::dekebab;
 use crate::translate::designations::designation_label;
 use crate::translate::effect::title_case;
 
+/// Causal links name an exact bound event; sharing its actor is not enough.
+pub(crate) fn event_relation_phrase(filter: &P) -> String {
+    let mut phrase = String::new();
+    if nn(filter, "caused_by").is_some() {
+        phrase.push_str(" as a result of the exact bound event");
+    }
+    if nn(filter, "causes").is_some() {
+        phrase.push_str(" and causing the exact bound event");
+    }
+    phrase
+}
 // ── Ids as names ────────────────────────────────────────────────────────────
 
 /// Faction dir slugs an ability or Stratagem id ends with (`<name>-<faction>`), longest first.
@@ -69,6 +80,54 @@ pub(crate) fn id_label(id: Option<&Value>) -> String {
     match s.as_str() {
         "lord-of-the-death-guard" => "Lord of the Death Guard".to_string(),
         _ => title_case(without_faction_suffix(&s)),
+    }
+}
+
+/// A named rule or one immutable option of a named ability.
+pub(crate) fn rule_ref_phrase(value: Option<&Value>) -> String {
+    if let Some(reference) = value.and_then(Value::as_object) {
+        return format!(
+            "{} option of {}",
+            id_label(reference.get("option_id")),
+            id_label(reference.get("ability_id"))
+        );
+    }
+    id_label(value)
+}
+
+/// Inclusive count bounds shared by selectors and counted predicates.
+pub(crate) fn count_phrase(value: Option<&Value>) -> String {
+    let count = obj(value);
+    match (nn(count, "min"), nn(count, "max")) {
+        (Some(min), Some(max)) if !min.is_object() && min == max => {
+            format!("exactly {}", crate::translate::effect::dice_case(Some(min)))
+        }
+        (Some(min), Some(max)) if min.is_number() && max.is_number() => {
+            format!("{}-{}", st(Some(min)), st(Some(max)))
+        }
+        (Some(min), Some(max)) => format!(
+            "between {} and {}",
+            crate::translate::effect::dice_case(Some(min)),
+            crate::translate::effect::dice_case(Some(max))
+        ),
+        (_, Some(max)) => format!("at most {}", crate::translate::effect::dice_case(Some(max))),
+        (Some(min), _) if min.is_number() => format!("{}+", st(Some(min))),
+        (Some(min), _) => format!(
+            "at least {}",
+            crate::translate::effect::dice_case(Some(min))
+        ),
+        _ => "1+".to_string(),
+    }
+}
+
+pub(crate) fn comparison_phrase(value: Option<&Value>) -> String {
+    match value.and_then(Value::as_str) {
+        Some("gt") => "more than".to_string(),
+        Some("gte") => "at least".to_string(),
+        Some("eq") => "equal to".to_string(),
+        Some("lt") => "less than".to_string(),
+        Some("lte") => "at most".to_string(),
+        _ => dekebab(&st(value)),
     }
 }
 
@@ -145,9 +204,11 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
         .map(|k| format!("{} ", k.join(" ")))
         .unwrap_or_default();
     let noun = if is(f, "level", "model") {
-        "model"
+        nn(f, "attachment_role")
+            .map(|role| format!("{} model", st(Some(role))))
+            .unwrap_or_else(|| "model".to_string())
     } else {
-        "unit"
+        "unit".to_string()
     };
     // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
     let compact = keyword_alternatives(f);
@@ -186,6 +247,12 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
         let names: Vec<String> = lacks.iter().map(titled).collect();
         s.push_str(&format!(" without the {} ability", or_list(&names)));
     }
+    if let Some(names) = strs(f.get("model_names")) {
+        s.push_str(&format!(" named {}", or_list(&names)));
+    }
+    if let Some(ids) = strs(f.get("unit_ids")) {
+        s.push_str(&format!(" with unit ID {}", or_list(&ids)));
+    }
     if let Some(e) = nn(f, "embarked_in") {
         s.push_str(&format!(
             " embarked within {}",
@@ -198,13 +265,23 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(g) = nn(f, "engaged_with") {
         s.push_str(&format!(
             " within Engagement Range of {}",
-            unit_filter_phrase(obj(Some(g)))
+            unit_ref_phrase(Some(g), "the unit")
         ));
     }
     if let Some(g) = nn(f, "not_engaged_with") {
+        let phrase = unit_ref_phrase(Some(g), "the unit");
+        let filter = g.as_object().is_some_and(|o| {
+            !["selection_var", "event_var", "stratagem_target"]
+                .iter()
+                .any(|k| nn(o, k).is_some())
+        });
         s.push_str(&format!(
-            " not within Engagement Range of any {}",
-            strip_article(&unit_filter_phrase(obj(Some(g))))
+            " not within Engagement Range of {}",
+            if filter {
+                format!("any {}", strip_article(&phrase))
+            } else {
+                phrase
+            }
         ));
     }
     if let Some(d) = nn(f, "designated") {
@@ -235,8 +312,11 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
             .collect();
         s.push_str(&format!(" that is {}", and_list(&phrases)));
     }
-    if f.get("visible") == Some(&Value::Bool(true)) {
-        s.push_str(" that is visible to it");
+    if let Some(visible) = nn(f, "visible") {
+        s.push_str(&format!(
+            " that is visible to {}",
+            unit_ref_phrase(obj(Some(visible)).get("to"), "the unit")
+        ));
     }
     if let Some(within) = nn(f, "within") {
         let w = obj(Some(within));
@@ -247,7 +327,7 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
         };
         s.push_str(&format!(" {wholly}within {}", range_phrase(w.get("range"))));
         if let Some(of) = nn(w, "of") {
-            s.push_str(&format!(" of {}", unit_ref_phrase(Some(of), "the unit")));
+            s.push_str(&format!(" of {}", place_ref_phrase(Some(of))));
         }
     }
     if let Some(ex) = nn(f, "excluding") {
@@ -318,9 +398,44 @@ pub(crate) fn range_phrase(r: Option<&Value>) -> String {
                     _ => format!("the {} range", id_label(Some(aura))),
                 };
             }
+            if let Some(tiers) = o.get("per_battle_round").and_then(Value::as_array) {
+                let ranges = tiers
+                    .iter()
+                    .map(|tier| range_phrase(Some(tier)))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                let rounds = (1..=tiers.len())
+                    .map(|round| round.to_string())
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                return format!("{ranges} in battle rounds {rounds} respectively (using the final range in later battle rounds)");
+            }
             "?\"".to_string()
         }
     }
+}
+
+/// A spatial anchor, retaining objective and marker identities.
+pub(crate) fn place_ref_phrase(r: Option<&Value>) -> String {
+    match r.and_then(Value::as_str) {
+        Some("battlefield-edge") => return "a battlefield edge".to_string(),
+        Some("battlefield-centre") => return "the centre of the battlefield".to_string(),
+        _ => {}
+    }
+    let p = obj(r);
+    if let Some(objective) = nn(p, "objective") {
+        let objective = obj(Some(objective));
+        if nn(objective, "selection_var").is_some() {
+            return "that objective marker".to_string();
+        }
+        let phrase = objective_phrase(objective, false, "objective marker");
+        return format!("{} {phrase}", article(&phrase));
+    }
+    if let Some(marker) = nn(p, "marker") {
+        let marker = st(Some(marker));
+        return format!("{} {} marker", article(&marker), dekebab(&marker));
+    }
+    unit_ref_phrase(r, "the unit")
 }
 
 pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
@@ -355,6 +470,14 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
     }
     if let Some(d) = nn(f, "designated") {
         s.push_str(&format!(" tagged {}", dekebab(&st(Some(d)))));
+    }
+    if let Some(within) = nn(f, "within") {
+        let within = obj(Some(within));
+        s.push_str(&format!(
+            " within {} of {}",
+            range_phrase(within.get("range")),
+            place_ref_phrase(within.get("of"))
+        ));
     }
     s
 }
@@ -405,7 +528,7 @@ pub(crate) fn window_phrase(w: Option<&Value>) -> String {
     match key.as_str() {
         "phase" => "this phase".to_string(),
         "turn" => "this turn".to_string(),
-        "round" => "this battle round".to_string(),
+        "battle-round" => "battle round".to_string(),
         "battle" => "this battle".to_string(),
         "previous-turn" => "in the previous turn".to_string(),
         "event" => String::new(),
@@ -492,24 +615,45 @@ pub(crate) fn in_progress_phrase(kind: &str) -> String {
     }
 }
 
-/// Which ability a `used` filter names: every ability with a bracketed keyword, or the same one
-/// as a bound use.
+/// The ability named by a used event, retaining source and usage restrictions.
 pub(crate) fn used_ability_phrase(f: &P) -> Option<String> {
-    if let Some(k) = nn(f, "ability_keyword") {
-        return Some(format!(
+    let mut phrase = if let Some(keyword) = nn(f, "ability_keyword") {
+        format!(
             "a {} ability",
-            title_case(&st(Some(k)).to_lowercase())
+            title_case(&st(Some(keyword)).to_lowercase())
+        )
+    } else if nn(f, "same_rule_as").is_some() {
+        format!(
+            "that same {}",
+            if is(f, "kind", "stratagem") {
+                "Stratagem"
+            } else {
+                "ability"
+            }
+        )
+    } else if nn(f, "source").is_some() || nn(f, "usage").is_some() {
+        named_use_phrase(f).unwrap_or_else(|| "an ability".into())
+    } else {
+        return None;
+    };
+    if let Some(sources) = f.get("source").and_then(Value::as_array) {
+        let sources = sources
+            .iter()
+            .map(|source| match source.as_str() {
+                Some("unit") => "its datasheet".into(),
+                Some("enhancement") => "an Enhancement".into(),
+                _ => dekebab(&st(Some(source))),
+            })
+            .collect::<Vec<_>>();
+        phrase.push_str(&format!(" from {}", or_list(&sources)));
+    }
+    if let Some(usage) = nn(f, "usage").filter(|usage| usage.is_object() || usage.is_array()) {
+        phrase.push_str(&format!(
+            " that can be used {}",
+            crate::translate::effect::usage_clause(usage)
         ));
     }
-    if nn(f, "same_rule_as").is_some() {
-        let what = if is(f, "kind", "stratagem") {
-            "Stratagem"
-        } else {
-            "ability"
-        };
-        return Some(format!("that same {what}"));
-    }
-    None
+    Some(phrase)
 }
 
 // ── Predicates ──────────────────────────────────────────────────────────────
@@ -519,27 +663,8 @@ pub(crate) fn quoted(items: Vec<String>) -> Vec<String> {
 }
 
 pub(crate) fn keyword_list(p: &P) -> String {
-    if let Some(chosen) = nn(p, "chosen_by") {
-        return format!("the keyword selected for {}", title_case(&st(Some(chosen))));
-    }
     if let Some(any) = strs(p.get("any_of")) {
         return or_list(&quoted(any));
     }
     and_list(&quoted(strs(p.get("all_of")).unwrap_or_default()))
-}
-
-/// TS `typeof p.count_min === "number" ? p.count_min : 1`, JS-formatted.
-pub(crate) fn count_or_one(p: &P) -> (f64, String) {
-    match p.get("count_min") {
-        Some(Value::Number(n)) => (n.as_f64().unwrap_or(0.0), js_num(n)),
-        _ => (1.0, "1".to_string()),
-    }
-}
-
-/// TS `str(p.key ?? 1)`.
-pub(crate) fn str_or_one(p: &P, k: &str) -> String {
-    match nn(p, k) {
-        Some(v) => st(Some(v)),
-        None => "1".to_string(),
-    }
 }

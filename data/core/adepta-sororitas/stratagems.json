@@ -40,7 +40,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Celestian Sacresants"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "bastion-of-faith-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -243,7 +251,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Penitent"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "devout-fanaticism-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -367,7 +391,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Celestian Sacresants"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "faithful-fortitude-sacred-champions-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -424,7 +455,42 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Penitent"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "final-redemption-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -679,7 +745,38 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "praise-the-fallen-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -709,7 +806,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Penitent"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "purity-of-suffering-penitent-host-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -857,7 +970,39 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas",
+        "Vehicle"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "model",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "has_ability": [
+                  "deadly-demise"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "sanctified-immolation-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -887,7 +1032,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "shield-of-aversion-bringers-of-flame-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -920,7 +1081,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "shield-of-denial-champions-of-faith-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -982,7 +1150,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Adepta Sororitas"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "spirit-of-the-martyr-hallowed-martyrs-adepta-sororitas",
     "game_version": {
       "edition": "11th",
@@ -1070,7 +1254,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sanctuary Guardians"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "none_of": [
+              "ARCO-FLAGELLANTS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "take-cover-sanctuary-guardians-adepta-sororitas",
     "game_version": {
       "edition": "11th",

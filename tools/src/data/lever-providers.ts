@@ -39,11 +39,14 @@ export function canTakeEnhancement(ds: Dataset, enhancement: Enhancement, bearer
 /** What a cost-bearing provider charges when its lever is on. */
 export type LeverCost = { cp?: number; points?: number };
 
+/** Canonical capacity allocation, including immutable option references. */
+export type CapacityRaise = NonNullable<ActivatableBuff["capRaise"]>;
+
 /** Levers one ability contributes, with the pools they belong to and the cap raises to resolve. */
 export type AbilityLevers = {
   buffs: StackableBuff[];
   groups: StackableBuffGroup[];
-  capRaises: Map<StackableBuff, { ability: string; by: number }>;
+  capRaises: Map<StackableBuff, CapacityRaise>;
 };
 
 /**
@@ -83,8 +86,10 @@ export function abilityLevers(
 
   for (const act of translation.activatable) {
     const lever: StackableBuff = { ...leverFromActivatable(act, `${ability.name} — ${act.label}`, source), ...(requiresLever ? { requiresLever } : {}) };
-    if (act.group && !out.groups.some((group) => group.id === act.group!.id)) {
-      out.groups.push({ id: act.group.id, label: ability.name, maxActivations: act.group.maxActivations });
+    for (const group of [...(act.group ? [act.group] : []), ...(act.groups ?? [])]) {
+      if (!out.groups.some((existing) => existing.id === group.id)) {
+        out.groups.push({ ...group, label: ability.name, abilityId: ability.id });
+      }
     }
     if (act.capRaise) out.capRaises.set(lever, act.capRaise);
     levers.push(lever);
@@ -95,6 +100,7 @@ export function abilityLevers(
     if (!granted) continue;
     levers.push(...granted.buffs);
     out.groups.push(...granted.groups);
+    for (const [lever, raise] of granted.capRaises) out.capRaises.set(lever, raise);
   }
 
   if (gate) {
@@ -132,7 +138,7 @@ export function enhancementLevers(
     for (const enhancement of offered) {
       if (!enhancement.ability_id || !canTakeEnhancement(ds, enhancement, bearer)) continue;
       const ability = ds.abilities.getInFaction(enhancement.ability_id, bearer.factionId) ?? ds.abilities.getAny(enhancement.ability_id);
-      if (!ability) continue;
+      if (!ability || args.held.has(ability.id)) continue;
       const source: BuffSource = bearer.id === args.crunchedUnitId
         ? { kind: "ability", abilityId: ability.id, abilityKind: "unit" }
         : { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: bearer.id };
@@ -150,7 +156,7 @@ export function enhancementLevers(
   return out;
 }
 
-/** A lever from a translator activatable; `group` keeps the activatable's pool id. */
+/** Preserve the primary pool and every intersecting parent activation pool. */
 export function leverFromActivatable(act: ActivatableBuff, label: string, source: BuffSource): StackableBuff {
   return {
     id: act.id,
@@ -159,6 +165,7 @@ export function leverFromActivatable(act: ActivatableBuff, label: string, source
     enabled: false,
     source,
     ...(act.group ? { group: act.group.id } : {}),
+    ...(act.groups?.length ? { groups: act.groups.map((group) => group.id) } : {}),
     ...(act.requires ? { requires: act.requires } : {}),
   };
 }
@@ -173,21 +180,22 @@ export function leverFromActivatable(act: ActivatableBuff, label: string, source
 export function grantedRecordIds(translation: EffectTranslation): { abilityId: string; fragment: UnsupportedFragment }[] {
   const out: { abilityId: string; fragment: UnsupportedFragment }[] = [];
   for (const item of translation.unsupported) {
+    // Only a fully admitted record grant may be expanded. Unknown target predicates
+    // and model isolation diagnostics must remain unsupported, not become buffs.
+    if (item.reason !== 'effect type "ability-grant" is not modelled by the buff layer') continue;
     const node = item.effectFragment as Record<string, unknown> | null;
     if (!node || typeof node !== "object" || node.type !== "ability-grant") continue;
     const modifier = node.modifier as Record<string, unknown> | undefined;
     if (!modifier || typeof modifier.ability !== "string" || modifier.definition != null) continue;
     const target = node.target;
     const reaches = typeof target === "string"
-      ? GRANT_RECIPIENTS.has(target)
-      : target !== null && typeof target === "object" && (target as Record<string, unknown>).owner === "friendly";
+      ? target === "this-unit" || target === "ability-unit" || target === "recipient" || target === "selected-unit"
+      : target !== null && typeof target === "object" && "owner" in target && target.owner === "friendly"
+        && !("level" in target && target.level === "model");
     if (reaches && !out.some((grant) => grant.abilityId === modifier.ability)) out.push({ abilityId: modifier.ability, fragment: item });
   }
   return out;
 }
-
-/** Grant targets that name the crunched unit (or the aura recipient it is) once the translator let the grant through. */
-const GRANT_RECIPIENTS = new Set(["this-unit", "ability-unit", "recipient", "selected-unit"]);
 
 /**
  * Translate a granted record as the crunched unit's own ability and return its buffs as levers the
@@ -201,7 +209,7 @@ export function grantedRecordLevers(
   factionId: string,
   provider: { abilityId: string; source: BuffSource; enabled: boolean; requiresLever?: string },
   ctx: EngineContext,
-): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } | undefined {
+): AbilityLevers | undefined {
   const record = ds.abilities.getInFaction(grantedId, factionId) ?? ds.abilities.getAny(grantedId);
   if (!record) return undefined;
   // The granted ability is held by the crunched unit: its "this unit" is the crunched unit.
@@ -209,6 +217,7 @@ export function grantedRecordLevers(
   const { applied, activatable } = record.describeBuffs(held, ctx, "attacker");
   const buffs: StackableBuff[] = [];
   const groups = new Map<string, StackableBuffGroup>();
+  const capRaises = new Map<StackableBuff, CapacityRaise>();
   const prefix = `${provider.abilityId}>`;
   const dependency = provider.requiresLever ? { requiresLever: provider.requiresLever } : {};
   if (applied.length > 0) {
@@ -217,28 +226,38 @@ export function grantedRecordLevers(
   for (const act of activatable) {
     const lever = leverFromActivatable(act, `${record.name} — ${act.label}`, provider.source);
     const group = act.group ? `${prefix}${act.group.id}` : undefined;
-    if (act.group && group && !groups.has(group)) groups.set(group, { id: group, label: record.name, maxActivations: act.group.maxActivations });
-    buffs.push({ ...lever, id: `${prefix}${act.id}`, ...(group ? { group } : {}), ...dependency });
+    for (const parent of [...(act.group ? [act.group] : []), ...(act.groups ?? [])]) {
+      const id = `${prefix}${parent.id}`;
+      if (!groups.has(id)) groups.set(id, { ...parent, id, label: record.name, abilityId: record.id });
+    }
+    const grantedLever: StackableBuff = {
+      ...lever,
+      id: `${prefix}${act.id}`,
+      ...(group ? { group } : {}),
+      ...(act.groups?.length ? { groups: act.groups.map((parent) => `${prefix}${parent.id}`) } : {}),
+      ...dependency,
+    };
+    buffs.push(grantedLever);
+    if (act.capRaise) capRaises.set(grantedLever, act.capRaise);
   }
-  return { buffs, groups: [...groups.values()] };
+  return { buffs, groups: [...groups.values()], capRaises };
 }
 
 /**
- * Resolve each cap-raising lever to the pool it raises: the pool whose label (the owning ability's
- * name) matches the ability the DSL names, compared on letters and digits only
- * ("techno-sorcerous-augmentations" names "Technosorcerous Augmentations"). A lever whose pool the
- * unit does not have is dropped: there is nothing for it to raise.
+ * Resolve a capacity lever by the owning ability's immutable id, never by its
+ * display label. Preserve the allocation and exact option references for the
+ * selection consumer. Drop it when that stance pool is not available.
  */
 export function resolveCapRaises(
   levers: StackableBuff[],
-  pending: Map<StackableBuff, { ability: string; by: number }>,
+  pending: Map<StackableBuff, CapacityRaise>,
   groups: readonly StackableBuffGroup[],
 ): StackableBuff[] {
-  const squash = (text: string) => text.toLowerCase().replace(/[^a-z0-9]/gu, "");
   return levers.flatMap((lever) => {
     const raise = pending.get(lever);
     if (!raise) return [lever];
-    const group = groups.find((candidate) => squash(candidate.label) === squash(raise.ability));
-    return group ? [{ ...lever, raisesCap: { group: group.id, by: raise.by } }] : [];
+    const group = groups.find((candidate) => candidate.abilityId === raise.ability && candidate.id.endsWith("?stance"));
+    const { ability: _ability, ...allocation } = raise;
+    return group ? [{ ...lever, raisesCap: { ...allocation, group: group.id } }] : [];
   });
 }

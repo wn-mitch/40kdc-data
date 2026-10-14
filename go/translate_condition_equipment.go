@@ -59,11 +59,14 @@ func weaponEquipmentPhrase(p map[string]any, negated bool) string {
 }
 
 func equipmentModelsSubject(models map[string]any) string {
-	atLeast := cstr(models["at_least"])
-	if atLeast == "1" {
-		return "one or more models in this unit"
+	count := mapOr(models["count"])
+	if count["max"] == nil {
+		if jsNumber(count["min"]) == 1 {
+			return "one or more models in this unit"
+		}
+		return "at least " + cstr(count["min"]) + " models in this unit"
 	}
-	return "at least " + atLeast + " models in this unit"
+	return controlCountPhrase(count) + " models in this unit"
 }
 
 func equipmentUnitLevel(phrase string, negated bool) string {

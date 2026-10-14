@@ -37,8 +37,8 @@ describe("Round 5C attack-filter frame with a defender unit-filter", () => {
       ["have -1 to wound rolls.", "roll-modifier", WOUND_MINUS_ONE]));
     expect(result.ok).toBe(true);
     const json = mechanicsOf(result);
-    expect(json).toContain('"subject":"defender","all_of":["ZETA"]');
-    expect(json).toContain('"type":"owned-by","parameters":{"subject":"defender","owner":"friendly"}');
+    expect(json).toContain('"all_of":["ZETA"]');
+    expect(json).toContain('"type":"matches","parameters":{"subject":"defender","filter":{"owner":"friendly","all_of":["ZETA"]}}');
     expect(json).toContain('"attack_type":"ranged"');
     expect(json).toContain('"type":"attack-compare"');
     expect(json).not.toContain("unit-filter-target");
@@ -95,7 +95,7 @@ describe("Round 5C defender unit-filter before an attack-compare", () => {
       ["have -1 to wound rolls.", "roll-modifier", WOUND_MINUS_ONE])
       , "Attacks aimed at friendly Omega/Sigma units where the attacker's power is above the target's resilience have -1 to wound rolls.");
     expect(result.ok).toBe(true);
-    expect(mechanicsOf(result)).toContain('"subject":"defender","any_of":["OMEGA","SIGMA"]');
+    expect(mechanicsOf(result)).toContain('"subject":"defender","filter":{"owner":"friendly","any_of":["OMEGA","SIGMA"]}');
     expect(mechanicsOf(result)).toContain('"type":"roll-modifier","target":"attacker"');
   });
 
@@ -134,9 +134,9 @@ describe("Round 5C attack frame with a target gate before its rolls", () => {
       ["have +1 to hit rolls.", "roll-modifier", HIT_PLUS_ONE]), TEXT4);
     expect(result.ok).toBe(true);
     const json = mechanicsOf(result);
-    expect(json).toContain('"subject":"defender","of":"attacker","range":{"inches":12}');
+    expect(json).toContain('"subject":"defender","filter":{"within":{"of":"attacker","range":{"inches":12}}}');
     expect(json).toContain('"owner":"friendly","all_of":["ECHO"]');
-    expect(json).toContain('"weapon_type":"ranged"');
+    expect(json).toContain('"weapons":{"type":"ranged"}');
     expect(json).not.toContain("attack-filter");
   });
 

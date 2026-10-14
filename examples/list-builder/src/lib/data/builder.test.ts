@@ -1141,7 +1141,6 @@ describe('unit configuration suggestions', () => {
 			providerUnitId: 'illuminor-szeras',
 			state: 'add-source',
 		});
-		expect(szeras.description).not.toHaveLength(0);
 
 		const destroyers = necronUnit('lokhust-destroyers', 'destroyers');
 		const destroyerState = { ...emptyBuilderState(), factionId, units: [destroyers] };

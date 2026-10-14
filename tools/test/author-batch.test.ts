@@ -31,7 +31,7 @@ describe("parseClaudeEnvelope", () => {
 describe("conditionNode", () => {
   it("maps known kinds to condition objects and 'none' to null", () => {
     expect(conditionNode("none", null)).toBeNull();
-    expect(conditionNode("vs-keyword", "MONSTER")).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["MONSTER"] } });
+    expect(conditionNode("vs-keyword", "MONSTER")).toEqual({ type: "matches", parameters: { subject: "defender", filter: { all_of: ["MONSTER"] } } });
     expect(conditionNode("charged", null)).toEqual({
       type: "happened",
       parameters: { event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" },
@@ -75,19 +75,19 @@ describe("assembleEffect", () => {
       attack_type: "any", condition_kind: "vs-keyword", condition_param: "VEHICLE", scope_duration: "phase",
     });
     expect(effect.type).toBe("conditional");
-    expect(effect.condition).toEqual({ type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } });
+    expect(effect.condition).toEqual({ type: "matches", parameters: { subject: "defender", filter: { all_of: ["VEHICLE"] } } });
     expect(effect.effect.type).toBe("re-roll");
   });
 
-  it("injects attack_type into the modifier as weapon_type for weapon-narrowable effects only", () => {
+  it("restricts weapon-narrowable effects without changing ordinary ability grants", () => {
     const form = (effect_type: string, modifier: Record<string, unknown>) =>
       ({ effect_type, target: "this-unit", modifier, attack_type: "melee", condition_kind: "none", scope_duration: "phase" });
     const melee = assembleEffect(form("stat-modifier", { stat: "A", operation: "add", value: 1 }));
-    expect(melee.effect.modifier).toEqual({ stat: "A", operation: "add", value: 1, weapon_type: "melee" });
+    expect(melee.effect.modifier).toEqual({ stat: "A", operation: "add", value: 1, weapons: { type: "melee" } });
     // The closed modifiers have no attack_type key; the legacy spelling must not leak.
     expect(melee.effect.modifier.attack_type).toBeUndefined();
     for (const t of ["roll-modifier", "re-roll", "roll-result", "weapon-ability-grant"]) {
-      expect(assembleEffect(form(t, {})).effect.modifier.weapon_type, t).toBe("melee");
+      expect(assembleEffect(form(t, {})).effect.modifier.weapons.type, t).toBe("melee");
     }
     // ability-grant has no weapon filter — no injection
     const grant = assembleEffect({ ...form("ability-grant", { ability: "x" }), scope_duration: "permanent" });
@@ -135,7 +135,7 @@ describe("buildEntry", () => {
 describe("buildRepairedEntry", () => {
   const nested = {
     type: "conditional",
-    condition: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] },
+    condition: { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "battle-shocked" } } }] },
     effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
   };
 
@@ -174,12 +174,12 @@ describe("buildRepairedEntry", () => {
       {
         trigger: { event: "selected", filter: { to: "shoot" } },
         usage: null,
-        applies_to: { required_keywords: ["WARBOSS"] },
+        applies_to: { all_of: ["WARBOSS"] },
       },
     );
     expect(entry.trigger).toEqual({ event: "selected", filter: { to: "shoot" } });
     expect(entry.usage).toBeUndefined();
-    expect(entry.applies_to).toEqual({ required_keywords: ["WARBOSS"] });
+    expect(entry.applies_to).toEqual({ all_of: ["WARBOSS"] });
   });
 });
 
@@ -190,7 +190,7 @@ describe("buildRepairedEntry → AJV gate", () => {
   it("accepts a faithful nested tree (compound condition + leaf)", () => {
     const entry = buildRepairedEntry(ORIGINAL, {
       type: "conditional",
-      condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "has-keyword", parameters: { all_of: ["INFANTRY"] } }] },
+      condition: { operator: "and", operands: [{ type: "phase-is", parameters: { phase: "command" } }, { type: "matches", parameters: { filter: { all_of: ["INFANTRY"] } } }] },
       effect: { type: "ability-grant", target: "this-model", modifier: { ability: "temple-relics-black-templars" } },
     }, { duration: "turn" }, "passive");
     expect(validate(entry)).toBe(true);
@@ -231,9 +231,9 @@ describe("buildRepairedEntry → AJV gate", () => {
     expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 2, model_filter: "not-character" } })).toBe(false);
   });
 
-  it("rejects out-of-vocabulary stat, weapon_type, and the legacy attack_type key", () => {
+  it("rejects out-of-vocabulary stats and weapon types, and the legacy attack_type key", () => {
     expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "Move", operation: "subtract", value: 2 } })).toBe(false);
-    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "arco-flail" } })).toBe(false);
+    expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "arco-flail" } } })).toBe(false);
     expect(leaf({ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1, attack_type: "melee" } })).toBe(false);
   });
 
@@ -262,21 +262,20 @@ describe("lintCanonical", () => {
   it("accepts canonical leaves nested under wrappers", () => {
     const eff = {
       type: "conditional",
-      condition: { type: "has-keyword", parameters: { all_of: ["WAR DOG"] } },
+      condition: { type: "matches", parameters: { filter: { all_of: ["WAR DOG"] } } },
       effect: { type: "sequence", steps: [
         { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "add", value: 1 } },
-        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } } },
       ] },
     };
     expect(lintCanonical(eff)).toEqual({ canonical: true, issues: [] });
   });
 
   it("rejects non-canonical conditions beneath every nested wrapper shape", () => {
-    // A condition param placed beside `parameters` is invisible to AJV and to the cruncher;
-    // the lint must find it however deeply a wrapper nests it.
+    // A misplaced filter must be rejected however deeply a wrapper nests it.
     const invalidLeaf = {
       type: "conditional",
-      condition: { type: "has-keyword", all_of: ["INFANTRY"] },
+      condition: { type: "matches", filter: { all_of: ["INFANTRY"] } },
       effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1 } },
     };
     const wrappers = [
@@ -287,12 +286,12 @@ describe("lintCanonical", () => {
       { name: "region default", effect: { type: "named-region-state", modifier: { consumer: { default_branch: { effect: invalidLeaf } } } } },
       { name: "region qualified", effect: { type: "named-region-state", modifier: { consumer: { qualified_branch: { effect: invalidLeaf } } } } },
       { name: "region qualified condition", effect: { type: "named-region-state", modifier: { consumer: { qualified_condition: invalidLeaf.condition } } } },
-      { name: "select-units eligibility", effect: { type: "select-units", selector: { owner: "friendly", count: 1, eligibility: invalidLeaf.condition }, effect: invalidLeaf.effect } },
+      { name: "select-units eligibility", effect: { type: "select-units", selector: { filter: { owner: "friendly" }, count: { min: 1, max: 1 }, eligibility: invalidLeaf.condition }, effect: invalidLeaf.effect } },
     ];
     for (const wrapper of wrappers) {
       const result = lintCanonical(wrapper.effect);
       expect(result.canonical, wrapper.name).toBe(false);
-      expect(result.issues.join(), wrapper.name).toContain('"all_of" must live under "parameters"');
+      expect(result.issues.join(), wrapper.name).toContain('"filter" must live under "parameters"');
     }
   });
 
@@ -300,7 +299,7 @@ describe("lintCanonical", () => {
     const result = lintCanonical({
       type: "resource-action-menu",
       actions: [{
-        eligibility: { requires: [{ type: "has-keyword", all_of: ["FABRICATED"] }] },
+        eligibility: { requires: [{ type: "matches", filter: { all_of: ["FABRICATED"] } }] },
         effect: { type: "no-effect" },
       }],
     });
@@ -309,13 +308,13 @@ describe("lintCanonical", () => {
   });
 
   it("rejects condition params placed top-level instead of under `parameters` (cruncher can't read them)", () => {
-    const bad = lintCanonical({ type: "conditional", condition: { type: "has-keyword", all_of: ["TECH-PRIEST"] }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const bad = lintCanonical({ type: "conditional", condition: { type: "matches", filter: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(bad.canonical).toBe(false);
     expect(bad.issues.join()).toContain("parameters");
-    const good = lintCanonical({ type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const good = lintCanonical({ type: "conditional", condition: { type: "matches", parameters: { filter: { all_of: ["TECH-PRIEST"] } } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(good.canonical).toBe(true);
     // Negation is the `not` operator, never a flag beside `parameters`.
-    const flagged = lintCanonical({ type: "conditional", condition: { type: "has-keyword", negated: true, parameters: { all_of: ["TECH-PRIEST"] } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
+    const flagged = lintCanonical({ type: "conditional", condition: { type: "matches", negated: true, parameters: { filter: { all_of: ["TECH-PRIEST"] } } }, effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } } });
     expect(flagged.issues.join()).toContain("operator");
   });
 
@@ -346,16 +345,16 @@ describe("lintCanonical", () => {
   });
 
   it("rejects a keyword condition that is not one uppercase unit keyword", () => {
-    const effect = (list: "all_of" | "any_of", keywords: string[]) => ({
+    const effect = (list: "all_of" | "any_of" | "none_of" | "not_all_of", keywords: string[]) => ({
       type: "conditional",
-      condition: { type: "has-keyword", parameters: { subject: "defender", [list]: keywords } },
+      condition: { type: "matches", parameters: { subject: "defender", filter: { [list]: keywords } } },
       effect: { type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } },
     });
     expect(lintCanonical(effect("all_of", ["VEHICLE"])).canonical).toBe(true);
     expect(lintCanonical(effect("any_of", ["MONSTER", "VEHICLE"])).canonical).toBe(true);
     // The old extraction's capital A, datasheet spelling, and two keywords joined into one —
     // in either list, and even beside a good keyword.
-    for (const list of ["all_of", "any_of"] as const) {
+    for (const list of ["all_of", "any_of", "none_of", "not_all_of"] as const) {
       for (const bad of ["A", "Vehicle", "ORKS WALKER"]) {
         expect(lintCanonical(effect(list, ["MONSTER", bad])).issues.join()).toContain(`"${bad}" is not a unit keyword`);
       }

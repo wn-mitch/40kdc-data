@@ -4,7 +4,8 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
-import { alternativeFilters, namedUsePhrase, rollWord, statePhrase, usedAbilityPhrase } from "./condition-refs.js";
+import { alternativeFilters, eventRelationPhrase, namedUsePhrase, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase } from "./condition-refs.js";
+import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 type P = Record<string, unknown>;
 
@@ -67,6 +68,8 @@ function actor(ref: unknown): string {
   if (typeof ref === "object") {
     const f = ref as P;
     if (typeof f.event_var === "string") return "that unit";
+    if (f.selection_var != null || f.stratagem_target != null) return unitRefPhrase(f);
+    if (Object.keys(f).some((key) => !["owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters"].includes(key))) return unitFilterPhrase(f);
     // Keywords on the actor read as a trailing requirement, as the event names them; states read
     // as a relative clause ("an enemy unit that is unengaged").
     const owner = f.owner === "friendly" ? "a friendly" : f.owner === "enemy" ? "an enemy" : "a";
@@ -83,9 +86,11 @@ function actor(ref: unknown): string {
 function actorKeywords(ref: unknown): string {
   if (typeof ref !== "object" || ref == null) return "";
   const f = ref as P;
+  if (Object.keys(f).some((key) => !["owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters"].includes(key))) return "";
   const noun = f.level === "model" ? "model" : "unit";
   let s = "";
   if (Array.isArray(f.all_of)) s += ` (the triggering ${noun} must have ${andList((f.all_of as unknown[]).map(str))})`;
+  if (Array.isArray(f.any_of)) s += ` (the triggering ${noun} must have ${orList(f.any_of.map(str))})`;
   // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
   if (Array.isArray(f.any_of_filters)) s += ` (the triggering ${noun} must be ${orList(alternativeFilters(f).map(unitFilterPhrase))})`;
   if (Array.isArray(f.none_of)) s += ` (the triggering ${noun} must not have ${orList((f.none_of as unknown[]).map(str))})`;
@@ -98,7 +103,7 @@ function objectPhrase(ref: unknown): string {
   if (ref == null || ref === "this-unit") return "this unit";
   if (ref === "this-model") return "this model";
   if (ref === "model-in-this-unit") return "a model in this unit";
-  if (typeof ref === "object") return unitFilterPhrase(ref as P);
+  if (typeof ref === "object") return unitRefPhrase(ref);
   return dekebab(str(ref));
 }
 
@@ -155,6 +160,8 @@ function eventPhrase(t: AbilityTrigger): string {
   const f = (t.filter ?? {}) as P;
   const who = actor(t.subject);
   switch (t.event) {
+    case "army-selected":
+      return "when selecting your army";
     case "battle-started":
       return "at the start of the battle";
     case "battle-formations-declared":
@@ -342,7 +349,7 @@ export function phaseWindow(condition: Condition): { window: string; rest: Condi
 function disembarkBattleShock(c: Condition | undefined): boolean {
   if (c?.operator !== "and" || c.operands?.length !== 2) return false;
   const [first, second] = c.operands;
-  return first?.type === "happened" && first.parameters?.event === "disembarked" && second?.type === "unit-state" && second.parameters?.state === "battle-shocked";
+  return first?.type === "happened" && first.parameters?.event === "disembarked" && second?.type === "matches" && (second.parameters?.filter as P | undefined)?.state === "battle-shocked" && Object.keys(second.parameters?.filter as P).length === 1;
 }
 
 /**
@@ -352,8 +359,12 @@ function disembarkBattleShock(c: Condition | undefined): boolean {
  */
 function destroyAttackPhrase(t: AbilityTrigger, f: P): string {
   if (t.event !== "destroyed" && t.event !== "model-destroyed") return "";
-  if (f.weapon_name) return ` with a ${str(f.weapon_name)} attack`;
-  if (f.weapon_keyword) return ` with a [${str(f.weapon_keyword).toUpperCase()}] weapon`;
+  if (f.weapons != null) {
+    const weapons = f.weapons as P;
+    if (Object.keys(weapons).length === 1 && weapons.name != null) return ` with a ${str(weapons.name)} attack`;
+    if (Object.keys(weapons).length === 1 && weapons.keyword != null && !Array.isArray(weapons.keyword)) return ` with a ${bracketKeyword(weapons.keyword)} weapon`;
+    return ` with ${weaponNoun({ weapons })}`;
+  }
   if (t.event === "model-destroyed" && f.attack_type) return f.attack_type === "melee" ? " in melee" : ` with a ${str(f.attack_type)} attack`;
   return "";
 }
@@ -373,14 +384,16 @@ export function describeTrigger(t: AbilityTrigger): string {
   s += actorKeywords(t.subject);
   const f = (t.filter ?? {}) as P;
   s += destroyAttackPhrase(t, f);
+  if (f.weapons != null && t.event !== "destroyed" && t.event !== "model-destroyed" && f.by == null) s += ` with ${weaponNoun({ weapons: f.weapons })}`;
   if (f.by != null) {
-    const source = f.by === "this-model" ? "this model" : "this unit";
+    const source = f.by === "this-unit" ? "this unit" : unitRefPhrase(f.by);
     const type = f.attack_type && t.event !== "destroyed" ? `${str(f.attack_type)} ` : "";
-    const weapon = f.weapon_keyword ? ` with [${str(f.weapon_keyword).toUpperCase()}] weapons` : "";
+    const weapon = f.weapons != null ? ` with ${weaponNoun({ weapons: f.weapons })}` : "";
     s += type || weapon ? ` by ${type}attacks made by ${source}${weapon}` : ` by ${source}`;
   }
+  s += eventRelationPhrase(f);
   if (t.proximity?.range != null) {
-    const of = t.proximity.of === "this-model" ? "this model" : "this unit";
+    const of = t.proximity.of == null || t.proximity.of === "this-unit" ? "this unit" : placeRefPhrase(t.proximity.of);
     s += ` within ${rangePhrase(t.proximity.range)} of ${of}`;
   }
   if (disembarkShock) s += ", if the unit disembarked from a Transport this turn and is Battle-shocked";

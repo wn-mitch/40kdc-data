@@ -70,7 +70,72 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "AGENTS OF THE IMPERIUM",
+                      "GRENADES"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "VINDICARE ASSASSIN"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "window": "event"
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ability_id": "blind-grenades-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -245,7 +310,50 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Agents of the Imperium",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "owner": "enemy"
+                  },
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "eligible",
+            "parameters": {
+              "subject": "this-unit",
+              "to": "declare-charge"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "ensnaring-trap-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -392,7 +500,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Agents of the Imperium",
+        "Character"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "hyperstimms-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
@@ -562,7 +687,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Agents of the Imperium",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "orbital-oversight-veiled-blade-elimination-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",

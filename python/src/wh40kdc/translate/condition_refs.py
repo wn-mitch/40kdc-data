@@ -20,6 +20,15 @@ def dekebab(s: str) -> str:
     """kebab-case → space-separated words (``enemy-territory`` → ``enemy territory``)."""
     return s.replace("-", " ")
 
+def event_relation_phrase(filter_: P) -> str:
+    """Render causal links to an exact bound event, never mere actor equality."""
+    phrase = ""
+    if filter_.get("caused_by") is not None:
+        phrase += " as a result of the exact bound event"
+    if filter_.get("causes") is not None:
+        phrase += " and causing the exact bound event"
+    return phrase
+
 
 # Small words kept lowercase mid-phrase in Title Case (`Benefit of Cover`, not
 # `Benefit Of Cover`). Mirrors TS ``TITLE_SMALL`` / Go ``titleSmall``.
@@ -79,6 +88,7 @@ _FACTION_SUFFIXES: tuple[str, ...] = (
     "tau-empire",
     "deathwatch",
     "drukhari",
+
     "tyranids",
     "aeldari",
     "necrons",
@@ -104,6 +114,37 @@ def id_label(id_: Any) -> str:
     s = _str(id_)
     return _WHOLE_NAMES.get(s, title_case(without_faction_suffix(s)))
 
+def count_phrase(value: Any, default_min: Any = 1) -> str:
+    """Render inclusive count bounds exactly as the TypeScript describer."""
+    count = value if isinstance(value, dict) else {}
+    minimum = count.get("min")
+    maximum = count.get("max")
+    if minimum is not None and maximum is not None:
+        if minimum == maximum:
+            from wh40kdc.translate.effect_words import dice_case
+
+            return f"exactly {dice_case(minimum)}"
+        from wh40kdc.translate.effect_words import dice_case
+
+        if _is_num(minimum) and _is_num(maximum):
+            return f"{minimum}-{maximum}"
+        return f"between {dice_case(minimum)} and {dice_case(maximum)}"
+    if maximum is not None:
+        from wh40kdc.translate.effect_words import dice_case
+
+        return f"at most {dice_case(maximum)}"
+    minimum = default_min if minimum is None else minimum
+    if _is_num(minimum):
+        return f"{minimum}+"
+    from wh40kdc.translate.effect_words import dice_case
+
+    return f"at least {dice_case(minimum)}"
+
+
+def rule_ref_phrase(value: Any) -> str:
+    if isinstance(value, dict):
+        return f"{id_label(value.get('option_id'))} option of {id_label(value.get('ability_id'))}"
+    return id_label(value)
 
 def _str(v: Any) -> str:
     """TS ``str``: null/undefined → "?", else JS ``String(v)``."""
@@ -234,22 +275,23 @@ def alternative_filters(f: Any) -> list[P]:
 def unit_filter_phrase(f: Any) -> str:
     """A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit"."""
     f = _obj(f)
-    owner = (
-        "friendly "
-        if f.get("owner") == "friendly"
-        else "enemy "
-        if f.get("owner") == "enemy"
-        else ""
-    )
+    owner = {
+        "friendly": "friendly ",
+        "enemy": "enemy ",
+    }.get(f.get("owner"), "")
     all_of = f.get("all_of")
     all_ = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
-    noun = "model" if f.get("level") == "model" else "unit"
-    # "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+    noun = (
+        f"{_str(f.get('attachment_role'))} model"
+        if f.get("level") == "model" and f.get("attachment_role") is not None
+        else "model"
+        if f.get("level") == "model"
+        else "unit"
+    )
     compact = keyword_alternatives(f)
     s = f"{owner}{_or_list(compact)} {noun}" if compact is not None else f"{owner}{all_}{noun}"
     article = "an" if re.match(r"(?:[aeio]|u(?!ni))", s, re.IGNORECASE) else "a"
     s = f"{article} {s}"
-    # Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
     if isinstance(f.get("any_of_filters"), list) and compact is None:
         s += f" that is {_or_list([unit_filter_phrase(a) for a in alternative_filters(f)])}"
     if isinstance(f.get("any_of"), list):
@@ -262,15 +304,26 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):
         s += f" without the {_or_list([id_label(a) for a in f['lacks_ability']])} ability"
+    if isinstance(f.get("model_names"), list):
+        s += f" named {_or_list([_str(name) for name in f['model_names']])}"
+    if isinstance(f.get("unit_ids"), list) and f["unit_ids"]:
+        s += f" with unit ID {_or_list([_str(unit_id) for unit_id in f['unit_ids']])}"
     if f.get("embarked_in") is not None:
         s += f" embarked within {unit_ref_phrase(f['embarked_in'])}"
     if f.get("member_of") is not None:
         s += f" in {unit_ref_phrase(f['member_of'])}"
     if f.get("engaged_with") is not None:
-        s += f" within Engagement Range of {unit_filter_phrase(f['engaged_with'])}"
+        s += f" within Engagement Range of {unit_ref_phrase(f['engaged_with'])}"
     if f.get("not_engaged_with") is not None:
-        inner = re.sub(r"^an? ", "", unit_filter_phrase(f["not_engaged_with"]))
-        s += f" not within Engagement Range of any {inner}"
+        reference = f["not_engaged_with"]
+        exact = isinstance(reference, str) or (
+            isinstance(reference, dict)
+            and any(key in reference for key in ("selection_var", "event_var", "stratagem_target"))
+        )
+        target = unit_ref_phrase(reference)
+        if not exact:
+            target = f"any {target.removeprefix('a ').removeprefix('an ')}"
+        s += f" not within Engagement Range of {target}"
     if f.get("designated") is not None:
         by = (
             f" by {unit_ref_phrase(f['designated_by'])}"
@@ -283,28 +336,39 @@ def unit_filter_phrase(f: Any) -> str:
     if f.get("state") is not None:
         s += f" that is {_state_phrase(_str(f['state']))}"
     if isinstance(f.get("not_states"), list):
-        s += f" that is {_and_list([_state_phrase(_str(x), True) for x in f['not_states']])}"
-    if f.get("visible") is True:
-        s += " that is visible to it"
+        s += f" that is {_and_list([_state_phrase(_str(x), True) for x in f['not_states']] )}"
+    visible = f.get("visible")
+    if isinstance(visible, dict) and visible.get("to") is not None:
+        s += f" that is visible to {unit_ref_phrase(visible['to'])}"
     within = f.get("within")
     if within is not None:
         w = _obj(within)
-        of = f" of {unit_ref_phrase(w['of'])}" if w.get("of") is not None else ""
+        of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
         wholly = "wholly " if w.get("wholly") is True else ""
         s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
     if f.get("excluding") is not None:
-        excl = f["excluding"]
-        s += f" other than {'this unit' if excl == 'this-unit' else unit_ref_phrase(excl)}"
+        excluded = (
+            "this unit"
+            if f["excluding"] == "this-unit"
+            else unit_ref_phrase(f["excluding"])
+        )
+        s += f" other than {excluded}"
     return s
 
 
 def unit_ref_phrase(ref: Any, fallback: str = "the unit") -> str:
-    """A unit-ref as a noun phrase; ``fallback`` names the default subject."""
+    """A unit/place ref as a noun phrase; fallback names the default subject."""
     if ref is None:
         return fallback
     if isinstance(ref, str):
         return _ROLE_PHRASES.get(ref, dekebab(ref))
     if isinstance(ref, dict):
+        if isinstance(ref.get("objective"), dict):
+            return _objective_phrase(ref["objective"])
+        if isinstance(ref.get("marker"), dict):
+            marker = ref["marker"]
+            marker_id = marker.get("id") or marker.get("marker_id")
+            return f"the {dekebab(_str(marker_id))} marker"
         if isinstance(ref.get("event_var"), str):
             return "that unit"
         if isinstance(ref.get("selection_var"), str):
@@ -315,6 +379,25 @@ def unit_ref_phrase(ref: Any, fallback: str = "the unit") -> str:
     if isinstance(ref, list):
         return unit_filter_phrase({})
     return fallback
+
+
+def place_ref_phrase(ref: Any) -> str:
+    if ref == "battlefield-edge":
+        return "a battlefield edge"
+    if ref == "battlefield-centre":
+        return "the centre of the battlefield"
+    if isinstance(ref, dict):
+        if ref.get("objective") is not None:
+            objective = _obj(ref["objective"])
+            if objective.get("selection_var") is not None:
+                return "that objective marker"
+            phrase = _objective_phrase(objective, False, "objective marker")
+            return f"{_article(phrase)} {phrase}"
+        if ref.get("marker") is not None:
+            marker = ref["marker"]
+            marker_text = _str(marker)
+            return f"{_article(marker_text)} {dekebab(marker_text)} marker"
+    return unit_ref_phrase(ref)
 
 
 def _subject_of(p: P, fallback: str = "the unit") -> str:
@@ -337,7 +420,7 @@ _RANGE_WORDS: dict[str, str] = {
 
 
 def range_phrase(r: Any) -> str:
-    """A range-ref as a distance phrase ("6\\"", "Engagement Range", "Contagion Range")."""
+    """A range-ref as a distance phrase, including per-battle-round tiers."""
     if r is None:
         return '?"'
     if isinstance(r, str):
@@ -348,6 +431,14 @@ def range_phrase(r: Any) -> str:
     if o.get("aura_of") is not None:
         aura = _str(o["aura_of"])
         return _AURA_RANGES.get(aura, f"the {id_label(aura)} range")
+    tiers = o.get("per_battle_round")
+    if isinstance(tiers, list) and tiers:
+        rendered = ", ".join(range_phrase(value) for value in tiers)
+        rounds = ", ".join(str(index + 1) for index in range(len(tiers)))
+        return (
+            f"{rendered} in battle rounds {rounds} respectively "
+            "(using the final range in later battle rounds)"
+        )
     return '?"'
 
 
@@ -372,6 +463,9 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += " your opponent controls"
     if f.get("designated") is not None:
         s += f" tagged {dekebab(_str(f['designated']))}"
+    if f.get("within") is not None:
+        within = _obj(f["within"])
+        s += f" within {range_phrase(within.get('range'))} of {place_ref_phrase(within.get('of'))}"
     return s
 
 
@@ -502,10 +596,31 @@ def named_use_phrase(f: P) -> str | None:
 
 
 def used_ability_phrase(f: P) -> str | None:
-    """Which ability a ``used`` filter names: every ability with a bracketed keyword, or
-    the same one as a bound use."""
+    """Which ability a ``used`` filter names, including source and usage limits."""
     if f.get("ability_keyword") is not None:
-        return f"a {title_case(_str(f['ability_keyword']).lower())} ability"
-    if f.get("same_rule_as") is not None:
-        return f"that same {'Stratagem' if f.get('kind') == 'stratagem' else 'ability'}"
-    return None
+        base = f"a {title_case(_str(f['ability_keyword']).lower())} ability"
+    elif f.get("same_rule_as") is not None:
+        base = f"that same {'Stratagem' if f.get('kind') == 'stratagem' else 'ability'}"
+    elif f.get("source") is not None or f.get("usage") is not None:
+        base = named_use_phrase(f) or "an ability"
+    else:
+        return None
+    sources = f.get("source")
+    if isinstance(sources, list) and sources:
+        labels = [
+            (
+                "its datasheet"
+                if source == "unit"
+                else "an Enhancement"
+                if source == "enhancement"
+                else dekebab(_str(source))
+            )
+            for source in sources
+        ]
+        base += f" from {_or_list(labels)}"
+    usage = f.get("usage")
+    if isinstance(usage, dict):
+        from wh40kdc.translate.effect_inline import usage_clause
+
+        base += f" that can be used {usage_clause(usage)}"
+    return base

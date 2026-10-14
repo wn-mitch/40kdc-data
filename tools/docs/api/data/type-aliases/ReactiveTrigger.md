@@ -8,7 +8,7 @@
 
 > **ReactiveTrigger** = `object`
 
-Defined in: [data/dataset.ts:97](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L97)
+Defined in: [data/dataset.ts:124](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L124)
 
 One reactive ability resolved for event dispatch: the ability's id, the
 [GameEvent](../../generated/type-aliases/GameEvent.md) it fires on, the units that carry it (sorted; empty for
@@ -25,7 +25,7 @@ faction/detachment rules), and the full (non-null) `trigger` block.
 
 > **abilityId**: `string`
 
-Defined in: [data/dataset.ts:98](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L98)
+Defined in: [data/dataset.ts:125](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L125)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [data/dataset.ts:98](https://github.com/wn-mitch/40kdc-data/blob/a2e
 
 > **event**: [`GameEvent`](../../generated/type-aliases/GameEvent.md)
 
-Defined in: [data/dataset.ts:99](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L99)
+Defined in: [data/dataset.ts:126](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L126)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [data/dataset.ts:99](https://github.com/wn-mitch/40kdc-data/blob/a2e
 
 > **unitIds**: `string`[]
 
-Defined in: [data/dataset.ts:100](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L100)
+Defined in: [data/dataset.ts:127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L127)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [data/dataset.ts:100](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > **trigger**: `NonNullable`\<[`RawData`](../interfaces/RawData.md)\[`"abilities"`\]\[`number`\]\[`"trigger"`\]\>
 
-Defined in: [data/dataset.ts:101](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L101)
+Defined in: [data/dataset.ts:128](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L128)

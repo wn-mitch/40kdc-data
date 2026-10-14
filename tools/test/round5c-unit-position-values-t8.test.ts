@@ -129,7 +129,7 @@ describe("unit-position place values (compile)", () => {
       ["Just after an enemy unit selects targets", "event", { kind: "enemy-selected-targets" }],
       ["that unit is within 3 of the centre", "unit-position", { kind: "within", inches: 3, of: "battlefield-centre", subject: "event-object", negated: false }],
       ["this model gains Zed", "core-ability-grant", { subject: "this-model", ability: "benefit-of-cover" }]), text);
-    expect(mechanics.effect.condition).toEqual({ type: "within", parameters: { subject: "event-object", of: "battlefield-centre", range: { inches: 3 } } });
+    expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { subject: "event-object", filter: { within: { of: "battlefield-centre", range: { inches: 3 } } } } });
     expect(validEffect(mechanics.effect), JSON.stringify(validEffect.errors?.slice(0, 2))).toBe(true);
   });
 
@@ -151,7 +151,7 @@ describe("unit-position place values (compile)", () => {
     const position = (extra: Record<string, unknown>): [string, string, Record<string, unknown>] =>
       ["While this model is wholly within 12 of the far zone", "unit-position", { kind: "within", inches: 12, of: "enemy-deployment-zone", subject: "this-model", negated: false, ...extra }];
     const wholly = mechanicsOf(placed(text, position({ wholly: true }), body), text);
-    expect(JSON.stringify(wholly.effect)).toContain('"subject":"this-model","of":{"territory":"enemy-deployment-zone"},"range":{"inches":12},"wholly":true');
+    expect(JSON.stringify(wholly.effect)).toContain('"subject":"this-model","filter":{"within":{"of":{"territory":"enemy-deployment-zone"},"range":{"inches":12},"wholly":true}}');
     expect(validEffect(wholly.effect), JSON.stringify(validEffect.errors?.slice(0, 2))).toBe(true);
     const plain = mechanicsOf(placed(text, position({}), body), text);
     expect(JSON.stringify(plain.effect)).not.toContain('"wholly"');
@@ -209,7 +209,7 @@ describe("an area held in a rule region reaches units of either side", () => {
     expect(errorsOf(leaves("any", body), TEXT)).toMatch(/must say friendly or enemy/u);
   });
 
-  it("still refuses either side for a model-level filter and a keyword-limited aura", () => {
+  it("refuses a model-level either-side aura but preserves a keyword-limited region grant", () => {
     const model = placed(TEXT,
       ["The area", "unit-filter", { side: "any", level: "model" }],
       ["around this model", "aura-range", { inches: 6, of: "this-model" }],
@@ -219,12 +219,12 @@ describe("an area held in a rule region reaches units of either side", () => {
       ["The area", "unit-filter", { side: "any", keywords: ["ALPHA"] }],
       ["around this model", "aura-range", { inches: 6, of: "this-model" }],
       ["is held in the Zed zone", "counts-as", { subject: "antecedent", region: REGION }]);
-    expect(errorsOf(keyworded, TEXT)).toMatch(/names no keyword/u);
+    expect(mechanicsOf(keyworded, TEXT).effect.target).toEqual({ owner: "any", all_of: ["ALPHA"], within: { range: { inches: 6 }, of: "this-model" } });
   });
 
   it("compiles friendly and enemy auras as before", () => {
     const friendly = mechanicsOf(leaves("friendly"), TEXT);
-    expect(friendly.effect).toMatchObject({ type: "aura", target: "friendly-within-aura", modifier: { range: 6, effect: { type: "counts-as" } } });
+    expect(friendly.effect).toMatchObject({ type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 }, effect: { type: "counts-as" } } });
     const enemy = mechanicsOf(leaves("enemy"), TEXT);
     expect(enemy.effect).toMatchObject({ type: "aura", target: "enemy-within-aura" });
   });

@@ -56,10 +56,10 @@ describe("a stat adjustment with weapon: antecedent changes the selected weapon"
   it("lowers the select to a named bind and each stat change to the bound weapon", () => {
     const { mechanics } = compiled(BATTLE_FORMATION());
     const text = JSON.stringify(mechanics.effect);
-    expect(text).toContain('"weapon_name":"plasma rifle"');
+    expect(text).toContain('"name":"plasma rifle"');
     expect(text).toContain('"bind_as":"plasma-rifle-weapon"');
-    // Both stat changes name the bound weapon and carry no weapon_type of their own.
-    const modifiers = JSON.stringify(mechanics.effect).match(/"weapon_ref":\{"weapon_var":"plasma-rifle-weapon"\}/g) ?? [];
+    // Both stat changes name the bound weapon and carry no weapon type of their own.
+    const modifiers = JSON.stringify(mechanics.effect).match(/"ref":\{"weapon_var":"plasma-rifle-weapon"\}/g) ?? [];
     expect(modifiers.length).toBe(4);
     expect(text).not.toContain('"weapon_type"');
   });

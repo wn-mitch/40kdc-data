@@ -4,7 +4,7 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, placeRefPhrase, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
@@ -68,7 +68,7 @@ export function scaleSource(q: P): string {
   let s = SCALE_OF[of] ?? dekebab(of);
   if (of === "models-equipped-with") s += ` ${titleCase(jstr(q.wargear))}`;
   if (q.keyword != null) s = s.replace(/^models\b/, `${jstr(q.keyword)} models`);
-  if (q.within_inches != null) s += ` within ${jstr(q.within_inches)}"`;
+  if (q.within != null) s += ` within ${rangePhrase(q.within)}`;
   return s;
 }
 
@@ -102,19 +102,19 @@ export function amountOf(q: unknown, one: string, many: string): string {
   return `a number of ${many} equal to ${quantityPhrase(p)}`;
 }
 
-/**
- * A GW weapon keyword token → bracketed caps (`lethal-hits` → `[LETHAL HITS]`).
- * Anti-X keywords keep their hyphen and normalize the threshold to `N+`.
- */
+/** A structured catalog weapon keyword reference as a bracketed rules label. */
 export function bracketKeyword(k: unknown): string {
-  const raw = jstr(k).trim();
-  const anti = /^anti[\s-]+(.*)$/i.exec(raw);
-  if (anti) {
-    const m = /^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$/i.exec(anti[1]!);
-    if (m) return `[ANTI-${dekebab(m[1]!).trim().toUpperCase()} ${m[2]}+]`;
-    return `[ANTI-${dekebab(anti[1]!).trim().toUpperCase()}]`;
+  if (k == null || typeof k !== "object" || Array.isArray(k)) return "[?]";
+  const ref = k as P;
+  const p = (ref.parameters ?? {}) as P;
+  const name = dekebab(jstr(ref.keyword_id)).toUpperCase();
+  const against = Array.isArray(p.required_target_keywords_any) && p.required_target_keywords_any.length ? ` (against ${orList(p.required_target_keywords_any.map(jstr))} units)` : "";
+  const excluding = Array.isArray(p.excluded_target_keywords) && p.excluded_target_keywords.length ? ` (excluding ${orList(p.excluded_target_keywords.map(jstr))} units)` : "";
+  if (ref.keyword_id === "anti") {
+    const target = p.target_keyword != null ? `-${jstr(p.target_keyword).toUpperCase()}` : "";
+    return `[ANTI${target}${p.threshold != null ? ` ${jstr(p.threshold)}+` : ""}]${against}${excluding}`;
   }
-  return `[${dekebab(raw).toUpperCase()}]`;
+  return `[${name}${p.value != null ? ` ${diceCase(p.value)}` : ""}]${against}${excluding}`;
 }
 
 const TEST_NAMES: Record<string, string> = { "battle-shock": "Battle-shock", "desperate-escape": "Desperate Escape" };
@@ -245,6 +245,9 @@ const ABILITY_LABELS: Record<string, string> = {
 /** The display label for an ability id: a curated override, else Title Case. */
 /** The display name for an ability or Stratagem id: a curated override, else its name part in Title Case. */
 export function abilityLabel(id: unknown): string {
+  if (id !== null && typeof id === "object" && "ability_id" in id && "definition_id" in id) {
+    return `${idLabel(jstr(id.definition_id))} (${abilityLabel(id.ability_id)})`;
+  }
   return ABILITY_LABELS[jstr(id)] ?? idLabel(jstr(id));
 }
 
@@ -265,24 +268,26 @@ export function weaponLabel(id: unknown): string {
 
 /** "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a weapon filter as a noun. */
 export function weaponNoun(m: Record<string, unknown>): string {
-  const kind = m.weapon_type ? `${jstr(m.weapon_type)} ` : "";
-  const keyword = m.weapon_keyword ? ` with [${jstr(m.weapon_keyword).toUpperCase()}]` : "";
-  // A name that already carries the noun ("hellforged weapons") must not read "weapons weapons".
-  const raw = m.weapon_name ? jstr(m.weapon_name).replace(/\s+weapons?$/i, "") : "";
+  const scope = (m.weapons ?? {}) as P;
+  const kind = scope.type ? `${jstr(scope.type)} ` : "";
+  const keywords = (value: unknown): string => orList((Array.isArray(value) ? value : [value]).map(bracketKeyword));
+  const keyword = scope.keyword != null ? ` with ${keywords(scope.keyword)}` : "";
+  const exclusion = `${scope.exclude_name != null ? ` other than "${jstr(scope.exclude_name)}"` : ""}${scope.exclude_keyword != null ? ` (excluding weapons with ${keywords(scope.exclude_keyword)})` : ""}`;
+  // A name that already carries the noun must not read "weapons weapons".
+  const raw = scope.name ? jstr(scope.name).replace(/\s+weapons?$/i, "") : "";
   const named = /^[a-z0-9]+(-[a-z0-9]+)+$/.test(raw) ? titleCase(raw) : raw;
-  const ref = m.weapon_ref as P | undefined;
+  const ref = scope.ref as P | undefined;
   if (ref != null) {
-    // A bound weapon ("the selected weapon") or the weapons picked for a named ability.
     const sel = ref.selected_by as P | undefined;
-    if (sel != null) return `the ${kind}weapons selected for ${abilityLabel(sel.ability)}${keyword}`;
-    return `the selected ${kind}weapon${keyword}`;
+    if (sel != null) return `the ${kind}weapons selected for ${abilityLabel(sel.ability)}${keyword}${exclusion}`;
+    return `the selected ${kind}weapon${keyword}${exclusion}`;
   }
-  return `${kind}${named ? `${named} ` : ""}weapons${keyword}`;
+  return `${kind}${named ? `${named} ` : ""}weapons${keyword}${exclusion}`;
 }
 
 /** Whether a modifier carries a weapon filter. */
 export function hasWeapon(m: Record<string, unknown>): boolean {
-  return m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null || m.weapon_ref != null;
+  return m.weapons != null;
 }
 
 /** " with melee weapons" for a roll scoped to a weapon filter, else "". */
@@ -305,7 +310,7 @@ const ROLE_SUBJECTS: Record<string, string> = {
 export function filterSubject(f: P, ctx: Ctx = {}): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(jstr).join(" ")} ` : "";
-  const noun = f.level === "model" ? "models" : "units";
+  const noun = f.level === "model" ? `${f.attachment_role === "bodyguard" ? "Bodyguard " : f.attachment_role === "leader" ? "Leader " : ""}models` : "units";
   // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
   const compact = keywordAlternatives(f);
   let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
@@ -314,16 +319,18 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(jstr).join(" ")} ${noun})`;
+  if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(jstr))}`;
+  if (Array.isArray(f.unit_ids)) s += ` with unit ID ${orList(f.unit_ids.map(jstr))}`;
   const within = f.within as P | undefined;
-  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${effectSubject(within.of, ctx)}` : ""}`;
+  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${placeRefPhrase(within.of)}` : ""}`;
   s += filterRelations(f, ctx);
-  if (f.visible === true) s += " that are visible";
+  if (f.visible != null) s += ` visible to ${effectSubject((f.visible as P).to, ctx)}`;
   if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
   if (f.not_designated != null) s += ` that are not ${designationPhrase(jstr(f.not_designated), true)}`;
   if (f.state != null) s += ` that are ${statePhrase(jstr(f.state))}`;
   if (Array.isArray(f.not_states)) s += ` that are ${andList((f.not_states as unknown[]).map((x) => statePhrase(jstr(x), true)))}`;
   if (f.excluding != null) s += ` other than ${effectSubject(f.excluding, ctx)}`;
-  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null || f.not_states != null ||
+  const bounded = within != null || f.visible != null || f.designated != null || f.not_designated != null || f.state != null || f.not_states != null ||
     f.embarked_in != null || f.member_of != null || f.engaged_with != null || f.not_engaged_with != null;
   return bounded ? s : `all ${s}`;
 }
@@ -334,17 +341,19 @@ function filterRelations(f: P, ctx: Ctx): string {
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map(abilityLabel))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map(abilityLabel))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${effectSubject(f.embarked_in, ctx)}`;
-  if (f.member_of != null) s += ` in ${effectSubject(f.member_of, ctx)}`;
+  if (f.member_of != null) s += ` in ${f.member_of === "this-unit" ? "the unit" : effectSubject(f.member_of, ctx)}`;
   // "any other friendly unit": a filter excluding the unit with the ability reads "other".
+  const exactReference = (ref: unknown): boolean => typeof ref === "string" || (ref != null && typeof ref === "object" && ("selection_var" in ref || "event_var" in ref || "stratagem_target" in ref));
   const engagedWith = (g: unknown): string => {
+    if (exactReference(g)) return effectSubject(g, ctx);
     const x = { ...(g as P) };
     const other = x.excluding === "this-unit" || x.excluding === "this-model";
     if (other) delete x.excluding;
     const phrase = filterSubject(x, ctx).replace(/^all /, "").replace(/ units\b/, " unit").replace(/ models\b/, " model");
     return other ? `other ${phrase}` : phrase;
   };
-  if (f.engaged_with != null) s += ` within Engagement Range of ${articled(engagedWith(f.engaged_with)).replace(/^an? other /, "another ")}`;
-  if (f.not_engaged_with != null) s += ` that are not within Engagement Range of any ${engagedWith(f.not_engaged_with)}`;
+  if (f.engaged_with != null) s += ` within Engagement Range of ${exactReference(f.engaged_with) ? engagedWith(f.engaged_with) : articled(engagedWith(f.engaged_with)).replace(/^an? other /, "another ")}`;
+  if (f.not_engaged_with != null) s += ` that are not within Engagement Range of ${exactReference(f.not_engaged_with) ? "" : "any "}${engagedWith(f.not_engaged_with)}`;
   return s;
 }
 

@@ -107,6 +107,7 @@ function buildFixture(): Fixture {
   // when only another entry is published.
   selected.effect = { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "add", value: 2 } };
   selected.behavior = "reactive";
+  selected.trigger = { event: "phase-started" };
   selected.community_notes = "metadata-must-survive";
   writeEntries(abilitiesFile, fixtureEntries);
   writeFileSync(join(rawStore, `${factionId}.json`), JSON.stringify([{

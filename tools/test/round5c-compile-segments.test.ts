@@ -189,8 +189,8 @@ describe("Round 5C crunch gate: effects off the damage path", () => {
     const range = unsupported({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-aura", aspect: "range", operation: "add", value: 3 } });
     expect(range.length).toBeGreaterThan(0);
     expect(range.every(isOutsideDamagePath)).toBe(true);
-    const selections = effectToBuffs({ type: "ability-modifier", target: "this-unit", modifier: { ability: "some-menu", aspect: "selections", operation: "add", value: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {});
+    const selections = effectToBuffs({ type: "stance-selection-capacity", target: "this-unit", modifier: { ability_id: "some-menu", allocation: "choose-one-option", additional_selections: 1 } }, { kind: "ability", abilityId: "fixture", abilityKind: "unit" }, {});
     expect(selections.unsupported).toEqual([]);
-    expect(selections.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "some-menu", by: 1 }]);
+    expect(selections.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "some-menu", by: 1, allocation: "choose-one-option" }]);
   });
 });

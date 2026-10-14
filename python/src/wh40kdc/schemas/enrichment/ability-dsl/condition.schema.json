@@ -121,7 +121,14 @@
               "additionalProperties": false,
               "properties": {
                 "rule": {
-                  "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  "oneOf": [
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                    },
+                    {
+                      "$ref": "../../defs/common.schema.json#/$defs/stance-option-ref"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -133,8 +140,38 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "title": "has-keyword condition",
-          "description": "[identity] The subject carries every keyword in all_of and at least one in any_of (or the keyword `chosen_by` an ability had the player pick). Designations (RILED UP, SPOTTED) are `designated`, not keywords.",
+          "title": "matches condition",
+          "description": "[identity/state/position] The subject matches one closed unit-filter predicate. The filter carries ordinary ownership, keyword, ability, state, range, visibility and attachment predicates.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "matches"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "filter": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+                }
+              },
+              "required": [
+                "filter"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "chosen-keyword condition",
+          "description": "[identity] The subject carries the keyword this ability had the player pick.",
           "required": [
             "type",
             "parameters"
@@ -150,96 +187,12 @@
                 "subject": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
-                "all_of": {
-                  "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-                },
-                "any_of": {
-                  "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-                },
                 "chosen_by": {
-                  "$ref": "../../defs/common.schema.json#/$defs/entity-id",
-                  "description": "The keyword this ability had the player pick (at the start of the battle), rather than a fixed keyword."
-                }
-              },
-              "anyOf": [
-                {
-                  "required": [
-                    "all_of"
-                  ]
-                },
-                {
-                  "required": [
-                    "any_of"
-                  ]
-                },
-                {
-                  "required": [
-                    "chosen_by"
-                  ]
-                }
-              ]
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "title": "owned-by condition",
-          "description": "[identity] The subject belongs to this player.",
-          "required": [
-            "type",
-            "parameters"
-          ],
-          "properties": {
-            "type": {
-              "const": "owned-by"
-            },
-            "parameters": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "subject": {
-                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
-                },
-                "owner": {
-                  "enum": [
-                    "friendly",
-                    "enemy"
-                  ]
-                }
-              },
-              "required": [
-                "owner"
-              ]
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "title": "has-ability condition",
-          "description": "[identity] The subject has this ability (Deep Strike, Oath of Moment, a Discipline).",
-          "required": [
-            "type",
-            "parameters"
-          ],
-          "properties": {
-            "type": {
-              "const": "has-ability"
-            },
-            "parameters": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "subject": {
-                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
-                },
-                "ability": {
                   "$ref": "../../defs/common.schema.json#/$defs/entity-id"
                 }
               },
               "required": [
-                "ability"
+                "chosen_by"
               ]
             }
           }
@@ -519,7 +472,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "equipped-weapon-count condition",
-          "description": "[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.",
+          "description": "[composition] This model carries exactly count weapons matching the shared weapons scope (for example, type melee while excluding a named weapon).",
           "required": [
             "type",
             "parameters"
@@ -535,27 +488,17 @@
                 "subject": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
-                "weapon_type": {
-                  "enum": [
-                    "melee",
-                    "ranged"
-                  ]
+                "weapons": {
+                  "$ref": "../../defs/common.schema.json#/$defs/weapon-scope"
                 },
                 "count": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 12
-                },
-                "other_than": {
-                  "type": "string",
-                  "minLength": 1
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 }
               },
               "required": [
                 "subject",
-                "weapon_type",
-                "count",
-                "other_than"
+                "weapons",
+                "count"
               ]
             }
           }
@@ -564,7 +507,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "named-weapon condition",
-          "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
+          "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, count bounds how many models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
           "required": [
             "type",
             "parameters"
@@ -594,14 +537,13 @@
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
-                    "at_least",
+                    "count",
                     "state"
                   ],
                   "properties": {
-                    "at_least": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 30
+                    "count": {
+                      "$ref": "../../defs/common.schema.json#/$defs/count-bounds",
+                      "description": "Inclusive bounds on the number of models carrying the named weapon."
                     },
                     "state": {
                       "enum": [
@@ -662,7 +604,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "unit-wargear condition",
-          "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).",
+          "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, count bounds how many models in this unit carry the item (state carry) or lack it (state lack).",
           "required": [
             "type",
             "parameters"
@@ -685,14 +627,13 @@
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
-                    "at_least",
+                    "count",
                     "state"
                   ],
                   "properties": {
-                    "at_least": {
-                      "type": "integer",
-                      "minimum": 1,
-                      "maximum": 30
+                    "count": {
+                      "$ref": "../../defs/common.schema.json#/$defs/count-bounds",
+                      "description": "Inclusive bounds on the number of models carrying the wargear."
                     },
                     "state": {
                       "enum": [
@@ -737,15 +678,31 @@
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
                 "at": {
-                  "enum": [
-                    "now",
-                    "phase-start",
-                    "turn-start"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot"
                 }
               },
               "required": [
                 "state"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "with"
+                  ]
+                },
+                {
+                  "required": [
+                    "at"
+                  ],
+                  "properties": {
+                    "at": {
+                      "enum": [
+                        "phase-start",
+                        "turn-start"
+                      ]
+                    }
+                  }
+                }
               ]
             }
           }
@@ -801,7 +758,7 @@
                 "at": {
                   "enum": [
                     "now",
-                    "opponents-previous-turn-end"
+                    "opponent-previous-turn-end"
                   ]
                 },
                 "transport": {
@@ -841,7 +798,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "happened condition",
-          "description": "[history] An event happened within `window`: the subject did it, to the object, matching the filter, at least count_min times (default 1).",
+          "description": "[history] An event happened within `window`: the subject did it, to the object, matching the filter, within the optional inclusive `count` bounds (default 1).",
           "required": [
             "type",
             "parameters"
@@ -869,13 +826,8 @@
                 "window": {
                   "$ref": "../../defs/common.schema.json#/$defs/history-window"
                 },
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "count_max": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "proximity": {
                   "type": "object",
@@ -943,10 +895,7 @@
                   ]
                 },
                 "comparison": {
-                  "enum": [
-                    "greater-than",
-                    "greater-or-equal"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/comparison"
                 },
                 "right": {
                   "oneOf": [
@@ -1017,7 +966,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "within condition",
-          "description": "[position] The subject is within `range` of `of`. models: every means every model of the subject; wholly means wholly within. `at` reads the position at an earlier point.",
+          "description": "[position] The subject is within `range` of `of`. `models` quantifies the subject's models (`every` requires all); `count` bounds how many subject models are within range. `wholly` requires the subject footprint to be inside the range. `at` reads the position at an earlier point.",
           "required": [
             "type",
             "parameters"
@@ -1049,18 +998,40 @@
                   ]
                 },
                 "at": {
-                  "enum": [
-                    "now",
-                    "phase-start"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot"
                 },
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds",
+                  "description": "Inclusive bounds on the number of subject models within range."
                 }
               },
               "required": [
-                "of"
+                "of",
+                "range"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "at"
+                  ],
+                  "properties": {
+                    "at": {
+                      "enum": [
+                        "phase-start"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "models"
+                  ]
+                },
+                {
+                  "required": [
+                    "count"
+                  ]
+                }
               ]
             }
           }
@@ -1151,7 +1122,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "controls condition",
-          "description": "[board] A player (default you) controls objectives matching the filter: at least count_min (default 1), at most count_max. compare: more-than-opponent means more objectives than the opponent.",
+          "description": "[board] A player controls objectives matching the filter. `count` supplies inclusive bounds; `compare` compares the controlling player's count with the named owner's count over the same objective filter; `proportion` compares controlled matching markers with a fraction of all matching markers.",
           "required": [
             "type"
           ],
@@ -1172,16 +1143,45 @@
                 "objective": {
                   "$ref": "../../defs/common.schema.json#/$defs/objective-filter"
                 },
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "count_max": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "compare": {
-                  "const": "more-than-opponent"
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "owner",
+                    "comparison"
+                  ],
+                  "properties": {
+                    "owner": {
+                      "enum": [
+                        "friendly",
+                        "enemy"
+                      ]
+                    },
+                    "comparison": {
+                      "$ref": "../../defs/common.schema.json#/$defs/comparison"
+                    }
+                  }
+                },
+                "proportion": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "comparison",
+                    "fraction"
+                  ],
+                  "properties": {
+                    "comparison": {
+                      "$ref": "../../defs/common.schema.json#/$defs/comparison"
+                    },
+                    "fraction": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
                 }
               }
             }
@@ -1205,11 +1205,7 @@
               "additionalProperties": false,
               "properties": {
                 "attack_type": {
-                  "enum": [
-                    "ranged",
-                    "melee",
-                    "psychic"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/attack-type"
                 },
                 "shooting_type": {
                   "enum": [
@@ -1226,13 +1222,8 @@
                     "overrun"
                   ]
                 },
-                "weapon_keyword": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "weapon_name": {
-                  "type": "string",
-                  "minLength": 1
+                "weapons": {
+                  "$ref": "../../defs/common.schema.json#/$defs/weapon-scope"
                 },
                 "all_target_same_unit": {
                   "const": true
@@ -1270,8 +1261,7 @@
                       ]
                     },
                     "stat": {
-                      "type": "string",
-                      "minLength": 1
+                      "$ref": "../../defs/common.schema.json#/$defs/stat"
                     },
                     "reduce": {
                       "enum": [
@@ -1286,13 +1276,7 @@
                   ]
                 },
                 "comparison": {
-                  "enum": [
-                    "greater-than",
-                    "less-than",
-                    "equal-to",
-                    "greater-or-equal",
-                    "less-or-equal"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/comparison"
                 },
                 "right": {
                   "oneOf": [
@@ -1307,8 +1291,7 @@
                           ]
                         },
                         "stat": {
-                          "type": "string",
-                          "minLength": 1
+                          "$ref": "../../defs/common.schema.json#/$defs/stat"
                         },
                         "reduce": {
                           "enum": [
@@ -1385,7 +1368,8 @@
           "title": "visible condition",
           "description": "[visibility] The subject is visible (fully visible, if set) to `to` (default the attacker). With blocked_by, the view is instead blocked by that unit.",
           "required": [
-            "type"
+            "type",
+            "parameters"
           ],
           "properties": {
             "type": {
@@ -1408,7 +1392,19 @@
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
                   "description": "The view is blocked by this unit: the subject is not (fully) visible to `to` because of it."
                 }
-              }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "fully"
+                  ]
+                },
+                {
+                  "required": [
+                    "blocked_by"
+                  ]
+                }
+              ]
             }
           }
         },
@@ -1416,7 +1412,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "designated condition",
-          "description": "[designation] The subject carries this designation. With count_min/count_max, counts how many units or objectives carry it.",
+          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
           "required": [
             "type",
             "parameters"
@@ -1451,13 +1447,8 @@
                 "tag": {
                   "$ref": "../../defs/common.schema.json#/$defs/designation-id"
                 },
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "count_max": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "by": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
@@ -1466,6 +1457,26 @@
               },
               "required": [
                 "tag"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "subject"
+                  ],
+                  "properties": {
+                    "subject": {
+                      "type": "object",
+                      "required": [
+                        "objective"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "count"
+                  ]
+                }
               ]
             }
           }
@@ -1491,13 +1502,8 @@
                   "type": "string",
                   "minLength": 1
                 },
-                "at_least": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "at_most": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "below_max": {
                   "const": true
@@ -1521,10 +1527,7 @@
                   ]
                 },
                 "at": {
-                  "enum": [
-                    "now",
-                    "opponents-previous-turn-end"
-                  ]
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot"
                 }
               },
               "required": [
@@ -1552,16 +1555,11 @@
                 "side": {
                   "enum": [
                     "friendly",
-                    "opponent"
+                    "enemy"
                   ]
                 },
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "count_max": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "friendly_unit_in_same_terrain_area": {
                   "const": true
@@ -1569,8 +1567,21 @@
                 "no_enemy_in_terrain_area": {
                   "const": true
                 },
-                "within_range_of": {
-                  "const": "opponent-home-objective"
+                "within": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "of",
+                    "range"
+                  ],
+                  "properties": {
+                    "of": {
+                      "$ref": "../../defs/common.schema.json#/$defs/place-ref"
+                    },
+                    "range": {
+                      "$ref": "../../defs/common.schema.json#/$defs/range-ref"
+                    }
+                  }
                 }
               }
             }
@@ -1580,7 +1591,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "engagement-fronts condition",
-          "description": "[board] Mission: you are engaged on at least count_min fronts.",
+          "description": "[board] Mission: you are engaged on at least the required `count.min` fronts.",
           "required": [
             "type",
             "parameters"
@@ -1593,13 +1604,12 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 }
               },
               "required": [
-                "count_min"
+                "count"
               ]
             }
           }
@@ -1620,9 +1630,8 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "objective_role": {
                   "enum": [
@@ -1659,9 +1668,8 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "count_min": {
-                  "type": "integer",
-                  "minimum": 0
+                "count": {
+                  "$ref": "../../defs/common.schema.json#/$defs/count-bounds"
                 },
                 "tag": {
                   "type": "string",
@@ -1849,6 +1857,71 @@
               "required": [
                 "during"
               ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "army-state condition",
+          "description": "[army] The named army state currently holds for the referenced side.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-state"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "owner",
+                "state"
+              ],
+              "properties": {
+                "owner": {
+                  "enum": [
+                    "friendly",
+                    "enemy"
+                  ]
+                },
+                "state": {
+                  "const": "honoured"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "oath-state condition",
+          "description": "[army] The referenced containing ability's current oath is fulfilled.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "oath-state"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ability",
+                "state"
+              ],
+              "properties": {
+                "ability": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                },
+                "state": {
+                  "const": "fulfilled"
+                }
+              }
             }
           }
         }

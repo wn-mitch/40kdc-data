@@ -6,7 +6,7 @@
 
 # Interface: ResourcePool
 
-Defined in: [generated.ts:4776](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4776)
+Defined in: [generated.ts:7311](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7311)
 
 A faction's resource system (Miracle Dice, Pain tokens, Blessings dice pool, etc.).
 
@@ -19,7 +19,7 @@ via the `definition` "resource-pool".
 
 > **id**: `string`
 
-Defined in: [generated.ts:4777](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4777)
+Defined in: [generated.ts:7312](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7312)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4777](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:4778](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4778)
+Defined in: [generated.ts:7313](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7313)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:4778](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **faction\_id**: `string`
 
-Defined in: [generated.ts:4779](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4779)
+Defined in: [generated.ts:7314](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7314)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:4779](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **pool\_type**: `"token"` \| `"dice-pool"` \| `"counter"`
 
-Defined in: [generated.ts:4780](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4780)
+Defined in: [generated.ts:7315](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7315)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:4780](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **generation?**: `object`[]
 
-Defined in: [generated.ts:4781](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4781)
+Defined in: [generated.ts:7316](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7316)
 
 #### Index Signature
 
@@ -59,7 +59,7 @@ Defined in: [generated.ts:4781](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 #### condition
 
-> **condition**: [`AbilityDSLCondition2`](../type-aliases/AbilityDSLCondition2.md)
+> **condition**: [`AbilityDSLCondition1`](../type-aliases/AbilityDSLCondition1.md)
 
 #### amount
 
@@ -71,7 +71,7 @@ Defined in: [generated.ts:4781](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **max\_size?**: `number` \| `null`
 
-Defined in: [generated.ts:4786](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4786)
+Defined in: [generated.ts:7321](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7321)
 
 ***
 
@@ -79,4 +79,4 @@ Defined in: [generated.ts:4786](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4787](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4787)
+Defined in: [generated.ts:7322](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7322)

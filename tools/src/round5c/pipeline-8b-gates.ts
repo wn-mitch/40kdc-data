@@ -1,11 +1,12 @@
 import type { DatabaseSync } from "node:sqlite";
+import type Ajv from "ajv";
 
+import { createValidator } from "../schema-loader.js";
 import { diceTableInvariantErrors } from "../integrity.js";
 import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
 import { grantedRecordIds } from "../data/lever-providers.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
-import type { CoverageView } from "./coverage.js";
-import { tiledSources } from "./leaf-view.js";
+import { tiledSources, type TiledSourceOptions } from "./leaf-view.js";
 import { ownAbilityIds } from "./own-abilities.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
@@ -68,6 +69,11 @@ export type AbilityGateResult = {
   gates: null | { status: "gated" | "no-data-entry"; schema: boolean; core_checks: boolean; integrity: boolean; describer: boolean; describer_score: number | null; crunch_shape: boolean; all: boolean };
 };
 
+export type CompileGateView = TiledSourceOptions & {
+  /** Explicit reviewed publication identity for a pinned historical source with a retired source ID. */
+  historicalEntityIds?: ReadonlyMap<number, string>;
+};
+
 /**
  * Cosine similarity of two texts under the same local embedder used for leaf proposals — the
  * "workbench's existing similarity measure" the round-trip gate is asked to reuse. Routed through
@@ -89,6 +95,20 @@ const CRUNCHER_CONTEXT: EngineContext = { phase: "shooting", attackerStationary:
  * see the single call site at from-dsl.ts's `translateConditional`.
  */
 const HONEST_UNKNOWN_CONDITION = /^conditional: cannot evaluate condition /u;
+const RUNTIME_CONTEXT_UNKNOWN: Readonly<Record<string, true>> = {
+  "unit-filter target: identity, state or model membership is unresolved": true,
+  "select-units: candidate identity or state is unavailable": true,
+  "select-units: enemy candidate identity or state is unavailable": true,
+  "selection/history/model/attack predicates are not resolved by the buff engine": true,
+  "activation condition cannot be evaluated against current context": true,
+  "persistent-designation: retained selection state is not resolved by the buff engine": true,
+  "aura emitter filter requires the source unit's keywords": true,
+};
+let effectValidator: Ajv | undefined;
+function validEffect(fragment: unknown): boolean {
+  effectValidator ??= createValidator({ allErrors: false });
+  return effectValidator.validate("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node", fragment) === true;
+}
 
 /**
  * The cruncher estimates damage; healing, a Wounds-characteristic change, and any other roll or
@@ -112,6 +132,7 @@ const NON_DAMAGE_EFFECT_TYPES = new Set([
   "heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity",
   "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "add-unit", "split-unit",
   "transport-capacity", "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
+  "oath-modifier", "objective-sticky", "counts-as",
 ]);
 // Core abilities (and Reanimation Protocols) that decide deployment, movement, fight order, attachment or
 // resurrection; none changes a hit, wound, save or damage roll.
@@ -164,7 +185,8 @@ export function isNonDamageEffect(node: unknown): boolean {
     case "ability-activate":
       return typeof modifier.ability === "string" && NON_DAMAGE_ABILITIES.has(modifier.ability);
     case "rule-state":
-      return modifier.rule_kind === "ability" && typeof modifier.rule === "string" && NON_DAMAGE_ABILITIES.has(modifier.rule);
+      return (modifier.rule_kind === "ability" && typeof modifier.rule === "string" && NON_DAMAGE_ABILITIES.has(modifier.rule))
+        || (modifier.rule_kind === "core-rule" && modifier.rule === "attacking-ends-hidden" && validEffect(effect));
     // An aura's range only decides which units are in it, and the cruncher's range gates are permissive;
     // a use count never changes an attack.
     case "ability-modifier":
@@ -239,7 +261,8 @@ export function classifyUnsupported(
       honestUnknown += asTarget.honestUnknown;
       outsideDamagePath += asTarget.outsideDamagePath;
       unrecognizedShape += asTarget.unrecognizedShape;
-    } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)) honestUnknown += 1;
+    } else if (HONEST_UNKNOWN_CONDITION.test(item.reason)
+      || (RUNTIME_CONTEXT_UNKNOWN[item.reason] === true && validEffect(item.effectFragment))) honestUnknown += 1;
     else if (isOutsideDamagePath(item)) outsideDamagePath += 1;
     else {
       const granted = recordGrantCounts(item, recordEffect, depth);
@@ -328,8 +351,11 @@ async function gateCompiledAbility(
  * a machine view (see `tiledSources`), and their results carry `machine_leaves`.
  */
 export async function runCompileGates(
-  db: DatabaseSync, embedder: Embedder, floor: number, abilityVersionIds?: ReadonlySet<number>, view: CoverageView = {},
+  db: DatabaseSync, embedder: Embedder, floor: number, abilityVersionIds?: ReadonlySet<number>, view: CompileGateView = {},
 ): Promise<CompileGateReport> {
+  for (const id of view.historicalEntityIds?.keys() ?? []) {
+    if (!view.historicalSourceHashes?.has(id)) throw new Error(`Historical publication identity ${id} requires a pinned source hash.`);
+  }
   const dataRoot = round5cDataRoot();
   const tiled = new Map(tiledSources(db, { ...view, abilityVersionIds }).map((source) => [source.id, source]));
   const own = ownAbilityIds(db, dataRoot);
@@ -343,9 +369,16 @@ export async function runCompileGates(
   };
   for (const [, ability] of tiled) {
     report.compile_attempted += 1;
-    const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
+    const entityId = view.historicalEntityIds?.get(ability.id) ?? ability.ability_id;
+    const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: entityId, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
     report.abilities.push(row);
-    const compiled = compileLeaves(ability.leaves, ability.source_text, { abilityId: own.get(ability.id), name: ability.name ?? undefined, weapons: { faction_id: ability.faction_id, source_type: ability.source_type ?? "" } });
+    const abilityId = own.get(ability.id) ?? (view.historicalSourceHashes?.has(ability.id) ? entityId : undefined);
+    const compiled = compileLeaves(ability.leaves, ability.source_text, {
+      abilityId,
+      name: ability.name ?? undefined,
+      weapons: { faction_id: ability.faction_id, source_type: ability.source_type ?? "" },
+      units: { faction_id: ability.faction_id },
+    });
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;
@@ -353,7 +386,7 @@ export async function runCompileGates(
       continue;
     }
     report.compile_ok += 1;
-    const gate = await gateCompiledAbility(db, embedder, dataRoot, ability.faction_id, ability.ability_id, compiled, ability.source_text, floor);
+    const gate = await gateCompiledAbility(db, embedder, dataRoot, ability.faction_id, entityId, compiled, ability.source_text, floor);
     if (gate.status === "no-data-entry") {
       row.gates = { status: "no-data-entry", schema: false, core_checks: false, integrity: false, describer: false, describer_score: null, crunch_shape: false, all: false };
       report.no_data_entry += 1;

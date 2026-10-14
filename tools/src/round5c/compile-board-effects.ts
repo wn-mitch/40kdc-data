@@ -25,8 +25,12 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
       return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
-    case "move-distance":
-      return { type: "move-modifier", target: closed(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), distance_bonus: closed(leaf, "bonus") } };
+    case "move-distance": {
+      const modifier: Node = { applies_to_moves: closed(leaf, "move_types") };
+      if (leaf.parameters.maximum !== undefined) modifier.maximum = closed(leaf, "maximum");
+      else modifier.distance_bonus = closed(leaf, "bonus");
+      return { type: "move-modifier", target: closed(leaf, "subject"), modifier };
+    }
     case "move-through": {
       // A pair of listed tokens (move-through@4, families/moves.ts) is one list.
       const modifier: Node = { passthrough: Array.isArray(leaf.parameters.passthrough) ? [...leaf.parameters.passthrough] : [closed(leaf, "passthrough")] };
@@ -37,14 +41,14 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "set-up": {
       const modifier: Node = { to: closed(leaf, "to") };
       if (leaf.parameters.from !== undefined) modifier.from = closed(leaf, "from");
-      if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = closed(leaf, "min_enemy_distance");
-      if (leaf.parameters.within_edge !== undefined) modifier.within_edge = closed(leaf, "within_edge");
+      if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = { inches: closed(leaf, "min_enemy_distance") };
+      if (leaf.parameters.within_edge !== undefined) modifier.within_edge = { inches: closed(leaf, "within_edge") };
       if (leaf.parameters.round_offset !== undefined) modifier.round_offset = closed(leaf, "round_offset");
       if (leaf.parameters.placement !== undefined) modifier.placement = closed(leaf, "placement");
       if (leaf.parameters.ignore_limits === true) modifier.ignore_limits = true;
       // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
-      if (leaf.parameters.via !== undefined) modifier.via = closed(leaf, "via");
-      if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { inches: closed(leaf, "marker_inches"), ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
+      if (leaf.parameters.via !== undefined) modifier.via = leaf.parameters.via === "cult-ambush-marker" ? "cult-ambush" : closed(leaf, "via");
+      if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { range: { inches: closed(leaf, "marker_inches") }, ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
       // Folded from wounds-remaining, starting-strength and leaves-attached-unit (compile-model-state.ts).
       if (leaf.parameters.wounds_remaining !== undefined) modifier.wounds_remaining = countValue(closed(leaf, "wounds_remaining"));
       if (leaf.parameters.detach === true) modifier.detach = true;
@@ -60,7 +64,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     case "battlefield-marker": {
       const modifier: Node = { label: closed(leaf, "label") };
       if (leaf.parameters.operation !== undefined) modifier.operation = closed(leaf, "operation");
-      if (leaf.parameters.distance !== undefined) modifier.distance = closed(leaf, "distance");
+      if (leaf.parameters.distance !== undefined) modifier.distance = { inches: closed(leaf, "distance") };
       // Version 2: only a marker not yet moved this turn.
       if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
       return { type: "marker", target: closed(leaf, "subject"), modifier };
@@ -144,19 +148,15 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
         const wr = closed(leaf, "wounds_remaining");
         if (wr !== "full") modifier.wounds_remaining = countValue(wr);
       }
-      if (leaf.parameters.model_keyword !== undefined) modifier.model_keyword = closed(leaf, "model_keyword");
-      if (leaf.parameters.exclude_model_keyword !== undefined) modifier.exclude_model_keyword = closed(leaf, "exclude_model_keyword");
-      if (leaf.parameters.bodyguard_only === true) modifier.bodyguard_only = true;
-      return { type: "return-models", target: target(leaf.parameters.subject), modifier };
+      return { type: "return-models", target: affectedModels(leaf, target(leaf.parameters.subject)), modifier };
     }
     case "destroy-models": {
       const recipient = String(closed(leaf, "recipient"));
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
-      if (leaf.parameters.model_keyword !== undefined) modifier.model_keyword = closed(leaf, "model_keyword");
       if (leaf.parameters.remove_from_play === true) modifier.remove_from_play = true;
       if (leaf.parameters.ignore_death_triggers === true) modifier.ignore_death_triggers = true;
       const target_ = recipient === "this-unit" || recipient === "this-model" ? target(recipient) : recipient;
-      return { type: "destroy-models", target: target_, modifier };
+      return { type: "destroy-models", target: affectedModels(leaf, target_), modifier };
     }
     case "split-unit": {
       const mode = closed(leaf, "mode");
@@ -199,6 +199,19 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     default:
       return undefined;
   }
+}
+
+/** Returned/destroyed model restrictions apply to members, not their containing unit. */
+function affectedModels(leaf: CompileLeaf, recipient: Node | string): Node | string {
+  const p = leaf.parameters;
+  if (p.model_keyword === undefined && p.exclude_model_keyword === undefined && p.bodyguard_only !== true && p.exclude_leader !== true) return recipient;
+  const keywords = (value: unknown): unknown[] => Array.isArray(value) ? value : [value];
+  return {
+    level: "model", member_of: recipient,
+    ...(p.model_keyword === undefined ? {} : { all_of: keywords(closed(leaf, "model_keyword")) }),
+    ...(p.exclude_model_keyword === undefined ? {} : { none_of: keywords(closed(leaf, "exclude_model_keyword")) }),
+    ...(p.bodyguard_only === true || p.exclude_leader === true ? { attachment_role: "bodyguard" } : {}),
+  };
 }
 
 /**

@@ -13,8 +13,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -42,7 +44,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -371,8 +373,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }

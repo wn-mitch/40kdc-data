@@ -32,6 +32,26 @@ export function resolveAttackBackrefs(list: readonly CompileLeaf[]): CompileLeaf
   const firstEffect = list.findIndex((leaf) => leaf.role === "EFFECT");
   return list.map((leaf, index) => {
     if (leaf.family_id !== "attack" || leaf.parameters.refers === undefined) return leaf;
+    if (leaf.parameters.refers === "earlier-permission") {
+      const earlier = list.slice(0, index);
+      const boundary = earlier.map((other) => other.fragment !== leaf.fragment
+        || (other.role === "EVENT" && other.family_id !== "select-unit" && other.family_id !== "attack")).lastIndexOf(true);
+      const candidates = earlier.slice(boundary + 1).filter((other) => other.family_id === "eligibility-permission");
+      if (candidates.length !== 1) throw new CompileError("'Those attacks' requires one preceding attack permission in its event context.");
+      const permission = candidates[0]!;
+      const { activity, allow, subject } = permission.parameters;
+      if (allow !== true || (activity !== "shoot" && activity !== "fight")) {
+        throw new CompileError("'Those attacks' requires an allowed shoot or fight permission.");
+      }
+      const attackType = activity === "shoot" ? "ranged" : "melee";
+      if (leaf.parameters.attack_type !== undefined && leaf.parameters.attack_type !== attackType) {
+        throw new CompileError("'Those attacks' names a different attack type from its permission.");
+      }
+      return { ...leaf, parameters: {
+        direction: "makes", unit: subject === "this-model" ? "this-model" : subject === "this-unit" ? "this-unit" : "that-unit",
+        attack_type: attackType, permission_start: permission.start_byte,
+      } };
+    }
     const at = list.slice(0, index).map((other) => other.family_id === "attack" && other.parameters.refers === undefined).lastIndexOf(true);
     if (at === -1) throw new CompileError("'That attack' points back to an attack, but no attack leaf comes before it.");
     const antecedent = list[at]!.parameters;

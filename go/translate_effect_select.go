@@ -6,116 +6,87 @@ import (
 )
 
 // Selection containers of the effect describer: select-units, for-each-unit,
-// designate-target, persistent-designation and leader-model-ability-grant,
-// plus the selector noun phrases they share. Mirror of the selection half of
-// tools/src/translate/effect.ts.
+// designate-target and persistent-designation, plus the selector noun phrases
+// they share. Mirror of the selection half of tools/src/translate/effect.ts.
 
-// selectUnitsSubject renders the select-units selector phrase ("one enemy Vehicle unit within 12\"").
-func selectUnitsSubject(sel map[string]any) string {
-	var kws []string
-	for _, k := range jstrList(sel["keywords"]) {
-		kws = append(kws, titleCase(k))
+func selectorSubject(sel map[string]any, plural bool) string {
+	subject := strings.TrimPrefix(filterSubject(mapOr(sel["filter"]), effCtx{}), "all ")
+	if plural {
+		return subject
 	}
-	kw := strings.Join(kws, " ")
-	exactCount := sel["count"]
-	if exactCount == nil && sel["min_count"] != nil && jsNumber(sel["min_count"]) == jsNumber(sel["max_count"]) {
-		exactCount = sel["max_count"]
-	}
-	bounded := sel["min_count"] != nil && exactCount == nil
-	count := sel["max_count"]
-	if exactCount != nil {
-		count = exactCount
-	}
-	// A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units (Incursion/...)".
-	capMap, isCap := count.(map[string]any)
-	single := jsNumber(count) == 1
-	nounBase := "unit"
-	if sel["target_kind"] == "model" {
-		nounBase = "model"
-	}
-	noun := nounBase
-	if !single {
-		noun += "s"
-	}
-	capPhrase, sized := "", false
-	if isCap {
-		capPhrase = quantityPhrase(capMap)
-		sized = capMap["count_of"] == nil
-	}
-	quantity := "up to " + ejstr(count)
-	if isCap {
-		quantity = "any number of"
-		if sized {
-			quantity = "up to " + capParenTailRe.ReplaceAllString(capPhrase, "")
-		}
-	} else if exactCount != nil {
-		quantity = ejstr(count)
-		if single {
-			quantity = "one"
-		}
-	} else if bounded {
-		quantity = "from " + ejstr(sel["min_count"]) + " through " + ejstr(sel["max_count"])
-	}
-	boundOrigin := ""
-	if jsTruthy(sel["within_inches_from"]) {
-		boundOrigin = " of " + selectionRefName(sel["within_inches_from"], "the bound source unit")
-	}
-	wholly := ""
-	if sel["wholly"] == true {
-		wholly = " wholly"
-	}
-	within := ""
-	if sel["within_inches"] != nil {
-		within = wholly + " within " + ejstr(sel["within_inches"]) + "\"" + boundOrigin
-	} else if sel["range_inches"] != nil {
-		origin := boundOrigin
-		if origin == "" {
-			origin = " of " + referenceOrigin(sel["reference"])
-		}
-		within = wholly + " within " + ejstr(sel["range_inches"]) + "\"" + origin
-	}
-	visible := ""
-	if jsTruthy(sel["visible_to"]) {
-		visible = " visible to " + selectionRefName(sel["visible_to"], "the bound source unit")
-	} else if sel["visibility_required"] == true {
-		visible = " visible to the bearer"
-	}
-	inclusive := ""
-	if bounded {
-		inclusive = ", inclusive"
-	}
-	eligibility := ""
-	if el, ok := asMap(sel["eligibility"]); ok && el != nil {
-		eligibility = " " + describeSelectionEligibility(el)
-	}
-	if kw != "" {
-		kw = " " + kw
-	}
-	capTail := ""
-	if isCap {
-		noun = nounBase + "s"
-		capTail = " (at most " + capPhrase + ")"
-		if sized {
-			capTail = " (" + capParenInnerRe.ReplaceAllString(capPhrase, "$1") + ")"
-		}
-	}
-	return quantity + " " + ejstr(sel["owner"]) + kw + " " + noun + capTail + selectionModelFilters(sel) + inclusive + within + visible + eligibility
+	subject = strings.Replace(subject, "units", "unit", 1)
+	subject = strings.Replace(subject, "models", "model", 1)
+	return strings.Replace(subject, "that are", "that is", 1)
 }
 
-func selectionModelFilters(sel map[string]any) string {
-	names := ""
-	if l, ok := asList(sel["model_names"]); ok {
-		names = " named " + orList(jstrList(l))
+// selectUnitsSubject renders a canonical unit selector's filter and inclusive
+// count bounds ("up to two enemy units", "at least one model").
+func selectUnitsSubject(sel map[string]any) string {
+	filter := mapOr(sel["filter"])
+	phrase, plural := selectorCountPhrase(sel)
+	subject := strings.TrimPrefix(filterSubject(filter, effCtx{}), "all ")
+	if !plural {
+		subject = strings.Replace(subject, "units", "unit", 1)
+		subject = strings.Replace(subject, "models", "model", 1)
+		subject = strings.Replace(subject, "that are", "that is", 1)
 	}
-	exclusions := ""
-	if l, ok := asList(sel["excluded_keywords"]); ok && len(l) > 0 {
-		kind := "units"
-		if sel["target_kind"] == "model" {
-			kind = "models"
+	bounds, _ := getMap(sel, "count")
+	cap, _ := asMap(bounds["max"])
+	if cap != nil && (bounds["min"] == nil || jsNumber(bounds["min"]) == 0) {
+		capPhrase := quantityPhrase(cap)
+		if cap["count_of"] != nil {
+			phrase = "any number of"
+			return phrase + " " + subject + " (at most " + capPhrase + ")" + selectionEligibilityAndLimit(sel)
 		}
-		exclusions = " (excluding " + kind + " with " + orList(jstrList(l)) + ")"
+		phrase = "up to " + capParenTailRe.ReplaceAllString(capPhrase, "")
+		return phrase + " " + subject + " (" + capParenInnerRe.ReplaceAllString(capPhrase, "$1") + ")" + selectionEligibilityAndLimit(sel)
 	}
-	return names + exclusions
+	return phrase + " " + subject + selectionEligibilityAndLimit(sel)
+}
+
+func selectorCountPhrase(sel map[string]any) (string, bool) {
+	bounds := mapOr(sel["count"])
+	quantity := func(value any) string {
+		if m, ok := asMap(value); ok && m != nil {
+			return quantityPhrase(m)
+		}
+		if jsNumber(value) == 1 {
+			return "one"
+		}
+		return ejstr(value)
+	}
+	min, max := bounds["min"], bounds["max"]
+	same := min != nil && max != nil && quantity(min) == quantity(max)
+	switch {
+	case same:
+		return quantity(min), jsNumber(max) != 1
+	case min != nil && max != nil && jsNumber(min) != 0:
+		return "from " + quantity(min) + " through " + quantity(max), jsNumber(max) != 1
+	case max != nil:
+		return "up to " + quantity(max), jsNumber(max) != 1
+	case min != nil:
+		return "at least " + quantity(min), true
+	default:
+		return "each", false
+	}
+}
+
+func selectionEligibilityAndLimit(sel map[string]any) string {
+	out := ""
+	if el, ok := asMap(sel["eligibility"]); ok && el != nil {
+		out += " " + describeSelectionEligibility(el)
+	}
+	if limit, ok := asMap(sel["limit"]); ok && limit != nil {
+		out += " (" + selectionLimitPhrase(limit, selectorNoun(sel)) + ")"
+	}
+	return out
+}
+
+func selectorNoun(sel map[string]any) string {
+	if filter, ok := asMap(sel["filter"]); ok && filter != nil && filter["level"] == "model" {
+		return "model"
+	}
+	return "unit"
 }
 
 func selectionLimitPhrase(limit map[string]any, noun string) string {
@@ -127,19 +98,16 @@ func selectionLimitPhrase(limit map[string]any, noun string) string {
 }
 
 func selectUnitsEngagement(sel map[string]any) string {
+	filter := mapOr(sel["filter"])
+	noun := selectorNoun(sel)
 	var parts []string
-	noun := "unit"
-	if sel["target_kind"] == "model" {
-		noun = "model"
+	if engaged := filter["engaged_with"]; engaged != nil {
+		parts = append(parts, "For each selected "+noun+", it must be within Engagement Range of "+unitRefPhrase(engaged, "the referenced unit")+".")
 	}
-	origin := referenceOrigin(sel["reference"])
-	switch sel["engagement_relation"] {
-	case "engaged-with-bearer":
-		parts = append(parts, "For each selected "+noun+", it must be within Engagement Range of "+origin+".")
-	case "not-engaged-with-bearer":
-		parts = append(parts, "For each selected "+noun+", it must not be within Engagement Range of "+origin+".")
+	if notEngaged := filter["not_engaged_with"]; notEngaged != nil {
+		parts = append(parts, "For each selected "+noun+", it must not be within Engagement Range of "+unitRefPhrase(notEngaged, "the referenced unit")+".")
 	}
-	if limit, ok := asMap(sel["selection_limit"]); ok && limit != nil {
+	if limit, ok := asMap(sel["limit"]); ok && limit != nil {
 		parts = append(parts, capitalize(selectionLimitPhrase(limit, noun))+".")
 	}
 	return strings.Join(parts, " ")
@@ -151,45 +119,46 @@ var (
 )
 
 func selectUnitsPlural(sel map[string]any) bool {
-	// A cap set by the battle size or a count can select more than one.
-	if _, ok := sel["max_count"].(map[string]any); ok && sel["count"] == nil {
+	bounds := mapOr(sel["count"])
+	min, max := bounds["min"], bounds["max"]
+	if max == nil {
 		return true
 	}
-	count := sel["count"]
-	if count == nil {
-		count = sel["max_count"]
+	if min != nil && jsNumber(min) == jsNumber(max) && jsNumber(max) == 1 {
+		return false
 	}
-	return jsNumber(count) > 1
+	return jsNumber(max) != 1
 }
 
 var theUnitPossRe = regexp.MustCompile(`\b[Tt]he unit's\b`)
 var theUnitRe = regexp.MustCompile(`\b[Tt]he unit\b`)
 
 func selectedRecipient(text string, sel map[string]any) string {
-	noun := "unit"
-	if sel["target_kind"] == "model" {
-		noun = "model"
-	}
+	noun := selectorNoun(sel)
 	recipient := "the selected " + noun
 	if selectUnitsPlural(sel) {
 		recipient = "each selected " + noun
 	}
+	// Membership remains relative to the bearer/current unit, not the selected recipient.
+	const membership = "\ue000"
+	text = strings.ReplaceAll(text, "in the unit", membership)
 	text = theUnitPossRe.ReplaceAllStringFunc(text, func(match string) string {
 		if match[0] == 'T' {
 			return "Each selected " + noun + "'s"
 		}
 		return recipient + "'s"
 	})
-	return theUnitRe.ReplaceAllStringFunc(text, func(match string) string {
+	text = theUnitRe.ReplaceAllStringFunc(text, func(match string) string {
 		if match[0] == 'T' {
 			return "Each selected " + noun
 		}
 		return recipient
 	})
+	return strings.ReplaceAll(text, membership, "in the unit")
 }
 
 func selectedContext(ctx effCtx, sel map[string]any) effCtx {
-	model := sel["target_kind"] == "model"
+	model := selectorNoun(sel) == "model"
 	ctx.selectedUnit = !model
 	ctx.selectedModel = model
 	ctx.unitSubject = ""
@@ -198,122 +167,30 @@ func selectedContext(ctx effCtx, sel map[string]any) effCtx {
 
 func selectUnitsInline(sel, effect map[string]any, ctx effCtx) string {
 	subject := selectUnitsSubject(sel)
-	engagement := selectUnitsEngagement(sel)
 	binding := selectionBinding(sel)
 	nested := selectedRecipient(describeEffectInline(effect, selectedContext(ctx, sel)), sel)
-	if engagement != "" {
-		return "select " + subject + binding + ". " + engagement + " " + capitalize(nested)
-	}
 	return "select " + subject + binding + ": " + nested
 }
 
-var thisModelLeadRe = regexp.MustCompile(`^this model\b`)
-
-// leaderModelAbilityGrantClause renders the beneficiary-only leader relation
-// without exposing a bearer fallback.
-func leaderModelAbilityGrantClause(e map[string]any, ctx effCtx) string {
-	filter := mapOr(e["leader_filter"])
-	identity := ""
-	if jsTruthy(filter["identity"]) {
-		identity = titleCase(ejstr(filter["identity"]))
-	}
-	var kwParts []string
-	for _, k := range getList(filter, "keywords") {
-		kwParts = append(kwParts, bracketKeyword(k))
-	}
-	keywords := strings.Join(kwParts, " and ")
-	role := "the attached leader model"
-	if e["beneficiary"] == "attached-character-leader" {
-		role = "the attached CHARACTER leader model"
-	}
-	leader := role
-	if identity != "" {
-		leader += " identified as " + identity
-	}
-	if keywords != "" {
-		leader += " with " + keywords
-	}
-	var unitParts []string
-	for _, k := range getList(e, "attached_unit_filter") {
-		unitParts = append(unitParts, bracketKeyword(k))
-	}
-	source := "the bearer unit"
-	if len(unitParts) > 0 {
-		source += " with " + strings.Join(unitParts, " and ")
-	}
-	nested := mapOr(mapOr(e["grant"])["effect"])
-	withTarget := make(map[string]any, len(nested)+1)
-	for k, v := range nested {
-		withTarget[k] = v
-	}
-	withTarget["target"] = "this-model"
-	rendered := replaceFirst(thisModelLeadRe, describeEffectInline(withTarget, ctx), "that leader model")
-	return "while " + leader + " leads " + source + ", " + rendered
-}
-
-// referenceOrigin is the range/engagement origin phrase for a selector's `reference`.
-func referenceOrigin(reference any) string {
-	switch reference {
-	case "bearer-transport":
-		return "this model's unit's Transport"
-	case "bearer-unit":
-		return "this model's unit"
-	}
-	return "the bearer"
-}
-
-// forEachUnitSubject renders the for-each-unit selector phrase ("enemy unit within 6\"").
+// forEachUnitSubject renders the canonical for-each-unit selector phrase.
 func forEachUnitSubject(sel map[string]any) string {
-	var keywordList []string
-	for _, k := range jstrList(sel["keywords"]) {
-		keywordList = append(keywordList, titleCase(k))
-	}
-	keywords := ""
-	if len(keywordList) > 0 {
-		if sel["keyword_match"] == "any" {
-			keywords = orList(keywordList) + " "
-		} else {
-			keywords = strings.Join(keywordList, " ") + " "
-		}
-	}
-	within := ""
-	if sel["within_inches"] != nil {
-		within += " within " + ejstr(sel["within_inches"]) + "\""
-	}
-	if jsTruthy(sel["within_objective"]) {
-		within += " within range of " + selectionRefName(sel["within_objective"], "the selected objective marker")
-	}
-	origin := referenceOrigin(sel["reference"])
-	engagement := ""
-	switch sel["engagement_relation"] {
-	case "engaged-with-bearer":
-		engagement = " in Engagement Range of " + origin
-	case "not-engaged-with-bearer":
-		engagement = " not in Engagement Range of " + origin
-	}
-	noun := "unit"
-	if sel["target_kind"] == "model" {
-		noun = "model"
-	}
 	eligibility := ""
-	if jsTruthy(sel["eligibility"]) {
-		eligibility = " " + describeSelectionEligibility(mapOr(sel["eligibility"]))
+	if el, ok := asMap(sel["eligibility"]); ok && el != nil {
+		eligibility = " " + describeSelectionEligibility(el)
 	}
-	member := ""
-	switch sel["member_of"] {
-	case "bearer-unit":
-		member = " in this model's unit"
-	case "embarked-in-bearer":
-		member = " embarked within this model"
-	case "target":
-		member = " in the target unit"
+	return selectorSubject(sel, false) + eligibility + selectionBinding(sel) + selectionLimitCanonical(sel, selectorNoun(sel))
+}
+
+func selectionLimitCanonical(sel map[string]any, noun string) string {
+	limit, ok := asMap(sel["limit"])
+	if !ok || limit == nil {
+		return ""
 	}
-	// owner any: "each unit within 6\" of …", with no side word.
-	owner := ejstr(sel["owner"]) + " "
-	if sel["owner"] == "any" {
-		owner = ""
+	times := ejstr(limit["count"]) + " times"
+	if jsNumber(limit["count"]) == 1 {
+		times = "once"
 	}
-	return owner + keywords + noun + selectionModelFilters(sel) + member + within + engagement + eligibility + selectionBinding(sel)
+	return " (each " + noun + " can be selected for this ability at most " + times + " per " + strings.ReplaceAll(ejstr(limit["period"]), "-", " ") + " across your army)"
 }
 
 var targetSuffixRe = regexp.MustCompile(`\bTarget$`)
@@ -328,73 +205,38 @@ func designationLabel(designation any) string {
 	return " (your " + label + " target)"
 }
 
-func designationTargetSubjectBase(sel map[string]any) string {
-	disposition := "enemy"
-	if sel["scope"] == "friendly-unit" {
-		disposition = "friendly"
-	}
-	var keywords []string
-	if l, ok := asList(sel["keywords"]); ok {
-		for _, k := range l {
-			keywords = append(keywords, titleCase(ejstr(k)))
-		}
-	}
-	join := " "
-	if sel["keyword_match"] == "any" {
-		join = " or "
-	}
-	keywordText := ""
-	if len(keywords) > 0 {
-		keywordText = " " + strings.Join(keywords, join)
-	}
-	reference := referenceOrigin(sel["reference"])
-	origin := ""
-	if jsTruthy(sel["within_inches_from"]) {
-		origin = " of " + selectionRefName(sel["within_inches_from"], "the bound source unit")
-	} else if jsTruthy(sel["reference"]) {
-		origin = " of " + reference
-	}
-	within := ""
-	if sel["within_inches"] != nil {
-		within = " within " + ejstr(sel["within_inches"]) + "\"" + origin
-	}
-	visible := ""
-	if jsTruthy(sel["visible_to"]) {
-		visible = " visible to " + selectionRefName(sel["visible_to"], "the bound source unit")
-	} else if jsTruthy(sel["visibility_required"]) {
-		visible = " visible to " + reference
-	}
-	exclusions := ""
-	if l, ok := asList(sel["excluded_keywords"]); ok && len(l) > 0 {
-		exclusions = " (excluding " + strings.Join(jstrList(l), " and ") + " units)"
-	}
-	return disposition + keywordText + " unit" + within + visible + exclusions
-}
-
 func designationTargetSubject(sel map[string]any) string {
-	limit := ""
-	if l, ok := asMap(sel["selection_limit"]); ok && l != nil {
-		limit = " (" + selectionLimitPhrase(l, "unit") + ")"
+	selector := mapOr(sel["selector"])
+	if sel["kind"] == "objective" {
+		return objectiveSelectorPhrase(selector)
 	}
-	elig := ""
-	if el, ok := asMap(sel["eligibility"]); ok && el != nil {
-		elig = " " + describeSelectionEligibility(el)
-	}
-	return designationTargetSubjectBase(sel) + elig + selectionBinding(sel) + limit
+	return selectUnitsSubject(selector) + selectionBinding(selector)
 }
 
 func designationAttackerPhrase(applies map[string]any, block bool) string {
-	modelKeywords := strings.Join(jstrList(applies["attacker_keywords"]), " ")
-	unitKeywords := strings.Join(jstrList(applies["attacker_unit_keywords"]), " ")
+	model, hasModel := asMap(applies["attacker_filter"])
+	unit, hasUnit := asMap(applies["attacker_unit_filter"])
 	attacker := "a friendly unit"
-	if unitKeywords != "" {
-		mk := ""
-		if modelKeywords != "" {
-			mk = " " + modelKeywords
+	if hasUnit && unit != nil {
+		modelSubject := "model"
+		if hasModel && model != nil {
+			copy := map[string]any{"owner": "any", "level": "model"}
+			for k, v := range model {
+				copy[k] = v
+			}
+			modelSubject = selectorSubject(map[string]any{"filter": copy}, false)
 		}
-		attacker = "a" + mk + " model in a friendly " + unitKeywords + " unit"
-	} else if modelKeywords != "" {
-		attacker = "a friendly " + modelKeywords + " model"
+		copy := map[string]any{"owner": "friendly"}
+		for k, v := range unit {
+			copy[k] = v
+		}
+		attacker = "a " + modelSubject + " in a " + selectorSubject(map[string]any{"filter": copy}, false)
+	} else if hasModel && model != nil {
+		copy := map[string]any{"owner": "friendly", "level": "model"}
+		for k, v := range model {
+			copy[k] = v
+		}
+		attacker = "a " + selectorSubject(map[string]any{"filter": copy}, false)
 	}
 	if block {
 		return "each time " + attacker + " makes an attack against it"
@@ -404,7 +246,7 @@ func designationAttackerPhrase(applies map[string]any, block bool) string {
 
 func persistentDesignationName(designation, scope any) string {
 	label := titleCase(ejstr(designation))
-	if scope == "objective-marker" {
+	if scope == "objective" {
 		if markerSuffixRe.MatchString(label) {
 			return "your " + label
 		}
@@ -428,43 +270,31 @@ func designationSelect(e map[string]any) map[string]any {
 func persistentDesignationSupported(e map[string]any) bool {
 	sel := designationSelect(e)
 	consumer := mapOr(e["consumer"])
-	recipient := consumer["beneficiary"] == "bearer" || consumer["beneficiary"] == "unit"
+	recipient := consumer["beneficiary"] == "this-model" || consumer["beneficiary"] == "this-unit"
+	kind := getStr(sel, "kind")
 	return recipient &&
-		((sel["scope"] == "enemy-unit" && consumer["relation"] == "attacks-selected-unit") ||
-			(sel["scope"] == "objective-marker" && consumer["relation"] == "within-selected-marker"))
+		((kind == "unit" && consumer["relation"] == "attacks-selected-unit") ||
+			(kind == "objective" && consumer["relation"] == "within-selected-marker"))
 }
 
 func persistentDesignationLead(e map[string]any) string {
 	sel := designationSelect(e)
-	noun := "enemy unit"
-	if sel["scope"] == "objective-marker" {
-		noun = "objective marker"
-	}
-	label := persistentDesignationLabel(e["designation"], sel["scope"])
-	lead := "select"
-	if jsTruthy(sel["timing"]) {
-		lead = describeTiming(sel["timing"]) + ", select"
-	}
-	clauses := []string{lead + " one " + noun + label + selectionBinding(sel) + "."}
-	if jsTruthy(sel["allow_while_embarked"]) {
+	noun := designationTargetSubject(sel)
+	label := persistentDesignationLabel(e["designation"], sel["kind"])
+	clauses := []string{"select " + noun + label + "."}
+	if jsTruthy(e["allow_while_embarked"]) {
 		clauses = append(clauses, "This selection can be made while this unit is embarked.")
 	}
-	lifecycle, hasLifecycle := asMap(e["lifecycle"])
-	if hasLifecycle && lifecycle != nil {
-		if replacement, ok := asMap(lifecycle["replace"]); ok && replacement != nil && sel["selection_policy"] == "replace-on-destroyed" {
-			name := selectionRefName(replacement["reference"], persistentDesignationName(e["designation"], sel["scope"]))
-			must := "you must"
-			if jsTruthy(replacement["optional"]) {
-				must = "you may"
-			}
-			clauses = append(clauses, "When "+name+" is destroyed, "+must+" select one new "+noun+" to replace it.")
+	lifecycle := mapOr(e["lifecycle"])
+	if replacement, ok := asMap(lifecycle["replace"]); ok && replacement != nil && e["selection_policy"] == "replace-on-destroyed" {
+		must := "you must"
+		if jsTruthy(replacement["optional"]) {
+			must = "you may"
 		}
-		if lifecycle["exclusivity"] == "one-active-per-bearer-unit" {
-			clauses = append(clauses, "Only one such designation can be active for this bearer unit.")
-		}
-		if lifecycle["expiry"] == "battle-end" && e["duration"] != "battle" {
-			clauses = append(clauses, "This designation expires at the end of the battle.")
-		}
+		clauses = append(clauses, "When "+persistentDesignationName(e["designation"], sel["kind"])+" is destroyed, "+must+" select "+noun+" to replace it.")
+	}
+	if lifecycle["exclusivity"] == "one-active-per-bearer-unit" {
+		clauses = append(clauses, "Only one such designation can be active for this bearer unit.")
 	}
 	return strings.Join(clauses, " ")
 }
@@ -472,20 +302,14 @@ func persistentDesignationLead(e map[string]any) string {
 func persistentDesignationWhen(e map[string]any) string {
 	sel := designationSelect(e)
 	consumer := mapOr(e["consumer"])
-	name := selectionRefName(consumer["reference"], persistentDesignationName(e["designation"], sel["scope"]))
+	name := persistentDesignationName(e["designation"], sel["kind"])
 	bearer := "this model"
-	if consumer["beneficiary"] == "unit" {
+	if consumer["beneficiary"] == "this-unit" {
 		bearer = "a model in this unit"
 	}
-	var relation string
+	relation := "each time " + bearer + " makes an attack against it"
 	if consumer["relation"] == "within-selected-marker" {
 		relation = "while " + bearer + " is within range of " + name
-	} else {
-		against := "it"
-		if jsTruthy(consumer["reference"]) {
-			against = name
-		}
-		relation = "each time " + bearer + " makes an attack against " + against
 	}
 	_, trail := durationClauses(e["duration"])
 	if trail != "" {
@@ -497,19 +321,18 @@ func persistentDesignationWhen(e map[string]any) string {
 func persistentDesignationReplacement(e map[string]any) string {
 	sel := designationSelect(e)
 	replacement := mapOr(mapOr(e["lifecycle"])["replace"])
-	previous := selectionRefName(replacement["reference"], persistentDesignationName(e["designation"], sel["scope"]))
-	label := persistentDesignationLabel(e["designation"], sel["scope"])
+	previous := persistentDesignationName(e["designation"], sel["kind"])
+	label := persistentDesignationLabel(e["designation"], sel["kind"])
 	embarked := ""
-	if jsTruthy(sel["allow_while_embarked"]) {
+	if jsTruthy(e["allow_while_embarked"]) {
 		embarked = ". This selection can be made while this unit is embarked"
 	}
 	must := "you must"
 	if jsTruthy(replacement["optional"]) {
 		must = "you may"
 	}
-	return "when " + previous + " is destroyed, " + must + " select one new enemy unit" + label +
-		" to replace this bearer unit's existing designation" + selectionBinding(sel) +
-		". Its existing effects apply to the new target without changing the designation's battle-end expiry" + embarked
+	return "when " + previous + " is destroyed, " + must + " select " + designationTargetSubject(sel) + label +
+		" to replace this bearer unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry" + embarked
 }
 
 func selectionRefName(ref any, fallback string) string {
@@ -529,11 +352,12 @@ func selectionBinding(sel map[string]any) string {
 	if !ok || b == "" {
 		return ""
 	}
+	_, plural := selectorCountPhrase(sel)
 	it := "it"
-	if sel["selection_mode"] == "any-number" {
+	if plural {
 		it = "them"
 	}
-	return ", binding " + it + " as " + dekebab(strings.ReplaceAll(b, "_", "-"))
+	return ", binding " + it + " as " + strings.ReplaceAll(strings.ReplaceAll(b, "_", " "), "-", " ")
 }
 
 func designatedAttackWhen(applies map[string]any) string {
@@ -572,10 +396,6 @@ func designateTargetInline(e map[string]any, ctx effCtx) string {
 	if jsTruthy(e["designation"]) {
 		desig = designationLabel(e["designation"])
 	}
-	selectLead := "select"
-	if jsTruthy(sel["timing"]) {
-		selectLead = describeTiming(sel["timing"]) + ", select"
-	}
 	_, durTrail := durationClauses(e["duration"])
 	applies := mapOr(e["applies"])
 	when := designateTargetWhen(applies, false)
@@ -584,7 +404,7 @@ func designateTargetInline(e map[string]any, ctx effCtx) string {
 		whenClause = durTrail + ", " + when
 	}
 	recipientCtx := designatedRecipientContext(applies, ctx)
-	return selectLead + " one " + designationTargetSubject(sel) + desig + "; " + whenClause + ", " + describeEffectInline(mapOr(applies["effect"]), recipientCtx)
+	return "select " + designationTargetSubject(sel) + desig + "; " + whenClause + ", " + describeEffectInline(mapOr(applies["effect"]), recipientCtx)
 }
 
 func designateTargetBlock(e map[string]any, indent, arrow string, depth int, ctx effCtx) string {
@@ -595,17 +415,13 @@ func designateTargetBlock(e map[string]any, indent, arrow string, depth int, ctx
 	}
 	applies := mapOr(e["applies"])
 	inner := mapOr(applies["effect"])
-	selectLead := "Select"
-	if jsTruthy(sel["timing"]) {
-		selectLead = capitalize(describeTiming(sel["timing"])) + ", select"
-	}
 	_, durTrail := durationClauses(e["duration"])
 	when := designateTargetWhen(applies, true)
 	whenClause := capitalize(when)
 	if durTrail != "" {
 		whenClause = capitalize(durTrail) + ", " + when
 	}
-	head := indent + arrow + selectLead + " one " + designationTargetSubject(sel) + desig + ". " + whenClause
+	head := indent + arrow + "Select " + designationTargetSubject(sel) + desig + ". " + whenClause
 	recipientCtx := designatedRecipientContext(applies, ctx)
 	if containerTypes[ejstrType(inner)] {
 		return head + ":\n" + describeEffect(inner, depth+1, recipientCtx)

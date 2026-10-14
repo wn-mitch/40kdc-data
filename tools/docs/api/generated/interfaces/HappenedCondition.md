@@ -6,9 +6,9 @@
 
 # Interface: HappenedCondition
 
-Defined in: [generated.ts:1956](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1956)
+Defined in: [generated.ts:1809](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1809)
 
-[history] An event happened within `window`: the subject did it, to the object, matching the filter, at least count_min times (default 1).
+[history] An event happened within `window`: the subject did it, to the object, matching the filter, within the optional inclusive `count` bounds (default 1).
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1956](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"happened"`
 
-Defined in: [generated.ts:1957](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1957)
+Defined in: [generated.ts:1810](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1810)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1957](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1958](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1958)
+Defined in: [generated.ts:1811](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1811)
 
 #### event
 
@@ -46,13 +46,9 @@ Defined in: [generated.ts:1958](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **window**: [`HistoryWindow`](../type-aliases/HistoryWindow.md)
 
-#### count\_min?
+#### count?
 
-> `optional` **count\_min?**: `number`
-
-#### count\_max?
-
-> `optional` **count\_max?**: `number`
+> `optional` **count?**: [`CountBounds`](CountBounds.md)
 
 #### proximity?
 

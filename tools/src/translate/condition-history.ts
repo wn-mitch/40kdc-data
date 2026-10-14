@@ -1,5 +1,6 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { dekebab, designationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+import { countPhrase, dekebab, designationPhrase, eventRelationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, placeRefPhrase, rangePhrase, rollWord, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 /** A rule of one kind being used now, when the filter names none. */
 const IN_PROGRESS: Record<string, string> = {
@@ -11,12 +12,27 @@ const IN_PROGRESS: Record<string, string> = {
 const RESOURCE_TERMS: Record<string, string> = { "yp-pool": "YP" };
 
 export function describeHappened(p: P, negated: boolean): string {
+  let phrase = happenedPhrase(p, negated);
+  const filter = (p.filter ?? {}) as P;
+  if ((p.event === "destroyed" || p.event === "model-destroyed") && filter.weapons != null && !(p.object === "event-object" && p.window === "event")) phrase += ` made with ${weaponNoun({ weapons: filter.weapons })}`;
+  if (p.count != null && (p.event === "destroyed" || p.event === "model-destroyed") && (p.object === "this-model" || (p.object === "event-object" && p.window === "event"))) phrase += ` (${countPhrase(p.count)} times)`;
+  phrase += eventRelationPhrase(filter);
+  if (p.proximity != null) {
+    const proximity = p.proximity as P;
+    phrase += ` within ${rangePhrase(proximity.range)} of ${placeRefPhrase(proximity.of)}`;
+  }
+  if (p.count != null && !["after-roll", "destroyed", "model-destroyed", "objective-gained", "designation-changed"].includes(str(p.event)) && !(p.event === "used" && (p.filter as P | undefined)?.kind === "action")) phrase += ` (${countPhrase(p.count)} times)`;
+  return phrase;
+}
+
+function happenedPhrase(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
   const didNot = (verb: string): string => (negated ? `did not ${verb}` : pastOf(verb));
   const f = (p.filter ?? {}) as P;
   const event = str(p.event);
   const who = subjectOf(p);
-  const n = typeof p.count_min === "number" ? p.count_min : 1;
+  const count = (p.count ?? {}) as P;
+  const amount = countPhrase(p.count);
   switch (event) {
     case "move-ended": {
       const types = (f.move_types as string[] | undefined) ?? [];
@@ -52,23 +68,25 @@ export function describeHappened(p: P, negated: boolean): string {
       const obj = unitRefPhrase(p.object, "the unit");
       const target = obj === "the target unit" ? "the target" : obj;
       const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
-      const keyword = f.weapon_keyword ? `[${dekebab(str(f.weapon_keyword)).toUpperCase()}]` : "";
-      const weaponName = /^[a-z0-9]+(-[a-z0-9]+)+$/.test(str(f.weapon_name)) ? titleCase(str(f.weapon_name)) : str(f.weapon_name);
-      const weapon = f.weapon_name ? ` by ${weaponName}${keyword ? ` (with ${keyword})` : ""}` : keyword ? ` made with a ${keyword} weapon` : "";
+      const weapons = (f.weapons ?? {}) as P;
+      const keyword = weapons.keyword != null && !Array.isArray(weapons.keyword) ? bracketKeyword(weapons.keyword) : "";
+      const weaponName = /^[a-z0-9]+(-[a-z0-9]+)+$/.test(str(weapons.name)) ? titleCase(str(weapons.name)) : str(weapons.name);
+      const simple = Object.keys(weapons).every((key) => key === "name" || key === "keyword") && !Array.isArray(weapons.keyword);
+      const weapon = !simple ? ` made with ${weaponNoun({ weapons })}` : weapons.name ? ` by ${weaponName}${keyword ? ` (with ${keyword})` : ""}` : keyword ? ` made with a ${keyword} weapon` : "";
       const by = f.by && typeof f.by === "object" && "event_var" in (f.by as P) ? " from the triggering unit" : f.by != null ? ` from ${unitRefPhrase(f.by)}` : "";
       const when = p.window === "event" ? " during its just-finished shooting sequence" : ` ${windowPhrase(p.window)}`;
       // Who made the attacks, when it is not the unit being checked ("hit by an attack made by this unit").
       const attacker = p.subject != null && p.subject !== "this-unit" ? ` made by ${unitRefPhrase(p.subject)}` : "";
       if (f.roll === "hit" && f.result === "success") {
-        const hits = n > 1 ? `${n}+ ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
+        const hits = (count.min != null && count.min !== 1) || count.max != null ? `${amount} ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
         return `${neg}${target} was hit by ${hits}${attacker}${weapon}${by}${when}`;
       }
       // Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
       if (p.subject != null) {
         const outcome = f.result === "failure" ? " and failed it" : f.result === "success" ? " and passed it" : "";
-        return `${neg}${who} made a ${rollWord(f.roll)} roll${outcome} ${windowPhrase(p.window)}`.trimEnd();
+        return `${neg}${who} made a ${rollWord(f.roll)} roll${outcome} ${windowPhrase(p.window)}${p.count != null ? ` (${amount} times)` : ""}`.trimEnd();
       }
-      return `${neg}a ${rollWord(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}`.trimEnd();
+      return `${neg}a ${rollWord(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}${p.count != null ? ` (${amount} times)` : ""}`.trimEnd();
     }
     case "damage-allocated": {
       const obj = unitRefPhrase(p.object, "the unit");
@@ -79,21 +97,23 @@ export function describeHappened(p: P, negated: boolean): string {
     case "model-destroyed": {
       const noun = event === "model-destroyed" ? "model" : "unit";
       if (p.object === "event-object" && p.window === "event") {
-        return f.attack_type ? `${neg}destroyed by a ${str(f.attack_type)} attack${f.weapon_name ? ` made with ${str(f.weapon_name)}` : ""}` : `${neg}destroyed by any attack`;
+        return f.attack_type ? `${neg}destroyed by a ${str(f.attack_type)} attack${f.weapons != null ? ` made with ${weaponNoun({ weapons: f.weapons })}` : ""}` : `${neg}destroyed by any attack${f.weapons != null ? ` made with ${weaponNoun({ weapons: f.weapons })}` : ""}`;
       }
       // "this model": the destroyed model is this one, not any model of the unit.
       if (p.object === "this-model") return withWindow(negated ? "this model was not destroyed" : "this model was destroyed", p.window);
       const obj = (typeof p.object === "object" && p.object ? p.object : {}) as P;
       const kws = Array.isArray(obj.all_of) ? `${(obj.all_of as unknown[]).map(str).join(" ")} ` : "";
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";
+      const extended = Object.keys(obj).some((key) => !["all_of", "owner", "level", "designated"].includes(key));
+      const objects = extended ? unitFilterPhrase({ ...obj, level: event === "model-destroyed" ? "model" : "unit" }).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s") : `${owner}${kws}${noun}s`;
       if (f.by != null) {
         // A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
         const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
         const when = p.window === "event" ? `with its just-resolved ${atk}attacks` : `${atk ? `with ${atk}attacks ` : ""}${windowPhrase(p.window)}`;
-        return `${neg}${unitRefPhrase(f.by)} has destroyed ${n}+ ${owner}${kws}${noun}s ${when}`.trimEnd();
+        return `${neg}${unitRefPhrase(f.by)} has destroyed ${amount} ${objects} ${when}`.trimEnd();
       }
-      const tagged = obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";
-      return `${neg}${withWindow(`${n}+ ${owner}${kws}${noun}s${tagged} destroyed`, p.window)}`;
+      const tagged = !extended && obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";
+      return `${neg}${withWindow(`${amount} ${objects}${tagged} destroyed`, p.window)}`;
     }
     case "used": {
       // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
@@ -103,7 +123,7 @@ export function describeHappened(p: P, negated: boolean): string {
         return `${who} is ${negated ? "not " : ""}${kind === "ability" || kind === "stratagem" ? "using" : "performing"} ${rule}`;
       }
       if (f.kind === "action") {
-        let s = `${neg}${n}+ actions completed`;
+        let s = `${neg}${amount} actions completed`;
         if (f.id != null) s += ` (${dekebab(str(f.id))})`;
         const o = p.object as P | undefined;
         if (o && typeof o === "object" && o.objective) s += ` on ${objectivePhrase(o.objective as P)}`;
@@ -116,9 +136,9 @@ export function describeHappened(p: P, negated: boolean): string {
       return `${neg}${withWindow(`${who} used ${f.id != null ? `the ${idLabel(f.id)} ` : "a "}${dekebab(str(f.kind ?? "ability"))}`, p.window)}`;
     }
     case "objective-gained":
-      return `${neg}you newly control ${n}+ objectives ${windowPhrase(p.window)}`.trimEnd();
+      return `${neg}you newly control ${amount} objectives ${windowPhrase(p.window)}`.trimEnd();
     case "designation-changed":
-      return `${neg}${withWindow(`${n}+ ${unitRefPhrase(p.object, "units")} became ${designationPhrase(str(f.tag))}`, p.window)}`;
+      return `${neg}${withWindow(`${amount} ${unitRefPhrase(p.object, "units")} became ${designationPhrase(str(f.tag))}`, p.window)}`;
     // "you spent YP in that turn" (optional-cost-paid window turn): a negated read is "you spent no YP".
     case "resource-spent": {
       const pool = str(f.pool);
@@ -133,6 +153,6 @@ export function describeHappened(p: P, negated: boolean): string {
 
 export function destroyedCount(side: P): string {
   const o = (side.object ?? {}) as P;
-  const kws = Array.isArray(o.all_of) ? `${(o.all_of as unknown[]).map(str).join(" ")} ` : "";
-  return `${str(o.owner)} ${kws}units ${windowPhrase(side.window)}`.trimEnd();
+  const objects = unitRefPhrase(o).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s");
+  return `${objects} ${windowPhrase(side.window)}`.trimEnd();
 }

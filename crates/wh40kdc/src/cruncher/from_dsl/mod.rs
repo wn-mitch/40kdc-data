@@ -12,9 +12,12 @@
 //! filter) is the buffed side; `defender` and an enemy filter are the other side; any other
 //! binding is not known to be the buffed unit and contributes nothing. Core rule 19.04: a
 //! `this-model` effect pooled in from another member of a combined unit stays on its model.
+//! Common filters use three-valued matching: unresolved board or model membership
+//! never turns into an automatic buff. Explicit selection levers retain those
+//! requirements for the player, rather than pretending that the engine resolved them.
 
 mod applicability;
-mod conditions;
+pub(crate) mod conditions;
 mod damage_leaves;
 mod js;
 mod leaves;
@@ -27,8 +30,13 @@ use serde_json::{json, Map, Value};
 use super::buffs::{AbilityKind, Buff, BuffSource, EngineContext};
 use js::*;
 
-pub use leaves::parse_keyword_grant;
 pub use levers::{is_attack_step, moment_gate, moment_key};
+
+pub(crate) use super::recipient_snapshots::recipient_snapshot_reason;
+
+pub(crate) fn bind_snapshot_recipient(node: &Obj, target: &Value) -> Option<Value> {
+    selection::bind_recipient(node, Some(target))
+}
 
 /// A fragment the translator could not turn into a buff; a UI renders these as warnings.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -62,6 +70,9 @@ pub struct ActivatableBuff {
     /// Set when the lever belongs to a mutually-limited pool.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group: Option<ActivatableGroupRef>,
+    /// Additional independent caps, such as a parent ability's shared usage pool.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<ActivatableGroupRef>>,
     /// The lever raises the cap of another ability's lever pool instead of adding buffs ("select
     /// one more augmentation").
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -75,10 +86,23 @@ pub struct ActivatableBuff {
 
 /// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
 /// as the DSL does, `by` the extra activations.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct CapRaise {
     pub ability: String,
     pub by: i64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub allocation: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub option: Option<StanceOptionRef>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<StanceOptionRef>>,
+}
+
+/// Stable authored option reference, independent of its display label.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct StanceOptionRef {
+    pub ability_id: String,
+    pub option_id: String,
 }
 
 /// The result of [`effect_to_buffs`].
@@ -106,7 +130,7 @@ pub(crate) struct Lever {
     buffs: Vec<Value>,
     group: Option<(String, i64)>,
     requires: Option<Vec<Value>>,
-    cap_raise: Option<(String, i64)>,
+    cap_raise: Option<CapRaise>,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -125,12 +149,16 @@ impl Out {
 }
 
 /// Walk options: the context, perspective and the owning ability id that seeds lever ids.
+#[derive(Clone)]
 pub(crate) struct WalkOpts<'a> {
     context: &'a EngineContext,
     perspective: TranslationPerspective,
-    ability_id: String,
-    source: Value,
+    ability_id: &'a str,
+    source: &'a Value,
     ability_kind: Option<AbilityKind>,
+    source_meta: &'a BuffSource,
+    duration: Option<Value>,
+    granted_holder: bool,
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -138,33 +166,25 @@ const MODEL_SCOPED_REASON: &str =
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)";
 const FIDELITY_BINDING_REASON: &str =
     "selection/history/model/attack predicates are not resolved by the buff engine";
-const ALTERNATIVES_REASON: &str = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";
+const ALTERNATIVES_REASON: &str =
+    "unit-filter target: identity, state or model membership is unresolved";
 
-/// Whether a node's unit-filter target with `any_of_filters` reaches the unit crunched (`None`:
-/// unknown). A friendly filter is read against the crunched side's own keywords; an enemy one
-/// only from the target's perspective, since the attacker's perspective drops it anyway. Nodes
-/// without alternatives are left to the target classification (`Some(true)`).
+/// Owner selects the side; every remaining predicate must be known on that side.
 fn alternatives_match(node: &Obj, opts: &WalkOpts) -> Option<bool> {
     let Some(target) = node.get("target").and_then(Value::as_object) else {
         return Some(true);
     };
-    let Some(alternatives) = target.get("any_of_filters").and_then(Value::as_array) else {
-        return Some(true);
+    let owner = target
+        .get("owner")
+        .and_then(Value::as_str)
+        .unwrap_or("friendly");
+    let side = match target.get("member_of").and_then(Value::as_str) {
+        Some("attacker") => TranslationPerspective::Attacker,
+        Some("defender") => TranslationPerspective::Target,
+        _ if owner == "enemy" => TranslationPerspective::Target,
+        _ => opts.perspective,
     };
-    let keywords = match (
-        target.get("owner").and_then(Value::as_str),
-        opts.perspective,
-    ) {
-        (Some("friendly"), TranslationPerspective::Attacker) => {
-            opts.context.attacker_keywords.as_deref()
-        }
-        (Some("friendly"), TranslationPerspective::Target)
-        | (Some("enemy"), TranslationPerspective::Target) => {
-            opts.context.target_keywords.as_deref()
-        }
-        _ => return Some(true),
-    };
-    conditions::evaluate_alternatives(alternatives, keywords)
+    conditions::matches_unit_filter(node.get("target")?, opts.context, side, owner)
 }
 
 /// Walk an ability DSL `effect` tree and produce the buff stack it contributes against
@@ -175,23 +195,61 @@ pub fn effect_to_buffs(
     context: &EngineContext,
     perspective: TranslationPerspective,
 ) -> EffectTranslation {
+    effect_to_buffs_with_duration(effect, source, context, perspective, None)
+}
+
+/// Translate an effect while retaining the owning ability's lifetime for activation gates.
+pub(crate) fn effect_to_buffs_with_duration(
+    effect: &Value,
+    source: &BuffSource,
+    context: &EngineContext,
+    perspective: TranslationPerspective,
+    duration: Option<&Value>,
+) -> EffectTranslation {
+    let effect = strip_nulls(effect);
+    let effect = if recipient_snapshot_reason(None, &effect).is_some() {
+        match super::recipient_snapshots::resolve_recipient_snapshots(
+            None,
+            &effect,
+            source,
+            context,
+            perspective,
+        ) {
+            Ok(effect) => effect,
+            Err(reason) => {
+                return EffectTranslation {
+                    unsupported: vec![UnsupportedFragment {
+                        reason: reason.into(),
+                        effect_fragment: effect,
+                    }],
+                    ..Default::default()
+                }
+            }
+        }
+    } else {
+        effect
+    };
     let (ability_id, ability_kind) = match source {
         BuffSource::Ability {
             ability_id,
             ability_kind,
             ..
-        } => (ability_id.clone(), Some(ability_kind.clone())),
-        _ => ("effect".to_string(), None),
+        } => (ability_id.as_str(), Some(ability_kind.clone())),
+        _ => ("effect", None),
     };
+    let source_value = serde_json::to_value(source).expect("a buff source serializes");
     let opts = WalkOpts {
         context,
         perspective,
         ability_id,
-        source: serde_json::to_value(source).expect("a buff source serializes"),
+        source: &source_value,
+        source_meta: source,
         ability_kind,
+        duration: duration.cloned(),
+        granted_holder: false,
     };
     let mut out = Out::default();
-    walk(&strip_nulls(effect), &opts, &mut out);
+    walk(&effect, &opts, &mut out);
     finish(out)
 }
 
@@ -223,10 +281,87 @@ fn finish(out: Out) -> EffectTranslation {
                     id,
                     max_activations,
                 }),
-                cap_raise: l.cap_raise.map(|(ability, by)| CapRaise { ability, by }),
+                groups: None,
+                cap_raise: l.cap_raise,
                 requires: l.requires,
             })
             .collect(),
+    }
+}
+
+/// Attach parent activation requirements after walking so child option groups
+/// and local triggers remain intact instead of being flattened by a wrapper.
+pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activation: Value) {
+    if activation.get("usage").is_none_or(Value::is_null)
+        && activation.get("cost").is_none_or(Value::is_null)
+        && activation.get("optional").and_then(Value::as_bool) != Some(true)
+    {
+        return;
+    }
+    let limits = activation
+        .get("usage")
+        .map(|usage| match usage {
+            Value::Array(limits) => limits.as_slice(),
+            other => std::slice::from_ref(other),
+        })
+        .unwrap_or_default();
+    let count = limits
+        .iter()
+        .filter(|limit| {
+            limit.is_object() && limit.get("per").and_then(Value::as_str) != Some("model")
+        })
+        .filter_map(|limit| {
+            limit.get("count").and_then(Value::as_i64).or_else(|| {
+                (limit.get("frequency").and_then(Value::as_str) != Some("n-per-battle"))
+                    .then_some(1)
+            })
+        })
+        .min();
+    let group = count.map(|max_activations| ActivatableGroupRef {
+        id: format!("{ability_id}?usage"),
+        max_activations,
+    });
+    let mut requirement = activation.clone();
+    if let Some(requirement) = requirement.as_object_mut() {
+        requirement.remove("duration");
+    }
+    if !result.applied.is_empty() {
+        let buffs = std::mem::take(&mut result.applied);
+        let raw: Vec<Value> = buffs
+            .iter()
+            .map(|buff| serde_json::to_value(buff).expect("buff serializes"))
+            .collect();
+        result.activatable.push(ActivatableBuff {
+            id: format!("{ability_id}#activate"),
+            label: applicability::label_for_buffs(&raw),
+            buffs,
+            group: None,
+            groups: None,
+            cap_raise: None,
+            requires: None,
+        });
+    }
+    for lever in &mut result.activatable {
+        if let Some(group) = &group {
+            if lever
+                .group
+                .as_ref()
+                .is_none_or(|current| current.id != group.id)
+            {
+                if lever.group.is_some() {
+                    lever
+                        .groups
+                        .get_or_insert_with(Vec::new)
+                        .push(group.clone());
+                } else {
+                    lever.group = Some(group.clone());
+                }
+            }
+        }
+        lever
+            .requires
+            .get_or_insert_with(Vec::new)
+            .insert(0, requirement.clone());
     }
 }
 
@@ -241,9 +376,30 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
         return;
     };
     // Core rule 19.04, before any leaf translation and under both perspectives.
-    if opts.ability_kind == Some(AbilityKind::Attached) && is_str(current, "target", "this-model") {
+    if opts.ability_kind == Some(AbilityKind::Attached)
+        && matches!(
+            current.get("target").and_then(Value::as_str),
+            Some("this-model" | "model-in-this-unit")
+        )
+    {
         out.unsupported(MODEL_SCOPED_REASON, current);
         return;
+    }
+    if is_str(current, "target", "model-in-this-unit") {
+        out.unsupported(
+            "model-in-this-unit: individual model identity is unresolved",
+            current,
+        );
+        return;
+    }
+    if is_str(current, "type", "ability-part") {
+        if let Some(reason) = recipient_snapshot_reason(
+            current.get("trigger"),
+            current.get("effect").unwrap_or(&Value::Null),
+        ) {
+            out.unsupported(reason, current);
+            return;
+        }
     }
     // A unit selection reaching the selected unit is a player lever; its eligibility is what the
     // player vouches for, so it is planned before the fidelity check below.
@@ -251,6 +407,12 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
         let plan = selection::plan_selection(current, opts);
         if !matches!(plan, selection::SelectionPlan::None) {
             selection::translate_selection(plan, current, opts, out);
+            return;
+        }
+    }
+    if is_str(current, "type", "for-each-unit") {
+        if let Some(bound) = selection::bind_each_recipient(current) {
+            walk(&bound, opts, out);
             return;
         }
     }
@@ -283,11 +445,7 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     if selection::targets_provider(current, opts) {
         return;
     }
-    // A friendly filter's keywords must hold on the crunched unit when its keywords are known.
-    if selection::friendly_filter_excludes(current, opts) {
-        return;
-    }
-    // A target filter of alternatives reaches the unit only when one alternative matches it.
+    // Targets require positive evidence for every canonical filter predicate.
     match alternatives_match(current, opts) {
         Some(false) => return,
         None => {
@@ -356,17 +514,26 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         Some("ability-part") => {
+            let mut part_opts = opts.clone();
+            if let Some(duration) = present(node, "duration") {
+                part_opts.duration = Some(duration.clone());
+            }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.
             let activation = is_true(node, "optional")
                 || present(node, "cost").is_some()
                 || present(node, "usage").is_some();
-            if present(node, "trigger").is_none() && activation {
-                levers::named_effect(node, opts, out);
+            if activation {
+                levers::named_effect(node, &part_opts, out);
             } else {
                 let effect = node.get("effect").cloned().unwrap_or(Value::Null);
-                let gated = moment_gate(node.get("trigger"), &effect).unwrap_or(effect);
-                walk(&gated, opts, out);
+                let gated = levers::moment_gate_with_source(
+                    node.get("trigger"),
+                    &effect,
+                    Some(node),
+                )
+                .unwrap_or(effect);
+                walk(&gated, &part_opts, out);
             }
         }
         Some("choice") => levers::enumerate_choice(node, opts, out),
@@ -397,10 +564,6 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         ),
         Some("select-units") => walk(node.get("effect").unwrap_or(&Value::Null), opts, out),
         Some("aura") => aura(node, opts, out),
-        Some("leader-model-ability-grant") => out.unsupported(
-            "leader-model-ability-grant: attached leader beneficiary is not resolved by the buff engine",
-            node,
-        ),
         Some("persistent-designation") => out.unsupported(
             "persistent-designation: retained selection state is not resolved by the buff engine",
             node,
@@ -410,6 +573,18 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             if applies.is_some_and(|a| {
                 is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
             }) {
+                for key in ["attacker_filter", "attacker_unit_filter"] {
+                    if let Some(filter) = applies.and_then(|applies| applies.get(key)) {
+                        match conditions::matches_unit_filter(filter, opts.context, TranslationPerspective::Attacker, "friendly") {
+                            Some(false) => return,
+                            None => {
+                                out.unsupported("designate-target attacker filter is unresolved", node);
+                                return;
+                            }
+                            Some(true) => {}
+                        }
+                    }
+                }
                 // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
                 // lever ("this defender is the designated unit"); the player vouches for the
                 // selection's eligibility (range, visibility, "hit by those attacks").
@@ -417,7 +592,21 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 let mut sub = Out::default();
                 walk(effect.unwrap_or(&Value::Null), opts, &mut sub);
                 out.unsupported.extend(sub.unsupported);
-                out.activatable.extend(sub.activatable);
+                let requirement = Value::Object(
+                    ["select", "duration"]
+                        .into_iter()
+                        .filter_map(|key| {
+                            node.get(key)
+                                .map(|value| (key.into(), value.clone()))
+                        })
+                        .collect(),
+                );
+                for mut lever in sub.activatable {
+                    let mut requirements = vec![requirement.clone()];
+                    requirements.extend(lever.requires.take().unwrap_or_default());
+                    lever.requires = Some(requirements);
+                    out.activatable.push(lever);
+                }
                 if !sub.applied.is_empty() {
                     let designation = node
                         .get("designation")
@@ -431,7 +620,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                         ),
                         buffs: sub.applied,
                         group: None,
-                        requires: None,
+                        requires: Some(vec![requirement]),
                         cap_raise: None,
                     });
                 }
@@ -445,7 +634,7 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("risk-reward") => walk(node.get("reward").unwrap_or(&Value::Null), opts, out),
         Some("stance-select") => {
             let group = format!("{}?stance", opts.ability_id);
-            levers::enumerate_named_options(node, opts, out, &group, 1);
+            levers::enumerate_named_options(node, opts, out, &group, node.get("max_choices").and_then(Value::as_i64).unwrap_or(1));
         }
         Some("issue-orders") => {
             let group = format!("{}?order", opts.ability_id);
@@ -456,6 +645,17 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("ignore-modifiers") => damage_leaves::ignore_modifiers(node, opts, out),
         Some("ability-grant") => damage_leaves::ability_grant(node, opts, out),
         Some("ability-modifier") => selection::ability_modifier(node, opts, out),
+        Some("stance-selection-capacity") => selection::stance_capacity(node, opts, out),
+        Some("rule-state") => {
+            let modifier = object(node.get("modifier"));
+            let persistent = modifier.is_some_and(|modifier| modifier.get("rule").is_some_and(Value::is_object)
+                || is_str(modifier, "direction", "exchanged") || modifier.contains_key("except_from"));
+            out.unsupported(if persistent {
+                "rule-state: persistent ability ownership and suppression are not resolved by the buff engine"
+            } else {
+                "effect type \"rule-state\" is not modelled by the buff layer"
+            }, node);
+        }
         _ => out.unsupported(
             format!(
                 "effect type \"{}\" is not modelled by the buff layer",
@@ -480,12 +680,16 @@ fn aura(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     }
     if let Some(filter) = modifier.and_then(|m| m.get("recipient_filter")) {
-        let keywords = if opts.perspective == TranslationPerspective::Attacker {
-            opts.context.attacker_keywords.as_deref()
-        } else {
-            opts.context.target_keywords.as_deref()
-        };
-        match conditions::evaluate_keyword_filter(filter, keywords) {
+        match conditions::matches_unit_filter(
+            filter,
+            opts.context,
+            opts.perspective,
+            if side == Side::Defender {
+                "enemy"
+            } else {
+                "friendly"
+            },
+        ) {
             Some(false) => return,
             None => {
                 out.unsupported(
@@ -534,6 +738,12 @@ pub(crate) fn classify_target(node: &Obj) -> Side {
             match t.get("owner").and_then(Value::as_str) {
                 Some("friendly") => Side::Buffed,
                 Some("enemy") => Side::Defender,
+                None | Some("any") if is_str(t, "level", "unit") && t.contains_key("unit_ids") => {
+                    Side::Buffed
+                }
+                None if is_str(t, "member_of", "this-unit") => Side::Buffed,
+                None if is_str(t, "member_of", "attacker") => Side::Attacker,
+                None if is_str(t, "member_of", "defender") => Side::Defender,
                 _ => Side::Unknown,
             }
         }
@@ -591,42 +801,15 @@ fn unsized_value_reason(node: &Obj) -> Option<String> {
 fn has_unresolved_fidelity_binding(node: &Obj) -> bool {
     let ty = node.get("type").and_then(Value::as_str);
     let has = |o: Option<&Obj>, k: &str| o.is_some_and(|o| present(o, k).is_some());
-    let truthy_flag = |o: Option<&Obj>, k: &str| o.is_some_and(|o| is_true(o, k));
     match ty {
-        Some("select-units" | "for-each-unit") => {
-            let sel = object(node.get("selector"));
-            sel.is_some_and(|s| is_str(s, "target_kind", "model"))
-                || [
-                    "eligibility",
-                    "reference",
-                    "origin",
-                    "selection_limit",
-                    "bind_as",
-                    "within_inches_from",
-                    "visible_to",
-                ]
-                .iter()
-                .any(|k| has(sel, k))
-                || truthy_flag(sel, "visibility_required")
-        }
+        Some("select-units" | "for-each-unit") => object(node.get("selector")).is_some(),
         // A designation's own selection (range, visibility, eligibility) is what its lever's
         // player vouches for; only the applied effect's bindings are unresolved.
         Some("designate-target") => {
             let applies = object(node.get("applies"));
-            [
-                "attacker_keywords",
-                "attacker_unit_keywords",
-                "beneficiary",
-                "reference",
-            ]
-            .iter()
-            .any(|k| has(applies, k))
+            ["beneficiary", "reference"].iter().any(|k| has(applies, k))
         }
         Some("ability-part") => has_unresolved_trigger_binding(node.get("trigger")),
-        Some("named-region-state") => {
-            let consumer = object(node.get("modifier")).and_then(|m| object(m.get("consumer")));
-            has(consumer, "attack_condition")
-        }
         _ => false,
     }
 }

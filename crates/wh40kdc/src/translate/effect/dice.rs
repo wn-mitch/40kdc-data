@@ -6,7 +6,7 @@ use serde_json::Value;
 
 use super::words::*;
 use super::{child, inline, items, ty};
-use crate::translate::condition::{describe_condition_value, nn, obj, truthy, P};
+use crate::translate::condition::{describe_condition_value, nn, obj, truthy, unit_ref_phrase, P};
 
 /// A dice-pool option requirement: `pair of 4+`, or an `any_of` set joined with " or ".
 pub(super) fn describe_requirement(req: Option<&Value>) -> String {
@@ -86,11 +86,7 @@ pub(super) fn roll_with_rider(steps: &[Value], ctx: &Ctx) -> Option<String> {
 
 pub(super) fn leadership_test(e: &P, ctx: &Ctx) -> String {
     let test = obj(e.get("test"));
-    let who = match sv(test, "subject") {
-        Some("self") => "this model",
-        Some("target") => "the target unit",
-        _ => "that unit",
-    };
+    let who = unit_ref_phrase(test.get("subject"), "the unit");
     let battle_shock = sv(test, "kind") == Some("battle-shock");
     let kind = if battle_shock {
         "Battle-shock"

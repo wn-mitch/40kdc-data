@@ -43,7 +43,7 @@ const errorsOf = (text: string, ...pieces: Piece[]): string[] => {
 };
 
 const engaged = { states: ["engaged"], subject: "this-unit", negated: true };
-const engagedNode = { type: "unit-state", parameters: { state: "engaged" } };
+const engagedNode = { type: "matches", parameters: { filter: { state: "engaged" } } };
 const notEngaged = { operator: "not", operands: [engagedNode] };
 const move = (distance: number) => ({ subject: "this-unit", move_type: "normal", distance });
 const fallBack = { subject: "this-unit", move_type: "fall-back" };
@@ -54,7 +54,7 @@ function truth(node: Node, eligible: boolean, engagedNow: boolean): boolean {
   if (node.operator === "or") return node.operands.some((operand: Node) => truth(operand, eligible, engagedNow));
   if (node.operator === "not") return !truth(node.operands[0], eligible, engagedNow);
   if (node.type === "eligible") return eligible;
-  if (node.type === "unit-state" && node.parameters.state === "engaged") return engagedNow;
+  if (node.type === "matches" && node.parameters.filter.state === "engaged") return engagedNow;
   throw new Error(`unexpected gate node ${JSON.stringify(node)}`);
 }
 
@@ -199,7 +199,7 @@ describe("an Otherwise bullet in a list (5644 shape, choice-open retired)", () =
       ["Otherwise", "otherwise", {}],
       ["you can", "optional-use", { who: "you" }],
       ["re-roll one Wound roll", "reroll", { roll: "wound", subset: "all", weapon_type: "all", count: 1 }]).steps;
-    expect(steps[0].condition.type).toBe("within");
+    expect(steps[0].condition).toMatchObject({ type: "matches", parameters: { filter: { within: { range: { inches: 6 } } } } });
     expect(steps[1].condition).toEqual({ operator: "not", operands: [steps[0].condition] });
     expect(steps[1].effect).toMatchObject({ type: "re-roll", modifier: { roll: "wound" } });
   });
@@ -265,7 +265,7 @@ describe("an Otherwise after a phase-and-selection head (7005 shape, with a bear
     expect(effect.condition.operands).toContainEqual({ type: "phase-is", parameters: { phase: "command" } });
     const selected = effect.effect as Node;
     expect(selected.type).toBe("select-units");
-    expect(selected.selector.keywords).toEqual(["SPIRIT"]);
+    expect(selected.selector.filter.all_of).toEqual(["SPIRIT"]);
     const [returned, healed] = (selected.effect as Node).steps as Node[];
     const below = { type: "strength", parameters: { subject: "selected-unit", below: "starting" } };
     expect(returned!.condition).toEqual(below);

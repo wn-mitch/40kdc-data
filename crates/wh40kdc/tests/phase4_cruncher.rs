@@ -1,14 +1,15 @@
 //! The phase-4 shapes' buff translation pinned against the TypeScript reference.
 //!
-//! `fixtures/phase4-cruncher.json` records every `effectToBuffs` and `usageGated` call
+//! `fixtures/phase4-cruncher.json` records each canonical `effectToBuffs` call
 //! `tools/test/translate-phase4-shapes.test.ts` makes, with the exact TS result. The cases
 //! hunt the regressions the shapes guard against: a scaled or bound value applied flat, a
 //! `roll` allocation whose levers drift from dice-pool-allocation's, the `ability-unit`
 //! role not read as the buffed unit, and a usage list that loses its lever.
 
 use serde_json::{json, Value};
-use wh40kdc::cruncher::{effect_to_buffs, BuffSource, EngineContext, TranslationPerspective};
-use wh40kdc::data::usage_gated;
+use wh40kdc::cruncher::{
+    apply_activation, effect_to_buffs, BuffSource, EngineContext, TranslationPerspective,
+};
 
 /// Numbers as floats and null keys dropped, so typed output compares with the TS JSON.
 fn norm(v: &Value) -> Value {
@@ -43,18 +44,20 @@ fn phase4_buff_translation_matches_ts() {
                     Some("target") => TranslationPerspective::Target,
                     _ => TranslationPerspective::Attacker,
                 };
-                let r = effect_to_buffs(&input["effect"], &source, &ctx, perspective);
+                let mut r = effect_to_buffs(&input["effect"], &source, &ctx, perspective);
+                if let Some(activation) = input.get("activation").filter(|value| !value.is_null()) {
+                    let ability_id = match &source {
+                        BuffSource::Ability { ability_id, .. } => ability_id.as_str(),
+                        _ => "effect",
+                    };
+                    apply_activation(&mut r, ability_id, activation.clone());
+                }
                 json!({
                     "applied": r.applied,
                     "unsupported": r.unsupported.iter().map(|u| &u.reason).collect::<Vec<_>>(),
                     "activatable": r.activatable,
                 })
             }
-            Some("usageGated") => usage_gated(
-                Some(&input["abilityType"]).filter(|v| !v.is_null()),
-                Some(&input["usage"]).filter(|v| !v.is_null()),
-                &input["effect"],
-            ),
             other => panic!("case {i}: unknown fn {other:?}"),
         };
         if norm(&got) != norm(&case["output"]) {

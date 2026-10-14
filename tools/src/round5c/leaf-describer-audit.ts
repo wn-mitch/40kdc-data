@@ -1,14 +1,18 @@
 import { normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
 import { hashJson } from "../round4/hash.js";
 import { previewLeaf } from "./leaf-preview.js";
+import { boundedCombinations, familySampling, type FamilySampling } from "./leaf-coverage-samples.js";
 
 /**
- * How well the describer tells leaves apart. Every current family is rendered for each closed
- * combination of its parameters (open values use a few samples), and the report names:
+ * How well the describer tells leaves apart. Small families are rendered for each closed
+ * combination of their parameters (open values use a few samples). High-dimensional families use
+ * the pairwise samples documented in leaf-coverage-samples.ts, and their reports say so rather
+ * than presenting sampled observations as exhaustive.
  *
- * - unrendered: a parameter whose value never changes the text, so the reader cannot see it;
- * - collisions: two values of one parameter that read the same with everything else equal;
- * - problems: valid parameters the describer or compiler cannot render at all.
+ * The report names:
+ * - unrendered: a parameter whose sampled values never change the text;
+ * - collisions: two values of one parameter that read the same in a representative shared context;
+ * - problems: sampled valid parameters the describer or compiler cannot render at all.
  *
  * Leaves with no text of their own (attacks without a melee/ranged limit, combinators, the
  * selected unit) are listed as silent rather than audited, since their words live elsewhere.
@@ -22,6 +26,7 @@ type Schema = {
 export type FamilyAudit = {
   family_id: string;
   version: number;
+  sampling: FamilySampling;
   combinations: number;
   silent: number;
   unrendered: string[];
@@ -62,7 +67,7 @@ function applies(schema: Schema, parameters: Record<string, unknown>): boolean {
   return !schema["x-only-when"] || Object.entries(schema["x-only-when"]).every(([key, values]) => values.includes(String(parameters[key])));
 }
 
-/** Every valid parameter set: a product over the parameters that apply, given earlier choices. */
+/** Every sampled parameter set in a family's Cartesian sweep. */
 function combinations(family: SemanticFamilyDefinition): Record<string, unknown>[] {
   const properties = Object.entries((family.parameterSchema.properties ?? {}) as Record<string, Schema>);
   // Parameters that others depend on come first, so x-only-when sees their value.
@@ -89,9 +94,20 @@ function combinations(family: SemanticFamilyDefinition): Record<string, unknown>
 const SILENT = /^No separate text:/u;
 
 export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
-  const report: FamilyAudit = { family_id: family.id, version: family.version, combinations: 0, silent: 0, unrendered: [], collisions: [], problems: [] };
+  const sampling = familySampling(family);
+  const report: FamilyAudit = {
+    family_id: family.id,
+    version: family.version,
+    sampling,
+    combinations: 0,
+    silent: 0,
+    unrendered: [],
+    collisions: [],
+    problems: [],
+  };
   const rendered: Array<{ parameters: Record<string, unknown>; text: string }> = [];
-  for (const parameters of combinations(family)) {
+  const parameterSets = sampling === "pairwise" ? boundedCombinations(family) : combinations(family);
+  for (const parameters of parameterSets) {
     report.combinations += 1;
     const preview = previewLeaf({ family_id: family.id, family_version: family.version, parameters });
     if (preview.problem !== null || preview.text === null) report.problems.push({ parameters, problem: preview.problem ?? "No text." });
@@ -106,26 +122,33 @@ export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
       if (!(name in item.parameters)) continue;
       const { [name]: value, ...others } = item.parameters;
       const key = hashJson(others);
-      buckets.set(key, [...(buckets.get(key) ?? []), { value, text: item.text }]);
+      const bucket = buckets.get(key);
+      if (bucket) bucket.push({ value, text: item.text });
+      else buckets.set(key, [{ value, text: item.text }]);
     }
     let varied = false;
     let changed = false;
     const seen = new Set<string>();
     const collisions: FamilyAudit["collisions"] = [];
     for (const bucket of buckets.values()) {
-      for (const [index, left] of bucket.entries()) {
-        for (const right of bucket.slice(index + 1)) {
-          varied = true;
-          if (left.text !== right.text) {
-            changed = true;
-            continue;
-          }
-          const pair = [left.value, right.value] as [unknown, unknown];
-          const key = JSON.stringify([pair, left.text]);
-          if (!seen.has(key)) {
-            seen.add(key);
-            collisions.push({ parameter: name, values: pair, text: left.text });
-          }
+      if (bucket.length < 2) continue;
+      varied = true;
+      const byText = new Map<string, Array<{ value: unknown; text: string }>>();
+      for (const item of bucket) {
+        const sameText = byText.get(item.text);
+        if (sameText) sameText.push(item);
+        else byText.set(item.text, [item]);
+      }
+      if (byText.size > 1) changed = true;
+      for (const sameText of byText.values()) {
+        if (sameText.length < 2) continue;
+        const anchor = sameText[0]!;
+        for (let index = 1; index < sameText.length; index += 1) {
+          const pair = [anchor.value, sameText[index]!.value] as [unknown, unknown];
+          const key = hashJson(pair);
+          if (seen.has(key)) continue;
+          seen.add(key);
+          collisions.push({ parameter: name, values: pair, text: anchor.text });
         }
       }
     }
@@ -138,8 +161,9 @@ export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
 const audits = new Map<SemanticFamilyDefinition, FamilyAudit>();
 
 /**
- * One family's audit, computed once per process, since it depends only on code. Families with
- * wide parameter domains take minutes to enumerate, so each is audited only when first asked for.
+ * One family's audit, computed once per process, since it depends only on code. Wide parameter
+ * domains use bounded pairwise sampling; caching also prevents repeated Leaves/API calls from
+ * re-rendering the same observations.
  */
 function cachedAudit(family: SemanticFamilyDefinition): FamilyAudit {
   let audit = audits.get(family);
@@ -160,7 +184,8 @@ export function describerGaps(familyId: string, parameters: Record<string, unkno
   const family = REVIEWED_FAMILY_REGISTRY.find((item) => !item.deprecated && item.id === familyId);
   if (!family) return [];
   const audit = cachedAudit(family);
-  const gaps = new Set(audit.unrendered.filter((name) => name in parameters).map((name) => `The English never shows ${name.replaceAll("_", " ")}.`));
+  const hiddenPrefix = audit.sampling === "pairwise" ? "The sampled English never shows" : "The English never shows";
+  const gaps = new Set(audit.unrendered.filter((name) => name in parameters).map((name) => `${hiddenPrefix} ${name.replaceAll("_", " ")}.`));
   for (const collision of audit.collisions) {
     if (!(collision.parameter in parameters)) continue;
     if (collision.values.some((value) => hashJson(value) === hashJson(parameters[collision.parameter]))) {

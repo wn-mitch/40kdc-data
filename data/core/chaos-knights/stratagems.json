@@ -44,7 +44,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "hellforged-construction-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -224,7 +240,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "spiteful-demise-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -401,7 +425,24 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights",
+        "Character"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "runes-of-disdain-lords-of-dread-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -434,7 +475,11 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "avenge-the-masters-iconoclast-fiefdom-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -492,7 +537,40 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "harrying-hounds-houndpack-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -609,7 +687,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "storm-of-darkness-traitoris-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -696,7 +790,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "diabolic-bulwark-infernal-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -761,7 +871,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Knight Tyrant"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "rune-cursed-stronghold-bastions-of-tyranny-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -845,7 +962,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "War Dog"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "insensate-bloodthirst-hunting-warpack-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -989,7 +1113,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "feral-arrogance-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -1049,7 +1180,23 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "beasthide-manifestation-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",
@@ -1136,7 +1283,34 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Chaos Knights"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "wounds",
+            "parameters": {
+              "subject": "this-unit",
+              "lost": true
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "goaded-beast-helhunt-lance-chaos-knights",
     "game_version": {
       "edition": "11th",

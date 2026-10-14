@@ -10,6 +10,18 @@ import "strings"
 
 func dekebab(s string) string { return strings.ReplaceAll(s, "-", " ") }
 
+// eventRelationPhrase renders exact causal links; sharing the actor is not enough.
+func eventRelationPhrase(filter map[string]any) string {
+	phrase := ""
+	if filter["caused_by"] != nil {
+		phrase += " as a result of the exact bound event"
+	}
+	if filter["causes"] != nil {
+		phrase += " and causing the exact bound event"
+	}
+	return phrase
+}
+
 // cstr is the condition module's `str`: null -> "?", else JS String(v).
 func cstr(v any) string {
 	if v == nil {
@@ -203,7 +215,11 @@ func unitFilterPhrase(f map[string]any) string {
 	}
 	noun := "unit"
 	if f["level"] == "model" {
-		noun = "model"
+		if role := cstr(f["attachment_role"]); role != "" && role != "?" {
+			noun = role + " model"
+		} else {
+			noun = "model"
+		}
 	}
 	// "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
 	compact, isCompact := keywordAlternatives(f)
@@ -212,7 +228,7 @@ func unitFilterPhrase(f map[string]any) string {
 		s = owner + orList(compact) + " " + noun
 	}
 	lower := strings.ToLower(s)
-	if strings.ContainsRune("aeio", rune(lower[0])) || (lower[0] == 'u' && !strings.HasPrefix(lower, "uni")) {
+	if lower != "" && (strings.ContainsRune("aeio", rune(lower[0])) || (lower[0] == 'u' && !strings.HasPrefix(lower, "uni"))) {
 		s = "an " + s
 	} else {
 		s = "a " + s
@@ -240,6 +256,12 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["lacks_ability"]) {
 		s += " without the " + orList(idLabelList(f["lacks_ability"])) + " ability"
 	}
+	if isList(f["model_names"]) {
+		s += " named " + orList(cstrList(f["model_names"]))
+	}
+	if isList(f["unit_ids"]) {
+		s += " with unit ID " + orList(cstrList(f["unit_ids"]))
+	}
 	if f["embarked_in"] != nil {
 		s += " embarked within " + unitRefPhrase(f["embarked_in"], "the unit")
 	}
@@ -247,10 +269,14 @@ func unitFilterPhrase(f map[string]any) string {
 		s += " in " + unitRefPhrase(f["member_of"], "the unit")
 	}
 	if f["engaged_with"] != nil {
-		s += " within Engagement Range of " + unitFilterPhrase(mapOr(f["engaged_with"]))
+		s += " within Engagement Range of " + unitRefPhrase(f["engaged_with"], "the unit")
 	}
 	if f["not_engaged_with"] != nil {
-		s += " not within Engagement Range of any " + replaceFirst(leadingArticleRe, unitFilterPhrase(mapOr(f["not_engaged_with"])), "")
+		ref := unitRefPhrase(f["not_engaged_with"], "the unit")
+		if m, ok := asMap(f["not_engaged_with"]); ok && m != nil && m["selection_var"] == nil && m["event_var"] == nil && m["stratagem_target"] == nil {
+			ref = "any " + strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(ref, "a "), "an "))
+		}
+		s += " not within Engagement Range of " + ref
 	}
 	if f["designated"] != nil {
 		s += " that is " + designationPhrase(cstr(f["designated"]), false)
@@ -271,7 +297,9 @@ func unitFilterPhrase(f map[string]any) string {
 		}
 		s += " that is " + andList(negs)
 	}
-	if f["visible"] == true {
+	if visible, ok := asMap(f["visible"]); ok && visible != nil {
+		s += " that is visible to " + unitRefPhrase(visible["to"], "the unit")
+	} else if f["visible"] == true {
 		s += " that is visible to it"
 	}
 	if within, ok := asMap(f["within"]); ok && within != nil {
@@ -281,7 +309,7 @@ func unitFilterPhrase(f map[string]any) string {
 		}
 		s += "within " + rangePhrase(within["range"])
 		if within["of"] != nil {
-			s += " of " + unitRefPhrase(within["of"], "the unit")
+			s += " of " + placeRefPhrase(within["of"])
 		}
 	}
 	if f["excluding"] != nil {
@@ -321,9 +349,41 @@ func unitRefPhrase(ref any, fallback string) string {
 	return fallback
 }
 
+// placeRefPhrase preserves objective and marker origins instead of flattening
+// them to a unit reference.
+func placeRefPhrase(ref any) string {
+	if ref == "battlefield-edge" {
+		return "a battlefield edge"
+	}
+	if ref == "battlefield-centre" {
+		return "the centre of the battlefield"
+	}
+	if r, ok := asMap(ref); ok && r != nil {
+		if objective, ok := asMap(r["objective"]); ok && objective != nil {
+			if objective["selection_var"] != nil {
+				return "that objective marker"
+			}
+			phrase := objectivePhrase(objective, false, "objective marker")
+			return article(phrase) + " " + phrase
+		}
+		if marker := r["marker"]; marker != nil {
+			phrase := ejstr(marker)
+			return article(phrase) + " " + dekebab(phrase) + " marker"
+		}
+	}
+	return unitRefPhrase(ref, "the unit")
+}
+
 // subjectOf renders the subject of a predicate.
 func subjectOf(p map[string]any, fallback string) string {
 	return unitRefPhrase(p["subject"], fallback)
+}
+
+func ruleRefPhrase(value any) string {
+	if ref, ok := asMap(value); ok && ref != nil {
+		return idLabel(ref["option_id"]) + " option of " + idLabel(ref["ability_id"])
+	}
+	return idLabel(value)
 }
 
 var auraRanges = map[string]string{"nurgles-gift-death-guard": "Contagion Range", "synapse-tyranids": "Synapse Range"}
@@ -356,6 +416,17 @@ func rangePhrase(r any) string {
 				return p
 			}
 			return "the " + idLabel(x["aura_of"]) + " range"
+		}
+		if tiers, ok := asList(x["per_battle_round"]); ok && len(tiers) > 0 {
+			rounds := make([]string, len(tiers))
+			for i, tier := range tiers {
+				rounds[i] = rangePhrase(tier)
+			}
+			indices := make([]string, len(tiers))
+			for i := range tiers {
+				indices[i] = numStr(float64(i + 1))
+			}
+			return strings.Join(rounds, ", ") + " in battle rounds " + strings.Join(indices, ", ") + " respectively (using the final range in later battle rounds)"
 		}
 	}
 	return "?\""

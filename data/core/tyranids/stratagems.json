@@ -246,7 +246,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Norn Assimilator"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "catalytic-biofortification-talons-of-the-norn-queen-tyranids",
     "game_version": {
       "edition": "11th",
@@ -304,7 +311,17 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Deathleaper",
+        "Lictor",
+        "Neurolictor",
+        "Von Ryan’s Leapers"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "counterpredation-ambush-predators-tyranids",
     "game_version": {
       "edition": "11th",

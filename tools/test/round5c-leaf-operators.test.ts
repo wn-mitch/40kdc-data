@@ -201,10 +201,16 @@ describe("Round 5C core keyword index", () => {
     // Fabricated fixture keywords only.
     writeFileSync(join(root, "core", "alpha", "units.json"), JSON.stringify([{ keywords: ["Infantry", "Squadron"], faction_keywords: ["T’Alpha Host"] }]));
     writeFileSync(join(root, "core", "alpha", "detachments.json"), JSON.stringify([{ granted_keywords: [{ keyword: "Armoured Vanguard", to_keywords: ["Squadron"] }] }]));
+    mkdirSync(join(root, "enrichment", "alpha"), { recursive: true });
+    writeFileSync(join(root, "enrichment", "alpha", "abilities.json"), JSON.stringify([{ effect: {
+      type: "sequence", steps: [{ type: "keyword-grant", target: { all_of: ["Not A Grant"] }, modifier: { keywords: ["Celestial Foundry"] } }],
+    } }]));
     const index = keywordIndex(root);
     expect(splitKeywords("ARMOURED VANGUARD", index)).toEqual(["Armoured Vanguard"]);
     expect(splitKeywords("T'ALPHA HOST INFANTRY", index)).toEqual(["T’Alpha Host", "Infantry"]);
     expect(splitKeywords("T’ALPHA HOST", index)).toEqual(["T’Alpha Host"]);
+    expect(splitKeywords("CELESTIAL FOUNDRY INFANTRY", index)).toEqual(["Celestial Foundry", "Infantry"]);
+    expect(() => splitKeywords("NOT A GRANT", index)).toThrow(/not a unit keyword/u);
     expect(() => splitKeywords("ARMOURED SKIRMISHER", index)).toThrow(/not a unit keyword/u);
   });
 });

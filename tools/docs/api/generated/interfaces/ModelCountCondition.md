@@ -6,7 +6,7 @@
 
 # Interface: ModelCountCondition
 
-Defined in: [generated.ts:1890](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1890)
+Defined in: [generated.ts:1634](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1634)
 
 [composition] The subject has this many models (with `keyword`, if given).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1890](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"model-count"`
 
-Defined in: [generated.ts:1891](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1891)
+Defined in: [generated.ts:1635](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1635)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1891](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1892](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1892)
+Defined in: [generated.ts:1636](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1636)
 
 #### Index Signature
 

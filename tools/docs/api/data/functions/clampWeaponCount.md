@@ -8,7 +8,7 @@
 
 > **clampWeaponCount**(`bounds`, `id`, `requested`): `number`
 
-Defined in: [data/loadout.ts:428](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/loadout.ts#L428)
+Defined in: [data/loadout.ts:429](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/loadout.ts#L429)
 
 Clamp a single weapon's requested count into its valid range. Ids with no
 bound (not part of this unit's loadout) are returned unchanged but floored at

@@ -14,6 +14,7 @@ accumulation below deliberately mirrors the TS loop order.
 
 from __future__ import annotations
 
+import json
 import math
 import re
 from typing import Any
@@ -117,10 +118,11 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
             if isinstance(n, str)
         ]
         ctx["weaponNames"] = list(dict.fromkeys(names))
+    if ctx.get("weaponKeywordRefs") is None:
+        ctx["weaponKeywordRefs"] = list(weapon_profile.get("keywords") or [])
     if ctx.get("weaponKeywords") is None:
-        # The profile's catalog keyword ids drive `applicableWhen.weaponKeyword`.
         ctx["weaponKeywords"] = list(
-            dict.fromkeys(ref["keyword_id"] for ref in weapon_profile.get("keywords") or [])
+            dict.fromkeys(ref["keyword_id"] for ref in ctx["weaponKeywordRefs"])
         )
 
     # Auto-inject weapon-keyword buffs from the attacker profile, then append
@@ -149,9 +151,10 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
         target_model_count = (unit.get("model_count") or {}).get("min")
     if target_model_count is None:
         target_model_count = 1
+    blast_params = (blast.get("parameters") or {}) if blast else {}
+    blast_value = blast_params.get("value") if "value" in blast_params else 0
     blast_extra = (
-        math.floor(target_model_count / 5)
-        * eval_stat_value((blast.get("parameters") or {}).get("value", 1))
+        math.floor(target_model_count / 5) * eval_stat_value(blast_value)
         if blast
         else 0
     )
@@ -232,16 +235,37 @@ def crunch(input: EngineInput, dataset: Dataset | None = None) -> EngineOutput:
     s_stat = eval_stat_value(stats.get("S")) + resolved["strengthMod"]["value"]
     t_stat = unit_profile["T"] + resolved["toughnessMod"]["value"]
     std_wound_needed = _wound_threshold(s_stat, t_stat)
-    anti = _find_keyword(resolved, "anti")
-    anti_threshold: float = 7  # unreachable
-    if anti:
+    anti_threshold: float = 7
+    for entry in resolved["extraKeywords"]:
+        anti = entry.get("keywordRef") or {}
+        if anti.get("keyword_id") != "anti":
+            continue
         params = anti.get("parameters") or {}
         target_kw = params.get("target_keyword")
-        target_kw = target_kw.lower() if isinstance(target_kw, str) else None
-        if target_kw and _anti_target_matches(target_kw, target_keywords):
-            threshold = _js_number(params.get("threshold"))
-            if math.isfinite(threshold):
-                anti_threshold = threshold
+        required = params.get("required_target_keywords_any")
+        excluded = params.get("excluded_target_keywords")
+        has_target = (
+            isinstance(target_kw, str)
+            or isinstance(required, list)
+            or isinstance(excluded, list)
+        )
+        if not has_target:
+            continue
+        if isinstance(target_kw, str) and target_kw.lower() not in target_keywords:
+            continue
+        if isinstance(required, list) and not any(
+            isinstance(keyword, str) and keyword.lower() in target_keywords
+            for keyword in required
+        ):
+            continue
+        if isinstance(excluded, list) and any(
+            isinstance(keyword, str) and keyword.lower() in target_keywords
+            for keyword in excluded
+        ):
+            continue
+        threshold = _js_number(params.get("threshold"))
+        if threshold.is_integer() and 2 <= threshold <= 6:
+            anti_threshold = min(anti_threshold, threshold)
     crit_wound_threshold = min(
         6, anti_threshold, (resolved["critThresholds"].get("wound") or {}).get("value", 6)
     )
@@ -525,15 +549,13 @@ def _js_number(v: Any) -> float:
 
 
 def eval_stat_value(v: Any) -> float:
-    """Mean value of a stat (number or dice expression like ``"D6"``,
-    ``"2D6"``, ``"D3+1"``, ``"D6-1"``). Unrecognised strings raise — better to
-    crash than to silently return 0 and produce a confidently wrong damage
-    projection."""
+    """Evaluate a numeric or dice quantity; unresolved quantities are errors."""
     if isinstance(v, (int, float)) and not isinstance(v, bool):
-        return v
+        if math.isfinite(v):
+            return float(v)
+        raise ValueError(f"eval_stat_value: unresolved quantity {json.dumps(v)}")
     if not isinstance(v, str):
-        n = _js_number(v)
-        return n if math.isfinite(n) and n else 0
+        raise ValueError(f"eval_stat_value: unresolved quantity {json.dumps(v)}")
     trimmed = v.strip()
     if trimmed == "":
         return 0

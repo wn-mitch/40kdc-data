@@ -6,7 +6,7 @@
 
 # Interface: ModelProfileCondition
 
-Defined in: [generated.ts:1899](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1899)
+Defined in: [generated.ts:1643](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1643)
 
 [composition] The subject model uses this datasheet model profile (Szarekh, not a Triarchal Menhir).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1899](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"model-profile"`
 
-Defined in: [generated.ts:1900](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1900)
+Defined in: [generated.ts:1644](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1644)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1900](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1901](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1901)
+Defined in: [generated.ts:1645](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1645)
 
 #### subject?
 

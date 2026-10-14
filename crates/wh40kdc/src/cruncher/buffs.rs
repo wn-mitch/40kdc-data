@@ -235,24 +235,31 @@ pub struct BuffApplicability {
     /// Attacker must carry this keyword (case-insensitive).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires_attacker_keyword: Option<String>,
-    /// Target must carry none of these keywords (case-insensitive). Permissive when the target's
-    /// keywords are unknown.
+    /// Target must carry none of these keywords; unknown target keywords fail the gate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub excluded_target_keywords: Option<Vec<String>>,
-    /// Range-gated abilities (DSL `scope.range_inches`): the buff applies only
-    /// when the target is within this many inches. Permissive when the caller
-    /// leaves `EngineContext::distance_inches` unset.
+    /// Full canonical predicates retained by enemy selections.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_filter: Option<Value>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_filter: Option<Value>,
+    /// An explicit inch-range gate; an unknown distance does not satisfy it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max_range_inches: Option<f64>,
-    /// Only attacks with the weapon of this name (lower case). Permissive when the caller leaves
-    /// `EngineContext::weapon_names` unset; the engine always sets it.
+    /// Only attacks with this lower-case weapon name; unknown names fail the gate.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_name: Option<String>,
-    /// Only attacks with a weapon that has this weapon ability (catalog keyword id, e.g.
-    /// `"lethal-hits"`), printed or granted by another live buff. Permissive when the caller
-    /// leaves `EngineContext::weapon_keywords` unset; the engine always sets it.
+    /// Canonical name exclusion; unknown weapon names cannot satisfy it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub weapon_keyword: Option<String>,
+    pub excluded_weapon_name: Option<String>,
+    /// Catalog-backed alternatives; all supplied reference parameters must match.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keywords: Option<Vec<WeaponKeywordRef>>,
+    /// Conjunctive nested gates preserve separately authored weapon scopes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_requirements: Option<Vec<BuffApplicability>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub excluded_weapon_keywords: Option<Vec<WeaponKeywordRef>>,
 }
 
 /// A single buff: where it came from, when it applies, what it contributes.
@@ -265,12 +272,36 @@ pub struct Buff {
     pub contribution: BuffContribution,
 }
 
+/// Actual membership in an attached unit, supplied by the caller's roster state.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum AttachmentRole {
+    Leader,
+    Bodyguard,
+}
+
 /// Shared engine context. Carries the phase plus a few attacker/target flags
 /// the keyword translator and the resolver both need.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EngineContext {
     pub phase: Phase,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_unit_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_unit_id: Option<String>,
+    /// Caller-attested event recipients, independent of current attachment state.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub recipient_snapshots: Vec<super::recipient_snapshots::RecipientSnapshot>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub battle_round: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attacker_attachment_role: Option<AttachmentRole>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_attachment_role: Option<AttachmentRole>,
+    /// Actual roles in the combined unit, keyed by source unit id.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attachment_roles: Option<BTreeMap<String, AttachmentRole>>,
     /// Attacker has not moved this turn — Heavy fires its +1 to hit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_stationary: Option<bool>,
@@ -281,7 +312,7 @@ pub struct EngineContext {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub within_half_range: Option<bool>,
     /// Distance to the target in inches; drives `applicable_when.max_range_inches`.
-    /// Unset = range gates evaluate permissively.
+    /// Unset leaves range gates unsatisfied.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub distance_inches: Option<f64>,
     /// Attacker benefits from cover (mostly informational).
@@ -302,6 +333,8 @@ pub struct EngineContext {
     /// The buffed unit is part of a combined ("attached") unit.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_attached: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_attached: Option<bool>,
     /// The army's Army Faction id. Drives the `army-faction` condition; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub army_faction: Option<String>,
@@ -314,14 +347,16 @@ pub struct EngineContext {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_guided: Option<bool>,
     /// Lower-cased names of the attacking weapon and its profile. Drives
-    /// `applicable_when.weapon_name`; `None` leaves weapon-name gates permissive.
+    /// `applicable_when.weapon_name`; unknown names cannot satisfy a constraint.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_names: Option<Vec<String>>,
-    /// Catalog keyword ids printed on the attacking weapon profile. Drives
-    /// `applicable_when.weapon_keyword` together with the keywords live buffs grant; `None`
-    /// leaves weapon-keyword gates permissive.
+    /// Catalog ids for unrated keyword matching. Rated selectors require
+    /// `weapon_keyword_refs`; live grants retain their full references.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub weapon_keywords: Option<Vec<String>>,
+    /// Printed keyword references, preserving ratings for canonical weapon selectors.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weapon_keyword_refs: Option<Vec<WeaponKeywordRef>>,
 }
 
 impl EngineContext {
@@ -329,6 +364,13 @@ impl EngineContext {
     pub fn new(phase: Phase) -> Self {
         EngineContext {
             phase,
+            attacker_unit_id: None,
+            target_unit_id: None,
+            recipient_snapshots: Vec::new(),
+            battle_round: None,
+            attacker_attachment_role: None,
+            target_attachment_role: None,
+            attachment_roles: None,
             attacker_stationary: None,
             attacker_charged: None,
             within_half_range: None,
@@ -339,11 +381,13 @@ impl EngineContext {
             target_keywords: None,
             timing: None,
             attacker_attached: None,
+            target_attached: None,
             army_faction: None,
             battle_size: None,
             attacker_guided: None,
             weapon_names: None,
             weapon_keywords: None,
+            weapon_keyword_refs: None,
         }
     }
 }

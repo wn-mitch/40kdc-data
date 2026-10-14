@@ -15,7 +15,7 @@ var permissionActivities = map[string]string{
 	"issue-order": "issue Orders", "attempt-ritual": "attempt Rituals", "use-enhancement": "use Enhancements", "move": "move", "observe": "act as an Observer",
 }
 var permissionAfter = map[string]string{
-	"advance": "Advanced", "fall-back": "Fell Back", "disembark": "disembarked", "normal-move": "made a Normal move",
+	"advance": "Advanced", "fall-back": "Fell Back", "disembark": "disembarked", "normal": "made a Normal move",
 	"charge": "made a Charge move", "remain-stationary": "Remained Stationary", "set-up": "was set up",
 }
 var permissionDespite = map[string]string{

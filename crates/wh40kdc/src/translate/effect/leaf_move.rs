@@ -265,6 +265,9 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
 pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     let kinds = map_arr(m, "applies_to_moves", |x| move_noun(&jv(x))).map(|k| and_list(&k));
     let mut clauses: Vec<String> = Vec::new();
+    if sv(m, "maximum") == Some("unlimited") {
+        clauses.push(format!("{subj} can move any distance"));
+    }
     if let Some(bonus) = nn(m, "distance_bonus") {
         let n = num(Some(bonus));
         let moves = match &kinds {
@@ -412,18 +415,18 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
     if sv(m, "via") == Some("deep-strike") {
         s.push_str(" using the Deep Strike rules");
     }
-    if sv(m, "via") == Some("cult-ambush-marker") {
+    if sv(m, "via") == Some("cult-ambush") {
         s.push_str(" using a Cult Ambush marker");
     }
-    if let Some(range) = nn(m, "marker_range").and_then(|v| v.as_object()) {
+    if let Some(range) = nn(m, "marker_range").map(|value| obj(Some(value))) {
         let wholly = if is_true(range, "wholly") {
             "wholly "
         } else {
             ""
         };
         s.push_str(&format!(
-            ", {wholly}within {}\" of that marker",
-            jv(range.get("inches").unwrap_or(&Value::Null))
+            ", {wholly}within {} of that marker",
+            range_phrase(range.get("range"))
         ));
     }
     s.push_str(&mode_clause(m));
@@ -451,14 +454,14 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
     s.push_str(&placement_limits(m, ctx));
     if let Some(edge) = nn(m, "within_edge") {
         s.push_str(&format!(
-            " wholly within {}\" of a battlefield edge",
-            jv(edge)
+            " wholly within {} of a battlefield edge",
+            range_phrase(Some(edge))
         ));
     }
     if let Some(d) = nn(m, "min_enemy_distance") {
         s.push_str(&format!(
-            " more than {}\" away from all enemy models",
-            jv(d)
+            " more than {} away from all enemy models",
+            range_phrase(Some(d))
         ));
     }
     if let Some(md) = nn(m, "min_distance_from") {

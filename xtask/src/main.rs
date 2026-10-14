@@ -16,6 +16,7 @@ use schemars::schema::RootSchema;
 use serde_json::Value;
 use typify::{TypeSpace, TypeSpaceSettings};
 
+mod compact;
 mod dispatch;
 
 fn main() -> Result<()> {
@@ -216,6 +217,7 @@ fn codegen() -> Result<()> {
     let tokens = type_space.to_stream();
     let mut file = syn::parse2::<syn::File>(tokens)
         .context("generated token stream did not parse as a Rust file")?;
+    compact::install(&mut file)?;
     dispatch::install(&mut file, &dispatch_schema)?;
     let formatted = prettyplease::unparse(&file);
 

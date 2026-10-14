@@ -37,7 +37,7 @@ export function optionalCostTag(leaf: CompileLeaf): string {
 export function optionalCostCondition(leaf: CompileLeaf): Node {
   const pool = String(leaf.parameters.pool);
   if (isSpendRead(leaf)) {
-    return { type: "designated", parameters: { subject: leaf.parameters.subject, tag: optionalCostTag(leaf) } };
+    return { type: "matches", parameters: { subject: leaf.parameters.subject, filter: { designated: optionalCostTag(leaf) } } };
   }
   const spent: Node = { type: "happened", parameters: { event: "resource-spent", filter: { pool }, window: "turn" } };
   return leaf.parameters.negated === true ? { operator: "not", operands: [spent] } : spent;
@@ -152,7 +152,7 @@ export function wrapOptionalSpends(body: Node | Node[], list: readonly CompileLe
 
 /** A trigger's gates: the designation is not yet set, and no "or" alternative holds. */
 function triggerGates(list: readonly CompileLeaf[], reads: readonly CompileLeaf[], tag: string, holder: string): Node[] {
-  const gates: Node[] = [negate({ type: "designated", parameters: { subject: holder, tag } })];
+  const gates: Node[] = [negate({ type: "matches", parameters: { subject: holder, filter: { designated: tag } } })];
   for (const read of reads) {
     const partners = partnerGroups(list, read);
     if (partners.length === 0) continue;

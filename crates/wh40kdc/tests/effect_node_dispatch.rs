@@ -32,12 +32,12 @@ fn embedded_bundle_parses_on_a_two_mib_stack() {
 #[test]
 fn deeply_nested_effect_parses_on_a_two_mib_stack() {
     let mut effect = json!({"type": "no-effect"});
-    // 12 rounds = 24 effect levels, over 3x the deepest shipped ability (7).
+    // Twelve paired containers exercise 24 nested effect levels.
     for _ in 0..12 {
         effect = json!({
             "type": "conditional",
             "condition": {"operator": "not", "operands": [
-                {"operator": "and", "operands": [{"type": "unit-state", "parameters": {"state": "battle-shocked"}}]}
+                {"operator": "and", "operands": [{"type": "matches", "parameters": {"subject": "this-unit", "filter": {"all_of": ["INFANTRY"]}}}]}
             ]},
             "effect": {"type": "sequence", "steps": [effect]}
         });

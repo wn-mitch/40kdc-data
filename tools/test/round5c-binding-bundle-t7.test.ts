@@ -57,12 +57,12 @@ describe("usage-limit per selected-unit (version 5 widens per only)", () => {
 });
 
 describe("event attack_type on damage-allocated (widens the event family)", () => {
-  it("accepts ranged on a damage-allocated moment and keeps the moment's other kinds unchanged", () => {
+  it("accepts ranged and psychic on a damage-allocated moment and keeps the moment's other kinds unchanged", () => {
     const version = currentFamilyVersion("event");
     expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "ranged" }, version)).toEqual({ kind: "damage-allocated", attack_type: "ranged" });
     expect(normalizeFingerprintParameters("event", { kind: "damage-allocated" }, version)).toEqual({ kind: "damage-allocated" });
     expect(() => normalizeFingerprintParameters("event", { kind: "attack-made", attack_type: "ranged" }, version)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "psychic" }, version)).toThrow();
+    expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", attack_type: "psychic" }, version)).toEqual({ kind: "damage-allocated", attack_type: "psychic" });
   });
 
   it("refuses attack_type at the version before", () => {
@@ -99,8 +99,8 @@ describe("per selected-unit usage lowers to the unit selection's cap (8553 shape
   it("caps the enemy selection and leaves the ability without a usage", () => {
     const mechanics = mechanicsOf(TEXT, ITEMS);
     const selector = mechanics.effect.effect.selector;
-    expect(selector.selection_limit).toEqual({ count: 1, period: "turn" });
-    expect(selector.owner).toBe("enemy");
+    expect(selector.limit).toEqual({ count: 1, period: "turn" });
+    expect(selector.filter).toMatchObject({ owner: "enemy" });
     expect(mechanics.usage).toBeUndefined();
   });
 
@@ -127,7 +127,7 @@ describe("per selected-unit usage lowers to the unit selection's cap (8553 shape
     ]);
     const designate = mechanics.effect.effect;
     expect(designate.type).toBe("designate-target");
-    expect(designate.select.selection_limit).toEqual({ count: 1, period: "turn" });
+    expect(designate.select.selector.limit).toEqual({ count: 1, period: "turn" });
     expect(mechanics.usage).toBeUndefined();
   });
 
@@ -142,7 +142,7 @@ describe("per selected-unit usage lowers to the unit selection's cap (8553 shape
       ["Once per turn, the same unit", "usage-limit", { frequency: "once-per-turn", per: "selected-unit" }],
       ["Once per turn, this unit", "usage-limit", { frequency: "once-per-turn", per: "unit" }],
     ]);
-    expect(mechanics.effect.effect.select.selection_limit).toEqual({ count: 1, period: "turn" });
+    expect(mechanics.effect.effect.select.selector.limit).toEqual({ count: 1, period: "turn" });
     expect(mechanics.usage).toMatchObject({ frequency: "once-per-turn", per: "unit" });
   });
 });
@@ -162,8 +162,8 @@ describe("a model's attack that targets that unit lowers with the selected unit 
   it("compiles with the model selection's cap and the attacker as the selected unit", () => {
     const mechanics = mechanicsOf(TEXT, ITEMS("that-unit"));
     const selector = mechanics.effect.effect.selector;
-    expect(selector.target_kind).toBe("model");
-    expect(selector.selection_limit).toEqual({ count: 1, period: "turn" });
+    expect(selector.filter.level).toBe("model");
+    expect(selector.limit).toEqual({ count: 1, period: "turn" });
     expect(JSON.stringify(mechanics.effect.effect.effect)).toContain("\"target\":\"selected-unit\"");
   });
 
@@ -186,7 +186,7 @@ describe("attack whose defender is the following filter binds visible to that de
   it("binds the visible subject to the defender, and the defender is an enemy unit", () => {
     const mechanics = mechanicsOf(TEXT, ITEMS());
     const conditions = JSON.stringify(mechanics.effect);
-    expect(conditions).toContain("\"type\":\"visible\",\"parameters\":{\"subject\":\"defender\",\"to\":\"this-model\"}");
+    expect(conditions).toContain('"type":"matches","parameters":{"subject":"defender","filter":{"visible":{"to":"this-model"}}}');
     expect(conditions).toContain("\"owner\":\"enemy\"");
   });
 
@@ -243,21 +243,24 @@ describe("for-each including the target: the keyword narrows only the other unit
   it("does not require the target to have the keyword, and gates only the others", () => {
     const mechanics = mechanicsOf(TEXT, ITEMS());
     const selector = mechanics.effect.effect.selector;
-    expect(selector.keywords).toBeUndefined();
+    expect(selector.filter).toEqual({ owner: "enemy" });
     const others = selector.eligibility.operands[1];
     expect(selector.eligibility.operands[0]).toEqual({ type: "same-unit", parameters: { as: "defender" } });
     expect(JSON.stringify(others)).toContain("\"all_of\":[\"BRAVO\"]");
   });
 
-  it("refuses a keyword with no range or other filter naming the other units", () => {
-    const errors = errorsOf("Shooting phase, just after selecting a target. The target unit and every other enemy BRAVO unit must take a Battle-shock test.", [
+  it("keeps the target and every other matching unit even without a range restriction", () => {
+    const mechanics = mechanicsOf("Shooting phase, just after selecting a target. The target unit and every other enemy BRAVO unit must take a Battle-shock test.", [
       ["Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
       ["just after selecting a target", "event", { kind: "targets-selected", action_kind: "shoot" }],
       ["The target unit and every other", "for-each-unit-select", { including: "target" }],
       ["enemy BRAVO unit", "unit-filter", { side: "enemy", keywords: ["BRAVO"] }],
       ["must take a Battle-shock test", "test", { target: "antecedent", test: "battle-shock" }],
     ]);
-    expect(errors.join(" ")).toContain("needs a range or a filter naming the other units");
+    expect(mechanics.effect.effect.selector).toEqual({ filter: { owner: "enemy" }, eligibility: { operator: "or", operands: [
+      { type: "same-unit", parameters: { as: "defender" } },
+      { type: "matches", parameters: { filter: { owner: "enemy", all_of: ["BRAVO"] } } },
+    ] } });
   });
 
   it("does not narrow the target by an excluded keyword", () => {

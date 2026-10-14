@@ -6,9 +6,9 @@
 
 # Interface: ControlsCondition
 
-Defined in: [generated.ts:2052](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2052)
+Defined in: [generated.ts:2071](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2071)
 
-[board] A player (default you) controls objectives matching the filter: at least count_min (default 1), at most count_max. compare: more-than-opponent means more objectives than the opponent.
+[board] A player controls objectives matching the filter. `count` supplies inclusive bounds; `compare` compares the controlling player's count with the named owner's count over the same objective filter; `proportion` compares controlled matching markers with a fraction of all matching markers.
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:2052](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"controls"`
 
-Defined in: [generated.ts:2053](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2053)
+Defined in: [generated.ts:2072](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2072)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:2053](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **parameters?**: `object`
 
-Defined in: [generated.ts:2054](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2054)
+Defined in: [generated.ts:2073](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2073)
 
 #### by?
 
@@ -34,14 +34,30 @@ Defined in: [generated.ts:2054](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **objective?**: [`ObjectiveFilter`](ObjectiveFilter.md)
 
-#### count\_min?
+#### count?
 
-> `optional` **count\_min?**: `number`
-
-#### count\_max?
-
-> `optional` **count\_max?**: `number`
+> `optional` **count?**: [`CountBounds`](CountBounds.md)
 
 #### compare?
 
-> `optional` **compare?**: `"more-than-opponent"`
+> `optional` **compare?**: `object`
+
+##### compare.owner
+
+> **owner**: `"friendly"` \| `"enemy"`
+
+##### compare.comparison
+
+> **comparison**: [`Comparison`](../type-aliases/Comparison.md)
+
+#### proportion?
+
+> `optional` **proportion?**: `object`
+
+##### proportion.comparison
+
+> **comparison**: [`Comparison`](../type-aliases/Comparison.md)
+
+##### proportion.fraction
+
+> **fraction**: `number`

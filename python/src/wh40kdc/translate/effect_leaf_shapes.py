@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from wh40kdc.translate.condition_refs import _and_list, _or_list
+from wh40kdc.translate.condition_refs import _and_list, _obj, _or_list
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -65,17 +65,19 @@ def _borrow_weapons(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         source = re.sub(r"\bunits\b", "models", source, count=1)
     else:
         source = "models embarked within it"
-    kind = f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else ""
-    excluded = m.get("exclude_weapon_keyword")
+    scope = _obj(m.get("weapons"))
+    kind = f"{jstr(scope['type'])} " if scope.get("type") else ""
+    excluded = scope.get("exclude_keyword")
     excl = (
         f" (excluding {' and '.join(bracket_keyword(k) for k in excluded)} weapons)"
         if isinstance(excluded, list) and excluded
         else ""
     )
     until = expiry_trail(m.get("until"))
+    duration = f" {until}" if until else ""
     return (
         f"{subj} can use one {kind}weapon{excl} from each of up to "
-        f"{dice_case(m.get('max_models'))} {source}{f' {until}' if until else ''}; "
+        f"{dice_case(m.get('max_models'))} {source}{duration}; "
         "those models cannot shoot"
     )
 
@@ -83,13 +85,12 @@ def _borrow_weapons(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _select_weapon(m: dict[str, Any], subj: str) -> str:
     n = num(m["count"] if m.get("count") is not None else 1)
     one = n == 1
-    named = f"{jstr(m['weapon_name'])} " if m.get("weapon_name") is not None else ""
-    kind = named + (f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else "")
-    kw = (
-        f" with [{jstr(m['weapon_keyword']).upper()}]"
-        if m.get("weapon_keyword") is not None
-        else ""
-    )
+    scope = _obj(m.get("weapons"))
+    named = f"{jstr(scope['name'])} " if scope.get("name") is not None else ""
+    kind = named + (f"{jstr(scope['type'])} " if scope.get("type") is not None else "")
+    keyword = scope.get("keyword")
+    refs = keyword if isinstance(keyword, list) else [keyword] if keyword is not None else []
+    kw = f" with {_or_list([bracket_keyword(k) for k in refs])}" if refs else ""
     count = "one" if one else jstr(m.get("count"))
     refer = "it as the selected weapon" if one else "them as the selected weapons"
     return (
@@ -120,6 +121,8 @@ def describe_shape_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str 
 def ability_activate(m: dict[str, Any], subj: str) -> str:
     """An ability resolved now, one of its options made active, or a fresh selection."""
     label = ability_label(m.get("ability"))
+    if m.get("procedure") == "oath":
+        return f"{subj} {v(subj, 'resolves')} the {label} Oath procedure again"
     consumed = (
         ", even if it has already been selected this battle"
         if m.get("ignore_consumed") is True

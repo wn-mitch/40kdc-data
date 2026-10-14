@@ -12,12 +12,26 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "NECRON WARRIORS"
-        ],
-        "within_inches": 3,
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "NECRON WARRIORS"
+          ],
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
+          "count": 1,
+          "period": "turn"
+        },
         "eligibility": {
           "type": "happened",
           "parameters": {
@@ -25,10 +39,6 @@
             "object": "this-unit",
             "window": "event"
           }
-        },
-        "selection_limit": {
-          "count": 1,
-          "period": "turn"
         }
       },
       "effect": {
@@ -181,13 +191,15 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -225,13 +237,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "event-subject",
-          "of": "this-model",
-          "range": {
-            "inches": 3
-          }
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "subject": "event-subject"
         }
       },
       "effect": {
@@ -265,12 +281,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "keywords": [
-          "CANOPTEK"
-        ],
-        "owner": "friendly",
-        "within_inches": 3
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "CANOPTEK"
+          ],
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -352,14 +378,24 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "NECRONS"
-        ],
-        "within_inches": 6,
-        "target_kind": "model",
-        "selection_limit": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "NECRONS"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "limit": {
           "count": 1,
           "period": "turn"
         }
@@ -453,21 +489,32 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "NECRONS",
-            "INFANTRY"
-          ],
-          "within_inches": 6,
-          "engagement_relation": "any",
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "NECRONS",
+              "INFANTRY"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -648,16 +695,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "keywords": [
-          "NECRONS"
-        ],
-        "owner": "friendly",
-        "within_inches": 12,
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "NECRONS"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -683,7 +742,7 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "NECRONS"
       ]
     },
@@ -714,7 +773,9 @@
         "modifier": {
           "roll": "hit",
           "succeeds_on": 5,
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1087,8 +1148,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -1113,11 +1176,11 @@
     "source_digest": "44952704aa874fc3cf4d82564f2cab6b351dcf7851d13989b385480a11fcf9b9",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "stealth"
+        "keywords": [
+          "STEALTH"
         ]
       }
     },
@@ -1242,20 +1305,24 @@
               {
                 "type": "attack-is",
                 "parameters": {
-                  "weapon_name": "Enmitic exterminator"
+                  "weapons": {
+                    "name": "Enmitic exterminator"
+                  }
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "any_of": [
-                        "MONSTER",
-                        "VEHICLE"
-                      ]
+                      "filter": {
+                        "any_of": [
+                          "MONSTER",
+                          "VEHICLE"
+                        ]
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
@@ -1268,17 +1335,21 @@
               {
                 "type": "attack-is",
                 "parameters": {
-                  "weapon_name": "Gauss destructor"
+                  "weapons": {
+                    "name": "Gauss destructor"
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1323,7 +1394,9 @@
           "modifier": {
             "roll": "hit",
             "subset": "ones",
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -1346,7 +1419,9 @@
             "modifier": {
               "roll": "hit",
               "subset": "all-failures",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         }
@@ -1376,8 +1451,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -1564,8 +1641,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -1623,20 +1702,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 18
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 18
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
-            "type": "visible",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "to": "this-unit"
+              "filter": {
+                "visible": {
+                  "to": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           }
         ]
@@ -1849,11 +1936,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "NECRONS"
-          ]
+          "filter": {
+            "all_of": [
+              "NECRONS"
+            ]
+          }
         }
       },
       "effect": {
@@ -1876,8 +1965,7 @@
       }
     },
     "scope": {
-      "duration": "permanent",
-      "aura_range_inches": 3
+      "duration": "permanent"
     },
     "unit_ids": [
       "canoptek-reanimator"
@@ -2005,11 +2093,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "role": "led",
+              "with": {
+                "all_of": [
+                  "NOBLE"
+                ]
+              }
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
+          }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
@@ -2028,7 +2139,7 @@
       "lychguard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "necrons"
   },
   {
@@ -2207,16 +2318,20 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "CRYPTEK"
-                ]
-              },
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "CRYPTEK"
+                    ]
+                  }
+                }
               }
             }
           },
@@ -2257,7 +2372,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2317,27 +2432,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "state": "on-battlefield"
+          "filter": {
+            "state": "on-battlefield"
+          },
+          "subject": "this-model"
         }
       },
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 1,
-          "target_kind": "model",
-          "keywords": [
-            "NECRONS",
-            "INFANTRY",
-            "CHARACTER"
-          ],
-          "excluded_keywords": [
-            "SKORPEKH LORD",
-            "EPIC HERO"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "NECRONS",
+              "INFANTRY",
+              "CHARACTER"
+            ],
+            "none_of": [
+              "SKORPEKH LORD",
+              "EPIC HERO"
+            ],
+            "level": "model"
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          }
         },
         "effect": {
           "type": "sequence",
@@ -2608,19 +2730,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "NECRONS"
-            ],
-            "excluding": "this-unit"
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "NECRONS"
+                ],
+                "excluding": "this-unit"
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -2655,9 +2781,11 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 3,
+        "range": {
+          "inches": 3
+        },
         "recipient_filter": {
-          "required_keywords": [
+          "all_of": [
             "NECRONS",
             "BATTLELINE"
           ]
@@ -2697,7 +2825,7 @@
     "ability_type": "unit",
     "behavior": "aura",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "NECRONS",
         "BATTLELINE"
       ]
@@ -2772,19 +2900,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "DESTROYER CULT"
-            ],
-            "excluding": "this-unit"
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "DESTROYER CULT"
+                ],
+                "excluding": "this-unit"
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -2818,11 +2950,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "DESTROYER CULT"
-          ]
+          "filter": {
+            "all_of": [
+              "DESTROYER CULT"
+            ]
+          }
         }
       },
       "effect": {
@@ -2836,8 +2970,13 @@
           }
         },
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -2851,10 +2990,10 @@
     "ability_type": "unit",
     "behavior": "aura",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "NECRONS"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "MONSTER",
         "TITANIC"
       ]
@@ -2950,13 +3089,17 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 12
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
               }
             }
           }
@@ -3027,9 +3170,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -3133,7 +3278,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -3161,8 +3306,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -3239,13 +3386,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "event-object",
-          "of": "this-model",
-          "range": {
-            "inches": 3
-          }
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "subject": "event-object"
         }
       },
       "effect": {
@@ -3344,40 +3495,59 @@
     "source_digest": "a8f1526d6d70d137521f79b1d8882e1e3e6a897199b2c2d48e481f746aed2d71",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "pinned",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-movement-phase"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "defender",
-              "modifier": {
-                "stat": "M",
-                "operation": "subtract",
-                "value": 2
-              }
-            },
-            {
-              "type": "roll-modifier",
-              "target": "defender",
-              "modifier": {
-                "roll": "charge",
-                "operation": "subtract",
-                "value": 2
-              }
-            }
-          ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "movement"
+          }
         }
       },
-      "duration": "battle-round"
+      "effect": {
+        "type": "designate-target",
+        "designation": "pinned",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "defender",
+                "modifier": {
+                  "stat": "M",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              },
+              {
+                "type": "roll-modifier",
+                "target": "defender",
+                "modifier": {
+                  "roll": "charge",
+                  "operation": "subtract",
+                  "value": 2
+                }
+              }
+            ]
+          }
+        },
+        "duration": "battle-round"
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -3387,7 +3557,7 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "[APPROX] Selection is restricted to an enemy unit within 18\" of and visible to this model; that 18\"/visibility restriction is not encoded, and the mark's until-your-next-Movement-phase window is modeled as one battle round. Pinned debuff (\u22122 Move, \u22122 to Charge rolls) mirrors the grav-pinned encoding. Full rule in raw-text store.",
+    "community_notes": "[APPROX] Selection is restricted to an enemy unit within 18\" of and visible to this model; that 18\"/visibility restriction is not encoded, and the mark's until-your-next-Movement-phase window is modeled as one battle round. Pinned debuff (−2 Move, −2 to Charge rolls) mirrors the grav-pinned encoding. Full rule in raw-text store.",
     "faction_id": "necrons"
   },
   {
@@ -3406,12 +3576,16 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           {
@@ -3518,116 +3692,131 @@
     "source_digest": "48af92b7e0a9ce676c0e9fc9052065dc5c4ef276ea30be77496d1ce919d0318d",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "army",
-      "select": "start-of-battle-round",
-      "options": [
-        {
-          "name": "Phaeron of the Stars",
-          "effect": {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "eligible": {
-                "required_keywords": [
-                  "NECRONS"
-                ],
-                "excluded_keywords": [
-                  "MONSTER"
-                ]
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "re-roll",
-                    "target": "recipient",
-                    "modifier": {
-                      "roll": "hit",
-                      "subset": "ones"
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Phaeron of the Stars",
+            "effect": {
+              "type": "aura",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "range": {
+                  "inches": 6
+                },
+                "eligible": {
+                  "all_of": [
+                    "NECRONS"
+                  ],
+                  "none_of": [
+                    "MONSTER"
+                  ]
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "re-roll",
+                      "target": "recipient",
+                      "modifier": {
+                        "roll": "hit",
+                        "subset": "ones"
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "recipient",
+                      "modifier": {
+                        "roll": "wound",
+                        "subset": "ones"
+                      }
                     }
-                  },
-                  {
-                    "type": "re-roll",
-                    "target": "recipient",
-                    "modifier": {
-                      "roll": "wound",
-                      "subset": "ones"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        },
-        {
-          "name": "Phaeron of the Blades",
-          "effect": {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "eligible": {
-                "required_keywords": [
-                  "NECRONS"
-                ],
-                "excluded_keywords": [
-                  "MONSTER"
-                ]
-              },
-              "effect": {
-                "type": "sequence",
-                "steps": [
-                  {
-                    "type": "re-roll",
-                    "target": "recipient",
-                    "modifier": {
-                      "roll": "charge",
-                      "subset": "all-failures"
-                    }
-                  },
-                  {
-                    "type": "stat-modifier",
-                    "target": "recipient",
-                    "modifier": {
-                      "stat": "S",
-                      "operation": "add",
-                      "value": 1,
-                      "weapon_type": "melee"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        },
-        {
-          "name": "Relentless March",
-          "effect": {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "eligible": {
-                "required_keywords": [
-                  "NECRONS"
-                ]
-              },
-              "effect": {
-                "type": "stat-modifier",
-                "target": "recipient",
-                "modifier": {
-                  "stat": "M",
-                  "operation": "add",
-                  "value": 2
+                  ]
                 }
               }
-            }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Phaeron of the Blades",
+            "effect": {
+              "type": "aura",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "range": {
+                  "inches": 6
+                },
+                "eligible": {
+                  "all_of": [
+                    "NECRONS"
+                  ],
+                  "none_of": [
+                    "MONSTER"
+                  ]
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "re-roll",
+                      "target": "recipient",
+                      "modifier": {
+                        "roll": "charge",
+                        "subset": "all-failures"
+                      }
+                    },
+                    {
+                      "type": "stat-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "stat": "S",
+                        "operation": "add",
+                        "value": 1,
+                        "weapons": {
+                          "type": "melee"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Relentless March",
+            "effect": {
+              "type": "aura",
+              "target": "friendly-within-aura",
+              "modifier": {
+                "range": {
+                  "inches": 6
+                },
+                "eligible": {
+                  "all_of": [
+                    "NECRONS"
+                  ]
+                },
+                "effect": {
+                  "type": "stat-modifier",
+                  "target": "recipient",
+                  "modifier": {
+                    "stat": "M",
+                    "operation": "add",
+                    "value": 2
+                  }
+                }
+              }
+            },
+            "id": "option-3"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-battle-round"
@@ -3698,10 +3887,15 @@
       },
       "effect": {
         "type": "destroy-models",
-        "target": "this-unit",
+        "target": {
+          "member_of": "this-unit",
+          "level": "model",
+          "all_of": [
+            "TRIARCHAL MENHIR"
+          ]
+        },
         "modifier": {
-          "count": "all",
-          "model_keyword": "TRIARCHAL MENHIR"
+          "count": "all"
         }
       }
     },
@@ -3843,11 +4037,13 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "has-keyword",
+          "type": "matches",
           "parameters": {
-            "all_of": [
-              "CANOPTEK SCARAB SWARM"
-            ]
+            "filter": {
+              "all_of": [
+                "CANOPTEK SCARAB SWARM"
+              ]
+            }
           }
         },
         "effect": {
@@ -3969,10 +4165,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "this-unit",
-          "state": "on-battlefield"
+          "filter": {
+            "state": "on-battlefield"
+          },
+          "subject": "this-unit"
         }
       },
       "effect": {
@@ -4019,8 +4217,15 @@
     "effect": {
       "type": "for-each-unit",
       "selector": {
-        "owner": "enemy",
-        "within_inches": 6
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -4100,12 +4305,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "keywords": [
-          "VEHICLE"
-        ],
-        "owner": "enemy",
-        "within_inches": 12
+        "filter": {
+          "owner": "enemy",
+          "all_of": [
+            "VEHICLE"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -4166,11 +4381,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "NECRONS"
-          ]
+          "filter": {
+            "all_of": [
+              "NECRONS"
+            ]
+          }
         }
       },
       "effect": {
@@ -4232,29 +4449,69 @@
             }
           },
           {
-            "type": "happened",
+            "type": "player-turn-is",
             "parameters": {
-              "event": "move-ended",
-              "filter": {
-                "move_types": [
-                  "advance"
-                ]
-              },
-              "window": "turn"
+              "turn": "your-turn"
             }
           }
         ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "this-model",
-        "modifier": {
-          "ability": "deep-strike"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "applies_to_moves": [
+                "advance"
+              ],
+              "maximum": "unlimited"
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "passthrough": [
+                "models"
+              ]
+            }
+          },
+          {
+            "type": "move-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "applies_to_moves": [
+                "advance"
+              ],
+              "ends_when": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "within": {
+                          "of": {
+                            "owner": "enemy"
+                          },
+                          "range": {
+                            "inches": 8
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
     "unit_ids": [
       "transcendent-ctan"
@@ -4262,11 +4519,21 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "necrons"
+    "faction_id": "necrons",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "advance"
+        ],
+        "to": "move"
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "ctan-shard-necrons",
-    "name": "C\u2019tan Shard",
+    "name": "C’tan Shard",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4315,10 +4582,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -4376,9 +4647,11 @@
           "target": "this-unit",
           "modifier": {
             "roll": "hit",
-            "weapon_type": "ranged",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -4417,7 +4690,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TITANIC",
         "FLY"
       ]
@@ -4516,34 +4789,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
           },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "object": "this-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
-              },
-              "window": "phase"
-            }
-          }
-        ]
+          "window": "event"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -4563,8 +4818,8 @@
             "modifier": {
               "by": "this-unit",
               "may": "must-target",
-              "target": "event-subject",
-              "kind": "shoot"
+              "kind": "shoot",
+              "target": "event-subject"
             }
           }
         ]
@@ -4573,7 +4828,16 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
@@ -4624,8 +4888,13 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Rapid Fire 1"
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -4694,43 +4963,27 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "movement"
-            }
-          },
-          {
-            "type": "within",
-            "parameters": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
               "of": {
-                "owner": "enemy"
+                "owner": "friendly",
+                "all_of": [
+                  "MOUNTED",
+                  "NECRONS"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
               },
               "range": {
                 "inches": 8
               }
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "engaged"
-                }
-              }
-            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "move",
@@ -4742,9 +4995,15 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "evasive-protocols-skyshroud-spearhead-necrons",
@@ -4768,15 +5027,9 @@
         "operator": "and",
         "operands": [
           {
-            "type": "player-turn-is",
+            "type": "attack-is",
             "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
+              "attack_type": "ranged"
             }
           },
           {
@@ -4786,7 +5039,7 @@
                 "of": "attacker",
                 "stat": "S"
               },
-              "comparison": "greater-than",
+              "comparison": "gt",
               "right": {
                 "of": "defender",
                 "stat": "T"
@@ -4797,10 +5050,9 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-unit",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
-          "weapon_type": "ranged",
           "operation": "subtract",
           "value": 1
         }
@@ -4809,7 +5061,23 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "MOUNTED",
+          "NECRONS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
@@ -4878,19 +5146,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "DESTROYER CULT"
-              ]
+              "filter": {
+                "all_of": [
+                  "DESTROYER CULT"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "MOUNTED"
-              ]
+              "filter": {
+                "all_of": [
+                  "MOUNTED"
+                ]
+              }
             }
           }
         ]
@@ -4899,10 +5171,14 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Assault"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "assault"
+            }
+          ]
         }
       }
     },
@@ -4932,14 +5208,31 @@
       "target": "attacker",
       "modifier": {
         "stat": "AP",
-        "operation": "set",
+        "operation": "worsen",
         "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
-    "community_notes": "[APPROX] Reactive defensive stratagem used when an enemy unit targets a friendly NECRONS TITANIC FLY unit in your opponent's Shooting phase or the Fight phase: attacks that target your unit have Armour Penetration 1 until that enemy unit has finished attacking. Modeled as setting attacker AP to 1; the scoping to only the triggering enemy unit and the 'until it has attacked' window are not fully encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Reactive defensive stratagem used when an enemy unit targets a friendly NECRONS TITANIC FLY unit in your opponent's Shooting phase or the Fight phase: attacks that target your unit have Armour Penetration 1 until that enemy unit has finished attacking. Modeled as setting attacker AP to 1; the scoping to only the triggering enemy unit and the 'until it has attacked' window are not fully encoded. Full rule in raw-text store.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "FLY",
+          "NECRONS",
+          "TITANIC"
+        ]
+      }
+    }
   },
   {
     "ability_id": "particle-pulse-the-phaerons-armoury-necrons",
@@ -4960,10 +5253,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 1,
-        "owner": "enemy",
-        "range_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 0,
+          "max": 1
+        }
       },
       "effect": {
         "type": "stat-modifier",
@@ -5006,28 +5311,35 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "stat-modifier",
-        "target": "this-model",
-        "modifier": {
-          "stat": "AP",
-          "operation": "add",
-          "value": 1,
-          "weapon_name": "Tesla Sphere"
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "AP",
+        "operation": "improve",
+        "value": 1,
+        "weapons": {
+          "type": "ranged",
+          "name": "tesla sphere"
         }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "OBELISK",
+          "TESSERACT VAULT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "prelocational-optimiser-the-phaerons-armoury-necrons",
@@ -5053,20 +5365,31 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         }
       ]
@@ -5098,11 +5421,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "OBELISK"
-              ]
+              "filter": {
+                "all_of": [
+                  "OBELISK"
+                ]
+              }
             }
           },
           {
@@ -5142,7 +5467,6 @@
       }
     },
     "scope": {
-      "distance": 8,
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
@@ -5170,10 +5494,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -5192,50 +5520,78 @@
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Assault"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "assault"
+                    }
+                  ]
                 }
               },
               {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Anti-Infantry 3+"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "anti",
+                      "parameters": {
+                        "target_keyword": "INFANTRY",
+                        "threshold": 3
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Anti-Mounted 4+"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "anti",
+                      "parameters": {
+                        "target_keyword": "MOUNTED",
+                        "threshold": 4
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Heavy"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "heavy"
+                    }
+                  ]
                 }
               },
               {
                 "type": "weapon-ability-grant",
                 "target": "this-unit",
                 "modifier": {
-                  "abilities": [
-                    "Ignores Cover"
-                  ],
-                  "weapon_type": "ranged"
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "ignores-cover"
+                    }
+                  ]
                 }
               }
             ]
@@ -5247,7 +5603,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CRYPTEK"
       ]
     },
@@ -5275,12 +5631,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           "effect": {
@@ -5297,10 +5657,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         }
       ]
@@ -5409,7 +5773,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -5438,11 +5804,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "keywords": [
-          "NECRONS"
-        ],
-        "owner": "friendly"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "NECRONS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "set-up",
@@ -5477,7 +5848,9 @@
       "type": "aura",
       "target": "enemy-within-aura",
       "modifier": {
-        "range": 6,
+        "range": {
+          "inches": 6
+        },
         "effect": {
           "type": "stat-modifier",
           "target": {
@@ -5518,39 +5891,57 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "designate-target",
-      "designation": "worthy-foes",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "command-phase"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "has-keyword",
-            "parameters": {
-              "any_of": [
-                "NOBLE",
-                "LYCHGUARD",
-                "TRIARCH"
-              ]
-            }
-          },
-          "effect": {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "wound",
-              "operation": "add",
-              "value": 1
-            }
-          }
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "worthy-foes",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "any_of": [
+                    "NOBLE",
+                    "LYCHGUARD",
+                    "TRIARCH"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "roll-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -5575,7 +5966,9 @@
     "behavior": "passive",
     "effect": {
       "type": "named-region-state",
-      "target": {"owner":"friendly"},
+      "target": {
+        "owner": "friendly"
+      },
       "modifier": {
         "region_ref": {
           "region_id": "power-matrix",
@@ -5590,60 +5983,52 @@
           "parent_ref": null,
           "baseline": [
             {
-              "kind": "fixed-zone",
-              "zone": "own-deployment-zone",
-              "activation": {
-                "event": "always-active"
+              "region": {
+                "territory": "your-deployment-zone"
               },
-              "expiry": {
-                "event": "never"
-              }
+              "duration": "permanent"
             }
           ],
           "phase_extensions": [
             {
-              "kind": "objective-majority-zone",
-              "zone": "no-mans-land",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "no-mans-land"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             },
             {
-              "kind": "objective-majority-zone",
-              "zone": "opponent-deployment-zone",
-              "control_gate": {
-                "marker_scope": "markers-in-zone",
-                "controlled_by": "owner-army",
-                "threshold": {
-                  "comparison": "at-least",
-                  "fraction": 0.5
+              "region": {
+                "territory": "enemy-deployment-zone"
+              },
+              "condition": {
+                "type": "controls",
+                "parameters": {
+                  "by": "friendly",
+                  "proportion": {
+                    "comparison": "gte",
+                    "fraction": 0.5
+                  }
                 }
               },
-              "activation": {
-                "event": "phase-start",
-                "evaluation": "snapshot-once",
-                "canonical_condition_ids": [
-                  "controls"
-                ]
+              "trigger": {
+                "event": "phase-started"
               },
-              "expiry": {
-                "event": "phase-end"
-              }
+              "duration": "phase",
+              "evaluation": "snapshot-once"
             }
           ],
           "additive_extensions": []
@@ -5652,15 +6037,6 @@
           "state_ref": {
             "region_id": "power-matrix",
             "owner_faction": "necrons"
-          },
-          "beneficiary_gate": {
-            "owner": "owner-army",
-            "faction": "necrons",
-            "operator": "or",
-            "keywords": [
-              "CRYPTEK",
-              "CANOPTEK"
-            ]
           },
           "membership": {
             "unit_scope": "whole-unit",
@@ -5680,52 +6056,44 @@
             }
           },
           "default_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "re-roll",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
-            },
-            "optional": true
+              "type": "ability-part",
+              "effect": {
+                "type": "re-roll",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              "optional": true,
+              "duration": "resolution"
+            }
           },
           "qualified_branch": {
-            "source": {
-              "role": "eligible-source",
-              "gate_ref": "beneficiary_gate"
-            },
-            "beneficiary": {
-              "role": "eligible-beneficiary",
-              "gate_ref": "beneficiary_gate"
-            },
-            "target": "attacker",
-            "timing": {
-              "event": "each-attack"
-            },
-            "duration": "attack-resolution",
             "effect": {
-              "type": "re-roll",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "result_scope": "any-result"
-              }
-            },
-            "optional": true
+              "type": "ability-part",
+              "effect": {
+                "type": "re-roll",
+                "target": "attacker",
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              },
+              "optional": true,
+              "duration": "resolution"
+            }
+          },
+          "beneficiary_filter": {
+            "owner": "friendly",
+            "all_of": [
+              "NECRONS"
+            ],
+            "any_of": [
+              "CRYPTEK",
+              "CANOPTEK"
+            ]
           }
         },
         "branch_precedence": "qualified-replaces-default"
@@ -5801,8 +6169,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -5832,9 +6202,10 @@
     "effect": {
       "type": "for-each-unit",
       "selector": {
-        "owner": "enemy",
-        "engagement_relation": "engaged-with-bearer",
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-unit"
+        }
       },
       "effect": {
         "type": "roll-modifier",

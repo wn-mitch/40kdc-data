@@ -57,6 +57,25 @@ describe("Round 5C movement-family compiler", () => {
     expect(rendered(base(), [leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "charge", distance: 12 })]).length).toBeGreaterThan(0);
   });
 
+  it("lowers an unlimited Advance ceiling as a move modifier without inventing a distance", () => {
+    expect(compiled([leaf("EFFECT", "move-distance", {
+      subject: "this-unit", move_types: ["advance"], maximum: "unlimited",
+    }, 2)]).mechanics.effect).toEqual({
+      type: "move-modifier",
+      target: "this-unit",
+      modifier: { applies_to_moves: ["advance"], maximum: "unlimited" },
+    });
+    expect(normalizeFingerprintParameters("move-distance", {
+      subject: "this-unit", move_types: ["advance"], maximum: "unlimited",
+    }, 2)).toEqual({ subject: "this-unit", move_types: ["advance"], maximum: "unlimited" });
+    expect(() => normalizeFingerprintParameters("move-distance", {
+      subject: "this-unit", move_types: ["advance"], maximum: "unlimited", bonus: 1,
+    }, 2)).toThrow(/mutually exclusive/u);
+    expect(() => normalizeFingerprintParameters("move-distance", {
+      subject: "this-unit", move_types: ["normal"], maximum: "unlimited",
+    }, 2)).toThrow(/exactly one advance/u);
+  });
+
   it("accepts a dice expression outside the sampled enum, since normalize reads the full pattern", () => {
     expect(() => normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "advance", distance: "D3+3" })).not.toThrow();
     expect(() => normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "advance", distance: "not-a-distance" })).toThrow(/make-move.distance/u);
@@ -86,7 +105,7 @@ describe("Round 5C movement-family compiler", () => {
       subject: "this-unit", to: "battlefield", from: "strategic-reserves", min_enemy_distance: 9, round_offset: -1,
     })]).mechanics.effect).toEqual({
       type: "set-up", target: "this-unit",
-      modifier: { to: "battlefield", from: "strategic-reserves", min_enemy_distance: 9, round_offset: -1 },
+      modifier: { to: "battlefield", from: "strategic-reserves", min_enemy_distance: { inches: 9 }, round_offset: -1 },
     });
     expect(rendered(base(), [leaf("EFFECT", "set-up", { subject: "this-unit", to: "battlefield", from: "transport" })]).length).toBeGreaterThan(0);
   });
@@ -95,7 +114,7 @@ describe("Round 5C movement-family compiler", () => {
     expect(compiled([leaf("EFFECT", "battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker" })]).mechanics.effect)
       .toEqual({ type: "marker", target: "this-unit", modifier: { label: "cult-ambush-marker" } });
     expect(compiled([leaf("EFFECT", "battlefield-marker", { subject: "this-model", label: "beacon-marker", operation: "relocate", distance: 6 })]).mechanics.effect)
-      .toEqual({ type: "marker", target: "this-model", modifier: { label: "beacon-marker", operation: "relocate", distance: 6 } });
+      .toEqual({ type: "marker", target: "this-model", modifier: { label: "beacon-marker", operation: "relocate", distance: { inches: 6 } } });
     expect(rendered(base(), [leaf("EFFECT", "battlefield-marker", { subject: "this-unit", label: "cult-ambush-marker" })]).length).toBeGreaterThan(0);
   });
 

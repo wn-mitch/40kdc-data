@@ -19,7 +19,7 @@ from wh40kdc.cruncher.from_dsl_shapes import roll_label
 
 #: Modifier keys a critical-threshold-only ``roll-result`` may carry.
 _CRITICAL_ONLY_KEYS = frozenset(
-    ["roll", "critical_on", "attack_type", "weapon_type", "weapon_name", "weapon_keyword"]
+    ["roll", "critical_on", "attack_type", "weapons"]
 )
 
 
@@ -79,7 +79,7 @@ def translate_roll_result(
     if opts["perspective"] != "attacker" or not dsl._applies_to_buffed_unit(node, "attacker"):
         return
     applicability = dsl.combine_optional(
-        dsl._attack_type_applicability(modifier), dsl.weapon_applicability(modifier)
+        dsl._weapon_type_applicability(modifier), dsl.weapon_applicability(modifier)
     )
     out["applied"].append(
         dsl.with_applicability(

@@ -86,14 +86,14 @@ describe("Round 5C engaged-with-this-model selection (SS3)", () => {
     const mechanics = mechanicsOf(placed(text, SELECT_ENEMY,
       ["within Engagement Range of it", "unit-state", { states: ["engaged"], subject: "selected-unit", negated: false, with: "this-model" }],
       [...effect]), text);
-    expect(JSON.stringify(mechanics)).toContain('"with":"this-model"');
+    expect(JSON.stringify(mechanics)).toContain('"engaged_with":"this-model"');
   });
 
   it("names the unit when the state says this unit", () => {
     const mechanics = mechanicsOf(placed(text, SELECT_ENEMY,
       ["within Engagement Range of it", "unit-state", { states: ["engaged"], subject: "selected-unit", negated: false, with: "this-unit" }],
       [...effect]), text);
-    expect(JSON.stringify(mechanics)).toContain('"with":"this-unit"');
+    expect(JSON.stringify(mechanics)).toContain('"engaged_with":"this-unit"');
   });
 });
 
@@ -107,15 +107,17 @@ describe("Round 5C engaged with a designated unit (SS5)", () => {
       ["is within Engagement Range of", "unit-state", { states: ["engaged"], subject: "target", negated: false, with: "following-filter" }],
       ["your focus of hatred", "unit-filter", { side: "enemy", designated: "focus-of-hatred" }],
       ["Add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1, subject: "this-unit" }]), text);
-    expect(JSON.stringify(mechanics)).toContain('"with":{"owner":"enemy","designated":"focus-of-hatred"}');
+    expect(JSON.stringify(mechanics)).toContain('"engaged_with":{"owner":"enemy","designated":"focus-of-hatred"}');
   });
 
-  it("still refuses a selection that names a designated unit", () => {
-    const selection = "Select one enemy unit that is your focus of hatred.";
-    const message = errorsOf(placed(selection,
+  it("retains a designation on a selection's unit filter", () => {
+    const selection = "Select one enemy unit that is your focus of hatred. That unit suffers 1 mortal wound.";
+    const mechanics = mechanicsOf(placed(selection,
       ["Select one enemy unit", "select-unit", { scope: "enemy", distance: "any", visible: false }],
-      ["your focus of hatred", "unit-filter", { side: "enemy", designated: "focus-of-hatred" }]), selection);
-    expect(message).toMatch(/designat/);
+      ["your focus of hatred", "unit-filter", { side: "enemy", designated: "focus-of-hatred" }],
+      ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]), selection);
+    expect(mechanics.effect.selector.filter).toEqual({ owner: "enemy", designated: "focus-of-hatred" });
+    expect(mechanics.effect.effect).toMatchObject({ type: "mortal-wounds", target: "selected-unit" });
   });
 });
 
@@ -136,7 +138,7 @@ describe("Round 5C engaged with only the named units (SS1)", () => {
 
   it("gives both operands the subject the state gets from the enemy filter", () => {
     const mechanics = mechanicsOf(placed(text, enemyWhile, exclusive, engaged, fortifications, effect), text);
-    const subjects = [...JSON.stringify(mechanics).matchAll(/"type":"unit-state","parameters":\{"subject":(\{[^}]*\})/gu)].map((match) => match[1]);
+    const subjects = [...JSON.stringify(mechanics).matchAll(/"type":"matches","parameters":\{"subject":(\{[^}]*\}),"filter":\{"engaged_with"/gu)].map((match) => match[1]);
     expect(subjects).toEqual(['{"owner":"enemy"}', '{"owner":"enemy"}']);
   });
 
@@ -211,11 +213,11 @@ describe("Round 5C re-authored Charge-move selections (records 1400, 3058)", () 
 
   it("compiles a Charge-move selection engaged with this unit", () => {
     const { text, leaves } = bodyUnit("this-unit");
-    expect(JSON.stringify(mechanicsOf(leaves, text))).toContain('"with":"this-unit"');
+    expect(JSON.stringify(mechanicsOf(leaves, text))).toContain('"engaged_with":"this-unit"');
   });
 
   it("compiles a Charge-move selection engaged with this model", () => {
     const { text, leaves } = bodyUnit("this-model");
-    expect(JSON.stringify(mechanicsOf(leaves, text))).toContain('"with":"this-model"');
+    expect(JSON.stringify(mechanicsOf(leaves, text))).toContain('"engaged_with":"this-model"');
   });
 });

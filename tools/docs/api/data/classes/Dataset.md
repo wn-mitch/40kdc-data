@@ -6,7 +6,7 @@
 
 # Class: Dataset
 
-Defined in: [data/dataset.ts:105](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L105)
+Defined in: [data/dataset.ts:132](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L132)
 
 The whole dataset, with linked accessors over every entity collection.
 
@@ -16,7 +16,7 @@ The whole dataset, with linked accessors over every entity collection.
 
 > **new Dataset**(`raw?`): `Dataset`
 
-Defined in: [data/dataset.ts:157](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L157)
+Defined in: [data/dataset.ts:184](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L184)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [data/dataset.ts:157](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **units**: [`Collection`](Collection.md)\<[`Unit`](../../generated/interfaces/Unit.md), [`UnitView`](UnitView.md)\>
 
-Defined in: [data/dataset.ts:107](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L107)
+Defined in: [data/dataset.ts:134](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L134)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [data/dataset.ts:107](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **weapons**: [`Collection`](Collection.md)\<[`Weapon`](../../generated/interfaces/Weapon.md), [`WeaponView`](WeaponView.md)\>
 
-Defined in: [data/dataset.ts:108](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L108)
+Defined in: [data/dataset.ts:135](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L135)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [data/dataset.ts:108](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **weaponKeywords**: [`Collection`](Collection.md)\<[`WeaponKeyword`](../../generated/interfaces/WeaponKeyword.md), [`WeaponKeywordView`](WeaponKeywordView.md)\>
 
-Defined in: [data/dataset.ts:109](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L109)
+Defined in: [data/dataset.ts:136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L136)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [data/dataset.ts:109](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **factions**: [`Collection`](Collection.md)\<[`Faction`](../../generated/interfaces/Faction.md), [`FactionView`](FactionView.md)\>
 
-Defined in: [data/dataset.ts:110](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L110)
+Defined in: [data/dataset.ts:137](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L137)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [data/dataset.ts:110](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **abilities**: [`Collection`](Collection.md)\<[`AbilityDSLEntry`](../../generated/interfaces/AbilityDSLEntry.md), [`AbilityView`](AbilityView.md)\>
 
-Defined in: [data/dataset.ts:111](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L111)
+Defined in: [data/dataset.ts:138](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L138)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [data/dataset.ts:111](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **unitKeywords**: [`Collection`](Collection.md)\<[`UnitKeyword`](../../generated/interfaces/UnitKeyword.md), [`UnitKeyword`](../../generated/interfaces/UnitKeyword.md)\>
 
-Defined in: [data/dataset.ts:114](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L114)
+Defined in: [data/dataset.ts:141](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L141)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [data/dataset.ts:114](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **targetProfiles**: [`Collection`](Collection.md)\<[`TargetProfile`](../../generated/interfaces/TargetProfile.md), [`TargetProfile`](../../generated/interfaces/TargetProfile.md)\>
 
-Defined in: [data/dataset.ts:115](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L115)
+Defined in: [data/dataset.ts:142](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L142)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [data/dataset.ts:115](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **detachments**: [`Collection`](Collection.md)\<[`Detachment`](../../generated/interfaces/Detachment.md), [`Detachment`](../../generated/interfaces/Detachment.md)\>
 
-Defined in: [data/dataset.ts:116](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L116)
+Defined in: [data/dataset.ts:143](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L143)
 
 ***
 
@@ -98,7 +98,7 @@ Defined in: [data/dataset.ts:116](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **alliedRules**: [`Collection`](Collection.md)\<[`AlliedRule`](../../generated/interfaces/AlliedRule.md), [`AlliedRule`](../../generated/interfaces/AlliedRule.md)\>
 
-Defined in: [data/dataset.ts:117](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L117)
+Defined in: [data/dataset.ts:144](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L144)
 
 ***
 
@@ -106,7 +106,7 @@ Defined in: [data/dataset.ts:117](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **enhancements**: [`Collection`](Collection.md)\<[`Enhancement`](../../generated/interfaces/Enhancement.md), [`Enhancement`](../../generated/interfaces/Enhancement.md)\>
 
-Defined in: [data/dataset.ts:118](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L118)
+Defined in: [data/dataset.ts:145](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L145)
 
 ***
 
@@ -114,7 +114,7 @@ Defined in: [data/dataset.ts:118](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **stratagems**: [`Collection`](Collection.md)\<[`Stratagem`](../../generated/interfaces/Stratagem.md), [`Stratagem`](../../generated/interfaces/Stratagem.md)\>
 
-Defined in: [data/dataset.ts:119](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L119)
+Defined in: [data/dataset.ts:146](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L146)
 
 ***
 
@@ -122,7 +122,7 @@ Defined in: [data/dataset.ts:119](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **wargearOptions**: [`Collection`](Collection.md)\<[`WargearOption`](../../generated/interfaces/WargearOption.md), [`WargearOption`](../../generated/interfaces/WargearOption.md)\>
 
-Defined in: [data/dataset.ts:120](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L120)
+Defined in: [data/dataset.ts:147](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L147)
 
 ***
 
@@ -130,7 +130,7 @@ Defined in: [data/dataset.ts:120](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **wargear**: [`Collection`](Collection.md)\<[`Wargear`](../../generated/interfaces/Wargear.md), [`Wargear`](../../generated/interfaces/Wargear.md)\>
 
-Defined in: [data/dataset.ts:121](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L121)
+Defined in: [data/dataset.ts:148](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L148)
 
 ***
 
@@ -138,7 +138,7 @@ Defined in: [data/dataset.ts:121](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **missions**: [`Collection`](Collection.md)\<[`Mission`](../../generated/interfaces/Mission.md), [`Mission`](../../generated/interfaces/Mission.md)\>
 
-Defined in: [data/dataset.ts:122](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L122)
+Defined in: [data/dataset.ts:149](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L149)
 
 ***
 
@@ -146,7 +146,7 @@ Defined in: [data/dataset.ts:122](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **missionMatchups**: [`Collection`](Collection.md)\<[`MissionMatchup`](../../generated/interfaces/MissionMatchup.md), [`MissionMatchup`](../../generated/interfaces/MissionMatchup.md)\>
 
-Defined in: [data/dataset.ts:123](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L123)
+Defined in: [data/dataset.ts:150](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L150)
 
 ***
 
@@ -154,7 +154,7 @@ Defined in: [data/dataset.ts:123](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **missionCards**: [`Collection`](Collection.md)\<[`SecondaryCard`](../../generated/interfaces/SecondaryCard.md), [`SecondaryCard`](../../generated/interfaces/SecondaryCard.md)\>
 
-Defined in: [data/dataset.ts:124](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L124)
+Defined in: [data/dataset.ts:151](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L151)
 
 ***
 
@@ -162,7 +162,7 @@ Defined in: [data/dataset.ts:124](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **deploymentPatterns**: [`Collection`](Collection.md)\<[`DeploymentPattern`](../../generated/interfaces/DeploymentPattern.md), [`DeploymentPattern`](../../generated/interfaces/DeploymentPattern.md)\>
 
-Defined in: [data/dataset.ts:125](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L125)
+Defined in: [data/dataset.ts:152](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L152)
 
 ***
 
@@ -170,7 +170,7 @@ Defined in: [data/dataset.ts:125](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **forceDispositions**: [`Collection`](Collection.md)\<[`ForceDisposition`](../../generated/interfaces/ForceDisposition.md), [`ForceDisposition`](../../generated/interfaces/ForceDisposition.md)\>
 
-Defined in: [data/dataset.ts:126](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L126)
+Defined in: [data/dataset.ts:153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L153)
 
 ***
 
@@ -178,7 +178,7 @@ Defined in: [data/dataset.ts:126](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **terrainTemplates**: [`Collection`](Collection.md)\<[`TerrainTemplate`](../../generated/interfaces/TerrainTemplate.md), [`TerrainTemplate`](../../generated/interfaces/TerrainTemplate.md)\>
 
-Defined in: [data/dataset.ts:127](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L127)
+Defined in: [data/dataset.ts:154](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L154)
 
 ***
 
@@ -186,7 +186,7 @@ Defined in: [data/dataset.ts:127](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **terrainLayouts**: [`Collection`](Collection.md)\<[`TerrainLayout`](../../generated/interfaces/TerrainLayout.md), [`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)\>
 
-Defined in: [data/dataset.ts:128](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L128)
+Defined in: [data/dataset.ts:155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L155)
 
 ***
 
@@ -194,7 +194,7 @@ Defined in: [data/dataset.ts:128](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **hullShapes**: [`Collection`](Collection.md)\<[`HullShape`](../../generated/interfaces/HullShape.md), [`HullShape`](../../generated/interfaces/HullShape.md)\>
 
-Defined in: [data/dataset.ts:129](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L129)
+Defined in: [data/dataset.ts:156](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L156)
 
 ***
 
@@ -202,7 +202,7 @@ Defined in: [data/dataset.ts:129](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **resourcePools**: [`Collection`](Collection.md)\<[`ResourcePool`](../../generated/interfaces/ResourcePool.md), [`ResourcePool`](../../generated/interfaces/ResourcePool.md)\>
 
-Defined in: [data/dataset.ts:130](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L130)
+Defined in: [data/dataset.ts:157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L157)
 
 ***
 
@@ -210,7 +210,7 @@ Defined in: [data/dataset.ts:130](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **leaderAttachments**: readonly [`LeaderAttachment`](../../generated/interfaces/LeaderAttachment.md)[]
 
-Defined in: [data/dataset.ts:133](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L133)
+Defined in: [data/dataset.ts:160](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L160)
 
 ***
 
@@ -218,7 +218,7 @@ Defined in: [data/dataset.ts:133](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **unitCompositions**: readonly [`UnitComposition`](../../generated/interfaces/UnitComposition.md)[]
 
-Defined in: [data/dataset.ts:134](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L134)
+Defined in: [data/dataset.ts:161](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L161)
 
 ***
 
@@ -226,7 +226,7 @@ Defined in: [data/dataset.ts:134](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **gameVersions**: readonly [`GameVersion`](../../generated/interfaces/GameVersion.md)[]
 
-Defined in: [data/dataset.ts:135](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L135)
+Defined in: [data/dataset.ts:162](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L162)
 
 ***
 
@@ -234,7 +234,7 @@ Defined in: [data/dataset.ts:135](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **interactionFlags**: readonly [`InteractionFlag`](../../generated/interfaces/InteractionFlag.md)[]
 
-Defined in: [data/dataset.ts:136](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L136)
+Defined in: [data/dataset.ts:163](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L163)
 
 ***
 
@@ -242,7 +242,7 @@ Defined in: [data/dataset.ts:136](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `readonly` **phaseMappings**: readonly [`PhaseMapping`](../../generated/interfaces/PhaseMapping.md)[]
 
-Defined in: [data/dataset.ts:137](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L137)
+Defined in: [data/dataset.ts:164](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L164)
 
 ## Methods
 
@@ -250,7 +250,7 @@ Defined in: [data/dataset.ts:137](https://github.com/wn-mitch/40kdc-data/blob/a2
 
 > `static` **embedded**(): `Dataset`
 
-Defined in: [data/dataset.ts:277](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L277)
+Defined in: [data/dataset.ts:295](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L295)
 
 The dataset built from the package's embedded data.
 
@@ -264,7 +264,7 @@ The dataset built from the package's embedded data.
 
 > **phasesFor**(`sourceType`, `sourceId`): [`Phase`](../../generated/type-aliases/Phase.md)[]
 
-Defined in: [data/dataset.ts:282](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L282)
+Defined in: [data/dataset.ts:300](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L300)
 
 Phases a source acts in, unioned across its phase-mappings.
 
@@ -288,7 +288,7 @@ Phases a source acts in, unioned across its phase-mappings.
 
 > **resolveTerrain**(`layout`): `ResolvedPiece`[]
 
-Defined in: [data/dataset.ts:292](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L292)
+Defined in: [data/dataset.ts:310](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L310)
 
 Resolve a terrain layout to absolute board-space vertices using this
 dataset's embedded terrain-template catalog — the layout-id →
@@ -311,7 +311,7 @@ geometry is pinned by the `terrain-resolver` conformance corpus.
 
 > **recommendedTerrainLayouts**(`pattern`): [`TerrainLayout`](../../generated/interfaces/TerrainLayout.md)[]
 
-Defined in: [data/dataset.ts:302](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L302)
+Defined in: [data/dataset.ts:320](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L320)
 
 The terrain layouts a deployment pattern recommends, in declared order,
 skipping any ids absent from the dataset.
@@ -332,7 +332,7 @@ skipping any ids absent from the dataset.
 
 > **unitsWithAbility**(`abilityId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:309](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L309)
+Defined in: [data/dataset.ts:327](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L327)
 
 Units that list the given ability id.
 
@@ -352,9 +352,9 @@ Units that list the given ability id.
 
 > **reactiveTriggers**(): [`ReactiveTrigger`](../type-aliases/ReactiveTrigger.md)[]
 
-Defined in: [data/dataset.ts:320](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L320)
+Defined in: [data/dataset.ts:338](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L338)
 
-Every ability carrying a reactive AbilityTrigger, sorted by ability
+Every ability carrying a reactive event trigger, sorted by ability
 id. Each entry names the units that list the ability (sorted; empty for
 faction/detachment-rule abilities no unit references directly).
 
@@ -368,7 +368,7 @@ faction/detachment-rule abilities no unit references directly).
 
 > **triggerIndex**(): `Map`\<[`GameEvent`](../../generated/type-aliases/GameEvent.md), [`ReactiveTrigger`](../type-aliases/ReactiveTrigger.md)[]\>
 
-Defined in: [data/dataset.ts:354](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L354)
+Defined in: [data/dataset.ts:372](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L372)
 
 Dispatch index for event-driven consumers: [GameEvent](../../generated/type-aliases/GameEvent.md) → the reactive
 triggers firing on it. Keys are iterated in event order and each bucket is
@@ -384,7 +384,7 @@ sorted by ability id, so the structure is deterministic across runs.
 
 > **unitsWithWeapon**(`weaponId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:367](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L367)
+Defined in: [data/dataset.ts:385](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L385)
 
 Units that list the given weapon id.
 
@@ -404,7 +404,7 @@ Units that list the given weapon id.
 
 > **weaponsWithKeyword**(`keywordId`): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/dataset.ts:374](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L374)
+Defined in: [data/dataset.ts:392](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L392)
 
 Weapons whose profiles reference the given weapon-keyword id.
 
@@ -424,7 +424,7 @@ Weapons whose profiles reference the given weapon-keyword id.
 
 > **unitsWithKeyword**(`keyword`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:387](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L387)
+Defined in: [data/dataset.ts:405](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L405)
 
 Units carrying the given keyword, matched case-insensitively against the
 union of each unit's `keywords` and `faction_keywords`. Powers a list
@@ -448,7 +448,7 @@ Returns each faction's copy of a shared unit id separately.
 
 > **alliesFor**(`factionId`, `detachmentIds?`): [`AlliedRule`](../../generated/interfaces/AlliedRule.md)[]
 
-Defined in: [data/dataset.ts:403](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L403)
+Defined in: [data/dataset.ts:421](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L421)
 
 The allied-rules **offered** for an army of `factionId` running the given
 detachments. A rule applies when both its gates pass: the **army gate**
@@ -479,7 +479,7 @@ offers the candidate rules a faction qualifies for. Mirror of Rust
 
 > **allyUnitsFor**(`ruleId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:433](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L433)
+Defined in: [data/dataset.ts:451](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L451)
 
 The unit pool an allied-rule grants, sorted by name. Starts from the rule's
 `source_faction_id` (if set, to keep that faction's copy of shared ids) or
@@ -506,7 +506,7 @@ resolves to nothing. Mirror of Rust `Dataset::ally_units_for`; pinned by the
 
 > **wargearOptionsOf**(`unit`): [`WargearOption`](../../generated/interfaces/WargearOption.md)[]
 
-Defined in: [data/dataset.ts:469](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L469)
+Defined in: [data/dataset.ts:487](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L487)
 
 Wargear options authored for the given unit, in declared order. Scoped to
 the unit's own faction: a chassis shared across factions (e.g.
@@ -531,7 +531,7 @@ Empty for a unit with no options.
 
 > **unitCompositionOf**(`unit`): [`UnitComposition`](../../generated/interfaces/UnitComposition.md) \| `undefined`
 
-Defined in: [data/dataset.ts:482](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L482)
+Defined in: [data/dataset.ts:500](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L500)
 
 The unit-composition authored for the given unit, faction-scoped exactly
 like [wargearOptionsOf](#wargearoptionsof): shared chassis carry a distinct composition
@@ -555,7 +555,7 @@ unit_id)` rather than the faction-blind `unitCompositions.find(...)`.
 
 > **leadersAttachableTo**(`bodyguardUnitId`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:493](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L493)
+Defined in: [data/dataset.ts:511](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L511)
 
 Leaders whose leader-attachment data lists `bodyguardUnitId` among its
 eligible body units, sorted by name. The attachment is stored on the
@@ -579,7 +579,7 @@ array for a unit that no leader can attach to (including leader units).
 
 > **bodyguardsAttachableFrom**(`leaderUnitId`, `factionId?`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/dataset.ts:521](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L521)
+Defined in: [data/dataset.ts:539](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L539)
 
 The inverse of [leadersAttachableTo](#leadersattachableto): the body units the given
 leader can attach to, sorted by name. Scans the same leader-attachment
@@ -608,7 +608,7 @@ SPA needs to offer a partner dropdown from either end.
 
 > **eligibleAbilities**(`input`, `phase`): [`EligibleAbility`](../type-aliases/EligibleAbility.md)[]
 
-Defined in: [data/dataset.ts:563](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L563)
+Defined in: [data/dataset.ts:581](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L581)
 
 Enumerate every ability that could apply to the given unit in `phase`,
 grouped by source. The SPA uses this to render the abilities pane.
@@ -633,7 +633,7 @@ grouped by source. The SPA uses this to render the abilities pane.
 
 > **buffsFor**(`input`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/dataset.ts:580](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L580)
+Defined in: [data/dataset.ts:608](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L608)
 
 Attacker-perspective [Buff](../type-aliases/Buff.md) stack for a (unit, phase) combination:
 intrinsic weapon-profile keywords plus every eligible ability whose DSL
@@ -646,6 +646,16 @@ who just want the stack don't need to thread diagnostics through. Use
 [AbilityView.describeBuffs](AbilityView.md#describebuffs) when you need the diagnostics for an
 individual ability. Symmetric to [defensiveBuffsFor](#defensivebuffsfor), which walks
 the same eligibility set under target perspective.
+
+Persistent recipient effects after an attachment changes are resolved only
+from caller-attested `context.recipientSnapshots` captured at activation
+time. The caller supplies live event-time evidence and asserts
+activation/equipment; this dataset has no internal history or clock.
+Discovery accepts an intrinsic source or an eligible enhancement with the
+matching detachment; legality alone does not prove that a source was
+equipped. Missing, mismatched, or conflicting snapshots are unsupported,
+`selected: false` produces no effect, and a named parent trigger remains
+distinct from unrelated effect guards.
 
 #### Parameters
 
@@ -667,7 +677,7 @@ the same eligibility set under target perspective.
 
 > **defensiveBuffsFor**(`input`, `context`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/dataset.ts:611](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L611)
+Defined in: [data/dataset.ts:639](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L639)
 
 Defender-perspective buff stack for the chosen unit: walks the same
 eligible-abilities set as [buffsFor](#buffsfor) but translates each ability's
@@ -682,11 +692,11 @@ just means concatenating onto the existing `buffs` array.
 effects ride with the firing weapon, not the receiving unit.
 
 Abilities pooled in from `attachedUnitIds` obey core rule 19.04: an effect
-targeting a single model (DSL `self`/`bearer`, e.g. an attached character's
+targeting a single model (DSL `this-model`, e.g. an attached character's
 personal invulnerable save) is *not* returned as a buff on the combined
 unit — it stays on its own model and surfaces in
 [AbilityView.describeBuffs](AbilityView.md#describebuffs)'s `unsupported` list instead. Effects
-targeting the unit (`unit`/`attached-unit`) do reach the whole unit.
+targeting the unit (`this-unit`) do reach the whole unit.
 
 #### Parameters
 
@@ -708,7 +718,7 @@ targeting the unit (`unit`/`attached-unit`) do reach the whole unit.
 
 > **stackableBuffsFor**(`input`, `context`): `object`
 
-Defined in: [data/dataset.ts:640](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L640)
+Defined in: [data/dataset.ts:668](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/dataset.ts#L668)
 
 Enumerate every attacker-side buff a unit could stack in `context` as a
 list of toggleable levers, plus the activation groups that limit them.

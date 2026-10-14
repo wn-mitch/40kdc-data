@@ -12,6 +12,7 @@ const WRAPPER_CHILDREN = Object.freeze({
   'rules-bundle': [{ path: ['steps'], role: 'members', ordered: true, array: true }],
   'ability-part': [{ path: ['effect'], role: 'members' }, { path: ['trigger'], role: 'trigger', trigger: true }, { path: ['cost'], role: 'cost' }],
   choice: [{ path: ['options'], role: 'members', array: true }],
+  'stance-select': [{ path: ['options'], child: ['effect'], role: 'members', array: true }],
   'dice-gated': [{ path: ['on_success'], role: 'on-success' }, { path: ['on_fail'], role: 'on-failure' }],
   'dice-table': [{ path: ['outcomes'], child: ['effect'], role: 'members', array: true }],
   conditional: [{ path: ['condition'], role: 'condition', condition: true }, { path: ['effect'], role: 'members' }],
@@ -19,13 +20,14 @@ const WRAPPER_CHILDREN = Object.freeze({
   'select-units': [{ path: ['effect'], role: 'members' }, { path: ['selector', 'eligibility'], role: 'condition', condition: true }],
   'for-each-unit': [{ path: ['effect'], role: 'members' }],
   aura: [{ path: ['modifier', 'effect'], role: 'members' }],
-  'leader-model-ability-grant': [{ path: ['grant', 'effect'], role: 'members' }],
-  'designate-target': [{ path: ['applies', 'effect'], role: 'members' }, { path: ['select', 'eligibility'], role: 'condition', condition: true }],
+  'designate-target': [{ path: ['applies', 'effect'], role: 'members' }],
   'persistent-designation': [{ path: ['consumer', 'effect'], role: 'members' }],
-  'stance-select': [{ path: ['options'], child: ['effect'], role: 'members', array: true }],
   'risk-reward': [{ path: ['reward'], role: 'on-success' }, { path: ['risk', 'on_fail'], role: 'on-failure' }],
   'issue-orders': [{ path: ['options'], child: ['effect'], role: 'members', array: true }],
   'resource-action-menu': [{ path: ['actions'], child: ['effect'], role: 'members', array: true }],
+  'select-objective': [{ path: ['effect'], role: 'members' }],
+  roll: [{ path: ['effect'], role: 'members' }],
+  'oath-modifier': [{ path: ['modifier', 'effect'], role: 'members' }],
 })
 
 function escapePointerToken(value) { return String(value).replaceAll('~', '~0').replaceAll('/', '~1') }
@@ -53,7 +55,7 @@ function residualParameters(node, omitted) {
   return Object.keys(value).length ? value : null
 }
 
-function leafCandidate(node, pointer, context) {
+function leafCandidate(node, pointer, context, nestedMembers = []) {
   const args = []
   const omitted = new Set(['type'])
   if (node.target !== undefined) { args.push(argument('affected-entity', node.target)); omitted.add('target') }
@@ -63,6 +65,10 @@ function leafCandidate(node, pointer, context) {
   const parameters = residualParameters(node, omitted)
   if (parameters !== null) {
     const cleaned = structuredClone(parameters)
+    if (node.type === 'ability-grant' && cleaned.modifier) {
+      delete cleaned.modifier.definition
+      if (Object.keys(cleaned.modifier).length === 0) delete cleaned.modifier
+    }
     if (node.type === 'feel-no-pain' && cleaned.modifier) {
       delete cleaned.modifier.threshold
       delete cleaned.modifier.against
@@ -70,6 +76,7 @@ function leafCandidate(node, pointer, context) {
     }
     if (Object.keys(cleaned).length) args.push(argument('parameters', cleaned))
   }
+  if (nestedMembers.length) args.push(argument('members', nestedMembers.length === 1 ? nestedMembers[0] : nestedMembers))
   return makeAssertion(claimValue(`mechanic.effect.${node.type}`, args), pointer, context)
 }
 
@@ -196,9 +203,15 @@ function mapEffect(node, pointer, context, out) {
     out.unresolved.push(ontologyGap(pointer, 'effect-node', context.origin_id))
     return null
   }
+  const leafPredicate = `mechanic.effect.${node.type}`
   if (node.type === 'named-region-state') return namedRegionCandidate(node, pointer, context, out)
   if (node.type === 'dice-table') return diceTableCandidate(node, pointer, context, out)
-  const leafPredicate = `mechanic.effect.${node.type}`
+  if (node.type === 'ability-grant' && node.modifier?.definition !== undefined && context.registry.predicates.has(leafPredicate)) {
+    const definitionKey = mapEffect(node.modifier.definition, pointerJoin(pointer, 'modifier', 'definition'), context, out)
+    const assertion = leafCandidate(node, pointer, context, definitionKey ? [definitionKey] : [])
+    out.assertions.push(assertion)
+    return assertion.semantic_key
+  }
   if (context.registry.predicates.has(leafPredicate)) {
     const assertion = leafCandidate(node, pointer, context)
     out.assertions.push(assertion)

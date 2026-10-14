@@ -20,8 +20,8 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
         "happened-compare" => {
             let left = obj(p.get("left"));
             let right = obj(p.get("right"));
-            let ge = is(p, "comparison", "greater-or-equal");
-            if let Some(pool) = nn(right, "pool") {
+            let ge = is(p, "comparison", "gte");
+            if let Some(pool) = nn(right, "pool").filter(|_| ge) {
                 return format!(
                     "{neg}you destroyed at least as many {} as your {}",
                     destroyed_count(left),
@@ -31,9 +31,21 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             if let Some(value) = nn(right, "value") {
                 return format!(
                     "{neg}you destroyed {} {} {}",
-                    if ge { "at least" } else { "more than" },
+                    comparison_phrase(p.get("comparison")),
                     st(Some(value)),
                     destroyed_count(left)
+                );
+            }
+            if !ge && !is(p, "comparison", "gt") {
+                let right = if let Some(pool) = nn(right, "pool") {
+                    format!("your {}", dekebab(&st(Some(pool))))
+                } else {
+                    format!("the number of {} you destroyed", destroyed_count(right))
+                };
+                return format!(
+                    "{neg}the number of {} you destroyed is {} {right}",
+                    destroyed_count(left),
+                    comparison_phrase(p.get("comparison"))
                 );
             }
             format!(
@@ -45,69 +57,56 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             )
         }
         "within" => {
-            let of = p.get("of");
-            let range = p.get("range");
-            let wholly = if p.get("wholly") == Some(&Value::Bool(true)) {
+            let every = is(p, "models", "every");
+            let counted = nn(p, "count").is_some();
+            let plural = counted && !every;
+            let who = if every {
+                format!(
+                    "every model in {}{}",
+                    subject_of(p, "the unit"),
+                    if counted {
+                        format!(" ({} models)", count_phrase(p.get("count")))
+                    } else {
+                        String::new()
+                    }
+                )
+            } else if counted {
+                format!(
+                    "{} models in {}",
+                    count_phrase(p.get("count")),
+                    subject_of(p, "the unit")
+                )
+            } else {
+                subject_of(p, "the unit")
+            };
+            let wholly = if p.get("wholly").and_then(Value::as_bool) == Some(true) {
                 "wholly "
             } else {
                 ""
             };
-            let who = if is(p, "models", "every") {
-                format!("every model in {}", subject_of(p, "the unit"))
-            } else {
-                subject_of(p, "the unit")
-            };
-            if matches!(
-                range.and_then(Value::as_str),
+            let target = if matches!(
+                p.get("range").and_then(Value::as_str),
                 Some("half-weapon" | "weapon")
             ) {
-                let who = if is(p, "subject", "defender") {
-                    "the target".to_string()
-                } else {
-                    subject_of(p, "the unit")
-                };
-                return format!("{who} is {not_}within {}", range_phrase(range));
-            }
-            let of_obj = of.and_then(Value::as_object);
-            if let Some(o) = of_obj.filter(|o| truthy(o.get("objective"))) {
-                if nn(obj(o.get("objective")), "selection_var").is_some() {
-                    return format!("{who} is {not_}{wholly}within range of that objective marker");
-                }
-                let phrase = objective_phrase(obj(o.get("objective")), false, "objective marker");
-                return format!(
-                    "{who} is {not_}{wholly}within range of {} {phrase}",
-                    article(&phrase)
-                );
-            }
-            if let Some(o) = of_obj.filter(|o| is(o, "owner", "enemy")) {
-                if nn(p, "subject").is_none() {
-                    let phrase = unit_filter_phrase(o);
-                    if negated {
-                        return format!(
-                            "no {} is within {}",
-                            strip_article(&phrase),
-                            range_phrase(range)
-                        );
-                    }
-                    return format!("{phrase} is within {}", range_phrase(range));
-                }
-            }
-            let target = if of.and_then(Value::as_str) == Some("battlefield-edge") {
-                "a battlefield edge".to_string()
-            } else if of.and_then(Value::as_str) == Some("battlefield-centre") {
-                "the centre of the battlefield".to_string()
-            } else if let Some(o) = of_obj.filter(|o| truthy(o.get("marker"))) {
-                let marker = st(o.get("marker"));
-                format!("{} {} marker", article(&marker), dekebab(&marker))
+                String::new()
             } else {
-                unit_ref_phrase(of, "the unit")
+                format!(" of {}", place_ref_phrase(p.get("of")))
             };
-            let phase_start = is(p, "at", "phase-start");
+            let verb = if is(p, "at", "phase-start") {
+                if plural {
+                    "were"
+                } else {
+                    "was"
+                }
+            } else if plural {
+                "are"
+            } else {
+                "is"
+            };
             format!(
-                "{who} {} {not_}{wholly}within {} of {target}{}",
-                if phase_start { "was" } else { "is" },
-                range_phrase(range),
-                if phase_start {
+                "{who} {verb} {not_}{wholly}within {}{target}{}",
+                range_phrase(p.get("range")),
+                if is(p, "at", "phase-start") {
                     " at the start of the phase"
                 } else {
                     ""
@@ -159,26 +158,80 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 "unit".to_string()
             };
-            format!("{neg}{who} is the closest {among}{within}")
+            let to = nn(p, "to")
+                .filter(|to| to.as_str() != Some("attacker"))
+                .map(|to| {
+                    format!(
+                        " to {}",
+                        if to.as_str() == Some("defender") {
+                            "the target".to_string()
+                        } else {
+                            unit_ref_phrase(Some(to), "the unit")
+                        }
+                    )
+                })
+                .unwrap_or_default();
+            format!("{neg}{who} is the closest {among}{to}{within}")
         }
         "controls" => {
-            if is(p, "compare", "more-than-opponent") {
-                return format!("{neg}you hold more objectives than the opponent");
-            }
             let who = if is(p, "by", "enemy") {
                 "your opponent controls"
             } else {
                 "you control"
             };
-            let mut s = format!(
-                "{neg}{who} {}+ {}",
-                str_or_one(p, "count_min"),
-                objective_phrase(obj(p.get("objective")), true, "objective")
-            );
-            if let Some(mx) = nn(p, "count_max") {
-                s.push_str(&format!(" (at most {})", st(Some(mx))));
+            let objective = objective_phrase(obj(p.get("objective")), true, "objective");
+            let mut clauses = Vec::new();
+            if nn(p, "count").is_some()
+                || (nn(p, "compare").is_none() && nn(p, "proportion").is_none())
+            {
+                clauses.push(format!(
+                    "{who} {} {objective}",
+                    count_phrase(p.get("count"))
+                ));
             }
-            s
+            if let Some(compare) = nn(p, "compare") {
+                let compare = obj(Some(compare));
+                let other = if is(compare, "owner", "friendly") {
+                    "you"
+                } else {
+                    "the opponent"
+                };
+                let holder = if is(p, "by", "enemy") {
+                    "your opponent holds"
+                } else {
+                    "you hold"
+                };
+                if is(compare, "comparison", "gt") {
+                    clauses.push(format!("{holder} more {objective} than {other}"));
+                } else {
+                    clauses.push(format!(
+                        "the number of {objective} {who} is {} the number {}",
+                        comparison_phrase(compare.get("comparison")),
+                        if is(compare, "owner", "friendly") {
+                            "you control"
+                        } else {
+                            "the opponent controls"
+                        }
+                    ));
+                }
+            }
+            if let Some(proportion) = nn(p, "proportion") {
+                let proportion = obj(Some(proportion));
+                let fraction = proportion
+                    .get("fraction")
+                    .and_then(Value::as_f64)
+                    .unwrap_or(0.0);
+                let fraction = if fraction == 0.5 {
+                    "half".to_string()
+                } else {
+                    format!("{}%", fraction * 100.0)
+                };
+                clauses.push(format!(
+                    "{who} {} {fraction} of the {objective}",
+                    comparison_phrase(proportion.get("comparison"))
+                ));
+            }
+            format!("{neg}{}", clauses.join(" and "))
         }
         "attack-is" => {
             let attack_type = if truthy(p.get("attack_type")) {
@@ -186,12 +239,6 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 None
             };
-            if p.get("all_target_same_unit") == Some(&Value::Bool(true)) {
-                return format!(
-                    "{neg}all of the unit's {}attacks target the same enemy unit",
-                    attack_type.map(|a| format!("{a} ")).unwrap_or_default()
-                );
-            }
             let mut kinds: Vec<String> = Vec::new();
             if truthy(p.get("shooting_type")) {
                 kinds.push(format!("{} shooting", dekebab(&st(p.get("shooting_type")))));
@@ -204,6 +251,21 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             }
             let kinds: Vec<String> = kinds.into_iter().filter(|k| !k.is_empty()).collect();
             let kind = kinds.join(" ");
+            if p.get("all_target_same_unit") == Some(&Value::Bool(true)) {
+                let weapons = if nn(p, "weapons").is_some() {
+                    format!(" made with {}", crate::translate::effect::weapon_noun(p))
+                } else {
+                    String::new()
+                };
+                return format!(
+                    "{neg}all of the unit's {}attacks{weapons} target the same enemy unit",
+                    if kind.is_empty() {
+                        String::new()
+                    } else {
+                        format!("{kind} ")
+                    }
+                );
+            }
             let mut parts = vec![format!(
                 "for {}attacks",
                 if kind.is_empty() {
@@ -212,14 +274,28 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     format!("{kind} ")
                 }
             )];
-            if truthy(p.get("weapon_keyword")) {
-                parts.push(format!(
-                    "made with [{}] weapons",
-                    st(p.get("weapon_keyword")).to_uppercase()
-                ));
-            }
-            if truthy(p.get("weapon_name")) {
-                parts.push(format!("made with {}", st(p.get("weapon_name"))));
+            if let Some(weapons) = nn(p, "weapons") {
+                let weapons = obj(Some(weapons));
+                if weapons
+                    .iter()
+                    .all(|(key, value)| value.is_null() || key == "keyword" || key == "name")
+                    && !weapons.get("keyword").is_some_and(Value::is_array)
+                {
+                    if let Some(keyword) = nn(weapons, "keyword") {
+                        parts.push(format!(
+                            "made with {} weapons",
+                            crate::translate::effect::bracket_keyword(keyword)
+                        ));
+                    }
+                    if let Some(name) = nn(weapons, "name") {
+                        parts.push(format!("made with {}", st(Some(name))));
+                    }
+                } else {
+                    parts.push(format!(
+                        "made with {}",
+                        crate::translate::effect::weapon_noun(p)
+                    ));
+                }
             }
             format!("{neg}{}", parts.join(" "))
         }
@@ -245,7 +321,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             format!(
                 "{neg}{} is {} {}",
                 side(obj(p.get("left"))),
-                dekebab(&st(p.get("comparison"))),
+                comparison_phrase(p.get("comparison")),
                 side(obj(p.get("right")))
             )
         }
@@ -291,17 +367,27 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
         "designated" => {
             if let Some(s) = p.get("subject").and_then(Value::as_object) {
                 if truthy(s.get("objective")) {
-                    let mut out = format!(
-                        "{neg}{}+ {} tagged {}",
-                        str_or_one(p, "count_min"),
+                    return format!(
+                        "{neg}{} {} tagged {}",
+                        count_phrase(p.get("count")),
                         objective_phrase(obj(s.get("objective")), true, "objective"),
                         dekebab(&st(p.get("tag")))
                     );
-                    if let Some(mx) = nn(p, "count_max") {
-                        out.push_str(&format!(" (at most {})", st(Some(mx))));
-                    }
-                    return out;
                 }
+            }
+            if nn(p, "count").is_some() {
+                let subject = pluralize_first_noun(&strip_article(&unit_ref_phrase(
+                    p.get("subject"),
+                    "the unit",
+                )));
+                let by = nn(p, "by")
+                    .map(|by| format!(" by {}", unit_ref_phrase(Some(by), "the unit")))
+                    .unwrap_or_default();
+                return format!(
+                    "{neg}{} {subject} {}{by}",
+                    count_phrase(p.get("count")),
+                    designation_phrase(&st(p.get("tag")), false)
+                );
             }
             let by = match nn(p, "by") {
                 Some(b) => {
@@ -329,23 +415,24 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     dekebab(&st(source))
                 );
             }
-            let amount = match nn(p, "at_least") {
-                Some(v) => format!("{}+", st(Some(v))),
-                None => format!("at most {}", st(p.get("at_most"))),
-            };
-            format!("{neg}the unit has {amount} {}", dekebab(&st(p.get("pool"))))
+            format!(
+                "{neg}the unit has {} {}",
+                count_phrase(p.get("count")),
+                dekebab(&st(p.get("pool")))
+            )
         }
         // ── Mission-card predicates ───────────────────────────────────────────
         "operation-markers" => {
             let side = nn(p, "side")
                 .map(|v| format!("{} ", st(Some(v))))
                 .unwrap_or_default();
-            let num = |k: &str| match p.get(k) {
+            let count = obj(p.get("count"));
+            let num = |k: &str| match count.get(k) {
                 Some(Value::Number(n)) => Some((n.as_f64().unwrap_or(0.0), js_num(n))),
                 _ => None,
             };
-            let min = num("count_min");
-            let max = num("count_max");
+            let min = num("min");
+            let max = num("max");
             let exact = match (&min, &max) {
                 (Some(mn), Some(mx)) if mn.0 == mx.0 => Some(mn.clone()),
                 _ => None,
@@ -359,14 +446,18 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     if mn.0 == 1.0 { "" } else { "s" }
                 )
             } else {
-                let lead = min
-                    .as_ref()
-                    .map(|m| m.1.clone())
-                    .unwrap_or_else(|| "1".to_string());
-                format!("{lead}+ {side}operation markers on the battlefield")
+                format!(
+                    "{} {side}operation markers on the battlefield",
+                    count_phrase(p.get("count"))
+                )
             };
-            if let Some(w) = nn(p, "within_range_of") {
-                s.push_str(&format!(" within range of {}", dekebab(&st(Some(w)))));
+            if let Some(w) = nn(p, "within") {
+                let w = obj(Some(w));
+                s.push_str(&format!(
+                    " within {} of {}",
+                    range_phrase(w.get("range")),
+                    place_ref_phrase(w.get("of"))
+                ));
             }
             if truthy(p.get("friendly_unit_in_same_terrain_area")) {
                 s.push_str(" with a friendly unit in the same terrain area");
@@ -377,8 +468,8 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             format!("{neg}{s}")
         }
         "engagement-fronts" => format!(
-            "{neg}you are engaged on {}+ fronts",
-            str_or_one(p, "count_min")
+            "{neg}you are engaged on {} fronts",
+            count_phrase(p.get("count"))
         ),
         "destroyed-while-on-objective" => {
             let objective = if truthy(p.get("objective_role")) {
@@ -386,7 +477,10 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 "an objective".to_string()
             };
-            let mut s = format!("{neg}{}+ enemy units destroyed", str_or_one(p, "count_min"));
+            let mut s = format!(
+                "{neg}{} enemy units destroyed",
+                count_phrase(p.get("count"))
+            );
             if truthy(p.get("destroyer_on_objective")) {
                 s.push_str(&format!(" by a unit on {objective}"));
             }
@@ -409,8 +503,8 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 None => "a terrain area".to_string(),
             };
             format!(
-                "{neg}{}+ enemy units destroyed {where_} {terrain}",
-                str_or_one(p, "count_min")
+                "{neg}{} enemy units destroyed {where_} {terrain}",
+                count_phrase(p.get("count"))
             )
         }
         "battle-size" => format!(
@@ -420,6 +514,20 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
         "army-faction" => format!(
             "your Army Faction is {not_}{}",
             st(p.get("faction")).replace('-', " ").to_uppercase()
+        ),
+        "army-state" => format!(
+            "{} is {not_}{}",
+            if is(p, "owner", "enemy") {
+                "your opponent's army"
+            } else {
+                "your army"
+            },
+            dekebab(&st(p.get("state")))
+        ),
+        "oath-state" => format!(
+            "the {} oath is {not_}{}",
+            id_label(p.get("ability")),
+            dekebab(&st(p.get("state")))
         ),
         "army-includes" => army_includes(p, negated),
         "moved-over" => {
@@ -468,6 +576,16 @@ fn army_includes(p: &P, negated: bool) -> String {
             .unwrap_or_default()
     };
     if p.get("every").and_then(Value::as_bool) == Some(true) {
+        if f.iter().any(|(key, value)| {
+            !value.is_null() && !["all_of", "any_of", "level"].contains(&key.as_str())
+        }) || (nn(&f, "all_of").is_some() && nn(&f, "any_of").is_some())
+        {
+            return format!(
+                "{}every {noun} in your army is {}",
+                if negated { "not " } else { "" },
+                unit_filter_phrase(&f)
+            );
+        }
         let all = words("all_of");
         let any = words("any_of");
         let list = if any.is_empty() {
@@ -507,7 +625,7 @@ fn army_includes(p: &P, negated: bool) -> String {
 }
 
 /// JS `s.replace(/\b(unit|model)\b/, "$1s")`: the first whole word "unit" or "model", made plural.
-fn pluralize_first_noun(s: &str) -> String {
+pub(super) fn pluralize_first_noun(s: &str) -> String {
     let word = |b: u8| b.is_ascii_alphanumeric() || b == b'_';
     let bytes = s.as_bytes();
     for (at, _) in s.char_indices() {

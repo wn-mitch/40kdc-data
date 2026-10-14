@@ -70,12 +70,20 @@ def test_crit_threshold_and_reroll_gate_by_weapon_type_and_name() -> None:
                 {
                     "type": "roll-result",
                     "target": "this-unit",
-                    "modifier": {"roll": "wound", "critical_on": 5, "weapon_type": "melee"},
+                    "modifier": {
+                        "roll": "wound",
+                        "critical_on": 5,
+                        "weapons": {"type": "melee"},
+                    },
                 },
                 {
                     "type": "re-roll",
                     "target": "this-unit",
-                    "modifier": {"roll": "hit", "subset": "ones", "weapon_name": "Fabricated Gun"},
+                    "modifier": {
+                        "roll": "hit",
+                        "subset": "ones",
+                        "weapons": {"name": "Fabricated Gun"},
+                    },
                 },
             ],
         },
@@ -97,8 +105,7 @@ def test_phase_and_weapon_name_gates_both_survive() -> None:
                 "stat": "A",
                 "operation": "improve",
                 "value": 1,
-                "weapon_type": "melee",
-                "weapon_name": "Fabricated Blade",
+                "weapons": {"type": "melee", "name": "Fabricated Blade"},
             },
         },
         SOURCE,
@@ -109,27 +116,23 @@ def test_phase_and_weapon_name_gates_both_survive() -> None:
     ]
 
 
-def test_crit_threshold_narrowed_by_weapon_keyword_gates_and_unreadable_one_is_refused() -> None:
-    def crit(keyword: Any) -> dict[str, Any]:
-        return effect_to_buffs(
-            {
-                "type": "roll-result",
-                "target": "this-unit",
-                "modifier": {"roll": "hit", "critical_on": 5, "weapon_keyword": keyword},
+def test_crit_threshold_narrowed_by_structured_weapon_keyword_gate() -> None:
+    gated = effect_to_buffs(
+        {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+                "roll": "hit",
+                "critical_on": 5,
+                "weapons": {"keyword": {"keyword_id": "pistol"}},
             },
-            SOURCE,
-            SHOOTING,
-        )
-
-    gated = crit("Pistol")
+        },
+        SOURCE,
+        SHOOTING,
+    )
     assert gated["unsupported"] == []
     assert [buff.get("applicableWhen") for buff in gated["applied"]] == [
-        {"weaponKeyword": "pistol"}
-    ]
-    unreadable = crit("")
-    assert unreadable["applied"] == []
-    assert [item["reason"] for item in unreadable["unsupported"]] == [
-        'roll-result: narrows by "weapon_keyword" which the cruncher can\'t resolve here'
+        {"weaponKeywords": [{"keyword_id": "pistol"}]}
     ]
 
 
@@ -205,7 +208,12 @@ def test_weapon_named_attacks_lift_reaches_only_that_weapon(dataset: Any) -> Non
             {
                 "type": "stat-modifier",
                 "target": "this-unit",
-                "modifier": {"stat": "A", "operation": "improve", "value": 1, "weapon_name": name},
+                "modifier": {
+                    "stat": "A",
+                    "operation": "improve",
+                    "value": 1,
+                    "weapons": {"name": name},
+                },
             },
             SOURCE,
             SHOOTING,
@@ -226,7 +234,9 @@ def test_printed_grant_to_friendly_units_translates_its_body_for_the_holders() -
         }
 
     friendly = effect_to_buffs(
-        grant({"owner": "friendly", "all_of": ["EXAMPLE"]}), SOURCE, SHOOTING
+        grant({"owner": "friendly", "all_of": ["EXAMPLE"]}),
+        SOURCE,
+        {"phase": "shooting", "attackerKeywords": ["example"]},
     )
     assert [b["contribution"] for b in friendly["applied"]] == [
         {"type": "reroll", "roll": "hit", "subset": "ones"}
@@ -238,5 +248,9 @@ def test_printed_grant_to_friendly_units_translates_its_body_for_the_holders() -
     assert [item["reason"] for item in bound["unsupported"]] == [
         "ability-grant: the units holding the granted ability are not resolved"
     ]
-    enemy = effect_to_buffs(grant({"owner": "enemy", "all_of": ["EXAMPLE"]}), SOURCE, SHOOTING)
+    enemy = effect_to_buffs(
+        grant({"owner": "enemy", "all_of": ["EXAMPLE"]}),
+        SOURCE,
+        {"phase": "shooting", "targetKeywords": ["example"]},
+    )
     assert enemy["applied"] == [] and enemy["unsupported"] == []

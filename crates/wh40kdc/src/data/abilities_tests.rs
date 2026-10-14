@@ -2,6 +2,7 @@ use serde_json::{json, Value};
 
 use super::*;
 use crate::cruncher::buffs::{AbilityKind, BuffContribution};
+use crate::cruncher::effect_to_buffs;
 use crate::data::RawData;
 
 fn source(id: &str, kind: AbilityKind) -> BuffSource {
@@ -41,7 +42,7 @@ fn grant(id: &str) -> Value {
 }
 
 fn assault() -> Value {
-    json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": { "abilities": ["Assault"] } })
+    json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": { "keywords": [{"keyword_id": "assault"}] } })
 }
 
 fn keyword_ids(t: &EffectTranslation) -> Vec<String> {
@@ -56,14 +57,17 @@ fn keyword_ids(t: &EffectTranslation) -> Vec<String> {
 
 #[test]
 fn a_bundle_grant_expands_into_the_bundle_it_names() {
-    let ds = Dataset::embedded();
-    let runts = ds
-        .abilities
-        .get_in_faction("super-runts-orks", "orks")
-        .expect("super-runts-orks");
-    let src = source("super-runts-orks", AbilityKind::Unit);
+    let ds = dataset(vec![
+        ability("grant-rule", grant("bundle"), json!({})),
+        ability(
+            "bundle",
+            json!({ "type": "rules-bundle", "steps": [assault()] }),
+            json!({}),
+        ),
+    ]);
+    let runts = ds.abilities.get_in_faction("grant-rule", "orks").unwrap();
+    let src = source("grant-rule", AbilityKind::Unit);
     let expanded = ds.describe_buffs(runts, &src, None, TranslationPerspective::Attacker, None);
-    // Riled Up's [ASSAULT] grant reaches the unit only through the expansion.
     assert_eq!(keyword_ids(&expanded), ["assault"]);
     let raw = effect_to_buffs(
         &serde_json::to_value(&runts.effect).unwrap(),
@@ -72,10 +76,6 @@ fn a_bundle_grant_expands_into_the_bundle_it_names() {
         TranslationPerspective::Attacker,
     );
     assert!(keyword_ids(&raw).is_empty());
-    assert!(raw
-        .unsupported
-        .iter()
-        .any(|u| u.reason == "effect type \"ability-grant\" is not modelled by the buff layer"));
 }
 
 #[test]
@@ -138,11 +138,11 @@ fn a_usage_limit_makes_the_buff_a_lever_named_by_the_first_limit() {
     );
     assert!(t.applied.is_empty(), "a limited use is not always on");
     let ids: Vec<&str> = t.activatable.iter().map(|l| l.id.as_str()).collect();
-    assert_eq!(ids, ["once@n-per-battle"]);
-    // A stratagem is already opt-in: its usage adds no gate.
+    assert_eq!(ids, ["once#activate"]);
+    assert_eq!(t.activatable[0].group.as_ref().unwrap().max_activations, 1);
     assert_eq!(
-        usage_gated(Some(&json!("stratagem")), Some(&limits), &assault()),
-        assault()
+        t.activatable[0].requires.as_ref().unwrap()[0]["usage"],
+        limits
     );
 }
 
@@ -178,11 +178,55 @@ fn only_a_single_aura_range_gates_the_buffs() {
         TranslationPerspective::Attacker,
         None,
     );
-    let gate = t.applied[0]
-        .applicable_when
-        .as_ref()
-        .and_then(|w| w.max_range_inches);
-    assert_eq!(gate, Some(6.0));
+    assert!(
+        t.applied.is_empty(),
+        "range membership is not inferred without board state"
+    );
+    assert_eq!(t.unsupported.len(), 1);
+}
+
+#[test]
+fn model_grants_do_not_make_supporting_abilities_or_aura_ranges() {
+    let nested_aura = json!({
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+            "definition": {
+                "type": "re-roll",
+                "target": {
+                    "owner": "friendly",
+                    "within": { "range": { "inches": 6 } }
+                },
+                "modifier": { "roll": "hit", "subset": "ones" }
+            }
+        }
+    });
+    assert!(!reaches_other_units(&nested_aura));
+    assert_eq!(aura_inches(&nested_aura), None);
+}
+
+#[test]
+fn aura_ranges_select_the_current_battle_round_tier() {
+    let tiered = json!({
+        "type": "re-roll",
+        "target": {
+            "owner": "friendly",
+            "within": {
+                "range": {
+                    "per_battle_round": [
+                        { "inches": 3 },
+                        { "inches": 6 },
+                        { "inches": 9 }
+                    ]
+                }
+            }
+        },
+        "modifier": { "roll": "hit", "subset": "ones" }
+    });
+    assert_eq!(aura_inches_for_round(&tiered, Some(1)), Some(3.0));
+    assert_eq!(aura_inches_for_round(&tiered, Some(2)), Some(6.0));
+    assert_eq!(aura_inches_for_round(&tiered, Some(9)), Some(9.0));
+    assert_eq!(aura_inches_for_round(&tiered, None), None);
 }
 
 #[test]
@@ -263,4 +307,97 @@ fn a_rated_rule_reads_the_rating_its_unit_prints() {
         None,
     );
     assert!(unrated.applied.is_empty());
+}
+
+#[test]
+fn model_bundle_grants_never_become_combined_unit_buffs() {
+    let bundle = ability(
+        "bundle",
+        json!({"type": "rules-bundle", "steps": [assault()]}),
+        json!({}),
+    );
+    let grant = ability(
+        "grant",
+        json!({"type": "ability-grant", "target": "this-model", "modifier": {
+            "ability": "bundle", "rules_bundle": true
+        }}),
+        json!({}),
+    );
+    let ds = dataset(vec![bundle, grant]);
+    for kind in [AbilityKind::Unit, AbilityKind::Attached] {
+        let result = ds.describe_buffs(
+            ds.abilities.get_any("grant").unwrap(),
+            &source("grant", kind),
+            None,
+            TranslationPerspective::Attacker,
+            None,
+        );
+        assert!(result.applied.is_empty());
+        assert_eq!(result.unsupported.len(), 1);
+    }
+}
+
+#[test]
+fn parent_usage_preserves_child_stance_group_and_local_trigger() {
+    let a = ability(
+        "stances",
+        json!({"type": "stance-select", "mode": "re-selectable", "options": [
+            {"id": "first", "name": "First", "effect": assault()},
+            {"id": "second", "name": "Second", "effect": assault()}
+        ]}),
+        json!({"ability_type": "unit", "behavior": "reactive", "usage": {"frequency": "n-per-battle", "count": 1},
+        "trigger": {"event": "phase-started", "condition": {"type": "phase-is", "parameters": {"phase": "shooting"}}}}),
+    );
+    let ds = dataset(vec![a]);
+    let result = ds.describe_buffs(
+        ds.abilities.get_any("stances").unwrap(),
+        &source("stances", AbilityKind::Unit),
+        None,
+        TranslationPerspective::Attacker,
+        None,
+    );
+    assert!(result.applied.is_empty());
+    assert_eq!(result.activatable.len(), 2);
+    assert_eq!(result.activatable[0].id, "stances#first");
+    assert_eq!(
+        result.activatable[0].group.as_ref().unwrap().id,
+        "stances?stance"
+    );
+    assert!(result
+        .activatable
+        .iter()
+        .all(|lever| lever.requires.as_ref().unwrap()[0].get("usage").is_some()));
+}
+
+#[test]
+fn top_level_trigger_snapshot_rejects_current_membership_as_historical_evidence() {
+    let recipients = json!({"type":"for-each-unit",
+        "selector":{"filter":{"level":"model","member_of":"this-unit","attachment_role":"bodyguard"}},
+        "effect":{"type":"weapon-ability-grant","target":"recipient","modifier":{"keywords":[{"keyword_id":"assault"}]}}
+    });
+    let a = ability(
+        "snapshot",
+        json!({"type":"sequence","steps":[recipients]}),
+        json!({"ability_type":"unit","behavior":"reactive","trigger":{"event":"battle-started"}}),
+    );
+    let ds = dataset(vec![a]);
+    for role in [
+        None,
+        Some(crate::cruncher::AttachmentRole::Bodyguard),
+        Some(crate::cruncher::AttachmentRole::Leader),
+    ] {
+        let mut context = EngineContext::new(crate::Phase::Shooting);
+        context.attacker_attachment_role = role;
+        let result = ds.describe_buffs(
+            ds.abilities.get_any("snapshot").unwrap(),
+            &source("snapshot", AbilityKind::Unit),
+            Some(&context),
+            TranslationPerspective::Attacker,
+            None,
+        );
+        assert!(result.applied.is_empty() && result.activatable.is_empty());
+        assert_eq!(result.unsupported.len(), 1);
+        assert_eq!(result.unsupported[0].reason,
+            "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients");
+    }
 }

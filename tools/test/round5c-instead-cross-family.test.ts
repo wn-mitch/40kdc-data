@@ -38,7 +38,7 @@ function errorsOf(text: string, pieces: Piece[]): string[] {
 
 const stat = (characteristic: string, value: number): Record<string, unknown> => ({ subject: "this-unit", characteristics: [characteristic], operation: "add", value });
 const keyword = (word: string, negated = false): Record<string, unknown> => ({ keywords: [word], subject: "this-unit", negated });
-const KEYWORD_NODE = (word: string) => ({ type: "has-keyword", parameters: { all_of: [word] } });
+const KEYWORD_NODE = (word: string) => ({ type: "matches", parameters: { filter: { all_of: [word] } } });
 
 describe("a restoration instead replaces a restoration effect of the other family (compile.ts, SS-1)", () => {
   const text = "Recover up to 3 lost wounds to one model or, if it is a DAEMONETTES unit, return up to D3+3 destroyed models instead.";
@@ -153,12 +153,12 @@ describe("a returned-model exclusion after a replacement instead binds the repla
   it("excludes CHARACTER models from the replacement only", () => {
     const mechanics = mechanicsOf(battlelineText, battlelinePieces);
     const battleline = KEYWORD_NODE("BATTLELINE");
-    const steps = mechanics.effect.steps as Array<{ condition: unknown; effect: { modifier?: Record<string, unknown> } }>;
+    const steps = mechanics.effect.steps as Array<{ condition: unknown; effect: { target: unknown } }>;
     expect(steps).toHaveLength(2);
     expect(steps[0]!.condition).toEqual({ operator: "not", operands: [battleline] });
-    expect(steps[0]!.effect.modifier?.exclude_model_keyword).toBeUndefined();
+    expect(steps[0]!.effect.target).toBe("this-unit");
     expect(steps[1]!.condition).toEqual(battleline);
-    expect(steps[1]!.effect.modifier?.exclude_model_keyword).toEqual(["CHARACTER"]);
+    expect(steps[1]!.effect.target).toEqual({ level: "model", member_of: "this-unit", none_of: ["CHARACTER"] });
   });
 
   it("refuses a trailing exclusion with no restoration effect of its own", () => {

@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
+import { destroyerFilterAfter, foldDestroyerFilter, namedDestroyerFilterAfter } from "../src/round5c/compile-destruction-participants.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data/enrichment");
 /** A real authored entry, used only as the shell the compiled mechanics are checked in. */
@@ -146,15 +147,15 @@ describe("Round 5C model-level selection", () => {
     // The Command phase gates the selection.
     const selection = mechanics.effect.effect;
     expect(selection.type).toBe("select-units");
-    expect(selection.selector).toMatchObject({ owner: "friendly", target_kind: "model", keywords: ["GLIMMER", "VEHICLE"], count: 1 });
+    expect(selection.selector).toMatchObject({ filter: { owner: "friendly", all_of: ["GLIMMER", "VEHICLE"], level: "model" }, count: { min: 1, max: 1 } });
     expect(selection.effect.target).toBe("selected-unit");
   });
 
-  it("keeps a unit selection without target_kind", () => {
+  it("keeps a unit selection without a model-level filter", () => {
     const mechanics = mechanicsOf(text.replace("VEHICLE model", "VEHICLE unit"),
       ...items({ side: "friendly", keywords: ["GLIMMER", "VEHICLE"] }).map(([wording, family, parameters]) => [wording.replace("VEHICLE model", "VEHICLE unit"), family, parameters] as Item));
     expect(mechanics.effect.effect.type).toBe("select-units");
-    expect(mechanics.effect.effect.selector.target_kind).toBeUndefined();
+    expect(mechanics.effect.effect.selector.filter.level).toBeUndefined();
   });
 
   it("refuses an other-model selection when no bearer's unit size is known", () => {
@@ -167,11 +168,11 @@ describe("Round 5C model-level selection", () => {
       ["Each model can only be selected once per turn", "usage-scope", { per: "model" }])).toContain("no decided reading yet");
   });
 
-  it("lowers a per-model usage on a model selection to that selection's selection_limit", () => {
+  it("lowers a per-model usage on a model selection to that selection's limit", () => {
     const capped = `${text} Each model can only be selected once per turn.`;
     const mechanics = mechanicsOf(capped, ...items(VEHICLE),
       ["Each model can only be selected once per turn", "usage-limit", { frequency: "once-per-turn", per: "model" }]);
-    expect(JSON.stringify(mechanics.effect)).toContain('"selection_limit":{"count":1,"period":"turn"}');
+    expect(JSON.stringify(mechanics.effect)).toContain('"limit":{"count":1,"period":"turn"}');
     expect(mechanics.usage).toBeUndefined();
   });
 
@@ -257,6 +258,53 @@ describe("Round 5C destroyed model of a passive moment", () => {
 
   it("refuses a model-level filter on a unit's destruction", () => {
     expect(errorsOf(text, ...items({ side: "friendly", keywords: ["GLIMMER"], level: "model" }, "unit-destroyed"))).toContain("cannot be what a unit's destruction destroys");
+  });
+});
+
+describe("Round 5C destruction participant binding", () => {
+  it("keeps a preceding destroyer filter as the subject when the victim follows the event", () => {
+    const text = "When a friendly GLIMMER unit destroys an enemy unit, this unit regains 1 lost wound.";
+    const mechanics = mechanicsOf(text,
+      ["friendly GLIMMER unit", "unit-filter", { side: "friendly", keywords: ["GLIMMER"] }],
+      ["destroys an", "event", { kind: "unit-destroyed", by: "antecedent" }],
+      ["enemy unit", "unit-filter", { side: "enemy" }],
+      ["this unit regains 1 lost wound", "regain-wounds", { subject: "this-unit", amount: "1" }]);
+    expect(mechanics.trigger).toMatchObject({
+      event: "destroyed",
+      subject: { owner: "friendly", all_of: ["GLIMMER"] },
+      object: { owner: "enemy" },
+    });
+  });
+
+  it("keeps the destroyed model as the object and binds its exact enemy destroyer as the subject", () => {
+    const text = "Each time a friendly GLIMMER model is destroyed by an enemy HOUND unit, that enemy unit gains a marked token.";
+    const mechanics = mechanicsOf(text,
+      ["friendly GLIMMER model", "unit-filter", { side: "friendly", keywords: ["GLIMMER"], level: "model" }],
+      ["is destroyed by an", "event", { kind: "model-destroyed", by: "enemy", object_owner: "friendly" }],
+      ["enemy HOUND unit", "unit-filter", { side: "enemy", keywords: ["HOUND"] }],
+      ["that enemy unit gains a marked token", "apply-mark", { subject: "antecedent", tag: "marked" }]);
+
+    expect(mechanics.trigger).toMatchObject({
+      event: "model-destroyed",
+      object: { owner: "friendly", all_of: ["GLIMMER"], level: "model" },
+      subject: { owner: "enemy", all_of: ["HOUND"] },
+    });
+    expect(mechanics.effect).toEqual({ type: "designate", target: "event-subject", modifier: { tag: "marked" } });
+  });
+
+  it("only accepts a unit-level filter on the destruction's named side", () => {
+    const event = placed("is destroyed enemy", ["is destroyed", "event", { kind: "model-destroyed", by: "enemy", object_owner: "friendly" }])[0]!;
+    const bound = { ...event, parameters: { ...event.parameters, object_filter: { owner: "friendly", level: "model" } } };
+    const enemy = placed("enemy HOUND unit", ["enemy HOUND unit", "unit-filter", { side: "enemy", keywords: ["HOUND"] }])[0]!;
+    const friendly = placed("friendly HOUND unit", ["friendly HOUND unit", "unit-filter", { side: "friendly", keywords: ["HOUND"] }])[0]!;
+    const model = placed("enemy HOUND model", ["enemy HOUND model", "unit-filter", { side: "enemy", keywords: ["HOUND"], level: "model" }])[0]!;
+
+    expect(namedDestroyerFilterAfter(event, enemy)).toBe(true);
+    expect(destroyerFilterAfter(bound, enemy)).toBe(true);
+    expect(foldDestroyerFilter(bound, enemy, { owner: "enemy", all_of: ["HOUND"] }).parameters.subject_filter)
+      .toEqual({ owner: "enemy", all_of: ["HOUND"] });
+    expect(destroyerFilterAfter(bound, friendly)).toBe(false);
+    expect(destroyerFilterAfter(bound, model)).toBe(false);
   });
 });
 

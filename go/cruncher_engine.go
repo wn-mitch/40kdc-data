@@ -1,6 +1,7 @@
 package wh40kdc
 
 import (
+	"encoding/json"
 	"math"
 	"regexp"
 	"strconv"
@@ -128,6 +129,12 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 
 	targetKeywords := unitKeywordsLower(unit)
 	ctx := cloneMap(getMapOr(input, "context"))
+	if ctx["attackerUnitId"] == nil {
+		ctx["attackerUnitId"] = getStr(attacker, "unitId")
+	}
+	if ctx["targetUnitId"] == nil {
+		ctx["targetUnitId"] = getStr(unit, "id")
+	}
 	if ctx["targetKeywords"] == nil {
 		tk := make([]any, len(targetKeywords))
 		for i, k := range targetKeywords {
@@ -146,15 +153,20 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 		ctx["weaponNames"] = names
 	}
 	if ctx["weaponKeywords"] == nil {
-		// The profile's catalog keyword ids drive applicableWhen.weaponKeyword.
 		keywords := []any{}
+		refs := []any{}
 		for _, refAny := range getList(weaponProfile, "keywords") {
-			ref, _ := asMap(refAny)
-			if id, ok := ref["keyword_id"].(string); ok && !containsAny(keywords, id) {
-				keywords = append(keywords, id)
+			if ref, ok := asMap(refAny); ok && ref != nil {
+				if id := getStr(ref, "keyword_id"); id != "" && !containsAny(keywords, id) {
+					keywords = append(keywords, id)
+				}
+				refs = append(refs, ref)
 			}
 		}
 		ctx["weaponKeywords"] = keywords
+		ctx["weaponKeywordRefs"] = refs
+	} else if ctx["weaponKeywordRefs"] == nil {
+		ctx["weaponKeywordRefs"] = getList(weaponProfile, "keywords")
 	}
 
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
@@ -534,18 +546,30 @@ func jsNumber(v any) float64 {
 	return math.NaN()
 }
 
+func unresolvedQuantityError(v any) error {
+	encoded, err := json.Marshal(v)
+	if err != nil {
+		encoded = []byte("<unserializable>")
+	}
+	return &crunchError{"evalStatValue: unresolved quantity " + string(encoded)}
+}
+
 func evalStatValue(v any) (float64, error) {
 	if isNumber(v) {
 		f, _ := num(v)
+		if math.IsNaN(f) || math.IsInf(f, 0) {
+			return 0, unresolvedQuantityError(v)
+		}
 		return f, nil
+	}
+	if v != nil {
+		if _, ok := v.(string); !ok {
+			return 0, unresolvedQuantityError(v)
+		}
 	}
 	s, ok := v.(string)
 	if !ok {
-		n := jsNumber(v)
-		if !math.IsInf(n, 0) && !math.IsNaN(n) && n != 0 {
-			return n, nil
-		}
-		return 0, nil
+		return 0, unresolvedQuantityError(v)
 	}
 	trimmed := strings.TrimSpace(s)
 	if trimmed == "" {

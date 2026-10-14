@@ -9,7 +9,7 @@ from wh40kdc.cruncher.buffs import (
     resolve_buffs,
 )
 from wh40kdc.cruncher.engine import EngineInput, EngineOutput, crunch, eval_stat_value
-from wh40kdc.cruncher.from_dsl import EffectTranslation, effect_to_buffs, parse_keyword_grant
+from wh40kdc.cruncher.from_dsl import EffectTranslation, effect_to_buffs
 from wh40kdc.cruncher.from_keyword import ENGINE_DISPATCH_KEYWORDS, buffs_from_keyword
 
 __all__ = [
@@ -26,6 +26,5 @@ __all__ = [
     "crunch",
     "effect_to_buffs",
     "eval_stat_value",
-    "parse_keyword_grant",
     "resolve_buffs",
 ]

@@ -33,9 +33,8 @@ def friendly_selection(keywords: list[str]) -> dict[str, Any]:
     return {
         "type": "select-units",
         "selector": {
-            "owner": "friendly",
-            "count": 1,
-            "keywords": keywords,
+            "filter": {"owner": "friendly", "level": "unit", "all_of": keywords},
+            "count": {"min": 1, "max": 1},
             "eligibility": {"operator": "and", "operands": [NOT_THIS_UNIT, WITHIN_9]},
         },
         "effect": {
@@ -83,10 +82,13 @@ def test_unit_without_selector_keywords_gets_nothing_and_unknown_keywords_refuse
 
 def test_enemy_selection_incoming_grant_is_the_attackers_own_behind_its_roll() -> None:
     selector = {
-        "owner": "enemy",
-        "count": 1,
-        "excluded_keywords": ["MONSTER", "VEHICLE"],
-        "visibility_required": True,
+        "filter": {
+            "owner": "enemy",
+            "level": "unit",
+            "none_of": ["MONSTER", "VEHICLE"],
+            "visible": {"to": "this-unit"},
+        },
+        "count": {"min": 1, "max": 1},
     }
     roll = {"type": "dice-gated", "dice": "D6", "threshold": 2, "comparison": "gte"}
     effect = {
@@ -106,8 +108,8 @@ def test_enemy_selection_incoming_grant_is_the_attackers_own_behind_its_roll() -
                         "type": "weapon-ability-grant",
                         "target": "selected-unit",
                         "modifier": {
-                            "abilities": ["Ignores Cover"],
-                            "weapon_type": "ranged",
+                            "keywords": [{"keyword_id": "ignores-cover"}],
+                            "weapons": {"type": "ranged"},
                             "incoming": True,
                         },
                     },
@@ -144,7 +146,10 @@ def test_enemy_selection_incoming_grant_is_the_attackers_own_behind_its_roll() -
 def test_enemy_selection_behind_a_roll_with_a_failure_branch_is_refused() -> None:
     effect = {
         "type": "select-units",
-        "selector": {"owner": "enemy", "count": 1},
+        "selector": {
+            "filter": {"owner": "enemy", "level": "unit"},
+            "count": {"min": 1, "max": 1},
+        },
         "effect": {
             "type": "dice-gated",
             "dice": "D6",
@@ -190,7 +195,7 @@ def test_provider_own_unit_effects_never_apply_to_the_crunched_unit() -> None:
     assert [b["contribution"]["type"] for b in provided] == ["hit-mod"]
 
 
-def test_friendly_filter_applies_only_with_its_keywords_and_is_permissive_without() -> None:
+def test_friendly_filter_requires_matching_keyword_evidence() -> None:
     effect = {
         "type": "roll-modifier",
         "target": {"owner": "friendly", "all_of": ["BLOOD LEGIONS"]},
@@ -199,7 +204,11 @@ def test_friendly_filter_applies_only_with_its_keywords_and_is_permissive_withou
     assert effect_to_buffs(effect, PROVIDED, SHOOTING)["applied"] == []
     keyed = {"phase": "shooting", "attackerKeywords": ["blood legions"]}
     assert len(effect_to_buffs(effect, PROVIDED, keyed)["applied"]) == 1
-    assert len(effect_to_buffs(effect, PROVIDED, {"phase": "shooting"})["applied"]) == 1
+    unknown = effect_to_buffs(effect, PROVIDED, {"phase": "shooting"})
+    assert unknown["applied"] == []
+    assert [item["reason"] for item in unknown["unsupported"]] == [
+        "unit-filter target: identity, state or model membership is unresolved"
+    ]
 
 
 # Capped and cap-raising levers.
@@ -215,7 +224,7 @@ def test_capped_scaling_is_a_lever_at_its_cap_and_uncapped_is_refused() -> None:
                 "stat": "A",
                 "operation": "improve",
                 "value": 2,
-                "weapon_name": "fabricated claws",
+                "weapons": {"name": "fabricated claws"},
             },
             "scaling": scaling,
         },
@@ -272,6 +281,44 @@ def test_added_selection_to_own_ability_is_a_cap_raise_with_no_buffs() -> None:
     assert effect_to_buffs(modifier("uses"), OWN, SHOOTING)["activatable"] == []
 
 
+def test_dice_pool_option_lever_ids_remain_label_based() -> None:
+    result = effect_to_buffs(
+        {
+            "type": "dice-pool-allocation",
+            "pool": {"count": 2, "die": "D6"},
+            "max_activations": 1,
+            "options": [
+                {
+                    "id": "alpha",
+                    "name": "Display Alpha",
+                    "requirement": {"count": 1},
+                    "effect": {
+                        "type": "stat-modifier",
+                        "target": "this-unit",
+                        "modifier": {"stat": "S", "operation": "add", "value": 1},
+                    },
+                },
+                {
+                    "id": "beta",
+                    "name": "Display Beta",
+                    "requirement": {"count": 1},
+                    "effect": {
+                        "type": "stat-modifier",
+                        "target": "this-unit",
+                        "modifier": {"stat": "A", "operation": "add", "value": 1},
+                    },
+                },
+            ],
+        },
+        OWN,
+        FIGHT,
+    )
+    assert {lever["id"] for lever in result["activatable"]} == {
+        "fabricated#Display Alpha",
+        "fabricated#Display Beta",
+    }
+
+
 # Weapon-keyword gates.
 
 RAPID_FIRE = effect_to_buffs(
@@ -279,9 +326,11 @@ RAPID_FIRE = effect_to_buffs(
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-            "abilities": ["Rapid Fire 1"],
-            "weapon_type": "ranged",
-            "weapon_keyword": "Lethal Hits",
+            "keywords": [{"keyword_id": "rapid-fire", "parameters": {"value": 1}}],
+            "weapons": {
+                "type": "ranged",
+                "keyword": {"keyword_id": "lethal-hits"},
+            },
         },
     },
     OWN,
@@ -299,11 +348,76 @@ def _granted(buffs: list[dict[str, Any]], printed: list[str]) -> list[str]:
 
 
 def test_weapon_keyword_gate_reads_printed_or_granted_keywords_and_no_other() -> None:
-    assert RAPID_FIRE["applicableWhen"] == {"phases": ["shooting"], "weaponKeyword": "lethal-hits"}
+    assert RAPID_FIRE["applicableWhen"] == {
+        "phases": ["shooting"],
+        "weaponKeywords": [{"keyword_id": "lethal-hits"}],
+    }
     assert _granted([RAPID_FIRE], ["lethal-hits"]) == ["rapid-fire"]
     assert _granted([RAPID_FIRE], ["heavy"]) == []
     assert _granted([RAPID_FIRE, LETHAL], ["heavy"]) == ["rapid-fire", "lethal-hits"]
 
 
-def test_weapon_keyword_gate_is_permissive_without_the_weapons_keywords() -> None:
-    assert len(resolve_buffs([RAPID_FIRE], {"phase": "shooting"})["extraKeywords"]) == 1
+def test_weapon_keyword_gate_rejects_without_weapon_metadata() -> None:
+    assert len(resolve_buffs([RAPID_FIRE], {"phase": "shooting"})["extraKeywords"]) == 0
+
+
+def _rated_keyword_gate(target_keyword: str, threshold: int) -> dict[str, Any]:
+    return {
+        "source": OWN,
+        "applicableWhen": {
+            "weaponKeywords": [
+                {
+                    "keyword_id": "anti",
+                    "parameters": {"target_keyword": target_keyword, "threshold": threshold},
+                }
+            ]
+        },
+        "contribution": {
+            "type": "extra-keyword",
+            "keywordRef": {"keyword_id": f"rated-{target_keyword.lower()}-{threshold}"},
+        },
+    }
+
+
+def test_weapon_keyword_gate_preserves_ratings_and_target_keyword() -> None:
+    infantry = _rated_keyword_gate("INFANTRY", 3)
+    vehicle = _rated_keyword_gate("VEHICLE", 3)
+    buffs = [infantry, vehicle]
+    context = {
+        "phase": "shooting",
+        "weaponKeywordRefs": [
+            {"keyword_id": "anti", "parameters": {"target_keyword": "INFANTRY", "threshold": 3}}
+        ],
+    }
+    assert [
+        item["keywordRef"]["keyword_id"]
+        for item in resolve_buffs(buffs, context)["extraKeywords"]
+    ] == ["rated-infantry-3"]
+
+
+def test_weapon_keyword_gate_rejects_same_id_wrong_or_unknown_rating() -> None:
+    buff = _rated_keyword_gate("INFANTRY", 3)
+    wrong = {
+        "phase": "shooting",
+        "weaponKeywordRefs": [
+            {"keyword_id": "anti", "parameters": {"target_keyword": "INFANTRY", "threshold": 4}}
+        ],
+    }
+    unknown = {"phase": "shooting", "weaponKeywordRefs": [{"keyword_id": "anti"}]}
+    assert resolve_buffs([buff], wrong)["extraKeywords"] == []
+    assert resolve_buffs([buff], unknown)["extraKeywords"] == []
+
+
+def test_weapon_keyword_gate_conjoins_nested_weapon_scopes() -> None:
+    buff = _rated_keyword_gate("INFANTRY", 3)
+    buff["applicableWhen"]["weaponRequirements"] = [
+        {"weaponKeywords": [{"keyword_id": "blast", "parameters": {"value": 1}}]}
+    ]
+    context = {
+        "phase": "shooting",
+        "weaponKeywordRefs": [
+            {"keyword_id": "anti", "parameters": {"target_keyword": "INFANTRY", "threshold": 3}},
+            {"keyword_id": "blast", "parameters": {"value": 1}},
+        ],
+    }
+    assert len(resolve_buffs([buff], context)["extraKeywords"]) == 1

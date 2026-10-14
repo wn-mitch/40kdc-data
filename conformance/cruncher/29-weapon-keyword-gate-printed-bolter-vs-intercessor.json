@@ -21,7 +21,9 @@
         "abilityKind": "unit"
       },
       "applicableWhen": {
-        "weaponKeyword": "heavy"
+        "weaponKeywords": [
+          { "keyword_id": "heavy" }
+        ]
       },
       "contribution": {
         "type": "extra-keyword",
@@ -40,7 +42,9 @@
         "abilityKind": "unit"
       },
       "applicableWhen": {
-        "weaponKeyword": "lethal-hits"
+        "weaponKeywords": [
+          { "keyword_id": "lethal-hits" }
+        ]
       },
       "contribution": {
         "type": "extra-keyword",

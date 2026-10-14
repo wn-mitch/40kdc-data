@@ -21,7 +21,6 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "loadout"
             | "equipped-weapon-count"
             | "attachment"
-            | "has-ability"
             | "controls"
             | "resource"
             | "attack-compare"
@@ -31,6 +30,8 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "destroyed-while-on-objective"
             | "destroyed-in-tagged-terrain"
             | "army-faction"
+            | "army-state"
+            | "oath-state"
             | "battle-size"
     )
 }
@@ -97,6 +98,15 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
     let t = ctype(c).unwrap_or("");
     if negated {
         let pp = params(c);
+        if t == "controls"
+            && ["count", "compare", "proportion"]
+                .iter()
+                .filter(|key| nn(pp, key).is_some())
+                .count()
+                > 1
+        {
+            return format!("not ({})", describe_predicate(c, false));
+        }
         let turned = verb_negated(t)
             || (t == "happened"
                 && !matches!(
@@ -152,7 +162,8 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             };
             format!("{neg}during {where_}")
         }
-        "rule-active" => format!("the {} is {not_}active", id_label(p.get("rule"))),
+        "matches" => describe_matches(p, negated),
+        "rule-active" => format!("the {} is {not_}active", rule_ref_phrase(p.get("rule"))),
         "has-keyword" => {
             let who = if is(p, "subject", "defender") {
                 "the target".to_string()
@@ -160,17 +171,11 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 subject_of(p, "the unit")
             };
             let verb = if negated { "does not have" } else { "has" };
-            format!("{who} {verb} {}", keyword_list(p))
+            format!(
+                "{who} {verb} the keyword selected for {}",
+                title_case(&st(p.get("chosen_by")))
+            )
         }
-        "owned-by" => format!(
-            "{} is {not_}{}",
-            subject_of(p, "the unit"),
-            if is(p, "owner", "enemy") {
-                "an enemy unit"
-            } else {
-                "friendly"
-            }
-        ),
         "same-unit" => format!(
             "{} is {not_}the same unit as {}",
             subject_of(p, "the unit"),
@@ -185,13 +190,34 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             subject_of(p, "the model"),
             title_case(&st(p.get("profile")))
         ),
-        "has-ability" => format!(
-            "{neg}{} has the {} ability",
-            subject_of(p, "the unit"),
-            id_label(p.get("ability"))
-        ),
         "attachment" => {
             let w = obj(p.get("with"));
+            if w.iter()
+                .any(|(key, value)| key != "all_of" && !value.is_null())
+            {
+                if is(p, "role", "leading") {
+                    let who = if is(p, "subject", "this-model") || nn(p, "subject").is_none() {
+                        "the model".to_string()
+                    } else {
+                        subject_of(p, "the unit")
+                    };
+                    return format!("{neg}{who} is leading {}", unit_filter_phrase(w));
+                }
+                if is(p, "role", "led") {
+                    let mut filter = w.clone();
+                    filter.insert("level".to_string(), Value::String("model".to_string()));
+                    return format!(
+                        "{neg}{} is being led by {}",
+                        subject_of(p, "this unit"),
+                        unit_filter_phrase(&filter)
+                    );
+                }
+                return format!(
+                    "{neg}{} is attached to {}",
+                    subject_of(p, "the unit"),
+                    unit_filter_phrase(w)
+                );
+            }
             let kw = strs(w.get("all_of"))
                 .map(|k| format!("{} ", k.join(" ")))
                 .unwrap_or_default();
@@ -267,17 +293,17 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
         }
         "named-weapon" | "unit-wargear" => named_equipment_phrase(t, p, negated),
         "equipped-weapon-count" => {
+            let mut weapons = crate::translate::effect::weapon_noun(p);
+            let count = obj(p.get("count"));
+            if count.get("min").and_then(Value::as_u64) == Some(1)
+                && count.get("max").and_then(Value::as_u64) == Some(1)
+            {
+                weapons = weapons.replacen("weapons", "weapon", 1);
+            }
             format!(
-                "{} is {not_}equipped with a weapon named \"{}\" and exactly {} other {} weapon{}",
+                "{} is {not_}equipped with {} {weapons}",
                 subject_of(p, "the model"),
-                st(p.get("other_than")),
-                st(p.get("count")),
-                st(p.get("weapon_type")),
-                if p.get("count").and_then(Value::as_f64) == Some(1.0) {
-                    ""
-                } else {
-                    "s"
-                }
+                count_phrase(p.get("count"))
             )
         }
         "loadout" => {
@@ -307,9 +333,6 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                         "turn"
                     }
                 );
-            }
-            if is(p, "state", "fights-first") {
-                return format!("{neg}{who} has Fights First");
             }
             format!(
                 "{who} is {}{with_ref}",
@@ -351,4 +374,136 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
         "happened" => describe_happened(p, negated),
         _ => board_predicate(c, negated),
     }
+}
+
+/// Ordinary predicates use the shared filter; negation applies to the complete filter.
+fn describe_matches(p: &P, negated: bool) -> String {
+    let f = obj(p.get("filter"));
+    let who = if is(p, "subject", "defender") {
+        "the target".to_string()
+    } else {
+        subject_of(p, "the unit")
+    };
+    let not = if negated { "not " } else { "" };
+    let has = if negated { "does not have" } else { "has" };
+    let lacks = if negated { "has" } else { "does not have" };
+    if f.iter()
+        .filter(|(key, value)| key.as_str() != "level" && !value.is_null())
+        .count()
+        == 1
+    {
+        if nn(f, "all_of").is_some() || nn(f, "any_of").is_some() {
+            if negated
+                && nn(f, "any_of").is_none()
+                && f.get("all_of")
+                    .and_then(Value::as_array)
+                    .is_some_and(|words| words.len() > 1)
+            {
+                return format!("{who} does not have all of {}", keyword_list(f));
+            }
+            return format!("{who} {has} {}", keyword_list(f));
+        }
+        if let Some(words) = strs(f.get("none_of")) {
+            return format!("{who} {lacks} {}", or_list(&quoted(words)));
+        }
+        if let Some(words) = strs(f.get("not_all_of")) {
+            return format!("{who} {lacks} all of {}", and_list(&quoted(words)));
+        }
+        if nn(f, "owner").is_some() {
+            let owner = if is(f, "owner", "enemy") {
+                "an enemy unit"
+            } else if is(f, "owner", "friendly") {
+                "friendly"
+            } else {
+                "a unit of either player"
+            };
+            return format!("{} is {not}{owner}", subject_of(p, "the unit"));
+        }
+        if let Some(state) = nn(f, "state") {
+            return if state.as_str() == Some("fights-first") {
+                format!("{who} {has} Fights First")
+            } else {
+                format!("{who} is {}", state_phrase(&st(Some(state)), negated))
+            };
+        }
+        if let Some(states) = strs(f.get("not_states")) {
+            if states.len() == 1 {
+                return format!("{who} is {}", state_phrase(&states[0], !negated));
+            }
+            let phrase = and_list(
+                &states
+                    .iter()
+                    .map(|state| format!("{who} is {}", state_phrase(state, true)))
+                    .collect::<Vec<_>>(),
+            );
+            return if negated {
+                format!("not ({phrase})")
+            } else {
+                phrase
+            };
+        }
+        if let Some(abilities) = f.get("has_ability").and_then(Value::as_array) {
+            return format!(
+                "{who} {has} the {} ability",
+                and_list(
+                    &abilities
+                        .iter()
+                        .map(|v| id_label(Some(v)))
+                        .collect::<Vec<_>>()
+                )
+            );
+        }
+        if let Some(abilities) = f.get("lacks_ability").and_then(Value::as_array) {
+            return format!(
+                "{who} {lacks} the {} ability",
+                or_list(
+                    &abilities
+                        .iter()
+                        .map(|v| id_label(Some(v)))
+                        .collect::<Vec<_>>()
+                )
+            );
+        }
+        if let Some(tag) = nn(f, "designated").or_else(|| nn(f, "not_designated")) {
+            return format!(
+                "{who} is {}{}",
+                if nn(f, "not_designated").is_some() != negated {
+                    "not "
+                } else {
+                    ""
+                },
+                designation_phrase(&st(Some(tag)), false)
+            );
+        }
+        if let Some(visible) = nn(f, "visible") {
+            let to = obj(Some(visible)).get("to");
+            let observer = if to.and_then(Value::as_str) == Some("attacker") {
+                "the attacking model".to_string()
+            } else {
+                unit_ref_phrase(to, "the unit")
+            };
+            return format!("{who} is {not}visible to {observer}");
+        }
+        if let Some(within) = nn(f, "within") {
+            let within = obj(Some(within));
+            let to = if matches!(
+                within.get("range").and_then(Value::as_str),
+                Some("weapon" | "half-weapon")
+            ) {
+                String::new()
+            } else {
+                format!(" of {}", place_ref_phrase(within.get("of")))
+            };
+            return format!(
+                "{who} is {not}{}within {}{to}",
+                if within.get("wholly").and_then(Value::as_bool) == Some(true) {
+                    "wholly "
+                } else {
+                    ""
+                },
+                range_phrase(within.get("range"))
+            );
+        }
+    }
+    format!("{who} is {not}{}", unit_filter_phrase(f))
 }

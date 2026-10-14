@@ -36,10 +36,10 @@ function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
   return tiledSources(db, { factionId });
 }
 
-/** Each member's compile options: the ability its "this ability" names (own-abilities.ts). */
-function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string } {
+/** Each member's compiler context: its own ability and owning-faction unit catalog. */
+function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string; units: { faction_id: string } } {
   const own = ownAbilityIds(db, round5cDataRoot());
-  return (member) => ({ abilityId: own.get(member.id), name: member.name ?? undefined });
+  return (member) => ({ abilityId: own.get(member.id), name: member.name ?? undefined, units: { faction_id: member.faction_id } });
 }
 
 type EntryState = { status: string; inputs_hash: string; mechanics_hash: string };

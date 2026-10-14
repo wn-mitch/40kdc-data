@@ -70,7 +70,7 @@ describe("Round 5C weapon-scoped change on an attached leader's own model", () =
     expect(result.ok).toBe(true);
     const steps = nodesOf(result.ok ? result.mechanics : {}, "stat-modifier");
     expect(steps.map((step) => step.target)).toEqual(["this-model", "this-model"]);
-    expect(steps.every((step) => step.modifier.weapon_keyword === "Psychic")).toBe(true);
+    expect(steps.every((step) => step.modifier.weapons?.keyword?.keyword_id === "psychic")).toBe(true);
   });
 
   it("still widens a non-weapon change on the attached leader to its unit", () => {
@@ -144,7 +144,7 @@ describe("Round 5C antecedent 'of' after an attack the record makes", () => {
 });
 
 describe("Round 5C selection shapes of the model-selection rows", () => {
-  it("binds a model-level membership to the ability's own unit as a same-unit eligibility", () => {
+  it("binds a model-level membership to the ability's own unit", () => {
     const text = "Each time that unit is selected, select one Bodyguard model in that unit; that model is destroyed.";
     const result = compileLeaves(placed(text,
       ["Each time that unit is selected", "event", { kind: "selected", to: "shoot", subject: "this-unit" }],
@@ -154,7 +154,7 @@ describe("Round 5C selection shapes of the model-selection rows", () => {
       ["that model is destroyed", "destroy-models", { recipient: "selected-unit" }]), text);
     expect(result.ok).toBe(true);
     const selector = nodesOf(result.ok ? result.mechanics : {}, "select-units")[0]!.selector;
-    expect(selector.eligibility.operands).toContainEqual({ type: "same-unit", parameters: { as: "ability-unit" } });
+    expect(selector.filter).toEqual({ owner: "friendly", any_of: ["BODYGUARD"], level: "model", member_of: "this-unit" });
   });
 
   it("binds an enemy selection within range of and visible to the first selection's model", () => {
@@ -167,10 +167,11 @@ describe("Round 5C selection shapes of the model-selection rows", () => {
       ["enemy unit", "unit-filter", { side: "enemy", states: ["unengaged"] }],
       ["suffers 1 mortal wound", "mortal-wounds", { amount: 1, recipient: "selected-unit" }]), text);
     expect(result.ok).toBe(true);
-    const enemy = nodesOf(result.ok ? result.mechanics : {}, "select-units").find((node) => node.selector.owner === "enemy")!.selector;
+    const enemy = nodesOf(result.ok ? result.mechanics : {}, "select-units").find((node) => node.selector.filter.owner === "enemy")!.selector;
     expect(enemy).toMatchObject({
-      within_inches: 8, visibility_required: true, within_inches_from: { selection_var: "shooter" }, visible_to: { selection_var: "shooter" },
+      filter: { within: { range: { inches: 8 }, of: { selection_var: "shooter" } }, owner: "enemy" },
     });
+    expect(enemy.filter.visible).toEqual({ to: { selection_var: "shooter" } });
   });
 
   it("refuses the enemy selection when the first selection has no bind_as to measure from", () => {
@@ -199,8 +200,8 @@ describe("Round 5C selection shapes of the model-selection rows", () => {
     expect(result.ok).toBe(true);
     const selector = nodesOf(result.ok ? result.mechanics : {}, "select-units")[0]!.selector;
     expect(selector.eligibility.operands).toEqual(expect.arrayContaining([
-      { type: "within", parameters: { subject: "selected-unit", of: "event-object", range: { inches: 9 } } },
-      { type: "has-ability", parameters: { subject: "selected-unit", ability: "spirit-snare-zadophon-the-soul-eater-thousand-sons" } },
+      { type: "matches", parameters: { subject: "selected-unit", filter: { within: { of: "event-object", range: { inches: 9 } } } } },
+      { type: "matches", parameters: { subject: "selected-unit", filter: { has_ability: ["spirit-snare-zadophon-the-soul-eater-thousand-sons"] } } },
     ]));
   });
 });

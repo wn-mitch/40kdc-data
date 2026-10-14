@@ -246,6 +246,21 @@ pub fn crunch(
         }
         ctx.weapon_keywords = Some(keywords);
     }
+    if ctx.weapon_keyword_refs.is_none() {
+        ctx.weapon_keyword_refs = Some(
+            weapon_profile
+                .keywords
+                .iter()
+                .map(|reference| WeaponKeywordRef {
+                    keyword_id: reference.keyword_id.to_string(),
+                    parameters: reference.parameters.as_ref().map(|parameters| {
+                        serde_json::to_value(parameters)
+                            .expect("weapon keyword parameters serialize")
+                    }),
+                })
+                .collect(),
+        );
+    }
 
     // Auto-inject weapon-keyword buffs from the attacker profile, then append
     // the caller-supplied stack. resolve_buffs deduplicates and ranks them.
@@ -262,7 +277,7 @@ pub fn crunch(
     let rapid_fire = find_extra_keyword(&resolved, "rapid-fire");
     let half_range = ctx.within_half_range == Some(true);
     let rapid_fire_extra_per_model = match (rapid_fire, half_range) {
-        (Some(kw), true) => eval_param_value(parameter(kw, "value")),
+        (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
         _ => 0.0,
     };
     let blast = find_extra_keyword(&resolved, "blast");
@@ -275,14 +290,10 @@ pub fn crunch(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
-    let blast_extra_per_model = blast
-        .map(|keyword| {
-            let value = parameter(keyword, "value")
-                .map(|parameter| eval_param_value(Some(parameter)))
-                .unwrap_or(1.0);
-            (target_model_count / 5) as f64 * value
-        })
-        .unwrap_or(0.0);
+    let blast_extra_per_model = match blast.and_then(|keyword| parameter(keyword, "value")) {
+        Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+        None => 0.0,
+    };
     let models_firing = input.models_firing as f64;
     let attacks =
         models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
@@ -384,7 +395,7 @@ pub fn crunch(
     let mut hits = hits_raw;
     let sustained = find_extra_keyword(&resolved, "sustained-hits");
     if let Some(kw) = sustained {
-        let sustained_value = eval_param_value(parameter(kw, "value"));
+        let sustained_value = eval_param_value(parameter(kw, "value"))?;
         hits += crit_hits * sustained_value;
         let label = parameter(kw, "value")
             .map(value_to_label)
@@ -404,16 +415,30 @@ pub fn crunch(
     let t_val = unit_profile.t.get() as f64 + resolved.toughness_mod.value;
     let std_wound_needed = wound_threshold(s_val, t_val);
     let mut anti_threshold: i64 = 7; // unreachable
-    if let Some(anti) = find_extra_keyword(&resolved, "anti") {
-        let target_kw = parameter(anti, "target_keyword")
-            .and_then(Value::as_str)
-            .map(str::to_lowercase);
-        if let Some(target_kw) = target_kw {
-            if anti_target_matches(&target_kw, &target_keywords) {
-                if let Some(t) = parameter(anti, "threshold").and_then(Value::as_i64) {
-                    anti_threshold = t;
-                }
-            }
+    for entry in &resolved.extra_keywords {
+        let anti = &entry.keyword_ref;
+        if anti.keyword_id != "anti" {
+            continue;
+        }
+        let target = parameter(anti, "target_keyword").and_then(Value::as_str);
+        let has_target = target.is_some()
+            || parameter(anti, "required_target_keywords_any").is_some_and(Value::is_array)
+            || parameter(anti, "excluded_target_keywords").is_some_and(Value::is_array);
+        if !has_target
+            || target.is_some_and(|wanted| {
+                !target_keywords
+                    .iter()
+                    .any(|owned| owned.eq_ignore_ascii_case(wanted))
+            })
+            || !keyword_applies_to_target(anti.parameters.as_ref(), &ctx)
+        {
+            continue;
+        }
+        if let Some(threshold) = parameter(anti, "threshold")
+            .and_then(Value::as_i64)
+            .filter(|threshold| (2..=6).contains(threshold))
+        {
+            anti_threshold = anti_threshold.min(threshold);
         }
     }
     let crit_wound_threshold = anti_threshold.min(6).min(
@@ -569,7 +594,7 @@ pub fn crunch(
     let base_d = eval_stat_value(&weapon_profile.stats.d)?;
     let melta = find_extra_keyword(&resolved, "melta");
     let melta_bonus = match (melta, half_range) {
-        (Some(kw), true) => eval_param_value(parameter(kw, "value")),
+        (Some(kw), true) => eval_param_value(parameter(kw, "value"))?,
         _ => 0.0,
     };
     let before_reduction = (base_d + melta_bonus + resolved.damage_mod.value).max(0.0);
@@ -653,17 +678,6 @@ pub fn crunch(
 // ---------------------------------------------------------------------------
 
 /// Lower-cased union of a unit's `keywords` + `faction_keywords`.
-/// Whether an Anti target matches a unit: one of its slash-separated alternatives. An alternative
-/// `non-X` matches a unit without keyword X. `target_keywords` are lower case.
-fn anti_target_matches(target: &str, target_keywords: &[String]) -> bool {
-    target.split('/').any(|alternative| {
-        let alternative = alternative.trim().to_lowercase();
-        match alternative.strip_prefix("non-") {
-            Some(keyword) => !target_keywords.iter().any(|k| k == keyword),
-            None => target_keywords.iter().any(|k| k == &alternative),
-        }
-    })
-}
 
 fn unit_keywords_lower(unit: &Unit) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
@@ -764,29 +778,36 @@ fn parameter<'a>(kw: &'a WeaponKeywordRef, key: &str) -> Option<&'a Value> {
 fn eval_stat_value(v: &StatValue) -> Result<f64, CruncherError> {
     match v {
         StatValue::Integer(n) => Ok(*n as f64),
-        StatValue::String(s) => parse_dice_or_number(s),
+        StatValue::DiceExpression(s) => parse_dice_or_number(s),
     }
 }
 
-/// Permissive variant for [`Value`]-typed parameters
-/// (`WeaponKeywordRef.parameters.value` etc.); unrecognised values resolve
-/// to 0 to match TS's `evalStatValue(undefined) → 0` fallback for missing
-/// keyword params.
-fn eval_param_value(v: Option<&Value>) -> f64 {
+/// Keyword ratings must be concrete before the stateless engine evaluates them.
+/// Missing or contextual quantities are errors, never invented zero/one ratings.
+fn eval_param_value(v: Option<&Value>) -> Result<f64, CruncherError> {
     match v {
-        Some(Value::Number(n)) => n.as_f64().unwrap_or(0.0),
-        Some(Value::String(s)) => parse_dice_or_number(s).unwrap_or(0.0),
-        _ => 0.0,
+        Some(Value::Number(n)) => n
+            .as_f64()
+            .filter(|value| value.is_finite())
+            .ok_or_else(|| CruncherError::ParseStat(n.to_string())),
+        Some(Value::String(s)) => parse_dice_or_number(s),
+        value => Err(CruncherError::ParseStat(
+            value.map_or_else(|| "missing quantity".into(), Value::to_string),
+        )),
     }
 }
 
 fn parse_dice_or_number(input: &str) -> Result<f64, CruncherError> {
     let trimmed = input.trim();
     if trimmed.is_empty() {
-        return Ok(0.0);
+        return Err(CruncherError::ParseStat(input.to_string()));
     }
     if let Ok(n) = trimmed.parse::<f64>() {
-        return Ok(n);
+        return if n.is_finite() {
+            Ok(n)
+        } else {
+            Err(CruncherError::ParseStat(input.to_string()))
+        };
     }
     parse_dice(trimmed).ok_or_else(|| CruncherError::ParseStat(input.to_string()))
 }

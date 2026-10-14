@@ -39,22 +39,28 @@ type selectionPlan struct {
 // roll joins requires.
 func planSelection(node, source map[string]any, perspective string, context map[string]any) selectionPlan {
 	selector, ok := node["selector"].(map[string]any)
-	if !ok || (selector["owner"] != "friendly" && selector["owner"] != "enemy") {
+	if !ok {
 		return selectionPlan{kind: "none"}
 	}
-	if selector["target_kind"] == "model" || selector["model_names"] != nil || selector["bind_as"] != nil {
+	filter, ok := selector["filter"].(map[string]any)
+	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
 		return selectionPlan{kind: "none"}
 	}
-	if !referencesSelectedUnit(node["effect"]) {
+	if filter["level"] == "model" || filter["model_names"] != nil || selector["bind_as"] != nil {
 		return selectionPlan{kind: "none"}
 	}
-
-	rawKeywords, hasKeywords := selector["keywords"]
-	rawExcluded, hasExcluded := selector["excluded_keywords"]
-	keywords, keywordsOK := selectorKeywordList(rawKeywords)
-	excluded, excludedOK := selectorKeywordList(rawExcluded)
-	if (hasKeywords && !keywordsOK) || (hasExcluded && !excludedOK) {
+	keywords, keywordsOK := selectorKeywordList(filter["all_of"])
+	anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
+	excluded, excludedOK := selectorKeywordList(filter["none_of"])
+	if (filter["all_of"] != nil && !keywordsOK) || (filter["any_of"] != nil && !anyOK) || (filter["none_of"] != nil && !excludedOK) {
 		return selectionPlan{kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed"}
+	}
+	if len(anyKeywords) > 0 {
+		// The buff gate can represent one required keyword, not an arbitrary
+		// OR predicate on an enemy selector.
+		if filter["owner"] == "enemy" {
+			return selectionPlan{kind: "unsupported", reason: "select-units: any_of keyword selectors are not gated by the buff layer"}
+		}
 	}
 	selection := make(map[string]any, len(node))
 	for k, v := range node {
@@ -67,12 +73,13 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	var effect any
 	var applicability map[string]any
 	var label string
-	if selector["owner"] == "friendly" {
+	if filter["owner"] == "friendly" {
 		provided := getStr(source, "kind") == "ability" && getStr(source, "abilityKind") == "support"
 		if excludesAbilityUnit(selector["eligibility"]) && !provided {
 			return selectionPlan{kind: "skip"}
 		}
-		if hasKeywords || hasExcluded {
+		hasKeywords := len(keywords) > 0 || len(anyKeywords) > 0 || len(excluded) > 0
+		if hasKeywords {
 			key := "targetKeywords"
 			if perspective == "attacker" {
 				key = "attackerKeywords"
@@ -87,11 +94,26 @@ func planSelection(node, source map[string]any, perspective string, context map[
 					return selectionPlan{kind: "skip"}
 				}
 			}
+			if len(anyKeywords) > 0 {
+				found := false
+				for _, k := range anyKeywords {
+					if includesKeyword(own, k) {
+						found = true
+						break
+					}
+				}
+				if !found {
+					return selectionPlan{kind: "skip"}
+				}
+			}
 			for _, k := range excluded {
 				if includesKeyword(own, k) {
 					return selectionPlan{kind: "skip"}
 				}
 			}
+		}
+		if filter["not_all_of"] != nil {
+			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
 		}
 		effect = node["effect"]
 		label = "Selected unit"
@@ -99,6 +121,9 @@ func planSelection(node, source map[string]any, perspective string, context map[
 		other := "attacker"
 		if perspective == "attacker" {
 			other = "defender"
+		}
+		if filter["not_all_of"] != nil {
+			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
 		}
 		gate, reason := selectedEnemyGate(keywords, excluded, perspective)
 		if reason != "" {
@@ -123,6 +148,89 @@ func planSelection(node, source map[string]any, perspective string, context map[
 		effect = gated["on_success"]
 	}
 	return selectionPlan{kind: "lever", effect: effect, applicability: applicability, requires: requires, label: label}
+}
+func bindEachRecipient(effect any, filter map[string]any) any {
+	switch value := effect.(type) {
+	case []any:
+		out := make([]any, len(value))
+		for i, item := range value {
+			out[i] = bindEachRecipient(item, filter)
+		}
+		return out
+	case map[string]any:
+		out := make(map[string]any, len(value))
+		for key, child := range value {
+			if key == "target" && child == "recipient" {
+				level := getStr(filter, "level")
+				if level == "model" {
+					out[key] = "this-model"
+				} else {
+					out[key] = "this-unit"
+				}
+			} else {
+				out[key] = bindEachRecipient(child, filter)
+			}
+		}
+		return out
+	default:
+		return effect
+	}
+}
+
+func matchesEachRecipient(filter map[string]any, context map[string]any, perspective string) (bool, string) {
+	owner := getStr(filter, "owner")
+	keywordsKey := "targetKeywords"
+	roleKey := "targetAttachmentRole"
+	if perspective == "attacker" {
+		keywordsKey = "attackerKeywords"
+		roleKey = "attackerAttachmentRole"
+	}
+	if owner == "enemy" {
+		if keywordsKey == "attackerKeywords" {
+			keywordsKey, roleKey = "targetKeywords", "targetAttachmentRole"
+		} else {
+			keywordsKey, roleKey = "attackerKeywords", "attackerAttachmentRole"
+		}
+	}
+	if ids, present := asList(filter["unit_ids"]); present {
+		idKey := "targetUnitId"
+		if keywordsKey == "attackerKeywords" {
+			idKey = "attackerUnitId"
+		}
+		actual := getStr(context, idKey)
+		if actual == "" {
+			return false, "for-each-unit unit ID is unavailable"
+		}
+		for _, raw := range ids {
+			if id, ok := raw.(string); ok && id == actual {
+				return true, ""
+			}
+		}
+		return false, ""
+	}
+	filterCopy := cloneMap(filter)
+	delete(filterCopy, "owner")
+	if role := getStr(filterCopy, "attachment_role"); role != "" {
+		actual, ok := context[roleKey].(string)
+		if !ok || actual == "" {
+			return false, "for-each-unit attachment role is unavailable"
+		}
+		if actual != role {
+			return false, ""
+		}
+	}
+	if keywords := context[keywordsKey]; keywords != nil {
+		matchPerspective := "target"
+		if keywordsKey == "attackerKeywords" {
+			matchPerspective = "attacker"
+		}
+		matched, reason := auraRecipientFilterMatches(filterCopy, context, matchPerspective)
+		return matched, reason
+	}
+	if filterCopy["all_of"] != nil || filterCopy["any_of"] != nil || filterCopy["none_of"] != nil || filterCopy["not_all_of"] != nil {
+		return false, "for-each-unit recipient keywords are unavailable"
+	}
+	return true, ""
 }
 
 // selectedEnemyGate is the keyword gate an enemy selector puts on the selected

@@ -103,8 +103,15 @@ Mined from 30 ability-coverage session transcripts (2026-07-12). Own-words rules
 - Run a dataset-wide grep to quantify how many abilities across all factions already use or would benefit from a shape before committing to a schema change — this reframes 'fix 4 flagged abilities' into 'fix ~250 across 23 factions', changing the whole scoping decision.
 - Grep the existing dataset for other abilities already using a target effect/grant type (move{move_type: ingress}, permission{activity: declare-charge, after: [advance]}) to match the canonical established pattern when re-homing a mechanic, rather than inventing a new one.
 - Rank authoring targets by coverage x tightness (cluster size x min_sim), not size alone — a large loose cluster is a single-linkage chaining artifact; dedupe by ability_id before quoting a 'how many shapes to design' number, since exact-duplicate clusters (min_sim 1.0) are one id copy-pasted across detachments.
-- Pull the actual faction pack PDF where one exists (astra-militarum aerial-deployment) rather than inferring by analogy; where no source exists, an ability's own existing DSL shape can unambiguously encode the intended mechanic, and you approximate only the genuinely-unsourced preconditions explicitly (flagging a Hover-mode gate).
+- Pull the actual faction pack PDF where one exists (astra-militarum aerial-deployment)
+  rather than inferring by analogy; where no source exists, preserve the existing
+  DSL only when its mechanic is unambiguous and flag unsourced preconditions as
+  `DSL_GAP` for human review.
 - Treat a flagged shape as a required generalization when the user names a harder relative mechanic — resource-die{operation: add} gained count_per_pool and consumes_pool specifically to cover Icon of Khorne's per-pool scaling before implementation started.
-- Reuse canonical shapes across factions: test{test:battle-shock} for a forced test, recon-star-designation-force for ingress-move timing, keyword-grant{keywords} + has-keyword for a shared cross-datasheet tag — read the closest analogous family's already-encoded convention and copy it.
+- Reuse canonical shapes across factions: `test{test:battle-shock}` for a forced
+  test, recon-star-designation-force for ingress-move timing, and
+  `keyword-grant{keywords}` plus `matches` with a typed `all_of` filter for a
+  shared cross-datasheet tag — read the closest analogous family's established
+  convention and copy it.
 - Route keyword/ability GRANTS to the existing keyword-grant/ability-grant shape, not to a newly-generalized rule-state(granted,...) — even though rule-state could technically encode it, that would create a second way to say the same thing (the exact sprawl the generalization was meant to kill).
 - Treat World Eaters as the authored golden reference faction — at the 0.85 cosine threshold its abilities correctly cluster as mostly outliers because they're distinctively authored; a low WE outlier rate is a harness sanity check, not a bug, and cross-faction near-duplicates only show with --faction all.

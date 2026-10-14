@@ -41,33 +41,64 @@ def plan_selection(
       ``requires``.
     """
     selector = node.get("selector") if isinstance(node.get("selector"), dict) else None
-    if selector is None or selector.get("owner") not in ("friendly", "enemy"):
+    filt = selector.get("filter") if isinstance(selector, dict) else None
+    unit_ids = filt.get("unit_ids") if isinstance(filt, dict) else None
+    owner = filt.get("owner") if isinstance(filt, dict) else None
+    if selector is None or not isinstance(filt, dict) or (
+        owner not in ("friendly", "enemy")
+        and not (unit_ids is not None and owner in (None, "any"))
+    ):
         return {"kind": "none"}
+    if unit_ids is not None and owner in (None, "any"):
+        owner = "friendly"
     if (
-        selector.get("target_kind") == "model"
-        or selector.get("model_names") is not None
+        filt.get("level") == "model"
+        or filt.get("model_names") is not None
         or selector.get("bind_as") is not None
     ):
         return {"kind": "none"}
     if not _references_selected_unit(node.get("effect")):
         return {"kind": "none"}
 
-    has_keywords = "keywords" in selector
-    has_excluded = "excluded_keywords" in selector
-    keywords = selector.get("keywords")
-    excluded = selector.get("excluded_keywords")
-    if (has_keywords and not _is_keyword_list(keywords)) or (
-        has_excluded and not _is_keyword_list(excluded)
-    ):
+    all_of = filt.get("all_of")
+    any_of = filt.get("any_of")
+    excluded = filt.get("none_of")
+    has_keywords = "all_of" in filt or "any_of" in filt
+    has_excluded = "none_of" in filt
+    if (all_of is not None and not _is_keyword_list(all_of)) or (
+        any_of is not None and not _is_keyword_list(any_of)
+    ) or (excluded is not None and not _is_keyword_list(excluded)):
         return {
             "kind": "unsupported",
             "reason": "select-units: the selector's keyword lists are malformed",
         }
     selection = {k: v for k, v in node.items() if k != "effect"}
     requires: list[Any] = [selection]
-
     applicability: dict[str, Any] | None = None
-    if selector["owner"] == "friendly":
+
+    unit_ids = filt.get("unit_ids")
+    if unit_ids is not None and (
+        filt.get("level") != "unit"
+        or not isinstance(unit_ids, list)
+        or not unit_ids
+        or any(not isinstance(unit_id, str) for unit_id in unit_ids)
+    ):
+        return {
+            "kind": "unsupported",
+            "reason": "select-units: unit_ids identity filter is malformed",
+        }
+    if unit_ids is not None:
+        identity_key = (
+            "attackerUnitId"
+            if (owner == "friendly") == (perspective == "attacker")
+            else "targetUnitId"
+        )
+        identity = context.get(identity_key)
+        if not isinstance(identity, str):
+            return {"kind": "unsupported", "reason": "select-units: unit identity is unavailable"}
+        if identity not in unit_ids:
+            return {"kind": "skip"}
+    if owner == "friendly":
         provided = source.get("kind") == "ability" and source.get("abilityKind") == "support"
         if _excludes_ability_unit(selector.get("eligibility")) and not provided:
             return {"kind": "skip"}
@@ -81,8 +112,10 @@ def plan_selection(
                         "selector"
                     ),
                 }
-            holds = all(_includes_keyword(own, k) for k in keywords or []) and not any(
-                _includes_keyword(own, k) for k in excluded or []
+            holds = (
+                (not all_of or all(_includes_keyword(own, k) for k in all_of))
+                and (not any_of or any(_includes_keyword(own, k) for k in any_of))
+                and not any(_includes_keyword(own, k) for k in excluded or [])
             )
             if not holds:
                 return {"kind": "skip"}
@@ -90,8 +123,15 @@ def plan_selection(
         label = "Selected unit"
     else:
         other = "defender" if perspective == "attacker" else "attacker"
+        enemy_keywords: list[str] = []
+        if isinstance(all_of, list):
+            enemy_keywords.extend(all_of)
+        if isinstance(any_of, list):
+            enemy_keywords.extend(any_of)
         gate = _selected_enemy_gate(
-            keywords if has_keywords else None, excluded if has_excluded else None, perspective
+            enemy_keywords if has_keywords else None,
+            excluded if has_excluded else None,
+            perspective,
         )
         if isinstance(gate, str):
             return {"kind": "unsupported", "reason": gate}
@@ -151,6 +191,45 @@ def _references_selected_unit(node: Any) -> bool:
     if node.get("target") == _SELECTED_UNIT:
         return True
     return any(_references_selected_unit(v) for k, v in node.items() if k != "target")
+
+def bind_each_recipient(node: dict[str, Any], replacement: Any | None = None) -> Any | None:
+    """Bind a for-each-unit recipient to its canonical candidate filter."""
+    selector = node.get("selector")
+    if not isinstance(selector, dict) or not isinstance(selector.get("filter"), dict):
+        return None
+    if selector.get("eligibility") is not None:
+        return None
+    binding = selector.get("bind_as")
+    bound_recipient = False
+    other_target = False
+
+    def bind(value: Any) -> Any:
+        nonlocal bound_recipient, other_target
+        if isinstance(value, list):
+            return [bind(child) for child in value]
+        if not isinstance(value, dict) or value.get("type") in ("select-units", "for-each-unit"):
+            return value
+        out: dict[str, Any] = {}
+        for key, child in value.items():
+            recipient = child == "recipient" or (
+                isinstance(binding, str)
+                and isinstance(child, dict)
+                and child.get("selection_var") == binding
+            )
+            out[key] = (
+                replacement
+                if key == "target" and recipient and replacement is not None
+                else selector["filter"]
+                if key == "target" and recipient
+                else bind(child)
+            )
+            if key == "target":
+                bound_recipient = bound_recipient or recipient
+                other_target = other_target or not recipient
+        return out
+
+    effect = bind(node.get("effect"))
+    return effect if bound_recipient and not other_target else None
 
 
 def _retarget(node: Any, target: str) -> Any:

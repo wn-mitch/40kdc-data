@@ -56,11 +56,8 @@ fn friendly_selection(keywords: &[&str]) -> Value {
     json!({
         "type": "select-units",
         "selector": {
-            "owner": "friendly", "count": 1, "keywords": keywords,
-            "eligibility": { "operator": "and", "operands": [
-                { "operator": "not", "operands": [{ "type": "same-unit", "parameters": { "as": "ability-unit" } }] },
-                { "type": "within", "parameters": { "subject": "selected-unit", "of": "this-model", "range": { "inches": 9 } } },
-            ] },
+            "filter": {"owner": "friendly", "all_of": keywords, "excluding": "ability-unit", "within": {"of": "this-model", "range": {"inches": 9}}},
+            "count": {"min": 1, "max": 1},
         },
         "effect": { "type": "re-roll", "target": "selected-unit", "modifier": { "roll": "wound", "subset": "ones" } },
     })
@@ -110,20 +107,20 @@ fn a_unit_without_the_selector_keywords_gets_nothing_and_unknown_keywords_are_re
     assert!(unknown.activatable.is_empty());
     assert_eq!(
         reasons(&unknown),
-        vec!["select-units: the crunched unit's keywords are unavailable for the selector"]
+        vec!["select-units: candidate identity or state is unavailable"]
     );
 }
 
 #[test]
 fn an_enemy_selection_incoming_grant_is_the_attackers_behind_its_roll_gated_on_exclusions() {
-    let selector = json!({ "owner": "enemy", "count": 1, "excluded_keywords": ["MONSTER", "VEHICLE"], "visibility_required": true });
+    let selector = json!({ "filter": {"owner": "enemy", "none_of": ["MONSTER", "VEHICLE"], "visible": {"to": "this-model"}}, "count": {"min": 1, "max": 1} });
     let roll = json!({ "type": "dice-gated", "dice": "D6", "threshold": 2, "comparison": "gte" });
     let mut gate = roll.as_object().unwrap().clone();
     gate.insert(
         "on_success".into(),
         json!({ "type": "sequence", "steps": [
             { "type": "designate", "target": "selected-unit", "modifier": { "tag": "fabricated" } },
-            { "type": "weapon-ability-grant", "target": "selected-unit", "modifier": { "abilities": ["Ignores Cover"], "weapon_type": "ranged", "incoming": true } },
+            { "type": "weapon-ability-grant", "target": "selected-unit", "modifier": { "keywords": [{"keyword_id": "ignores-cover"}], "weapons": {"type": "ranged"}, "incoming": true } },
         ] }),
     );
     gate.insert("on_fail".into(), Value::Null);
@@ -150,7 +147,7 @@ fn an_enemy_selection_incoming_grant_is_the_attackers_behind_its_roll_gated_on_e
             },
             applicable_when: Some(BuffApplicability {
                 phases: Some(vec![Phase::Shooting]),
-                excluded_target_keywords: Some(vec!["MONSTER".into(), "VEHICLE".into()]),
+                target_filter: Some(json!({"owner": "enemy", "none_of": ["MONSTER", "VEHICLE"]})),
                 ..Default::default()
             }),
         }]
@@ -176,7 +173,7 @@ fn an_enemy_selection_incoming_grant_is_the_attackers_behind_its_roll_gated_on_e
 fn an_enemy_selection_behind_a_roll_with_a_failure_branch_is_refused() {
     let effect = json!({
         "type": "select-units",
-        "selector": { "owner": "enemy", "count": 1 },
+        "selector": { "filter": {"owner": "enemy"}, "count": {"min": 1, "max": 1} },
         "effect": { "type": "dice-gated", "dice": "D6", "threshold": 4, "comparison": "gte",
             "on_success": { "type": "stat-modifier", "target": "selected-unit", "modifier": { "stat": "T", "operation": "worsen", "value": 1 } },
             "on_fail": { "type": "mortal-wounds", "target": "this-unit", "modifier": { "count": 1 } } },
@@ -214,7 +211,7 @@ fn a_provided_ability_never_applies_the_providers_own_unit_effects() {
 }
 
 #[test]
-fn a_friendly_filter_applies_only_to_a_unit_with_its_keywords_and_is_permissive_without_them() {
+fn a_friendly_filter_requires_known_matching_keywords() {
     let effect = json!({ "type": "roll-modifier", "target": { "owner": "friendly", "all_of": ["BLOOD LEGIONS"] }, "modifier": { "roll": "hit", "operation": "add", "value": 1 } });
     assert!(translate(&effect, &provided(), &shooting())
         .applied
@@ -222,14 +219,14 @@ fn a_friendly_filter_applies_only_to_a_unit_with_its_keywords_and_is_permissive_
     let with = context(Phase::Shooting, Some(&["blood legions"]));
     assert_eq!(translate(&effect, &provided(), &with).applied.len(), 1);
     let unknown = EngineContext::new(Phase::Shooting);
-    assert_eq!(translate(&effect, &provided(), &unknown).applied.len(), 1);
+    assert!(translate(&effect, &provided(), &unknown).applied.is_empty());
 }
 
 #[test]
 fn a_capped_scaling_is_a_lever_at_its_cap_and_an_uncapped_one_is_refused() {
     let scaling = json!({ "per": 1, "of": "models-embarked-in-bearer", "max_value": 22 });
     let capped = translate(
-        &json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 2, "weapon_name": "fabricated claws" }, "scaling": scaling }),
+        &json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 2, "weapons": {"name": "fabricated claws"} }, "scaling": scaling }),
         &own(),
         &fight(),
     );
@@ -275,9 +272,11 @@ fn an_added_selection_to_the_units_own_ability_is_a_cap_raise_with_no_buffs() {
             label: "One more fabricated-augments selection".into(),
             buffs: Vec::new(),
             group: None,
+            groups: None,
             cap_raise: Some(CapRaise {
                 ability: "fabricated-augments".into(),
-                by: 1
+                by: 1,
+                ..Default::default()
             }),
             requires: None,
         }]
@@ -288,7 +287,7 @@ fn an_added_selection_to_the_units_own_ability_is_a_cap_raise_with_no_buffs() {
 
 fn rapid_fire() -> Buff {
     translate(
-        &json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": { "abilities": ["Rapid Fire 1"], "weapon_type": "ranged", "weapon_keyword": "Lethal Hits" } }),
+        &json!({ "type": "weapon-ability-grant", "target": "this-unit", "modifier": { "keywords": [{"keyword_id": "rapid-fire", "parameters": {"value": 1}}], "weapons": {"type": "ranged", "keyword": {"keyword_id": "lethal-hits"}} } }),
         &own(),
         &shooting(),
     )
@@ -313,7 +312,10 @@ fn a_weapon_keyword_gate_reaches_a_weapon_with_the_keyword_printed_or_granted_an
         rapid.applicable_when,
         Some(BuffApplicability {
             phases: Some(vec![Phase::Shooting]),
-            weapon_keyword: Some("lethal-hits".into()),
+            weapon_keywords: Some(vec![WeaponKeywordRef {
+                keyword_id: "lethal-hits".into(),
+                parameters: None
+            }]),
             ..Default::default()
         })
     );
@@ -339,6 +341,222 @@ fn a_weapon_keyword_gate_reaches_a_weapon_with_the_keyword_printed_or_granted_an
 }
 
 #[test]
-fn a_weapon_keyword_gate_is_permissive_when_the_caller_names_no_weapon_keywords() {
-    assert_eq!(granted(&[rapid_fire()], None).len(), 1);
+fn a_weapon_keyword_gate_requires_known_weapon_keywords() {
+    assert!(granted(&[rapid_fire()], None).is_empty());
+}
+
+#[test]
+fn persistent_ownership_and_state_guards_never_become_immediate_buffs() {
+    let first = json!({"ability_id":"example-host","definition_id":"first-form"});
+    let reward = json!({"type":"roll-modifier","target":"this-unit",
+        "modifier":{"roll":"hit","operation":"add","value":1}});
+    for modifier in [
+        json!({"rule_kind":"ability","rule":first,"direction":"exchanged",
+            "exchange_with":{"ability_id":"example-host","definition_id":"second-form"}}),
+        json!({"rule_kind":"ability","rule":first,"direction":"suppressed","except_from":"this-ability"}),
+    ] {
+        let result = translate(
+            &json!({"type":"rule-state","target":"this-unit","modifier":modifier}),
+            &own(),
+            &shooting(),
+        );
+        assert!(result.applied.is_empty() && result.activatable.is_empty());
+        assert_eq!(reasons(&result), vec!["rule-state: persistent ability ownership and suppression are not resolved by the buff engine"]);
+    }
+    for condition in [
+        json!({"type":"army-state","parameters":{"owner":"friendly","state":"honoured"}}),
+        json!({"type":"oath-state","parameters":{"ability":"example-oath","state":"fulfilled"}}),
+    ] {
+        for guard in [
+            condition.clone(),
+            json!({"operator":"not","operands":[condition]}),
+        ] {
+            let result = translate(
+                &json!({"type":"conditional","condition":guard,"effect":reward}),
+                &own(),
+                &shooting(),
+            );
+            assert!(result.applied.is_empty() && result.activatable.is_empty());
+            assert_eq!(result.unsupported.len(), 1);
+            assert!(result.unsupported[0]
+                .reason
+                .contains("cannot evaluate condition"));
+        }
+    }
+}
+
+#[test]
+fn oath_policies_and_event_bound_selection_report_unsupported_without_executing_rewards() {
+    let reward = json!({"type":"roll-modifier","target":"this-unit",
+        "modifier":{"roll":"hit","operation":"add","value":1}});
+    let effects = [
+        json!({"type":"oath-modifier","target":"this-unit","modifier":{
+            "ability":"example-rule","aspect":"selection","domains":["deed"],"exclude_previously_selected":true}}),
+        json!({"type":"oath-modifier","target":"this-unit","modifier":{
+            "ability":"example-rule","aspect":"quality-persistence","from":"fulfilled","duration":"battle"}}),
+        json!({"type":"oath-modifier","target":"this-unit","modifier":{
+            "ability":"example-rule","aspect":"deed-reward","applies_to":"additional","operation":"replace",
+            "selection_method":"any","effect":reward}}),
+        json!({"type":"ability-activate","target":"this-model","modifier":{"ability":"example-rule","procedure":"oath"}}),
+        json!({"type":"ability-modifier","target":{"event_var":"actor"},"modifier":{
+            "ability":{"event":"used","event_var":"use"},"aspect":"selection","operation":"set",
+            "selection":{"filter":{"owner":"friendly","all_of":["INFANTRY"]},"count":{"min":0,"max":2}},
+            "recipient_duration":"turn"}}),
+    ];
+    for effect in effects {
+        let result = translate(&effect, &own(), &shooting());
+        assert!(
+            result.applied.is_empty() && result.activatable.is_empty(),
+            "{effect}"
+        );
+        assert_eq!(result.unsupported.len(), 1, "{effect}");
+    }
+}
+
+#[test]
+fn contextual_keyword_ratings_are_reported_without_dropping_concrete_siblings() {
+    for rating in [
+        json!({"rating":true}),
+        json!({"incursion":1,"strike-force":2,"onslaught":3}),
+    ] {
+        let effect = json!({"type":"weapon-ability-grant","target":"this-unit","modifier":{"keywords":[
+            {"keyword_id":"sustained-hits","parameters":{"value":rating}}, {"keyword_id":"lethal-hits"}
+        ]}});
+        let result = translate(&effect, &own(), &shooting());
+        assert_eq!(granted(&result.applied, None), vec!["lethal-hits"]);
+        assert_eq!(
+            reasons(&result),
+            vec!["weapon-ability-grant: keyword rating quantity is unresolved"]
+        );
+    }
+}
+
+#[test]
+fn engine_keyword_ratings_require_concrete_values_and_blast_has_no_invented_rating() {
+    use wh40kdc::cruncher::{crunch, AttackProfileRef, EngineInput, TargetProfileRef};
+    let weapon: wh40kdc::Weapon = serde_json::from_value(json!({
+        "id":"example-weapon","name":"Example weapon","type":"ranged",
+        "game_version":{"edition":"11th","dataslate":"example"},
+        "profiles":[{"name":"Example profile","range":24,"stats":{"A":1,"BS":3,"S":4,"AP":0,"D":1}}]
+    }))
+    .unwrap();
+    let unit: wh40kdc::Unit = serde_json::from_value(json!({
+        "id":"example-unit","name":"Example unit","faction_id":"example",
+        "game_version":{"edition":"11th","dataslate":"example"},
+        "profiles":[{"M":6,"T":4,"Sv":3,"W":1,"Ld":6,"OC":1}]
+    }))
+    .unwrap();
+    let dataset = wh40kdc::Dataset::from_raw(wh40kdc::data::RawData::default());
+    let run = |keyword_id: &str, value: Option<Value>| {
+        let buff = Buff {
+            source: own(),
+            applicable_when: None,
+            contribution: BuffContribution::ExtraKeyword {
+                keyword_ref: WeaponKeywordRef {
+                    keyword_id: keyword_id.into(),
+                    parameters: value.map(|value| json!({"value":value})),
+                },
+            },
+        };
+        let mut context = shooting();
+        context.within_half_range = Some(true);
+        crunch(
+            &EngineInput {
+                attacker: AttackProfileRef {
+                    weapon: &weapon,
+                    profile_index: 0,
+                },
+                target: TargetProfileRef {
+                    unit: &unit,
+                    profile_index: 0,
+                    model_count: Some(10),
+                },
+                models_firing: 1,
+                buffs: vec![buff],
+                context,
+            },
+            Some(&dataset),
+        )
+    };
+    assert_eq!(run("blast", None).unwrap().stages[0].expected, 1.0);
+    assert_eq!(
+        run("blast", Some(json!(2))).unwrap().stages[0].expected,
+        5.0
+    );
+    assert_eq!(
+        run("rapid-fire", Some(json!("D3"))).unwrap().stages[0].expected,
+        3.0
+    );
+    for keyword in ["blast", "rapid-fire", "sustained-hits", "melta"] {
+        assert!(
+            run(keyword, Some(json!({"rating":true}))).is_err(),
+            "{keyword}"
+        );
+    }
+    for keyword in ["rapid-fire", "sustained-hits", "melta"] {
+        assert!(run(keyword, None).is_err(), "{keyword}");
+    }
+}
+
+#[test]
+fn unit_identity_filter_matches_exact_perspective_identity_not_shared_keywords() {
+    for perspective in [
+        TranslationPerspective::Attacker,
+        TranslationPerspective::Target,
+    ] {
+        let stat = if perspective == TranslationPerspective::Attacker {
+            "S"
+        } else {
+            "T"
+        };
+        let effect = json!({"type":"conditional","condition":{"type":"matches","parameters":{
+            "filter":{"level":"unit","unit_ids":["example-unit"]}}},
+            "effect":{"type":"stat-modifier","target":"this-unit","modifier":{"stat":stat,"operation":"add","value":1}}});
+        for (identity, applied, unknown) in [
+            (Some("example-unit"), true, false),
+            (Some("Example-Unit"), false, false),
+            (Some("other-unit"), false, false),
+            (None, false, true),
+        ] {
+            let mut context = shooting();
+            match perspective {
+                TranslationPerspective::Attacker => {
+                    context.attacker_unit_id = identity.map(str::to_owned)
+                }
+                TranslationPerspective::Target => {
+                    context.target_unit_id = identity.map(str::to_owned)
+                }
+            }
+            let result = effect_to_buffs(&effect, &own(), &context, perspective);
+            assert_eq!(!result.applied.is_empty(), applied);
+            assert_eq!(!result.unsupported.is_empty(), unknown);
+        }
+    }
+}
+
+#[test]
+fn exact_unit_targets_work_without_an_owner_on_both_sides() {
+    for perspective in [
+        TranslationPerspective::Attacker,
+        TranslationPerspective::Target,
+    ] {
+        let mut context = shooting();
+        context.attacker_unit_id = Some("example-unit".into());
+        context.target_unit_id = Some("example-unit".into());
+        for owner in [None, Some("any")] {
+            let mut target = json!({"level":"unit","unit_ids":["example-unit"]});
+            if let Some(owner) = owner {
+                target["owner"] = json!(owner);
+            }
+            let stat = if perspective == TranslationPerspective::Attacker {
+                "S"
+            } else {
+                "T"
+            };
+            let effect = json!({"type":"stat-modifier","target":target,"modifier":{"stat":stat,"operation":"add","value":1}});
+            let result = effect_to_buffs(&effect, &own(), &context, perspective);
+            assert_eq!(result.applied.len(), 1);
+            assert!(result.unsupported.is_empty());
+        }
+    }
 }

@@ -80,7 +80,7 @@ describe("named-weapon and unit-wargear: family parameters", () => {
 describe("named-weapon and unit-wargear: describer", () => {
   const weapon = (count: number, state?: "carry" | "lack", at_least = 2) => ({
     type: "named-weapon",
-    parameters: state ? { subject: "this-unit", name: "Fizz blade", count, models: { at_least, state } } : { subject: "this-model", name: "Fizz blade", count },
+    parameters: state ? { subject: "this-unit", name: "Fizz blade", count, models: { count: { min: at_least }, state } } : { subject: "this-model", name: "Fizz blade", count },
   });
 
   it("reads a this-model count, exact or single", () => {
@@ -100,9 +100,9 @@ describe("named-weapon and unit-wargear: describer", () => {
     const presence = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "death-korps-medi-pack" } };
     expect(describePredicate(presence as never, false)).toBe("this unit has the Death Korps Medi Pack wargear");
     expect(describePredicate(presence as never, true)).toBe("this unit does not have the Death Korps Medi Pack wargear");
-    const models = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "relay-kit", models: carry(2) } };
+    const models = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "relay-kit", models: { count: { min: 2 }, state: "carry" } } };
     expect(describePredicate(models as never, false)).toBe("at least 2 models in this unit are equipped with the Relay Kit wargear");
-    const lacking = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "relay-kit", models: lack(1) } };
+    const lacking = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "relay-kit", models: { count: { min: 1 }, state: "lack" } } };
     expect(describePredicate(lacking as never, false)).toBe("one or more models in this unit are not equipped with the Relay Kit wargear");
   });
 });
@@ -142,7 +142,7 @@ describe("named equipment: record shapes", () => {
       mechanics: { effect: { type: "conditional", condition: { operator: "and", operands: [
         { type: "named-weapon", parameters: { subject: "this-model", name: "Fizz caestus", count: 2 } },
         { type: "named-weapon", parameters: { subject: "this-model", name: "Armoured feet", count: 1 } },
-      ] }, effect: { type: "stat-modifier", modifier: { value: 2, weapon_name: "Fizz caestus" } } } },
+      ] }, effect: { type: "stat-modifier", modifier: { value: 2, weapons: { type: "melee", name: "Fizz caestus" } } } } },
     });
   });
 
@@ -170,7 +170,7 @@ describe("named equipment: record shapes", () => {
     const result = compileLeaves(placed(text,
       ["if a model in this unit does not have a fizz vortex weapon", "named-weapon", { subject: "this-unit", name: "Fizz vortex", count: 1, models: { at_least: 1, state: "lack" } }],
       ["add 1 to the Attacks characteristic of melee weapons", "characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "improve", value: 1, weapon_type: "melee" }]), text);
-    expect(result).toMatchObject({ ok: true, mechanics: { effect: { type: "conditional", condition: { type: "named-weapon", parameters: { models: { at_least: 1, state: "lack" } } } } } });
+    expect(result).toMatchObject({ ok: true, mechanics: { effect: { type: "conditional", condition: { type: "named-weapon", parameters: { models: { count: { min: 1 }, state: "lack" } } } } } });
   });
 
   it("keeps a named-weapon loadout check to the loadout leaf (9191 shape)", () => {
@@ -191,7 +191,7 @@ describe("named equipment: record shapes", () => {
       ["if this unit contains two models equipped with a fizz medi-pack", "unit-wargear", { subject: "this-unit", wargear: "fizz-medi-pack", models: { at_least: 2, state: "carry" } }],
       ["return up to D3+1 destroyed Fizz troopers to this unit", "return-models", { subject: "this-unit", count: "D3+1" }],
       ["instead", "instead", {}]), text);
-    const wargear = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "fizz-medi-pack", models: { at_least: 2, state: "carry" } } };
+    const wargear = { type: "unit-wargear", parameters: { subject: "this-unit", wargear: "fizz-medi-pack", models: { count: { min: 2 }, state: "carry" } } };
     expect(result).toMatchObject({
       ok: true,
       mechanics: { effect: { type: "conditional", condition: { type: "strength", parameters: { below: "starting" } }, effect: { type: "sequence", steps: [

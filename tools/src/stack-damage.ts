@@ -23,6 +23,9 @@
  * weapon's contribution is `perModel × count` and bag scoring is a dot product.
  */
 import { Dataset } from "./data/dataset.js";
+import type { StackableBuffGroup } from "./data/dataset.js";
+import { isLegalLeverSelection, type SelectableLever } from "./data/lever-selection.js";
+import type { ActivatableBuff } from "./cruncher/from-dsl.js";
 import { crunch, profileCanTarget, type Buff, type BuffSource, type EngineContext } from "./cruncher/index.js";
 import { resolveTarget, type ComparePhase } from "./compare.js";
 import { isMeleeProfile } from "./data/weapon-profile.js";
@@ -420,8 +423,11 @@ function abilityView(abilityId: string) {
   return ds.abilities.get(abilityId);
 }
 
-function isAuraRange(range: unknown): boolean {
-  return typeof range === "string" && /^aura/.test(range);
+function isAuraRange(effect: unknown): boolean {
+  if (Array.isArray(effect)) return effect.some(isAuraRange);
+  if (effect === null || typeof effect !== "object") return false;
+  const node = effect as Record<string, unknown>;
+  return node.type === "aura" || Object.values(node).some(isAuraRange);
 }
 
 function armyRuleAbilityIds(chapter: string): string[] {
@@ -453,6 +459,9 @@ function makeContext(spec: StackSpec, phase: Phase): EngineContext {
     attackerStationary: true,
     withinHalfRange: true,
     attackerAttached: spec.members.length > 1,
+    attachmentRoles: spec.members.length > 1
+      ? Object.fromEntries(spec.members.map((member) => [member.unit.id, member.role === "bodyguard" ? "bodyguard" : "leader"]))
+      : {},
     attackerKeywords: memberKeywords(spec.members),
   };
 }
@@ -468,7 +477,7 @@ function auraCandidateViews(chapter: string, phase: Phase): { unitId: string; vi
   for (const u of ALL_UNITS) {
     if (!legalInChapter(u.raw, chapter)) continue;
     for (const view of u.abilities) {
-      if (seen.has(view.id) || !isAuraRange(view.raw.scope?.range)) continue;
+      if (seen.has(view.id) || !isAuraRange(view.raw.effect)) continue;
       if (view.phases.length > 0 && !view.phases.includes(phase)) continue;
       seen.add(view.id);
       out.push({ unitId: u.id, viewId: view.id });
@@ -483,17 +492,17 @@ function auraCandidateViews(chapter: string, phase: Phase): { unitId: string; vi
  * `choice` branch, a dice-pool option, or a timing-gated activation. These are
  * the search space: `getBuffs` returns only the auto-applied half.
  */
-interface Lever {
+interface Lever extends SelectableLever {
   key: string;
   label: string;
-  group: string | null;
-  maxActivations: number;
+  capRaise?: ActivatableBuff["capRaise"];
   perMember: Map<string, Buff[]>;
 }
 
 interface BufferPool {
   applied: Map<string, Buff[]>;
   levers: Lever[];
+  groups: StackableBuffGroup[];
   unsupported: { label: string; reason: string }[];
 }
 
@@ -509,10 +518,14 @@ const translationCache = new Map<string, ReturnType<NonNullable<ReturnType<typeo
 
 function translate(ref: SourceRef, m: Member, ctx: EngineContext, ctxKey: string) {
   const source = ref.sourceFor(m);
-  const key = `${ref.tag}|${JSON.stringify(source)}|${ctxKey}`;
+  const key = `${ref.tag}|${m.unit.id}|${JSON.stringify(source)}|${ctxKey}`;
   const hit = translationCache.get(key);
   if (hit) return hit;
-  const out = ref.view.describeBuffs(source, ctx, "attacker");
+  const out = ref.view.describeBuffs(source, {
+    ...ctx,
+    attackerUnitId: m.unit.id,
+    attackerAttachmentRole: ctx.attachmentRoles?.[m.unit.id],
+  }, "attacker");
   translationCache.set(key, out);
   return out;
 }
@@ -594,7 +607,7 @@ function poolSources(spec: StackSpec, phase: Phase): SourceRef[] {
 }
 
 function ctxKeyOf(spec: StackSpec, phase: Phase): string {
-  return `${phase}|${spec.members.length > 1 ? "attached" : "solo"}|${memberKeywords(spec.members).join(",")}`;
+  return `${phase}|${spec.members.map((member) => `${member.unit.id}:${member.role}`).join(",")}|${memberKeywords(spec.members).join(",")}`;
 }
 
 const poolCache = new Map<string, BufferPool>();
@@ -609,6 +622,7 @@ function bufferPool(spec: StackSpec, phase: Phase): BufferPool {
   const ctxKey = ctxKeyOf(spec, phase);
   const applied = new Map<string, Buff[]>();
   const levers = new Map<string, Lever>();
+  const groups = new Map<string, StackableBuffGroup>();
   const unsupported: { label: string; reason: string }[] = [];
 
   for (const m of spec.members) applied.set(m.unit.id, []);
@@ -622,13 +636,18 @@ function bufferPool(spec: StackSpec, phase: Phase): BufferPool {
       }
       for (const lever of t.activatable) {
         const leverKey = `${ref.tag}#${lever.id}`;
+        for (const group of [...(lever.group ? [lever.group] : []), ...(lever.groups ?? [])]) {
+          if (!groups.has(group.id)) groups.set(group.id, { ...group, abilityId: ref.view.id, label: ref.view.name });
+        }
         let entry = levers.get(leverKey);
         if (!entry) {
           entry = {
             key: leverKey,
+            id: leverKey,
             label: `${ref.label} — ${lever.label}`,
-            group: lever.group?.id ?? null,
-            maxActivations: lever.group?.maxActivations ?? Infinity,
+            group: lever.group?.id,
+            groups: lever.groups?.map((group) => group.id),
+            capRaise: lever.capRaise,
             perMember: new Map(),
           };
           levers.set(leverKey, entry);
@@ -637,7 +656,15 @@ function bufferPool(spec: StackSpec, phase: Phase): BufferPool {
       }
     }
   }
-  const pool: BufferPool = { applied, levers: [...levers.values()], unsupported };
+  for (const lever of levers.values()) {
+    if (!lever.capRaise) continue;
+    const group = [...groups.values()].find((candidate) => candidate.abilityId === lever.capRaise!.ability && candidate.id.endsWith("?stance"));
+    if (group) {
+      const { ability: _ability, ...allocation } = lever.capRaise;
+      lever.raisesCap = { ...allocation, group: group.id };
+    }
+  }
+  const pool: BufferPool = { applied, levers: [...levers.values()], groups: [...groups.values()], unsupported };
   poolCache.set(key, pool);
   return pool;
 }
@@ -685,12 +712,27 @@ function selectLevers(spec: StackSpec, phase: ComparePhase): StackSpec {
     let improved = false;
     for (const lever of pool.levers) {
       if (selected.includes(lever.key)) continue;
-      if (lever.group) {
-        const inGroup = selected.filter((k) => pool.levers.find((l) => l.key === k)?.group === lever.group);
-        const cap = pool.levers.find((l) => l.key === lever.key)!.maxActivations;
-        if (inGroup.length >= cap) continue;
+      const selectedLevers = pool.levers.filter((candidate) => selected.includes(candidate.key));
+      const trialLevers = [...selectedLevers, lever];
+      // Capacity providers may have no direct damage: evaluate their unlock with
+      // each candidate rather than requiring a positive standalone contribution.
+      const capacity = pool.levers.filter((candidate) => candidate.raisesCap && !selected.includes(candidate.key) && candidate !== lever);
+      let additions = [lever];
+      if (!isLegalLeverSelection(pool.levers, pool.groups, new Set(trialLevers.map((candidate) => candidate.id)))) {
+        additions = [];
+        const choose = (offset: number, extra: Lever[]): boolean => {
+          if (isLegalLeverSelection(pool.levers, pool.groups, new Set([...trialLevers, ...extra].map((candidate) => candidate.id)))) {
+            additions = [lever, ...extra];
+            return true;
+          }
+          for (let index = offset; index < capacity.length; index++) {
+            if (choose(index + 1, [...extra, capacity[index]])) return true;
+          }
+          return false;
+        };
+        if (!choose(0, [])) continue;
       }
-      const trial = { ...spec, levers: [...selected, lever.key] };
+      const trial = { ...spec, levers: [...selected, ...additions.map((candidate) => candidate.key)] };
       const score = scoreStack(trial, phase).total;
       if (score > best + 1e-9) {
         selected = trial.levers;

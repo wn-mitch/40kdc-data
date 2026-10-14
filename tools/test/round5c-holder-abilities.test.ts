@@ -45,12 +45,12 @@ function errorsOf(list: CompileLeaf[], text: string, abilityId: string | null = 
   return result.errors.join("; ");
 }
 
-/** Every has-ability condition node in a tree. */
+/** Every canonical ability-membership condition node in a tree. */
 function hasAbilityNodes(tree: unknown): Array<Record<string, any>> {
   if (Array.isArray(tree)) return tree.flatMap(hasAbilityNodes);
   if (tree === null || typeof tree !== "object") return [];
   const node = tree as Record<string, any>;
-  return [...(node.type === "has-ability" ? [node] : []), ...Object.values(node).flatMap(hasAbilityNodes)];
+  return [...(node.type === "matches" && Array.isArray(node.parameters?.filter?.has_ability) ? [node] : []), ...Object.values(node).flatMap(hasAbilityNodes)];
 }
 
 const thisAbility: Item = ["with this ability", "unit-has-ability", { subject: "antecedent", own: true }];
@@ -70,7 +70,7 @@ describe("Round 5C holder abilities: the other unit of an engagement or distance
       battleShock("must take a Battle-shock test", "antecedent")), text);
     const loop = mechanics.effect.effect;
     expect(loop.type).toBe("for-each-unit");
-    expect(loop.effect.condition).toEqual({ type: "unit-state", parameters: { subject: "recipient", state: "engaged", with: { owner: "friendly", has_ability: [OWN] } } });
+    expect(loop.effect.condition).toEqual({ type: "matches", parameters: { subject: "recipient", filter: { engaged_with: { owner: "friendly", has_ability: [OWN] } } } });
     // The ability is the holder's, never asked of the enemy unit.
     expect(hasAbilityNodes(mechanics)).toEqual([]);
     // Once for the army: one test per enemy unit per phase, however many holders there are.
@@ -89,7 +89,7 @@ describe("Round 5C holder abilities: the other unit of an engagement or distance
       ["Falls Back", "event", { kind: "move-ended", move_types: ["fall-back"] }],
       battleShock("that unit must take a Battle-shock test", "antecedent")), text);
     expect(mechanics.trigger.subject).toEqual({ owner: "enemy", none_of: ["TITAN"] });
-    expect(mechanics.effect.condition.parameters).toEqual({ subject: "event-subject", state: "engaged", with: { owner: "friendly", has_ability: [OWN] } });
+    expect(mechanics.effect.condition.parameters).toEqual({ subject: "event-subject", filter: { engaged_with: { owner: "friendly", has_ability: [OWN] } } });
     expect(mechanics.effect.effect.target).toBe("event-subject");
     expect(mechanics.usage).toBeUndefined();
   });
@@ -104,7 +104,7 @@ describe("Round 5C holder abilities: the other unit of an engagement or distance
       ["models", "unit-filter", { side: "any", level: "model" }],
       thisAbility,
       ["suffers 1 mortal wound", "mortal-wounds", { recipient: "antecedent", count: "1" }]), text);
-    expect(mechanics.effect.effect.condition).toEqual({ type: "within", parameters: { subject: "recipient", of: { owner: "friendly", level: "model", has_ability: [OWN] }, range: { inches: 9 } } });
+    expect(mechanics.effect.effect.condition).toEqual({ type: "matches", parameters: { subject: "recipient", filter: { within: { of: { owner: "friendly", level: "model", has_ability: [OWN] }, range: { inches: 9 } } } } });
     expect(mechanics.usage).toEqual({ frequency: "once-per-phase", per: "army" });
   });
 
@@ -117,7 +117,7 @@ describe("Round 5C holder abilities: the other unit of an engagement or distance
       ["enemy units", "unit-filter", { side: "enemy" }],
       ["with the Gloom Veil ability", "unit-has-ability", { subject: "antecedent", ability: "gloom-veil" }],
       battleShock("must take a Battle-shock test", "antecedent")), text);
-    expect(mechanics.effect.effect.condition.parameters.with).toEqual({ owner: "enemy", has_ability: ["gloom-veil"] });
+    expect(mechanics.effect.effect.condition.parameters.filter.engaged_with).toEqual({ owner: "enemy", has_ability: ["gloom-veil"] });
     // Not the record's own holders: no army allowance.
     expect(mechanics.usage).toBeUndefined();
   });
@@ -133,7 +133,7 @@ describe("Round 5C holder abilities: presence, moments and recipients", () => {
       thisAbility,
       ["are on the battlefield", "unit-state", { states: ["on-battlefield"], subject: "antecedent", negated: false }],
       ["you gain 1CP", "resource-gain", { pool: "cp", amount: 1 }]), text);
-    expect(mechanics.effect.condition.operands[1]).toEqual({ type: "unit-state", parameters: { subject: { owner: "friendly", level: "model", has_ability: [OWN] }, state: "on-battlefield" } });
+    expect(mechanics.effect.condition.operands[1]).toEqual({ type: "matches", parameters: { subject: { owner: "friendly", level: "model", has_ability: [OWN] }, filter: { state: "on-battlefield" } } });
     expect(hasAbilityNodes(mechanics)).toEqual([]);
     expect(mechanics.usage).toEqual({ frequency: "once-per-phase", per: "army" });
   });
@@ -227,13 +227,14 @@ describe("Round 5C holder abilities: what still does not fold", () => {
       advance), text)).toMatch(/both requires and excludes/u);
   });
 
-  it("refuses an aura that reaches units by ability", () => {
+  it("preserves the ability requirement on an aura's recipient filter", () => {
     const text = "While a friendly ALPHA unit with this ability is within 6\" of this model, re-roll Advance rolls.";
-    expect(errorsOf(placed(text,
+    const mechanics = mechanicsOf(placed(text,
       ["friendly ALPHA unit", "unit-filter", { side: "friendly", keywords: ["ALPHA"] }],
       thisAbility,
       ["is within 6\" of this model", "aura-range", { inches: 6, of: "this-model" }],
-      advance), text)).toMatch(/aura reaching units by ability/u);
+      advance), text);
+    expect(mechanics.effect).toMatchObject({ type: "aura", modifier: { eligible: { owner: "friendly", all_of: ["ALPHA"], has_ability: [OWN] } } });
   });
 
   it("leaves a has-ability with its own subject as a condition on that subject", () => {
@@ -243,7 +244,7 @@ describe("Round 5C holder abilities: what still does not fold", () => {
       advance,
       ["this unit has the Gloom Veil ability", "unit-has-ability", { subject: "this-unit", ability: "gloom-veil" }]), text);
     expect(mechanics.effect.effect.target).toEqual({ owner: "friendly", all_of: ["ALPHA"] });
-    expect(hasAbilityNodes(mechanics)).toEqual([{ type: "has-ability", parameters: { subject: "this-unit", ability: "gloom-veil" } }]);
+    expect(hasAbilityNodes(mechanics)).toEqual([{ type: "matches", parameters: { subject: "this-unit", filter: { has_ability: ["gloom-veil"] } } }]);
   });
 
   it("does not fold across other wording between the filter and \"with this ability\"", () => {
@@ -262,8 +263,7 @@ describe("Round 5C holder abilities: what still does not fold", () => {
       ["Select one unit", "select-unit", { scope: "friendly", distance: "any", visible: false }],
       ["from your army", "unit-owner", { owner: "friendly" }],
       thisAbility, advance), text);
-    expect(JSON.stringify(mechanics)).not.toContain("\"has_ability\"");
-    expect(hasAbilityNodes(mechanics).map((node) => node.parameters.ability)).toEqual([OWN]);
+    expect(hasAbilityNodes(mechanics)).toEqual([{ type: "matches", parameters: { subject: "selected-unit", filter: { has_ability: [OWN] } } }]);
   });
 });
 

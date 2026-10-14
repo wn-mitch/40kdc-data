@@ -61,6 +61,10 @@ export interface PrepareWriteOptions {
   label: string;
   /** Validation tree to snapshot. Defaults to the repository data directory. */
   dataRoot?: string;
+  /** Bound diagnostic rendering, without skipping validation or hiding failed records. */
+  maxDiagnosticsPerRecord?: number;
+  /** Audit the complete input tree even when there are no changed files. */
+  validateUnchanged?: boolean;
 }
 
 export interface PreparedWrites {
@@ -220,7 +224,7 @@ export async function prepareWrites(
   staged: StagedWrite[],
   opts: PrepareWriteOptions,
 ): Promise<PreparedWrites> {
-  if (staged.length === 0) {
+  if (staged.length === 0 && !opts.validateUnchanged) {
     console.log(`[${opts.label}] no file changes to apply.`);
     let used = false;
     return {
@@ -252,16 +256,17 @@ export async function prepareWrites(
     }
 
     const ajv = createValidator();
-    const core = await validateFiles(ajv, "core/**/*.json", projRoot);
-    const enrich = await validateFiles(ajv, "enrichment/**/*.json", projRoot);
+    const fast = createValidator({ allErrors: false });
+    const core = await validateFiles(ajv, "core/**/*.json", projRoot, fast);
+    const enrich = await validateFiles(ajv, "enrichment/**/*.json", projRoot, fast);
     const integrity = await checkReferentialIntegrity(projRoot);
 
     const failed = core.failed + enrich.failed + integrity.failed;
     if (failed > 0) {
       const detail =
-        formatReport(mergeSchema(core, enrich), "pretty") +
+        formatReport(mergeSchema(core, enrich), "pretty", "40kdc Data Validation Report", opts.maxDiagnosticsPerRecord) +
         "\n" +
-        formatReport(integrity, "pretty", "40kdc Referential Integrity Report");
+        formatReport(integrity, "pretty", "40kdc Referential Integrity Report", opts.maxDiagnosticsPerRecord);
       throw new Error(
         `[${opts.label}] projected dataset FAILS validation (${failed} error(s)). ` +
           `Nothing was written. This is exactly what --write would have produced.\n${detail}`,

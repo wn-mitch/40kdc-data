@@ -50,19 +50,6 @@ fn borrow_weapons(m: &P, subj: &str, ctx: &Ctx) -> String {
         }
         None => "models embarked within it".to_string(),
     };
-    let kind = nn(m, "weapon_type")
-        .map(|k| format!("{} ", jv(k)))
-        .unwrap_or_default();
-    let excl = match arr(m, "exclude_weapon_keyword") {
-        Some(k) if !k.is_empty() => format!(
-            " (excluding {} weapons)",
-            k.iter()
-                .map(bracket_keyword)
-                .collect::<Vec<_>>()
-                .join(" and ")
-        ),
-        _ => String::new(),
-    };
     let until = expiry_trail(m.get("until"));
     let until = if until.is_empty() {
         String::new()
@@ -70,7 +57,8 @@ fn borrow_weapons(m: &P, subj: &str, ctx: &Ctx) -> String {
         format!(" {until}")
     };
     format!(
-        "{subj} can use one {kind}weapon{excl} from each of up to {} {from}{until}; those models cannot shoot",
+        "{subj} can use one {} from each of up to {} {from}{until}; those models cannot shoot",
+        weapon_noun(m),
         dice_case(m.get("max_models"))
     )
 }
@@ -80,22 +68,15 @@ fn select_weapon(m: &P, subj: &str) -> String {
         m.get("count").filter(|c| !c.is_null()).unwrap_or(&1.into()),
     ));
     let one = n == 1.0;
-    let named = nn(m, "weapon_name")
-        .map(|k| format!("{} ", jv(k)))
-        .unwrap_or_default();
-    let kind = format!(
-        "{named}{}",
-        nn(m, "weapon_type")
-            .map(|k| format!("{} ", jv(k)))
-            .unwrap_or_default()
-    );
-    let kw = nn(m, "weapon_keyword")
-        .map(|k| format!(" with [{}]", jv(k).to_uppercase()))
-        .unwrap_or_default();
+    let weapon = if one {
+        weapon_noun(m).replacen("weapons", "weapon", 1)
+    } else {
+        weapon_noun(m)
+    };
     format!(
-        "select {} {kind}weapon{}{kw} equipped by {subj}; the effects below refer to {}",
+        "select {} {} equipped by {subj}; the effects below refer to {}",
         if one { "one".to_string() } else { fnum(n) },
-        if one { "" } else { "s" },
+        weapon,
         if one {
             "it as the selected weapon"
         } else {

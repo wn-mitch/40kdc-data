@@ -1,8 +1,8 @@
 {
-  "name": "DSL→Buff translations for canonical abilities (attacker-perspective, fight phase)",
+  "name": "DSL→Buff translations for canonical abilities (attacker-perspective)",
   "cases": [
     {
-      "_comment": "Combat Doctrines is the Codex army rule. Only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group; Assault (charge after Advancing) and Tactical (shoot and charge after Falling Back) grant move-then-act eligibility, which carries no buff.",
+      "_comment": "Combat Doctrines is the Codex army rule. The command-phase witness selects the doctrine, and the assault grant is scoped to the attested ranged weapon keyword; only Devastator is buff-bearing ([ASSAULT] on ranged weapons), so it surfaces as an opt-in lever in the stance's mutually-exclusive group. Assault (charge after Advancing) and Tactical (shoot and charge after Falling Back) grant move-then-act eligibility, which carries no buff.",
       "abilityId": "combat-doctrines-assault-force-adeptus-astartes",
       "source": {
         "kind": "ability",
@@ -10,19 +10,52 @@
         "abilityKind": "army"
       },
       "context": {
-        "phase": "fight"
+        "phase": "command",
+        "weaponKeywords": [
+          "assault"
+        ]
       },
       "expected": {
         "applied": [],
-        "unsupportedReasons": [],
+        "unsupportedReasons": [
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer",
+          "effect type \"permission\" is not modelled by the buff layer"
+        ],
         "activatable": [
           {
-            "id": "combat-doctrines-assault-force-adeptus-astartes#Devastator Doctrine",
+            "id": "combat-doctrines-assault-force-adeptus-astartes#option-1",
             "label": "Devastator Doctrine",
             "group": {
               "id": "combat-doctrines-assault-force-adeptus-astartes?stance",
               "maxActivations": 1
             },
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "command"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -60,7 +93,8 @@
         ],
         "unsupportedReasons": [
           "re-roll on \"charge\" (subset \"all-failures\") is outside the damage path"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -75,9 +109,7 @@
       },
       "expected": {
         "applied": [],
-        "unsupportedReasons": [
-          "dice-gated effect: stochastic; not expressible as a buff"
-        ],
+        "unsupportedReasons": [],
         "activatable": []
       }
     },
@@ -93,7 +125,11 @@
       },
       "expected": {
         "applied": [],
-        "unsupportedReasons": [],
+        "unsupportedReasons": [
+          "roll-modifier on \"charge\" is outside the damage path",
+          "effect type \"move\" is not modelled by the buff layer",
+          "activation condition cannot be evaluated against current context"
+        ],
         "activatable": [
           {
             "id": "blessings-of-khorne-world-eaters#Martial Excellence",
@@ -102,6 +138,16 @@
               "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "round-started",
+                  "optional": true
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -121,6 +167,16 @@
               "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "round-started",
+                  "optional": true
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -137,6 +193,16 @@
               "id": "blessings-of-khorne-world-eaters",
               "maxActivations": 2
             },
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "round-started",
+                  "optional": true
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -161,15 +227,11 @@
         "phase": "fight"
       },
       "expected": {
-        "applied": [
-          {
-            "type": "extra-keyword",
-            "keywordRef": {
-              "keyword_id": "psyker"
-            }
-          }
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"keyword-grant\" is not modelled by the buff layer"
         ],
-        "unsupportedReasons": []
+        "activatable": []
       }
     },
     {
@@ -188,7 +250,8 @@
         "applied": [],
         "unsupportedReasons": [
           "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -203,7 +266,9 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -218,7 +283,9 @@
                 "stat": "A",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             },
             "optional": true,
@@ -248,9 +315,24 @@
         "unsupportedReasons": [],
         "activatable": [
           {
-            "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes@phase-started",
+            "id": "the-imperiums-sword-1st-company-task-force-adeptus-astartes#+1 attacks",
             "label": "+1 attacks",
             "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started"
+                },
+                "optional": true,
+                "duration": "phase",
+                "usage": {
+                  "frequency": "n-per-battle",
+                  "count": 1
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "attacks-mod",
@@ -275,23 +357,16 @@
         "applied": [],
         "unsupportedReasons": [
           "effect type \"resource-gain\" is not modelled by the buff layer",
+          "stat-modifier on \"M\" is outside the damage path",
+          "effect type \"rule-state\" is not modelled by the buff layer",
+          "resource-action-menu eligibility filter is unresolved",
+          "effect type \"move\" is not modelled by the buff layer",
+          "effect type \"move\" is not modelled by the buff layer",
+          "resource-action-menu eligibility filter is unresolved",
+          "resource-action-menu eligibility filter is unresolved",
           "effect type \"resource-spend\" is not modelled by the buff layer"
         ],
-        "activatable": [
-          {
-            "id": "battle-focus-aeldari#star-engines",
-            "label": "Star Engines",
-            "group": null,
-            "buffs": [
-              {
-                "type": "extra-keyword",
-                "keywordRef": {
-                  "keyword_id": "assault"
-                }
-              }
-            ]
-          }
-        ]
+        "activatable": []
       }
     },
     {
@@ -315,6 +390,35 @@
             "id": "ammo-runts-orks@selected:shoot",
             "label": "+1 to hit",
             "group": null,
+            "requires": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "selected",
+                  "filter": {
+                    "to": "shoot"
+                  },
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "shooting"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "hit-mod",
@@ -340,22 +444,37 @@
         "type": "designate-target",
         "designation": "example-quarry",
         "select": {
-          "scope": "enemy-unit",
-          "count": 1,
-          "within_inches": 18,
-          "visibility_required": true,
-          "eligibility": {
-            "type": "happened",
-            "parameters": {
-              "event": "after-roll",
-              "subject": "event-subject",
-              "object": "selected-unit",
-              "filter": {
-                "roll": "hit",
-                "result": "success",
-                "attack_type": "ranged"
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "within": {
+                "range": {
+                  "inches": 18
+                },
+                "of": "this-model"
               },
-              "window": "event"
+              "visible": {
+                "to": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "subject": "event-subject",
+                "object": "selected-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "attack_type": "ranged"
+                },
+                "window": "event"
+              }
             }
           }
         },
@@ -380,6 +499,47 @@
             "id": "example-quarry-designation#example-quarry",
             "label": "Designated target: re-roll hit 1s",
             "group": null,
+            "requires": [
+              {
+                "select": {
+                  "kind": "unit",
+                  "selector": {
+                    "filter": {
+                      "owner": "enemy",
+                      "within": {
+                        "range": {
+                          "inches": 18
+                        },
+                        "of": "this-model"
+                      },
+                      "visible": {
+                        "to": "this-model"
+                      }
+                    },
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    },
+                    "eligibility": {
+                      "type": "happened",
+                      "parameters": {
+                        "event": "after-roll",
+                        "subject": "event-subject",
+                        "object": "selected-unit",
+                        "filter": {
+                          "roll": "hit",
+                          "result": "success",
+                          "attack_type": "ranged"
+                        },
+                        "window": "event"
+                      }
+                    }
+                  }
+                },
+                "duration": "phase"
+              }
+            ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "reroll",
@@ -546,7 +706,7 @@
       "expected": {
         "applied": [],
         "unsupportedReasons": [
-          "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords"
+          "unit-filter target: identity, state or model membership is unresolved"
         ],
         "activatable": []
       }
@@ -567,16 +727,21 @@
         "target": "this-unit",
         "modifier": {
           "removes": [
-            "Heavy"
+            {
+              "keyword_id": "heavy"
+            }
           ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       },
       "expected": {
         "applied": [],
         "unsupportedReasons": [
           "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -594,10 +759,16 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Close-quarters"
-          ],
-          "weapon_keyword": "Torrent"
+          "weapons": {
+            "keyword": {
+              "keyword_id": "torrent"
+            }
+          },
+          "keywords": [
+            {
+              "keyword_id": "close-quarters"
+            }
+          ]
         }
       },
       "expected": {
@@ -609,7 +780,8 @@
             }
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       }
     },
     {
@@ -639,7 +811,8 @@
             "value": 5
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       }
     },
     {
@@ -665,7 +838,8 @@
         "applied": [],
         "unsupportedReasons": [
           "roll-result on \"hit\": only a critical threshold on hit or wound rolls is modelled"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -691,7 +865,8 @@
         "applied": [],
         "unsupportedReasons": [
           "roll-result on \"advance\" is outside the damage path"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -747,7 +922,8 @@
             "roll": "wound"
           }
         ],
-        "unsupportedReasons": []
+        "unsupportedReasons": [],
+        "activatable": []
       }
     },
     {
@@ -780,7 +956,9 @@
               "stat": "WS",
               "operation": "improve",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -809,7 +987,8 @@
         ],
         "unsupportedReasons": [
           "stat-modifier BS: operation \"set\" not supported"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -833,8 +1012,10 @@
               "stat": "A",
               "operation": "improve",
               "value": 1,
-              "weapon_type": "melee",
-              "weapon_name": "fabricated blade"
+              "weapons": {
+                "type": "melee",
+                "name": "fabricated blade"
+              }
             }
           },
           {
@@ -844,7 +1025,9 @@
               "stat": "Range",
               "operation": "add",
               "value": 6,
-              "weapon_name": "fabricated gun"
+              "weapons": {
+                "name": "fabricated gun"
+              }
             }
           }
         ]
@@ -858,7 +1041,8 @@
         ],
         "unsupportedReasons": [
           "stat-modifier on \"Range\" is outside the damage path"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -926,7 +1110,8 @@
           "stat-modifier AP on the attacker: defender-side stat; applies when the buffed unit is the target",
           "stat-modifier on \"M\" is outside the damage path",
           "effect type \"ability-grant\" is not modelled by the buff layer"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -961,14 +1146,11 @@
         }
       },
       "expected": {
-        "applied": [
-          {
-            "type": "reroll",
-            "roll": "hit",
-            "subset": "ones"
-          }
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter target: identity, state or model membership is unresolved"
         ],
-        "unsupportedReasons": []
+        "activatable": []
       }
     },
     {
@@ -1001,7 +1183,8 @@
         "applied": [],
         "unsupportedReasons": [
           "ability-grant: the units holding the granted ability are not resolved"
-        ]
+        ],
+        "activatable": []
       }
     },
     {
@@ -1023,11 +1206,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "DESTROYER CULT"
-          ],
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "DESTROYER CULT"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
@@ -1043,12 +1231,16 @@
                 ]
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
                   "subject": "selected-unit",
-                  "of": "this-model",
-                  "range": {
-                    "inches": 9
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 9
+                      },
+                      "of": "this-model"
+                    }
                   }
                 }
               }
@@ -1071,15 +1263,21 @@
           {
             "id": "fabricated-pick-rule#selected",
             "label": "Selected unit: re-roll wound 1s",
+            "group": null,
             "requires": [
               {
                 "type": "select-units",
                 "selector": {
-                  "owner": "friendly",
-                  "count": 1,
-                  "keywords": [
-                    "DESTROYER CULT"
-                  ],
+                  "filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "DESTROYER CULT"
+                    ]
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  },
                   "eligibility": {
                     "operator": "and",
                     "operands": [
@@ -1095,12 +1293,16 @@
                         ]
                       },
                       {
-                        "type": "within",
+                        "type": "matches",
                         "parameters": {
                           "subject": "selected-unit",
-                          "of": "this-model",
-                          "range": {
-                            "inches": 9
+                          "filter": {
+                            "within": {
+                              "range": {
+                                "inches": 9
+                              },
+                              "of": "this-model"
+                            }
                           }
                         }
                       }
@@ -1109,6 +1311,7 @@
                 }
               }
             ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "reroll",
@@ -1138,11 +1341,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "DESTROYER CULT"
-          ],
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "DESTROYER CULT"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
@@ -1158,12 +1366,16 @@
                 ]
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
                   "subject": "selected-unit",
-                  "of": "this-model",
-                  "range": {
-                    "inches": 9
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 9
+                      },
+                      "of": "this-model"
+                    }
                   }
                 }
               }
@@ -1203,12 +1415,19 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "excluded_keywords": [
-            "VEHICLE"
-          ],
-          "visibility_required": true
+          "filter": {
+            "owner": "enemy",
+            "none_of": [
+              "VEHICLE"
+            ],
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "dice-gated",
@@ -1229,11 +1448,15 @@
                 "type": "weapon-ability-grant",
                 "target": "selected-unit",
                 "modifier": {
-                  "abilities": [
-                    "Ignores Cover"
-                  ],
-                  "weapon_type": "ranged",
-                  "incoming": true
+                  "incoming": true,
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "ignores-cover"
+                    }
+                  ]
                 }
               }
             ]
@@ -1250,16 +1473,24 @@
           {
             "id": "fabricated-bomb-rule#selected",
             "label": "Selected enemy unit: Ignores Cover",
+            "group": null,
             "requires": [
               {
                 "type": "select-units",
                 "selector": {
-                  "owner": "enemy",
-                  "count": 1,
-                  "excluded_keywords": [
-                    "VEHICLE"
-                  ],
-                  "visibility_required": true
+                  "filter": {
+                    "owner": "enemy",
+                    "none_of": [
+                      "VEHICLE"
+                    ],
+                    "visible": {
+                      "to": "this-model"
+                    }
+                  },
+                  "count": {
+                    "min": 1,
+                    "max": 1
+                  }
                 }
               },
               {
@@ -1269,6 +1500,7 @@
                 "comparison": "gte"
               }
             ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "extra-keyword",
@@ -1367,7 +1599,9 @@
           "stat": "A",
           "operation": "improve",
           "value": 2,
-          "weapon_name": "fabricated claws"
+          "weapons": {
+            "name": "fabricated claws"
+          }
         },
         "scaling": {
           "per": 1,
@@ -1382,6 +1616,7 @@
           {
             "id": "fabricated-cap-rule#at-cap",
             "label": "At its maximum: +22 attacks",
+            "group": null,
             "requires": [
               {
                 "per": 1,
@@ -1389,6 +1624,7 @@
                 "max_value": 22
               }
             ],
+            "capRaise": null,
             "buffs": [
               {
                 "type": "attacks-mod",
@@ -1411,13 +1647,11 @@
         "phase": "shooting"
       },
       "effect": {
-        "type": "ability-modifier",
-        "target": "this-unit",
+        "type": "stance-selection-capacity",
         "modifier": {
-          "ability": "fabricated-augments",
-          "aspect": "selections",
-          "operation": "add",
-          "value": 1
+          "ability_id": "fabricated-augments",
+          "additional_selections": 1,
+          "allocation": "choose-one-option"
         }
       },
       "expected": {
@@ -1426,14 +1660,1808 @@
         "activatable": [
           {
             "id": "fabricated-more-rule#cap",
-            "label": "One more fabricated-augments selection",
+            "label": "1 more fabricated-augments selections",
+            "group": null,
+            "requires": null,
             "capRaise": {
               "ability": "fabricated-augments",
-              "by": 1
+              "by": 1,
+              "allocation": "choose-one-option"
             },
             "buffs": []
           }
         ]
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/attested-strength-after-detachment",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "strength-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/missing",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": []
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-source-unit",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "outsider",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-source-identity",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "outsider"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/conflicting",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          },
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": false
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conflicting trigger-time recipient snapshots"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/known-nonrecipient",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": false
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-recipient",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "source",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-perspective",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "target",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-trigger",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "turn-started"
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-selection-path",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/wrong-selector-role",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "leader"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/reordered-object-fields",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "melee"
+                  }
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "T",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              },
+              "event": "battle-started"
+            },
+            "selector": {
+              "filter": {
+                "attachment_role": "bodyguard",
+                "member_of": "this-unit",
+                "level": "model"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "strength-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/nested-local-trigger-path",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "duration": "battle",
+            "effect": {
+              "type": "for-each-unit",
+              "selector": {
+                "filter": {
+                  "level": "model",
+                  "member_of": "this-unit",
+                  "attachment_role": "bodyguard"
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "stat-modifier",
+                    "target": "recipient",
+                    "modifier": {
+                      "stat": "S",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "type": "melee"
+                      }
+                    }
+                  },
+                  {
+                    "type": "stat-modifier",
+                    "target": "recipient",
+                    "modifier": {
+                      "stat": "T",
+                      "operation": "add",
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/steps/0/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "strength-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [
+          "stat-modifier T: defender-side stat; applies when the buffed unit is the target"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/recipient-snapshot/recipient-relative-ap-ws-bs",
+      "abilityId": "snapshot-example",
+      "source": {
+        "kind": "ability",
+        "abilityId": "snapshot-example",
+        "abilityKind": "attached",
+        "sourceUnitId": "source"
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "battle-started",
+          "condition": {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          }
+        },
+        "duration": "battle",
+        "effect": {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "level": "model",
+              "member_of": "this-unit",
+              "attachment_role": "bodyguard"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "improve",
+                  "value": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1
+                }
+              },
+              {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "BS",
+                  "operation": "improve",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        }
+      },
+      "context": {
+        "phase": "fight",
+        "attackerUnitId": "recipient",
+        "attackerKeywords": [
+          "INFANTRY",
+          "CHARACTER"
+        ],
+        "attackerAttached": false,
+        "recipientSnapshots": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "snapshot-example",
+              "abilityKind": "attached",
+              "sourceUnitId": "source"
+            },
+            "sourceUnitId": "source",
+            "trigger": {
+              "event": "battle-started",
+              "condition": {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            },
+            "selector": {
+              "filter": {
+                "level": "model",
+                "member_of": "this-unit",
+                "attachment_role": "bodyguard"
+              }
+            },
+            "selectionPath": "/effect",
+            "perspective": "attacker",
+            "recipientUnitId": "recipient",
+            "selected": true
+          }
+        ]
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "ap-mod",
+            "value": -1
+          },
+          {
+            "type": "skill-mod",
+            "stat": "WS",
+            "value": 1
+          },
+          {
+            "type": "skill-mod",
+            "stat": "BS",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/half-weapon-range/known-true",
+      "abilityId": "fabricated-half-weapon-range",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-half-weapon-range",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "level": "unit",
+              "within": {
+                "range": "half-weapon",
+                "of": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "withinHalfRange": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [
+          {
+            "type": "strength-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/half-weapon-range/known-false",
+      "abilityId": "fabricated-half-weapon-range",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-half-weapon-range",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "level": "unit",
+              "within": {
+                "range": "half-weapon",
+                "of": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "withinHalfRange": false
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/half-weapon-range/missing-unknown",
+      "abilityId": "fabricated-half-weapon-range",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-half-weapon-range",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "level": "unit",
+              "within": {
+                "range": "half-weapon",
+                "of": "attacker"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/half-weapon-range/wholly-unknown",
+      "abilityId": "fabricated-half-weapon-range",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-half-weapon-range",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "level": "unit",
+              "within": {
+                "range": "half-weapon",
+                "of": "attacker",
+                "wholly": true
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "withinHalfRange": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/half-weapon-range/unrelated-unknown",
+      "abilityId": "fabricated-half-weapon-range",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-half-weapon-range",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "defender",
+            "filter": {
+              "owner": "enemy",
+              "level": "unit",
+              "within": {
+                "range": "half-weapon",
+                "of": "defender"
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "S",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      },
+      "context": {
+        "phase": "shooting",
+        "withinHalfRange": true
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "conditional: cannot evaluate condition \"matches\" against current context"
+        ],
+        "activatable": []
       }
     }
   ]

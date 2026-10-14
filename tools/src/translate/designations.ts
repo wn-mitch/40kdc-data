@@ -103,6 +103,7 @@ export const DESIGNATION_IDS: ReadonlySet<string> = new Set([
   "pulse-onslaught-shaken",
   "quarry",
   "remains-under-your-control",
+  "righteous",
   "riled-up",
   "riven",
   "sabotaged",

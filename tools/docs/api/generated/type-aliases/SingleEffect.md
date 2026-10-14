@@ -6,31 +6,11 @@
 
 # Type Alias: SingleEffect
 
-> **SingleEffect** = `object` & `object`
+> **SingleEffect** = [`StatModifierEffect`](../interfaces/StatModifierEffect.md) \| [`IgnoreModifiersEffect`](../interfaces/IgnoreModifiersEffect.md) \| [`RollModifierEffect`](../interfaces/RollModifierEffect.md) \| [`ReRollEffect`](../interfaces/ReRollEffect.md) \| [`RollResultEffect`](../interfaces/RollResultEffect.md) \| [`EndAttackSequenceEffect`](../interfaces/EndAttackSequenceEffect.md) \| [`AbilityGrantEffect`](../interfaces/AbilityGrantEffect.md) \| [`KeywordGrantEffect`](../interfaces/KeywordGrantEffect.md) \| [`WeaponAbilityGrantEffect`](../interfaces/WeaponAbilityGrantEffect.md) \| [`WeaponGrantEffect`](../interfaces/WeaponGrantEffect.md) \| [`AbilityModifierEffect`](../interfaces/AbilityModifierEffect.md) \| [`AbilityActivateEffect`](../interfaces/AbilityActivateEffect.md) \| [`PermissionEffect`](../interfaces/PermissionEffect.md) \| [`TargetingEffect`](../interfaces/TargetingEffect.md) \| [`CountsAsEffect`](../interfaces/CountsAsEffect.md) \| [`RuleStateEffect`](../interfaces/RuleStateEffect.md) \| [`MortalWoundsEffect`](../interfaces/MortalWoundsEffect.md) \| [`DamageReductionEffect`](../interfaces/DamageReductionEffect.md) \| [`FeelNoPainEffect`](../interfaces/FeelNoPainEffect.md) \| [`InvulnerableSaveEffect`](../interfaces/InvulnerableSaveEffect.md) \| [`HealEffect`](../interfaces/HealEffect.md) \| [`ReturnModelsEffect`](../interfaces/ReturnModelsEffect.md) \| [`DestroyModelsEffect`](../interfaces/DestroyModelsEffect.md) \| [`ActOnDeathEffect`](../interfaces/ActOnDeathEffect.md) \| [`SplitUnitEffect`](../interfaces/SplitUnitEffect.md) \| [`AddUnitEffect`](../interfaces/AddUnitEffect.md) \| [`DestructionRuleEffect`](../interfaces/DestructionRuleEffect.md) \| [`MoveEffect`](../interfaces/MoveEffect.md) \| [`MoveModifierEffect`](../interfaces/MoveModifierEffect.md) \| [`SetUpEffect`](../interfaces/SetUpEffect.md) \| [`MarkerEffect`](../interfaces/MarkerEffect.md) \| [`TransportCapacityEffect`](../interfaces/TransportCapacityEffect.md) \| [`TestEffect`](../interfaces/TestEffect.md) \| [`StateChangeEffect`](../interfaces/StateChangeEffect.md) \| [`CpGainEffect`](../interfaces/CpGainEffect.md) \| [`CostModifierEffect`](../interfaces/CostModifierEffect.md) \| [`ResourceGainEffect`](../interfaces/ResourceGainEffect.md) \| [`ResourceSpendEffect`](../interfaces/ResourceSpendEffect.md) \| [`ResourceDieEffect`](../interfaces/ResourceDieEffect.md) \| [`ObjectiveStickyEffect`](../interfaces/ObjectiveStickyEffect.md) \| [`DesignateEffect`](../interfaces/DesignateEffect.md) \| [`ArmyRuleEffect`](../interfaces/ArmyRuleEffect.md) \| [`TestExemptionEffect`](../interfaces/TestExemptionEffect.md) \| [`DatasheetSwapEffect`](../interfaces/DatasheetSwapEffect.md) \| [`CharacteristicResolutionEffect`](../interfaces/CharacteristicResolutionEffect.md) \| [`BorrowWeaponsEffect`](../interfaces/BorrowWeaponsEffect.md) \| [`SelectWeaponEffect`](../interfaces/SelectWeaponEffect.md) \| [`WeaponAbilityRangeEffect`](../interfaces/WeaponAbilityRangeEffect.md)
 
-Defined in: [generated.ts:488](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L488)
+Defined in: [generated.ts:702](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L702)
+
+One effect: a type, the unit-ref it applies to (`target`), and that effect's closed `modifier`.
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "single-effect".
-
-## Type Declaration
-
-### type
-
-> **type**: `"ability-grant"` \| `"attack-restriction"` \| `"auto-result"` \| `"battle-shock-test"` \| `"bs-modifier"` \| `"charge-roll-modifier"` \| `"cp-gain"` \| `"cp-on-destroy"` \| `"cp-refund"` \| `"damage-reduction"` \| `"deep-strike"` \| `"disembark"` \| `"disembark-after-move"` \| `"engagement-passthrough"` \| `"fallback-and-act"` \| `"feel-no-pain"` \| `"fight-eligibility-extension"` \| `"fight-first"` \| `"fight-last"` \| `"fight-on-death"` \| `"firing-deck"` \| `"flyover"` \| `"heal-wounds"` \| `"hazard-rolls"` \| `"invulnerable-save"` \| `"keyword-grant"` \| `"leadership-modifier"` \| `"model-destruction"` \| `"modifier-immunity"` \| `"mortal-wounds"` \| `"detection-range-modifier"` \| `"named-region-state"` \| `"objective-control-modifier"` \| `"objective-tag"` \| `"pool-add-die"` \| `"re-roll"` \| `"recovery-pool"` \| `"remove-battle-shock"` \| `"set-battle-shock"` \| `"replace-roll-from-pool"` \| `"resource-clear"` \| `"resource-gain"` \| `"resource-spend"` \| `"resurrection"` \| `"roll-modifier"` \| `"rule-state"` \| `"shoot-on-death"` \| `"stat-modifier"` \| `"stratagem-cost-modifier"` \| `"stratagem-targeting-permission"` \| `"strategic-reserves-arrival"` \| `"targeting-permission"` \| `"tracking-token"` \| `"transport-capacity-conversion"` \| `"terrain-area-tag"` \| `"unit-attachment"` \| `"unit-keyword"` \| `"unit-keyword-grant"` \| `"unit-tag"` \| `"ward"` \| `"unit-division"` \| `"desperate-escape"` \| `"reactive-charge"` \| `"ability-usage-limit"` \| `"deadly-demise-threshold"` \| `"embark"` \| `"eligibility-override"` \| `"weapon-grant"` \| `"mirror-triggering-choice"` \| `"persistent-battlefield-marker-state"` \| `"named-objective-state"`
-
-### target
-
-> **target**: `"self"` \| `"bearer"` \| `"unit"` \| `"attached-unit"` \| `"selected-models-unit"` \| `"attacker"` \| `"defender"` \| `"target"` \| `"targets-of-selected-unit-attacks"` \| `"friendly-within-aura"` \| `"enemy-within-aura"` \| `"all-friendly"` \| `"all-enemy"` \| `"destroyed-model"` \| `"triggering-unit"`
-
-### modifier?
-
-> `optional` **modifier?**: `object`
-
-#### Index Signature
-
-\[`k`: `string`\]: `unknown`
-
-### scaling?
-
-> `optional` **scaling?**: [`Scaling`](../interfaces/Scaling.md)

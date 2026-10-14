@@ -44,15 +44,10 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 	}
 	if roll, ok := asMap(m["roll"]); ok && roll != nil {
 		each := ""
-		switch roll["per_model"] {
-		case "target":
-			each = " for each model in the target unit"
-		case "this":
-			each = " for each model in this unit"
-		default:
-			if selector, ok := asMap(roll["for_each"]); ok && selector != nil {
-				each = " for each " + forEachUnitSubject(selector)
-			}
+		if roll["per_model"] != nil {
+			each = " for each model in " + effectSubject(roll["per_model"], effCtx{})
+		} else if selector, ok := asMap(roll["for_each"]); ok && selector != nil {
+			each = " for each " + forEachUnitSubject(selector)
 		}
 		// A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
 		dice := diceCase(roll["dice"])
@@ -95,25 +90,27 @@ var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
 }
 
-func destroyModelsLeaf(m map[string]any, subj string) string {
-	kind := "model"
-	if m["model_keyword"] != nil {
-		kind = ejstr(m["model_keyword"]) + " model"
+func destroyModelsLeaf(e, m map[string]any, subj string) string {
+	modelTarget := false
+	if target, ok := asMap(e["target"]); ok && target != nil && target["level"] == "model" {
+		modelTarget = true
 	}
 	var what string
-	if m["count"] == "all" {
-		what = "every " + kind + " in " + subj
+	if modelTarget {
+		if m["count"] == "all" {
+			what = subj
+		} else {
+			what = diceCase(m["count"]) + " of the " + strings.TrimPrefix(subj, "all ")
+		}
+	} else if m["count"] == "all" {
+		what = "every model in " + subj
 	} else {
 		n := diceCase(m["count"])
-		k := kind + "s"
+		kind := "models"
 		if n == "1" {
-			k = kind
+			kind = "model"
 		}
-		what = n + " " + k + " in " + subj
-	}
-	leader := ""
-	if m["exclude_leader"] == true {
-		leader = " (excluding Leader models)"
+		what = n + " " + kind + " in " + subj
 	}
 	verb, tail := "destroy", ""
 	if m["remove_from_play"] == true {
@@ -123,7 +120,7 @@ func destroyModelsLeaf(m map[string]any, subj string) string {
 	if m["ignore_death_triggers"] == true {
 		triggers = ", ignoring any rules triggered by their destruction"
 	}
-	return verb + " " + what + leader + tail + triggers
+	return verb + " " + what + tail + triggers
 }
 
 func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
@@ -136,16 +133,29 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		model = "a model in this unit"
 	} else if subj == "this model" {
 		model = "this model"
+	} else if target, ok := asMap(e["target"]); ok && target != nil && target["level"] == "model" {
+		model = "a " + strings.Replace(strings.TrimPrefix(subj, "all "), "models", "model", 1)
+	}
+	eligibility := ""
+	if elig, ok := asMap(m["eligibility"]); ok && elig != nil {
+		eligibility = conditionLeadIn(elig)
+	}
+	resolution := "it can " + act
+	switch m["resolution"] {
+	case "when-unit-fights":
+		resolution = "when its unit is selected to fight, it can " + act
+	case "after-attacking-unit-finishes":
+		resolution = "after the attacking unit has finished making its attacks, it can " + act
 	}
 	if gate, ok := asMap(m["gate"]); ok && gate != nil {
 		before := ""
-		if elig, ok := asMap(m["eligibility"]); ok && elig != nil {
-			before = " " + conditionLeadIn(elig)
+		if eligibility != "" {
+			before = " " + eligibility
 		}
 		adds := ""
 		for _, g := range getList(gate, "modifiers") {
 			gm := mapOr(g)
-			adds += ", adding " + ejstr(gm["value"]) + " " + conditionLeadIn(mapOr(gm["condition"]))
+			adds += ", adding " + diceCase(gm["value"]) + " " + conditionLeadIn(mapOr(gm["condition"]))
 		}
 		removal := ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
 		if m["removal"] == "after-destroyed-model-fights" {
@@ -159,8 +169,7 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		if gate["comparison"] != nil {
 			comp = ejstr(gate["comparison"])
 		}
-		// Under a destroyed trigger the ability's lead-in already names the death: one lead-in only.
-		var lead string
+		lead := ""
 		if ctx.destroyedTrigger {
 			if before != "" {
 				lead = strings.TrimSpace(before) + ", "
@@ -173,22 +182,26 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			lead += ", "
 		}
 		return lead + "roll one " + diceCase(gate["dice"]) + adds + ". On " +
-			formatComparison(comp, gate["threshold"]) + ", leave that model on the battlefield; it can " + act + removal
+			formatComparison(comp, gate["threshold"]) + ", leave that model on the battlefield; " + resolution + removal
+	}
+	lead := ""
+	if eligibility != "" {
+		lead = eligibility + ", "
 	}
 	switch m["resolution"] {
 	case "when-unit-fights":
-		return "do not remove " + subj + " yet; when its unit is selected to fight, it can " + act + "; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
+		return lead + "do not remove " + subj + " yet; " + resolution + "; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
 	case "after-attacking-unit-finishes":
-		return "do not remove " + subj + " yet; after the attacking unit has finished making its attacks, it can " + act + "; then remove it"
+		return lead + "do not remove " + subj + " yet; " + resolution + "; then remove it"
 	}
 	if ctx.destroyedTrigger {
 		who := "that model"
 		if model == "this model" {
 			who = "this model"
 		}
-		return who + " can " + act + " before being removed from play"
+		return lead + who + " can " + act + " before being removed from play"
 	}
-	return "each time " + model + " is destroyed, it can " + act + " before being removed from play"
+	return lead + "each time " + model + " is destroyed, it can " + act + " before being removed from play"
 }
 
 var moveVerbs = map[string]string{
@@ -333,6 +346,9 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		kinds = andList(parts)
 	}
 	var clauses []string
+	if m["maximum"] == "unlimited" {
+		clauses = append(clauses, subj+" can move any distance")
+	}
 	if m["distance_bonus"] != nil {
 		n := jsNumber(m["distance_bonus"])
 		moves := "Move characteristic"
@@ -432,7 +448,7 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["via"] == "deep-strike" {
 		s += " using the Deep Strike rules"
 	}
-	if m["via"] == "cult-ambush-marker" {
+	if m["via"] == "cult-ambush" {
 		s += " using a Cult Ambush marker"
 	}
 	if markerRange, ok := asMap(m["marker_range"]); ok && markerRange != nil {
@@ -440,7 +456,7 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		if markerRange["wholly"] == true {
 			wholly = "wholly "
 		}
-		s += ", " + wholly + "within " + ejstr(markerRange["inches"]) + "\" of that marker"
+		s += ", " + wholly + "within " + rangePhrase(markerRange["range"]) + " of that marker"
 	}
 	s += moveModeClause(m)
 	if turns, ok := asList(m["turns"]); ok {
@@ -466,10 +482,10 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	s += placementPhrase(m) + placementLimits(m, ctx)
 	if m["within_edge"] != nil {
-		s += " wholly within " + ejstr(m["within_edge"]) + "\" of a battlefield edge"
+		s += " wholly within " + rangePhrase(m["within_edge"]) + " of a battlefield edge"
 	}
 	if m["min_enemy_distance"] != nil {
-		s += " more than " + ejstr(m["min_enemy_distance"]) + "\" away from all enemy models"
+		s += " more than " + rangePhrase(m["min_enemy_distance"]) + " away from all enemy models"
 	}
 	if md, ok := asMap(m["min_distance_from"]); ok && md != nil {
 		rel, of := "more than", " away from"
@@ -478,7 +494,7 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		origin := "this model"
 		if md["of"] != nil {
-			origin = effectSubject(md["of"], ctx)
+			origin = placePhrase(md["of"], ctx)
 		}
 		s += " " + rel + " " + rangePhrase(md["range"]) + of + " " + origin
 	}
@@ -516,7 +532,7 @@ func markerLeaf(m map[string]any) string {
 	if m["operation"] == "relocate" {
 		dist := ""
 		if m["distance"] != nil {
-			dist = " up to " + ejstr(m["distance"]) + "\""
+			dist = " up to " + rangePhrase(m["distance"])
 		}
 		unmoved := ""
 		if m["not_moved_this_turn"] == true {
@@ -561,8 +577,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return subj + " " + ev(subj, "has") + " the Feel No Pain " + ejstr(m["threshold"]) + "+ ability" + fnpAgainst[ejstr(m["against"])]
 	case "invulnerable-save":
 		vs := ""
-		if m["weapon_type"] != nil {
-			vs = " against " + ejstr(m["weapon_type"]) + " attacks"
+		if m["weapons"] != nil {
+			vs = " against " + weaponNoun(m) + " attacks"
 		}
 		return subj + " " + ev(subj, "has") + " a " + ejstr(m["invuln_sv"]) + "+ invulnerable save" + vs
 	case "heal":
@@ -581,7 +597,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "return-models":
 		return returnModelsLeaf(e, m, subj, ctx)
 	case "destroy-models":
-		return destroyModelsLeaf(m, subj)
+		return destroyModelsLeaf(e, m, subj)
 	case "act-on-death":
 		return actOnDeathLeaf(e, m, subj, ctx)
 	case "split-unit":

@@ -40,7 +40,7 @@ describe("positive must-end anchored to a declared charge", () => {
   it("lowers to a charge move-modifier on the declaring unit, in the declaration's part with the reroll", () => {
     const mechanics = json(compiled([declare(), reroll(), mustEnd(), engagedAny("this-unit")]));
     // The subject this-unit is rewritten to event-subject, the moving unit the declaration names.
-    expect(mechanics).toContain(json({ type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: ["charge"], ends_when: { type: "unit-state", parameters: { subject: "event-subject", state: "engaged" } } } }));
+    expect(mechanics).toContain(json({ type: "move-modifier", target: "event-subject", modifier: { applies_to_moves: ["charge"], ends_when: { type: "matches", parameters: { subject: "event-subject", filter: { state: "engaged" } } } } }));
     // Same sequence as the reroll: the move-modifier is one of the steps the declaration starts.
     const sequence = JSON.parse(mechanics).effect ?? JSON.parse(mechanics);
     expect(json(sequence)).toMatch(/"re-roll"[\s\S]*"move-modifier"/u);
@@ -59,7 +59,7 @@ describe("positive must-end anchored to a declared charge", () => {
       engagedWith("antecedent", "following-filter"), friendlyCharacter(),
     ]));
     expect(mechanics).toContain(json({ owner: "enemy", engaged_with: { owner: "friendly", all_of: ["CHARACTER"] } }));
-    expect(mechanics).toContain(json({ type: "unit-state", parameters: { subject: "event-subject", state: "engaged", with: { owner: "enemy", engaged_with: { owner: "friendly", all_of: ["CHARACTER"] } } } }));
+    expect(mechanics).toContain(json({ type: "matches", parameters: { subject: "event-subject", filter: { engaged_with: { owner: "enemy", engaged_with: { owner: "friendly", all_of: ["CHARACTER"] } } } } }));
     // The inner state and the partner are consumed: no stray condition or unit-filter is left.
     expect(mechanics).not.toContain('"owner":"friendly","all_of":["CHARACTER"]},"effect"');
     // The move-modifier stays inside the optional charge part, so the optional-use gate still wraps it.
@@ -85,7 +85,7 @@ describe("positive must-end anchored to a declared charge", () => {
     const generic = "\"Must end that move\" has no move before it.";
     expect(refused([leaf("EVENT", "event", { kind: "move-ended" }), reroll(), mustEnd(), engagedWith("this-unit", "antecedent")])).toContain(generic);
     expect(refused([declare("shoot"), reroll(), mustEnd(), engagedWith("this-unit", "antecedent")])).toContain(generic);
-    expect(refused([leaf("EVENT", "event", { kind: "selected", move_types: ["charge"] }), reroll(), mustEnd(), engagedWith("this-unit", "antecedent")])).toContain(generic);
+    expect(refused([leaf("EVENT", "event", { kind: "selected", move_types: ["charge"] }), reroll(), mustEnd(), engagedWith("this-unit", "antecedent")])).toContain("needs a selected-to-move event");
     // A move-ended trigger after a declared charge is the nearest event: the charge is not borrowed.
     expect(refused([declare(), leaf("EVENT", "event", { kind: "move-ended" }), reroll(), mustEnd(), engagedWith("this-unit", "antecedent")])).toContain(generic);
   });
@@ -115,7 +115,7 @@ describe("engaged distance partner (unit-filter state engaged)", () => {
       declare(), friendlyCharacter(), leaf("CONDITION", "unit-position", { kind: "within", inches: 12, of: "following-filter", subject: "this-unit", negated: false }),
       leaf("CONDITION", "unit-filter", { side: "enemy", states: ["engaged"] }), reroll(),
     ]));
-    expect(mechanics).toContain(json({ type: "within", parameters: { of: { owner: "enemy", state: "engaged" }, range: { inches: 12 } } }));
+    expect(mechanics).toContain(json({ type: "matches", parameters: { filter: { within: { of: { owner: "enemy", state: "engaged" }, range: { inches: 12 } } } } }));
   });
 });
 

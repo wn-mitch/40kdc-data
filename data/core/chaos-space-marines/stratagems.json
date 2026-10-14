@@ -2217,7 +2217,42 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Havocs"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "snare-of-fire-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2454,7 +2489,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "HAVOCS",
+              "OBLITERATORS"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "undying-hatred-devotees-of-destruction-chaos-space-marines",
     "game_version": {
       "edition": "11th",
@@ -2541,7 +2591,23 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "SOUL FORGE"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "unholy-fortitude-cult-of-the-arkifane-chaos-space-marines",
     "game_version": {
       "edition": "11th",

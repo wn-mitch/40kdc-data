@@ -2,7 +2,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import type { CompileLeaf } from "./compile.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
-import { getCurrentCoverage, type CoverageView } from "./coverage.js";
+import { getAbilityCoverage, getCurrentCoverage, type CoverageView } from "./coverage.js";
 import { untiledRuns } from "./leaves.js";
 
 /**
@@ -19,6 +19,13 @@ export type TiledSource = {
   machine_leaves: number;
 };
 
+export type TiledSourceOptions = CoverageView & {
+  abilityVersionIds?: ReadonlySet<number>;
+  factionId?: string | null;
+  /** Explicitly reviewed historical versions; each source must still match its pinned hash. */
+  historicalSourceHashes?: ReadonlyMap<number, string>;
+};
+
 type LeafRow = {
   ability_version_id: number; start_byte: number; end_byte: number; fragment: string; exact_text: string; role: string;
   family_id: string; family_version: number; parameters_json: string; trusted: number;
@@ -32,18 +39,26 @@ function idList(ids: Iterable<number>): string {
 
 export function tiledSources(
   db: DatabaseSync,
-  options: CoverageView & { abilityVersionIds?: ReadonlySet<number>; factionId?: string | null } = {},
+  options: TiledSourceOptions = {},
 ): TiledSource[] {
   const scope = options.abilityVersionIds ? `AND abilities.id IN (${idList(options.abilityVersionIds)})` : "";
   const faction = options.factionId ?? null;
   const coverage = getCurrentCoverage(db, options);
+  const historical = options.historicalSourceHashes ?? new Map<number, string>();
+  for (const [id, hash] of historical) {
+    if (!options.abilityVersionIds?.has(id)) throw new Error(`Historical source ${id} must be explicitly requested.`);
+    const row = db.prepare("SELECT source_hash, current FROM abilities WHERE id = ?").get(id) as { source_hash: string; current: number } | undefined;
+    if (!row || row.current !== 0 || row.source_hash !== hash) throw new Error(`Historical source ${id} no longer matches its pinned historical identity.`);
+    coverage.set(id, getAbilityCoverage(db, id, options));
+  }
+  const current = `(abilities.current = 1 OR abilities.id IN (${idList(historical.keys())}))`;
   const abilities = db.prepare(`
     SELECT id, faction_id, ability_id, name, source_hash, source_text, source_type FROM abilities
-    WHERE current = 1 AND (? IS NULL OR faction_id = ?) ${scope.replaceAll("abilities.id", "id")} ORDER BY faction_id, ability_id
+    WHERE ${current.replaceAll("abilities.", "")} AND (? IS NULL OR faction_id = ?) ${scope.replaceAll("abilities.id", "id")} ORDER BY faction_id, ability_id
   `).all(faction, faction) as Array<Omit<TiledSource, "leaves" | "machine_leaves">>;
   const columns = `source_spans.ability_version_id, source_spans.start_byte, source_spans.end_byte, source_spans.fragment, source_spans.exact_text, semantic_families.role,
     fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json`;
-  const joins = `JOIN abilities ON abilities.id = source_spans.ability_version_id AND abilities.current = 1
+  const joins = `JOIN abilities ON abilities.id = source_spans.ability_version_id AND ${current}
     JOIN fingerprints ON fingerprints.id = X.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version`;
   const rows = db.prepare(`

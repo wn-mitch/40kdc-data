@@ -28,24 +28,24 @@ describe("cruncher damage levers: gates the goldens do not project", () => {
 
   it("gates a critical threshold and a re-roll by weapon type and weapon name", () => {
     const applied = effectToBuffs({ type: "sequence", steps: [
-      { type: "roll-result", target: "this-unit", modifier: { roll: "wound", critical_on: 5, weapon_type: "melee" } },
-      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones", weapon_name: "Fabricated Gun" } },
+      { type: "roll-result", target: "this-unit", modifier: { roll: "wound", critical_on: 5, weapons: { type: "melee" } } },
+      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones", weapons: { name: "Fabricated Gun" } } },
     ] }, source, shooting).applied;
     expect(applied.map((buff) => buff.applicableWhen)).toEqual([{ phases: ["fight"] }, { weaponName: "fabricated gun" }]);
   });
 
   it("keeps both the phase and the weapon-name gate when a modifier carries both", () => {
-    const applied = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_type: "melee", weapon_name: "Fabricated Blade" } }, source, shooting).applied;
+    const applied = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { type: "melee", name: "Fabricated Blade" } } }, source, shooting).applied;
     expect(applied.map((buff) => buff.applicableWhen)).toEqual([{ phases: ["fight"], weaponName: "fabricated blade" }]);
   });
 
   it("gates a critical threshold narrowed by a weapon keyword on that keyword, and refuses one it cannot read", () => {
-    const gated = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "Pistol" } }, source, shooting);
+    const gated = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapons: { keyword: { keyword_id: "pistol" } } } }, source, shooting);
     expect(gated.unsupported).toEqual([]);
-    expect(gated.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeyword: "pistol" }]);
-    const unreadable = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "" } }, source, shooting);
+    expect(gated.applied.map((buff) => buff.applicableWhen)).toEqual([{ weaponKeywords: [{ keyword_id: "pistol" }] }]);
+    const unreadable = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5, weapons: { keyword: { keyword_id: "" } } } }, source, shooting);
     expect(unreadable.applied).toEqual([]);
-    expect(unreadable.unsupported.map((item) => item.reason)).toEqual(['roll-result: narrows by "weapon_keyword" which the cruncher can\'t resolve here']);
+    expect(unreadable.unsupported.map((item) => item.reason)).toEqual(['roll-result: narrows by "weapons.keyword" which the cruncher can\'t resolve here']);
   });
 });
 
@@ -63,6 +63,18 @@ describe("cruncher damage levers: malformed sizes", () => {
 });
 
 describe("cruncher damage levers: DSL to engine", () => {
+  it("improving a Save reduces damage and preserves literal add/subtract direction", () => {
+    const save = (operation: string) => effectToBuffs({
+      type: "stat-modifier", target: "this-unit",
+      modifier: { stat: "Sv", operation, value: 1 },
+    }, source, shooting, "target").applied;
+    const baseline = stages([]).damage;
+    expect(stages(save("improve")).damage).toBeLessThan(baseline);
+    expect(stages(save("worsen")).damage).toBeGreaterThan(baseline);
+    expect(stages(save("improve"))).toEqual(stages(save("subtract")));
+    expect(stages(save("worsen"))).toEqual(stages(save("add")));
+  });
+
   it("a critical hit threshold of 5+ with Lethal Hits raises wounds against the same target", () => {
     const lethal: Buff = { source: { kind: "manual", label: "lethal" }, contribution: { type: "extra-keyword", keywordRef: { keyword_id: "lethal-hits" } } };
     const crit = effectToBuffs({ type: "roll-result", target: "this-unit", modifier: { roll: "hit", critical_on: 5 } }, source, shooting).applied;
@@ -72,8 +84,28 @@ describe("cruncher damage levers: DSL to engine", () => {
   });
 
   it("a weapon-named Attacks lift reaches only that weapon's attacks", () => {
-    const lift = (name: string) => effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapon_name: name } }, source, shooting).applied;
+    const lift = (name: string) => effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "improve", value: 1, weapons: { name } } }, source, shooting).applied;
     expect(stages(lift("Bolt Rifles")).attacks).toBe(15);
     expect(stages(lift("Fabricated Gun")).attacks).toBe(10);
   });
+});
+
+it("keeps structured weapon scopes on attack predicates until weapon resolution", () => {
+  const result = effectToBuffs({ type: "conditional",
+    condition: { type: "attack-is", parameters: { weapons: { type: "ranged", name: "Bolt Rifles", exclude_keyword: { keyword_id: "heavy" } } } },
+    effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } },
+  }, source, shooting);
+  expect(result.unsupported).toEqual([]);
+  expect(result.applied[0].applicableWhen).toEqual({ phases: ["shooting"], weaponName: "bolt rifles", excludedWeaponKeywords: [{ keyword_id: "heavy" }] });
+});
+
+it("uses structured Anti alternatives and exclusions through the engine", () => {
+  const baseline = stages([]).wounds;
+  const grant = (parameters: Record<string, unknown>) => effectToBuffs({
+    type: "weapon-ability-grant", target: "this-unit",
+    modifier: { keywords: [{ keyword_id: "anti", parameters: { ...parameters, threshold: 2 } }] },
+  }, source, shooting).applied;
+  expect(stages(grant({ required_target_keywords_any: ["INFANTRY", "VEHICLE"] })).wounds).toBeGreaterThan(baseline);
+  expect(stages(grant({ excluded_target_keywords: ["VEHICLE"] })).wounds).toBeGreaterThan(baseline);
+  expect(stages(grant({ excluded_target_keywords: ["INFANTRY"] })).wounds).toBe(baseline);
 });

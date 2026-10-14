@@ -33,6 +33,14 @@ model-assisted segmentation (proposals only)
    connectives, it is **leaf-complete**. The deterministic compiler (`compile.ts`) lowers its
    leaves to canonical DSL and the gates check it. No model writes canonical DSL.
 
+The Velochy vocabulary migration may repair activation metadata on an existing incomplete record
+without replacing its effects. This is a migration-only operation, not a partial-record authoring
+or publication path: its entire WHEN scope and correlated actor/object qualifiers must already be
+trusted, and it reuses the compiler's event/filter lowering. The existing effect, usage, duration
+and static eligibility remain unchanged, with source/input fingerprints and whole-projection
+validation. Untiled effects remain untiled; this operation never reports a whole-record compile or
+gate pass. Missing or contradictory timing semantics still require an explicit human leaf review.
+
 ## Where work happens
 
 One live workbench database (`_private/round5c/workbench.sqlite`) holds all source, proposals,
@@ -94,13 +102,78 @@ unless it is needed to operate.
   adds values or optional parameters and hands the rest of a leaf to the previous version, so
   earlier leaves move across by identity.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
-  …" and "excluding …" are separate leaves. Lowering may fold them into one selector; authoring
-  does not absorb qualifiers into a broader leaf to raise completion counts.
+  …" and "excluding …" are separate leaves. Lowering may fold them into one canonical selector;
+  authoring does not absorb qualifiers into a broader leaf to raise completion counts. A selector
+  uses `filter` plus inclusive `count` bounds, optional per-target `limit`, `bind_as`, and
+  event-dependent `eligibility`. `for-each-unit` means all matches and therefore omits `count`.
+- **Canonical targets name roles and references, not legacy aliases.** A model target is
+  `this-model`/`model-in-this-unit`, or a `unit-filter` with `level: "model"` and (for actual
+  attachment membership) `member_of` plus `attachment_role: "bodyguard"|"leader"`. This is
+  actual attached membership, including retained membership of destroyed models; it is never
+  inferred from `CHARACTER`, `has_ability: ["leader"]`, or a bearer label. `self` and `bearer`
+  are retired DSL target spellings. A source family's reviewed `bodyguard_only` parameter may
+  remain as source semantics, but deterministic lowering emits the typed target filter.
+- **Static applicability is not runtime targeting.** Top-level `applies_to` is the human-curated
+  roster-highlighting keyword predicate (`all_of`, `any_of`, `none_of`, `not_all_of`); absent or
+  null matches no unit, while `{}` matches every unit. Runtime recipients use `unit-filter`
+  (`all_of`, `any_of`, `none_of`, `not_all_of`, and typed predicates), and ordinary predicates
+  use `matches`; never copy runtime effect targets into `applies_to`.
+- **Board-dependent predicates preserve unknown.** A range, visibility, engagement, or placement
+  test with no board state is not silently false or true by invented geometry. Lowering and
+  consumers retain an explicit unknown/permissive outcome where the current runtime contract
+  requires it; a known distance outside a range is the only range rejection.
 - **Frequency and ownership are separate qualifications.** A usage frequency records its cadence
   without choosing army, unit or model ownership. A reviewed `usage-scope` leaf supplies the
   allowance owner; an explicitly bound usage leaf can carry it directly. Compilation refuses an
   unbound frequency rather than guessing an owner or turning a target-selection cap into a global
   usage limit. Effects do not restrict reuse of the frequency wording.
+- **Ability-use context keeps event identity intact.** A `game-event` trigger for
+  `used` binds the whole use (`binds_event_variable`), including its actor and exact
+  rule definition. An `ability-modifier` with `ability:{event:"used",event_var}`,
+  `aspect:"selection"`, and `operation:"set"` replaces that use's original
+  `selection` with a canonical `unit-selector`; `recipient_duration` is a
+  `scope-duration`. It is an override, not an additional activation or grant.
+  Ability-use history compares the same ability across a different actor, and
+  army-state predicates retain their explicit friendly/enemy owner and state.
+- **Named ability definitions are distinct from stance options.** A granted named
+  ability uses `{ability_id, definition_id}`; declare the definition once with
+  its paired `ability-grant.modifier.definition`, then reuse that identity for
+  later cross-record grants and references. `rule-state` exchange is atomic
+  (lose the held state and gain the other), and suppression exceptions retain
+  `except_from:"this-ability"` provenance. Resource income resolves in its
+  ordered phase-ended sequence; fixed payments require the pool minimum and are
+  not player-menu choices.
+- **Oath procedures keep their parent semantics.** `oath-determine` references the
+  parent procedure and never invents a stance option. Selection history,
+  duplicate/exhaustion, and method qualifiers remain separate reviewed
+  qualifiers. Fulfilled qualities retain the parent lifetime unless an explicit
+  duration overrides it. An additional-deed reward requires its own event
+  prefix, `instead` branch, ordinary reward, and method qualifier; passive
+  policies compile independently from turn-start fulfilled activation. The
+  acknowledged Code Chivalric stub remains intentionally untouched.
+- **Historical compilation is explicit and provenance-bound.** Correlated
+  recipient reactions keep the enemy actor distinct from the friendly event
+  object and consume one shared parent usage. Historical gates require
+  `abilityVersionIds` plus a matching `historicalSourceHashes` map; omitting
+  them means current versions only, without changing current DB data or
+  provenance. Named ability-state, Oath, and contextual ability-use families
+  are registered compiler families, not ad-hoc recipient predicates. The core
+  keyword publisher indexes canonical `keyword-grant` leaves and unit/detachment
+  inventories, never labels copied from recipient filters.
+  A historical record without a live core owner retains reviewed bearer
+  eligibility as explicit runtime predicates, including every required and
+  excluded keyword. Its phase availability uses `activation-window`; a
+  `use-window` leaf requires an actual core Stratagem to check.
+- **Stance and option identity are stable data, not labels.** Every option has a required unique
+  `id` within its containing ability plus display `name`. Cross-record references use
+  `{ability_id, option_id}` and resolve in the faction-local then shared-core namespace. Renaming
+  `name` must not change references, lever ids, or capacity links. A shared usage allowance and
+  local triggers remain independent; several ability parts can consume one parent allowance.
+- **Capacity allocation is an intersection problem.** A complete lever selection must satisfy every
+  `group` and `groups` pool and every provider dependency. Capacity raises are assigned to eligible
+  options: a fixed option raise cannot fund another option, and overlapping subsets cannot spend
+  one slot twice. Consumers must validate the complete selection; summing scalar caps is not
+  equivalent. `isLegalLeverSelection` is the public helper for this check.
 - **Stat adjustments and setters do not choose their recipient.** Signed number/stat terms accept spaced
   and compact spellings. A bonus improves the named stat and a penalty worsens it, including
   characteristics whose beneficial numerical direction is downward. The unsigned
@@ -115,9 +188,11 @@ unless it is needed to operate.
   conflicting recipients or scopes, and does not carry a stat scope into another sentence.
 - **Returned-model exclusions filter models, not their unit.** A `returned-model-exclusion`
   leaf excludes individual returned models with the named keywords, including within attached
-  units. Source-backed clause binding folds it into `return-models.modifier.exclude_model_keyword`;
-  count, wounds and placement remain separate. Compilation rejects orphaned or ambiguous
-  exclusions rather than applying a whole-unit keyword condition.
+  units. Source-backed clause binding folds it into the return effect's typed model target
+  (`target: {level: "model", member_of: "this-unit", none_of: [...]}`); count, wounds and
+  placement remain separate. Compilation rejects orphaned or ambiguous exclusions rather than
+  applying a whole-unit keyword condition. The source family's `bodyguard_only` parameter,
+  when reviewed, remains distinct from this lowered target filter.
 - **What a model comes back with qualifies its placement, not the ability.** `wounds-remaining`
   ("with 3 wounds remaining"), `starting-strength` ("its unit has a Starting Strength of 1") and
   `leaves-attached-unit` ("that model is not part of an attached unit") are separate leaves that

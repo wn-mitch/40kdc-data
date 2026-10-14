@@ -45,7 +45,7 @@ Subtract 1 from the Objective Control characteristic of enemy units within 6".</
             <profile name="Virulent Blessing (Psychic)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">During the Fight phase, until the end of the phase:
-  -&gt; Select up to 1 enemy unit within 24" of the bearer visible to the bearer: if the target unit is the same unit as the selected unit, add 1 to all friendly NURGLE LEGIONES DAEMONICA units' Damage characteristic.</characteristic>
+  -&gt; Select up to one enemy unit within 24" of this model visible to this model: if the target unit is the same unit as the selected unit, add 1 to all friendly NURGLE LEGIONES DAEMONICA units' Damage characteristic.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">

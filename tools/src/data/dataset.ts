@@ -49,6 +49,8 @@ import { RAW_DATA } from "./bundle.generated.js";
 import { SHARE_REGISTRY } from "../share/registry.generated.js";
 import { resolveLayout, type ResolvedPiece } from "../terrain/resolve.js";
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
+import { sameSnapshotValue } from "../cruncher/recipient-snapshots.js";
+import { historicalSnapshotAbilities } from "./recipient-snapshots.js";
 import {
   abilityLevers,
   combinedKeywordsLower,
@@ -56,6 +58,7 @@ import {
   resolveCapRaises,
   type AbilityLevers,
   type LeverCost,
+  type CapacityRaise,
 } from "./lever-providers.js";
 import {
   resolveEligibleAbilities,
@@ -86,6 +89,8 @@ export type StackableBuff = {
   source: BuffSource;
   /** Id of the mutually-limited {@link StackableBuffGroup} this belongs to, if any. */
   group?: string;
+  /** Additional enclosing pools; every listed cap applies alongside `group`. */
+  groups?: string[];
   /** What turning the lever on costs: CP for a Stratagem, points for an Enhancement. */
   cost?: LeverCost;
   /**
@@ -96,12 +101,14 @@ export type StackableBuff = {
   /** Id of the lever this one needs on (the Stratagem or Enhancement that provides it). */
   requiresLever?: string;
   /** Turning the lever on raises the cap of the pool `group` by `by` instead of adding buffs. */
-  raisesCap?: { group: string; by: number };
+  raisesCap?: Omit<CapacityRaise, "ability"> & { group: string };
 };
 
 /** A pool of {@link StackableBuff} levers limited to `maxActivations` at once. */
 export type StackableBuffGroup = {
   id: string;
+  /** Stable owning ability id, independent of its display name. */
+  abilityId?: string;
   label: string;
   maxActivations: number;
 };
@@ -324,7 +331,7 @@ export class Dataset {
   }
 
   /**
-   * Every ability carrying a reactive {@link AbilityTrigger}, sorted by ability
+   * Every ability carrying a reactive event trigger, sorted by ability
    * id. Each entry names the units that list the ability (sorted; empty for
    * faction/detachment-rule abilities no unit references directly).
    */
@@ -587,6 +594,16 @@ export class Dataset {
    * {@link AbilityView.describeBuffs} when you need the diagnostics for an
    * individual ability. Symmetric to {@link defensiveBuffsFor}, which walks
    * the same eligibility set under target perspective.
+   *
+   * Persistent recipient effects after an attachment changes are resolved only
+   * from caller-attested `context.recipientSnapshots` captured at activation
+   * time. The caller supplies live event-time evidence and asserts
+   * activation/equipment; this dataset has no internal history or clock.
+   * Discovery accepts an intrinsic source or an eligible enhancement with the
+   * matching detachment; legality alone does not prove that a source was
+   * equipped. Missing, mismatched, or conflicting snapshots are unsupported,
+   * `selected: false` produces no effect, and a named parent trigger remains
+   * distinct from unrelated effect guards.
    */
   buffsFor(
     input: EligibilityInput & {
@@ -613,11 +630,11 @@ export class Dataset {
    * effects ride with the firing weapon, not the receiving unit.
    *
    * Abilities pooled in from `attachedUnitIds` obey core rule 19.04: an effect
-   * targeting a single model (DSL `self`/`bearer`, e.g. an attached character's
+   * targeting a single model (DSL `this-model`, e.g. an attached character's
    * personal invulnerable save) is *not* returned as a buff on the combined
    * unit — it stays on its own model and surfaces in
    * {@link AbilityView.describeBuffs}'s `unsupported` list instead. Effects
-   * targeting the unit (`unit`/`attached-unit`) do reach the whole unit.
+   * targeting the unit (`this-unit`) do reach the whole unit.
    */
   defensiveBuffsFor(
     input: EligibilityInput & { optedInStratagemIds?: string[] },
@@ -656,7 +673,7 @@ export class Dataset {
   ): { buffs: StackableBuff[]; groups: StackableBuffGroup[] } {
     const buffs: StackableBuff[] = [];
     const groups: StackableBuffGroup[] = [];
-    const capRaises = new Map<StackableBuff, { ability: string; by: number }>();
+    const capRaises = new Map<StackableBuff, CapacityRaise>();
     const take = (levers: AbilityLevers) => {
       buffs.push(...levers.buffs);
       for (const group of levers.groups) if (!groups.some((g) => g.id === group.id)) groups.push(group);
@@ -673,13 +690,16 @@ export class Dataset {
     const combined = unit ? [unit, ...members] : members;
 
     // Surface the attachment fact and the combined unit's keywords to the DSL translator so
-    // `is-attached` conditions and keyword filters ("friendly BLOOD LEGIONS units") evaluate.
+    // attachment conditions and keyword filters evaluate against their actual subjects.
     // Clone — never mutate the caller's context. An explicitly-set value wins over the derivation.
     const ctx: EngineContext = {
       ...context,
       attackerAttached:
         context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
       attackerKeywords: context.attackerKeywords ?? (combined.length > 0 ? combinedKeywordsLower(combined) : undefined),
+      attackerUnitId: context.attackerUnitId ?? input.unitId,
+      attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
     };
 
     // Intrinsic weapon-profile keywords — always on. Weapon ids are shared
@@ -724,6 +744,15 @@ export class Dataset {
         held,
       }));
     }
+    for (const entry of historicalSnapshotAbilities(this, input, ctx, "attacker")) {
+      if (eligible.some((current) => current.ability.id === entry.ability.id && sameSnapshotValue(bufferSourceFromEligible(current), entry.source))) continue;
+      take(abilityLevers(this, {
+        ability: entry.ability, source: entry.source, ctx, factionId,
+        idBase: `${entry.source.kind === "ability" ? entry.source.abilityKind : entry.source.kind}:${entry.ability.id}`,
+        label: entry.ability.name, enabled: true, held,
+      }));
+      held.add(entry.ability.id);
+    }
 
     // Enhancements a character in the combined unit could take from the detachment.
     take(enhancementLevers(this, { detachmentId: input.detachmentId, crunchedUnitId: input.unitId, bearers: combined, ctx, factionId, held }));
@@ -742,12 +771,31 @@ export class Dataset {
   ): Buff[] {
     const out: Buff[] = [];
 
-    // Surface the attachment fact to the DSL translator (see stackableBuffsFor).
-    // Clone — never mutate the caller's context; explicit flag wins.
-    const ctx: EngineContext = {
+    const unit = (input.factionId ? this.units.getInFaction(input.unitId, input.factionId) : undefined)
+      ?? this.units.getAny(input.unitId);
+    const factionId = input.factionId ?? unit?.raw.faction_id;
+    const combined = unit ? [unit] : [];
+    for (const id of input.attachedUnitIds ?? []) {
+      const member = (factionId ? this.units.getInFaction(id, factionId) : undefined) ?? this.units.getAny(id);
+      if (member) combined.push(member);
+    }
+    // Explicit game-state facts win. Roles come only from actual attachment edges.
+    const keywords = combined.length > 0 ? combinedKeywordsLower(combined) : undefined;
+    const attached = (input.attachedUnitIds?.length ?? 0) > 0;
+    const ctx: EngineContext = perspective === "attacker" ? {
       ...context,
-      attackerAttached:
-        context.attackerAttached ?? (input.attachedUnitIds?.length ?? 0) > 0,
+      attackerAttached: context.attackerAttached ?? attached,
+      attackerUnitId: context.attackerUnitId ?? input.unitId,
+      attackerAttachmentRole: context.attackerAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      attackerKeywords: context.attackerKeywords ?? keywords,
+      attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
+    } : {
+      ...context,
+      targetAttached: context.targetAttached ?? attached,
+      targetUnitId: context.targetUnitId ?? input.unitId,
+      targetAttachmentRole: context.targetAttachmentRole ?? input.attachmentRoles?.[input.unitId],
+      targetKeywords: context.targetKeywords ?? keywords,
+      attachmentRoles: context.attachmentRoles ?? input.attachmentRoles,
     };
 
     // Weapon-profile keywords are attacker-only. Faction-scoped like
@@ -766,6 +814,7 @@ export class Dataset {
     }
 
     const optedIn = new Set(input.optedInStratagemIds ?? []);
+    const visited: { abilityId: string; source: BuffSource }[] = [];
     for (const entry of this.eligibleAbilities(input, ctx.phase)) {
       if (
         entry.source.kind === "detachment-stratagem" &&
@@ -774,7 +823,12 @@ export class Dataset {
         continue;
       }
       const source = bufferSourceFromEligible(entry);
+      visited.push({ abilityId: entry.ability.id, source });
       out.push(...entry.ability.getBuffs(source, ctx, perspective, entry.rating));
+    }
+    for (const entry of historicalSnapshotAbilities(this, input, ctx, perspective)) {
+      if (visited.some((current) => current.abilityId === entry.ability.id && sameSnapshotValue(current.source, entry.source))) continue;
+      out.push(...entry.ability.getBuffs(entry.source, ctx, perspective));
     }
 
     return out;

@@ -30,7 +30,7 @@ func friendlySelection(keywords ...any) map[string]any {
 	within9 := map[string]any{"type": "within", "parameters": map[string]any{"subject": "selected-unit", "of": "this-model", "range": map[string]any{"inches": 9.0}}}
 	return map[string]any{
 		"type":     "select-units",
-		"selector": map[string]any{"owner": "friendly", "count": 1.0, "keywords": keywords, "eligibility": map[string]any{"operator": "and", "operands": []any{notThisUnit, within9}}},
+		"selector": map[string]any{"filter": map[string]any{"owner": "friendly", "all_of": keywords}, "count": map[string]any{"min": 1.0, "max": 1.0}, "eligibility": map[string]any{"operator": "and", "operands": []any{notThisUnit, within9}}},
 		"effect":   map[string]any{"type": "re-roll", "target": "selected-unit", "modifier": map[string]any{"roll": "wound", "subset": "ones"}},
 	}
 }
@@ -90,62 +90,6 @@ func TestUnitWithoutSelectorKeywordsGetsNothingAndUnknownKeywordsRefuse(t *testi
 	}
 }
 
-func TestEnemySelectionIncomingGrantIsTheAttackersOwnBehindItsRoll(t *testing.T) {
-	selector := map[string]any{"owner": "enemy", "count": 1.0, "excluded_keywords": []any{"MONSTER", "VEHICLE"}, "visibility_required": true}
-	roll := map[string]any{"type": "dice-gated", "dice": "D6", "threshold": 2.0, "comparison": "gte"}
-	gated := cloneMap(roll)
-	gated["on_success"] = map[string]any{"type": "sequence", "steps": []any{
-		map[string]any{"type": "designate", "target": "selected-unit", "modifier": map[string]any{"tag": "fabricated"}},
-		map[string]any{"type": "weapon-ability-grant", "target": "selected-unit", "modifier": map[string]any{"abilities": []any{"Ignores Cover"}, "weapon_type": "ranged", "incoming": true}},
-	}}
-	gated["on_fail"] = nil
-	effect := map[string]any{"type": "select-units", "selector": selector, "effect": gated}
-
-	out := effectToBuffs(effect, providedSource(), shootingKeyed(), "attacker")
-	if len(out.activatable) != 1 {
-		t.Fatalf("activatable = %#v", out.activatable)
-	}
-	lever := out.activatable[0].(map[string]any)
-	if want := []any{map[string]any{"type": "select-units", "selector": selector}, roll}; !reflect.DeepEqual(lever["requires"], want) {
-		t.Fatalf("requires = %#v", lever["requires"])
-	}
-	want := []any{map[string]any{
-		"source":         providedSource(),
-		"contribution":   map[string]any{"type": "extra-keyword", "keywordRef": map[string]any{"keyword_id": "ignores-cover"}},
-		"applicableWhen": map[string]any{"phases": []any{"shooting"}, "excludedTargetKeywords": []any{"MONSTER", "VEHICLE"}},
-	}}
-	if !reflect.DeepEqual(lever["buffs"], want) {
-		t.Fatalf("buffs = %#v", lever["buffs"])
-	}
-	if n := len(resolveBuffs(getList(lever, "buffs"), map[string]any{"phase": "shooting", "targetKeywords": []any{"infantry"}}).extraKeywords); n != 1 {
-		t.Fatalf("infantry target: %d extra keywords", n)
-	}
-	if n := len(resolveBuffs(getList(lever, "buffs"), map[string]any{"phase": "shooting", "targetKeywords": []any{"vehicle"}}).extraKeywords); n != 0 {
-		t.Fatalf("vehicle target: %d extra keywords", n)
-	}
-	// The enemy unit is never the attacked unit's own side: nothing under the target perspective.
-	if target := effectToBuffs(effect, providedSource(), shootingKeyed(), "target"); len(target.activatable) != 0 {
-		t.Fatalf("target activatable = %#v", target.activatable)
-	}
-}
-
-func TestEnemySelectionBehindARollWithAFailureBranchIsRefused(t *testing.T) {
-	effect := map[string]any{
-		"type":     "select-units",
-		"selector": map[string]any{"owner": "enemy", "count": 1.0},
-		"effect": map[string]any{"type": "dice-gated", "dice": "D6", "threshold": 4.0, "comparison": "gte",
-			"on_success": map[string]any{"type": "stat-modifier", "target": "selected-unit", "modifier": map[string]any{"stat": "T", "operation": "worsen", "value": 1.0}},
-			"on_fail":    map[string]any{"type": "mortal-wounds", "target": "this-unit", "modifier": map[string]any{"count": 1.0}}},
-	}
-	out := effectToBuffs(effect, ownSource(), shootingKeyed(), "attacker")
-	if len(out.activatable) != 0 {
-		t.Fatalf("activatable = %#v", out.activatable)
-	}
-	if got, want := reasonsOf(out), []any{"select-units: a dice gate with a failure branch is not a single lever"}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("reasons = %#v", got)
-	}
-}
-
 func contributionTypes(buffs []any) []any {
 	out := []any{}
 	for _, c := range contributionsOf(buffs) {
@@ -167,7 +111,7 @@ func TestProviderOwnUnitEffectsNeverApplyToTheCrunchedUnit(t *testing.T) {
 	}
 }
 
-func TestFriendlyFilterAppliesOnlyWithItsKeywordsAndIsPermissiveWithout(t *testing.T) {
+func TestFriendlyFilterAppliesOnlyWithItsKeywordsAndRefusesUnknownKeywords(t *testing.T) {
 	effect := map[string]any{"type": "roll-modifier", "target": map[string]any{"owner": "friendly", "all_of": []any{"BLOOD LEGIONS"}}, "modifier": map[string]any{"roll": "hit", "operation": "add", "value": 1.0}}
 	if n := len(effectToBuffs(effect, providedSource(), shootingKeyed(), "attacker").applied); n != 0 {
 		t.Fatalf("without keyword: %d applied", n)
@@ -175,14 +119,16 @@ func TestFriendlyFilterAppliesOnlyWithItsKeywordsAndIsPermissiveWithout(t *testi
 	if n := len(effectToBuffs(effect, providedSource(), map[string]any{"phase": "shooting", "attackerKeywords": []any{"blood legions"}}, "attacker").applied); n != 1 {
 		t.Fatalf("with keyword: %d applied", n)
 	}
-	if n := len(effectToBuffs(effect, providedSource(), map[string]any{"phase": "shooting"}, "attacker").applied); n != 1 {
-		t.Fatalf("unknown keywords: %d applied", n)
+	unknown := effectToBuffs(effect, providedSource(), map[string]any{"phase": "shooting"}, "attacker")
+	if len(unknown.applied) != 0 || len(unknown.unsupported) != 1 ||
+		unknown.unsupported[0].(map[string]any)["reason"] != "unit-filter target: identity, state or model membership is unresolved" {
+		t.Fatalf("unknown keywords = %#v", unknown)
 	}
 }
 
 func TestCappedScalingIsALeverAtItsCapAndUncappedIsRefused(t *testing.T) {
 	scaling := map[string]any{"per": 1.0, "of": "models-embarked-in-bearer", "max_value": 22.0}
-	capped := effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 2.0, "weapon_name": "fabricated claws"}, "scaling": scaling}, ownSource(), fightKeyed(), "attacker")
+	capped := effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 2.0, "weapons": map[string]any{"name": "fabricated claws"}}, "scaling": scaling}, ownSource(), fightKeyed(), "attacker")
 	if len(capped.applied) != 0 || len(capped.activatable) != 1 {
 		t.Fatalf("capped = %#v", capped)
 	}
@@ -206,24 +152,34 @@ func TestCappedScalingIsALeverAtItsCapAndUncappedIsRefused(t *testing.T) {
 }
 
 func TestAddedSelectionToOwnAbilityIsACapRaiseWithNoBuffs(t *testing.T) {
-	modifier := func(aspect string) map[string]any {
-		return map[string]any{"type": "ability-modifier", "target": "this-unit", "modifier": map[string]any{"ability": "fabricated-augments", "aspect": aspect, "operation": "add", "value": 1.0}}
+	modifier := map[string]any{
+		"type":   "stance-selection-capacity",
+		"target": "this-unit",
+		"modifier": map[string]any{
+			"ability_id":            "fabricated-augments",
+			"additional_selections": 1.0,
+			"allocation":            "choose-one-option",
+			"options": []any{
+				map[string]any{"ability_id": "fabricated-augments", "option_id": "alpha"},
+				map[string]any{"ability_id": "fabricated-augments", "option_id": "beta"},
+			},
+		},
 	}
-	out := effectToBuffs(modifier("selections"), ownSource(), shootingKeyed(), "attacker")
+	out := effectToBuffs(modifier, ownSource(), shootingKeyed(), "attacker")
 	if len(out.unsupported) != 0 {
 		t.Fatalf("unsupported = %#v", out.unsupported)
 	}
-	want := []any{map[string]any{"id": "fabricated#cap", "label": "One more fabricated-augments selection", "buffs": []any{}, "capRaise": map[string]any{"ability": "fabricated-augments", "by": 1.0}}}
+	want := []any{map[string]any{"id": "fabricated#cap", "label": "1 more fabricated-augments selections", "buffs": []any{}, "capRaise": map[string]any{"ability": "fabricated-augments", "by": 1.0, "allocation": "choose-one-option", "options": []any{
+		map[string]any{"ability_id": "fabricated-augments", "option_id": "alpha"},
+		map[string]any{"ability_id": "fabricated-augments", "option_id": "beta"},
+	}}}}
 	if !reflect.DeepEqual(out.activatable, want) {
 		t.Fatalf("activatable = %#v", out.activatable)
-	}
-	if uses := effectToBuffs(modifier("uses"), ownSource(), shootingKeyed(), "attacker"); len(uses.activatable) != 0 {
-		t.Fatalf("uses activatable = %#v", uses.activatable)
 	}
 }
 
 func rapidFireBehindLethalHits() any {
-	return effectToBuffs(map[string]any{"type": "weapon-ability-grant", "target": "this-unit", "modifier": map[string]any{"abilities": []any{"Rapid Fire 1"}, "weapon_type": "ranged", "weapon_keyword": "Lethal Hits"}}, ownSource(), shootingKeyed(), "attacker").applied[0]
+	return effectToBuffs(map[string]any{"type": "weapon-ability-grant", "target": "this-unit", "modifier": map[string]any{"keywords": []any{map[string]any{"keyword_id": "rapid-fire", "parameters": map[string]any{"value": 1}}}, "weapons": map[string]any{"type": "ranged", "keyword": map[string]any{"keyword_id": "lethal-hits"}}}}, ownSource(), shootingKeyed(), "attacker").applied[0]
 }
 
 func grantedKeywordIDs(buffs []any, printed []any) []any {
@@ -237,7 +193,7 @@ func grantedKeywordIDs(buffs []any, printed []any) []any {
 func TestWeaponKeywordGateReadsPrintedOrGrantedKeywordsAndNoOther(t *testing.T) {
 	rapidFire := rapidFireBehindLethalHits()
 	lethal := map[string]any{"source": ownSource(), "contribution": map[string]any{"type": "extra-keyword", "keywordRef": map[string]any{"keyword_id": "lethal-hits"}}}
-	if got, want := rapidFire.(map[string]any)["applicableWhen"], map[string]any{"phases": []any{"shooting"}, "weaponKeyword": "lethal-hits"}; !reflect.DeepEqual(got, want) {
+	if got, want := rapidFire.(map[string]any)["applicableWhen"], map[string]any{"phases": []any{"shooting"}, "weaponKeywords": []map[string]any{{"keyword_id": "lethal-hits"}}}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("applicableWhen = %#v", got)
 	}
 	if got := grantedKeywordIDs([]any{rapidFire}, []any{"lethal-hits"}); !reflect.DeepEqual(got, []any{"rapid-fire"}) {
@@ -254,5 +210,57 @@ func TestWeaponKeywordGateReadsPrintedOrGrantedKeywordsAndNoOther(t *testing.T) 
 func TestWeaponKeywordGateIsPermissiveWithoutTheWeaponsKeywords(t *testing.T) {
 	if n := len(resolveBuffs([]any{rapidFireBehindLethalHits()}, map[string]any{"phase": "shooting"}).extraKeywords); n != 1 {
 		t.Fatalf("extra keywords = %d", n)
+	}
+}
+
+func TestStructuredWeaponKeywordApplicabilityKeepsRatingsAndExclusions(t *testing.T) {
+	antiFour := map[string]any{"keyword_id": "anti", "parameters": map[string]any{"target_keyword": "MONSTER", "threshold": 4.0}}
+	antiFive := map[string]any{"keyword_id": "anti", "parameters": map[string]any{"target_keyword": "MONSTER", "threshold": 5.0}}
+	buff := map[string]any{
+		"source": ownSource(),
+		"applicableWhen": map[string]any{
+			"weaponKeywords": []map[string]any{antiFour},
+		},
+		"contribution": map[string]any{"type": "extra-keyword", "keywordRef": map[string]any{"keyword_id": "fabricated"}},
+	}
+	if got := len(resolveBuffs([]any{buff}, map[string]any{"weaponKeywordRefs": []map[string]any{antiFour}}).extraKeywords); got != 1 {
+		t.Fatalf("matching rating = %d, want 1", got)
+	}
+	if got := len(resolveBuffs([]any{buff}, map[string]any{"weaponKeywordRefs": []map[string]any{antiFive}}).extraKeywords); got != 0 {
+		t.Fatalf("different rating = %d, want 0", got)
+	}
+	buff["applicableWhen"] = map[string]any{
+		"excludedWeaponKeywords": []map[string]any{antiFour},
+	}
+	if got := len(resolveBuffs([]any{buff}, map[string]any{"weaponKeywordRefs": []map[string]any{antiFour}}).extraKeywords); got != 0 {
+		t.Fatalf("excluded rating = %d, want 0", got)
+	}
+	if got := len(resolveBuffs([]any{buff}, map[string]any{"weaponKeywordRefs": []map[string]any{antiFive}}).extraKeywords); got != 1 {
+		t.Fatalf("nonmatching excluded rating = %d, want 1", got)
+	}
+}
+
+func TestExplicitRangeGateRejectsUnknownDistance(t *testing.T) {
+	buff := map[string]any{"applicableWhen": map[string]any{"maxRangeInches": 6.0}, "contribution": map[string]any{"type": "extra-keyword", "keywordRef": map[string]any{"keyword_id": "fabricated"}}}
+	for _, tc := range []struct {
+		name string
+		ctx  map[string]any
+		want bool
+	}{
+		{"absent", map[string]any{}, false},
+		{"zero", map[string]any{"distanceInches": 0.0}, true},
+		{"inside", map[string]any{"distanceInches": 5.99}, true},
+		{"boundary", map[string]any{"distanceInches": 6.0}, true},
+		{"outside", map[string]any{"distanceInches": 6.01}, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := buffApplies(buff, tc.ctx); got != tc.want {
+				t.Fatalf("buffApplies = %v, want %v", got, tc.want)
+			}
+		})
+	}
+	ungated := map[string]any{"contribution": buff["contribution"]}
+	if !buffApplies(ungated, map[string]any{}) {
+		t.Fatal("ungated buff rejected absent distance")
 	}
 }

@@ -6,7 +6,7 @@
 
 # Interface: BattleRoundCondition
 
-Defined in: [generated.ts:1811](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1811)
+Defined in: [generated.ts:1564](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1564)
 
 [clock] The battle round is within [min, max].
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1811](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"battle-round"`
 
-Defined in: [generated.ts:1812](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1812)
+Defined in: [generated.ts:1565](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1565)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1812](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1813](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1813)
+Defined in: [generated.ts:1566](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1566)
 
 #### min?
 

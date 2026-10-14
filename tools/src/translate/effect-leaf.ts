@@ -13,6 +13,8 @@ import {
   isRatingRef,
 } from "./effect-words.js";
 import type { P } from "./condition-refs.js";
+import { selectionBinding, selectUnitsSubject } from "./effect-bind.js";
+import { expiryTrail } from "./expiry.js";
 
 /** A leaf effect node: `{type, target, modifier, scaling?}`. */
 export interface Leaf {
@@ -32,11 +34,13 @@ export const LEAF_TYPES = new Set([
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
   "objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
+  "oath-modifier",
 ]);
 
 /** "each time an attack targets the unit, " — the lead of an `incoming` change. */
 function incomingLead(m: Record<string, unknown>, subj: string): string {
-  const attack = m.weapon_type != null ? `a ${jstr(m.weapon_type)} attack` : "an attack";
+  const scope = m.weapons as P | undefined;
+  const attack = scope?.type != null && Object.keys(scope).length === 1 ? `a ${jstr(scope.type)} attack` : hasWeapon(m) ? `an attack with ${weaponNoun(m)}` : "an attack";
   return `each time ${attack} targets ${subj}, `;
 }
 
@@ -68,9 +72,7 @@ function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   if (m.stat === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
   const stat = `${statName(m.stat)} characteristic`;
   if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
-  // A weapon exclusion names the one weapon the change skips ("other than "Close combat weapon"").
-  const other = m.exclude_weapon_name != null ? ` other than "${jstr(m.exclude_weapon_name)}"` : "";
-  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)}${other} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
+  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
   return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
 }
 
@@ -171,14 +173,13 @@ export function isDefinedGrant(e: { type?: string; modifier?: Record<string, unk
 
 /**
  * "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
- * "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+ * "the following rules" for an unnamed one. Model targets retain model-only ownership.
  */
 export function definedGrantHead(e: Leaf, ctx: Ctx): string {
   const m = e.modifier ?? {};
   const def = m.definition as P;
   const base = effectSubject(e.target, ctx);
-  const modelLevel = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
-  const subj = modelLevel ? `units with one or more ${base.replace(/^all /, "")}` : base;
+  const subj = base;
   const name = typeof def.name === "string" ? def.name : m.ability != null ? abilityLabel(m.ability) : null;
   return name ? `${subj} ${v(subj, "gains")} the ${name} ability` : `${subj} ${v(subj, "gains")} the following rules`;
 }
@@ -207,13 +208,14 @@ function keywordGrant(m: Record<string, unknown>, subj: string): string {
   return `${subj} ${v(subj, "gains")} the ${andList(kws)} ${noun}${replaces}`;
 }
 
-/** A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire). */
+/** Change an existing weapon ability's reach without granting or replacing its rating. */
 function weaponAbilityRange(m: Record<string, unknown>, subj: string): string {
-  return `${ofOrPossessive(subj, "attacks")} benefit from ${bracketKeyword(m.keyword)} when the target is within the weapon's range`;
+  const range = m.range === "weapon" ? "the weapon's range" : rangePhrase(m.range);
+  return `${ofOrPossessive(subj, "attacks")}${weaponRollScope(m)} benefit from ${bracketKeyword(m.keyword)} when the target is within ${range}`;
 }
 
 function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const gained = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : undefined;
+  const gained = Array.isArray(m.keywords) ? (m.keywords as unknown[]).map(bracketKeyword).join(" and ") : undefined;
   const lost = Array.isArray(m.removes) ? (m.removes as unknown[]).map(bracketKeyword).join(" and ") : undefined;
   const increment = m.if_present === "increment" ? " (a weapon that already has that ability adds the ratings together)" : "";
   if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${gained ?? "[?]"}${increment}`;
@@ -245,6 +247,11 @@ function modifiedAbility(ref: unknown, subj: string, ctx: Ctx): string {
 }
 
 function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inline: Inline): string {
+  if (m.aspect === "selection" && m.operation === "set" && m.selection != null) {
+    const selector = m.selection as P;
+    const duration = expiryTrail(m.recipient_duration);
+    return `replace that ability's selection with ${selectUnitsSubject(selector)}${selectionBinding(selector)}; those recipients are affected by that same ability${duration ? ` ${duration}` : ""}`;
+  }
   const whose = modifiedAbility(m.ability, subj, ctx);
   const aspect = ASPECTS[jstr(m.aspect)] ?? jstr(m.aspect);
   const value = m.aspect === "range" && typeof m.value === "number" ? `${jstr(m.value)}"` : typeof m.value === "string" ? dekebab(m.value) : jstr(m.value);
@@ -285,7 +292,7 @@ const ACTIVITIES: Record<string, string> = {
   "issue-order": "issue Orders", "attempt-ritual": "attempt Rituals", "use-enhancement": "use Enhancements", move: "move", observe: "act as an Observer",
 };
 const AFTER: Record<string, string> = {
-  advance: "Advanced", "fall-back": "Fell Back", disembark: "disembarked", "normal-move": "made a Normal move",
+  advance: "Advanced", "fall-back": "Fell Back", disembark: "disembarked", normal: "made a Normal move",
   charge: "made a Charge move", "remain-stationary": "Remained Stationary", "set-up": "was set up",
 };
 const DESPITE: Record<string, string> = {
@@ -374,6 +381,14 @@ const CORE_RULES: Record<string, [string, string]> = {
 };
 
 function ruleState(m: Record<string, unknown>, subj: string): string {
+  if (m.direction === "exchanged") {
+    const first = abilityLabel(m.rule);
+    const second = abilityLabel(m.exchange_with);
+    return `if ${subj} ${v(subj, "has")} exactly one of the ${first} and ${second} abilities, ${subj} simultaneously ${v(subj, "loses")} that ability and ${v(subj, "gains")} the other`;
+  }
+  if (m.direction === "suppressed" && m.except_from === "this-ability") {
+    return `${subj} ${v(subj, "loses")} the ${abilityLabel(m.rule)} ability and cannot gain it except from this ability`;
+  }
   const granted = m.direction === "granted";
   const rule = jstr(m.rule);
   if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(rule)}` : `${subj} cannot use ${abilityLabel(rule)}`;
@@ -388,12 +403,13 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
     return `${subj} ${isPlural(subj) ? agreed.replace(/\bits\b/g, "their") : agreed}`;
   }
   const noun = m.rule_kind === "keyword" ? "keyword" : m.rule_kind === "core-rule" ? "rule" : "ability";
-  const label = m.rule_kind === "ability" ? abilityLabel(rule) : titleCase(rule);
+  const label = m.rule_kind === "ability" ? abilityLabel(m.rule) : titleCase(rule);
   return granted ? `${subj} ${v(subj, "gains")} the ${label} ${noun}` : `${subj} ${v(subj, "loses")} the ${label} ${noun}`;
 }
 
 function abilityActivate(m: Record<string, unknown>, subj: string): string {
   const label = abilityLabel(m.ability);
+  if (m.procedure === "oath") return `${subj} ${v(subj, "resolves")} the ${label} Oath procedure again`;
   const consumed = m.ignore_consumed === true ? ", even if it has already been selected this battle" : "";
   const sel = m.select as { by?: unknown; count?: unknown; from?: unknown } | undefined;
   const exclusive = m.exclusive === true ? " (and no other option is)" : "";
@@ -418,6 +434,26 @@ function optionNames(list: unknown): string[] {
   return Array.isArray(list) ? list.map((option) => titleCase(jstr(option))) : [];
 }
 
+/** Oath policy changes describe future procedure/reward handling, not immediate effects. */
+function oathModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inline: Inline): string {
+  const label = abilityLabel(m.ability);
+  if (m.aspect === "quality-persistence") {
+    const duration = expiryTrail(m.duration);
+    return `${subj} ${v(subj, "retains")} qualities from ${jstr(m.from)} ${label} Oaths${duration ? ` ${duration}` : ""}`;
+  }
+  if (m.aspect === "deed-reward") {
+    const method = m.selection_method === "random" ? "randomly determined " : m.selection_method === "chosen" ? "chosen " : "";
+    const anyMethod = m.selection_method === "any" ? ", regardless of how those deeds were selected" : "";
+    return `for ${subj}, on completion of ${jstr(m.applies_to)} ${method}${label} deeds${anyMethod}, replace their reward with: ${inline(m.effect, ctx)}`;
+  }
+  const domains = Array.isArray(m.domains) ? andList(m.domains.map((domain) => domain === "quality" ? "qualities" : `${jstr(domain)}s`)) : "";
+  const clauses = [`when selecting ${domains} for ${label} for ${subj}`];
+  if (m.exclude_previously_selected === true) clauses.push(`exclude previously selected ${domains}`);
+  if (m.duplicate_roll === "choose-unselected") clauses.push("if a duplicate is rolled, choose an unselected result in that domain");
+  if (m.stop_when === "all-domains-exhausted") clauses.push("stop when every domain is exhausted");
+  return clauses.join("; ");
+}
+
 /** One single effect as a lowercase-initial clause. */
 export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
   const m = e.modifier ?? {};
@@ -439,6 +475,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     }
     case "ability-modifier": return abilityModifier(m, subj, ctx, inline);
     case "ability-activate": return abilityActivate(m, subj);
+    case "oath-modifier": return oathModifier(m, subj, ctx, inline);
     case "permission": return permission(m, subj, ctx);
     case "targeting": return targeting(m, subj, ctx);
     case "counts-as": return countsAs(m, subj, ctx);

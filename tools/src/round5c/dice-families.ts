@@ -29,10 +29,9 @@ export const ROLL_KINDS = [
 ] as const;
 
 /**
- * The rolls a DSL reactive trigger can name (`common.schema.json` roll-kind): the thirteen kinds
- * of ROLL_KINDS that the trigger's filter takes, and `channelling` (a model's Channel the Warp roll,
- * which an event can name). `any`, `all`, `attacks`, `surge` and `resource-die` are
- * not trigger kinds, so a before-roll or after-roll moment cannot name them.
+ * The roll identities currently expressible by reviewed event leaves. The shared DSL roll-kind
+ * also supports operation-specific rolls; those need their own additive family extension before
+ * authoring. Wildcards `any` and `all` are roll selectors, never event identities.
  * Canonical order: a list of kinds lowers to triggers in this order.
  */
 export const TRIGGER_ROLL_KINDS = [

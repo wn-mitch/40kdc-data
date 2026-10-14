@@ -12,13 +12,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -62,13 +64,17 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "of": {
-                "objective": {}
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
               },
-              "range": "objective-control"
+              "subject": "defender"
             }
           }
         ]
@@ -77,8 +83,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Ignores Cover"
+          "keywords": [
+            {
+              "keyword_id": "ignores-cover"
+            }
           ]
         }
       }
@@ -182,15 +190,19 @@
         "operator": "not",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "defender"
+                }
+              },
               "subject": {
                 "owner": "enemy",
                 "excluding": "defender"
-              },
-              "of": "defender",
-              "range": {
-                "inches": 6
               }
             }
           }
@@ -304,11 +316,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "WAR DOG"
-          ]
+          "filter": {
+            "all_of": [
+              "WAR DOG"
+            ]
+          }
         }
       },
       "effect": {
@@ -319,7 +333,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":9}
+                "range": {
+                  "inches": 9
+                }
               }
             },
             "modifier": {
@@ -333,7 +349,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":9}
+                "range": {
+                  "inches": 9
+                }
               }
             },
             "modifier": {
@@ -578,8 +596,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -608,9 +628,11 @@
       "type": "aura",
       "target": "friendly-within-aura",
       "modifier": {
-        "range": 9,
+        "range": {
+          "inches": 9
+        },
         "recipient_filter": {
-          "required_keywords": [
+          "all_of": [
             "WAR DOG"
           ]
         },
@@ -657,8 +679,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },
@@ -729,13 +753,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "TITANIC",
-            "TOWERING"
-          ]
+          "filter": {
+            "any_of": [
+              "TITANIC",
+              "TOWERING"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -762,7 +788,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WAR DOG"
       ]
     },
@@ -880,10 +906,17 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -970,10 +1003,14 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Assault"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
       }
     },
     "scope": {
@@ -1000,8 +1037,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Devastating Wounds"
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
         ]
       }
     },
@@ -1042,7 +1081,9 @@
       "modifier": {
         "roll": "hit",
         "subset": "ones",
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -1080,10 +1121,14 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Assault"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
       }
     },
     "scope": {
@@ -1251,31 +1296,52 @@
     "source_digest": "b1975c2cec727f603762c5c06dccb8dfff12d7f29df873ad78b6643ca4c81206",
     "version": "2025-q3",
     "effect": {
-      "type": "dice-gated",
-      "dice": "D6",
-      "threshold": 3,
-      "comparison": "gte",
-      "on_success": {
-        "type": "mortal-wounds",
-        "target": {
-          "owner": "enemy",
-          "within": {
-            "range": {
-              "inches": 9
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        }
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "type": "matches",
+          "parameters": {
+            "subject": "recipient",
+            "filter": {
+              "within": {
+                "of": {
+                  "owner": "friendly",
+                  "level": "model",
+                  "has_ability": [
+                    "warp-storms-chaos-knights"
+                  ]
+                },
+                "range": {
+                  "inches": 9
+                }
+              }
             }
           }
         },
-        "modifier": {
-          "count": "D3",
-          "range": {
-            "inches": 9
-          }
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 3,
+          "comparison": "gte",
+          "on_success": {
+            "type": "mortal-wounds",
+            "target": "recipient",
+            "modifier": {
+              "count": "D3"
+            }
+          },
+          "on_fail": null
         }
-      },
-      "on_fail": null
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "knight-abominant"
@@ -1283,7 +1349,31 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "At the end of your Movement phase, roll one D6 for each enemy unit within 9\" of a model with this ability; on a 3+ that unit suffers D3 mortal wounds.",
-    "faction_id": "chaos-knights"
+    "faction_id": "chaos-knights",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "army"
+    }
   },
   {
     "ability_id": "preysight-chaos-knights",
@@ -1310,10 +1400,14 @@
         }
       },
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
@@ -1342,18 +1436,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
             "type": "attack-is",
             "parameters": {
-              "weapon_name": "Graviton crusher"
+              "weapons": {
+                "name": "Graviton crusher"
+              }
             }
           }
         ]
@@ -1527,10 +1625,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "state": "battle-shocked"
+          "filter": {
+            "state": "battle-shocked"
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1547,7 +1647,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "KNIGHT TYRANT"
       ]
     },
@@ -1580,9 +1680,19 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "count": 1,
-          "owner": "enemy",
-          "within_inches": 24
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 24
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "stat-modifier",
@@ -1655,6 +1765,15 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "KNIGHT TYRANT"
+        ]
+      }
     }
   },
   {
@@ -1709,12 +1828,11 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "designate",
           "target": "selected-unit",
           "modifier": {
-            "abilities": [
-              "Suppressed"
-            ]
+            "subject": "selected-unit",
+            "tag": "suppressed"
           }
         },
         {
@@ -1763,22 +1881,33 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "count": 1,
-          "owner": "enemy",
-          "visibility_required": true,
+          "filter": {
+            "owner": "enemy",
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "WAR DOG"
-                ]
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WAR DOG"
+                    ]
+                  }
+                }
               },
-              "range": {
-                "inches": 12
-              }
+              "subject": "this-unit"
             }
           }
         },
@@ -1821,7 +1950,9 @@
         "stat": "Range",
         "operation": "add",
         "value": 6,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -1849,10 +1980,14 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
@@ -1885,6 +2020,21 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ]
+      }
     }
   },
   {
@@ -1942,13 +2092,54 @@
         "stat": "AP",
         "operation": "worsen",
         "value": 1,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Ranged attacks that target your WAR DOG unit (within range of an objective) have -1 AP until that enemy unit has attacked."
+    "community_notes": "Ranged attacks that target your WAR DOG unit (within range of an objective) have -1 AP until that enemy unit has attacked.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ],
+        "within": {
+          "range": "objective-control",
+          "of": {
+            "objective": {}
+          }
+        }
+      },
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "wretched-thralls-chaos-knights",
@@ -1980,7 +2171,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAMNED"
       ]
     },
@@ -2085,33 +2276,36 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
-          "target": {
-            "owner": "enemy"
-          },
+          "type": "designate",
+          "target": "event-subject",
           "modifier": {
-            "abilities": [
-              "MARKED"
-            ]
+            "tag": "marked"
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
               "subject": "defender",
-              "tag": "MARKED"
+              "filter": {
+                "designated": "MARKED"
+              }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
             "target": {
-              "owner": "friendly"
+              "owner": "friendly",
+              "all_of": [
+                "DAMNED"
+              ]
             },
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           }
@@ -2121,7 +2315,19 @@
     "scope": {
       "duration": "battle"
     },
-    "community_notes": "When a friendly CHAOS KNIGHTS unit is destroyed by an enemy unit, that enemy unit is Marked until the end of the battle. Friendly DAMNED units' attacks targeting a Marked unit have [LETHAL HITS]."
+    "community_notes": "When a friendly CHAOS KNIGHTS unit is destroyed by an enemy unit, that enemy unit is Marked until the end of the battle. Friendly DAMNED units' attacks targeting a Marked unit have [LETHAL HITS].",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "dark-sacrifice-iconoclast-fiefdom-chaos-knights",
@@ -2190,10 +2396,22 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "count": 1,
-          "owner": "enemy",
-          "within_inches": 12,
-          "visibility_required": true
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            },
+            "visible": {
+              "to": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "sequence",
@@ -2332,20 +2550,48 @@
     "ability_type": "enhancement",
     "behavior": "aura",
     "effect": {
-      "type": "designate-target",
-      "designation": "octagram-battle-shock",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-friendly-war-dog-within-9-shoots"
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "friendly",
+          "all_of": [
+            "WAR DOG"
+          ]
+        },
+        "filter": {
+          "kind": "shoot"
+        },
+        "proximity": {
+          "range": {
+            "inches": 9
+          },
+          "of": "this-model"
+        }
       },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "test",
-          "target": "defender",
-          "modifier": {
-            "test": "battle-shock"
+      "effect": {
+        "type": "designate-target",
+        "designation": "octagram-battle-shock",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "test",
+            "target": "defender",
+            "modifier": {
+              "test": "battle-shock"
+            }
           }
         }
       }
@@ -2362,11 +2608,13 @@
         }
       },
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "WAR DOG"
-          ]
+          "filter": {
+            "all_of": [
+              "WAR DOG"
+            ]
+          }
         }
       },
       "optional": true
@@ -2375,7 +2623,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "KNIGHT ABOMINANT"
       ]
     },
@@ -2403,13 +2651,23 @@
         {
           "type": "select-units",
           "selector": {
-            "count": 1,
-            "owner": "friendly",
-            "keywords": [
-              "CHAOS KNIGHTS",
-              "CHARACTER"
-            ],
-            "within_inches": 9,
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "CHAOS KNIGHTS",
+                "CHARACTER"
+              ],
+              "within": {
+                "range": {
+                  "inches": 9
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
             "eligibility": {
               "operator": "not",
               "operands": [
@@ -2514,6 +2772,25 @@
     },
     "scope": {
       "duration": "phase"
+    },
+    "trigger": {
+      "event": "damage-allocated",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHAOS KNIGHTS"
+        ]
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "CHAOS KNIGHTS"
+            ]
+          }
+        }
+      }
     }
   },
   {
@@ -2536,8 +2813,13 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -2572,9 +2854,19 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
-    "community_notes": "Until the attacking unit finishes its attacks, each attack targeting your Chaos Knights unit worsens its Armour Penetration by 1."
+    "community_notes": "Until the attacking unit finishes its attacks, each attack targeting your Chaos Knights unit worsens its Armour Penetration by 1.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "flush-the-quarry-helhunt-lance-chaos-knights",
@@ -2608,7 +2900,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -2622,7 +2916,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -2637,7 +2933,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -2651,7 +2949,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -2740,9 +3040,18 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "In your opponent's Shooting phase, after an enemy unit shoots, a Chaos Knights unit that lost wounds can make a D6\" surge move."
+    "community_notes": "In your opponent's Shooting phase, after an enemy unit shoots, a Chaos Knights unit that lost wounds can make a D6\" surge move.",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "harbingers-of-dread-chaos-knights",
@@ -2801,10 +3110,12 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  },
+                  "subject": "defender"
                 }
               },
               "effect": {
@@ -2894,14 +3205,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
+          "filter": {
+            "all_of": [
+              "CHAOS"
+            ]
+          },
           "subject": {
             "owner": "friendly"
-          },
-          "all_of": [
-            "CHAOS"
-          ]
+          }
         }
       },
       "effect": {
@@ -3026,7 +3339,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CHAOS KNIGHTS",
         "CHARACTER"
       ]
@@ -3075,12 +3388,61 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "roll-result",
-      "target": "stratagem-target",
-      "modifier": {
-        "roll": "deadly-demise",
-        "succeeds_on": 4
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "object": {
+              "owner": "friendly",
+              "all_of": [
+                "CHAOS KNIGHTS",
+                "CHARACTER"
+              ]
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": true,
+              "despite": [
+                "destroyed"
+              ]
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-roll",
+            "filter": {
+              "roll": "deadly-demise"
+            },
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "CHAOS KNIGHTS",
+                    "CHARACTER"
+                  ]
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "roll-result",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "deadly-demise",
+              "succeeds_on": 4
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
@@ -3104,38 +3466,65 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "designate-target",
-      "designation": "titanic-duel-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "shooting-or-fight-phase"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
-            },
-            {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "wound",
-                "subset": "ones"
-              }
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
             }
-          ]
-        }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "titanic-duel-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              },
+              {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "wound",
+                  "subset": "ones"
+                }
+              }
+            ]
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -3190,12 +3579,17 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy",
-        "excluded_keywords": [
-          "MONSTER",
-          "VEHICLE"
-        ]
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3255,16 +3649,32 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "damage-reduction",
-      "target": "this-unit",
-      "modifier": {
-        "reduction": 1
+      "type": "ability-part",
+      "trigger": {
+        "event": "damage-allocated"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": 1
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "2CP. Reactive, after an enemy selects targets: subtract 1 from the Damage characteristic of each attack allocated to your CHAOS KNIGHTS CHARACTER unit."
+    "community_notes": "2CP. Reactive, after an enemy selects targets: subtract 1 from the Damage characteristic of each attack allocated to your CHAOS KNIGHTS CHARACTER unit.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "throne-mechanicum-of-skulls-lords-of-dread-chaos-knights",
@@ -3334,10 +3744,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -3429,42 +3843,42 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "cost-modifier",
-          "target": "this-model",
-          "modifier": {
-            "of": "stratagem",
-            "id": "command-re-roll",
-            "operation": "set",
-            "amount": 0,
-            "applies_to": "targeting-this-unit"
-          }
-        },
-        {
-          "type": "cost-modifier",
-          "target": {
-            "owner": "enemy",
-            "within": {
-              "range": {
-                "inches": 12
-              }
-            }
-          },
-          "modifier": {
-            "of": "stratagem",
-            "operation": "increase",
-            "amount": 1,
-            "applies_to": "targeting-this-unit"
-          }
-        }
-      ]
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "increase",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
+      }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
-    "community_notes": "30pts (Faction Pack v1.0). Once per battle round, the bearer's unit can be targeted with the Command Re-roll Stratagem for 0CP, even if another unit was already targeted by it this phase. In addition, once per battle, just after the opponent uses a Stratagem, the CP cost they must pay to use that Stratagem again is increased by 1CP."
+    "community_notes": "30pts (Faction Pack v1.0). Once per battle round, the bearer's unit can be targeted with the Command Re-roll Stratagem for 0CP, even if another unit was already targeted by it this phase. In addition, once per battle, just after the opponent uses a Stratagem, the CP cost they must pay to use that Stratagem again is increased by 1CP.",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "enemy",
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    }
   },
   {
     "ability_id": "blessing-of-the-dark-master-lords-of-dread-chaos-knights",
@@ -3534,8 +3948,10 @@
               "type": "weapon-ability-grant",
               "target": "this-unit",
               "modifier": {
-                "abilities": [
-                  "Lethal Hits"
+                "keywords": [
+                  {
+                    "keyword_id": "lethal-hits"
+                  }
                 ]
               }
             },
@@ -3543,8 +3959,13 @@
               "type": "weapon-ability-grant",
               "target": "this-unit",
               "modifier": {
-                "abilities": [
-                  "Sustained Hits 1"
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
                 ]
               }
             }
@@ -3623,18 +4044,27 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "this-unit",
+      "target": "attacker",
       "modifier": {
         "stat": "AP",
         "operation": "worsen",
-        "value": 1,
-        "incoming": true
+        "value": 1
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
-    "community_notes": "1CP (Faction Pack v1.0). Reactive in the Fight phase: until the attacking unit finishes, worsen by 1 the Armour Penetration of each attack targeting your unit."
+    "community_notes": "1CP (Faction Pack v1.0). Reactive in the Fight phase: until the attacking unit finishes, worsen by 1 the Armour Penetration of each attack targeting your unit.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "corrupting-taint-infernal-lance-chaos-knights",
@@ -3738,10 +4168,14 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
@@ -3775,7 +4209,17 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have a 4+ invulnerable save."
+    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have a 4+ invulnerable save.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "knight-diabolus-infernal-lance-chaos-knights",
@@ -3803,17 +4247,23 @@
             "stat": "WS",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Lance"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lance"
+              }
+            ]
           }
         }
       ]
@@ -3903,10 +4353,14 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Assault"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
       }
     },
     "scope": {
@@ -3931,36 +4385,75 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "designate-target",
-      "designation": "marked-prey",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-command-phase"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "conditional",
-          "condition": {
-            "type": "visible",
-            "parameters": {
-              "subject": "defender",
-              "to": "attacker"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          },
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ]
-            }
-          }
+          ]
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "marked-prey",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "visible": {
+                    "to": "attacker"
+                  }
+                },
+                "subject": "defender"
+              }
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "sustained-hits",
+                    "parameters": {
+                      "value": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -4035,7 +4528,82 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "1CP (Faction Pack v1.0). Just after a WAR DOG unit that has not been selected to attack this phase is destroyed: before its Deadly Demise resolves, it can shoot or fight, targeting only the unit that destroyed it."
+    "community_notes": "1CP (Faction Pack v1.0). Just after a WAR DOG unit that has not been selected to attack this phase is destroyed: before its Deadly Demise resolves, it can shoot or fight, targeting only the unit that destroyed it.",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "WAR DOG"
+        ]
+      },
+      "optional": true,
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "opponent-turn"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "fight"
+                }
+              }
+            ]
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "operator": "or",
+                "operands": [
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "subject": "event-object",
+                      "event": "selected",
+                      "filter": {
+                        "to": "fight"
+                      },
+                      "window": "phase"
+                    }
+                  },
+                  {
+                    "type": "happened",
+                    "parameters": {
+                      "subject": "event-object",
+                      "event": "selected",
+                      "filter": {
+                        "to": "shoot"
+                      },
+                      "window": "phase"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "vox-howl-houndpack-lance-chaos-knights",
@@ -4129,9 +4697,22 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "1CP (Faction Pack v1.0). Reactive, after an enemy ends a move within 8\" of your WAR DOG unit (was 9\"): your unit makes a Normal move of up to 6\"."
+    "community_notes": "1CP (Faction Pack v1.0). Reactive, after an enemy ends a move within 8\" of your WAR DOG unit (was 9\"): your unit makes a Normal move of up to 6\".",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "normal",
+          "advance",
+          "fall-back"
+        ]
+      }
+    }
   },
   {
     "ability_id": "encircling-pack-houndpack-lance-chaos-knights",
@@ -4245,10 +4826,14 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Assault"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
       }
     },
     "scope": {
@@ -4346,7 +4931,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4491,10 +5078,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "attacker",
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              },
+              "subject": "attacker"
             }
           },
           "effect": {
@@ -4510,7 +5099,24 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "1CP. Reactive in the Fight phase: your unit has Feel No Pain 6+, and Feel No Pain 5+ against attacks made by Battle-shocked models."
+    "community_notes": "1CP. Reactive in the Fight phase: your unit has Feel No Pain 6+, and Feel No Pain 5+ against attacks made by Battle-shocked models.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "optional": true,
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    }
   },
   {
     "ability_id": "a-long-leash-traitoris-lance-chaos-knights",
@@ -4531,11 +5137,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 2,
-        "owner": "friendly",
-        "keywords": [
-          "WAR DOG"
-        ]
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "WAR DOG"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 2
+        }
       },
       "effect": {
         "type": "counts-as",
@@ -4583,12 +5194,21 @@
           }
         },
         {
-          "type": "rule-state",
-          "target": "this-unit",
-          "modifier": {
-            "direction": "granted",
-            "rule_kind": "core-rule",
-            "rule": "benefit-of-cover"
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
           }
         }
       ]
@@ -4596,7 +5216,17 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have Stealth and the Benefit of Cover."
+    "community_notes": "1CP. Reactive in the opponent's Shooting phase: models in your unit have Stealth and the Benefit of Cover.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "pterrorshades-traitoris-lance-chaos-knights",
@@ -4629,7 +5259,53 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "[APPROX] 1CP, once per battle round (not gated — no once-per-battle-round frequency exists). After an enemy unit fails a Battle-shock test, a CHAOS KNIGHTS unit within 12\" rolls 6D6: each 4+ deals that enemy unit 1 mortal wound. The paired heal (one model in your unit regains 1 lost wound per 4+) cannot share the same dice pool and is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] 1CP, once per battle round (not gated — no once-per-battle-round frequency exists). After an enemy unit fails a Battle-shock test, a CHAOS KNIGHTS unit within 12\" rolls 6D6: each 4+ deals that enemy unit 1 mortal wound. The paired heal (one model in your unit regains 1 lost wound per 4+) cannot share the same dice pool and is not modeled. Full rule in raw-text store.",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true,
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          }
+        ]
+      }
+    }
   },
   {
     "ability_id": "nightmares-master-traitoris-lance-chaos-knights",
@@ -4708,10 +5384,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "state": "on-battlefield"
+          "filter": {
+            "state": "on-battlefield"
+          },
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -4753,7 +5431,9 @@
           "target": "this-model",
           "modifier": {
             "invuln_sv": 4,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -4761,7 +5441,9 @@
           "target": "this-model",
           "modifier": {
             "invuln_sv": 5,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]

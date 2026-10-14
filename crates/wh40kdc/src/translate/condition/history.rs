@@ -37,6 +37,41 @@ fn is_kebab_slug(s: &str) -> bool {
 }
 
 pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
+    let mut phrase = happened_phrase(p, negated);
+    let event = st(p.get("event"));
+    if nn(p, "count").is_some()
+        && matches!(event.as_str(), "destroyed" | "model-destroyed")
+        && (is(p, "object", "this-model")
+            || (is(p, "object", "event-object") && is(p, "window", "event")))
+    {
+        phrase.push_str(&format!(" ({} times)", count_phrase(p.get("count"))));
+    }
+    phrase.push_str(&event_relation_phrase(obj(p.get("filter"))));
+    if let Some(proximity) = nn(p, "proximity") {
+        let proximity = obj(Some(proximity));
+        phrase.push_str(&format!(
+            " within {} of {}",
+            range_phrase(proximity.get("range")),
+            place_ref_phrase(proximity.get("of"))
+        ));
+    }
+    if nn(p, "count").is_some()
+        && ![
+            "after-roll",
+            "destroyed",
+            "model-destroyed",
+            "objective-gained",
+            "designation-changed",
+        ]
+        .contains(&event.as_str())
+        && !(event == "used" && is(obj(p.get("filter")), "kind", "action"))
+    {
+        phrase.push_str(&format!(" ({} times)", count_phrase(p.get("count"))));
+    }
+    phrase
+}
+
+fn happened_phrase(p: &P, negated: bool) -> String {
     let did_not = |verb: &str| -> String {
         if negated {
             format!("did not {verb}")
@@ -48,7 +83,11 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
     let f = obj(p.get("filter"));
     let event = st(p.get("event"));
     let who = subject_of(p, "the unit");
-    let (n_val, n) = count_or_one(p);
+    let n_val = obj(p.get("count"))
+        .get("min")
+        .and_then(Value::as_f64)
+        .unwrap_or(1.0);
+    let amount = count_phrase(p.get("count"));
     let window = p.get("window");
     match event.as_str() {
         "move-ended" => {
@@ -164,24 +203,32 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             } else {
                 String::new()
             };
-            let keyword = if truthy(f.get("weapon_keyword")) {
-                format!("[{}]", dekebab(&st(f.get("weapon_keyword"))).to_uppercase())
-            } else {
-                String::new()
-            };
-            let weapon = if truthy(f.get("weapon_name")) {
-                let with = if keyword.is_empty() {
-                    String::new()
-                } else {
-                    format!(" (with {keyword})")
-                };
-                let name = st(f.get("weapon_name"));
+            let weapons = obj(f.get("weapons"));
+            let keyword = nn(weapons, "keyword")
+                .filter(|keyword| !keyword.is_array())
+                .map(crate::translate::effect::bracket_keyword)
+                .unwrap_or_default();
+            let simple = weapons
+                .iter()
+                .all(|(key, value)| value.is_null() || key == "name" || key == "keyword")
+                && !weapons.get("keyword").is_some_and(Value::is_array);
+            let weapon = if !simple {
+                format!(" made with {}", crate::translate::effect::weapon_noun(f))
+            } else if let Some(name) = nn(weapons, "name") {
+                let name = st(Some(name));
                 let name = if is_kebab_slug(&name) {
                     title_case(&name)
                 } else {
                     name
                 };
-                format!(" by {name}{with}")
+                format!(
+                    " by {name}{}",
+                    if keyword.is_empty() {
+                        String::new()
+                    } else {
+                        format!(" (with {keyword})")
+                    }
+                )
             } else if !keyword.is_empty() {
                 format!(" made with a {keyword} weapon")
             } else {
@@ -209,8 +256,11 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 _ => String::new(),
             };
             if is(f, "roll", "hit") && is(f, "result", "success") {
-                let hits = if n_val > 1.0 {
-                    format!("{n}+ {atk}attacks")
+                let hits = if n_val > 1.0
+                    || nn(obj(p.get("count")), "min").is_some_and(|min| !min.is_number())
+                    || nn(obj(p.get("count")), "max").is_some()
+                {
+                    format!("{amount} {atk}attacks")
                 } else if atk.is_empty() {
                     "an attack".to_string()
                 } else {
@@ -229,9 +279,14 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                     ""
                 };
                 return format!(
-                    "{neg}{who} made a {} roll{outcome} {}",
+                    "{neg}{who} made a {} roll{outcome} {}{}",
                     roll_word(f.get("roll")),
-                    window_phrase(window)
+                    window_phrase(window),
+                    if nn(p, "count").is_some() {
+                        format!(" ({amount} times)")
+                    } else {
+                        String::new()
+                    }
                 )
                 .trim_end()
                 .to_string();
@@ -242,9 +297,14 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 "was made ".to_string()
             };
             format!(
-                "{neg}a {} roll {result}{}",
+                "{neg}a {} roll {result}{}{}",
                 roll_word(f.get("roll")),
-                window_phrase(window)
+                window_phrase(window),
+                if nn(p, "count").is_some() {
+                    format!(" ({amount} times)")
+                } else {
+                    String::new()
+                }
             )
             .trim_end()
             .to_string()
@@ -270,18 +330,19 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 "unit"
             };
             if is(p, "object", "event-object") && window.and_then(Value::as_str) == Some("event") {
-                if truthy(f.get("attack_type")) {
-                    let with = if truthy(f.get("weapon_name")) {
-                        format!(" made with {}", st(f.get("weapon_name")))
-                    } else {
-                        String::new()
-                    };
-                    return format!(
+                let with = if nn(f, "weapons").is_some() {
+                    format!(" made with {}", crate::translate::effect::weapon_noun(f))
+                } else {
+                    String::new()
+                };
+                return if truthy(f.get("attack_type")) {
+                    format!(
                         "{neg}destroyed by a {} attack{with}",
                         st(f.get("attack_type"))
-                    );
-                }
-                return format!("{neg}destroyed by any attack");
+                    )
+                } else {
+                    format!("{neg}destroyed by any attack{with}")
+                };
             }
             // "this model": the destroyed model is this one, not any model of the unit.
             if is(p, "object", "this-model") {
@@ -299,6 +360,27 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             let owner = nn(o, "owner")
                 .map(|v| format!("{} ", st(Some(v))))
                 .unwrap_or_default();
+            let extended = o.iter().any(|(key, value)| {
+                !value.is_null()
+                    && !["all_of", "owner", "level", "designated"].contains(&key.as_str())
+            });
+            let objects = if extended {
+                let mut filter = o.clone();
+                filter.insert(
+                    "level".to_string(),
+                    Value::String(
+                        if event == "model-destroyed" {
+                            "model"
+                        } else {
+                            "unit"
+                        }
+                        .to_string(),
+                    ),
+                );
+                super::board::pluralize_first_noun(&strip_article(&unit_filter_phrase(&filter)))
+            } else {
+                format!("{owner}{kws}{noun}s")
+            };
             if let Some(by) = nn(f, "by") {
                 // A destruction by one attack type says it: "with its just-resolved melee attacks".
                 let atk = if truthy(f.get("attack_type")) {
@@ -314,21 +396,19 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                     format!("with {atk}attacks {}", window_phrase(window))
                 };
                 return format!(
-                    "{neg}{} has destroyed {n}+ {owner}{kws}{noun}s {when}",
+                    "{neg}{} has destroyed {amount} {objects} {when}",
                     unit_ref_phrase(Some(by), "the unit")
                 )
                 .trim_end()
                 .to_string();
             }
             let tagged = nn(o, "designated")
+                .filter(|_| !extended)
                 .map(|d| format!(" {}", designation_phrase(&st(Some(d)), false)))
                 .unwrap_or_default();
             format!(
                 "{neg}{}",
-                with_window(
-                    &format!("{n}+ {owner}{kws}{noun}s{tagged} destroyed"),
-                    window
-                )
+                with_window(&format!("{amount} {objects}{tagged} destroyed"), window)
             )
         }
         "used" => {
@@ -348,7 +428,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 return format!("{who} is {not}{verb} {rule}");
             }
             if is(f, "kind", "action") {
-                let mut s = format!("{neg}{n}+ actions completed");
+                let mut s = format!("{neg}{amount} actions completed");
                 if let Some(id) = nn(f, "id") {
                     s.push_str(&format!(" ({})", dekebab(&st(Some(id)))));
                 }
@@ -392,7 +472,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             )
         }
         "objective-gained" => format!(
-            "{neg}you newly control {n}+ objectives {}",
+            "{neg}you newly control {amount} objectives {}",
             window_phrase(window)
         )
         .trim_end()
@@ -401,7 +481,7 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             "{neg}{}",
             with_window(
                 &format!(
-                    "{n}+ {} became {}",
+                    "{amount} {} became {}",
                     unit_ref_phrase(p.get("object"), "units"),
                     designation_phrase(&st(f.get("tag")), false)
                 ),
@@ -416,12 +496,11 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
 }
 
 pub(crate) fn destroyed_count(side: &P) -> String {
-    let o = obj(side.get("object"));
-    format!(
-        "{} units {}",
-        st(o.get("owner")),
-        window_phrase(side.get("window"))
-    )
-    .trim_end()
-    .to_string()
+    let objects = super::board::pluralize_first_noun(&strip_article(&unit_ref_phrase(
+        side.get("object"),
+        "the unit",
+    )));
+    format!("{objects} {}", window_phrase(side.get("window")))
+        .trim_end()
+        .to_string()
 }

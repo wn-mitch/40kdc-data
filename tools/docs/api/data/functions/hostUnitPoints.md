@@ -6,9 +6,9 @@
 
 # Function: hostUnitPoints()
 
-> **hostUnitPoints**(`unit`, `modelCount`, `ordinal?`, `hostFaction?`): `number`
+> **hostUnitPoints**(`unit`, `modelCount`, `ordinal?`, `hostFaction?`, `detachmentIds?`): `number`
 
-Defined in: [data/pricing.ts:111](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/pricing.ts#L111)
+Defined in: [data/pricing.ts:121](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/pricing.ts#L121)
 
 [baseUnitPoints](baseUnitPoints.md), but priced from the tier table in effect inside
 `hostFaction`'s army (see [hostPointsTiers](hostPointsTiers.md)). With no `hostFaction`
@@ -32,6 +32,10 @@ tiers reprice the native sizes), so `pointsTierMissing` stays native-only.
 ### hostFaction?
 
 [`Faction`](../../generated/interfaces/Faction.md) \| `null`
+
+### detachmentIds?
+
+readonly `string`[] = `[]`
 
 ## Returns
 

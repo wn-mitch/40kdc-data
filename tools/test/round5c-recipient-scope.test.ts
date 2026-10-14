@@ -56,8 +56,8 @@ describe("a weapon scope printed before its recipient chain", () => {
     expect(grant).toContain('"owner":"friendly"');
     expect(grant).toContain('"any_of":["ALPHA","BETA","GAMMA"]');
     expect(grant).toContain('"level":"model"');
-    expect(grant).toContain('"abilities":["Ignores Cover"]');
-    expect(grant).toContain('"weapon_type":"ranged"');
+    expect(grant).toContain('"keywords":[{"keyword_id":"ignores-cover"}]');
+    expect(grant).toContain('"weapons":{"type":"ranged"}');
     // An "all" list is not an "any" list: a substituted operator would widen or narrow the recipients.
     expect(grant).not.toContain('"all_of":["ALPHA"');
   });
@@ -71,7 +71,7 @@ describe("a weapon scope printed before its recipient chain", () => {
       ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }],
     ), text).effect);
     expect(json).toContain(JSON.stringify({ owner: "friendly", all_of: ["OMEGA"], level: "model" }));
-    expect(json).toContain(JSON.stringify({ abilities: ["Assault"], weapon_type: "ranged" }));
+    expect(json).toContain(JSON.stringify({ keywords: [{ keyword_id: "assault" }], weapons: { type: "ranged" } }));
   });
 
   it("keeps a battle-round window ahead of a scope printed after its chain", () => {
@@ -98,7 +98,7 @@ describe("a weapon scope printed before its recipient chain", () => {
     const grant = JSON.stringify(mechanics.effect);
     expect(grant).toContain('"all_of":["DELTA"]');
     expect(grant).not.toContain('"level"');
-    expect(grant).toContain('"weapon_type":"melee"');
+    expect(grant).toContain('"weapons":{"type":"melee"}');
   });
 
   it("keeps a scope of all weapons unrestricted by type", () => {
@@ -110,9 +110,8 @@ describe("a weapon scope printed before its recipient chain", () => {
       ["SUSTAINED HITS 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
     ), text);
     const grant = JSON.stringify(mechanics.effect);
-    expect(grant).toContain('"abilities":["Sustained Hits 1"]');
-    expect(grant).not.toContain('"weapon_type":"ranged"');
-    expect(grant).not.toContain('"weapon_type":"melee"');
+    expect(grant).toContain('"keywords":[{"keyword_id":"sustained-hits","parameters":{"value":1}}]');
+    expect(mechanics.effect.modifier.weapons).toBeUndefined();
   });
 
   it("refuses a recipient chain split by a sentence break before the keyword", () => {
@@ -275,7 +274,7 @@ describe("such a weapon after a scope-printed grant", () => {
   it("binds the attacks to the granted model units, not to every weapon of the type", () => {
     const mechanics = mechanicsOf(placed(SUCH_TEXT, ...sustained()), SUCH_TEXT);
     const json = JSON.stringify(mechanics);
-    expect(json).toContain('"attack_type":"ranged","weapon_keyword":"Assault"');
+    expect(json).toContain('"weapons":{"keyword":{"keyword_id":"assault"}},"attack_type":"ranged"');
     expect(json).not.toContain('"weapon":"antecedent"');
     expect(json).not.toContain('"this-unit"');
     // The stat change's target is the grant's recipients, the same units the keyword went to.

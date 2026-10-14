@@ -1,7 +1,8 @@
 import { DESIGNATION_IDS } from "../../translate/designations.js";
 import { ANTECEDENT } from "../antecedent-families.js";
 import { type FamilyExtension, KEYWORD_ITEMS, keywordList, optional, properties, standIn, widenedEnum, withProperties } from "../family-extension-helpers.js";
-import { enumValue } from "../family-validation.js";
+import { boundedInteger, enumValue, exactKeys } from "../family-validation.js";
+import { normalizeUnitKeywords } from "../unit-filter-family.js";
 import { ALTERNATIVE_SCHEMA, normalizeAlternatives } from "../unit-filter-alternatives.js";
 import { EMBARKED_IN, ENHANCEMENT_KIND, FOLLOWING_FILTER, HELD_IN, MATCHED_UNITS } from "./shared.js";
 
@@ -357,6 +358,56 @@ export const UNIT_FILTER_EXTENSIONS: readonly FamilyExtension[] = [
       return { ...previous(rest), other_than: "event-subject" };
     },
   },
+  {
+    family: "unit-filter",
+    version: 16,
+    description: "As the previous version, plus actual attachment_role bodyguard or leader on model-level filters and member_of naming this-unit, selected-unit or an antecedent unit. Membership identifies attached composition, not keywords or the ability to lead. A separate reviewed membership leaf may supply member_of during compilation.",
+    schema: (previous) => withProperties(previous, {
+      attachment_role: optional({ enum: ["bodyguard", "leader"], "x-only-when": { level: ["model"] } }),
+      member_of: optional({ enum: ["this-unit", "selected-unit", ANTECEDENT], "x-only-when": { level: ["model"] } }),
+    }),
+    normalize: (input, previous) => {
+      if (input.attachment_role === undefined && input.member_of === undefined) return previous(input);
+      const { attachment_role: role, member_of: member, ...rest } = input;
+      if (rest.level !== "model") throw new TypeError("Attachment membership filters must name models.");
+      if (rest.attached_to !== undefined) throw new TypeError("An attachment-role filter cannot also name attached_to.");
+      return {
+        ...previous(rest),
+        ...(role === undefined ? {} : { attachment_role: enumValue(role, ["bodyguard", "leader"], "unit-filter.attachment_role") }),
+        ...(member === undefined ? {} : { member_of: enumValue(member, ["this-unit", "selected-unit", ANTECEDENT], "unit-filter.member_of") }),
+      };
+    },
+  },
   TARGET_IS_SELECTED_PARTIES,
   VISIBLE_TO_FILTER,
+  {
+    family: "aura-range",
+    version: 4,
+    description: "As the previous version, plus conditional_range: an alternate radius and emitter keyword that the aura fold lowers into disjoint aura effects.",
+    schema: (previous) => withProperties(previous, {
+      conditional_range: optional({
+        type: "object",
+        required: ["inches", "keywords"],
+        additionalProperties: false,
+        properties: {
+          inches: { type: "integer", minimum: 1, maximum: 24 },
+          keywords: { type: "array", minItems: 1, uniqueItems: true, items: KEYWORD_ITEMS },
+        },
+      }),
+    }),
+    normalize: (input, previous) => {
+      if (input.conditional_range === undefined) return previous(input);
+      const { conditional_range: conditional, ...rest } = input;
+      if (!conditional || typeof conditional !== "object" || Array.isArray(conditional)) throw new TypeError("aura-range.conditional_range is an object.");
+      const value = conditional as Record<string, unknown>;
+      exactKeys(value, ["inches", "keywords"], "aura-range.conditional_range");
+      return {
+        ...previous(rest),
+        conditional_range: {
+          inches: boundedInteger(value.inches, 1, 24, "aura-range.conditional_range.inches"),
+          keywords: normalizeUnitKeywords(value.keywords, "aura-range.conditional_range.keywords"),
+        },
+      };
+    },
+  },
 ];

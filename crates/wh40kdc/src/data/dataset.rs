@@ -897,7 +897,7 @@ fn build_phase_index(phase_mappings: &[PhaseMapping]) -> HashMap<String, Vec<Pha
 
 /// The lowercased union of a unit's `keywords` and `faction_keywords`, for
 /// membership tests in `ally_units_for`.
-fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String> {
+pub(super) fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String> {
     unit.keywords
         .iter()
         .flat_map(|k| k.0.iter())

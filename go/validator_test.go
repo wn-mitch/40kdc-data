@@ -117,3 +117,30 @@ func TestTriggerBindingConstraints(t *testing.T) {
 		}
 	}
 }
+
+func TestBooleanBranchProbePreservesConstraints(t *testing.T) {
+	v := NewSchemaValidator()
+	base := "https://40kdc.dev/schemas/defs/common.schema.json"
+	withSibling := map[string]any{
+		"$ref":  base + "#/$defs/entity-id",
+		"const": "fixture-only",
+	}
+	if !v.valid(withSibling, "fixture-only", base) {
+		t.Fatal("reference and sibling constraints reject their shared valid value")
+	}
+	if v.valid(withSibling, "fixture-other", base) {
+		t.Fatal("reference shortcut ignored its sibling constant")
+	}
+	optionalConstant := map[string]any{
+		"type": "object",
+		"properties": map[string]any{
+			"kind": map[string]any{"const": "fixture"},
+		},
+	}
+	if !v.valid(optionalConstant, map[string]any{}, base) {
+		t.Fatal("an optional constant property became required")
+	}
+	if v.valid(optionalConstant, map[string]any{"kind": "other"}, base) {
+		t.Fatal("a present constant property accepted another value")
+	}
+}

@@ -180,7 +180,15 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Obelisk",
+        "Tesseract Vault"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "cosmic-storm-the-phaerons-armoury-necrons",
     "game_version": {
       "edition": "11th",
@@ -564,7 +572,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mounted",
+        "Necrons"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "evasive-protocols-skyshroud-spearhead-necrons",
     "game_version": {
       "edition": "11th",
@@ -1003,7 +1019,15 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Immortals",
+        "Necron Warriors"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "nanosaturation-hand-of-the-dynasty-necrons",
     "game_version": {
       "edition": "11th",
@@ -1611,7 +1635,16 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Fly",
+        "Necrons",
+        "Titanic"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "subsurface-quantumweave-the-phaerons-armoury-necrons",
     "game_version": {
       "edition": "11th",
@@ -1668,7 +1701,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Mounted",
+        "Necrons"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "swift-as-death-skyshroud-spearhead-necrons",
     "game_version": {
       "edition": "11th",

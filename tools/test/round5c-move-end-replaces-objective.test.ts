@@ -116,7 +116,7 @@ describe("move-end nearest to an objective (make-move, must)", () => {
       ["must end that move as close as possible to that objective", "move-end-nearest", { to: "selected-objective" }],
     ), text);
     expect(mechanics.effect.type).toBe("select-objective");
-    expect(mechanics.effect.selector).toEqual({ bind_as: "marker", count: 1 });
+    expect(mechanics.effect.selector).toEqual({ filter: {}, bind_as: "marker", count: { min: 1, max: 1 } });
     expect(JSON.stringify(mechanics.effect.effect)).toContain('"ends_nearest":{"of":{"objective":{"selection_var":"marker"}}}');
   });
 
@@ -348,7 +348,7 @@ describe("feasibility proviso on a distance bonus (2306 shape)", () => {
     );
     const bonuses = nodesWhere(compiled(list, text), (node) => node.type === "move-modifier" && (node.modifier as Record<string, unknown> | undefined)?.distance_bonus !== undefined);
     expect(bonuses).toHaveLength(1);
-    expect(bonuses[0]!.modifier.ends_when).toEqual({ type: "unit-state", parameters: { state: "engaged" } });
+    expect(bonuses[0]!.modifier.ends_when).toEqual({ type: "matches", parameters: { filter: { state: "engaged" } } });
   });
 });
 

@@ -21,9 +21,11 @@ import {
   isAttackStep,
   effectToBuffs,
   momentGate,
+  recipientSnapshotReason,
   type EffectTranslation,
   type TranslationPerspective,
 } from "../cruncher/from-dsl.js";
+import { resolveRecipientSnapshots } from "../cruncher/recipient-snapshots.js";
 import type { Dataset } from "./dataset.js";
 import { describeAbility, type AbilityAppliesTo, type AbilityLike } from "../translate/effect.js";
 import { unitMatchesAppliesTo } from "../scope.js";
@@ -188,10 +190,9 @@ export class AbilityView {
   }
 
   /**
-   * Whether this ability's `applies_to` scope includes `unit` — true iff the
-   * unit carries every `required_keywords` entry and no `excluded_keywords`,
-   * across its `keywords` + `faction_keywords`. Always `false` when the ability
-   * has no `applies_to` (no resolvable scope → no highlight). Pinned by the
+   * Whether this ability's canonical keyword predicate includes `unit`, across
+   * its `keywords` + `faction_keywords`. Always `false` when the ability has no
+   * `applies_to` (no resolvable scope → no highlight). Pinned by the
    * `conformance/applies-to` corpus.
    */
   affectsUnit(unit: UnitView): boolean {
@@ -246,6 +247,9 @@ export class AbilityView {
 
     const node = effect as Record<string, unknown>;
     if (node.type === "ability-grant" && node.modifier !== null && typeof node.modifier === "object") {
+      // Expanding a model's grant into a unit effect would erase its recipient.
+      const recipient = node.target;
+      if (recipient === "this-model" || recipient === "model-in-this-unit" || (recipient !== null && typeof recipient === "object" && "level" in recipient && recipient.level === "model")) return effect;
       const modifier = node.modifier as Record<string, unknown>;
       const abilityId = modifier.ability;
       if (modifier.rules_bundle === true && typeof abilityId === "string" && !seen.has(abilityId)) {
@@ -288,18 +292,31 @@ export class AbilityView {
     const ctx: EngineContext = context ?? { phase: "shooting" };
     // A rated rule ({rating: true}) reads the rating the owning unit prints.
     const resolved = withRating(this.resolveRulesBundles(this.raw.effect), rating);
-    const moment = triggerGated(this.raw.behavior, this.raw.trigger, resolved);
+    const needsSnapshot = recipientSnapshotReason(this.raw.trigger, resolved);
+    if (needsSnapshot && (source.kind !== "ability" || source.abilityId !== this.id)) return {
+      applied: [], activatable: [],
+      unsupported: [{ reason: "recipient snapshot source does not own this ability", effectFragment: this.raw.effect }],
+    };
+    const snapshot = needsSnapshot
+      ? resolveRecipientSnapshots(this.raw.trigger, resolved, source, isAttackStep, ctx, perspective, momentGate)
+      : undefined;
+    if (snapshot?.reason) return {
+      applied: [], activatable: [],
+      unsupported: [{ reason: snapshot.reason, effectFragment: this.raw.effect }],
+    };
+    const moment = snapshot ? snapshot.effect : triggerGated(this.raw.behavior, this.raw.trigger, resolved);
     const translated = effectToBuffs(
-      moment !== resolved ? moment : usageGated(this.raw.ability_type, this.raw.usage, resolved),
+      moment,
       source,
       ctx,
       perspective,
+      { usage: this.raw.usage, duration: this.raw.scope?.duration },
     );
     // An aura (an effect whose target filter reaches units `within` N", e.g. a "within 18\""
     // reroll) gates on distance to the target. Stamp it here rather than in the effect
     // translator so the `effect-translation` corpus (bare effects) is unaffected; the gate is
     // permissive until a caller sets `distanceInches`. Only a single inch range gates.
-    const range = auraInches(resolved);
+    const range = auraInches(resolved, ctx.battleRound);
     if (range === undefined) return translated;
     const gate = (b: Buff): Buff => ({
       ...b,
@@ -314,14 +331,27 @@ export class AbilityView {
 }
 
 /** The one inch range every aura-filtered effect target in `effect` reaches, if there is exactly one. */
-export function auraInches(effect: unknown): number | undefined {
+export function auraInches(effect: unknown, battleRound?: number): number | undefined {
   const found = new Set<number>();
   const walk = (node: unknown): void => {
     if (Array.isArray(node)) return node.forEach(walk);
     if (node === null || typeof node !== "object") return;
     const rec = node as Record<string, unknown>;
-    const target = rec.target as { within?: { range?: { inches?: unknown } } } | undefined;
-    if (typeof rec.type === "string" && target && typeof target === "object" && typeof target.within?.range?.inches === "number") found.add(target.within.range.inches);
+    const target = rec.target;
+    if (target !== null && typeof target === "object" && "within" in target) {
+      const within = target.within;
+      if (within !== null && typeof within === "object" && "range" in within) {
+        let range = within.range;
+        if (range !== null && typeof range === "object" && "per_battle_round" in range) {
+          const tiers = range.per_battle_round;
+          range = Array.isArray(tiers) && battleRound !== undefined && Number.isInteger(battleRound) && battleRound > 0
+            ? tiers[Math.min(battleRound, tiers.length) - 1]
+            : undefined;
+        }
+        if (range !== null && typeof range === "object" && "inches" in range && typeof range.inches === "number") found.add(range.inches);
+      }
+    }
+    if (rec.type === "ability-grant" && (target === "this-model" || target === "model-in-this-unit" || (target !== null && typeof target === "object" && "level" in target && target.level === "model"))) return;
     Object.values(rec).forEach(walk);
   };
   walk(effect);
@@ -344,18 +374,6 @@ export function triggerGated(behavior: unknown, trigger: unknown, effect: unknow
   return momentGate(trigger, effect);
 }
 
-/**
- * An ability's effect gated on its usage limit ("once per battle", "once per turn"): using it is
- * the player's choice, so its buffs are an opt-in lever (`<ability>@<frequency>`). Called only
- * when no trigger already gates the effect. A stratagem is already opt-in as a stratagem.
- */
-export function usageGated(abilityType: unknown, usage: unknown, effect: unknown): unknown {
-  // Several limits that all apply are still one player-chosen use; the first limit names the lever.
-  const limit = Array.isArray(usage) ? usage[0] : usage;
-  const frequency = limit !== null && typeof limit === "object" ? (limit as { frequency?: unknown }).frequency : undefined;
-  if (effect == null || typeof frequency !== "string" || abilityType === "stratagem") return effect;
-  return { type: "conditional", condition: { type: "timing-is", parameters: { timing: frequency } }, effect };
-}
 
 /** A weapon, linked to the units that carry it. */
 export class WeaponView {

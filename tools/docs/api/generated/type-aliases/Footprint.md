@@ -8,7 +8,7 @@
 
 > **Footprint** = \{ `type`: `"rectangle"`; `width`: `number`; `height`: `number`; \} \| \{ `type`: `"right-triangle"`; `width`: `number`; `height`: `number`; \} \| \{ `type`: `"polygon"`; `points`: \[[`Vec2`](../interfaces/Vec2.md), [`Vec2`](../interfaces/Vec2.md), [`Vec2`](../interfaces/Vec2.md), `...Vec2[]`\]; \}
 
-Defined in: [generated.ts:160](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L160)
+Defined in: [generated.ts:268](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L268)
 
 A terrain piece's 2D footprint in local inches (y-down): an axis-aligned rectangle with its min corner at the local origin, a right triangle with the right angle at the local origin and legs along +x/+y, or an explicit polygon (>= 3 points). The placement resolver re-centers the footprint on its polygon area centroid, so the local-origin convention does not affect where the piece lands — only its shape matters.
 

@@ -457,12 +457,19 @@ describe("abilities-resolver conformance corpus", () => {
       const ability = c.effect === undefined ? ds.abilities.getAny(c.abilityId) : undefined;
       if (c.effect === undefined) expect(ability, `unknown ability ${c.abilityId}`).toBeDefined();
       // A rated rule reads the unit's printed rating; the case supplies it.
-      const result = effectToBuffs(
-        withRating(c.effect ?? ability!.raw.effect, c.rating),
-        c.source as never,
-        c.context,
-        c.perspective ?? "attacker",
-      );
+      const result = c.effect === undefined
+        ? ability!.describeBuffs(
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+          c.rating,
+        )
+        : effectToBuffs(
+          withRating(c.effect, c.rating),
+          c.source as never,
+          c.context,
+          c.perspective ?? "attacker",
+        );
       const appliedContribs = result.applied.map((b) => b.contribution);
       expect(
         appliedContribs,

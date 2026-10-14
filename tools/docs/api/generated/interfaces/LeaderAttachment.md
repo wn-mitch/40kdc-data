@@ -6,7 +6,7 @@
 
 # Interface: LeaderAttachment
 
-Defined in: [generated.ts:1502](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1502)
+Defined in: [generated.ts:2843](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2843)
 
 Defines which character units can attach to which bodyguard units.
 
@@ -19,7 +19,7 @@ via the `definition` "leader-attachment".
 
 > **leader\_id**: `string`
 
-Defined in: [generated.ts:1503](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1503)
+Defined in: [generated.ts:2844](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2844)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1503](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **eligible\_bodyguard\_ids**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:1507](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1507)
+Defined in: [generated.ts:2848](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2848)
 
 #### Min Items
 
@@ -39,7 +39,7 @@ Defined in: [generated.ts:1507](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **eligible\_bodyguard\_keywords?**: \[`string`, `...string[]`\]
 
-Defined in: [generated.ts:1513](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1513)
+Defined in: [generated.ts:2854](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2854)
 
 Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL of these is also an eligible bodyguard, in addition to eligible_bodyguard_ids. Models rules like an Inquisitor leading any IMPERIUM BATTLELINE INFANTRY unit.
 
@@ -53,4 +53,4 @@ Optional keyword-based eligibility: any unit whose keyword set (keywords ∪ fac
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1514](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1514)
+Defined in: [generated.ts:2855](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2855)

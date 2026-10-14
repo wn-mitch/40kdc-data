@@ -105,7 +105,7 @@ describe("move-must-end on a bonus move (feasibility proviso, 5746 shape)", () =
   it("puts the end condition on the bonus node, which the bonus is available only with", () => {
     const text = compiled([bonus(["consolidation"]), mustEnd(), engaged()]);
     expect(text).toContain('{"type":"move-modifier","target":"this-unit","modifier":{"applies_to_moves":["consolidation"],"distance_bonus":3,"ends_when":');
-    expect(text).toContain('"ends_when":{"type":"unit-state","parameters":{"state":"engaged"}}');
+    expect(text).toContain('"ends_when":{"type":"matches","parameters":{"filter":{"state":"engaged"}}}');
     expect(text).not.toContain('"type":"move"');
   });
 

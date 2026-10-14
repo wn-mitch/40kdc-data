@@ -130,6 +130,7 @@ function parentFaction(dataRoot: string, factionId: string): string | null {
 export type MechanicsRender = { entry: Record<string, unknown> | null; rendered_text: string | null; errors: string[] };
 
 let previewValidator: Ajv | null = null;
+let previewValidityValidator: Ajv | null = null;
 
 /** Graft mechanics onto an existing entry exactly as publication does, keeping community notes. */
 export function entryWithMechanics(original: Record<string, unknown>, mechanics: Mechanics): Record<string, unknown> {
@@ -148,10 +149,15 @@ export function entryWithMechanics(original: Record<string, unknown>, mechanics:
  */
 export function checkEntry(entry: Record<string, unknown>): { rendered_text: string | null; errors: string[] } {
   const errors: string[] = [];
-  previewValidator ??= createValidator();
-  const validate = previewValidator.getSchema(ABILITY_SCHEMA_ID);
+  previewValidityValidator ??= createValidator({ allErrors: false });
+  const validate = previewValidityValidator.getSchema(ABILITY_SCHEMA_ID);
   if (!validate) errors.push("The ability schema is not registered.");
-  else if (!validate(entry)) errors.push(...(validate.errors ?? []).map((issue) => `${issue.instancePath || "/"} ${issue.message ?? "invalid"}`));
+  else if (!validate(entry)) {
+    previewValidator ??= createValidator();
+    const diagnostics = previewValidator.getSchema(ABILITY_SCHEMA_ID)!;
+    diagnostics(entry);
+    for (const issue of diagnostics.errors ?? []) errors.push(`${issue.instancePath || "/"} ${issue.message ?? "invalid"}`);
+  }
   const lint = lintCanonical(entry.effect);
   if (!lint.canonical) errors.push(...lint.issues);
   let rendered: string | null = null;

@@ -185,12 +185,16 @@
   "effect": {
    "type": "conditional",
    "condition": {
-    "type": "within",
+    "type": "matches",
     "parameters": {
      "subject": "event-subject",
-     "of": "this-unit",
-     "range": {
-      "inches": 6
+     "filter": {
+      "within": {
+       "of": "this-unit",
+       "range": {
+        "inches": 6
+       }
+      }
      }
     }
    },

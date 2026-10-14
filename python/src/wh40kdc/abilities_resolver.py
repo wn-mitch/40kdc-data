@@ -207,6 +207,13 @@ def reaches_other_units(effect: Any) -> bool:
 
 
 def _is_aura_scope(range_: Any) -> bool:
-    if not isinstance(range_, str):
-        return False
-    return range_.startswith("aura-") or range_ in ("any-on-battlefield", "any-visible")
+    if isinstance(range_, dict):
+        return (
+            isinstance(range_.get("aura_of"), str)
+            or range_.get("aura") is True
+            or range_.get("any_on_battlefield") is True
+            or range_.get("any_visible") is True
+        )
+    return isinstance(range_, str) and (
+        range_.startswith("aura-") or range_ in ("any-on-battlefield", "any-visible")
+    )

@@ -98,13 +98,16 @@ describe("a bare filter after an earlier selection", () => {
   ];
 
   it("lets the second sentence's designation and modifier name the filtered units", () => {
-    const json = JSON.stringify(mechanics(TEXT,
+    const result = mechanics(TEXT,
       ["After this model shoots", "event", { kind: "after-shooting" }], BASE[1]!, BASE[2]!, BASE[3]!, BASE[4]!,
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["is marked", "designated-filter", { tag: "marked", subject: "antecedent" }],
-      ["-1 to Leadership rolls", "roll-modifier", { roll: "leadership", operation: "subtract", value: 1, subject: "antecedent" }]));
-    expect(json).toContain('"type":"designated"');
-    expect(json).toContain('"target":{"owner":"enemy"}');
+      ["-1 to Leadership rolls", "roll-modifier", { roll: "leadership", operation: "subtract", value: 1, subject: "antecedent" }]);
+    expect(result.effect.effect.steps[1]).toMatchObject({
+      type: "conditional",
+      condition: { type: "matches", parameters: { subject: "recipient", filter: { designated: "marked" } } },
+      effect: { type: "roll-modifier", target: { owner: "enemy" } },
+    });
   });
 
   it("keeps the selected unit for a condition measured to a following filter", () => {
@@ -116,7 +119,7 @@ describe("a bare filter after an earlier selection", () => {
       ["one or more friendly units", "unit-filter", { side: "friendly" }],
       ["is visible to this unit", "visible", { subject: "antecedent", to: "this-unit" }],
       ["That unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]));
-    expect(json).toContain('"type":"visible","parameters":{"subject":"selected-unit"');
+    expect(json).toContain('"type":"matches","parameters":{"subject":"selected-unit","filter":{"visible":{"to":"this-unit"}}}');
   });
 });
 
@@ -131,7 +134,7 @@ describe("a designation between a select and its unit-filter", () => {
 
   it("gates the selected unit on the designation", () => {
     const json = JSON.stringify(mechanics(TEXT, ...HEAD, ["unravelling", "designated-filter", { tag: "unravelling", subject: "antecedent" }], ["enemy unit", "unit-filter", { side: "enemy" }], TAIL));
-    expect(json).toContain('"type":"designated","parameters":{"subject":"selected-unit","tag":"unravelling"}');
+    expect(json).toContain('"type":"matches","parameters":{"subject":"selected-unit","filter":{"designated":"unravelling"}}');
   });
 
   it("leaves a counted designation where it is", () => {
@@ -214,10 +217,13 @@ describe("a list-building rule after a composition rule", () => {
 
   it("targets the filter between them, not the composition group", () => {
     const text = "You can include Beta units in your army, up to 3 units. An Alpha model must be your Warlord.";
-    const json = JSON.stringify(mechanics(text, COMPOSITION,
+    const result = mechanics(text, COMPOSITION,
       ["Alpha model", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
-      ["must be your Warlord", "army-construction", { rule: "warlord-required", subject: "antecedent" }]));
-    expect(json).toContain('"target":{"owner":"friendly","all_of":["ALPHA"],"level":"model"},"modifier":{"rule":"warlord-required"}');
+      ["must be your Warlord", "army-construction", { rule: "warlord-required", subject: "antecedent" }]);
+    expect(result.effect.steps).toContainEqual(expect.objectContaining({
+      target: { owner: "friendly", all_of: ["ALPHA"], level: "model" },
+      modifier: { rule: "warlord-required" },
+    }));
   });
 
   it("keeps the composition group when no filter sits between them", () => {

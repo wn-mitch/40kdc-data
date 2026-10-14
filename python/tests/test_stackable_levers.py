@@ -53,10 +53,14 @@ def hit_plus(target: Any) -> dict[str, Any]:
 
 
 def grant(keyword: str) -> dict[str, Any]:
+    keyword_id, _, rating = keyword.lower().partition(" ")
+    ref: dict[str, Any] = {"keyword_id": keyword_id.replace(" ", "-")}
+    if rating:
+        ref["parameters"] = {"value": int(rating)}
     return {
         "type": "weapon-ability-grant",
         "target": "this-unit",
-        "modifier": {"abilities": [keyword]},
+        "modifier": {"keywords": [ref]},
     }
 
 
@@ -75,9 +79,11 @@ def army_raw() -> Any:
             {
                 "type": "select-units",
                 "selector": {
-                    "owner": "friendly",
-                    "count": 1,
-                    "keywords": ["MOB"],
+                    "filter": {
+                        "owner": "friendly",
+                        "all_of": ["MOB"],
+                    },
+                    "count": {"min": 1, "max": 1},
                     "eligibility": {
                         "operator": "and",
                         "operands": [
@@ -135,7 +141,22 @@ def army_raw() -> Any:
         ability(
             "fix-granted",
             "unit",
-            {"type": "choice", "options": [grant("Lethal Hits"), grant("Sustained Hits 1")]},
+            {
+                "type": "stance-select",
+                "mode": "re-selectable",
+                "options": [
+                    {
+                        "id": "stable-lethal",
+                        "name": "Lethal",
+                        "effect": grant("lethal-hits"),
+                    },
+                    {
+                        "id": "stable-sustained",
+                        "name": "Sustained",
+                        "effect": grant("sustained-hits 1"),
+                    },
+                ],
+            },
             name="Fix Granted",
         ),
         # A Stratagem whose only content is a choice, and one adding a selection to the record.
@@ -159,13 +180,11 @@ def army_raw() -> Any:
             "fix-more",
             "stratagem",
             {
-                "type": "ability-modifier",
-                "target": "this-unit",
+                "type": "stance-selection-capacity",
                 "modifier": {
-                    "ability": "fix-granted",
-                    "aspect": "selections",
-                    "operation": "add",
-                    "value": 1,
+                    "ability_id": "fix-granted",
+                    "additional_selections": 1,
+                    "allocation": "choose-one-option",
                 },
             },
             detachment_id="fix-det",
@@ -255,12 +274,13 @@ def test_stratagem_is_one_cp_lever_its_choices_depend_on_even_when_it_applies_no
 
 def test_granted_record_becomes_its_own_choice_levers_on_the_unit_the_grant_reaches() -> None:
     levers, groups = by_id(MOB)
-    granted = levers["fix-grant-rule>fix-granted?0"]
-    assert granted["group"] == "fix-grant-rule>fix-granted?choice"
+    granted = levers["fix-grant-rule>fix-granted#stable-lethal"]
+    assert granted["group"] == "fix-grant-rule>fix-granted?stance"
     assert granted["enabled"] is False
     assert "requiresLever" not in granted
-    assert groups["fix-grant-rule>fix-granted?choice"] == {
-        "id": "fix-grant-rule>fix-granted?choice",
+    assert groups["fix-grant-rule>fix-granted?stance"] == {
+        "id": "fix-grant-rule>fix-granted?stance",
+        "abilityId": "fix-granted",
         "label": "Fix Granted",
         "maxActivations": 1,
     }
@@ -275,7 +295,7 @@ def test_record_is_not_granted_again_to_a_unit_that_already_holds_it() -> None:
     ids = [
         lever["id"] for lever in Dataset(raw).stackable_buffs_for(MOB, {"phase": "fight"})["buffs"]
     ]
-    assert "fix-granted?0" in ids
+    assert "fix-granted#stable-lethal" in ids
     assert not any(id_.startswith("fix-grant-rule>") for id_ in ids)
 
 
@@ -283,7 +303,11 @@ def test_selection_raising_stratagem_points_at_its_pool_and_drops_where_absent()
     levers, _ = by_id(MOB)
     more = levers["fix-more#cap"]
     assert more["buffs"] == []
-    assert more["raisesCap"] == {"group": "fix-grant-rule>fix-granted?choice", "by": 1}
+    assert more["raisesCap"] == {
+        "group": "fix-grant-rule>fix-granted?stance",
+        "by": 1,
+        "allocation": "choose-one-option",
+    }
     assert more["requiresLever"] == "detachment-stratagem:fix-more"
     boss_levers, _ = by_id(BOSS)
     assert "fix-more#cap" not in boss_levers

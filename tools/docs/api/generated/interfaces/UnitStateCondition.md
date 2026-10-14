@@ -6,7 +6,7 @@
 
 # Interface: UnitStateCondition
 
-Defined in: [generated.ts:1929](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1929)
+Defined in: [generated.ts:1752](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1752)
 
 [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.
 
@@ -16,28 +16,12 @@ Defined in: [generated.ts:1929](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"unit-state"`
 
-Defined in: [generated.ts:1930](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1930)
+Defined in: [generated.ts:1753](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1753)
 
 ***
 
 ### parameters
 
-> **parameters**: `object`
+> **parameters**: \{\[`k`: `string`\]: `unknown`; \} \| \{\[`k`: `string`\]: `unknown`; `at`: `"phase-start"` \| `"turn-start"`; \}
 
-Defined in: [generated.ts:1931](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1931)
-
-#### subject?
-
-> `optional` **subject?**: [`UnitRef`](../type-aliases/UnitRef.md)
-
-#### state
-
-> **state**: [`UnitState`](../type-aliases/UnitState.md)
-
-#### with?
-
-> `optional` **with?**: [`UnitRef`](../type-aliases/UnitRef.md)
-
-#### at?
-
-> `optional` **at?**: `"now"` \| `"phase-start"` \| `"turn-start"`
+Defined in: [generated.ts:1754](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1754)

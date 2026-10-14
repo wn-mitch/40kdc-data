@@ -1,4 +1,4 @@
-import { str, titleCase, type P } from "./condition-refs.js";
+import { countPhrase, str, titleCase, type P } from "./condition-refs.js";
 
 /**
  * English for the named-equipment predicates (`named-weapon`, `unit-wargear`). Negation is written
@@ -33,8 +33,9 @@ function weaponPhrase(p: P, negated: boolean): string {
 }
 
 function modelsSubject(models: P): string {
-  const atLeast = Number(models.at_least);
-  return atLeast === 1 ? "one or more models in this unit" : `at least ${atLeast} models in this unit`;
+  const count = (models.count ?? {}) as P;
+  if (count.max == null) return count.min === 1 ? "one or more models in this unit" : `at least ${str(count.min)} models in this unit`;
+  return `${countPhrase(count)} models in this unit`;
 }
 
 function unitLevel(phrase: string, negated: boolean): string {

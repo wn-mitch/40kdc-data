@@ -16,15 +16,15 @@ export type PlacedNode = { index: number; node: Node };
 export type ConditionBuilder = (leaf: CompileLeaf) => Node | null;
 
 /**
- * "…, and cannot end that move within Engagement Range of them" and "…, can end that move more than
- * 6\" horizontally from all enemy units (instead of more than 8\")": the restriction's move is the
- * trigger's (a move-ended event, or a selection that names its moves) and no make-move in the ability
- * makes it. The one condition is either "engaged" with this unit or model (no_end_in_engagement, on
- * the unit the nearest move-through or move permission in its sentence binds), or "within a distance
- * of the unit-filter after it" with this unit (ends_when: not that place, carried as ends_when_replaces
- * when the restriction replaces the usual threshold). applies_to_moves is the restriction's own
- * move_types, else the trigger's; a distance needs the trigger's move_types and takes no leaf move_types
- * of its own. Returns an error when a piece is missing.
+ * "…, and cannot end that move within Engagement Range of them", "must end that charge move engaged",
+ * and "after moving, this unit must be more than 8\" horizontally from all enemy units": the restriction's
+ * move is the trigger's (a move-ended event, a declared charge, or a selection that names its moves)
+ * and no make-move in the ability makes it. The one condition is either "engaged" with this unit or model
+ * (no_end_in_engagement, on the unit the nearest move-through or move permission in its sentence binds),
+ * a distance to the unit-filter after it (ends_when: not that place), or a strict beyond distance to
+ * matching units (ends_when: the condition's strict negation). applies_to_moves is the restriction's
+ * own move_types when present, else the trigger's; a distance restriction takes the trigger's move_types.
+ * Returns an error when a piece is missing.
  */
 export function triggerMoveEnd(
   list: readonly CompileLeaf[],
@@ -34,6 +34,8 @@ export function triggerMoveEnd(
   condition: ConditionBuilder,
 ): { node: Node } | { error: string } {
   const refuse = (error: string) => ({ error });
+  const trigger = moveTriggerBefore(list, rule.index);
+  if (!rule.cannot && trigger?.parameters.kind === "selected") return positiveSelectedMoveEnd(list, rule, trigger, condition);
   if (!rule.cannot) return positiveChargeEnd(list, rule, condition);
   if (rule.conditions.length !== 1) return refuse("\"Cannot end that move\" with no move before it needs exactly one condition: engaged, or within a distance of a unit-filter.");
   const leaf = list[rule.conditions[0]!]!;
@@ -59,6 +61,50 @@ export function chargeDeclarationBefore(list: readonly CompileLeaf[], index: num
     return kind === "targets-selected" && leaf.parameters.action_kind === "charge" ? leaf : undefined;
   }
   return undefined;
+}
+
+/**
+ * "After moving, this unit must be more than 8\" horizontally from all enemy units": the selected
+ * event is the move being constrained, not a phase-wide "advanced this phase" condition. `beyond`
+ * is compiled by the condition builder as the strict negation of the inclusive `within` predicate,
+ * so the source's boundary and matching enemy-unit object remain intact.
+ */
+function positiveSelectedMoveEnd(
+  list: readonly CompileLeaf[],
+  rule: MoveEndRule,
+  trigger: CompileLeaf,
+  condition: ConditionBuilder,
+): { node: Node } | { error: string } {
+  const refuse = (error: string) => ({ error });
+  if (trigger.parameters.to !== "move" || !Array.isArray(trigger.parameters.move_types)) {
+    return refuse("\"Must end that move\" needs a selected-to-move event that names its move types.");
+  }
+  const moveTypes = trigger.parameters.move_types as string[];
+  if (rule.replaces) return refuse("\"Must end that move\" that replaces the usual threshold has no selected-move form.");
+  if (rule.moveTypes && !rule.moveTypes.every((type) => moveTypes.includes(type))) {
+    return refuse("\"Must end that move\" names a move type the selected event does not name.");
+  }
+  if (rule.conditions.length === 0) return refuse("\"Must end that move\" names no condition for where the move ends.");
+  const nodes: Node[] = [];
+  for (const at of rule.conditions) {
+    const leaf = list[at]!;
+    if (leaf.family_id !== "unit-position" || leaf.parameters.kind !== "beyond"
+      || leaf.parameters.subject !== "this-unit" || leaf.parameters.of !== "matching-unit"
+      || leaf.parameters.negated === true) {
+      return refuse("\"Must end that move\" after a selected-to-move event names only a strict distance beyond matching units.");
+    }
+    const node = condition(leaf);
+    if (node === null) return refuse("\"Must end that move\" names a distance condition that does not compile.");
+    nodes.push(node);
+  }
+  const where: Node = nodes.length === 1 ? nodes[0]! : { operator: rule.match === "any" ? "or" : "and", operands: nodes };
+  return {
+    node: {
+      type: "move-modifier",
+      target: EVENT_SUBJECT,
+      modifier: { applies_to_moves: moveTypes, ends_when: where },
+    },
+  };
 }
 
 /**

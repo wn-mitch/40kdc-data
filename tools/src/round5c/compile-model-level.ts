@@ -26,13 +26,14 @@ export function rollOwnerEvent(event: CompileLeaf | undefined, filter: CompileLe
 }
 
 /**
- * "when a friendly X model … is destroyed": a destruction that names no destroyer, so a
- * unit-filter describing it names what was destroyed (the trigger's object), not the destroyer
- * (its subject). The destruction may name whose model it was only as the filter's own side.
+ * "when a friendly X model … is destroyed": a destruction whose object a preceding unit-filter
+ * names. With a separately named destroyer, the victim must have an explicit object owner;
+ * otherwise a preceding filter can be the destroyer in "a friendly unit destroys an enemy unit".
  */
 export function destroyedObject(moment: CompileLeaf | undefined, filter: CompileLeaf | undefined): boolean {
   return moment?.family_id === "event" && (moment.parameters.kind === "model-destroyed" || moment.parameters.kind === "unit-destroyed")
-    && moment.parameters.by === undefined && moment.parameters.object_filter === undefined && filter?.family_id === "unit-filter"
+    && moment.parameters.object_filter === undefined && filter?.family_id === "unit-filter"
+    && (moment.parameters.by === undefined || moment.parameters.object_owner !== undefined)
     && (moment.parameters.object_owner === undefined || (filter.parameters.side !== "any" && moment.parameters.object_owner === filter.parameters.side));
 }
 

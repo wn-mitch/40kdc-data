@@ -21,6 +21,7 @@
  * M2's broader ability translator.
  */
 import type { Buff, BuffSource, EngineContext, WeaponKeywordRef } from "./buffs.js";
+import { matchesUnitFilter } from "./unit-filter.js";
 
 /** Keywords whose math the engine encodes directly (catalog `effect` is null). */
 const ENGINE_DISPATCH_KEYWORDS = new Set([
@@ -41,6 +42,7 @@ function keywordAppliesToTarget(
   context: EngineContext,
 ): boolean {
   if (!parameters) return true;
+  if (context.targetKeywords === undefined && (parameters.required_target_keywords_any !== undefined || parameters.excluded_target_keywords !== undefined)) return false;
   const targetKeywords = new Set((context.targetKeywords ?? []).map((keyword) => keyword.toLowerCase()));
   const required = parameters.required_target_keywords_any;
   if (Array.isArray(required) && !required.some((keyword) => typeof keyword === "string" && targetKeywords.has(keyword.toLowerCase()))) {
@@ -203,11 +205,8 @@ function evaluateCondition(
         return ctx.attackerStationary === true;
       return "unknown";
     }
-    case "has-keyword": {
-      const all = Array.isArray(parameters.all_of) ? parameters.all_of : [];
-      if (parameters.subject !== "defender" || parameters.any_of != null || all.length !== 1 || typeof all[0] !== "string") return "unknown";
-      return (ctx.targetKeywords ?? []).includes(all[0].toLowerCase());
-    }
+    case "matches":
+      return parameters.subject === "defender" ? matchesUnitFilter(parameters.filter, ctx, "target", "enemy") : "unknown";
     default:
       return "unknown";
   }

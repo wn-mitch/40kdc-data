@@ -6,14 +6,10 @@
 
 # Interface: DicePoolAllocationEffect
 
-Defined in: [generated.ts:2591](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2591)
+Defined in: [generated.ts:3675](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3675)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "dice-pool-allocation-effect".
-
-## Indexable
-
-> \[`k`: `string`\]: `unknown`
 
 ## Properties
 
@@ -21,7 +17,7 @@ via the `definition` "dice-pool-allocation-effect".
 
 > **type**: `"dice-pool-allocation"`
 
-Defined in: [generated.ts:2592](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2592)
+Defined in: [generated.ts:3676](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3676)
 
 ***
 
@@ -29,11 +25,7 @@ Defined in: [generated.ts:2592](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **pool**: `object`
 
-Defined in: [generated.ts:2593](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2593)
-
-#### Index Signature
-
-\[`k`: `string`\]: `unknown`
+Defined in: [generated.ts:3677](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3677)
 
 #### count
 
@@ -49,15 +41,15 @@ Defined in: [generated.ts:2593](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **max\_activations**: `number`
 
-Defined in: [generated.ts:2598](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2598)
+Defined in: [generated.ts:3681](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3681)
 
 ***
 
 ### options
 
-> **options**: \[\{\[`k`: `string`\]: `unknown`; `name`: `string`; `requirement`: [`DiceRequirementSpec`](../type-aliases/DiceRequirementSpec.md); `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ name: string; requirement: DiceRequirementSpec; effect: EffectNode; [k: string]: unknown }[]`\]
+> **options**: \[\{ `id`: `string`; `name`: `string`; `requirement`: [`DiceRequirementSpec`](../type-aliases/DiceRequirementSpec.md); `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ id: string; name: string; requirement: DiceRequirementSpec; effect: EffectNode }[]`\]
 
-Defined in: [generated.ts:2602](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2602)
+Defined in: [generated.ts:3685](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3685)
 
 #### Min Items
 

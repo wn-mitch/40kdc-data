@@ -164,7 +164,7 @@ describe("Round 5C placement limits after a set-up or add-unit", () => {
       ["This unit must be set up", "set-up", { subject: "this-unit", to: "battlefield", mandatory: true }],
       beyondEnemy("more than 6\" away from all enemy units", 6, { subject: "this-unit" }),
       ["not engaged", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true }]);
-    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", mandatory: true, min_enemy_distance: 6, placement: "unengaged" });
+    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", mandatory: true, min_enemy_distance: { inches: 6 }, placement: "unengaged" });
   });
 
   it("folds a level distance from enemy units into min_enemy_distance like any other", () => {
@@ -172,7 +172,7 @@ describe("Round 5C placement limits after a set-up or add-unit", () => {
     const mechanics = mechanicsOf(text,
       ["This unit can be set up", "set-up", { subject: "this-unit", to: "battlefield" }],
       beyondEnemy("more than 9\" level away from all enemy units", 9, { subject: "this-unit" }));
-    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", min_enemy_distance: 9 });
+    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", min_enemy_distance: { inches: 9 } });
   });
 
   it("keeps a distance from enemy units on a forbidden set-up as away_from", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { effectToBuffs, parseKeywordGrant } from "../src/cruncher/from-dsl.js";
+import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import { resolveBuffs, type BuffSource, type EngineContext } from "../src/cruncher/buffs.js";
 
 const armyRule: BuffSource = {
@@ -169,7 +169,7 @@ describe("effectToBuffs: leaves", () => {
       {
         type: "weapon-ability-grant",
         target: "this-unit",
-        modifier: { abilities: ["Sustained Hits 1"] },
+        modifier: { keywords: [{keyword_id: "sustained-hits", parameters: {value: 1}}] },
       },
       unitRule,
       ctx,
@@ -185,16 +185,15 @@ describe("effectToBuffs: leaves", () => {
 describe("effectToBuffs: nested relationship containers", () => {
   it("does not apply a leader-model grant without resolving its attached beneficiary", () => {
     const effect = {
-      type: "leader-model-ability-grant",
-      grant: {
-        effect: { type: "feel-no-pain", modifier: { threshold: 4 } },
-      },
+      type: "ability-grant",
+      target: { level: "model", member_of: "this-unit", attachment_role: "leader" },
+      modifier: { definition: { type: "ability-part", effect: { type: "feel-no-pain", target: "this-model", modifier: { threshold: 4 } } } },
     };
     const result = effectToBuffs(effect, unitRule, ctx, "target");
     expect(result.applied).toEqual([]);
     expect(result.unsupported).toEqual([
       {
-        reason: "leader-model-ability-grant: attached leader beneficiary is not resolved by the buff engine",
+        reason: "unit-filter target: identity, state or model membership is unresolved",
         effectFragment: effect,
       },
     ]);
@@ -228,7 +227,7 @@ describe("effectToBuffs: nested relationship containers", () => {
         target: "friendly-within-aura",
         modifier: {
           range: 6,
-          recipient_filter: { required_keywords: ["ALLY"] },
+          recipient_filter: { all_of: ["ALLY"] },
           effect: {
             type: "conditional",
             condition: { type: "attack-is", parameters: { attack_type: "ranged" } },
@@ -277,7 +276,7 @@ describe("effectToBuffs: named-region-state", () => {
     target: { owner: "friendly" },
     modifier: {
       consumer: {
-        beneficiary_gate: { operator, keywords },
+        beneficiary_filter: operator === "and" ? { all_of: keywords } : { any_of: keywords },
         default_branch: { effect: defaultEffect },
         qualified_branch: {
           effect: {
@@ -336,23 +335,23 @@ describe("effectToBuffs: named-region-state", () => {
         {
           type: "re-roll",
           target: "attacker",
-          modifier: { roll: "wound", subset: "ones", weapon_keyword: "Psychic" },
+          modifier: { roll: "wound", subset: "ones", weapons: { keyword: { keyword_id: "psychic" } } },
         },
       ),
       unitRule,
       { phase: "shooting", attackerKeywords: ["thousand sons"] },
     );
-    expect(result.unsupported.map((entry) => entry.reason).filter((reason) => reason.includes("weapon_keyword"))).toEqual([]);
-    expect(result.applied.map((buff) => buff.applicableWhen?.weaponKeyword)).toEqual(["psychic"]);
+    expect(result.unsupported.map((entry) => entry.reason)).toEqual(["named-region-state qualified branch: region membership is unavailable in EngineContext; qualified replacement is unsupported"]);
+    expect(result.applied.map((buff) => buff.applicableWhen?.weaponKeywords)).toEqual([[{ keyword_id: "psychic" }]]);
   });
 });
 
 describe("effectToBuffs: unhonorable narrowing filters fail safe", () => {
   // A weapon-name / model filter the cruncher can't resolve here must NOT apply
   // the buff unfiltered (silent over-apply); it surfaces as `unsupported`.
-  it("stat-modifier with weapon_name → applied, gated on that weapon's attacks", () => {
+  it("stat-modifier with a weapon name gates that weapon's attacks", () => {
     const r = effectToBuffs(
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapon_name: "Power Fist" } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { name: "Power Fist" } } },
       unitRule, { phase: "fight", attackerStationary: false },
     );
     expect(r.unsupported).toEqual([]);
@@ -362,26 +361,26 @@ describe("effectToBuffs: unhonorable narrowing filters fail safe", () => {
     expect(resolveBuffs(r.applied, { ...ctx, weaponNames: ["close combat weapon"] }).attacksMod.value).toBe(0);
   });
 
-  it("roll-modifier with model_filter → unsupported", () => {
+  it("roll-modifier with a model filter stays unresolved", () => {
     const r = effectToBuffs(
-      { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1, model_filter: "not-character" } },
+      { type: "roll-modifier", target: { level: "model", member_of: "this-unit", none_of: ["CHARACTER"] }, modifier: { roll: "hit", operation: "add", value: 1 } },
       unitRule, ctx,
     );
     expect(r.applied).toEqual([]);
-    expect(r.unsupported[0].reason).toContain("model_filter");
+    expect(r.unsupported[0].reason).toContain("unit-filter");
   });
 
-  it("re-roll with weapon_profile → unsupported", () => {
+  it("re-roll with a bound weapon reference stays unresolved", () => {
     const r = effectToBuffs(
-      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures", weapon_profile: "macro-scalpels" } },
+      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "all-failures", weapons: { ref: { weapon_var: "selected" } } } },
       unitRule, ctx,
     );
     expect(r.applied).toEqual([]);
-    expect(r.unsupported[0].reason).toContain("weapon_profile");
+    expect(r.unsupported[0].reason).toContain("weapons.ref");
   });
 
-  it("weapon_type is honorable — phase-gates the stat-modifier rather than blocking it", () => {
-    const eff = { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "melee" } };
+  it("weapon type phase-gates the stat-modifier rather than blocking it", () => {
+    const eff = { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "melee" } } };
     const r = effectToBuffs(eff, unitRule, { phase: "fight", attackerStationary: false });
     expect(r.applied).toHaveLength(1);
     expect(r.unsupported).toEqual([]);
@@ -493,7 +492,7 @@ describe("effectToBuffs: compound", () => {
     const result = effectToBuffs(
       {
         type: "conditional",
-        condition: { type: "attachment", parameters: { subject: "this-model", role: "leading" } },
+        condition: { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } },
         effect: {
           type: "roll-modifier",
           target: "this-unit",
@@ -505,6 +504,36 @@ describe("effectToBuffs: compound", () => {
     );
     expect(result.applied).toEqual([]);
     expect(result.unsupported[0].reason).toMatch(/cannot evaluate condition/);
+  });
+
+  it.each([
+    ["known true", { withinHalfRange: true }, { range: "half-weapon", of: "attacker" }, 1, 0],
+    ["known false", { withinHalfRange: false }, { range: "half-weapon", of: "attacker" }, 0, 0],
+    ["missing", {}, { range: "half-weapon", of: "attacker" }, 0, 1],
+    ["wholly", { withinHalfRange: true }, { range: "half-weapon", of: "attacker", wholly: true }, 0, 1],
+    ["unrelated", { withinHalfRange: true }, { range: "half-weapon", of: "defender" }, 0, 1],
+  ])("matches defender within half-weapon range: %s", (_name, context, within, applied, unsupported) => {
+    const result = effectToBuffs(
+      {
+        type: "conditional",
+        condition: {
+          type: "matches",
+          parameters: {
+            subject: "defender",
+            filter: { owner: "enemy", level: "unit", within },
+          },
+        },
+        effect: {
+          type: "stat-modifier",
+          target: "this-unit",
+          modifier: { stat: "S", operation: "add", value: 1 },
+        },
+      },
+      unitRule,
+      { phase: "shooting", ...context },
+    );
+    expect(result.applied).toHaveLength(applied);
+    expect(result.unsupported).toHaveLength(unsupported);
   });
 
   it("was-hit-by-attack reactive trigger is surfaced, never silently applied", () => {
@@ -558,7 +587,6 @@ describe("effectToBuffs: target filtering", () => {
       "recipient",
       "attacker",
       { owner: "friendly" },
-      { owner: "friendly", within: { range: { inches: 6 } } },
     ];
     for (const target of targets) {
       const result = effectToBuffs(
@@ -572,6 +600,20 @@ describe("effectToBuffs: target filtering", () => {
       );
       expect(result.applied, `target ${JSON.stringify(target)}`).toHaveLength(1);
     }
+  });
+
+  it("does not assume a friendly target satisfies an unresolved range filter", () => {
+    const effect = {
+      type: "roll-modifier",
+      target: { owner: "friendly", within: { range: { inches: 6 } } },
+      modifier: { roll: "hit", operation: "add", value: 1 },
+    };
+    const result = effectToBuffs(effect, unitRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([{
+      reason: "unit-filter target: identity, state or model membership is unresolved",
+      effectFragment: effect,
+    }]);
   });
 
   it("enemy-side and unbound unit-refs are not the attacker", () => {
@@ -771,7 +813,7 @@ describe("effectToBuffs: target perspective", () => {
       {
         type: "weapon-ability-grant",
         target: "this-unit",
-        modifier: { abilities: ["Lethal Hits"] },
+        modifier: { keywords: [{keyword_id: "lethal-hits"}] },
       },
       unitRule,
       ctxT,
@@ -960,7 +1002,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // false
-          { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, // unknown
+          { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } }, // unknown
         ],
       }),
       unitRule,
@@ -976,7 +1018,7 @@ describe("effectToBuffs: compound conditions", () => {
         operator: "and",
         operands: [
           { type: "phase-is", parameters: { phase: "fight" } }, // true
-          { type: "attachment", parameters: { subject: "this-model", role: "leading" } }, // unknown
+          { type: "matches", parameters: { subject: "this-model", filter: { level: "model", member_of: "this-unit", attachment_role: "leader" } } }, // unknown
         ],
       }),
       unitRule,
@@ -1117,7 +1159,7 @@ describe("effectToBuffs: activatable gates", () => {
             effect: {
               type: "weapon-ability-grant",
               target: { owner: "friendly" },
-              modifier: { abilities: ["Sustained Hits 1"] },
+              modifier: { keywords: [{keyword_id: "sustained-hits", parameters: {value: 1}}] },
             },
           },
           {
@@ -1126,7 +1168,7 @@ describe("effectToBuffs: activatable gates", () => {
             effect: {
               type: "weapon-ability-grant",
               target: { owner: "friendly" },
-              modifier: { abilities: ["Lethal Hits"] },
+              modifier: { keywords: [{keyword_id: "lethal-hits"}] },
             },
           },
         ],
@@ -1187,14 +1229,14 @@ describe("effectToBuffs: activatable gates", () => {
               condition: {
                 operator: "and",
                 operands: [
-                  { type: "has-keyword", parameters: { subject: "defender", all_of: ["INFANTRY"] } },
+                  { type: "matches", parameters: { subject: "defender", filter: {all_of: ["INFANTRY"]} } },
                   { type: "attack-is", parameters: { attack_type: "melee" } },
                 ],
               },
               effect: {
                 type: "weapon-ability-grant",
                 target: { owner: "friendly" },
-                modifier: { abilities: ["Devastating Wounds"] },
+                modifier: { keywords: [{keyword_id: "devastating-wounds"}] },
               },
             },
           },
@@ -1224,7 +1266,7 @@ describe("effectToBuffs: activatable gates", () => {
           type: "sequence",
           steps: [
             { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 3 } },
-            { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Devastating Wounds"] } },
+            { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{keyword_id: "devastating-wounds"}] } },
           ],
         },
       },
@@ -1303,7 +1345,7 @@ describe("effectToBuffs: AP stat-modifier", () => {
       {
         type: "stat-modifier",
         target: "this-unit",
-        modifier: { stat: "AP", operation: "improve", value: 1, weapon_type: "melee" },
+        modifier: { stat: "AP", operation: "improve", value: 1, weapons: { type: "melee" } },
       },
       unitRule,
       { phase: "fight" },
@@ -1311,7 +1353,7 @@ describe("effectToBuffs: AP stat-modifier", () => {
     );
     expect(result.applied).toHaveLength(1);
     expect(result.applied[0].contribution).toEqual({ type: "ap-mod", value: -1 });
-    // melee weapon_type rides on the buff as a fight-phase gate.
+    // The melee weapon scope rides on the buff as a fight-phase gate.
     expect(result.applied[0].applicableWhen).toEqual({ phases: ["fight"] });
     expect(result.unsupported).toEqual([]);
   });
@@ -1373,8 +1415,8 @@ describe("effectToBuffs: charged-this-turn condition", () => {
     effect: {
       type: "sequence",
       steps: [
-        { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapon_type: "melee" } },
-        { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 2, weapon_type: "melee" } },
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "A", operation: "add", value: 1, weapons: { type: "melee" } } },
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 2, weapons: { type: "melee" } } },
       ],
     },
   };
@@ -1464,28 +1506,20 @@ describe("effectToBuffs: named activations", () => {
   });
 });
 
-describe("parseKeywordGrant", () => {
+describe("structured weapon grants", () => {
   it.each([
-    ["Lethal Hits", { keyword_id: "lethal-hits" }],
-    ["Sustained Hits 1", { keyword_id: "sustained-hits", parameters: { value: 1 } }],
-    ["Sustained Hits 2", { keyword_id: "sustained-hits", parameters: { value: 2 } }],
-    ["Twin-linked", { keyword_id: "twin-linked" }],
-    ["Precision", { keyword_id: "precision" }],
-    ["Rapid Fire 1", { keyword_id: "rapid-fire", parameters: { value: 1 } }],
-    [
-      "Anti-INFANTRY 4+",
-      { keyword_id: "anti", parameters: { target_keyword: "INFANTRY", threshold: 4 } },
-    ],
-    [
-      "Anti-Monster/Vehicle 4+",
-      { keyword_id: "anti", parameters: { target_keyword: "Monster/Vehicle", threshold: 4 } },
-    ],
-    [
-      "Anti-Non-Vehicle 4+",
-      { keyword_id: "anti", parameters: { target_keyword: "Non-Vehicle", threshold: 4 } },
-    ],
-  ])("%s → %j", (input, expected) => {
-    expect(parseKeywordGrant(input)).toEqual(expected);
+    { keyword_id: "lethal-hits" },
+    { keyword_id: "sustained-hits", parameters: { value: 2 } },
+    { keyword_id: "anti", parameters: { required_target_keywords_any: ["MONSTER", "VEHICLE"], threshold: 4 } },
+  ])("preserves a catalog reference %j", (keyword) => {
+    const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [keyword] } }, unitRule, ctx);
+    expect(result.applied[0].contribution).toEqual({ type: "extra-keyword", keywordRef: keyword });
+  });
+  it("diagnoses structured removals instead of dropping them", () => {
+    const removes = [{ keyword_id: "heavy" }];
+    const result = effectToBuffs({ type: "weapon-ability-grant", target: "this-unit", modifier: { removes } }, unitRule, ctx);
+    expect(result.applied).toEqual([]);
+    expect(result.unsupported).toEqual([{ reason: 'weapon-ability-removal: the cruncher does not model removing a weapon ability ("Heavy")', effectFragment: { removes } }]);
   });
 });
 
@@ -1510,7 +1544,7 @@ describe("incoming changes (attacks made against the target)", () => {
 
   it("reports an incoming change it cannot model instead of applying it", () => {
     const result = effectToBuffs(
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], incoming: true } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }], incoming: true } },
       src,
       ctx,
       "target",

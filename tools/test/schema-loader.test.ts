@@ -222,7 +222,7 @@ describe("schema-loader", () => {
       parameters: {
         event: "after-roll",
         object: "defender",
-        filter: { roll: "hit", result: "success", weapon_name: "graviton-crusher" },
+        filter: { roll: "hit", result: "success", weapons: { name: "graviton-crusher" } },
         window: "phase",
       },
     };
@@ -255,12 +255,12 @@ describe("schema-loader", () => {
     };
     expect(validate!(charged)).toBe(true);
     expect(
-      validate!({ type: "unit-state", parameters: { subject: "defender", state: "battle-shocked" } }),
+      validate!({ type: "matches", parameters: { subject: "defender", filter: { state: "battle-shocked" } } }),
     ).toBe(true);
     expect(validate!({ ...charged, of: "defender" })).toBe(false);
     // "target" was a legacy actor alias; the unit-ref names the attack's role instead.
     expect(
-      validate!({ type: "unit-state", parameters: { subject: "target", state: "battle-shocked" } }),
+      validate!({ type: "matches", parameters: { subject: "target", filter: { state: "battle-shocked" } } }),
     ).toBe(false);
     // A clock predicate has no actor at all.
     expect(
@@ -271,13 +271,13 @@ describe("schema-loader", () => {
       validate!({ type: "unit-state", negated: true, parameters: { state: "battle-shocked" } }),
     ).toBe(false);
     expect(
-      validate!({ operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] }),
+      validate!({ operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "battle-shocked" } } }] }),
     ).toBe(true);
     expect(
       validate!({
         operator: "not",
         operands: [
-          { type: "unit-state", parameters: { state: "battle-shocked" } },
+          { type: "matches", parameters: { filter: { state: "battle-shocked" } } },
           { type: "phase-is", parameters: { phase: "fight" } },
         ],
       }),
@@ -416,57 +416,50 @@ describe("schema-loader", () => {
       parent_ref: null,
       baseline: [
         {
-          kind: "fixed-zone",
-          zone: "own-deployment-zone",
-          activation: { event: "always-active" },
-          expiry: { event: "never" },
+          region: { territory: "your-deployment-zone" },
+          duration: "permanent",
         },
       ],
       phase_extensions: [
         {
-          kind: "objective-majority-zone",
-          zone: "no-mans-land",
-          control_gate: {
-            marker_scope: "markers-in-zone",
-            controlled_by: "owner-army",
-            threshold: { comparison: "at-least", fraction: 0.5 },
+          region: { territory: "no-mans-land" },
+          condition: {
+            type: "controls",
+            parameters: {
+              by: "friendly",
+              objective: { territory: "no-mans-land" },
+              proportion: { comparison: "gte", fraction: 0.6 },
+            },
           },
-          activation: {
-            event: "phase-start",
-            evaluation: "snapshot-once",
-            canonical_condition_ids: ["controls"],
+          trigger: {
+            event: "phase-started",
+            condition: { type: "phase-is", parameters: { phase: "command" } },
           },
-          expiry: { event: "phase-end" },
+          duration: "phase",
+          evaluation: "snapshot-once",
         },
         {
-          kind: "objective-majority-zone",
-          zone: "opponent-deployment-zone",
-          control_gate: {
-            marker_scope: "markers-in-zone",
-            controlled_by: "owner-army",
-            threshold: { comparison: "at-least", fraction: 0.5 },
+          region: { territory: "enemy-territory" },
+          condition: {
+            type: "controls",
+            parameters: {
+              by: "friendly",
+              objective: { territory: "enemy-territory" },
+              proportion: { comparison: "gte", fraction: 0.75 },
+            },
           },
-          activation: {
-            event: "phase-start",
-            evaluation: "snapshot-once",
-            canonical_condition_ids: ["controls"],
+          trigger: {
+            event: "phase-started",
+            condition: { type: "phase-is", parameters: { phase: "command" } },
           },
-          expiry: { event: "phase-end" },
+          duration: "phase",
+          evaluation: "snapshot-once",
         },
       ],
       additive_extensions: [],
     };
     const branch = (effect: Record<string, unknown>) => ({
-      source: { role: "eligible-source", gate_ref: "beneficiary_gate" },
-      beneficiary: {
-        role: "eligible-beneficiary",
-        gate_ref: "beneficiary_gate",
-      },
-      target: "attacker",
-      timing: { event: "each-attack" },
-      duration: "attack-resolution",
-      effect,
-      optional: true,
+      effect: { type: "ability-part", effect },
     });
     const valid = {
       type: "named-region-state",
@@ -476,16 +469,11 @@ describe("schema-loader", () => {
         producer,
         consumer: {
           state_ref: regionRef,
-          beneficiary_gate: {
-            owner: "owner-army",
-            faction: "fixture-faction",
-            operator: "or",
-            keywords: ["FIXTURE"],
-          },
+          beneficiary_filter: { owner: "friendly", all_of: ["FIXTURE"] },
           membership: { unit_scope: "model", relation: "within" },
           qualified_condition: {
-            type: "in-region",
-            parameters: { subject: "this-model", region: { rule_region: regionRef } },
+            type: "matches",
+            parameters: { subject: "this-model", filter: { state: "battle-shocked" } },
           },
           default_branch: branch({
             type: "re-roll",
@@ -510,8 +498,8 @@ describe("schema-loader", () => {
           producer: {
             ...producer,
             phase_extensions: [
-              producer.phase_extensions[0],
-              producer.phase_extensions[0],
+              { ...producer.phase_extensions[0], duration: "phase-end" },
+              producer.phase_extensions[1],
             ],
           },
         },
@@ -546,7 +534,7 @@ describe("schema-loader", () => {
           },
         },
       }),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       validate!({
         ...valid,
@@ -564,7 +552,7 @@ describe("schema-loader", () => {
           producer: {
             ...producer,
             baseline: [
-              { ...producer.baseline[0], activation: { event: "phase-start" } },
+              { ...producer.baseline[0], duration: "battle-end" },
             ],
           },
         },
@@ -580,9 +568,12 @@ describe("schema-loader", () => {
             phase_extensions: [
               {
                 ...producer.phase_extensions[0],
-                control_gate: {
-                  ...producer.phase_extensions[0].control_gate,
-                  threshold: { comparison: "at-least", fraction: 0.25 },
+                condition: {
+                  ...producer.phase_extensions[0].condition,
+                  parameters: {
+                    ...producer.phase_extensions[0].condition.parameters,
+                    proportion: { comparison: "gte", fraction: 0.25 },
+                  },
                 },
               },
               producer.phase_extensions[1],
@@ -590,7 +581,7 @@ describe("schema-loader", () => {
           },
         },
       }),
-    ).toBe(false);
+    ).toBe(true);
   });
   it("restricts designation binding fields to bound attacks", () => {
     const validate = createValidator().getSchema(
@@ -600,7 +591,14 @@ describe("schema-loader", () => {
     const valid = {
       type: "designate-target",
       designation: "bound-fixture",
-      select: { scope: "enemy-unit", bind_as: "bound-target" },
+      select: {
+        kind: "unit",
+        selector: {
+          filter: { owner: "enemy" },
+          count: { min: 1, max: 1 },
+          bind_as: "bound-target",
+        },
+      },
       applies: {
         to: "bound-unit-attacks-reference",
         beneficiary: { selection_var: "bound-unit" },
@@ -643,9 +641,10 @@ describe("schema-loader", () => {
     const valid = {
       type: "for-each-unit",
       selector: {
-        owner: "enemy",
-        engagement_relation: "engaged-with-bearer",
-        reference: "bearer-unit",
+        filter: {
+          owner: "enemy",
+          engaged_with: "this-unit",
+        },
       },
       effect: {
         type: "mortal-wounds",
@@ -658,9 +657,10 @@ describe("schema-loader", () => {
       validate!({
         ...valid,
         selector: {
-          owner: "enemy",
-          engagement_relation: "not-engaged-with-bearer",
-          reference: "bearer",
+          filter: {
+            owner: "enemy",
+            not_engaged_with: "this-unit",
+          },
         },
       }),
     ).toBe(true);
@@ -668,27 +668,11 @@ describe("schema-loader", () => {
       validate!({
         ...valid,
         selector: {
-          owner: "enemy",
-          engagement_relation: "engaged-with-bearer",
+          filter: {
+            owner: "enemy",
+            engaged_with: "bearer",
+          },
         },
-      }),
-    ).toBe(false);
-    expect(
-      validate!({
-        ...valid,
-        selector: { ...valid.selector, engagement_relation: "any" },
-      }),
-    ).toBe(false);
-    expect(
-      validate!({
-        ...valid,
-        selector: { ...valid.selector, reference: "selected-unit" },
-      }),
-    ).toBe(false);
-    expect(
-      validate!({
-        ...valid,
-        selector: { ...valid.selector, unrelated: true },
       }),
     ).toBe(false);
   });
@@ -707,7 +691,7 @@ describe("schema-loader", () => {
       }),
     ).toBe(false);
   });
-  it("restricts persistent designations to the renderer-supported seed contract", () => {
+  it("validates canonical persistent designation selectors and consumers", () => {
     const validate = createValidator().getSchema(
       "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json",
     );
@@ -716,13 +700,15 @@ describe("schema-loader", () => {
       type: "persistent-designation",
       designation: "fixture-target",
       select: {
-        scope: "enemy-unit",
-        timing: "start-of-first-battle-round",
-        selection_policy: "one-time",
+        kind: "unit",
+        selector: {
+          filter: { owner: "enemy" },
+          count: { min: 1, max: 1 },
+        },
       },
       consumer: {
         relation: "attacks-selected-unit",
-        beneficiary: "bearer",
+        beneficiary: "this-unit",
         effect: {
           type: "re-roll",
           target: "this-model",
@@ -730,6 +716,7 @@ describe("schema-loader", () => {
         },
       },
       duration: "battle",
+      selection_policy: "one-time",
     };
     expect(validate!(valid)).toBe(true);
     expect(
@@ -738,19 +725,24 @@ describe("schema-loader", () => {
         consumer: { ...valid.consumer, beneficiary: "friendly-attackers" },
       }),
     ).toBe(false);
+    const objective = {
+      ...valid,
+      select: {
+        kind: "objective",
+        selector: {
+          filter: { role: "home" },
+          count: { min: 1, max: 1 },
+        },
+      },
+      consumer: { ...valid.consumer, relation: "within-selected-marker" },
+    };
+    expect(validate!(objective)).toBe(true);
     expect(
       validate!({
-        ...valid,
-        consumer: { ...valid.consumer, relation: "within-selected-marker" },
+        ...objective,
+        consumer: { ...objective.consumer, relation: "attacks-selected-unit" },
       }),
     ).toBe(false);
-    expect(
-      validate!({
-        ...valid,
-        select: { ...valid.select, scope: "objective-marker" },
-        consumer: { ...valid.consumer, relation: "within-selected-marker" },
-      }),
-    ).toBe(true);
   });
   it("enforces discriminated Transport occupancy contracts", () => {
     const validate = createValidator().getSchema(

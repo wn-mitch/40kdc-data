@@ -210,7 +210,7 @@ export type ReviewAbilityBody = {
   cues?: Record<string, unknown>;
 };
 
-export type AnnotationDecisionAction = "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "confirm-connective";
+export type AnnotationDecisionAction = "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "confirm-connective";
 
 /** A single source-bound decision, including every byte-level identity guard. */
 export type AnnotationDecision = {
@@ -225,6 +225,8 @@ export type AnnotationDecision = {
   merges_annotation_ids?: number[];
   ability_version_id: number;
   source_hash: string;
+  /** Historical authorization requires current=0 plus exact persisted source_hash; it never changes provenance/current state. */
+  historical?: boolean;
   fragment: string;
   start_byte: number;
   end_byte: number;
@@ -335,10 +337,10 @@ function requireAbility(db: DatabaseSync, abilityVersionId: number): AbilityRow 
   return ability;
 }
 
-function requireCurrentAbility(db: DatabaseSync, abilityVersionId: number, sourceHash: string): AbilityRow {
+function requireCurrentAbility(db: DatabaseSync, abilityVersionId: number, sourceHash: string, allowHistorical = false): AbilityRow {
   const ability = requireAbility(db, abilityVersionId);
-  if (ability.current !== 1 || ability.source_hash !== sourceHash) {
-    conflict("This ability source version is stale. Reload before applying review decisions.");
+  if ((allowHistorical ? ability.current !== 0 : ability.current !== 1) || ability.source_hash !== sourceHash) {
+    conflict("This ability source version is stale or has an invalid historical authorization.");
   }
   return ability;
 }
@@ -346,7 +348,7 @@ function requireCurrentAbility(db: DatabaseSync, abilityVersionId: number, sourc
 function parseDecision(value: unknown, index: number): ParsedDecision {
   const input = asObject(value, `decisions[${index}]`);
   const action = asNonblankString(input.action, `decisions[${index}].action`);
-  if (!["confirm", "correct", "reject", "novel", "ambiguous", "confirm-connective"].includes(action)) {
+  if (!["confirm", "correct", "retire", "reject", "novel", "ambiguous", "confirm-connective"].includes(action)) {
     invalid(`decisions[${index}].action is not supported.`);
   }
   const role = asNonblankString(input.role, `decisions[${index}].role`);
@@ -359,8 +361,8 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
   if (supersedesAnnotationId !== undefined && supersedesAnnotationId < 1) {
     invalid(`decisions[${index}].supersedes_annotation_id must be positive.`);
   }
-  if (supersedesAnnotationId !== undefined && action !== "correct") {
-    invalid("supersedes_annotation_id is only valid for a correction.");
+  if (supersedesAnnotationId !== undefined && action !== "correct" && action !== "retire") {
+    invalid("supersedes_annotation_id is only valid for a correction or retirement.");
   }
   let mergesAnnotationIds: number[] | undefined;
   if (input.merges_annotation_ids !== undefined) {
@@ -377,6 +379,8 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
   if (input.allow_overlap !== undefined && typeof input.allow_overlap !== "boolean") {
     invalid(`decisions[${index}].allow_overlap must be boolean when supplied.`);
   }
+  const historical = input.historical === undefined ? false : input.historical;
+  if (typeof historical !== "boolean") invalid(`decisions[${index}].historical must be boolean when supplied.`);
   const relation = input.relation === undefined ? undefined : asNonblankString(input.relation, `decisions[${index}].relation`);
   if (relation !== undefined && action !== "confirm-connective") invalid("relation is only valid when confirming a connective.");
   if (relation !== undefined && !CONNECTIVE_RELATION_TYPES.includes(relation)) {
@@ -389,6 +393,7 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
     ...(mergesAnnotationIds ? { merges_annotation_ids: mergesAnnotationIds } : {}),
     ability_version_id: asInteger(input.ability_version_id, `decisions[${index}].ability_version_id`),
     source_hash: asNonblankString(input.source_hash, `decisions[${index}].source_hash`),
+    historical,
     fragment: asNonblankString(input.fragment, `decisions[${index}].fragment`),
     start_byte: asInteger(input.start_byte, `decisions[${index}].start_byte`),
     end_byte: asInteger(input.end_byte, `decisions[${index}].end_byte`),
@@ -999,7 +1004,7 @@ export function applyAnnotationBatch(
     `).run(batchId, batch.reviewer, createdAt);
     const touchedAbilities = new Set<number>();
     for (const decision of batch.decisions) {
-      requireCurrentAbility(db, decision.ability_version_id, decision.source_hash);
+      requireCurrentAbility(db, decision.ability_version_id, decision.source_hash, decision.historical === true);
       const spanId = sourceSpanForDecision(db, decision);
       const proposal = proposalForDecision(db, decision.proposal_id);
       touchedAbilities.add(decision.ability_version_id);
@@ -1050,6 +1055,18 @@ export function applyAnnotationBatch(
           });
           if (suggestion) addMember(db, batchId, "candidate-suggestion", suggestion.evidence_id);
         }
+        continue;
+      }
+      if (decision.action === "retire") {
+        if (proposal || decision.supersedes_annotation_id === undefined) {
+          invalid("Retirement requires an active annotation and no proposal.");
+        }
+        const retired = correctionTarget(db, decision);
+        if (!retired) invalid("Retirement requires an active annotation.");
+        const changed = db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'")
+          .run(retired.id);
+        if (changed.changes !== 1) conflict("The annotation selected for retirement changed before the batch was applied.");
+        addMember(db, batchId, "annotation-retired", retired.id);
         continue;
       }
 
@@ -1209,7 +1226,7 @@ export function undoBatch(
         conflict("This batch cannot restore its superseded annotation because it was later changed.");
       }
     }
-    const mergedMembers = members.filter((member) => member.entity_kind === "annotation-merged").map(numericMemberId);
+    const mergedMembers = members.filter((member) => member.entity_kind === "annotation-merged" || member.entity_kind === "annotation-retired").map(numericMemberId);
     for (const id of mergedMembers) {
       const previous = db.prepare("SELECT status FROM annotations WHERE id = ?").get(id) as { status: string } | undefined;
       if (!previous || previous.status !== "superseded") conflict("This batch cannot restore an annotation it merged because that annotation was later changed.");

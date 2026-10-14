@@ -36,14 +36,14 @@ function mechanicsOf(text: string, items: Item[]): Record<string, any> {
 describe("Round 5C unit-position weapon_range: a distance equal to the attacking weapon's range", () => {
   it("lowers half range to a within test of the attacker at half-weapon range", () => {
     const json = JSON.stringify(mechanicsOf(TEXT, [FRIENDLY, RANGED, gate("half"), ["have +1 to hit rolls.", "roll-modifier", HIT_PLUS_ONE]]));
-    expect(json).toContain('"subject":"defender","of":"attacker","range":"half-weapon"');
+    expect(json).toContain('"subject":"defender","filter":{"within":{"of":"attacker","range":"half-weapon"}}');
     expect(json).not.toContain('"inches"');
   });
 
   it("lowers full range to a within test at the weapon's range", () => {
     const text = "Friendly Echo units' ranged attacks aimed at a unit within range have +1 to hit rolls.";
     const json = JSON.stringify(mechanicsOf(text, [FRIENDLY, RANGED, ["aimed at a unit within range", "unit-position", { kind: "within", subject: "target", of: "attacker", negated: false, weapon_range: "full" }], ["have +1 to hit rolls.", "roll-modifier", HIT_PLUS_ONE]]));
-    expect(json).toContain('"subject":"defender","of":"attacker","range":"weapon"');
+    expect(json).toContain('"subject":"defender","filter":{"within":{"of":"attacker","range":"weapon"}}');
     expect(json).not.toContain("half-weapon");
   });
 
@@ -54,7 +54,7 @@ describe("Round 5C unit-position weapon_range: a distance equal to the attacking
   });
 
   it("describes half range as the attacking weapon's half range", () => {
-    const condition = { type: "within", parameters: { subject: "defender", of: "attacker", range: "half-weapon" } };
+    const condition = { type: "matches", parameters: { subject: "defender", filter: { within: { of: "attacker", range: "half-weapon" } } } };
     expect(describeCondition(condition as any)).toBe("the target is within half the attacking weapon's range");
   });
 

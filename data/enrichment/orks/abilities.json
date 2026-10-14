@@ -48,9 +48,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -145,10 +147,14 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
         }
       }
     },
@@ -180,28 +186,41 @@
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "RILED UP"
+              "filter": {
+                "designated": "RILED UP"
+              }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           }
         }
@@ -372,7 +391,9 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -382,7 +403,9 @@
               "stat": "S",
               "operation": "add",
               "value": 2,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -457,18 +480,22 @@
         "operator": "and",
         "operands": [
           {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "HIDDEN"
+              "filter": {
+                "designated": "HIDDEN"
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -538,7 +565,9 @@
         "modifier": {
           "roll": "hit",
           "subset": "ones",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -566,11 +595,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ORKS"
-          ]
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
         }
       },
       "effect": {
@@ -588,9 +619,11 @@
             },
             "modifier": {
               "roll": "hit",
-              "weapon_type": "melee",
               "operation": "add",
-              "value": 1
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -605,9 +638,11 @@
             },
             "modifier": {
               "roll": "wound",
-              "weapon_type": "melee",
               "operation": "add",
-              "value": 1
+              "value": 1,
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -739,14 +774,20 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "owner": "enemy",
-                  "visible": true
-                },
-                "range": {
-                  "inches": 12
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 12
+                    },
+                    "of": {
+                      "owner": "enemy",
+                      "visible": {
+                        "to": "this-unit"
+                      }
+                    }
+                  }
                 }
               }
             },
@@ -836,48 +877,75 @@
     "source_digest": "61428b8b09498cfaa579a6fac894b551c91bd6a3ff6211c576605e3f851a0fdf",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "pulsa-rokkit-target",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "when-selected-to-shoot",
-        "within_inches": 24,
-        "keywords": [
-          "MONSTER",
-          "VEHICLE"
-        ],
-        "keyword_match": "any"
-      },
-      "applies": {
-        "to": "bearer-attacks-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "AP",
-                "operation": "add",
-                "value": 1,
-                "weapon_type": "ranged"
-              }
-            },
-            {
-              "type": "weapon-ability-grant",
-              "target": "this-unit",
-              "modifier": {
-                "abilities": [
-                  "Lethal Hits"
-                ],
-                "weapon_type": "ranged"
-              }
-            }
-          ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "selected",
+        "subject": "this-unit",
+        "filter": {
+          "to": "shoot"
         }
       },
-      "duration": "phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "pulsa-rokkit-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "any_of": [
+                "MONSTER",
+                "VEHICLE"
+              ],
+              "within": {
+                "range": {
+                  "inches": 24
+                },
+                "of": "this-model"
+              }
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "bearer-attacks-target",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "AP",
+                  "operation": "add",
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
+                }
+              },
+              {
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
+                "modifier": {
+                  "weapons": {
+                    "type": "ranged"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "lethal-hits"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "duration": "phase"
+      }
     },
     "scope": {
       "duration": "phase"
@@ -935,7 +1003,9 @@
       "modifier": {
         "roll": "hit",
         "subset": "ones",
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -962,21 +1032,35 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "target_kind": "unit",
-        "count": 1,
-        "range_inches": 24,
-        "visibility_required": true,
+        "filter": {
+          "owner": "enemy",
+          "level": "unit",
+          "within": {
+            "range": {
+              "inches": 24
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "operator": "not",
           "operands": [
             {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "subject": "recipient",
-                "all_of": [
-                  "LONE OPERATIVE"
-                ]
+                "filter": {
+                  "all_of": [
+                    "LONE OPERATIVE"
+                  ]
+                },
+                "subject": "recipient"
               }
             }
           ]
@@ -1072,21 +1156,30 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "SPEED FREEKS"
-          ]
+          "filter": {
+            "all_of": [
+              "SPEED FREEKS"
+            ]
+          }
         }
       },
       "effect": {
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -1175,7 +1268,9 @@
       "target": "this-unit",
       "modifier": {
         "invuln_sv": 4,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -1326,13 +1421,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -1341,7 +1438,9 @@
         "modifier": {
           "roll": "wound",
           "result_scope": "any-result",
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -1384,7 +1483,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_name": "Scavenged Shivs"
+            "weapons": {
+              "name": "Scavenged Shivs"
+            }
           }
         },
         {
@@ -1392,10 +1493,12 @@
           "target": "this-model",
           "modifier": {
             "roll": "hit",
-            "weapon_name": "Scavenged Shivs",
-            "weapon_type": "melee",
             "operation": "add",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "melee",
+              "name": "Scavenged Shivs"
+            }
           }
         },
         {
@@ -1405,7 +1508,9 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_name": "Scavenged Shivs"
+            "weapons": {
+              "name": "Scavenged Shivs"
+            }
           }
         }
       ]
@@ -1483,11 +1588,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "BEAST SNAGGA"
-          ]
+          "filter": {
+            "all_of": [
+              "BEAST SNAGGA"
+            ]
+          }
         }
       },
       "effect": {
@@ -1540,9 +1647,11 @@
             }
           },
           {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "RILED UP"
+              "filter": {
+                "designated": "RILED UP"
+              }
             }
           }
         ]
@@ -1552,9 +1661,11 @@
         "target": "this-model",
         "modifier": {
           "roll": "hit",
-          "weapon_type": "melee",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -1604,7 +1715,9 @@
               "hit"
             ],
             "only": "worsening",
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       }
@@ -1635,13 +1748,17 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 36
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 36
+                  },
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
               }
             }
           },
@@ -1649,12 +1766,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "LONE OPERATIVE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "LONE OPERATIVE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1663,12 +1782,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1677,12 +1798,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -1716,11 +1839,15 @@
               "type": "weapon-ability-grant",
               "target": "defender",
               "modifier": {
-                "abilities": [
-                  "IgnoresCover"
-                ],
-                "weapon_type": "ranged",
-                "incoming": true
+                "incoming": true,
+                "weapons": {
+                  "type": "ranged"
+                },
+                "keywords": [
+                  {
+                    "keyword_id": "ignores-cover"
+                  }
+                ]
               }
             }
           ]
@@ -1774,12 +1901,14 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -1789,9 +1918,11 @@
         "target": "defender",
         "modifier": {
           "roll": "hit",
-          "weapon_type": "ranged",
           "operation": "add",
-          "value": 1
+          "value": 1,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1852,7 +1983,9 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -1862,7 +1995,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -2050,9 +2185,11 @@
               "target": "attacker",
               "modifier": {
                 "roll": "hit",
-                "weapon_type": "ranged",
                 "operation": "subtract",
-                "value": 1
+                "value": 1,
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           },
@@ -2112,9 +2249,11 @@
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "unit-state",
+                        "type": "matches",
                         "parameters": {
-                          "state": "battle-shocked"
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
                         }
                       }
                     ]
@@ -2168,30 +2307,36 @@
         "operator": "or",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "MEK"
-              ]
+              "filter": {
+                "all_of": [
+                  "MEK"
+                ]
+              }
             }
           },
           {
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ORKS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ORKS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "WALKER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "WALKER"
+                    ]
+                  }
                 }
               }
             ]
@@ -2200,19 +2345,23 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "GROTS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "GROTS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  }
                 }
               }
             ]
@@ -2227,8 +2376,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           },
@@ -2236,8 +2390,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           },
@@ -2299,49 +2455,80 @@
     "source_digest": "9505f77890a320546443de269c675a682eadc1fd17e53cf04186b389edfed427",
     "version": "2025-q3",
     "effect": {
-      "type": "select-units",
-      "selector": {
-        "owner": "enemy",
-        "target_kind": "unit",
-        "count": 1,
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "by": {
-                "event_var": "indiscriminate-attacks"
-              }
-            },
-            "window": "event"
-          }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
           {
-            "type": "designate",
-            "target": "this-unit",
-            "modifier": {
-              "subject": "selected-unit",
-              "tag": "suppressed",
-              "clears_on": "turn-rollover"
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
             }
           },
           {
-            "type": "roll-modifier",
-            "target": "selected-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "subtract",
-              "value": 1
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
             }
           }
         ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "suppressed"
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "designated": "suppressed"
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            }
+          ]
+        }
       }
     },
     "scope": {
@@ -2353,7 +2540,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      }
+    }
   },
   {
     "ability_id": "ammo-runts-orks",
@@ -2423,9 +2616,11 @@
                 "target": "this-unit",
                 "modifier": {
                   "roll": "hit",
-                  "weapon_type": "ranged",
                   "operation": "add",
-                  "value": 1
+                  "value": 1,
+                  "weapons": {
+                    "type": "ranged"
+                  }
                 }
               }
             ]
@@ -2491,48 +2686,54 @@
         "operator": "or",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BEAST SNAGGA"
-                ],
-                "none_of": [
-                  "MONSTER"
-                ]
-              },
-              "range": {
-                "inches": 3
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "BEAST SNAGGA"
+                    ],
+                    "none_of": [
+                      "MONSTER"
+                    ]
+                  }
+                }
               }
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BEAST SNAGGA"
-                ],
-                "none_of": [
-                  "CHARACTER"
-                ]
-              },
-              "range": {
-                "inches": 3
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "BEAST SNAGGA"
+                    ],
+                    "none_of": [
+                      "CHARACTER"
+                    ]
+                  }
+                }
               }
             }
           }
         ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lone Operative"
-          ]
+          "ability": "lone-operative"
         }
       }
     },
@@ -2569,9 +2770,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -2596,13 +2799,15 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "defender",
-                    "any_of": [
-                      "MONSTER",
-                      "VEHICLE"
-                    ]
+                    "filter": {
+                      "any_of": [
+                        "MONSTER",
+                        "VEHICLE"
+                      ]
+                    },
+                    "subject": "defender"
                   }
                 },
                 "effect": {
@@ -2690,13 +2895,15 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "any_of": [
-                    "MONSTER",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "MONSTER",
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -2710,8 +2917,10 @@
           "stat": "A",
           "operation": "add",
           "value": 6,
-          "weapon_name": "breakkanon",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged",
+            "name": "breakkanon"
+          }
         }
       }
     },
@@ -2742,48 +2951,54 @@
         "operator": "or",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BEAST SNAGGA"
-                ],
-                "none_of": [
-                  "MONSTER"
-                ]
-              },
-              "range": {
-                "inches": 3
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "BEAST SNAGGA"
+                    ],
+                    "none_of": [
+                      "MONSTER"
+                    ]
+                  }
+                }
               }
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "BEAST SNAGGA"
-                ],
-                "none_of": [
-                  "CHARACTER"
-                ]
-              },
-              "range": {
-                "inches": 3
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "BEAST SNAGGA"
+                    ],
+                    "none_of": [
+                      "CHARACTER"
+                    ]
+                  }
+                }
               }
             }
           }
         ]
       },
       "effect": {
-        "type": "weapon-ability-grant",
+        "type": "ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lone Operative"
-          ]
+          "ability": "lone-operative"
         }
       }
     },
@@ -2854,44 +3069,63 @@
     "source_digest": "1592dc1ed7ca8011c3ba6a9f14cc362343bc9af0a812b0cc0f3e897717a3877b",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "busted",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-unit-resolves-attacks",
-        "eligibility": {
-          "type": "happened",
-          "parameters": {
-            "event": "after-roll",
-            "object": "this-unit",
-            "filter": {
-              "roll": "hit",
-              "result": "success",
-              "by": {
-                "event_var": "bust-attacks"
-              }
-            },
-            "window": "event"
-          }
-        }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit"
       },
-      "applies": {
-        "to": "attackers-of-target",
-        "attacker_keywords": [
-          "SPEED FREEKS"
-        ],
-        "effect": {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "abilities": [
-              "Lethal Hits"
+      "effect": {
+        "type": "designate-target",
+        "designation": "busted",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "happened",
+              "parameters": {
+                "event": "after-roll",
+                "object": "this-unit",
+                "filter": {
+                  "roll": "hit",
+                  "result": "success",
+                  "by": {
+                    "event_var": "bust-attacks"
+                  }
+                },
+                "window": "event"
+              }
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
+            }
+          },
+          "attacker_filter": {
+            "level": "model",
+            "all_of": [
+              "SPEED FREEKS"
             ]
           }
-        }
-      },
-      "duration": "turn"
+        },
+        "duration": "turn"
+      }
     },
     "scope": {
       "duration": "turn"
@@ -3025,7 +3259,7 @@
     "ability_type": "unit",
     "behavior": "passive",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "GRETCHIN"
       ]
     },
@@ -3087,20 +3321,28 @@
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "enemy"
+              "filter": {
+                "owner": "enemy"
+              }
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy",
-                "visible": true
-              },
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "enemy",
+                    "visible": {
+                      "to": "this-unit"
+                    }
+                  }
+                }
               }
             }
           },
@@ -3108,12 +3350,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -3122,12 +3366,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -3170,10 +3416,17 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -3219,9 +3472,19 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
-          "range_inches": 12
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "stat-modifier",
@@ -3292,7 +3555,9 @@
         "stat": "A",
         "operation": "add",
         "value": 2,
-        "weapon_name": "Butcha Boyz"
+        "weapons": {
+          "name": "Butcha Boyz"
+        }
       },
       "scaling": {
         "per": 1,
@@ -3324,12 +3589,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "SPEED FREEKS"
-        ],
-        "range_inches": 6
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "SPEED FREEKS"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "sequence",
@@ -3537,7 +3812,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -3599,7 +3874,9 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -3609,7 +3886,9 @@
               "stat": "D",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -3705,19 +3984,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -3743,12 +4026,22 @@
           {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "max_count": 1,
-              "keywords": [
-                "ORKS"
-              ],
-              "range_inches": 6
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ORKS"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              }
             },
             "effect": {
               "type": "designate",
@@ -3756,7 +4049,7 @@
               "modifier": {
                 "subject": "selected-unit",
                 "tag": "RILED UP",
-                "clears_on": "turn-rollover"
+                "clears_on": "turn"
               }
             }
           }
@@ -3848,19 +4141,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "BEAST SNAGGA"
-              ]
+              "filter": {
+                "all_of": [
+                  "BEAST SNAGGA"
+                ]
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -3886,12 +4183,22 @@
           {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "max_count": 1,
-              "keywords": [
-                "BEAST SNAGGA"
-              ],
-              "range_inches": 6
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              }
             },
             "effect": {
               "type": "designate",
@@ -3899,7 +4206,7 @@
               "modifier": {
                 "subject": "selected-unit",
                 "tag": "RILED UP",
-                "clears_on": "turn-rollover"
+                "clears_on": "turn"
               }
             }
           }
@@ -3986,9 +4293,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "engagement_relation": "engaged-with-bearer"
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -3999,13 +4319,27 @@
           "roll": {
             "dice": 1,
             "threshold": 3,
-            "per_model": "this"
+            "for_each": {
+              "filter": {
+                "owner": "friendly",
+                "level": "model",
+                "member_of": "this-unit"
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "engaged_with": "selected-unit"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "warboss-in-mega-armour"
@@ -4038,11 +4372,20 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Assault",
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -4078,8 +4421,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -4108,7 +4456,9 @@
                     "roll": "hit",
                     "result": "success",
                     "attack_type": "ranged",
-                    "weapon_name": "Bubblechukka"
+                    "weapons": {
+                      "name": "Bubblechukka"
+                    }
                   },
                   "window": "phase"
                 }
@@ -4144,7 +4494,9 @@
                     "roll": "hit",
                     "result": "success",
                     "attack_type": "ranged",
-                    "weapon_name": "Kustom Mega-kannon"
+                    "weapons": {
+                      "name": "Kustom Mega-kannon"
+                    }
                   },
                   "window": "phase"
                 }
@@ -4170,7 +4522,9 @@
                     "roll": "hit",
                     "result": "success",
                     "attack_type": "ranged",
-                    "weapon_name": "Smasha Gun"
+                    "weapons": {
+                      "name": "Smasha Gun"
+                    }
                   },
                   "window": "phase"
                 }
@@ -4196,7 +4550,9 @@
                     "roll": "hit",
                     "result": "success",
                     "attack_type": "ranged",
-                    "weapon_name": "Traktor Kannon"
+                    "weapons": {
+                      "name": "Traktor Kannon"
+                    }
                   },
                   "window": "phase"
                 }
@@ -4270,13 +4626,15 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -4403,7 +4761,9 @@
         "modifier": {
           "roll": "hit",
           "subset": "ones",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -4498,10 +4858,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "designated",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "tag": "HIDDEN"
+          "filter": {
+            "designated": "HIDDEN"
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -4544,7 +4906,9 @@
           "modifier": {
             "roll": "hit",
             "result_scope": "any-result",
-            "weapon_name": "Kustom Krumpa"
+            "weapons": {
+              "name": "Kustom Krumpa"
+            }
           }
         },
         {
@@ -4553,7 +4917,9 @@
           "modifier": {
             "roll": "wound",
             "result_scope": "any-result",
-            "weapon_name": "Kustom Krumpa"
+            "weapons": {
+              "name": "Kustom Krumpa"
+            }
           }
         }
       ]
@@ -4585,9 +4951,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -4683,13 +5051,23 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "target_kind": "unit",
-              "count": 1,
-              "keywords": [
-                "BEAST SNAGGA"
-              ],
-              "range_inches": 6
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "BEAST SNAGGA"
+                ],
+                "level": "unit",
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
             },
             "effect": {
               "type": "sequence",
@@ -4745,28 +5123,36 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {
-              "role": "home"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {
+                  "role": "home"
+                }
+              }
             }
-          },
-          "range": "objective-control"
+          }
         }
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "within",
+          "type": "matches",
           "parameters": {
-            "subject": "this-model",
-            "of": {
-              "objective": {
-                "role": "home"
+            "filter": {
+              "within": {
+                "range": "objective-control",
+                "of": {
+                  "objective": {
+                    "role": "home"
+                  }
+                }
               }
             },
-            "range": "objective-control"
+            "subject": "this-model"
           }
         },
         "effect": {
@@ -4907,7 +5293,9 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -4917,17 +5305,23 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Hazardous"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "hazardous"
+                }
+              ]
             }
           }
         ]
@@ -4967,11 +5361,13 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "MOUNTED"
-              ]
+              "filter": {
+                "all_of": [
+                  "MOUNTED"
+                ]
+              }
             }
           }
         ]
@@ -4980,14 +5376,27 @@
         "type": "sequence",
         "steps": [
           {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "abilities": [
-                "MOBILE",
-                "MOUNTED"
-              ]
-            }
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "keyword-grant",
+                "target": "this-model",
+                "modifier": {
+                  "keywords": [
+                    "MOBILE"
+                  ]
+                }
+              },
+              {
+                "type": "keyword-grant",
+                "target": "this-model",
+                "modifier": {
+                  "keywords": [
+                    "MOUNTED"
+                  ]
+                }
+              }
+            ]
           },
           {
             "type": "stat-modifier",
@@ -5052,9 +5461,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -5100,7 +5511,7 @@
             "stat": "T",
             "reduce": "max"
           },
-          "comparison": "less-than",
+          "comparison": "lt",
           "right": {
             "value": 7
           }
@@ -5140,13 +5551,18 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "target_kind": "unit",
-        "count": 1,
-        "excluded_keywords": [
-          "MONSTER",
-          "VEHICLE"
-        ],
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "MONSTER",
+            "VEHICLE"
+          ],
+          "level": "unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "type": "happened",
           "parameters": {
@@ -5156,9 +5572,11 @@
               "roll": "hit",
               "result": "success",
               "attack_type": "ranged",
-              "weapon_name": "Squig Launchas",
               "by": {
                 "event_var": "squig-attacks"
+              },
+              "weapons": {
+                "name": "Squig Launchas"
               }
             },
             "window": "event"
@@ -5298,10 +5716,15 @@
       "steps": [
         {
           "type": "destroy-models",
-          "target": "this-unit",
+          "target": {
+            "member_of": "this-unit",
+            "level": "model",
+            "all_of": [
+              "GRETCHIN"
+            ]
+          },
           "modifier": {
-            "count": "D3",
-            "model_keyword": "GRETCHIN"
+            "count": "D3"
           }
         },
         {
@@ -5332,9 +5755,11 @@
         "operator": "and",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           },
           {
@@ -5393,10 +5818,14 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
         }
       }
     },
@@ -5521,9 +5950,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -5551,11 +5982,17 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Lethal Hits",
-                "Psychic"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                },
+                {
+                  "keyword_id": "psychic"
+                }
+              ]
             }
           }
         ]
@@ -5597,9 +6034,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "battle-shocked"
+                  "filter": {
+                    "state": "battle-shocked"
+                  }
                 }
               }
             ]
@@ -5629,17 +6068,23 @@
             "modifier": {
               "roll": "wound",
               "subset": "ones",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Psychic"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "psychic"
+                }
+              ]
             }
           }
         ]
@@ -5696,20 +6141,22 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "WARBIKERS"
-              ]
+              "filter": {
+                "all_of": [
+                  "WARBIKERS"
+                ]
+              }
             }
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "keyword-grant",
             "target": {
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
+              "keywords": [
                 "BATTLELINE"
               ]
             }
@@ -5749,17 +6196,21 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "owned-by",
+                  "type": "matches",
                   "parameters": {
-                    "owner": "friendly"
+                    "filter": {
+                      "owner": "friendly"
+                    }
                   }
                 },
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "all_of": [
-                      "SPEED FREEKS"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "SPEED FREEKS"
+                      ]
+                    }
                   }
                 }
               ]
@@ -5771,10 +6222,14 @@
                   "type": "weapon-ability-grant",
                   "target": "this-unit",
                   "modifier": {
-                    "abilities": [
-                      "Assault"
-                    ],
-                    "weapon_type": "ranged"
+                    "weapons": {
+                      "type": "ranged"
+                    },
+                    "keywords": [
+                      {
+                        "keyword_id": "assault"
+                      }
+                    ]
                   }
                 },
                 {
@@ -5868,9 +6323,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "designated",
+                  "type": "matches",
                   "parameters": {
-                    "tag": "RILED UP"
+                    "filter": {
+                      "designated": "RILED UP"
+                    }
                   }
                 }
               ]
@@ -5886,9 +6343,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "designated",
+              "type": "matches",
               "parameters": {
-                "tag": "RILED UP"
+                "filter": {
+                  "designated": "RILED UP"
+                }
               }
             },
             "effect": {
@@ -5965,9 +6424,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "RILED UP"
+              "filter": {
+                "designated": "RILED UP"
+              }
             }
           },
           "effect": {
@@ -6007,38 +6468,46 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "WARBOSS"
-              ]
+              "filter": {
+                "all_of": [
+                  "WARBOSS"
+                ]
+              }
             }
           },
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "embarked"
+              "filter": {
+                "state": "embarked"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "TRANSPORT"
-              ]
+              "filter": {
+                "all_of": [
+                  "TRANSPORT"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "WALKER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "WALKER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -6107,9 +6576,11 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "unit-state",
+                  "type": "matches",
                   "parameters": {
-                    "state": "battle-shocked"
+                    "filter": {
+                      "state": "battle-shocked"
+                    }
                   }
                 },
                 {
@@ -6120,25 +6591,31 @@
                   }
                 },
                 {
-                  "type": "owned-by",
+                  "type": "matches",
                   "parameters": {
-                    "owner": "friendly"
+                    "filter": {
+                      "owner": "friendly"
+                    }
                   }
                 },
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "all_of": [
-                      "ORKS"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "ORKS"
+                      ]
+                    }
                   }
                 },
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "all_of": [
-                      "INFANTRY"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "INFANTRY"
+                      ]
+                    }
                   }
                 }
               ]
@@ -6170,25 +6647,31 @@
                 }
               },
               {
-                "type": "owned-by",
+                "type": "matches",
                 "parameters": {
-                  "owner": "friendly"
+                  "filter": {
+                    "owner": "friendly"
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ORKS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ORKS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "INFANTRY"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  }
                 }
               }
             ]
@@ -6250,9 +6733,11 @@
       "target": "this-model",
       "modifier": {
         "roll": "damage",
-        "weapon_type": "melee",
         "operation": "add",
-        "value": 1
+        "value": 1,
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -6278,22 +6763,31 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ORKS"
-          ]
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
         }
       },
       "effect": {
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "rapid-fire-1"
-          ],
-          "weapon_type": "ranged",
-          "if_present": "increment"
+          "if_present": "increment",
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "rapid-fire",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -6363,11 +6857,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
@@ -6444,21 +6940,25 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "BEAST SNAGGA"
-              ]
+              "filter": {
+                "all_of": [
+                  "BEAST SNAGGA"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -6521,19 +7021,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           }
         ]
@@ -6547,18 +7051,24 @@
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
-                "Assault"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "assault"
+                }
+              ]
             }
           },
           {
             "type": "conditional",
             "condition": {
-              "type": "designated",
+              "type": "matches",
               "parameters": {
-                "tag": "RILED UP"
+                "filter": {
+                  "designated": "RILED UP"
+                }
               }
             },
             "effect": {
@@ -6570,7 +7080,9 @@
                 "stat": "Range",
                 "operation": "add",
                 "value": 3,
-                "weapon_type": "ranged"
+                "weapons": {
+                  "type": "ranged"
+                }
               }
             }
           }
@@ -6615,17 +7127,21 @@
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "RUKKATRUKK SQUIGBUGGIES"
-              ]
+              "filter": {
+                "all_of": [
+                  "RUKKATRUKK SQUIGBUGGIES"
+                ]
+              }
             }
           }
         ]
@@ -6636,37 +7152,47 @@
           "operator": "and",
           "operands": [
             {
-              "type": "owned-by",
+              "type": "matches",
               "parameters": {
-                "owner": "friendly"
-              }
-            },
-            {
-              "type": "within",
-              "parameters": {
-                "subject": "selected-unit",
-                "of": "stratagem-target",
-                "range": {
-                  "inches": 3
+                "filter": {
+                  "owner": "friendly"
                 }
               }
             },
             {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "subject": "defender",
-                "all_of": [
-                  "ORKS"
-                ]
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 3
+                    },
+                    "of": "stratagem-target"
+                  }
+                },
+                "subject": "selected-unit"
               }
             },
             {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "subject": "defender",
-                "all_of": [
-                  "INFANTRY"
-                ]
+                "filter": {
+                  "all_of": [
+                    "ORKS"
+                  ]
+                },
+                "subject": "defender"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "INFANTRY"
+                  ]
+                },
+                "subject": "defender"
               }
             }
           ]
@@ -6716,12 +7242,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "any_of": [
-            "MEGANOBZ",
-            "NOBZ"
-          ]
+          "filter": {
+            "any_of": [
+              "MEGANOBZ",
+              "NOBZ"
+            ]
+          }
         }
       },
       "effect": {
@@ -6730,10 +7258,17 @@
           "owner": "friendly"
         },
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -6763,25 +7298,31 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "TRANSPORT"
-              ]
+              "filter": {
+                "all_of": [
+                  "TRANSPORT"
+                ]
+              }
             }
           }
         ]
@@ -6793,7 +7334,9 @@
           "roll": "hit",
           "operation": "add",
           "value": 1,
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -6846,22 +7389,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
             "type": "controls"
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "BOYZ",
-                "KOMMANDOS",
-                "STORMBOYZ"
-              ]
+              "filter": {
+                "any_of": [
+                  "BOYZ",
+                  "KOMMANDOS",
+                  "STORMBOYZ"
+                ]
+              }
             }
           }
         ]
@@ -6963,9 +7510,14 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "target_kind": "unit",
-        "count": 1,
+        "filter": {
+          "owner": "enemy",
+          "level": "unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "type": "happened",
           "parameters": {
@@ -7003,7 +7555,7 @@
       "subject": "this-model"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "BIG MEK WITH SHOKK ATTACK GUN"
       ]
     },
@@ -7060,11 +7612,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "GRETCHIN"
-          ]
+          "filter": {
+            "all_of": [
+              "GRETCHIN"
+            ]
+          }
         }
       },
       "effect": {
@@ -7103,19 +7657,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           }
         ]
@@ -7130,7 +7688,9 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -7149,7 +7709,9 @@
                 "stat": "A",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           }
@@ -7180,10 +7742,10 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "weapon-ability-grant",
+          "type": "keyword-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
+            "keywords": [
               "CHARACTER"
             ]
           }
@@ -7253,19 +7815,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "AIRCRAFT"
-              ]
+              "filter": {
+                "all_of": [
+                  "AIRCRAFT"
+                ]
+              }
             }
           }
         ]
@@ -7285,9 +7851,19 @@
           {
             "type": "select-units",
             "selector": {
-              "owner": "enemy",
-              "count": 1,
-              "range_inches": 12
+              "filter": {
+                "owner": "enemy",
+                "within": {
+                  "range": {
+                    "inches": 12
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
             },
             "effect": {
               "type": "sequence",
@@ -7439,11 +8015,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ORKS"
-          ]
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
         }
       },
       "effect": {
@@ -7488,12 +8066,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "MOUNTED",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MOUNTED",
+                  "VEHICLE"
+                ]
+              }
             }
           }
         ]
@@ -7531,11 +8111,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ORKS"
-          ]
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
         }
       },
       "effect": {
@@ -7544,10 +8126,17 @@
           "owner": "friendly"
         },
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -7574,11 +8163,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "BEAST SNAGGA"
-          ]
+          "filter": {
+            "all_of": [
+              "BEAST SNAGGA"
+            ]
+          }
         }
       },
       "effect": {
@@ -7619,30 +8210,36 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "BREAKA BOYZ",
-                "FLASH GITZ",
-                "TANKBUSTAS"
-              ]
+              "filter": {
+                "any_of": [
+                  "BREAKA BOYZ",
+                  "FLASH GITZ",
+                  "TANKBUSTAS"
+                ]
+              }
             }
           }
         ]
@@ -7718,72 +8315,90 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "enemy"
+              "filter": {
+                "owner": "enemy"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "GRETCHIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "GRETCHIN"
+                ]
+              }
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "recipient"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "GRETCHIN"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "GRETCHIN"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": "defender",
-              "range": {
-                "inches": 3
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "defender"
+                }
               }
             }
           }
@@ -7808,9 +8423,11 @@
               }
             },
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "state": "on-battlefield"
+                "filter": {
+                  "state": "on-battlefield"
+                }
               }
             }
           ]
@@ -7886,17 +8503,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "enemy"
+              "filter": {
+                "owner": "enemy"
+              },
+              "subject": "recipient"
             }
           },
           {
@@ -7913,12 +8534,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "FLASH GITZ",
-                "TANKBUSTAS"
-              ]
+              "filter": {
+                "any_of": [
+                  "FLASH GITZ",
+                  "TANKBUSTAS"
+                ]
+              }
             }
           }
         ]
@@ -8000,11 +8623,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
@@ -8028,7 +8653,9 @@
           "stat": "AP",
           "operation": "add",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -8056,10 +8683,14 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
-        ],
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
+        ]
       }
     },
     "scope": {
@@ -8106,7 +8737,7 @@
                 "of": "attacker",
                 "stat": "S"
               },
-              "comparison": "greater-than",
+              "comparison": "gt",
               "right": {
                 "of": "defender",
                 "stat": "T"
@@ -8118,9 +8749,11 @@
             "target": "this-unit",
             "modifier": {
               "roll": "wound",
-              "weapon_type": "ranged",
               "operation": "subtract",
-              "value": 1
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -8129,9 +8762,11 @@
           "target": "this-unit",
           "modifier": {
             "roll": "wound",
-            "weapon_type": "ranged",
             "operation": "subtract",
-            "value": 1
+            "value": 1,
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       ]
@@ -8196,7 +8831,7 @@
     },
     "unit_ids": [],
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ORKS",
         "AIRCRAFT"
       ]
@@ -8233,26 +8868,32 @@
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "owner": "enemy"
+              "filter": {
+                "owner": "enemy"
+              },
+              "subject": "recipient"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "recipient",
-              "all_of": [
-                "GRETCHIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "GRETCHIN"
+                ]
+              },
+              "subject": "recipient"
             }
           }
         ]
@@ -8309,36 +8950,46 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "BEAST SNAGGA"
-              ]
+              "filter": {
+                "all_of": [
+                  "BEAST SNAGGA"
+                ]
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": "battlefield-edge",
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "battlefield-edge"
+                }
               }
             }
           }
@@ -8428,22 +9079,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "BIG MEK",
-                "WARBOSS"
-              ]
+              "filter": {
+                "any_of": [
+                  "BIG MEK",
+                  "WARBOSS"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -8454,12 +9109,17 @@
           {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "max_count": 3,
-              "keywords": [
-                "ORKS",
-                "INFANTRY"
-              ]
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ORKS",
+                  "INFANTRY"
+                ]
+              },
+              "count": {
+                "min": 0,
+                "max": 3
+              }
             },
             "effect": {
               "type": "choice",
@@ -8517,11 +9177,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ORKS"
-          ]
+          "filter": {
+            "all_of": [
+              "ORKS"
+            ]
+          }
         }
       },
       "effect": {
@@ -8562,35 +9224,43 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "AIRCRAFT",
-                "DEFFKOPTAS"
-              ]
+              "filter": {
+                "any_of": [
+                  "AIRCRAFT",
+                  "DEFFKOPTAS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "FLY"
-              ]
+              "filter": {
+                "all_of": [
+                  "FLY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -8601,7 +9271,9 @@
         "modifier": {
           "roll": "hit",
           "result_scope": "any-result",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -8671,19 +9343,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "BOYZ",
-                "KOMMANDOS",
-                "STORMBOYZ"
-              ]
+              "filter": {
+                "any_of": [
+                  "BOYZ",
+                  "KOMMANDOS",
+                  "STORMBOYZ"
+                ]
+              }
             }
           }
         ]
@@ -8759,22 +9435,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "GRETCHIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "GRETCHIN"
+                ]
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "EMBARKED"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "EMBARKED"
+                    ]
+                  }
                 }
               }
             ]
@@ -8819,17 +9499,21 @@
             "operator": "and",
             "operands": [
               {
-                "type": "owned-by",
+                "type": "matches",
                 "parameters": {
-                  "owner": "friendly"
+                  "filter": {
+                    "owner": "friendly"
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "BOYZ"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "BOYZ"
+                    ]
+                  }
                 }
               }
             ]
@@ -8838,10 +9522,17 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           }
         },
@@ -8851,25 +9542,31 @@
             "operator": "and",
             "operands": [
               {
-                "type": "owned-by",
+                "type": "matches",
                 "parameters": {
-                  "owner": "friendly"
+                  "filter": {
+                    "owner": "friendly"
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ORKS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ORKS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "INFANTRY"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "INFANTRY"
+                    ]
+                  }
                 }
               },
               {
@@ -8888,13 +9585,15 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "defender",
-                      "any_of": [
-                        "MONSTER",
-                        "VEHICLE"
-                      ]
+                      "filter": {
+                        "any_of": [
+                          "MONSTER",
+                          "VEHICLE"
+                        ]
+                      },
+                      "subject": "defender"
                     }
                   }
                 ]
@@ -8905,10 +9604,14 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           }
         }
@@ -8943,9 +9646,11 @@
             "operator": "and",
             "operands": [
               {
-                "type": "owned-by",
+                "type": "matches",
                 "parameters": {
-                  "owner": "friendly"
+                  "filter": {
+                    "owner": "friendly"
+                  }
                 }
               },
               {
@@ -8957,19 +9662,23 @@
             ]
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           }
         ]
@@ -8980,39 +9689,51 @@
           "operator": "and",
           "operands": [
             {
-              "type": "owned-by",
+              "type": "matches",
               "parameters": {
-                "subject": "recipient",
-                "owner": "friendly"
+                "filter": {
+                  "owner": "friendly"
+                },
+                "subject": "recipient"
               }
             },
             {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "subject": "recipient",
-                "all_of": [
-                  "ORKS"
-                ]
+                "filter": {
+                  "all_of": [
+                    "ORKS"
+                  ]
+                },
+                "subject": "recipient"
               }
             },
             {
               "operator": "and",
               "operands": [
                 {
-                  "type": "within",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "selected-unit",
-                    "of": "stratagem-target",
-                    "range": {
-                      "inches": 12
-                    }
+                    "filter": {
+                      "within": {
+                        "range": {
+                          "inches": 12
+                        },
+                        "of": "stratagem-target"
+                      }
+                    },
+                    "subject": "selected-unit"
                   }
                 },
                 {
-                  "type": "visible",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "selected-unit",
-                    "to": "stratagem-target"
+                    "filter": {
+                      "visible": {
+                        "to": "stratagem-target"
+                      }
+                    },
+                    "subject": "selected-unit"
                   }
                 }
               ]
@@ -9086,9 +9807,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "RILED UP"
+              "filter": {
+                "designated": "RILED UP"
+              }
             }
           },
           "effect": {
@@ -9131,9 +9854,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -9148,7 +9873,7 @@
       "per": "army"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WARBOSS"
       ]
     },
@@ -9170,36 +9895,44 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "VEHICLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "WALKER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "WALKER"
+                    ]
+                  }
                 }
               }
             ]
@@ -9222,11 +9955,18 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Cleave1"
-          ],
-          "weapon_type": "melee",
-          "if_present": "increment"
+          "if_present": "increment",
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "cleave",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -9274,10 +10014,17 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -9324,9 +10071,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "designated",
+              "type": "matches",
               "parameters": {
-                "tag": "RILED UP"
+                "filter": {
+                  "designated": "RILED UP"
+                }
               }
             },
             "effect": {
@@ -9351,9 +10100,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "designated",
+                  "type": "matches",
                   "parameters": {
-                    "tag": "RILED UP"
+                    "filter": {
+                      "designated": "RILED UP"
+                    }
                   }
                 }
               ]
@@ -9400,12 +10151,14 @@
     "effect": {
       "type": "for-each-unit",
       "selector": {
-        "owner": "friendly",
-        "keywords": [
-          "ORKS",
-          "PSYKER"
-        ],
-        "target_kind": "model"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ORKS",
+            "PSYKER"
+          ],
+          "level": "model"
+        }
       },
       "effect": {
         "type": "rules-bundle",
@@ -9417,7 +10170,11 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             }
           },
           {
@@ -9427,7 +10184,11 @@
               "stat": "S",
               "operation": "add",
               "value": 1,
-              "weapon_keyword": "Psychic"
+              "weapons": {
+                "keyword": {
+                  "keyword_id": "psychic"
+                }
+              }
             },
             "scaling": {
               "per": 5,
@@ -9461,9 +10222,11 @@
                     "operator": "not",
                     "operands": [
                       {
-                        "type": "unit-state",
+                        "type": "matches",
                         "parameters": {
-                          "state": "battle-shocked"
+                          "filter": {
+                            "state": "battle-shocked"
+                          }
                         }
                       }
                     ]
@@ -9490,9 +10253,19 @@
                   {
                     "type": "select-units",
                     "selector": {
-                      "owner": "enemy",
-                      "count": 1,
-                      "range_inches": 12,
+                      "filter": {
+                        "owner": "enemy",
+                        "within": {
+                          "range": {
+                            "inches": 12
+                          },
+                          "of": "this-model"
+                        }
+                      },
+                      "count": {
+                        "min": 1,
+                        "max": 1
+                      },
                       "eligibility": {
                         "operator": "and",
                         "operands": [
@@ -9500,12 +10273,14 @@
                             "operator": "not",
                             "operands": [
                               {
-                                "type": "has-keyword",
+                                "type": "matches",
                                 "parameters": {
-                                  "subject": "recipient",
-                                  "all_of": [
-                                    "MONSTER"
-                                  ]
+                                  "filter": {
+                                    "all_of": [
+                                      "MONSTER"
+                                    ]
+                                  },
+                                  "subject": "recipient"
                                 }
                               }
                             ]
@@ -9514,12 +10289,14 @@
                             "operator": "not",
                             "operands": [
                               {
-                                "type": "has-keyword",
+                                "type": "matches",
                                 "parameters": {
-                                  "subject": "recipient",
-                                  "all_of": [
-                                    "VEHICLE"
-                                  ]
+                                  "filter": {
+                                    "all_of": [
+                                      "VEHICLE"
+                                    ]
+                                  },
+                                  "subject": "recipient"
                                 }
                               }
                             ]
@@ -9566,9 +10343,11 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "battle-shocked"
+                      "filter": {
+                        "state": "battle-shocked"
+                      }
                     }
                   }
                 ]
@@ -9628,12 +10407,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "WARBOSS"
-          ]
+          "filter": {
+            "all_of": [
+              "WARBOSS"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -9671,31 +10452,39 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 8
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
               }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "GRETCHIN"
-              ]
+              "filter": {
+                "all_of": [
+                  "GRETCHIN"
+                ]
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -9816,32 +10605,40 @@
             "operator": "and",
             "operands": [
               {
-                "type": "owned-by",
+                "type": "matches",
                 "parameters": {
-                  "owner": "friendly"
+                  "filter": {
+                    "owner": "friendly"
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ORKS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ORKS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "any_of": [
-                    "AIRCRAFT",
-                    "DEFFKOPTAS"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "AIRCRAFT",
+                      "DEFFKOPTAS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "designated",
+                "type": "matches",
                 "parameters": {
-                  "tag": "RILED UP"
+                  "filter": {
+                    "designated": "RILED UP"
+                  }
                 }
               }
             ]
@@ -9851,9 +10648,11 @@
             "target": "this-model",
             "modifier": {
               "roll": "hit",
-              "weapon_type": "ranged",
               "operation": "add",
-              "value": 1
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -9885,22 +10684,26 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SPEED FREEKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "SPEED FREEKS"
+                ]
+              }
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "AIRCRAFT"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "AIRCRAFT"
+                    ]
+                  }
                 }
               }
             ]
@@ -10011,17 +10814,21 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "SPEED FREEKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "SPEED FREEKS"
+                ]
+              }
             }
           },
           {
@@ -10038,8 +10845,10 @@
         "modifier": {
           "roll": "hit",
           "succeeds_on": 4,
-          "weapon_type": "ranged",
-          "incoming": true
+          "incoming": true,
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -10096,33 +10905,39 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -10136,12 +10951,24 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Anti INFANTRY 4+",
-                "Devastating Wounds",
-                "Supa-Hazardous"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "anti",
+                  "parameters": {
+                    "target_keyword": "INFANTRY",
+                    "threshold": 4
+                  }
+                },
+                {
+                  "keyword_id": "devastating-wounds"
+                },
+                {
+                  "keyword_id": "supa-hazardous"
+                }
+              ]
             }
           },
           {
@@ -10186,10 +11013,17 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Rapid Fire 1"
-        ],
-        "weapon_name": "Snazzgun"
+        "weapons": {
+          "name": "Snazzgun"
+        },
+        "keywords": [
+          {
+            "keyword_id": "rapid-fire",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -10218,19 +11052,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "WARBOSS"
-              ]
+              "filter": {
+                "all_of": [
+                  "WARBOSS"
+                ]
+              }
             }
           }
         ]
@@ -10301,21 +11139,23 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "STORMBOYZ"
-              ]
+              "filter": {
+                "all_of": [
+                  "STORMBOYZ"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
-            "type": "weapon-ability-grant",
+            "type": "keyword-grant",
             "target": {
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
+              "keywords": [
                 "BATTLELINE"
               ]
             }
@@ -10335,14 +11175,16 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "subject": "defender",
-                "any_of": [
-                  "BOYZ",
-                  "KOMMANDOS",
-                  "STORMBOYZ"
-                ]
+                "filter": {
+                  "any_of": [
+                    "BOYZ",
+                    "KOMMANDOS",
+                    "STORMBOYZ"
+                  ]
+                },
+                "subject": "defender"
               }
             },
             "effect": {
@@ -10385,13 +11227,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "any_of": [
-            "BIG MEK",
-            "BIG BOSS",
-            "MEKBOSS"
-          ]
+          "filter": {
+            "any_of": [
+              "BIG MEK",
+              "BIG BOSS",
+              "MEKBOSS"
+            ]
+          }
         }
       },
       "effect": {
@@ -10402,7 +11246,11 @@
             {
               "type": "attack-is",
               "parameters": {
-                "weapon_keyword": "TORRENT"
+                "weapons": {
+                  "keyword": {
+                    "keyword_id": "torrent"
+                  }
+                }
               }
             }
           ]
@@ -10414,7 +11262,9 @@
             "stat": "Range",
             "operation": "add",
             "value": 3,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         }
       }
@@ -10445,11 +11295,13 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "VEHICLE"
-              ]
+              "filter": {
+                "all_of": [
+                  "VEHICLE"
+                ]
+              }
             }
           }
         ]
@@ -10497,11 +11349,15 @@
                 "type": "weapon-ability-grant",
                 "target": "this-model",
                 "modifier": {
-                  "abilities": [
-                    "Torrent"
-                  ],
-                  "weapon_type": "ranged",
-                  "weapon_name": "Shokk Attack Gun"
+                  "weapons": {
+                    "type": "ranged",
+                    "name": "Shokk Attack Gun"
+                  },
+                  "keywords": [
+                    {
+                      "keyword_id": "torrent"
+                    }
+                  ]
                 }
               },
               {
@@ -10534,8 +11390,10 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "ranged",
-              "weapon_name": "Shokk Attack Gun"
+              "weapons": {
+                "type": "ranged",
+                "name": "Shokk Attack Gun"
+              }
             }
           }
         },
@@ -10547,11 +11405,18 @@
             "type": "weapon-ability-grant",
             "target": "this-model",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 2"
-              ],
-              "weapon_type": "ranged",
-              "weapon_name": "Shokk Attack Gun"
+              "weapons": {
+                "type": "ranged",
+                "name": "Shokk Attack Gun"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 2
+                  }
+                }
+              ]
             }
           }
         }
@@ -10590,7 +11455,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "BIG MEK WITH SHOKK ATTACK GUN"
       ]
     },
@@ -10615,12 +11480,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -10629,12 +11496,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -10645,10 +11514,14 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
         }
       }
     },
@@ -10709,9 +11582,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "designated",
+                  "type": "matches",
                   "parameters": {
-                    "tag": "RILED UP"
+                    "filter": {
+                      "designated": "RILED UP"
+                    }
                   }
                 }
               ]
@@ -10727,9 +11602,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "designated",
+              "type": "matches",
               "parameters": {
-                "tag": "RILED UP"
+                "filter": {
+                  "designated": "RILED UP"
+                }
               }
             },
             "effect": {
@@ -10795,7 +11672,9 @@
           "stat": "A",
           "operation": "add",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -10843,10 +11722,20 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "owner": "enemy",
-              "target_kind": "unit",
-              "count": 1,
-              "range_inches": 3,
+              "filter": {
+                "owner": "enemy",
+                "level": "unit",
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": "this-model"
+                }
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
               "eligibility": {
                 "operator": "not",
                 "operands": [
@@ -10882,9 +11771,11 @@
             "target": "attacker",
             "modifier": {
               "roll": "hit",
-              "weapon_type": "ranged",
               "operation": "add",
-              "value": 1
+              "value": 1,
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -10961,14 +11852,16 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "BIG MEK",
-                "MEK GUNZ",
-                "MORKANAUT",
-                "WAZBOM BLASTAJET"
-              ]
+              "filter": {
+                "any_of": [
+                  "BIG MEK",
+                  "MEK GUNZ",
+                  "MORKANAUT",
+                  "WAZBOM BLASTAJET"
+                ]
+              }
             }
           },
           {
@@ -11009,32 +11902,54 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           },
           {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Hazardous",
-                "Lethal Hits",
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "hazardous"
+                },
+                {
+                  "keyword_id": "lethal-hits"
+                },
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
           }
         ]
@@ -11066,19 +11981,23 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
+              "filter": {
+                "all_of": [
+                  "ORKS"
+                ]
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "PSYKER"
-              ]
+              "filter": {
+                "all_of": [
+                  "PSYKER"
+                ]
+              }
             }
           }
         ]
@@ -11148,13 +12067,15 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -11163,10 +12084,12 @@
               {
                 "type": "conditional",
                 "condition": {
-                  "type": "unit-state",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "event-subject",
-                    "state": "battle-shocked"
+                    "filter": {
+                      "state": "battle-shocked"
+                    },
+                    "subject": "event-subject"
                   }
                 },
                 "effect": {
@@ -11186,10 +12109,12 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "unit-state",
+                      "type": "matches",
                       "parameters": {
-                        "subject": "event-subject",
-                        "state": "battle-shocked"
+                        "filter": {
+                          "state": "battle-shocked"
+                        },
+                        "subject": "event-subject"
                       }
                     }
                   ]
@@ -11260,7 +12185,7 @@
       }
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "BEAST SNAGGA"
       ]
     },
@@ -11279,19 +12204,26 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
+        "filter": {
+          "owner": "friendly"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
           "operator": "and",
           "operands": [
             {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "any_of": [
-                  "BOYZ",
-                  "KOMMANDOS",
-                  "STORMBOYZ"
-                ]
+                "filter": {
+                  "any_of": [
+                    "BOYZ",
+                    "KOMMANDOS",
+                    "STORMBOYZ"
+                  ]
+                }
               }
             },
             {
@@ -11305,9 +12237,11 @@
               "operator": "not",
               "operands": [
                 {
-                  "type": "unit-state",
+                  "type": "matches",
                   "parameters": {
-                    "state": "engaged"
+                    "filter": {
+                      "state": "engaged"
+                    }
                   }
                 }
               ]
@@ -11386,20 +12320,29 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "count": 1,
-          "keywords": [
-            "DEFFKOPTAS"
-          ],
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "DEFFKOPTAS"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": "event-subject",
-                  "range": {
-                    "inches": 8
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 8
+                      },
+                      "of": "event-subject"
+                    }
                   }
                 }
               },
@@ -11407,9 +12350,11 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "state": "engaged"
+                      "filter": {
+                        "state": "engaged"
+                      }
                     }
                   }
                 ]
@@ -11432,9 +12377,11 @@
             {
               "type": "conditional",
               "condition": {
-                "type": "designated",
+                "type": "matches",
                 "parameters": {
-                  "tag": "RILED UP"
+                  "filter": {
+                    "designated": "RILED UP"
+                  }
                 }
               },
               "effect": {
@@ -11482,11 +12429,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "NOBZ"
-              ]
+              "filter": {
+                "all_of": [
+                  "NOBZ"
+                ]
+              }
             }
           },
           {
@@ -11514,9 +12463,11 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "designated",
+              "type": "matches",
               "parameters": {
-                "tag": "RILED UP"
+                "filter": {
+                  "designated": "RILED UP"
+                }
               }
             },
             "effect": {
@@ -11570,42 +12521,54 @@
         "operator": "and",
         "operands": [
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              }
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "BREAKA BOYZ",
-                "FLASH GITZ",
-                "TANKBUSTAS"
-              ]
+              "filter": {
+                "any_of": [
+                  "BREAKA BOYZ",
+                  "FLASH GITZ",
+                  "TANKBUSTAS"
+                ]
+              }
             }
           },
           {
             "operator": "or",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "attacker",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "attacker"
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "of": {
-                    "objective": {}
+                  "filter": {
+                    "within": {
+                      "range": "objective-control",
+                      "of": {
+                        "objective": {}
+                      }
+                    }
                   },
-                  "range": "objective-control"
+                  "subject": "defender"
                 }
               }
             ]
@@ -11618,7 +12581,9 @@
         "modifier": {
           "roll": "hit",
           "subset": "ones",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -11672,10 +12637,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -11746,22 +12715,26 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "this-model",
-              "of": {
-                "owner": "friendly",
-                "all_of": [
-                  "ORKS",
-                  "WALKER"
-                ],
-                "none_of": [
-                  "BIG MEK"
-                ]
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 3
+                  },
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ORKS",
+                      "WALKER"
+                    ],
+                    "none_of": [
+                      "BIG MEK"
+                    ]
+                  }
+                }
               },
-              "range": {
-                "inches": 3
-              }
+              "subject": "this-model"
             }
           },
           "effect": {
@@ -11773,30 +12746,51 @@
           }
         },
         {
-          "type": "designate-target",
-          "designation": "dreadherder-target",
-          "select": {
-            "scope": "friendly-unit",
-            "count": 1,
-            "within_inches": 3,
-            "keywords": [
-              "ORKS",
-              "WALKER"
-            ],
-            "timing": "shooting-phase"
-          },
-          "applies": {
-            "to": "target",
-            "effect": {
-              "type": "re-roll",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "subset": "ones"
-              }
+          "type": "conditional",
+          "condition": {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
             }
           },
-          "duration": "turn"
+          "effect": {
+            "type": "designate-target",
+            "designation": "dreadherder-target",
+            "select": {
+              "kind": "unit",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ORKS",
+                    "WALKER"
+                  ],
+                  "within": {
+                    "range": {
+                      "inches": 3
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              }
+            },
+            "applies": {
+              "to": "target",
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            "duration": "turn"
+          }
         }
       ]
     },
@@ -11812,7 +12806,7 @@
       "per": "unit"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "BIG MEK"
       ]
     },
@@ -11832,20 +12826,24 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-unit",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ORKS",
-              "INFANTRY"
-            ],
-            "excluding": "this-unit"
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ORKS",
+                  "INFANTRY"
+                ],
+                "excluding": "this-unit"
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-unit"
         }
       },
       "effect": {
@@ -11887,11 +12885,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 5,
-          "keywords": [
-            "ORKS"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ORKS"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 5
+          }
         },
         "effect": {
           "type": "ability-grant",
@@ -11937,10 +12940,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
         }
       ]
@@ -11968,9 +12975,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "state": "engaged"
+          "filter": {
+            "state": "engaged"
+          }
         }
       },
       "effect": {
@@ -12069,20 +13078,31 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         }
       ]
@@ -12183,9 +13203,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "RILED UP"
+              "filter": {
+                "designated": "RILED UP"
+              }
             }
           },
           "effect": {
@@ -12228,11 +13250,15 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": "event-subject",
-              "range": {
-                "inches": 8
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "event-subject"
+                }
               }
             }
           },
@@ -12240,9 +13266,11 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]

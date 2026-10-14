@@ -6,7 +6,7 @@
 
 # Interface: RuleActiveCondition
 
-Defined in: [generated.ts:1821](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1821)
+Defined in: [generated.ts:1574](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1574)
 
 [army] This army or detachment rule is active now (a doctrine, Waaagh!, a pact).
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1821](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"rule-active"`
 
-Defined in: [generated.ts:1822](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1822)
+Defined in: [generated.ts:1575](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1575)
 
 ***
 
@@ -24,8 +24,8 @@ Defined in: [generated.ts:1822](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1823](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1823)
+Defined in: [generated.ts:1576](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1576)
 
 #### rule
 
-> **rule**: `string`
+> **rule**: `string` \| [`StanceOptionRef`](StanceOptionRef.md)

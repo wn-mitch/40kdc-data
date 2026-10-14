@@ -8,9 +8,9 @@
       {
         "starts": "shooting",
         "player_turn": "your-turn",
-        "units": {"type":"designated","parameters":{"tag":"infantry"}},
+        "units": {"type":"matches","parameters":{"filter":{"designated":"infantry"}}},
         "use_limit": 1,
-        "completes": {"type":"within","parameters":{"of":{"objective":{}},"range":"objective-control"}},
+        "completes": {"type":"matches","parameters":{"filter":{"within":{"of":{"objective":{}},"range":"objective-control"}}}},
         "effect": {"type":"designate","target":"this-unit","modifier":{"subject":{"terrain_area":{}},"tag":"cleansed"}}
       }
     ],
@@ -75,7 +75,7 @@
       },
       {
         "trigger": { "timing": "end-of-phase", "phase": "command", "battle_round": { "min": 2 } },
-        "when": {"type":"controls","parameters":{"compare":"more-than-opponent"}},
+        "when": {"type":"controls","parameters":{"compare":{"owner":"enemy","comparison":"gt"}}},
         "vp": 6
       },
       {
@@ -88,7 +88,7 @@
       },
       {
         "trigger": { "timing": "end-of-battle" },
-        "when": {"type":"happened-compare","parameters":{"left":{"event":"destroyed","object":{"owner":"enemy"},"window":"turn"},"comparison":"greater-than","right":{"event":"destroyed","object":{"owner":"friendly"},"window":"previous-turn"}}},
+        "when": {"type":"happened-compare","parameters":{"left":{"event":"destroyed","object":{"owner":"enemy"},"window":"turn"},"comparison":"gt","right":{"event":"destroyed","object":{"owner":"friendly"},"window":"previous-turn"}}},
         "vp": 4
       }
     ],

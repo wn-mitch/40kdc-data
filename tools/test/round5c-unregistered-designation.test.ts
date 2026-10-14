@@ -35,9 +35,9 @@ function compiled(list: CompileLeaf[], text: string): string {
 // Designation ids that the registry holds but the describer printed as "marked as <id>" before wave 10.
 describe("describer: designation terms for the wave-10 ids", () => {
   it("prints a designation check as its printed term, not as an internal tag", () => {
-    expect(describeCondition({ type: "designated", parameters: { tag: "shaken" } } as never)).toBe("the unit is shaken");
-    expect(describeCondition({ type: "designated", parameters: { subject: "defender", tag: "overlapping-fire" } } as never))
-      .toBe("the target unit is caught in overlapping fire");
+    expect(describeCondition({ type: "matches", parameters: { filter: { designated: "shaken" } } } as never)).toBe("the unit is shaken");
+    expect(describeCondition({ type: "matches", parameters: { subject: "defender", filter: { designated: "overlapping-fire" } } } as never))
+      .toContain("is caught in overlapping fire");
   });
 
   it("prints a designation as its printed term on the effect", () => {
@@ -64,7 +64,7 @@ describe("a designation check on a named Stratagem target", () => {
 
   it("binds the check to the second target, the unit the effects change", () => {
     const out = compiled(leaves(), text);
-    expect(out).toContain('"condition":{"type":"designated","parameters":{"subject":{"stratagem_target":"second"},"tag":"shaken"}}');
+    expect(out).toContain('"condition":{"type":"matches","parameters":{"subject":{"stratagem_target":"second"},"filter":{"designated":"shaken"}}}');
     expect(out).toContain('"stat":"M","operation":"subtract","value":2');
     expect(out.match(/"target":\{"stratagem_target":"second"\}/gu)?.length).toBe(3);
   });
@@ -94,7 +94,7 @@ describe("a printed grant whose body carries a designation check", () => {
       ["Iron Vigil", "granted-ability-name", { label: "Iron Vigil" }],
       ...body), text);
     expect(out).toContain('"ability":"iron-vigil"');
-    expect(out).toContain('"condition":{"type":"designated","parameters":{"tag":"nulled"}}');
+    expect(out).toContain('"condition":{"type":"matches","parameters":{"filter":{"designated":"nulled"}}}');
   });
 
   it("refuses the printed grant when no granted-ability-name follows it", () => {
@@ -115,7 +115,7 @@ describe("an attack on a designated defender", () => {
 
   it("gates the hit roll on the defender's designation and a ranged attack", () => {
     const out = compiled(placed(text, phase, check, attack, hit), text);
-    expect(out).toContain('"condition":{"operator":"and","operands":[{"operator":"and","operands":[{"type":"phase-is","parameters":{"phase":"shooting"}},{"type":"player-turn-is","parameters":{"turn":"your-turn"}}]},{"type":"designated","parameters":{"subject":"defender","tag":"overlapping-fire"}},{"type":"attack-is","parameters":{"attack_type":"ranged"}}]}');
+    expect(out).toContain('"condition":{"operator":"and","operands":[{"operator":"and","operands":[{"type":"phase-is","parameters":{"phase":"shooting"}},{"type":"player-turn-is","parameters":{"turn":"your-turn"}}]},{"type":"matches","parameters":{"subject":"defender","filter":{"designated":"overlapping-fire"}}},{"type":"attack-is","parameters":{"attack_type":"ranged"}}]}');
   });
 
   it("refuses an attack on that unit when no designation or selection names it", () => {

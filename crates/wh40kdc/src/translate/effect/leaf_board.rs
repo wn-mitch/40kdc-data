@@ -21,7 +21,7 @@ fn wounds(n: &str, noun: &str) -> String {
     }
 }
 
-fn mortal_wounds(m: &P, subj: &str) -> String {
+fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
     let count = dice_case(m.get("count"));
     let suffered = if is_literal(m.get("count")) {
         format!("{count} {}", wounds(&count, "mortal wound"))
@@ -61,9 +61,10 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
     };
     if let Some(roll) = nn(m, "roll") {
         let roll = obj(Some(roll));
-        let each = match (sv(roll, "per_model"), nn(roll, "for_each")) {
-            (Some("target"), _) => " for each model in the target unit".to_string(),
-            (Some("this"), _) => " for each model in this unit".to_string(),
+        let each = match (nn(roll, "per_model"), nn(roll, "for_each")) {
+            (Some(subject), _) => {
+                format!(" for each model in {}", effect_subject(Some(subject), ctx))
+            }
             (_, Some(selector)) => {
                 format!(" for each {}", for_each_unit_subject(obj(Some(selector))))
             }
@@ -117,39 +118,53 @@ fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
     if target.and_then(Value::as_str) == Some("this-model") {
         return format!("{subj} is set up again{place} with {w} remaining{detach}");
     }
-    let kw = match nn(m, "model_keyword") {
-        Some(k) => format!("{} ", jv(k)),
-        None if is_true(m, "bodyguard_only") => "Bodyguard ".to_string(),
-        None => String::new(),
-    };
-    let kind = format!("destroyed {kw}model");
+    let target_filter = obj(target);
+    if sv(target_filter, "level") == Some("model") {
+        let mut affected_filter = target_filter.clone();
+        affected_filter.remove("member_of");
+        let affected_selector = serde_json::json!({"filter": affected_filter});
+        let model = super::select::selector_subject(obj(Some(&affected_selector)), false);
+        let destination = target_filter
+            .get("member_of")
+            .map(|member| effect_subject(Some(member), ctx))
+            .unwrap_or_else(|| subj.to_string());
+        let kind = format!("destroyed {model}");
+        let what = if sv(m, "count") == Some("all") {
+            format!("all {model}s")
+        } else {
+            amount_of(m.get("count"), &kind, &format!("{kind}s"))
+        };
+        return format!("return {what} to {destination}{place}, each with {w} remaining{detach}");
+    }
+    let kind = "destroyed model";
     let what = if sv(m, "count") == Some("all") {
         format!("all {kind}s")
     } else {
-        amount_of(m.get("count"), &kind, &format!("{kind}s"))
+        amount_of(m.get("count"), kind, &format!("{kind}s"))
     };
-    let excl = map_arr(m, "exclude_model_keyword", jv)
-        .map(|k| format!(" (excluding {} models)", and_list(&k)))
-        .unwrap_or_default();
-    format!("return {what}{excl} to {subj}{place}, each with {w} remaining{detach}")
+    format!("return {what} to {subj}{place}, each with {w} remaining{detach}")
 }
 
-fn destroy_models(m: &P, subj: &str) -> String {
-    let kind = match nn(m, "model_keyword") {
-        Some(k) => format!("{} model", jv(k)),
-        None => "model".to_string(),
-    };
-    let what = if sv(m, "count") == Some("all") {
-        format!("every {kind} in {subj}")
+fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
+    let model_target = target
+        .and_then(Value::as_object)
+        .is_some_and(|t| t.get("level").and_then(Value::as_str) == Some("model"));
+    let what = if model_target {
+        if sv(m, "count") == Some("all") {
+            subj.to_string()
+        } else {
+            let n = dice_case(m.get("count"));
+            format!("{} of the {}", n, subj.strip_prefix("all ").unwrap_or(subj))
+        }
+    } else if sv(m, "count") == Some("all") {
+        format!("every model in {subj}")
     } else {
         let n = dice_case(m.get("count"));
-        let noun = if n == "1" { kind } else { format!("{kind}s") };
-        format!("{n} {noun} in {subj}")
-    };
-    let leader = if is_true(m, "exclude_leader") {
-        " (excluding Leader models)"
-    } else {
-        ""
+        format!(
+            "{} {} in {subj}",
+            n,
+            if n == "1" { "model" } else { "models" }
+        )
     };
     let remove = is_true(m, "remove_from_play");
     let verb = if remove { "remove" } else { "destroy" };
@@ -159,7 +174,7 @@ fn destroy_models(m: &P, subj: &str) -> String {
     } else {
         ""
     };
-    format!("{verb} {what}{leader}{tail}{triggers}")
+    format!("{verb} {what}{tail}{triggers}")
 }
 
 fn empty_condition() -> Value {
@@ -176,8 +191,25 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         "a model in this unit".to_string()
     } else if subj == "this model" {
         "this model".to_string()
+    } else if target
+        .and_then(Value::as_object)
+        .is_some_and(|t| t.get("level").and_then(Value::as_str) == Some("model"))
+    {
+        format!(
+            "a {}",
+            subj.strip_prefix("all ")
+                .unwrap_or(subj)
+                .replace("models", "model")
+        )
     } else {
         format!("a model in {subj}")
+    };
+    let resolution = match sv(m, "resolution") {
+        Some("when-unit-fights") => format!("when its unit is selected to fight, it can {act}"),
+        Some("after-attacking-unit-finishes") => {
+            format!("after the attacking unit has finished making its attacks, it can {act}")
+        }
+        _ => format!("it can {act}"),
     };
     if let Some(gate) = nn(m, "gate") {
         let gate = obj(Some(gate));
@@ -227,27 +259,33 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
             format!("each time {model} is destroyed,{before}, ")
         };
         return format!(
-            "{lead}roll one {}{adds}. On {}, leave that model on the battlefield; it can {act}{removal}",
+            "{lead}roll one {}{adds}. On {}, leave that model on the battlefield; {resolution}{removal}",
             dice_case(gate.get("dice")),
             format_comparison(&comp, gate.get("threshold"))
         );
     }
+    let eligibility = m
+        .get("eligibility")
+        .filter(|e| crate::translate::condition::truthy(Some(e)))
+        .map(condition_lead_in_value)
+        .map(|s| format!("{s}, "))
+        .unwrap_or_default();
     match sv(m, "resolution") {
         Some("when-unit-fights") => format!(
-            "do not remove {subj} yet; when its unit is selected to fight, it can {act}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
+            "{eligibility}do not remove {subj} yet; when its unit is selected to fight, it can {act}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first"
         ),
         Some("after-attacking-unit-finishes") => format!(
-            "do not remove {subj} yet; after the attacking unit has finished making its attacks, it can {act}; then remove it"
+            "{eligibility}do not remove {subj} yet; after the attacking unit has finished making its attacks, it can {act}; then remove it"
         ),
         _ if ctx.destroyed_trigger => format!(
-            "{} can {act} before being removed from play",
+            "{eligibility}{} can {act} before being removed from play",
             if model == "this model" {
                 "this model"
             } else {
                 "that model"
             }
         ),
-        _ => format!("each time {model} is destroyed, it can {act} before being removed from play"),
+        _ => format!("{eligibility}each time {model} is destroyed, it can {act} before being removed from play"),
     }
 }
 
@@ -326,7 +364,7 @@ fn add_unit(m: &P, ctx: &Ctx) -> String {
 pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String {
     let target = e.get("target");
     match sv(e, "type") {
-        Some("mortal-wounds") => mortal_wounds(m, subj),
+        Some("mortal-wounds") => mortal_wounds(m, subj, ctx),
         Some("damage-reduction") => {
             let r = jstr(m.get("reduction"));
             let how = match r.as_str() {
@@ -361,9 +399,11 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             )
         }
         Some("invulnerable-save") => {
-            let vs = nn(m, "weapon_type")
-                .map(|t| format!(" against {} attacks", jv(t)))
-                .unwrap_or_default();
+            let vs = if has_weapon(m) {
+                format!(" against {} attacks", weapon_noun(m))
+            } else {
+                String::new()
+            };
             format!(
                 "{subj} {} a {}+ invulnerable save{vs}",
                 v(subj, "has"),
@@ -398,7 +438,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             )
         }
         Some("return-models") => return_models(target, m, subj, ctx),
-        Some("destroy-models") => destroy_models(m, subj),
+        Some("destroy-models") => destroy_models(target, m, subj),
         Some("act-on-death") => act_on_death(target, m, subj, ctx),
         Some("split-unit") => {
             let strength = nn(m, "starting_strength")

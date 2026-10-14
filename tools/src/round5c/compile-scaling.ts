@@ -30,11 +30,12 @@ function scaleLeaf(node: Node, scaling: Node): Node {
   const { per, of, within_inches: within, keyword, max_value: max, wargear } = scaling as Record<string, unknown>;
   const counted = COUNTED_FIELDS[type];
   if (counted !== undefined && per === 1 && max === undefined && String(modifier[counted]) === "1") {
-    modifier[counted] = { count_of: of, ...(keyword !== undefined ? { keyword } : {}), ...(within !== undefined ? { within_inches: within } : {}), ...(wargear !== undefined ? { wargear } : {}) };
+    modifier[counted] = { count_of: of, ...(keyword !== undefined ? { keyword } : {}), ...(within !== undefined ? { within: { inches: within } } : {}), ...(wargear !== undefined ? { wargear } : {}) };
     return { ...node, modifier };
   }
   if (modifier[field] === undefined) throw new CompileError(`The ${type} a count-scale multiplies has no ${field} to multiply.`);
-  return { ...node, scaling: { ...scaling, ...(field === "value" ? {} : { field }) } };
+  const { within_inches: _within, ...rest } = scaling;
+  return { ...node, scaling: { ...rest, ...(within === undefined ? {} : { within: { inches: within } }), ...(field === "value" ? {} : { field }) } };
 }
 
 /** The effect node with the count its leaf carries applied: a scaling, or one gated copy per counted item. */

@@ -8,6 +8,6 @@
 
 > **KeywordList9** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:742](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L742)
+Defined in: [generated.ts:950](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L950)
 
-The keyword does not apply when the target has any listed keyword.
+AND set: the target must carry every keyword listed here.

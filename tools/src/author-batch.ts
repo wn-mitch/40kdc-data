@@ -61,7 +61,7 @@ const CONDITION_GUIDE = (() => {
     return `    - ${v.properties.type.const}{${keys}}: ${String(v.description).replace(/^\[[a-z]+\] /, "")}`;
   });
   return `A condition is ONE of:\n` +
-    `  • predicate: {type, parameters:{...}} — ALL params go UNDER "parameters". \`subject\` names the unit tested: this-unit (default), this-model, model-in-this-unit, attacker, defender (the attack's target), event-subject, event-object, stratagem-target, selected-unit, recipient (the unit an aura or effect is applied to), or a filter {owner, all_of, any_of, none_of, designated, state, level, visible} meaning "a unit that…". A range is {inches:N} | engagement | aura | weapon | half-weapon | detection | objective-control | {aura_of:<ability_id>}. Keywords are uppercase as GW prints them; designations (RILED UP, SPOTTED) are \`designated\`, not keywords. Types:\n${lines.join("\n")}\n` +
+    `  • predicate: {type, parameters:{...}} — ALL params go UNDER "parameters". Ordinary ownership, keyword, ability, state, designation, range and visibility tests use {type:"matches", parameters:{subject:"this-unit"|"this-model"|..., filter:{owner?, all_of?, any_of?, none_of?, not_all_of?, ...}}}; retain parameterized history, snapshots, quantifiers and correlated participants in their dedicated typed forms. A range is a shared range-ref ({inches:N} | engagement | aura | weapon | half-weapon | detection | objective-control | {aura_of:<ability_id>}). Keywords are uppercase as rules print them; designations (RILED UP, SPOTTED) are \`designated\`, not keywords. Types:\n${lines.join("\n")}\n` +
     `  • compound: {operator:"and"|"or", operands:[condition, ...]} or {operator:"not", operands:[one condition]} — "not" is the ONLY negation (e.g. "while not Battle-shocked" → {operator:"not", operands:[{type:"unit-state",parameters:{state:"battle-shocked"}}]}; "unengaged" → not unit-state engaged).\n\n`;
 })();
 
@@ -79,8 +79,8 @@ const EFFECT_GUIDE = (() => {
     const keys = Object.keys(mod.properties ?? {}).map((k) => (required.has(k) ? k : `${k}?`)).join(", ");
     return `    - ${v.properties.type.const}{${keys}}: ${String(v.description).replace(/^\[[a-z]+\] /, "")}`;
   });
-  return `A single effect is {type, target, modifier, scaling?}. Each type's modifier is CLOSED: use only the keys listed (weapon_type/weapon_name/weapon_keyword narrow to a weapon). ` +
-    `target is a unit-ref: this-unit (default), this-model (the bearer), model-in-this-unit, attacker, defender (the attack's target), event-subject, event-object (e.g. the destroyed model), stratagem-target, selected-unit (inside select-units/for-each-unit), recipient (inside an aura), or a filter {owner, all_of, any_of, none_of, designated, state, level, visible, within:{range, of?}, excluding} meaning every unit that matches — an aura's range lives in within ({owner:"friendly", within:{range:{inches:6}}}). ` +
+  return `A single effect is {type, target, modifier, scaling?}. Each type's modifier is CLOSED: use only the keys listed; weapon restrictions use the shared \`weapons\` weapon-scope (type, name, keyword, ref, exclude_name, exclude_keyword), with catalog-backed structured weapon-keyword references. ` +
+    `target is a canonical unit-ref: this-unit (default), this-model, model-in-this-unit, attacker, defender (the attack's target), event-subject, event-object (e.g. the destroyed model), stratagem-target, selected-unit (inside select-units/for-each-unit), recipient (inside an aura), or a unit-filter {owner, all_of, any_of, none_of, designated, state, level, visible, within:{range, of?}, excluding, member_of, attachment_role} meaning every unit that matches — an aura's range lives in within ({owner:"friendly", within:{range:{inches:6}, of:"this-unit"}}). Actual attached membership uses level:"model", member_of, and attachment_role:"bodyguard"|"leader"; it is not inferred from CHARACTER or a Leader ability. ` +
     `ability-grant names ONLY a core ability (${(readJSON(resolve(SCHEMA_ROOT, "../data/core/unit-keywords.json")) as Json[]).map((k) => k.id).join(", ")}) or an existing ability record id. Types:\n${lines.join("\n")}\n`;
 })();
 const writeJSON = (p: string, v: Json): void => writeFileSync(p, JSON.stringify(v, null, 2) + "\n");
@@ -224,15 +224,15 @@ export const VERIFY_SCHEMA = {
 // as the flat-form path validates `buildEntry` output.
 
 export const REPAIR_SYSTEM =
-  `You repair Warhammer 40k ability DSL. You are given a rule and a DRAFT ability that an earlier pass produced. Emit the COMPLETE ability mechanics that fix the verifier's exact gap. The effect tree and scope are required. Return trigger, usage, and applies_to when the rule needs them; use null only to remove a stale draft field. Never copy rule text into any field.\n\n` +
+  `You repair a candidate Warhammer 40k ability DSL entry. You are given a rule and a DRAFT ability that an earlier pass produced. Propose the complete candidate mechanics that address the verifier's exact gap, but do not authorize or auto-apply them: source-backed semantic leaves require human review and canonical data is produced only by the deterministic compiler. The effect tree and scope are required. Return trigger, usage, and applies_to when the rule needs them; use null only to remove a stale draft field. Never copy rule text into any field.\n\n` +
   `An effect node is ONE of:\n` +
   `  • a single effect — ` + EFFECT_GUIDE +
   `  • conditional: {type:"conditional", condition, effect}\n` +
   `  • sequence: {type:"sequence", steps:[effect, ...]} — multiple effects that all apply\n` +
   `  • rules-bundle: {type:"rules-bundle", steps:[effect, ...]} — the complete reusable effect set of the containing named ability; grant it elsewhere with ability-grant.modifier {ability, rules_bundle:true}\n` +
   `  • choice: {type:"choice", options:[effect, ...], choice_label?} — pick exactly one\n` +
-  `  • select-units: {type:"select-units", selector:{owner:"friendly"|"enemy", target_kind?:"unit"|"model", count:1, keywords?:[...], range_inches?:number, visibility_required?:boolean, engagement_relation?:"any"|"engaged-with-bearer"|"not-engaged-with-bearer", eligibility?:condition}, effect} — use this wrapper whenever the rule selects exactly one eligible unit or model; target_kind defaults to "unit"; nested effects name the selection as target:"selected-unit" (the selected model when target_kind is "model"); count:1 enforces the one-target binding\n` +
-  `  • for-each-unit: {type:"for-each-unit", selector:{owner:"friendly"|"enemy", keywords?:[...], within_inches?:number}, effect} — independently resolve the effect once for every matching unit; keywords are all required\n` +
+  `  • select-units: {type:"select-units", selector:{filter:<unit-filter>, count:{min?, max?}, limit?:{count, period}, bind_as?, eligibility?:condition}, effect} — use this wrapper whenever the rule selects eligible units or models; count bounds are inclusive and at least one bound is required. Use filter.level:"model" for model selection, and bind the selection as target:"selected-unit" in nested effects.\n` +
+  `  • for-each-unit: {type:"for-each-unit", selector:{filter:<unit-filter>, limit?, bind_as?, eligibility?}, effect} — independently resolve the effect once for every matching unit or model; omit count because this operation means all matches.\n` +
   `  • dice-gated: {type:"dice-gated", dice:"D6"|..., threshold:int, comparison?:"gte"|"lte"|"gt"|"lt"|"eq", on_success:effect, on_fail?:effect}\n` +
   `  • dice-table: {type:"dice-table", dice:"D3"|"D6", outcomes:[{results:[1,...], effect}, ...]} — one closed die whose outcome rows cover every face exactly once; use this instead of nested dice-gated effects when each face has a different result\n` +
   `  • dice-pool-allocation: {type:"dice-pool-allocation", pool:{count,die}, max_activations:int, options:[{name, requirement:{type:"pair"|"triple"|"single"|"run",min_value:1..6}, effect}, ...]} — ONLY for allocating an already-rolled dice pool by pair/triple/single/run requirements; never use it for an ordinary D6 outcome table\n\n` +
@@ -240,9 +240,9 @@ export const REPAIR_SYSTEM =
   `Encode every moment (when the rule fires) as a trigger, never as a condition: the moment the whole ability fires is the ability-level trigger (an array of triggers when any of several moments fires it), with its phase and whose turn in trigger.condition as phase-is + player-turn-is{turn:"your-turn"|"opponent-turn"}. A compound ability whose parts fire at different moments stays one ability: its effect is a sequence of {type:"ability-part", trigger, effect, usage?, optional?, name?} steps, one per moment, and it has no ability-level trigger. Encode frequency with usage (on the ability, or on the part it limits); do not invent timing condition strings for frequency.\n` +
   `scope = {duration}: duration ∈ [phase, turn, battle-round, battle, until-next-command-phase, until-next-movement-phase, until-next-battle-round, until-start-next-turn, one-use, permanent, attack-sequence, resolution]. Use until-start-next-turn exactly when the rule says "until the start of your next turn"; that is not equivalent to battle-round or until-next-command-phase. Who is affected lives in each effect's target, never in scope.\n` +
   TRIGGER_GUIDE +
-  `usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {required_keywords?:[...], excluded_keywords?:[...]} for static bearer/datasheet eligibility such as "WARBOSS model only".\n` +
+  `usage = {frequency:"once-per-turn"|"once-per-phase"|"once-per-battle-round"|"once-per-command-phase"|"once-per-opponent-turn"|"n-per-battle"|"first-this-battle"|"first-time-this-phase", count?:int, per?:"army"|"unit"|"model"}. There is no once-per-battle frequency: use n-per-battle with count:1. applies_to = {all_of?:[...], any_of?:[...], none_of?:[...], not_all_of?:[...]} is a static roster-highlighting predicate; absent/null matches no units and {} matches all units. It is not runtime effect targeting.\n` +
   `behavior ∈ [passive, activated, reactive, aura].\n\n` +
-  `SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"models-in-or-embarked-in-bearer"|"enemy-units-in-range"|"wounds-lost", within_inches?:int, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,weapon_type:"melee"},scaling:{per:5,of:"enemy-models-in-range",within_inches:6}}). Do NOT flatten the scaling away.\n\n` +
+  `SCALING ("X per N models/units"): add a sibling \`scaling\`:{per:int, of:"enemy-models-in-range"|"friendly-models-in-range"|"models-in-bearer-unit"|"models-in-or-embarked-in-bearer"|"enemy-units-in-range"|"wounds-lost", within?:<range-ref>, round?:"down"|"up"} to the leaf and set modifier.value to the PER-INCREMENT amount (e.g. "+2 A per 5 enemy models within 6\\"" → {type:"stat-modifier",...,modifier:{stat:"A",operation:"add",value:2,weapons:{type:"melee"}},scaling:{per:5,of:"enemy-models-in-range",within:{inches:6}}}). Do NOT flatten the scaling away.\n\n` +
   `dice-gated.comparison ∈ ["gte","lte","gt","lt","eq"] (use "gte" for "on a 2+"). dice e.g. "D6","2D6"; threshold int. on_success/on_fail are effect nodes.\n` +
   `ENCODING THE RESIDUE — these ARE expressible, do not punt on them:\n` +
   `  • "roll a D6, on 2+ <effect>" → dice-gated {dice:"D6", threshold:2, comparison:"gte", on_success:<effect>}.\n` +
@@ -253,13 +253,13 @@ export const REPAIR_SYSTEM =
   `  • "eligible to shoot/charge after Advancing/Falling Back", "can shoot even while engaged" → permission {activity, allow:true, after|despite}. "cannot be targeted unless …" → targeting.\n` +
   `  • "characteristic of N" → stat-modifier with operation:"set".\n\n` +
   `FIDELITY EXTENSIONS (all fields below are schema-backed; do not replace them with invented modifier keys):\n` +
-  `  for-each-unit.selector {owner:"friendly", target_kind:"model", member_of:"bearer-unit", keywords:[...]} filters EACH individual model in the bearer's current unit. Attached-unit keyword unions cannot qualify a Leader that lacks the model keyword.\n` +
-  `  select-units.selector.reference:"bearer"|"bearer-unit" defines the range/engagement origin. selector.selection_limit:{count,period:"turn"|"phase"|"battle-round"|"battle"} limits EACH selected target across ALL bearers in the army, separately from ability usage.\n` +
-  `  A real Leadership test is dice-gated {dice:"2D6",threshold:"leadership",comparison:"gte",test:{kind:"leadership",subject:"unit"|"self"},on_success}. This uses current Leadership and test modifiers/permissions, not a fixed 6 and not Battle-shock. Use {type:"no-effect"} for a no-result dice-table band.\n` +
+  `  for-each-unit.selector.filter {owner:"friendly", level:"model", member_of:"this-unit", ...} filters EACH individual model in the bearer's current unit. Actual attachment membership uses attachment_role:"bodyguard"|"leader"; attached-unit keyword unions cannot qualify a Leader that lacks the model keyword.\n` +
+  `  select-units.selector.filter may carry within:{range:<range-ref>, of:<place-ref>} for the explicit range/engagement origin. selector.limit:{count,period:"turn"|"phase"|"battle-round"|"battle"} limits EACH selected target across ALL bearers in the army, separately from ability usage.\n` +
+  `  A real Leadership test is dice-gated {dice:"2D6",threshold:"leadership",comparison:"gte",test:{kind:"leadership",subject:"this-unit"|"this-model"},on_success}. This uses current Leadership and test modifiers/permissions, not a fixed 6 and not Battle-shock. Use {type:"no-effect"} for a no-result dice-table band.\n` +
   `  A Stratagem's reduced cost for the use that triggered it is cost-modifier {of:"stratagem", operation:"decrease", amount:1, applies_to:"the-triggering-use"} (floor 0); it is neither a refund nor set-to-zero. "Use X for 0CP on this unit" is cost-modifier {of:"stratagem", id, operation:"set", amount:0, applies_to:"targeting-this-unit"}.\n` +
   `  designate-target.select.eligibility can require a hit in the bound triggering attack sequence. applies.attacker_keywords filters individual attacking MODEL keywords, only with to:"attackers-of-target".\n` +
   `  objective-sticky keeps a marker until the opponent's Level of Control exceeds yours at a phase end. re-roll result_scope:"any-result" is a full re-roll including successful results.\n` +
-  `  named-region-state.modifier.producer.additive_extensions can use kind:"unit-proximity",radius_inches,activation:{event:"continuous"},source_gate:{gate_ref,owner:"owner-army",unit_predicate:{faction,keywords}}. This is a continuously updated union of unit-centred areas, not an objective extension. consumer.attack_condition gates BOTH default and qualified effects, not region production. Qualified conditions may compose keyword OR whole-unit region membership. Reuse the current full named-region schema and Power Matrix/Flow of Magic patterns.\n` +
+  `  named-region-state.modifier.producer.additive_extensions use typed entries: {region:<region-ref>, condition?, trigger?, duration:<scope-duration>, evaluation:"snapshot-once"} or {kind:"unit-proximity",filter:<unit-filter>,range:<range-ref>}. Unit-proximity continuously follows matching source units; it is not an objective snapshot. consumer.attack_condition gates BOTH default and qualified effects, not region production. Qualified conditions may compose keyword OR whole-unit region membership. Reuse the current full named-region schema and Power Matrix/Flow of Magic patterns.\n` +
   `  scope.duration:"attack-sequence" expires after the currently selected unit finishes its attacks. "resolution" is this activation only, not once per battle. Do not put army-wide audience predicates in applies_to (reserved for static bearer eligibility).\n` +
   `Set unencodable:true when ANY material claim has no faithful current-schema representation, including in-battle mechanics. Such proposals are blocked from application; record the precise gap in reasoning, never in community_notes. Do not force the rule into a neighboring effect or invent a grant. Give confidence and one-sentence reasoning.`;
 
@@ -290,7 +290,7 @@ export function conditionNode(kind: string, param: string | null | undefined): J
   const move = (types: string[]) => ({ type: "happened", parameters: { event: "move-ended", filter: { move_types: types }, window: "turn" } });
   switch (kind) {
     case "phase": return { type: "phase-is", parameters: { phase: param } };
-    case "vs-keyword": return { type: "has-keyword", parameters: { subject: "defender", all_of: [param] } };
+    case "vs-keyword": return { type: "matches", parameters: { subject: "defender", filter: { all_of: [param] } } };
     case "charged": return move(["charge"]);
     case "stationary": return move(["remain-stationary"]);
     case "below-half": return { type: "strength", parameters: { below: "half" } };
@@ -305,7 +305,7 @@ export function conditionNode(kind: string, param: string | null | undefined): J
 export function assembleEffect(form: Json): { effect: Json; scope: Json } {
   const modifier = PARAMETERLESS.has(form.effect_type) ? {} : { ...(form.modifier ?? {}) };
   if (form.attack_type && form.attack_type !== "any" && ["stat-modifier", "roll-modifier", "re-roll", "roll-result", "weapon-ability-grant"].includes(form.effect_type)) {
-    modifier.weapon_type = form.attack_type;
+    modifier.weapons = { ...modifier.weapons, type: form.attack_type };
   }
   let effect: Json = { type: form.effect_type, target: form.target, modifier };
   const cond = conditionNode(form.condition_kind, form.condition_param);
@@ -380,7 +380,8 @@ export function lintCanonical(effect: Json): { canonical: boolean; issues: strin
       if (c.type === "player-turn-is" && !CANONICAL_PLAYER_TURNS.has(String(c.parameters?.turn))) {
         issues.push(`condition player-turn-is: unknown turn "${String(c.parameters?.turn)}"`);
       }
-      const keywords = c.type === "has-keyword" ? [...(c.parameters?.all_of ?? []), ...(c.parameters?.any_of ?? [])] : [];
+      const filter = c.type === "matches" ? c.parameters?.filter : c.type === "has-keyword" ? c.parameters : undefined;
+      const keywords = [...(filter?.all_of ?? []), ...(filter?.any_of ?? []), ...(filter?.none_of ?? []), ...(filter?.not_all_of ?? [])];
       for (const keyword of keywords) if (!canonicalKeyword(keyword)) {
         issues.push(`condition ${c.type}: "${String(keyword)}" is not a unit keyword as rules print it (uppercase, one keyword)`);
       }

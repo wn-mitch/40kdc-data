@@ -55,9 +55,9 @@ describe("Round 5C dice-family compiler", () => {
       [leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: "characteristics", stats: ["WS", "BS"] }),
         { type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics", stats: ["WS", "BS"] } }],
       [leaf("EFFECT", "ignore-modifiers", { subject: "this-model", what: "rolls", rolls: ["hit"], only: "worsening", weapon_type: "ranged" }),
-        { type: "ignore-modifiers", target: "this-model", modifier: { what: "rolls", rolls: ["hit"], only: "worsening", weapon_type: "ranged" } }],
+        { type: "ignore-modifiers", target: "this-model", modifier: { what: "rolls", rolls: ["hit"], only: "worsening", weapons: { type: "ranged" } } }],
       [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "succeeds-on", value: 4, weapon_type: "ranged" }),
-        { type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 4, weapon_type: "ranged" } }],
+        { type: "roll-result", target: "this-unit", modifier: { roll: "hit", succeeds_on: 4, weapons: { type: "ranged" } } }],
       [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6" }),
         { type: "roll-result", target: "this-unit", modifier: { roll: "hit", result: 6 } }],
       [leaf("EFFECT", "roll-auto-result", { roll: "battle-shock", outcome: "auto-pass" }),
@@ -82,8 +82,8 @@ describe("Round 5C dice-family compiler", () => {
   it("lowers one list of characteristics and rolls to one ignore-modifiers effect per kind, each with only its own list", () => {
     const both = leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: ["characteristics", "rolls"], stats: ["BS"], rolls: ["hit", "wound"], weapon_type: "ranged" }, 2);
     const effects = JSON.stringify(compiled([both]).mechanics);
-    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"characteristics","stats":["BS"],"weapon_type":"ranged"}}');
-    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"rolls","rolls":["hit","wound"],"weapon_type":"ranged"}}');
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"characteristics","stats":["BS"],"weapons":{"type":"ranged"}}}');
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"rolls","rolls":["hit","wound"],"weapons":{"type":"ranged"}}}');
     expect(previewLeaf({ family_id: "ignore-modifiers", parameters: both.parameters }).text).toMatch(/Ballistic Skill.*Hit and Wound rolls/su);
   });
 
@@ -116,7 +116,7 @@ describe("Round 5C dice-family compiler", () => {
     expect(compiled([leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2)]).mechanics.effect)
       .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } });
     expect(compiled([leaf("EFFECT", "reroll", { roll: "psychic", subset: "all", weapon_type: "melee", count: 1 }, 2)]).mechanics.effect)
-      .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "psychic", result_scope: "any-result", weapon_type: "melee", count: 1 } });
+      .toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "psychic", result_scope: "any-result", weapons: { type: "melee" }, count: 1 } });
     expect(rendered(base(), [leaf("EFFECT", "reroll", { roll: "surge", subset: "ones", weapon_type: "all" }, 2)]).length).toBeGreaterThan(0);
   });
 

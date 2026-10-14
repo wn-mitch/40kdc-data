@@ -34,8 +34,8 @@ function errorsOf(text: string, pieces: Piece[]): string[] {
 
 const keyword = (word: string): Record<string, unknown> => ({ keywords: [word], subject: "this-unit", negated: false });
 const damage: Record<string, unknown> = { subject: "attack", characteristics: ["D"], operation: "add", value: 1, weapon_type: "all" };
-const has = (word: string) => ({ type: "has-keyword", parameters: { all_of: [word] } });
-const defenderHas = (words: string[]) => ({ type: "has-keyword", parameters: { subject: "defender", any_of: words } });
+const has = (word: string) => ({ type: "matches", parameters: { filter: { all_of: [word] } } });
+const defenderHas = (words: string[]) => ({ type: "matches", parameters: { subject: "defender", filter: { any_of: words, level: "model" } } });
 
 describe("an attack-target filter after a condition names the target the attack named (compile-unit-filters.ts)", () => {
   const text = "Until the end of the phase, each time an attack made by a model in your unit is allocated to an enemy model, if your unit has the ALPHA keyword and that enemy model is not a BETA or GAMMA, add 1 to the Damage characteristic of that attack. If your unit has the DELTA keyword and that enemy model is a BETA or GAMMA, add 1 to the Damage characteristic of that attack instead.";
@@ -56,7 +56,7 @@ describe("an attack-target filter after a condition names the target the attack 
     const steps = mechanicsOf(text, pieces).effect.steps as Record<string, any>[];
     expect(steps).toHaveLength(2);
     expect(steps[1]!.condition).toEqual({ operator: "and", operands: [has("DELTA"), defenderHas(["BETA", "GAMMA"])] });
-    expect(JSON.stringify(steps[0]!.condition)).toContain('"subject":"defender","all_of":["BETA"]');
+    expect(JSON.stringify(steps[0]!.condition)).toContain('"subject":"defender","filter":{"none_of":["BETA","GAMMA"],"level":"model"}');
   });
 
   it("does not let the first sentence's gate guard the instead sentence", () => {
@@ -143,7 +143,9 @@ describe("a later Stratagem target measured from an earlier target (compile-targ
     expect(JSON.stringify(mechanics)).not.toContain("this-unit");
     const result = compileLeaves(placed(text, pieces(["within 6\" of that ALPHA unit", "unit-position", { kind: "within", inches: 6, subject: "target", of: "antecedent", negated: false }, "TARGET"])), text);
     const second = (result.ok ? (result.core as any).target_restrictions : [])[1];
-    expect(JSON.stringify(second.eligibility)).toContain('{"type":"within","parameters":{"of":{"stratagem_target":"first"},"range":{"inches":6}}}');
+    expect(second.eligibility).toMatchObject({ operator: "and", operands: expect.arrayContaining([
+      { type: "matches", parameters: { filter: { within: { of: { stratagem_target: "first" }, range: { inches: 6 } } } } },
+    ]) });
   });
 });
 

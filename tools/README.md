@@ -71,6 +71,28 @@ Open-source example apps built on this package:
 - [Layout Editor](https://layout-editor.alpacasoft.dev) — author terrain layouts on a board; exports terrain-layout JSON.
 - [Hull Tracer](https://hull-tracer.alpacasoft.dev) — trace a model's collision hull from a top-down photo; exports geometry-only hull-shape JSON.
 
+## Complete lever selections
+
+`Dataset.stackableBuffsFor` returns stable lever ids, intersecting activation
+pools, provider dependencies, and exact option-capacity metadata. Validate a
+complete proposed selection with the public `isLegalLeverSelection` helper
+before passing its contributions to `crunch`; a scalar sum of pool caps is not
+equivalent when pools overlap or a raise is fixed to a subset of option ids.
+
+```ts
+import { isLegalLeverSelection } from "@alpaca-software/40kdc-data";
+
+const { buffs, groups } = dataset.stackableBuffsFor(input, context);
+const selectedIds = new Set(buffs.filter(b => b.enabled).map(b => b.id));
+if (isLegalLeverSelection(buffs, groups, selectedIds)) {
+  // Use only the contributions from this complete, legal selection.
+}
+
+```
+
+`id` and `{ability_id, option_id}` references are stable identities; display
+labels and option names are presentation only.
+
 ## Also: schema validation
 
 This package also ships the canonical JSON Schemas and an AJV-based validator

@@ -83,9 +83,9 @@ export function leafSurface(text: string): string {
   return leafSurfaceKey(text);
 }
 
-/** Uncovered runs that still need a leaf: everything except punctuation and glue words. */
+/** Runs not accounted for by trusted leaves or accepted structure/connectives still need review. */
 export function untiledRuns(coverage: AbilityCoverage): UncoveredInterval[] {
-  return coverage.uncovered.filter((run) => {
+  return coverage.unaccounted.filter((run) => {
     const surface = leafSurface(runText(run.text));
     return surface.length > 0 && !GLUE.has(surface);
   });

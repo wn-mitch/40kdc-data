@@ -65,39 +65,61 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "entrenched"
+              "filter": {
+                "designated": "entrenched"
+              }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1",
-                "Lethal Hits"
-              ],
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                },
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
           }
         }
@@ -172,7 +194,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
@@ -197,11 +219,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "owner": "friendly",
-        "keywords": [
-          "ADEPTUS ASTARTES"
-        ]
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "choice",
@@ -230,7 +257,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
@@ -310,7 +337,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "GRAVIS"
       ]
     },
@@ -335,14 +362,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "CHARACTER",
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "CHARACTER",
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {

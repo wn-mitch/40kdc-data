@@ -42,7 +42,7 @@ func pastOf(verb string) string {
 	return verb
 }
 
-func describeHappened(p map[string]any, negated bool) string {
+func describeHappenedCore(p map[string]any, negated bool) string {
 	neg := ""
 	if negated {
 		neg = "not "
@@ -50,8 +50,8 @@ func describeHappened(p map[string]any, negated bool) string {
 	f := mapOr(p["filter"])
 	event := cstr(p["event"])
 	who := subjectOf(p, "the unit")
-	n := countMin(p)
-	nStr := numStr(n)
+	count := mapOr(p["count"])
+	amount := controlCountPhrase(p["count"])
 	didNot := func(verb string) string {
 		if negated {
 			return "did not " + verb
@@ -138,22 +138,22 @@ func describeHappened(p map[string]any, negated bool) string {
 		if jsTruthy(f["attack_type"]) {
 			atk = cstr(f["attack_type"]) + " "
 		}
-		keyword := ""
-		if jsTruthy(f["weapon_keyword"]) {
-			keyword = "[" + strings.ToUpper(dekebab(cstr(f["weapon_keyword"]))) + "]"
-		}
 		weapon := ""
-		if jsTruthy(f["weapon_name"]) {
-			weaponName := cstr(f["weapon_name"])
-			if kebabSlugRe.MatchString(weaponName) {
-				weaponName = titleCase(weaponName)
+		if f["weapons"] != nil {
+			scope := mapOr(f["weapons"])
+			keys := 0
+			for key := range scope {
+				if key != "name" && key != "keyword" {
+					keys++
+				}
 			}
-			weapon = " by " + weaponName
-			if keyword != "" {
-				weapon += " (with " + keyword + ")"
+			if keys == 0 && scope["name"] != nil && scope["keyword"] != nil {
+				weapon = " by " + ejstr(scope["name"]) + " (with " + bracketKeyword(scope["keyword"]) + ")"
+			} else if keys == 0 && scope["name"] != nil {
+				weapon = " by " + ejstr(scope["name"])
+			} else {
+				weapon = " made with " + weaponNoun(map[string]any{"weapons": scope})
 			}
-		} else if keyword != "" {
-			weapon = " made with a " + keyword + " weapon"
 		}
 		by := ""
 		if byMap, ok := asMap(f["by"]); ok && byMap != nil {
@@ -172,8 +172,8 @@ func describeHappened(p map[string]any, negated bool) string {
 		if f["roll"] == "hit" && f["result"] == "success" {
 			var hits string
 			switch {
-			case n > 1:
-				hits = nStr + "+ " + atk + "attacks"
+			case (count["min"] != nil && cstr(count["min"]) != "1") || count["max"] != nil:
+				hits = amount + " " + atk + "attacks"
 			case atk == "":
 				hits = "an attack"
 			default:
@@ -220,8 +220,8 @@ func describeHappened(p map[string]any, negated bool) string {
 		if p["object"] == "event-object" && p["window"] == "event" {
 			if jsTruthy(f["attack_type"]) {
 				s := neg + "destroyed by a " + cstr(f["attack_type"]) + " attack"
-				if jsTruthy(f["weapon_name"]) {
-					s += " made with " + cstr(f["weapon_name"])
+				if jsTruthy(f["weapons"]) {
+					s += " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
 				}
 				return s
 			}
@@ -246,6 +246,27 @@ func describeHappened(p map[string]any, negated bool) string {
 		if obj["owner"] != nil {
 			owner = cstr(obj["owner"]) + " "
 		}
+		extended := false
+		for key := range obj {
+			switch key {
+			case "all_of", "owner", "level", "designated":
+			default:
+				extended = true
+			}
+		}
+		objects := owner + kws + noun + "s"
+		if extended {
+			copy := cloneMap(obj)
+			copy["level"] = "unit"
+			if event == "model-destroyed" {
+				copy["level"] = "model"
+			}
+			objects = strings.TrimPrefix(strings.TrimPrefix(unitFilterPhrase(copy), "a "), "an ")
+			objects = strings.Replace(objects, "unit", "units", 1)
+			if event == "model-destroyed" {
+				objects = strings.Replace(objects, "model", "models", 1)
+			}
+		}
 		if f["by"] != nil {
 			// A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
 			atk := ""
@@ -258,13 +279,13 @@ func describeHappened(p map[string]any, negated bool) string {
 			} else if atk != "" {
 				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
-			return trimEnd(neg + unitRefPhrase(f["by"], "the unit") + " has destroyed " + nStr + "+ " + owner + kws + noun + "s " + when)
+			return trimEnd(neg + unitRefPhrase(f["by"], "the unit") + " has destroyed " + amount + " " + objects + " " + when)
 		}
 		tagged := ""
-		if obj["designated"] != nil {
+		if !extended && obj["designated"] != nil {
 			tagged = " " + designationPhrase(cstr(obj["designated"]), false)
 		}
-		return neg + withWindow(nStr+"+ "+owner+kws+noun+"s"+tagged+" destroyed", p["window"])
+		return neg + withWindow(amount+" "+objects+tagged+" destroyed", p["window"])
 	case "used":
 		// The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
 		if p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
@@ -290,7 +311,7 @@ func describeHappened(p map[string]any, negated bool) string {
 			return who + " is " + not + verb + " " + rule
 		}
 		if f["kind"] == "action" {
-			s := neg + nStr + "+ actions completed"
+			s := neg + amount + " actions completed"
 			if f["id"] != nil {
 				s += " (" + dekebab(cstr(f["id"])) + ")"
 			}
@@ -323,11 +344,35 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		return neg + withWindow(who+" used "+what+dekebab(cstr(kind)), p["window"])
 	case "objective-gained":
-		return trimEnd(neg + "you newly control " + nStr + "+ objectives " + windowPhrase(p["window"]))
+		return trimEnd(neg + "you newly control " + amount + " objectives " + windowPhrase(p["window"]))
 	case "designation-changed":
-		return neg + withWindow(nStr+"+ "+unitRefPhrase(p["object"], "units")+" became "+designationPhrase(cstr(f["tag"]), false), p["window"])
+		return neg + withWindow(amount+" "+unitRefPhrase(p["object"], "units")+" became "+designationPhrase(cstr(f["tag"]), false), p["window"])
 	}
 	return neg + withWindow(dekebab(event)+" happened", p["window"])
+}
+
+func describeHappened(p map[string]any, negated bool) string {
+	phrase := describeHappenedCore(p, negated)
+	filter := mapOr(p["filter"])
+	event := cstr(p["event"])
+	if (event == "destroyed" || event == "model-destroyed") && filter["weapons"] != nil &&
+		!(p["object"] == "event-object" && p["window"] == "event") {
+		phrase += " made with " + weaponNoun(map[string]any{"weapons": filter["weapons"]})
+	}
+	if p["count"] != nil && (event == "destroyed" || event == "model-destroyed") &&
+		(p["object"] == "this-model" || (p["object"] == "event-object" && p["window"] == "event")) {
+		phrase += " (" + controlCountPhrase(p["count"]) + " times)"
+	}
+	phrase += eventRelationPhrase(filter)
+	if proximity, ok := asMap(p["proximity"]); ok && proximity != nil {
+		phrase += " within " + rangePhrase(proximity["range"]) + " of " + placeRefPhrase(proximity["of"])
+	}
+	if p["count"] != nil && event != "after-roll" && event != "destroyed" && event != "model-destroyed" &&
+		event != "objective-gained" && event != "designation-changed" &&
+		!(event == "used" && filter["kind"] == "action") {
+		phrase += " (" + controlCountPhrase(p["count"]) + " times)"
+	}
+	return phrase
 }
 
 func firstOr(items []string) string {

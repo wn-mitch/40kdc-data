@@ -6,7 +6,7 @@
 
 # Interface: AbilityDSLEntry
 
-Defined in: [generated.ts:4404](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4404)
+Defined in: [generated.ts:7123](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7123)
 
 Community-authored structured representation of what a game ability does. NOT GW text.
 
@@ -19,7 +19,7 @@ via the `definition` "ability".
 
 > **ability\_id**: `string`
 
-Defined in: [generated.ts:4405](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4405)
+Defined in: [generated.ts:7124](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7124)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4405](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:4406](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4406)
+Defined in: [generated.ts:7125](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7125)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:4406](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **authored\_by**: `string`
 
-Defined in: [generated.ts:4407](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4407)
+Defined in: [generated.ts:7126](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7126)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:4407](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4408](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4408)
+Defined in: [generated.ts:7127](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7127)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:4408](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **source\_digest?**: `string`
 
-Defined in: [generated.ts:4412](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4412)
+Defined in: [generated.ts:7131](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7131)
 
 SHA-256 of the NORMALISED printed rule this annotation was authored against — one-way, so the rule text itself stays outside this repository. Normalisation (defined once in tools/src/source-digest.ts) casefolds, folds Unicode, keeps the rule-significant operators + - = < > / % and replaces other punctuation with spaces, so reprint noise and quote style leave the digest unchanged while a changed value or an added condition changes it. Optional: absent means the source was never fingerprinted, which `npm run audit:source-digest` reports as untracked rather than current. Records source-content identity, not release history — consumers must not select, order or supersede abilities by it.
 
@@ -61,7 +61,17 @@ SHA-256 of the NORMALISED printed rule this annotation was authored against — 
 
 > `optional` **version?**: `string`
 
-Defined in: [generated.ts:4413](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4413)
+Defined in: [generated.ts:7132](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7132)
+
+***
+
+### stub?
+
+> `optional` **stub?**: `true`
+
+Defined in: [generated.ts:7136](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7136)
+
+A seeded placeholder awaiting authoring: its effect is not the ability's mechanics. Removed when an authored effect replaces it.
 
 ***
 
@@ -69,7 +79,7 @@ Defined in: [generated.ts:4413](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **supersedes?**: `string` \| `null`
 
-Defined in: [generated.ts:4414](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4414)
+Defined in: [generated.ts:7137](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7137)
 
 ***
 
@@ -77,7 +87,7 @@ Defined in: [generated.ts:4414](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **unit\_ids?**: `string`[]
 
-Defined in: [generated.ts:4415](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4415)
+Defined in: [generated.ts:7138](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7138)
 
 ***
 
@@ -85,7 +95,7 @@ Defined in: [generated.ts:4415](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **faction\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:4419](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4419)
+Defined in: [generated.ts:7142](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7142)
 
 Owning faction. Authored explicitly on faction/detachment-scoped abilities; otherwise stamped at bundle time from the ability's data/enrichment/<faction>/ directory (records in the shared _core pool stay null). Enables faction-scoped resolution of a unit's ability_ids so an ability_id shared across factions resolves to the unit's own faction's copy rather than whichever faction bundled first.
 
@@ -95,7 +105,7 @@ Owning faction. Authored explicitly on faction/detachment-scoped abilities; othe
 
 > `optional` **detachment\_id?**: `string` \| `null`
 
-Defined in: [generated.ts:4423](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4423)
+Defined in: [generated.ts:7146](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7146)
 
 For detachment/enhancement/stratagem-type abilities, the associated detachment
 
@@ -105,15 +115,15 @@ For detachment/enhancement/stratagem-type abilities, the associated detachment
 
 > `optional` **ability\_type?**: `"stratagem"` \| `"enhancement"` \| `"unit"` \| `"core"` \| `"detachment"` \| `"faction"`
 
-Defined in: [generated.ts:4424](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4424)
+Defined in: [generated.ts:7147](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7147)
 
 ***
 
 ### behavior?
 
-> `optional` **behavior?**: `"aura"` \| `"reactive"` \| `"passive"` \| `"activated"`
+> `optional` **behavior?**: `"aura"` \| `"passive"` \| `"activated"` \| `"reactive"`
 
-Defined in: [generated.ts:4428](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4428)
+Defined in: [generated.ts:7151](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7151)
 
 How this ability interacts with the game flow — not a runtime predicate
 
@@ -123,7 +133,7 @@ How this ability interacts with the game flow — not a runtime predicate
 
 > **effect**: [`AbilityEffect1`](../type-aliases/AbilityEffect1.md)
 
-Defined in: [generated.ts:4429](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4429)
+Defined in: [generated.ts:7152](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7152)
 
 ***
 
@@ -131,7 +141,7 @@ Defined in: [generated.ts:4429](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **trigger?**: [`AbilityTrigger`](../type-aliases/AbilityTrigger.md)
 
-Defined in: [generated.ts:4430](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4430)
+Defined in: [generated.ts:7153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7153)
 
 ***
 
@@ -139,25 +149,25 @@ Defined in: [generated.ts:4430](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **scope**: [`AbilityScope`](AbilityScope.md)
 
-Defined in: [generated.ts:4431](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4431)
+Defined in: [generated.ts:7154](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7154)
 
 ***
 
 ### usage?
 
-> `optional` **usage?**: [`AbilityUsage1`](AbilityUsage1.md)
+> `optional` **usage?**: [`AbilityUsage`](../type-aliases/AbilityUsage.md)
 
-Defined in: [generated.ts:4432](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4432)
+Defined in: [generated.ts:7155](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7155)
 
 ***
 
 ### applies\_to?
 
-> `optional` **applies\_to?**: \{ `required_keywords?`: [`KeywordList`](../type-aliases/KeywordList.md); `excluded_keywords?`: [`KeywordList`](../type-aliases/KeywordList.md); \} \| `null`
+> `optional` **applies\_to?**: [`KeywordPredicate`](KeywordPredicate.md) \| `null`
 
-Defined in: [generated.ts:4436](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4436)
+Defined in: [generated.ts:7159](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7159)
 
-Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.
+Static, human-curated keyword predicate naming which datasheet units this ability benefits, for roster-side highlighting. Null or absence means no resolvable scope; {} matches every unit. This projection is distinct from runtime effect conditions.
 
 ***
 
@@ -165,7 +175,7 @@ Static, human-curated keyword filter naming which datasheet units this ability b
 
 > `optional` **interactions?**: `object`[]
 
-Defined in: [generated.ts:4440](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4440)
+Defined in: [generated.ts:7160](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7160)
 
 #### Index Signature
 
@@ -189,7 +199,7 @@ Defined in: [generated.ts:4440](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:4446](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4446)
+Defined in: [generated.ts:7166](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7166)
 
 ***
 
@@ -197,7 +207,7 @@ Defined in: [generated.ts:4446](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **dispute\_notes?**: `string`
 
-Defined in: [generated.ts:4447](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4447)
+Defined in: [generated.ts:7167](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7167)
 
 ***
 
@@ -205,4 +215,4 @@ Defined in: [generated.ts:4447](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **community\_notes?**: `string`
 
-Defined in: [generated.ts:4448](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4448)
+Defined in: [generated.ts:7168](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7168)

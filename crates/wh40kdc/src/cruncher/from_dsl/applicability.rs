@@ -14,7 +14,10 @@ pub(super) enum App {
 }
 
 /// A condition as a buff applicability the resolver can gate on.
-pub(super) fn condition_to_applicability(condition: &Obj) -> App {
+pub(super) fn condition_to_applicability(
+    condition: &Obj,
+    perspective: super::TranslationPerspective,
+) -> App {
     if condition.get("operator").is_some_and(Value::is_string) {
         if let Some(operands) = condition.get("operands").and_then(Value::as_array) {
             if !is_str(condition, "operator", "and") {
@@ -25,7 +28,7 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
                 let Some(o) = operand.as_object() else {
                     return App::Context;
                 };
-                match condition_to_applicability(o) {
+                match condition_to_applicability(o, perspective) {
                     App::Gate => {}
                     App::Context => return App::Context,
                     App::When(a) => merged = combine(&merged, &a),
@@ -42,14 +45,17 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
             Some(phase) => when(json!({ "phases": [phase] })),
             None => App::Context,
         },
-        Some("has-keyword") => {
+        Some("matches") => {
             let Some(kw) = single_keyword(params) else {
                 return App::Context;
             };
             let subject = params.and_then(|p| p.get("subject"));
-            if subject.and_then(Value::as_str) == Some("defender") {
+            if subject.and_then(Value::as_str) == Some("defender")
+                || (is_buffed_unit(subject) && perspective == super::TranslationPerspective::Target)
+            {
                 when(json!({ "requiresTargetKeyword": kw }))
-            } else if is_buffed_unit(subject) {
+            } else if is_buffed_unit(subject) || subject.and_then(Value::as_str) == Some("attacker")
+            {
                 when(json!({ "requiresAttackerKeyword": kw }))
             } else {
                 App::Context
@@ -59,12 +65,17 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
             let Some(p) = params else {
                 return App::Context;
             };
-            if p.keys().any(|k| k != "attack_type") {
+            if p.keys()
+                .any(|key| !matches!(key.as_str(), "attack_type" | "weapons"))
+                || super::damage_leaves::unresolved_weapon_scope(p).is_some()
+            {
                 return App::Context;
             }
-            match p.get("attack_type").and_then(Value::as_str) {
-                Some("melee") => when(json!({ "phases": ["fight"] })),
-                Some("ranged") => when(json!({ "phases": ["shooting"] })),
+            match super::damage_leaves::combine_optional(
+                super::leaves::attack_type_applicability(p),
+                super::damage_leaves::weapon_applicability(p),
+            ) {
+                Some(Value::Object(gate)) => App::When(gate),
                 _ => App::Context,
             }
         }
@@ -72,41 +83,46 @@ pub(super) fn condition_to_applicability(condition: &Obj) -> App {
     }
 }
 
-/// Merge two applicabilities: `phases` intersect; roll type, keyword and weapon gates narrow;
-/// excluded target keywords union.
+/// Merge two applicabilities: `phases` intersect; overlapping weapon scopes remain conjunctive.
 pub(super) fn combine(a: &Obj, b: &Obj) -> Obj {
     let mut out = a.clone();
+    out.extend(b.clone());
     if let Some(bp) = b.get("phases").and_then(Value::as_array) {
         let phases = match a.get("phases").and_then(Value::as_array) {
-            Some(ap) => ap.iter().filter(|p| bp.contains(p)).cloned().collect(),
+            Some(ap) => ap
+                .iter()
+                .filter(|phase| bp.contains(phase))
+                .cloned()
+                .collect(),
             None => bp.clone(),
         };
         out.insert("phases".into(), Value::Array(phases));
     }
-    for k in [
-        "rollType",
-        "requiresTargetKeyword",
-        "requiresAttackerKeyword",
+    let weapon_fields = [
         "weaponName",
-        "weaponKeyword",
-    ] {
-        if let Some(v) = b
-            .get(k)
-            .filter(|v| v.as_str().is_some_and(|s| !s.is_empty()))
-        {
-            out.insert(k.into(), v.clone());
-        }
+        "excludedWeaponName",
+        "weaponKeywords",
+        "excludedWeaponKeywords",
+        "weaponRequirements",
+    ];
+    if weapon_fields
+        .iter()
+        .any(|key| a.contains_key(*key) && b.contains_key(*key))
+    {
+        out.insert(
+            "weaponRequirements".into(),
+            Value::Array(vec![Value::Object(a.clone()), Value::Object(b.clone())]),
+        );
     }
-    // Excluded target keywords union, first occurrence first.
-    if let Some(bx) = b.get("excludedTargetKeywords").and_then(Value::as_array) {
-        let mut union: Vec<Value> = a
+    if let Some(excluded) = b.get("excludedTargetKeywords").and_then(Value::as_array) {
+        let mut union = a
             .get("excludedTargetKeywords")
             .and_then(Value::as_array)
             .cloned()
             .unwrap_or_default();
-        for k in bx {
-            if !union.contains(k) {
-                union.push(k.clone());
+        for keyword in excluded {
+            if !union.contains(keyword) {
+                union.push(keyword.clone());
             }
         }
         out.insert("excludedTargetKeywords".into(), Value::Array(union));
@@ -196,7 +212,7 @@ fn describe_contribution(c: &Value) -> String {
 }
 
 /// A weapon-keyword ref back in its printed form (best-effort).
-fn keyword_label(r: &Value) -> String {
+pub(super) fn keyword_label(r: &Value) -> String {
     let empty = Obj::new();
     let params = object(r.get("parameters")).unwrap_or(&empty);
     let id = r["keyword_id"].as_str().unwrap_or("");

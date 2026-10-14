@@ -8,6 +8,6 @@
 
 > **KeywordList4** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:321](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L321)
+Defined in: [generated.ts:605](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L605)
 
-A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
+A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.

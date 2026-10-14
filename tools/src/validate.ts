@@ -170,11 +170,14 @@ function resolveSchemaId(filePath: string): string | null {
 /**
  * Validate all data files matching the given glob pattern.
  * Each data file is expected to be a JSON array; each element is validated individually.
+ * A fast validator may use the same schema registry with allErrors disabled; failures still
+ * run through ajv so the complete diagnostic set is preserved.
  */
 export async function validateFiles(
   ajv: Ajv,
   pattern: string,
   cwd?: string,
+  fastValidator?: Ajv,
 ): Promise<ValidationResult> {
   const root = cwd ?? DATA_ROOT;
   const files = await glob(pattern, { cwd: root, absolute: true });
@@ -207,7 +210,7 @@ export async function validateFiles(
       continue;
     }
 
-    const validate = ajv.getSchema(schemaId);
+    const validate = (fastValidator ?? ajv).getSchema(schemaId);
     if (!validate) {
       result.errors.push({
         file,
@@ -253,11 +256,13 @@ export async function validateFiles(
       if (valid) {
         result.passed++;
       } else {
+        const diagnostics = fastValidator ? ajv.getSchema(schemaId)! : validate;
+        if (fastValidator) diagnostics(data[i]);
         result.failed++;
         result.errors.push({
           file,
           index: i,
-          errors: (validate.errors ?? []).map((e) => ({
+          errors: (diagnostics.errors ?? []).map((e) => ({
             path: e.instancePath || "/",
             message: e.message ?? "Unknown validation error",
           })),

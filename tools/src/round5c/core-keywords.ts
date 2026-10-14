@@ -16,9 +16,9 @@ export function keywordKey(keyword: string): string {
 }
 
 /**
- * Every keyword a unit in core can carry, keyed by {@link keywordKey}: its datasheet and faction
- * keywords, and the keywords a detachment grants its units (`granted_keywords`, e.g. Armoured
- * Infantry's ARMOURED SKIRMISHER), which no datasheet lists.
+ * Every keyword a unit can carry, keyed by {@link keywordKey}: core datasheet/faction keywords,
+ * detachment `granted_keywords`, and canonical keyword-grant effects in the same data projection.
+ * Runtime grants contribute their complete identities, never names or recipient predicates.
  */
 export function keywordIndex(dataRoot: string): Map<string, string> {
   const cached = indexes.get(dataRoot);
@@ -42,10 +42,30 @@ export function keywordIndex(dataRoot: string): Map<string, string> {
           for (const grant of (detachment.granted_keywords as Array<{ keyword?: unknown }> | undefined) ?? []) add(grant.keyword);
         }
       }
+      const abilities = join(dataRoot, "enrichment", faction, "abilities.json");
+      if (existsSync(abilities)) {
+        for (const ability of JSON.parse(readFileSync(abilities, "utf8")) as Array<Record<string, unknown>>) {
+          addGrantedKeywords(ability.effect, add);
+        }
+      }
     }
   }
   indexes.set(dataRoot, index);
   return index;
+}
+
+/** Runtime keyword grants are identities too; recipient predicates and labels are not grants. */
+function addGrantedKeywords(value: unknown, add: (keyword: unknown) => void): void {
+  if (Array.isArray(value)) {
+    for (const item of value) addGrantedKeywords(item, add);
+  } else if (value !== null && typeof value === "object") {
+    const node = value as Record<string, unknown>;
+    if (node.type === "keyword-grant" && node.modifier !== null && typeof node.modifier === "object") {
+      const keywords = (node.modifier as Record<string, unknown>).keywords;
+      if (Array.isArray(keywords)) for (const keyword of keywords) add(keyword);
+    }
+    for (const child of Object.values(node)) addGrantedKeywords(child, add);
+  }
 }
 
 const MAX_WORDS = 6;

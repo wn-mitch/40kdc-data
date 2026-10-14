@@ -30,7 +30,7 @@
   },
   {
     "ability_id": "eviscerating-fly-by-drukhari",
-    "name": "Eviscerating Fly\u2011by",
+    "name": "Eviscerating Fly‑by",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -42,7 +42,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -113,8 +113,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Lethal Hits"
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          }
         ]
       }
     },
@@ -289,8 +291,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -327,12 +334,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -424,22 +433,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -486,14 +501,27 @@
     "source_digest": "addbfdf7f6e08ce08be81862ae0e082e8d3976bceec4403528c3eefd7a6d3106",
     "version": "2025-q3",
     "effect": {
-      "type": "weapon-ability-grant",
-      "target": "this-unit",
-      "modifier": {
-        "abilities": [
-          "smoke",
-          "grenades"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "keyword-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              "SMOKE"
+            ]
+          }
+        },
+        {
+          "type": "keyword-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              "GRENADES"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -598,13 +626,23 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "max_count": 1,
-          "owner": "friendly",
-          "keywords": [
-            "DRUKHARI",
-            "INFANTRY"
-          ],
-          "within_inches": 6,
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "DRUKHARI",
+              "INFANTRY"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 0,
+            "max": 1
+          },
           "eligibility": {
             "operator": "and",
             "operands": [
@@ -619,12 +657,14 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "has-keyword",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "recipient",
-                      "all_of": [
-                        "FLY"
-                      ]
+                      "filter": {
+                        "all_of": [
+                          "FLY"
+                        ]
+                      },
+                      "subject": "recipient"
                     }
                   }
                 ]
@@ -633,10 +673,12 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "recipient",
-                      "state": "engaged"
+                      "filter": {
+                        "state": "engaged"
+                      },
+                      "subject": "recipient"
                     }
                   }
                 ]
@@ -715,20 +757,26 @@
               "to": "battlefield",
               "from": "strategic-reserves",
               "via": "deep-strike",
-              "min_enemy_distance": 6,
+              "min_enemy_distance": {
+                "inches": 6
+              },
               "placement": "anywhere"
             }
           },
           {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "owner": "enemy"
-                },
-                "range": {
-                  "inches": 9
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 9
+                    },
+                    "of": {
+                      "owner": "enemy"
+                    }
+                  }
                 }
               }
             },
@@ -861,9 +909,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           }
         ]
@@ -946,154 +996,191 @@
         }
       },
       "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "scope": "unit",
-        "select": "start-of-command-phase",
-        "options": [
-          {
-            "name": "Masters of the Shadowed Sky",
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "within",
-                    "parameters": {
-                      "of": {
-                        "objective": {
-                          "controlled_by": "friendly"
-                        }
-                      },
-                      "range": "objective-control"
-                    }
-                  },
-                  {
-                    "type": "has-keyword",
-                    "parameters": {
-                      "subject": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "KABALITE WARRIORS"
-                        ],
-                        "state": "embarked"
-                      },
-                      "all_of": [
-                        "KABALITE WARRIORS"
-                      ]
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "objective-sticky",
-                "target": "this-model"
-              }
-            }
-          },
-          {
-            "name": "Speed of the Kill",
-            "effect": {
-              "type": "move",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "WYCHES"
-                ],
-                "state": "embarked"
-              },
-              "modifier": {
-                "move_type": "disembark",
-                "ends_within": {
-                  "range": {
-                    "inches": 6
-                  },
-                  "of": "this-model",
-                  "wholly": true
-                }
-              }
-            }
-          },
-          {
-            "name": "Visions of Butchery",
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "stat-modifier",
-                  "target": "this-model",
-                  "modifier": {
-                    "stat": "A",
-                    "operation": "add",
-                    "value": 1,
-                    "weapon_name": "bladevanes"
-                  },
-                  "scaling": {
-                    "per": 1,
-                    "of": "models-in-or-embarked-in-bearer"
-                  }
-                },
-                {
-                  "type": "stat-modifier",
-                  "target": "this-model",
-                  "modifier": {
-                    "stat": "A",
-                    "operation": "add",
-                    "value": 1,
-                    "weapon_name": "chainsnares"
-                  },
-                  "scaling": {
-                    "per": 1,
-                    "of": "models-in-or-embarked-in-bearer"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "name": "Aethersails",
-            "effect": {
-              "type": "conditional",
-              "condition": {
-                "type": "has-keyword",
+        "type": "ability-part",
+        "trigger": {
+          "event": "phase-started",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
                 "parameters": {
-                  "subject": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "DRUKHARI"
-                    ],
-                    "state": "embarked"
-                  },
-                  "all_of": [
-                    "DRUKHARI"
-                  ]
+                  "phase": "command"
                 }
               },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          }
+        },
+        "effect": {
+          "type": "stance-select",
+          "mode": "re-selectable",
+          "options": [
+            {
+              "name": "Masters of the Shadowed Sky",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "operator": "and",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "within": {
+                            "range": "objective-control",
+                            "of": {
+                              "objective": {
+                                "controlled_by": "friendly"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "KABALITE WARRIORS"
+                          ]
+                        },
+                        "subject": {
+                          "owner": "friendly",
+                          "all_of": [
+                            "KABALITE WARRIORS"
+                          ],
+                          "state": "embarked"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "objective-sticky",
+                  "target": "this-model"
+                }
+              },
+              "id": "option-1"
+            },
+            {
+              "name": "Speed of the Kill",
+              "effect": {
+                "type": "move",
+                "target": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "WYCHES"
+                  ],
+                  "state": "embarked"
+                },
+                "modifier": {
+                  "move_type": "disembark",
+                  "ends_within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model",
+                    "wholly": true
+                  }
+                }
+              },
+              "id": "option-2"
+            },
+            {
+              "name": "Visions of Butchery",
               "effect": {
                 "type": "sequence",
                 "steps": [
                   {
-                    "type": "re-roll",
+                    "type": "stat-modifier",
                     "target": "this-model",
                     "modifier": {
-                      "roll": "advance",
-                      "result_scope": "any-result"
+                      "stat": "A",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "name": "bladevanes"
+                      }
+                    },
+                    "scaling": {
+                      "per": 1,
+                      "of": "models-in-or-embarked-in-bearer"
                     }
                   },
                   {
-                    "type": "re-roll",
+                    "type": "stat-modifier",
                     "target": "this-model",
                     "modifier": {
-                      "roll": "charge",
-                      "result_scope": "any-result"
+                      "stat": "A",
+                      "operation": "add",
+                      "value": 1,
+                      "weapons": {
+                        "name": "chainsnares"
+                      }
+                    },
+                    "scaling": {
+                      "per": 1,
+                      "of": "models-in-or-embarked-in-bearer"
                     }
                   }
                 ]
-              }
+              },
+              "id": "option-3"
+            },
+            {
+              "name": "Aethersails",
+              "effect": {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "DRUKHARI"
+                      ]
+                    },
+                    "subject": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "DRUKHARI"
+                      ],
+                      "state": "embarked"
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "re-roll",
+                      "target": "this-model",
+                      "modifier": {
+                        "roll": "advance",
+                        "result_scope": "any-result"
+                      }
+                    },
+                    {
+                      "type": "re-roll",
+                      "target": "this-model",
+                      "modifier": {
+                        "roll": "charge",
+                        "result_scope": "any-result"
+                      }
+                    }
+                  ]
+                }
+              },
+              "id": "option-4"
             }
-          }
-        ]
+          ]
+        }
       }
     },
     "scope": {
@@ -1250,8 +1337,17 @@
           {
             "type": "select-units",
             "selector": {
-              "owner": "enemy",
-              "count": 1,
+              "filter": {
+                "owner": "enemy",
+                "none_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
               "eligibility": {
                 "type": "happened",
                 "parameters": {
@@ -1264,11 +1360,7 @@
                   },
                   "window": "event"
                 }
-              },
-              "excluded_keywords": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              }
             },
             "effect": {
               "type": "sequence",
@@ -1468,10 +1560,14 @@
       "type": "weapon-ability-grant",
       "target": "model-in-this-unit",
       "modifier": {
-        "abilities": [
-          "Twin-linked"
-        ],
-        "weapon_name": "macro-scalpel"
+        "weapons": {
+          "name": "macro-scalpel"
+        },
+        "keywords": [
+          {
+            "keyword_id": "twin-linked"
+          }
+        ]
       }
     },
     "scope": {
@@ -1496,28 +1592,15 @@
     "source_digest": "ce2bf8e172792cfc17f88787aa7713a5a513059ebb3bf9e23276b720c827d1aa",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "destroyed",
-          "object": {
-            "owner": "enemy"
-          },
-          "window": "event"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "pain-token-pool",
-          "amount": 1
-        }
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": 1
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
     },
     "unit_ids": [
       "talos"
@@ -1525,7 +1608,14 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "drukhari"
+    "faction_id": "drukhari",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "experimental-enhancements-drukhari",
@@ -1552,7 +1642,9 @@
             "type": "resource",
             "parameters": {
               "pool": "pain-token-pool",
-              "at_least": 1
+              "count": {
+                "min": 1
+              }
             }
           }
         ]
@@ -1578,11 +1670,13 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "has-keyword",
+                      "type": "matches",
                       "parameters": {
-                        "all_of": [
-                          "CHARACTER"
-                        ]
+                        "filter": {
+                          "all_of": [
+                            "CHARACTER"
+                          ]
+                        }
                       }
                     }
                   ]
@@ -1594,7 +1688,9 @@
                     "stat": "A",
                     "operation": "set",
                     "value": 3,
-                    "weapon_type": "melee"
+                    "weapons": {
+                      "type": "melee"
+                    }
                   }
                 }
               },
@@ -1604,11 +1700,13 @@
                   "operator": "not",
                   "operands": [
                     {
-                      "type": "has-keyword",
+                      "type": "matches",
                       "parameters": {
-                        "all_of": [
-                          "CHARACTER"
-                        ]
+                        "filter": {
+                          "all_of": [
+                            "CHARACTER"
+                          ]
+                        }
                       }
                     }
                   ]
@@ -1623,17 +1721,23 @@
                         "stat": "A",
                         "operation": "set",
                         "value": 4,
-                        "weapon_type": "melee"
+                        "weapons": {
+                          "type": "melee"
+                        }
                       }
                     },
                     {
                       "type": "weapon-ability-grant",
                       "target": "this-unit",
                       "modifier": {
-                        "abilities": [
-                          "Hazardous"
-                        ],
-                        "weapon_type": "melee"
+                        "weapons": {
+                          "type": "melee"
+                        },
+                        "keywords": [
+                          {
+                            "keyword_id": "hazardous"
+                          }
+                        ]
                       }
                     }
                   ]
@@ -1657,7 +1761,7 @@
   },
   {
     "ability_id": "torturers-craft-drukhari",
-    "name": "Torturer\u2019s Craft",
+    "name": "Torturer’s Craft",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1777,15 +1881,35 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
           },
           {
-            "type": "player-turn-is",
+            "type": "matches",
             "parameters": {
-              "turn": "your-turn"
+              "subject": {
+                "owner": "friendly",
+                "level": "model",
+                "has_ability": [
+                  "pain-adept-drukhari"
+                ]
+              },
+              "filter": {
+                "state": "on-battlefield"
+              }
             }
           }
         ]
@@ -1802,19 +1926,24 @@
             "pool": "pain-token-pool",
             "amount": 1
           }
-        }
+        },
+        "on_fail": null
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "permanent"
     },
     "unit_ids": [
       "haemonculus"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "drukhari"
+    "faction_id": "drukhari",
+    "usage": {
+      "frequency": "once-per-phase",
+      "per": "army"
+    }
   },
   {
     "ability_id": "hatred-eternal-drukhari",
@@ -1857,17 +1986,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "DRUKHARI"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "DRUKHARI"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -2008,8 +2148,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           },
@@ -2017,8 +2159,13 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           }
@@ -2049,11 +2196,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "keywords": [
-          "DRUKHARI"
-        ],
-        "owner": "friendly"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "DRUKHARI"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "set-up",
@@ -2123,26 +2275,43 @@
     "source_digest": "8581291b6e6ad0a3f7291fcfcd73d8ed6b93ce4f09871dd64b15c3dceefa9d08",
     "version": "2025-q3",
     "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "suppressed",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -2253,7 +2422,7 @@
   },
   {
     "ability_id": "assassins-poisons-drukhari",
-    "name": "Assassins\u2019 Poisons",
+    "name": "Assassins’ Poisons",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2276,8 +2445,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
               ]
             }
           },
@@ -2285,8 +2456,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Precision"
+              "keywords": [
+                {
+                  "keyword_id": "precision"
+                }
               ]
             }
           }
@@ -2306,7 +2479,7 @@
   },
   {
     "ability_id": "archons-will-drukhari",
-    "name": "Archon\u2019s Will",
+    "name": "Archon’s Will",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2364,7 +2537,7 @@
   },
   {
     "ability_id": "archons-retinue-drukhari",
-    "name": "Archon\u2019s Retinue",
+    "name": "Archon’s Retinue",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2624,12 +2797,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "INFANTRY"
-              ]
+              "filter": {
+                "all_of": [
+                  "INFANTRY"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2638,8 +2813,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -2750,9 +2927,11 @@
         "operator": "not",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "engaged"
+              "filter": {
+                "state": "engaged"
+              }
             }
           }
         ]
@@ -2839,7 +3018,9 @@
           "range": {
             "inches": 18
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -2944,13 +3125,15 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -2964,10 +3147,14 @@
           ]
         },
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
         }
       }
     },
@@ -3003,10 +3190,14 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
+          ]
         }
       }
     },
@@ -3108,36 +3299,31 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          },
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "invulnerable-save",
-        "target": "this-model",
-        "modifier": {
-          "invuln_sv": 5
-        }
+      "type": "invulnerable-save",
+      "target": "this-unit",
+      "modifier": {
+        "invuln_sv": 5
       }
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "WYCH CULT"
+        ]
+      }
+    }
   },
   {
     "ability_id": "periapt-of-torments-exhibition-of-slaughter-drukhari",
@@ -3158,11 +3344,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "SUCCUBUS"
-          ]
+          "filter": {
+            "all_of": [
+              "SUCCUBUS"
+            ]
+          }
         }
       },
       "effect": {
@@ -3210,11 +3398,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "SUCCUBUS"
-          ]
+          "filter": {
+            "all_of": [
+              "SUCCUBUS"
+            ]
+          }
         }
       },
       "effect": {
@@ -3254,13 +3444,15 @@
         "operator": "not",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -3271,10 +3463,17 @@
           "owner": "friendly"
         },
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
-          ],
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          },
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
+          ]
         }
       }
     },
@@ -3302,42 +3501,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "operator": "or",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "fight"
-                }
-              }
+        "type": "matches",
+        "parameters": {
+          "subject": "defender",
+          "filter": {
+            "all_of": [
+              "CHARACTER"
             ]
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "subject": "defender",
-              "all_of": [
-                "CHARACTER"
-              ]
-            }
           }
-        ]
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -3345,7 +3524,7 @@
           },
           {
             "type": "re-roll",
-            "target": "this-model",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -3357,7 +3536,26 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "BLADES FOR HIRE",
+          "KABAL"
+        ]
+      },
+      "filter": {
+        "kind": "attack"
+      },
+      "object": {
+        "owner": "enemy",
+        "all_of": [
+          "CHARACTER"
+        ]
+      }
+    }
   },
   {
     "ability_id": "shadows-reach-kabalite-agonysts-drukhari",
@@ -3418,10 +3616,14 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
       }
     },
     "scope": {
@@ -3524,8 +3726,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Precision"
+          "keywords": [
+            {
+              "keyword_id": "precision"
+            }
           ]
         }
       }
@@ -3557,12 +3761,14 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "CRONOS",
-                "TALOS"
-              ]
+              "filter": {
+                "any_of": [
+                  "CRONOS",
+                  "TALOS"
+                ]
+              }
             }
           },
           {
@@ -3572,7 +3778,7 @@
                 "of": "attacker",
                 "stat": "S"
               },
-              "comparison": "greater-than",
+              "comparison": "gt",
               "right": {
                 "of": "defender",
                 "stat": "T"
@@ -3617,18 +3823,22 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "state": "battle-shocked"
+          "filter": {
+            "state": "battle-shocked"
+          },
+          "subject": "defender"
         }
       },
       "effect": {
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -3655,64 +3865,58 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "destroyed",
-              "object": {
-                "owner": "enemy"
-              },
-              "window": "phase"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 12
+                }
+              }
             }
           }
-        ]
+        }
       },
       "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "test",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": {"inches":12}
-              }
-            },
-            "modifier": {
-              "test": "battle-shock"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": {
-              "owner": "enemy",
-              "within": {
-                "range": {"inches":12}
-              }
-            },
-            "modifier": {
-              "stat": "BS",
-              "operation": "subtract",
-              "value": 1
-            }
-          }
-        ]
+        "type": "test",
+        "target": "selected-unit",
+        "modifier": {
+          "test": "battle-shock",
+          "modifier": -1
+        }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "HAEMONCULUS COVENS"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "urgent-metamorphosis-tools-of-torment-drukhari",
@@ -3735,16 +3939,28 @@
       "target": "this-unit",
       "modifier": {
         "activity": "declare-charge",
-        "allow": true,
-        "after": [
-          "fall-back"
-        ]
+        "allow": true
       }
     },
     "scope": {
-      "duration": "turn"
+      "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "HAEMONCULUS COVENS"
+        ]
+      }
+    }
   },
   {
     "ability_id": "gnarlskin-experimentor-tools-of-torment-drukhari",
@@ -3761,7 +3977,7 @@
     "faction_id": "drukhari",
     "detachment_id": "tools-of-torment",
     "ability_type": "enhancement",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -3771,7 +3987,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -3780,7 +3996,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "defender",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -3789,7 +4005,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -3838,102 +4054,137 @@
     "ability_type": "detachment",
     "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Adrenalight",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "A",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          }
-        },
-        {
-          "name": "Hypex",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "M",
-              "operation": "add",
-              "value": 2
-            }
-          }
-        },
-        {
-          "name": "Serpentin",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "WS",
-              "operation": "subtract",
-              "value": 1,
-              "weapon_type": "melee"
-            }
-          }
-        },
-        {
-          "name": "Painbringer",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "T",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        },
-        {
-          "name": "Grave Lotus",
-          "effect": {
-            "type": "stat-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "stat": "S",
-              "operation": "add",
-              "value": 1,
-              "weapon_type": "melee"
-            }
-          }
-        },
-        {
-          "name": "Splintermind",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "roll-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "roll": "battle-shock",
-                  "operation": "subtract",
-                  "value": 1
-                }
-              },
-              {
-                "type": "stat-modifier",
-                "target": "this-unit",
-                "modifier": {
-                  "stat": "BS",
-                  "operation": "subtract",
-                  "value": 1,
-                  "weapon_type": "ranged"
+          ]
+        }
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "Adrenalight",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "A",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
                 }
               }
-            ]
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Hypex",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "add",
+                "value": 2
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Serpentin",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "WS",
+                "operation": "subtract",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            "id": "option-3"
+          },
+          {
+            "name": "Painbringer",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "T",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            "id": "option-4"
+          },
+          {
+            "name": "Grave Lotus",
+            "effect": {
+              "type": "stat-modifier",
+              "target": "this-unit",
+              "modifier": {
+                "stat": "S",
+                "operation": "add",
+                "value": 1,
+                "weapons": {
+                  "type": "melee"
+                }
+              }
+            },
+            "id": "option-5"
+          },
+          {
+            "name": "Splintermind",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "battle-shock",
+                    "operation": "subtract",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "stat": "BS",
+                    "operation": "subtract",
+                    "value": 1,
+                    "weapons": {
+                      "type": "ranged"
+                    }
+                  }
+                }
+              ]
+            },
+            "id": "option-6"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -3957,31 +4208,53 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "designate-target",
-      "designation": "contract-unit",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "start-of-first-battle-round"
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "weapon-ability-grant",
-          "target": "this-unit",
-          "modifier": {
-            "abilities": [
-              "Precision"
-            ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started",
+        "condition": {
+          "type": "battle-round",
+          "parameters": {
+            "min": 1,
+            "max": 1
           }
         }
       },
-      "duration": "battle"
+      "effect": {
+        "type": "designate-target",
+        "designation": "contract-unit",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "precision"
+                }
+              ]
+            }
+          }
+        },
+        "duration": "battle"
+      }
     },
     "scope": {
       "duration": "battle"
     },
-    "community_notes": "[APPROX] Models the Trophy Hunters Contract: at the start of the first battle round one enemy CHARACTER is designated the Contract unit, and KABAL / BLADES FOR HIRE attacks against it gain [PRECISION]. The two other Contracts (Sow Fear and Terror \u2192 [SUSTAINED HITS 1] vs INFANTRY/MOUNTED; Show of Strength \u2192 [LETHAL HITS] vs MONSTER/VEHICLE), the KABAL/BLADES-FOR-HIRE attacker restriction, and the +3 Pain tokens gained when the Contract unit is destroyed are not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Models the Trophy Hunters Contract: at the start of the first battle round one enemy CHARACTER is designated the Contract unit, and KABAL / BLADES FOR HIRE attacks against it gain [PRECISION]. The two other Contracts (Sow Fear and Terror → [SUSTAINED HITS 1] vs INFANTRY/MOUNTED; Show of Strength → [LETHAL HITS] vs MONSTER/VEHICLE), the KABAL/BLADES-FOR-HIRE attacker restriction, and the +3 Pain tokens gained when the Contract unit is destroyed are not modeled. Full rule in raw-text store."
   },
   {
     "ability_id": "rain-of-cruelty-drukhari",
@@ -4000,44 +4273,51 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "disembarked",
-          "window": "turn"
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Ignores Cover"
-              ],
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Lance"
-              ],
-              "weapon_type": "melee"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": "event-subject",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lance"
+              }
+            ],
+            "weapons": {
+              "type": "melee"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "turn"
     },
-    "community_notes": "Each time a DRUKHARI unit disembarks from a TRANSPORT, until the end of the turn its ranged weapons gain [IGNORES COVER] and its melee weapons gain [LANCE]."
+    "community_notes": "Each time a DRUKHARI unit disembarks from a TRANSPORT, until the end of the turn its ranged weapons gain [IGNORES COVER] and its melee weapons gain [LANCE].",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DRUKHARI"
+        ]
+      }
+    }
   },
   {
     "ability_id": "callous-competition-drukhari",
@@ -4061,9 +4341,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "winning-the-wager"
+              "filter": {
+                "designated": "winning-the-wager"
+              }
             }
           },
           "effect": {
@@ -4078,9 +4360,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "tag": "losing-the-wager"
+              "filter": {
+                "designated": "losing-the-wager"
+              }
             }
           },
           "effect": {
@@ -4137,19 +4421,23 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "ARCHON"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "ARCHON"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "KABALITE WARRIORS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "KABALITE WARRIORS"
+                    ]
+                  }
                 }
               }
             ]
@@ -4171,19 +4459,23 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "SUCCUBUS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "SUCCUBUS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "WYCHES"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "WYCHES"
+                    ]
+                  }
                 }
               }
             ]
@@ -4205,19 +4497,23 @@
             "operator": "and",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "HAEMONCULUS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "HAEMONCULUS"
+                    ]
+                  }
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "all_of": [
-                    "WRACKS"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "WRACKS"
+                    ]
+                  }
                 }
               }
             ]
@@ -4258,26 +4554,50 @@
     "faction_id": "drukhari",
     "detachment_id": "covenite-coterie",
     "ability_type": "detachment",
-    "behavior": "reactive",
+    "behavior": "passive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-compare",
-        "parameters": {
-          "left": {
-            "of": "attacker",
-            "stat": "S"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "all_of": [
+                  "HAEMONCULUS COVENS"
+                ]
+              }
+            }
           },
-          "comparison": "greater-than",
-          "right": {
-            "of": "defender",
-            "stat": "T"
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "attack-compare",
+            "parameters": {
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
+              "comparison": "gt",
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "defender",
+        "target": "attacker",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -4286,7 +4606,7 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
@@ -4375,28 +4695,22 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "happened",
-        "parameters": {
-          "event": "destroyed",
-          "object": {
-            "owner": "enemy"
-          },
-          "window": "event"
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "pain-token-pool",
-          "amount": 1
-        }
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": 1
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
     }
   },
   {
@@ -4423,7 +4737,9 @@
           "target": {
             "owner": "enemy",
             "within": {
-              "range": {"inches":6}
+              "range": {
+                "inches": 6
+              }
             }
           },
           "modifier": {

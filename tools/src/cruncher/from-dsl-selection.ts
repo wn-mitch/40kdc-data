@@ -10,6 +10,7 @@
  * effect it returns.
  */
 import type { BuffApplicability, BuffSource, EngineContext } from "./buffs.js";
+import { matchesUnitFilter } from "./unit-filter.js";
 
 /** What a selection contributes to the crunched unit. */
 export type SelectionPlan =
@@ -43,8 +44,8 @@ const SELECTED_UNIT = "selected-unit";
  * - A top-level dice gate with no failure branch becomes the lever's content; its roll joins
  *   `requires`.
  *
- * Selections that bind models, named models or a named binding stay on the translator's general
- * path, as does a selection whose effect never names the selected unit.
+ * Model selections stay unresolved without model identity. Named unit bindings are retargeted
+ * only within their own selection; nested selections retain their independent scope.
  */
 export function planSelection(
   node: Record<string, unknown>,
@@ -53,39 +54,32 @@ export function planSelection(
   context: EngineContext,
 ): SelectionPlan {
   const selector = isObject(node.selector) ? node.selector : undefined;
-  if (!selector || (selector.owner !== "friendly" && selector.owner !== "enemy")) return { kind: "none" };
-  if (selector.target_kind === "model" || selector.model_names != null || selector.bind_as != null) return { kind: "none" };
-  if (!referencesSelectedUnit(node.effect)) return { kind: "none" };
-
-  const keywords = selector.keywords;
-  const excluded = selector.excluded_keywords;
-  if ((keywords !== undefined && !isKeywordList(keywords)) || (excluded !== undefined && !isKeywordList(excluded))) {
-    return { kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed" };
-  }
+  const filter = selector && isObject(selector.filter) ? selector.filter : undefined;
+  if (!selector || !filter || (filter.owner !== "friendly" && filter.owner !== "enemy")) return { kind: "none" };
+  if (filter.level === "model" || filter.model_names != null) return { kind: "none" };
+  const binding = typeof selector.bind_as === "string" ? selector.bind_as : undefined;
+  if (!referencesSelectedUnit(node.effect, binding)) return { kind: "none" };
+  if (isObject(selector.count) && selector.count.max === 0) return { kind: "skip" };
   const { effect: _effect, ...selection } = node;
   const requires: unknown[] = [selection];
 
   let effect: unknown;
   let applicability: BuffApplicability | undefined;
   let label: string;
-  if (selector.owner === "friendly") {
-    if (excludesAbilityUnit(selector.eligibility) && !(source.kind === "ability" && source.abilityKind === "support")) {
-      return { kind: "skip" };
-    }
-    if (keywords !== undefined || excluded !== undefined) {
-      const own = perspective === "attacker" ? context.attackerKeywords : context.targetKeywords;
-      if (own === undefined) return { kind: "unsupported", reason: "select-units: the crunched unit's keywords are unavailable for the selector" };
-      const holds = (keywords ?? []).every((k) => includesKeyword(own, k)) && !(excluded ?? []).some((k) => includesKeyword(own, k));
-      if (!holds) return { kind: "skip" };
-    }
-    effect = node.effect;
+  if (filter.owner === "friendly") {
+    const excludesSelf = filter.excluding === "ability-unit" || filter.excluding === "this-unit" || excludesAbilityUnit(selector.eligibility);
+    if (excludesSelf && !(source.kind === "ability" && source.abilityKind === "support")) return { kind: "skip" };
+    const { within: _within, visible: _visible, excluding: _excluding, ...knownFilter } = filter;
+    const verdict = matchesUnitFilter(knownFilter, context, perspective === "attacker" ? "attacker" : "target");
+    if (verdict === false) return { kind: "skip" };
+    if (verdict === "unknown") return { kind: "unsupported", reason: "select-units: candidate identity or state is unavailable" };
+    effect = retarget(node.effect, SELECTED_UNIT, binding);
     label = "Selected unit";
   } else {
     const other = perspective === "attacker" ? "defender" : "attacker";
-    const gate = selectedEnemyGate(keywords, excluded, perspective);
-    if (typeof gate === "string") return { kind: "unsupported", reason: gate };
-    applicability = gate;
-    effect = retarget(node.effect, other);
+    const { within: _within, visible: _visible, excluding: _excluding, ...knownFilter } = filter;
+    applicability = perspective === "attacker" ? { targetFilter: knownFilter } : { attackerFilter: knownFilter };
+    effect = retarget(node.effect, other, binding);
     label = "Selected enemy unit";
   }
 
@@ -99,48 +93,60 @@ export function planSelection(
 }
 
 /**
- * The keyword gate an enemy selector puts on the selected unit. When the crunched unit attacks, the
- * selected unit is the defender and the gate reads the target's keywords; when it is attacked,
- * only a single required keyword on the attacker can be gated. Returns a reason when the selector
- * asks for a gate the buff layer cannot express.
+ * Bind a quantified recipient to its actual candidate filter. Unlike a selection,
+ * every matching pool receives the effect; no count or player choice is invented.
+ * Nested selections and loops establish their own recipient bindings.
  */
-function selectedEnemyGate(
-  keywords: string[] | undefined,
-  excluded: string[] | undefined,
-  perspective: "attacker" | "target",
-): BuffApplicability | undefined | string {
-  const out: BuffApplicability = {};
-  if (keywords !== undefined && keywords.length > 0) {
-    if (keywords.length > 1) return "select-units: more than one required keyword on the selected enemy unit is not gated by the buff layer";
-    if (perspective === "attacker") out.requiresTargetKeyword = keywords[0];
-    else out.requiresAttackerKeyword = keywords[0];
-  }
-  if (excluded !== undefined && excluded.length > 0) {
-    if (perspective !== "attacker") return "select-units: excluded keywords on the attacking unit are not gated by the buff layer";
-    out.excludedTargetKeywords = [...excluded];
-  }
-  return Object.keys(out).length > 0 ? out : undefined;
+export function bindEachRecipient(node: Record<string, unknown>, snapshotTarget?: "recipient"): unknown | undefined {
+  const selector = isObject(node.selector) ? node.selector : undefined;
+  if (!selector || !isObject(selector.filter) || (snapshotTarget === undefined && selector.eligibility !== undefined)) return undefined;
+  let boundRecipient = false;
+  let otherTarget = false;
+  const bind = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(bind);
+    if (!isObject(value) || value.type === "select-units" || value.type === "for-each-unit") return value;
+    const out: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value)) {
+      const recipient = child === "recipient" ||
+        (typeof selector.bind_as === "string" && isObject(child) && child.selection_var === selector.bind_as);
+      out[key] = key === "target" && recipient ? snapshotTarget ?? selector.filter : bind(child);
+      if (key === "target") {
+        boundRecipient ||= recipient;
+        otherTarget ||= !recipient;
+      }
+    }
+    return out;
+  };
+  const effect = bind(node.effect);
+  return boundRecipient && !otherTarget ? effect : undefined;
 }
 
+
 /** Does the effect name the selected unit as a target anywhere, outside a nested selection? */
-function referencesSelectedUnit(node: unknown): boolean {
-  if (Array.isArray(node)) return node.some(referencesSelectedUnit);
+function referencesSelectedUnit(node: unknown, binding?: string): boolean {
+  if (Array.isArray(node)) return node.some((child) => referencesSelectedUnit(child, binding));
   if (!isObject(node)) return false;
   if (node.type === "select-units") return false;
-  if (node.target === SELECTED_UNIT) return true;
+  if (node.target === SELECTED_UNIT || (binding !== undefined && isObject(node.target) && node.target.selection_var === binding)) return true;
+  if (isObject(node.target) && (node.target.member_of === SELECTED_UNIT ||
+      (binding !== undefined && isObject(node.target.member_of) && node.target.member_of.selection_var === binding))) return true;
   for (const key in node) {
-    if (key !== "target" && referencesSelectedUnit(node[key])) return true;
+    if (key !== "target" && referencesSelectedUnit(node[key], binding)) return true;
   }
   return false;
 }
 
 /** Copy the effect with each `selected-unit` target replaced, leaving nested selections alone. */
-function retarget(node: unknown, target: string): unknown {
-  if (Array.isArray(node)) return node.map((child) => retarget(child, target));
+function retarget(node: unknown, target: string, binding?: string): unknown {
+  if (Array.isArray(node)) return node.map((child) => retarget(child, target, binding));
   if (!isObject(node) || node.type === "select-units") return node;
   const out: Record<string, unknown> = {};
   for (const key in node) {
-    out[key] = key === "target" && node[key] === SELECTED_UNIT ? target : retarget(node[key], target);
+    const value = node[key];
+    const selected = value === SELECTED_UNIT || (binding !== undefined && isObject(value) && value.selection_var === binding);
+    out[key] = (key === "target" || key === "member_of") && selected
+      ? key === "member_of" && target === SELECTED_UNIT ? "this-unit" : target
+      : retarget(value, target, binding);
   }
   return out;
 }
@@ -160,11 +166,3 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isKeywordList(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((keyword) => typeof keyword === "string" && keyword.length > 0);
-}
-
-function includesKeyword(keywords: readonly string[], keyword: string): boolean {
-  const lower = keyword.toLowerCase();
-  return keywords.some((candidate) => candidate.toLowerCase() === lower);
-}

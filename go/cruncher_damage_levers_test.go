@@ -65,8 +65,8 @@ func TestLeversGateAttackerSkillPenaltiesByPhase(t *testing.T) {
 
 func TestLeversGateCritThresholdAndRerollByWeaponTypeAndName(t *testing.T) {
 	out := effectToBuffs(map[string]any{"type": "sequence", "steps": []any{
-		map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "wound", "critical_on": 5.0, "weapon_type": "melee"}},
-		map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones", "weapon_name": "Fabricated Gun"}},
+		map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "wound", "critical_on": 5.0, "weapons": map[string]any{"type": "melee"}}},
+		map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones", "weapons": map[string]any{"name": "Fabricated Gun"}}},
 	}}, leverSource(), shootingCtx(), "attacker")
 	want := []any{map[string]any{"phases": []any{"fight"}}, map[string]any{"weaponName": "fabricated gun"}}
 	if got := applicabilities(out.applied); !reflect.DeepEqual(got, want) {
@@ -75,7 +75,7 @@ func TestLeversGateCritThresholdAndRerollByWeaponTypeAndName(t *testing.T) {
 }
 
 func TestLeversKeepPhaseAndWeaponNameGates(t *testing.T) {
-	out := effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 1.0, "weapon_type": "melee", "weapon_name": "Fabricated Blade"}}, leverSource(), shootingCtx(), "attacker")
+	out := effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 1.0, "weapons": map[string]any{"type": "melee", "name": "Fabricated Blade"}}}, leverSource(), shootingCtx(), "attacker")
 	want := []any{map[string]any{"phases": []any{"fight"}, "weaponName": "fabricated blade"}}
 	if got := applicabilities(out.applied); !reflect.DeepEqual(got, want) {
 		t.Fatalf("applicableWhen = %#v, want %#v", got, want)
@@ -83,20 +83,12 @@ func TestLeversKeepPhaseAndWeaponNameGates(t *testing.T) {
 }
 
 func TestLeversGateCritThresholdOnWeaponKeywordAndRefuseUnreadableOne(t *testing.T) {
-	gated := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapon_keyword": "Pistol"}}, leverSource(), shootingCtx(), "attacker")
+	gated := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapons": map[string]any{"keyword": map[string]any{"keyword_id": "pistol"}}}}, leverSource(), shootingCtx(), "attacker")
 	if len(gated.unsupported) != 0 {
 		t.Fatalf("unsupported = %#v", gated.unsupported)
 	}
-	if got, want := applicabilities(gated.applied), []any{map[string]any{"weaponKeyword": "pistol"}}; !reflect.DeepEqual(got, want) {
+	if got, want := applicabilities(gated.applied), []any{map[string]any{"weaponKeywords": []map[string]any{{"keyword_id": "pistol"}}}}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("applicableWhen = %#v, want %#v", got, want)
-	}
-	out := effectToBuffs(map[string]any{"type": "roll-result", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "critical_on": 5.0, "weapon_keyword": ""}}, leverSource(), shootingCtx(), "attacker")
-	if len(out.applied) != 0 {
-		t.Fatalf("applied = %#v", out.applied)
-	}
-	want := "roll-result: narrows by \"weapon_keyword\" which the cruncher can't resolve here"
-	if len(out.unsupported) != 1 || out.unsupported[0].(map[string]any)["reason"] != want {
-		t.Fatalf("unsupported = %#v", out.unsupported)
 	}
 }
 
@@ -138,7 +130,7 @@ func TestLeversCritHitFiveWithLethalRaisesWounds(t *testing.T) {
 
 func TestLeversWeaponNamedAttacksLiftReachesOnlyThatWeapon(t *testing.T) {
 	lift := func(name string) []any {
-		return effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 1.0, "weapon_name": name}}, leverSource(), shootingCtx(), "attacker").applied
+		return effectToBuffs(map[string]any{"type": "stat-modifier", "target": "this-unit", "modifier": map[string]any{"stat": "A", "operation": "improve", "value": 1.0, "weapons": map[string]any{"name": name}}}, leverSource(), shootingCtx(), "attacker").applied
 	}
 	if got := leverStages(t, lift("Bolt Rifles"))["attacks"]; got != 15 {
 		t.Fatalf("named weapon attacks = %v, want 15", got)
@@ -153,7 +145,9 @@ func TestLeversPrintedGrantToFriendlyUnitsTranslatesItsBodyForTheHolders(t *test
 		body := map[string]any{"type": "re-roll", "target": "this-unit", "modifier": map[string]any{"roll": "hit", "subset": "ones"}}
 		return map[string]any{"type": "ability-grant", "target": target, "modifier": map[string]any{"ability": "fabricated-granted", "definition": body}}
 	}
-	friendly := effectToBuffs(grant(map[string]any{"owner": "friendly", "all_of": []any{"EXAMPLE"}}), leverSource(), shootingCtx(), "attacker")
+	friendlyCtx := shootingCtx()
+	friendlyCtx["attackerKeywords"] = []any{"EXAMPLE"}
+	friendly := effectToBuffs(grant(map[string]any{"owner": "friendly", "all_of": []any{"EXAMPLE"}}), leverSource(), friendlyCtx, "attacker")
 	if len(friendly.applied) != 1 || len(friendly.unsupported) != 0 {
 		t.Fatalf("friendly = %#v / %#v", friendly.applied, friendly.unsupported)
 	}
@@ -167,7 +161,8 @@ func TestLeversPrintedGrantToFriendlyUnitsTranslatesItsBodyForTheHolders(t *test
 		t.Fatalf("bound = %#v / %#v", bound.applied, bound.unsupported)
 	}
 	enemy := effectToBuffs(grant(map[string]any{"owner": "enemy", "all_of": []any{"EXAMPLE"}}), leverSource(), shootingCtx(), "attacker")
-	if len(enemy.applied) != 0 || len(enemy.unsupported) != 0 {
+	if len(enemy.applied) != 0 || len(enemy.unsupported) != 1 ||
+		enemy.unsupported[0].(map[string]any)["reason"] != "unit-filter target: identity, state or model membership is unresolved" {
 		t.Fatalf("enemy = %#v / %#v", enemy.applied, enemy.unsupported)
 	}
 }

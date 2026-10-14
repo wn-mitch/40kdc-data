@@ -434,3 +434,55 @@ tooling/parity/differ.py defaults to the stale gitignored tools/dist/runner.js w
 ## 2026-09-28T03:42:26Z — claude-opus-5-5
 
 lldb -b 'run; bt' on the wh40kdc debug test binary hung with no output (stack-overflow triage); bisecting RUST_MIN_STACK sizes found the needed stack faster.
+
+## 2026-10-14T22:35:48Z — claude-opus-5-5
+
+Round 5C leafDescriberAudit enumerated every family's full parameter product on the first leafBoard call (unit-filter@15 ~120s, characteristic-modifier@18 ~77s locally), so each vitest worker paid ~200s (12 min in CI) and an async test hit its 5s timeout only when the timer won the race; sync blocking hid it locally.
+
+## 2026-10-15T16:38:03Z — openai-codex/gpt-6-astra
+
+Descriptive find failed every judgment request because its backend rejected the account; literal search is required for this migration investigation.
+
+## 2026-10-15T16:39:45Z — openai-codex/gpt-6-astra
+
+Private tsx scripts outside the tools package run as CommonJS, so import.meta.dirname is undefined; process.argv[1] supplies their filesystem location.
+
+## 2026-10-15T17:41:57Z — openai-codex/gpt-6-astra
+
+Root instructions require examples/AGENTS.md before app work, but that file is absent; the already-loaded project instructions remain the available convention source.
+
+## 2026-10-15T18:14:36Z — openai-codex/gpt-6-astra
+
+Schema edits from concurrent workers briefly left invalid JSON, blocking authoring CLI imports and tests before dispatch. Browser evaluation imported an isolated module instance; the UI smoke required an explicit page-module script to mutate in-memory fixture data.
+
+## 2026-10-15T19:00:35Z — gpt-6-astra
+
+Shared schema references use URL paths under defs while source files live under schemas/$defs; treating a $ref as a filesystem path led to a failed lookup. Resolve registered schema IDs or locate the source filename instead.
+
+## 2026-10-15T19:33:39Z — sol
+
+The LSP device has no language server for the TypeScript compiler files; reference-aware edits require bounded source inspection instead.
+
+## 2026-10-15T19:43:17Z — sol
+
+round5c review-apply resolves its JSON packet against the shell cwd rather than the documented repository-root path convention; invoking it from tools with a root-relative packet fails ENOENT.
+
+## 2026-10-15T20:01:36Z — sol
+
+Semantic code search failed all judge requests because the TypeSafe account had no available credits; switched to literal search instead of treating no hits as absence.
+
+## 2026-10-15T20:44:57Z — gpt-6.1-sol
+
+LLDB batch launch of a Rust test stalled before producing a trace and timed out; native layout diagnostics were needed to investigate recursive deserialization stack pressure.
+
+## 2026-10-15T20:56:29Z — gpt-6.1-sol
+
+Ranged reads of xd://eval/browser were interpreted as a different documentation topic, requiring a full docs read instead; a language-server reference lookup also raced code generation and needed its regenerated line anchor.
+
+## 2026-10-16T03:52:00Z — sol
+
+Eval tool results expose text and details through a non-enumerable result object; Object.keys returned empty and output(result) attempted agent-history lookup. Parsing runner discovery required bounded raw artifact reads instead.
+
+## 2026-10-16T04:29:18Z — sol
+
+Resolver example lookup used nonexistent test paths; grep skipped them, so the actual conformance fixture and exported API contracts were used instead.

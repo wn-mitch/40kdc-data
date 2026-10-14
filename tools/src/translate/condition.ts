@@ -20,21 +20,17 @@ export interface Condition {
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
-import { andList, dekebab, designationPhrase, idLabel, objectivePhrase, ord, orList, type P, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
+import { andList, countPhrase, dekebab, designationPhrase, idLabel, keywordList, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
+import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
 
 // ── Predicates ──────────────────────────────────────────────────────────────
 
-function keywordList(p: P): string {
-  if (p.chosen_by != null) return `the keyword selected for ${titleCase(str(p.chosen_by))}`;
-  if (Array.isArray(p.any_of)) return orList((p.any_of as unknown[]).map((k) => `"${str(k)}"`));
-  return andList(((p.all_of as unknown[]) ?? []).map((k) => `"${str(k)}"`));
-}
 
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
-  "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "has-ability", "controls", "resource", "attack-compare",
+  "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "controls", "resource", "attack-compare",
   "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
 ]);
 
@@ -62,6 +58,7 @@ const transportPhrase = (ref: unknown): string => ref === "this-unit" ? "that Tr
 
 /** The predicate phrase, optionally negated ("the unit is not below starting strength"). */
 export function describePredicate(c: Condition, negated: boolean): string {
+  if (negated && c.type === "controls" && ["count", "compare", "proportion"].filter((key) => c.parameters?.[key] != null).length > 1) return `not (${describePredicate(c, false)})`;
   if (negated && VERB_NEGATED.has(String(c.type))) return negatePhrase(describePredicate(c, false));
   if (negated && c.type === "happened" && !["move-ended", "selected", "disembarked"].includes(String(c.parameters?.event))) return negatePhrase(describePredicate(c, false));
   if (negated && c.type === "designated" && typeof c.parameters?.subject === "object" && (c.parameters.subject as P)?.objective) return negatePhrase(describePredicate(c, false));
@@ -84,22 +81,25 @@ export function describePredicate(c: Condition, negated: boolean): string {
       else where = "the battle round";
       return `${neg}during ${where}`;
     }
+    case "matches":
+      return describeMatches(p, negated);
     case "rule-active":
-      return `the ${idLabel(p.rule)} is ${negated ? "not " : ""}active`;
+      return `the ${ruleRefPhrase(p.rule)} is ${negated ? "not " : ""}active`;
     case "has-keyword": {
       const who = p.subject === "defender" ? "the target" : subjectOf(p);
-      return `${who} ${negated ? "does not have" : "has"} ${keywordList(p)}`;
+      return `${who} ${negated ? "does not have" : "has"} the keyword selected for ${titleCase(str(p.chosen_by))}`;
     }
-    case "owned-by":
-      return `${subjectOf(p)} is ${negated ? "not " : ""}${p.owner === "enemy" ? "an enemy unit" : "friendly"}`;
     case "same-unit":
       return `${subjectOf(p)} is ${negated ? "not " : ""}the same unit as ${p.as === "this-unit" ? "this unit" : unitRefPhrase(p.as)}`;
     case "model-profile":
       return `${subjectOf(p, "the model")} is ${negated ? "not " : ""}the ${titleCase(str(p.profile))} model`;
-    case "has-ability":
-      return `${neg}${subjectOf(p)} has the ${idLabel(p.ability)} ability`;
     case "attachment": {
       const w = (p.with ?? {}) as P;
+      if (Object.keys(w).some((key) => key !== "all_of")) {
+        if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p)} is leading ${unitFilterPhrase(w)}`;
+        if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${unitFilterPhrase({ ...w, level: "model" })}`;
+        return `${neg}${subjectOf(p)} is attached to ${unitFilterPhrase(w)}`;
+      }
       const kw = Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : "";
       if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p)} is leading a ${kw}unit`;
       if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}model`;
@@ -126,8 +126,10 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${neg}${who} ${andList(parts)}`;
     }
     case "equipped-weapon-count": {
-      const count = Number(p.count);
-      return `${subjectOf(p, "the model")} is equipped with a weapon named "${str(p.other_than)}" and exactly ${count} other ${str(p.weapon_type)} weapon${count === 1 ? "" : "s"}`;
+      const count = (p.count ?? {}) as P;
+      const weapons = weaponNoun({ weapons: p.weapons });
+      const noun = count.min === 1 && count.max === 1 ? weapons.replace(/\bweapons\b/, "weapon") : weapons;
+      return `${subjectOf(p, "the model")} is ${negated ? "not " : ""}equipped with ${countPhrase(count)} ${noun}`;
     }
     case "named-weapon":
     case "unit-wargear":
@@ -139,7 +141,6 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const withRef = p.with != null ? ` with ${unitRefPhrase(p.with)}` : "";
       if (p.at === "phase-start" || p.at === "turn-start")
         return `${who} ${negated ? "was not" : "was"} ${statePhrase(str(p.state))}${withRef} at the start of the ${p.at === "phase-start" ? "phase" : "turn"}`;
-      if (p.state === "fights-first") return `${neg}${who} has Fights First`;
       return `${who} is ${statePhrase(str(p.state), negated)}${withRef}`;
     }
     case "eligible": {
@@ -156,28 +157,22 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "happened-compare": {
       const left = p.left as P;
       const right = p.right as P;
-      const ge = p.comparison === "greater-or-equal";
-      if (right.pool != null) return `${neg}you destroyed at least as many ${destroyedCount(left)} as your ${dekebab(str(right.pool))}`;
-      if (right.value != null) return `${neg}you destroyed ${ge ? "at least" : "more than"} ${str(right.value)} ${destroyedCount(left)}`;
-      return `${neg}you destroyed ${ge ? "at least as many" : "more"} ${destroyedCount(left)} ${ge ? "as" : "than"} ${destroyedCount(right)}`;
+      const ge = p.comparison === "gte";
+      if (right.pool != null && ge) return `${neg}you destroyed at least as many ${destroyedCount(left)} as your ${dekebab(str(right.pool))}`;
+      if (right.value != null) return `${neg}you destroyed ${comparisonPhrase(p.comparison)} ${str(right.value)} ${destroyedCount(left)}`;
+      if (p.comparison === "gt" || ge) return `${neg}you destroyed ${ge ? "at least as many" : "more"} ${destroyedCount(left)} ${ge ? "as" : "than"} ${destroyedCount(right)}`;
+      return `${neg}the number of ${destroyedCount(left)} you destroyed is ${comparisonPhrase(p.comparison)} ${right.pool != null ? `your ${dekebab(str(right.pool))}` : `the number of ${destroyedCount(right)} you destroyed`}`;
     }
     case "within": {
       const of = p.of;
       const range = p.range;
       const wholly = p.wholly === true ? "wholly " : "";
-      const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
-      if (range === "half-weapon" || range === "weapon")
-        return `${p.subject === "defender" ? "the target" : subjectOf(p)} is ${negated ? "not " : ""}within ${rangePhrase(range)}`;
-      if (of && typeof of === "object" && (of as P).objective) {
-        if (((of as P).objective as P).selection_var != null) return `${who} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
-        const obj = objectivePhrase((of as P).objective as P, false, "objective marker");
-        return `${who} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
-      }
-      if (of && typeof of === "object" && (of as P).owner === "enemy" && p.subject == null)
-        return negated ? `no ${unitFilterPhrase(of as P).replace(/^an? /, "")} is within ${rangePhrase(range)}` : `${unitFilterPhrase(of as P)} is within ${rangePhrase(range)}`;
-      const target = of === "battlefield-edge" ? "a battlefield edge" : of === "battlefield-centre" ? "the centre of the battlefield" : of && typeof of === "object" && (of as P).marker ? `${/^[aeiou]/i.test(str((of as P).marker)) ? "an" : "a"} ${dekebab(str((of as P).marker))} marker` : unitRefPhrase(of);
+      const every = p.models === "every";
+      const who = every ? `every model in ${subjectOf(p)}${p.count != null ? ` (${countPhrase(p.count)} models)` : ""}` : p.count != null ? `${countPhrase(p.count)} models in ${subjectOf(p)}` : subjectOf(p);
+      const plural = !every && p.count != null;
+      const target = range === "half-weapon" || range === "weapon" ? "" : ` of ${placeRefPhrase(of)}`;
       const at = p.at === "phase-start" ? " at the start of the phase" : "";
-      return `${who} ${p.at === "phase-start" ? "was" : "is"} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)} of ${target}${at}`;
+      return `${who} ${p.at === "phase-start" ? (plural ? "were" : "was") : (plural ? "are" : "is")} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)}${target}${at}`;
     }
     case "in-region": {
       const r = (p.region ?? {}) as P;
@@ -202,20 +197,36 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${neg}${who} is the closest ${among}${to}${within}`;
     }
     case "controls": {
-      if (p.compare === "more-than-opponent") return `${neg}you hold more objectives than the opponent`;
       const who = p.by === "enemy" ? "your opponent controls" : "you control";
-      const n = p.count_min ?? 1;
-      let s = `${neg}${who} ${str(n)}+ ${objectivePhrase((p.objective ?? {}) as P, true)}`;
-      if (p.count_max != null) s += ` (at most ${str(p.count_max)})`;
-      return s;
+      const objective = objectivePhrase((p.objective ?? {}) as P, true);
+      const clauses: string[] = [];
+      if (p.count != null || (p.compare == null && p.proportion == null)) clauses.push(`${who} ${countPhrase(p.count)} ${objective}`);
+      if (p.compare != null) {
+        const compare = p.compare as P;
+        const other = compare.owner === "friendly" ? "you" : "the opponent";
+        const holder = p.by === "enemy" ? "your opponent holds" : "you hold";
+        if (compare.comparison === "gt") clauses.push(`${holder} more ${objective} than ${other}`);
+        else clauses.push(`the number of ${objective} ${p.by === "enemy" ? "your opponent controls" : "you control"} is ${comparisonPhrase(compare.comparison)} the number ${compare.owner === "friendly" ? "you control" : "the opponent controls"}`);
+      }
+      if (p.proportion != null) {
+        const proportion = p.proportion as P;
+        const fraction = proportion.fraction === 0.5 ? "half" : `${Number(proportion.fraction) * 100}%`;
+        clauses.push(`${who} ${comparisonPhrase(proportion.comparison)} ${fraction} of the ${objective}`);
+      }
+      return `${neg}${clauses.join(" and ")}`;
     }
     case "attack-is": {
       const parts: string[] = [];
-      if (p.all_target_same_unit === true) return `${neg}all of the unit's ${p.attack_type ? `${str(p.attack_type)} ` : ""}attacks target the same enemy unit`;
       const kind = [p.shooting_type ? `${dekebab(str(p.shooting_type))} shooting` : "", p.fight_type ? `${dekebab(str(p.fight_type))} fight` : "", p.attack_type ? str(p.attack_type) : ""].filter(Boolean).join(" ");
+      if (p.all_target_same_unit === true) return `${neg}all of the unit's ${kind ? `${kind} ` : ""}attacks${p.weapons != null ? ` made with ${weaponNoun({ weapons: p.weapons })}` : ""} target the same enemy unit`;
       parts.push(`for ${kind ? `${kind} ` : ""}attacks`);
-      if (p.weapon_keyword) parts.push(`made with [${str(p.weapon_keyword).toUpperCase()}] weapons`);
-      if (p.weapon_name) parts.push(`made with ${str(p.weapon_name)}`);
+      if (p.weapons != null) {
+        const weapons = p.weapons as P;
+        if (Object.keys(weapons).every((key) => key === "keyword" || key === "name") && !Array.isArray(weapons.keyword)) {
+          if (weapons.keyword != null) parts.push(`made with ${bracketKeyword(weapons.keyword)} weapons`);
+          if (weapons.name != null) parts.push(`made with ${str(weapons.name)}`);
+        } else parts.push(`made with ${weaponNoun({ weapons })}`);
+      }
       return `${neg}${parts.join(" ")}`;
     }
     case "attack-compare": {
@@ -224,7 +235,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
         const whose = o.of === "defender" ? "the target's" : "the attack's";
         return `${whose} ${o.reduce === "max" ? "highest " : o.reduce === "min" ? "lowest " : ""}${str(o.stat)}`;
       };
-      return `${neg}${side(p.left as P)} is ${dekebab(str(p.comparison))} ${side(p.right as P)}`;
+      return `${neg}${side(p.left as P)} is ${comparisonPhrase(p.comparison)} ${side(p.right as P)}`;
     }
     case "roll-result":
       return `${neg}the triggering ${rollWord(p.roll)} roll ${p.result === "success" ? "succeeded" : `was a ${str(p.result)}`}`;
@@ -238,10 +249,9 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "designated": {
       const s = p.subject;
       if (s && typeof s === "object" && (s as P).objective) {
-        let out = `${neg}${str(p.count_min ?? 1)}+ ${objectivePhrase((s as P).objective as P, true)} tagged ${dekebab(str(p.tag))}`;
-        if (p.count_max != null) out += ` (at most ${str(p.count_max)})`;
-        return out;
+        return `${neg}${countPhrase(p.count)} ${objectivePhrase((s as P).objective as P, true)} tagged ${dekebab(str(p.tag))}`;
       }
+      if (p.count != null) return `${neg}${countPhrase(p.count)} ${unitRefPhrase(s).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s")} ${designationPhrase(str(p.tag))}${p.by != null ? ` by ${unitRefPhrase(p.by)}` : ""}`;
       const by = p.by != null ? ` by ${unitRefPhrase(p.by, "this unit").replace(/^the unit$/, "this unit")}` : "";
       return `${subjectOf(p)} is ${negated ? "not " : ""}${designationPhrase(str(p.tag))}${by}`;
     }
@@ -250,28 +260,32 @@ export function describePredicate(c: Condition, negated: boolean): string {
         const source = (p.source_ability as P | undefined)?.ability_id;
         return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of the opponent's previous turn`;
       }
-      const amount = p.at_least != null ? `${str(p.at_least)}+` : `at most ${str(p.at_most)}`;
+      const amount = countPhrase(p.count);
       return `${neg}the unit has ${amount} ${dekebab(str(p.pool))}`;
     }
     // ── Mission-card predicates ───────────────────────────────────────────
     case "operation-markers": {
       const side = p.side != null ? `${str(p.side)} ` : "";
-      const min = typeof p.count_min === "number" ? p.count_min : undefined;
-      const max = typeof p.count_max === "number" ? p.count_max : undefined;
+      const count = (p.count ?? {}) as P;
+      const min = typeof count.min === "number" ? count.min : undefined;
+      const max = typeof count.max === "number" ? count.max : undefined;
       let s: string;
       if (max === 0) s = `no ${side}operation markers on the battlefield`;
       else if (min != null && max != null && min === max) s = `exactly ${min} ${side}operation marker${min === 1 ? "" : "s"} on the battlefield`;
-      else s = `${str(min ?? 1)}+ ${side}operation markers on the battlefield`;
-      if (p.within_range_of != null) s += ` within range of ${dekebab(str(p.within_range_of))}`;
+      else s = `${countPhrase(p.count)} ${side}operation markers on the battlefield`;
+      if (p.within != null) {
+        const within = p.within as P;
+        s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
+      }
       if (p.friendly_unit_in_same_terrain_area) s += " with a friendly unit in the same terrain area";
       if (p.no_enemy_in_terrain_area) s += " and no enemy units in that terrain area";
       return `${neg}${s}`;
     }
     case "engagement-fronts":
-      return `${neg}you are engaged on ${str(p.count_min ?? 1)}+ fronts`;
+      return `${neg}you are engaged on ${countPhrase(p.count)} fronts`;
     case "destroyed-while-on-objective": {
       const obj = p.objective_role ? `a ${dekebab(str(p.objective_role))} objective` : "an objective";
-      let s = `${neg}${str(p.count_min ?? 1)}+ enemy units destroyed`;
+      let s = `${neg}${countPhrase(p.count)} enemy units destroyed`;
       if (p.destroyer_on_objective) s += ` by a unit on ${obj}`;
       if (p.victim_on_objective) s += ` while on ${obj}`;
       if (p.victim_started_turn_on_objective) s += ` that started the turn on ${obj}`;
@@ -280,12 +294,16 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "destroyed-in-tagged-terrain": {
       const where = p.at_start_of_turn ? "that started the turn in" : "while in";
       const terrain = p.tag != null ? `${dekebab(str(p.tag))} terrain` : "a terrain area";
-      return `${neg}${str(p.count_min ?? 1)}+ enemy units destroyed ${where} ${terrain}`;
+      return `${neg}${countPhrase(p.count)} enemy units destroyed ${where} ${terrain}`;
     }
     case "battle-size":
       return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
     case "army-faction":
       return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
+    case "army-state":
+      return `${p.owner === "enemy" ? "your opponent's army" : "your army"} is ${negated ? "not " : ""}${dekebab(str(p.state))}`;
+    case "oath-state":
+      return `the ${idLabel(str(p.ability))} oath is ${negated ? "not " : ""}${dekebab(str(p.state))}`;
     case "army-includes":
       return armyIncludes(p, negated);
     case "moved-over": {
@@ -300,6 +318,39 @@ export function describePredicate(c: Condition, negated: boolean): string {
   }
 }
 
+function comparisonPhrase(comparison: unknown): string {
+  return ({ gt: "more than", gte: "at least", eq: "equal to", neq: "not equal to", lt: "less than", lte: "at most" } as Record<string, string>)[str(comparison)] ?? dekebab(str(comparison));
+}
+
+/** Canonical ordinary predicates; compound negation applies to the whole filter. */
+function describeMatches(p: P, negated: boolean): string {
+  const f = (p.filter ?? {}) as P;
+  const who = p.subject === "defender" ? "the target" : subjectOf(p);
+  const keys = Object.keys(f).filter((key) => key !== "level");
+  const no = negated ? "not " : "";
+  if (keys.length === 1) {
+    if (f.all_of != null || f.any_of != null) return `${who} ${negated ? "does not have" : "has"} ${negated && Array.isArray(f.all_of) && f.all_of.length > 1 ? "all of " : ""}${keywordList(f)}`;
+    if (Array.isArray(f.none_of)) return `${who} ${negated ? "has" : "does not have"} ${orList(f.none_of.map((k) => `"${str(k)}"`))}`;
+    if (Array.isArray(f.not_all_of)) return `${who} ${negated ? "has" : "does not have"} all of ${andList(f.not_all_of.map((k) => `"${str(k)}"`))}`;
+    if (f.owner != null) return `${subjectOf(p)} is ${no}${f.owner === "enemy" ? "an enemy unit" : f.owner === "friendly" ? "friendly" : "a unit of either player"}`;
+    if (f.state != null) return f.state === "fights-first" ? `${who} ${negated ? "does not have" : "has"} Fights First` : `${who} is ${statePhrase(str(f.state), negated)}`;
+    if (Array.isArray(f.not_states)) return f.not_states.length === 1 ? `${who} is ${statePhrase(str(f.not_states[0]), !negated)}` : `${negated ? "not (" : ""}${andList(f.not_states.map((state) => `${who} is ${statePhrase(str(state), true)}`))}${negated ? ")" : ""}`;
+    if (Array.isArray(f.has_ability)) return `${who} ${negated ? "does not have" : "has"} the ${andList(f.has_ability.map(idLabel))} ability`;
+    if (Array.isArray(f.lacks_ability)) return `${who} ${negated ? "has" : "does not have"} the ${orList(f.lacks_ability.map(idLabel))} ability`;
+    if (f.designated != null || f.not_designated != null) return `${who} is ${(f.not_designated != null) !== negated ? "not " : ""}${designationPhrase(str(f.designated ?? f.not_designated))}`;
+    if (f.visible != null) {
+      const to = (f.visible as P).to;
+      return `${who} is ${no}visible to ${to === "attacker" ? "the attacking model" : unitRefPhrase(to)}`;
+    }
+    if (f.within != null) {
+      const within = f.within as P;
+      const to = within.range === "weapon" || within.range === "half-weapon" ? "" : ` of ${placeRefPhrase(within.of)}`;
+      return `${who} is ${no}${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${to}`;
+    }
+  }
+  return `${who} is ${no}${unitFilterPhrase(f)}`;
+}
+
 /**
  * "your army includes a CHARACTER unit", "your army includes 2 or more X units", "every model in
  * your army has the IMPERIUM keyword". The army is yours, so the filter's owner is not repeated.
@@ -308,6 +359,7 @@ function armyIncludes(p: P, negated: boolean): string {
   const { owner: _owner, ...f } = (p.filter ?? {}) as P;
   const noun = f.level === "model" ? "model" : "unit";
   if (p.every === true) {
+    if (Object.keys(f).some((key) => !["all_of", "any_of", "level"].includes(key)) || (f.all_of != null && f.any_of != null)) return `${negated ? "not " : ""}every ${noun} in your army is ${unitFilterPhrase(f)}`;
     const all = Array.isArray(f.all_of) ? (f.all_of as unknown[]).map(str) : [];
     const any = Array.isArray(f.any_of) ? (f.any_of as unknown[]).map(str) : [];
     const words = any.length ? orList(any) : andList(all);

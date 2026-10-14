@@ -22,30 +22,40 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "CHARACTER"
-              ]
+              "filter": {
+                "all_of": [
+                  "CHARACTER"
+                ]
+              }
             }
           },
           "effect": {
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Lance"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lance"
+                }
+              ]
             }
           }
         }
@@ -94,7 +104,9 @@
         "range": {
           "inches": 18
         },
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -152,10 +164,17 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
-        ],
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -260,11 +279,11 @@
       }
     },
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Stealth"
+        "keywords": [
+          "STEALTH"
         ]
       }
     },
@@ -308,7 +327,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -351,33 +370,47 @@
       "object": "this-unit"
     },
     "effect": {
-      "type": "persistent-designation",
-      "designation": "death-begets-vengeance-hated",
-      "duration": "battle",
-      "select": {
-        "count": 1,
-        "scope": "enemy-unit",
-        "selection_policy": "one-time",
-        "timing": "on-unit-destroyed"
+      "type": "ability-part",
+      "trigger": {
+        "event": "destroyed",
+        "object": "this-unit"
       },
-      "consumer": {
-        "beneficiary": "bearer",
-        "relation": "attacks-selected-unit",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-model",
-          "modifier": {
-            "roll": "wound",
-            "operation": "add",
-            "value": 1
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "death-begets-vengeance-hated",
+        "duration": "battle",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
           }
-        }
+        },
+        "consumer": {
+          "beneficiary": "this-model",
+          "relation": "attacks-selected-unit",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        "selection_policy": "one-time"
       }
     },
     "scope": {
       "duration": "battle"
     },
-    "community_notes": "Used when a friendly Death Company unit is destroyed by an enemy unit: that enemy unit is hated for the rest of the battle \u2014 friendly Death Company attacks against it get +1 to Wound rolls"
+    "community_notes": "Used when a friendly Death Company unit is destroyed by an enemy unit: that enemy unit is hated for the rest of the battle — friendly Death Company attacks against it get +1 to Wound rolls"
   },
   {
     "ability_id": "inexorable-valour-encarmine-speartip-blood-angels",
@@ -479,11 +512,11 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "weapon-ability-grant",
+      "type": "keyword-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Mobile"
+        "keywords": [
+          "MOBILE"
         ]
       }
     },
@@ -494,7 +527,7 @@
   },
   {
     "ability_id": "rage-fuelled-response-wrath-of-the-doomed-blood-angels",
-    "name": "Rage\u2011Fuelled Response",
+    "name": "Rage‑Fuelled Response",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -577,10 +610,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -633,7 +668,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     }
@@ -667,7 +702,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "INFANTRY"
       ]
@@ -710,7 +745,7 @@
       "duration": "one-use"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     },
@@ -740,20 +775,31 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         }
       ]
@@ -762,7 +808,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "JUMP PACK"
       ]
@@ -797,14 +843,16 @@
         "stat": "D",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "JUMP PACK"
       ]
@@ -842,7 +890,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH COMPANY"
       ]
     },
@@ -874,7 +922,9 @@
             "stat": "S",
             "operation": "add",
             "value": 2,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -884,7 +934,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -893,7 +945,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CAPTAIN"
       ]
     }
@@ -926,7 +978,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Assault Intercessor Squad"
       ]
     },
@@ -955,14 +1007,16 @@
         "stat": "A",
         "operation": "add",
         "value": 2,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DEATH COMPANY"
       ]
     }
@@ -1000,8 +1054,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -1029,9 +1088,9 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "phase-is",
+        "type": "attack-is",
         "parameters": {
-          "phase": "fight"
+          "attack_type": "melee"
         }
       },
       "effect": {
@@ -1051,7 +1110,7 @@
       "sanguinary-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "blood-angels"
   },
   {
@@ -1067,11 +1126,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "all_of": [
-            "ADEPTUS ASTARTES"
-          ]
+          "filter": {
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ]
+          }
         }
       },
       "effect": {
@@ -1146,7 +1207,9 @@
           "modifier": {
             "roll": "hit",
             "subset": "all-failures",
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -1161,30 +1224,38 @@
                     "operator": "and",
                     "operands": [
                       {
-                        "type": "within",
+                        "type": "matches",
                         "parameters": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "BLOOD ANGELS"
-                            ]
-                          },
-                          "range": {
-                            "inches": 6
+                          "filter": {
+                            "within": {
+                              "range": {
+                                "inches": 6
+                              },
+                              "of": {
+                                "owner": "friendly",
+                                "all_of": [
+                                  "BLOOD ANGELS"
+                                ]
+                              }
+                            }
                           }
                         }
                       },
                       {
-                        "type": "within",
+                        "type": "matches",
                         "parameters": {
-                          "of": {
-                            "owner": "friendly",
-                            "all_of": [
-                              "CHARACTER"
-                            ]
-                          },
-                          "range": {
-                            "inches": 6
+                          "filter": {
+                            "within": {
+                              "range": {
+                                "inches": 6
+                              },
+                              "of": {
+                                "owner": "friendly",
+                                "all_of": [
+                                  "CHARACTER"
+                                ]
+                              }
+                            }
                           }
                         }
                       }
@@ -1196,16 +1267,20 @@
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "within",
+                    "type": "matches",
                     "parameters": {
-                      "of": {
-                        "owner": "friendly",
-                        "all_of": [
-                          "CHAPLAIN"
-                        ]
-                      },
-                      "range": {
-                        "inches": 12
+                      "filter": {
+                        "within": {
+                          "range": {
+                            "inches": 12
+                          },
+                          "of": {
+                            "owner": "friendly",
+                            "all_of": [
+                              "CHAPLAIN"
+                            ]
+                          }
+                        }
                       }
                     }
                   }
@@ -1309,9 +1384,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "state": "engaged"
+          "filter": {
+            "state": "engaged"
+          }
         }
       },
       "effect": {
@@ -1389,67 +1466,48 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "happened",
             "parameters": {
               "event": "after-roll",
+              "subject": "event-subject",
               "object": "this-unit",
               "filter": {
                 "roll": "hit",
                 "result": "success"
               },
-              "window": "phase"
+              "window": "event"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "unit-state",
-                "parameters": {
-                  "state": "battle-shocked"
-                }
-              }
-            ]
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
-                }
-              }
-            ]
           }
         ]
       },
       "effect": {
         "type": "move",
-        "target": "this-unit",
+        "target": "event-subject",
         "modifier": {
           "move_type": "surge",
-          "distance": "D6+2"
+          "distance": "D6+1"
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "death-company-dreadnought"
@@ -1460,7 +1518,16 @@
       "frequency": "once-per-phase"
     },
     "community_notes": "After being hit by one or more of an enemy unit's ranged attacks in your opponent's Shooting phase, this model makes a D6+2\" reactive move toward the nearest enemy unit; it cannot do so while Battle-shocked or within Engagement Range of an enemy unit.",
-    "faction_id": "blood-angels"
+    "faction_id": "blood-angels",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "finest-hour-blood-angels",
@@ -1496,8 +1563,10 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Devastating Wounds"
+              "keywords": [
+                {
+                  "keyword_id": "devastating-wounds"
+                }
               ]
             }
           }
@@ -1540,10 +1609,12 @@
           "operator": "not",
           "operands": [
             {
-              "type": "unit-state",
+              "type": "matches",
               "parameters": {
-                "subject": "this-unit",
-                "state": "embarked"
+                "filter": {
+                  "state": "embarked"
+                },
+                "subject": "this-unit"
               }
             }
           ]
@@ -1591,8 +1662,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -1657,22 +1730,18 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "fight"
-            }
+        "type": "attack-compare",
+        "parameters": {
+          "left": {
+            "of": "attacker",
+            "stat": "S"
           },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
+          "comparison": "gt",
+          "right": {
+            "of": "defender",
+            "stat": "T"
           }
-        ]
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -1691,7 +1760,7 @@
       "sanguinary-guard"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "blood-angels"
   },
   {
@@ -1717,8 +1786,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -1761,8 +1835,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
           ]
         }
       }
@@ -1804,8 +1880,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1,
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "happened",
             "parameters": {
@@ -2030,7 +2111,7 @@
       "comparison": "gte",
       "test": {
         "kind": "leadership",
-        "subject": "target"
+        "subject": "event-subject"
       },
       "on_fail": {
         "type": "permission",

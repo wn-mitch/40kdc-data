@@ -33,7 +33,7 @@
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a friendly WORLD EATERS unit is targeted with a Stratagem, you may use this ability, while the unit is within 12" of a friendly WORLD EATERS unit, until the end of the battle round, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description">When a friendly WORLD EATERS unit is targeted with a Stratagem within 12" of this model, you may use this ability, while the unit is within 12" of a friendly WORLD EATERS unit, until the end of the battle round, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">

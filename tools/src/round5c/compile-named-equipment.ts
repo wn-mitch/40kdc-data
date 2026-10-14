@@ -33,7 +33,7 @@ function modelsOf(leaf: CompileLeaf): Record<string, unknown> | undefined {
   const models = leaf.parameters.models;
   if (models === undefined) return undefined;
   const { at_least: atLeast, state } = models as Record<string, unknown>;
-  return { at_least: atLeast, state };
+  return { count: { min: atLeast }, state };
 }
 
 /** Whether a leaf is a unit-level equipment condition (a named weapon on this unit, or a wargear item). */

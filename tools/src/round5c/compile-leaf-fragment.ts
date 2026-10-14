@@ -30,6 +30,9 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
     return { kind: "implicit", note: "No separate text: opens a container; every sentence after it, up to the next opener, becomes one of its options." };
   }
   if (leaf.family_id === "granted-ability-name") return { kind: "implicit", note: "No separate text: its label names one ability a printed grant gives; the leaves after it, to the end of its paragraph, are that ability's own." };
+  if (leaf.family_id === "named-ability-definition") return { kind: "implicit", note: `Declares named ability ${String(leaf.parameters.definition_id)}; subsequent reviewed leaves define its body without granting it.` };
+  if (leaf.family_id === "named-ability-definition-end") return { kind: "implicit", note: "Ends the named ability body; subsequent leaves belong to the containing rule." };
+  if (leaf.family_id === "resource-before-ability-determination") return { kind: "implicit", note: `Resolve ${String(leaf.parameters.pool)} income before determining named abilities at the same phase-end event.` };
   if (leaf.family_id === "ability-record-grant" && leaf.parameters.printed !== undefined) {
     return { kind: "implicit", note: "No separate text: gives its holder the abilities printed after it; each compiles alone, as the holder's own ability." };
   }

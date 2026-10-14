@@ -75,14 +75,15 @@ describe("Round 5C family extensions, second round", () => {
       expect(JSON.stringify(selected), family).toContain('"target":"selected-unit"');
     }
     // unit-has-ability names a selected unit, so its antecedent binds there.
-    const has = first(compiled([leaf("select-unit", { scope: "enemy", distance: "any", visible: false }), leaf("unit-has-ability", { subject: "antecedent", ability: "lone-operative", negated: true }), heal()]), "has-ability");
-    expect(has).toMatchObject({ parameters: { subject: "selected-unit", ability: "lone-operative" } });
+    const has = nodes(compiled([leaf("select-unit", { scope: "enemy", distance: "any", visible: false }), leaf("unit-has-ability", { subject: "antecedent", ability: "lone-operative", negated: true }), heal()]),
+      (node) => node.type === "matches" && (node.parameters as Record<string, any> | undefined)?.filter?.has_ability !== undefined)[0];
+    expect(has).toMatchObject({ parameters: { subject: "selected-unit", filter: { has_ability: ["lone-operative"] } } });
   });
 
   it("changes Desperate Escape and Hazardous tests, and limits a weapon roll change to melee or ranged", () => {
     expect(first(compiled([leaf("roll-modifier", { roll: "desperate-escape", operation: "subtract", value: 1 })]), "roll-modifier")).toMatchObject({ modifier: { roll: "desperate-escape", operation: "subtract", value: 1 } });
     const melee = first(compiled([leaf("roll-modifier", { roll: "wound", operation: "subtract", value: 1, weapon_type: "melee" })]), "roll-modifier");
-    expect(melee!.modifier).toEqual({ roll: "wound", operation: "subtract", value: 1, weapon_type: "melee" });
+    expect(melee!.modifier).toEqual({ roll: "wound", operation: "subtract", value: 1, weapons: { type: "melee" } });
     // all limits nothing, so it is not written.
     expect(first(compiled([leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapon_type: "all" })]), "roll-modifier")!.modifier).not.toHaveProperty("weapon_type");
     expect(() => normalize("roll-modifier", { roll: "charge", operation: "add", value: 1, weapon_type: "melee" })).toThrow(/Hit, Wound or Damage/u);
@@ -97,7 +98,7 @@ describe("Round 5C family extensions, second round", () => {
 
   it("limits a characteristic change to weapons with one ability, only with a weapon scope", () => {
     const stat = first(compiled([leaf("characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "add", value: 1, weapon_type: "ranged", weapon_keyword: "Torrent" })]), "stat-modifier");
-    expect(stat!.modifier).toEqual({ stat: "S", operation: "add", value: 1, weapon_type: "ranged", weapon_keyword: "Torrent" });
+    expect(stat!.modifier).toEqual({ stat: "S", operation: "add", value: 1, weapons: { type: "ranged", keyword: { keyword_id: "torrent" } } });
     expect(() => normalize("characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "add", value: 1, weapon_keyword: "Torrent" })).toThrow(/weapon_type/u);
     expect(() => normalize("characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "add", value: 1, weapon_type: "all", weapon_keyword: "Flamer" })).toThrow();
   });
@@ -111,25 +112,27 @@ describe("Round 5C family extensions, second round", () => {
   });
 
   it("measures wholly within, only for a within distance", () => {
-    const within = first(compiled([leaf("unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "matching-unit", of_keywords: ["HARVESTER"], of_side: "friendly", wholly: true }), heal()]), "within");
-    expect(within!.parameters).toMatchObject({ wholly: true, range: { inches: 6 } });
+    const within = nodes(compiled([leaf("unit-position", { kind: "within", inches: 6, subject: "this-unit", negated: false, of: "matching-unit", of_keywords: ["HARVESTER"], of_side: "friendly", wholly: true }), heal()]),
+      (node) => node.type === "matches" && (node.parameters as Record<string, any> | undefined)?.filter?.within !== undefined)[0];
+    expect(within!.parameters).toMatchObject({ filter: { within: { wholly: true, range: { inches: 6 } } } });
     expect(() => normalize("unit-position", { kind: "beyond", inches: 6, subject: "this-unit", negated: false, of: "this-model", wholly: true })).toThrow(/within distance/u);
   });
 
   it("measures a distance to any unit of a side, with no keywords", () => {
     const near = leaf("unit-position", { kind: "within", inches: 3, subject: "this-unit", negated: false, of: "matching-unit", of_side: "enemy" });
     expect(near.parameters).not.toHaveProperty("of_keywords");
-    expect(first(compiled([near, heal()]), "within")!.parameters).toMatchObject({ of: { owner: "enemy" }, range: { inches: 3 } });
+    expect(nodes(compiled([near, heal()]), (node) => node.type === "matches" && (node.parameters as Record<string, any> | undefined)?.filter?.within !== undefined)[0]!.parameters)
+      .toMatchObject({ filter: { within: { of: { owner: "enemy" }, range: { inches: 3 } } } });
     expect(() => normalize("unit-position", { kind: "within", inches: 3, subject: "this-unit", negated: false, of: "matching-unit" })).toThrow(/of_side/u);
   });
 
   it("selects several units, exactly or up to a number, and refuses a dice count", () => {
     const select = (parameters: Record<string, unknown>) => leaf("select-unit", { scope: "friendly", distance: "any", visible: false, ...parameters });
     const selector = (parameters: Record<string, unknown>) => first(compiled([select(parameters), leaf("keyword-grant", { subject: "this-unit", keywords: ["FLY"] })]), "select-units")!.selector;
-    expect(selector({ count: 2, up_to: true })).toMatchObject({ max_count: 2 });
-    expect(selector({ count: 3 })).toMatchObject({ count: 3 });
-    expect(selector({})).toMatchObject({ count: 1 });
-    expect(selector({ count: 2, up_to: true })).not.toHaveProperty("count");
+    expect(selector({ count: 2, up_to: true })).toMatchObject({ count: { min: 0, max: 2 } });
+    expect(selector({ count: 3 })).toMatchObject({ count: { min: 3, max: 3 } });
+    expect(selector({})).toMatchObject({ count: { min: 1, max: 1 } });
+    expect(selector({ count: 2, up_to: true })).not.toHaveProperty("max_count");
     expect(() => normalize("select-unit", { distance: "any", visible: false, count: "D3" })).toThrow(/dice count/u);
     expect(() => normalize("select-unit", { distance: "any", visible: false, up_to: true })).toThrow(/needs a count/u);
     expect(() => normalize("select-unit", { distance: "any", visible: false, count: 1 })).toThrow(/by default/u);

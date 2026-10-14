@@ -156,7 +156,7 @@ describe("Round 5C set-up placement from a named marker with an enemy floor (SS1
 
   it("lowers a marker distance to near and an enemy floor to min_enemy_distance", () => {
     const mechanics = mechanicsOf(text, ...leaves);
-    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", mandatory: true, near: [{ of: { marker: "teleport-homer-token" }, range: { inches: 3 } }], min_enemy_distance: 8 });
+    expect(mechanics.effect.modifier).toEqual({ to: "battlefield", mandatory: true, near: [{ of: { marker: "teleport-homer-token" }, range: { inches: 3 } }], min_enemy_distance: { inches: 8 } });
   });
 });
 

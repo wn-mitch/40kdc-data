@@ -1,15 +1,47 @@
 /**
- * Parameter combinations the leaf-coverage sweep compiles for each family: the full product over
- * each parameter's domain, or a bounded sample (required fields plus one optional property at a
- * time) for families whose full product is too large.
+ * Parameter combinations used by the leaf-coverage sweep and the describer audit.
+ *
+ * Small families use their full sampled product. High-dimensional families use pairwise samples:
+ * every declared value is retained, first by itself and then against every value of each other
+ * parameter. Pairwise sampling catches value-specific and one-context interactions without
+ * materializing products that now reach tens or hundreds of millions of objects. It is not
+ * exhaustive for behavior that needs three or more optional parameters together; those authored
+ * shapes remain the responsibility of their focused compiler tests.
  */
 
 import { normalizeFingerprintParameters, type SemanticFamilyDefinition } from "./contracts.js";
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; oneOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; examples?: unknown[]; const?: unknown; required?: string[]; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
+  items?: Schema; pattern?: string; examples?: unknown[]; const?: unknown; required?: string[]; properties?: Record<string, Schema>;
+  "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
+
+export type FamilySampling = "cartesian" | "pairwise";
+
+/**
+ * Families whose full sampled products are unsafe or disproportionate. In particular,
+ * unit-filter@17 expands to hundreds of millions of describer candidates and unit-position@25 to
+ * millions; their independent recipient/origin fields are the newly explosive domains. Event's
+ * catalog-sized designation list and the expanded characteristic, roll, setup and activity
+ * families also cross the practical boundary.
+ */
+const BOUNDED_SAMPLE_FAMILIES: Record<string, true> = {
+  "characteristic-modifier": true,
+  "event": true,
+  "menu-action": true,
+  "roll-modifier": true,
+  "set-up": true,
+  "test": true,
+  "test-exemption": true,
+  "unit-activity": true,
+  "unit-filter": true,
+  "unit-position": true,
+};
+
+export function familySampling(family: SemanticFamilyDefinition): FamilySampling {
+  return Object.hasOwn(BOUNDED_SAMPLE_FAMILIES, family.id) ? "pairwise" : "cartesian";
+}
 
 /** A handful of representative strings, tried against a `pattern` until one matches it. */
 const PATTERN_CANDIDATES = ["test-id", "test-unit", "test-rule", "TEST KEYWORD", "Test Ability", "Lethal Hits", "Sustained Hits 1", "test"];
@@ -119,28 +151,82 @@ export function familyCombinations(family: SemanticFamilyDefinition): Record<str
   return [...valid.values()];
 }
 
-/** See `BOUNDED_SAMPLE_FAMILIES`: a baseline plus one property-at-a-time variant, instead of the full product. */
+/**
+ * A bounded, pairwise sample for a high-dimensional family.
+ *
+ * The baseline uses only schema-required properties. Each single parameter value and each pair of
+ * parameter values is then normalized with required fields and x-only-when prerequisites filled
+ * in. A second legacy completion also tries applicable fields that predate x-optional, because
+ * older family schemas use those fields as conditionally required. Invalid candidates are
+ * discarded by the same canonical normalizer as authored leaves.
+ */
 export function boundedCombinations(family: SemanticFamilyDefinition): Record<string, unknown>[] {
   const properties = Object.entries((family.parameterSchema.properties ?? {}) as Record<string, Schema>);
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
-  const baseline: Record<string, unknown> = {};
-  for (const [name, schema] of properties) {
-    if (!appliesGiven(schema, baseline) || schema["x-optional"]) continue;
-    const values = domain(name, schema, family.starter);
-    if (values.length) baseline[name] = values[0];
-  }
-  const sets: Record<string, unknown>[] = [baseline];
-  for (const [name, schema] of properties) {
-    if (!appliesGiven(schema, baseline)) continue;
-    for (const value of domain(name, schema, family.starter).slice(0, 3)) sets.push({ ...baseline, [name]: value });
-  }
+  const schemas = new Map(properties);
+  const domains = new Map(properties.map(([name, schema]) => [name, domain(name, schema, family.starter)]));
+  const required = new Set((family.parameterSchema.required ?? []) as string[]);
   const valid = new Map<string, Record<string, unknown>>();
-  for (const set of sets) {
-    try {
-      const normalized = normalizeFingerprintParameters(family.id, set, family.version);
-      valid.set(JSON.stringify(normalized), normalized);
-    } catch {
-      // Combinations the family refuses are not leaves; skip them the same way the audit does.
+
+  const complete = (selected: Record<string, unknown>, legacy: boolean): Record<string, unknown> | null => {
+    const parameters = { ...selected };
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const name of Object.keys(parameters)) {
+        const schema = schemas.get(name);
+        if (!schema) continue;
+        for (const [dependency, allowed] of Object.entries(schema["x-only-when"] ?? {})) {
+          if (dependency in parameters) {
+            if (!allowed.includes(String(parameters[dependency]))) return null;
+            continue;
+          }
+          const prerequisite = domains.get(dependency)?.find((candidate) => allowed.includes(String(candidate)));
+          if (prerequisite === undefined) return null;
+          parameters[dependency] = prerequisite;
+          changed = true;
+        }
+      }
+      for (const [name, schema] of properties) {
+        if (name in parameters || !appliesGiven(schema, parameters)) continue;
+        if (!required.has(name) && (!legacy || schema["x-optional"])) continue;
+        const value = domains.get(name)?.[0];
+        if (value === undefined) return null;
+        parameters[name] = value;
+        changed = true;
+      }
+    }
+    return Object.entries(parameters).every(([name]) => {
+      const schema = schemas.get(name);
+      return schema !== undefined && appliesGiven(schema, parameters);
+    }) ? parameters : null;
+  };
+
+  const add = (selected: Record<string, unknown>): void => {
+    for (const legacy of [false, true]) {
+      const candidate = complete(selected, legacy);
+      if (!candidate) continue;
+      try {
+        const normalized = normalizeFingerprintParameters(family.id, candidate, family.version);
+        valid.set(JSON.stringify(normalized), normalized);
+      } catch {
+        // Invalid pairings are not leaves. Other pairings retain each value in valid contexts.
+      }
+    }
+  };
+
+  add({});
+  add(Object.fromEntries(Object.entries(family.starter).filter(([, value]) => isConcrete(value))));
+  for (const [name] of properties) {
+    for (const value of domains.get(name) ?? []) add({ [name]: value });
+  }
+  for (let leftIndex = 0; leftIndex < properties.length; leftIndex += 1) {
+    const [leftName] = properties[leftIndex]!;
+    for (let rightIndex = leftIndex + 1; rightIndex < properties.length; rightIndex += 1) {
+      const [rightName] = properties[rightIndex]!;
+      for (const left of domains.get(leftName) ?? []) {
+        for (const right of domains.get(rightName) ?? []) add({ [leftName]: left, [rightName]: right });
+      }
     }
   }
   return [...valid.values()];

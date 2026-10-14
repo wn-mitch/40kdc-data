@@ -29,6 +29,8 @@ mod dataset;
 mod loadout;
 mod normalize;
 mod pricing;
+#[cfg(feature = "cruncher")]
+mod recipient_snapshots;
 
 // Roster-level legality + affordability build on both the Dataset and the
 // importer's `Roster`/`BattleSize` types, so they ride the `import` feature
@@ -42,8 +44,7 @@ pub mod roster;
 
 #[cfg(feature = "cruncher")]
 pub use abilities::{
-    aura_inches, trigger_gated, usage_gated, EligibilityInput, EligibleAbility,
-    EligibleAbilitySource,
+    aura_inches, trigger_gated, EligibilityInput, EligibleAbility, EligibleAbilitySource,
 };
 pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;
@@ -57,6 +58,8 @@ pub use loadout::{
 };
 pub use normalize::{normalize_name, strip_leading_the};
 pub use pricing::{base_unit_points, points_tier_missing};
+#[cfg(feature = "cruncher")]
+pub use recipient_snapshots::HistoricalSnapshotAbility;
 
 #[cfg(feature = "import")]
 pub use affordability::{

@@ -32,7 +32,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
@@ -131,7 +131,7 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit's weapons gain [MARKERLIGHT].
+                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
 The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
@@ -358,7 +358,7 @@ The unit is eligible to act as an Observer in a turn in which it Advanced.</char
             </profile>
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit's weapons gain [MARKERLIGHT].
+                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
 The unit is eligible to act as an Observer in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>

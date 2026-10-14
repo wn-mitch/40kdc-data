@@ -7,10 +7,8 @@ import "math"
 // cannot size. Mirror of the phase-4 additions to tools/src/cruncher/from-dsl.ts.
 
 // enumerateRollAllocation handles a `roll` whose nested effect is a choice of
-// dice gates on that roll (`from` + `requirement`): the general encoding of a
-// dice-pool allocation. It emits the same levers enumerateDicePool does (ids
-// `<ability>#<option name>`, one group capped by the choice's max_choices) and
-// reports false when the roll is not such an allocation.
+// dice gates on that roll (`from` + `requirement`). Roll allocations retain
+// their historical label-based lever identity, matching the reference port.
 func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *effectTranslation) bool {
 	choice, ok := asMap(node["effect"])
 	if !ok || choice == nil || choice["type"] != "choice" {
@@ -33,15 +31,18 @@ func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *eff
 			part = opt
 			g, _ = asMap(opt["effect"])
 		}
+		if g == nil {
+			return false
+		}
 		from, _ := asMap(g["from"])
-		if g == nil || g["type"] != "dice-gated" || g["requirement"] == nil || from == nil || !jsonEqual(from["roll_var"], node["roll_var"]) {
+		if g["type"] != "dice-gated" || g["requirement"] == nil || from == nil || !jsonEqual(from["roll_var"], node["roll_var"]) {
 			return false
 		}
 		name := ""
 		if part != nil {
-			name, _ = part["name"].(string)
+			name = getStr(part, "name")
 		}
-		gates = append(gates, gate{name, g["on_success"]})
+		gates = append(gates, gate{name: name, effect: g["on_success"]})
 	}
 	maxActivations := 1.0
 	if isNumber(choice["max_choices"]) {
@@ -49,7 +50,7 @@ func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *eff
 	}
 	for _, g := range gates {
 		var buffs []any
-		collectGatedBuffs(g.effect, source, opts, map[string]any{}, &buffs)
+		collectGatedBuffs(g.effect, source, opts, map[string]any{}, &buffs, &out.unsupported)
 		if len(buffs) == 0 {
 			continue
 		}
@@ -58,9 +59,7 @@ func enumerateRollAllocation(node, source map[string]any, opts dslOpts, out *eff
 			name = labelForBuffs(buffs)
 		}
 		out.activatable = append(out.activatable, map[string]any{
-			"id":    opts.abilityID + "#" + name,
-			"label": name,
-			"buffs": buffs,
+			"id": opts.abilityID + "#" + name, "label": name, "buffs": buffs,
 			"group": map[string]any{"id": opts.abilityID, "maxActivations": maxActivations},
 		})
 	}

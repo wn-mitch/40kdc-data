@@ -6,7 +6,7 @@
 
 # Interface: StanceSelectionCapacityEffect
 
-Defined in: [generated.ts:2291](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2291)
+Defined in: [generated.ts:3448](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3448)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "stance-selection-capacity-effect".
@@ -17,15 +17,7 @@ via the `definition` "stance-selection-capacity-effect".
 
 > **type**: `"stance-selection-capacity"`
 
-Defined in: [generated.ts:2292](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2292)
-
-***
-
-### scope?
-
-> `optional` **scope?**: `"unit"` \| `"army"`
-
-Defined in: [generated.ts:2293](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2293)
+Defined in: [generated.ts:3449](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3449)
 
 ***
 
@@ -33,11 +25,27 @@ Defined in: [generated.ts:2293](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **modifier**: `object`
 
-Defined in: [generated.ts:2294](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2294)
+Defined in: [generated.ts:3450](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3450)
 
-#### stance\_id
+#### option?
 
-> **stance\_id**: `string`
+> `optional` **option?**: `object`
+
+##### option.ability\_id
+
+> **ability\_id**: `string`
+
+##### option.option\_id
+
+> **option\_id**: `string`
+
+#### options?
+
+> `optional` **options?**: \[\{ `ability_id`: `string`; `option_id`: `string`; \}, `...{ ability_id: string; option_id: string }[]`\]
+
+##### Min Items
+
+1
 
 #### additional\_selections
 
@@ -47,6 +55,6 @@ Defined in: [generated.ts:2294](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **allocation**: `"choose-one-option"` \| `"fixed-option"`
 
-#### option\_id?
+#### ability\_id
 
-> `optional` **option\_id?**: `string`
+> **ability\_id**: `string`

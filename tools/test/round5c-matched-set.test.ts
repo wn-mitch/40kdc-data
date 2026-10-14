@@ -27,9 +27,9 @@ describe("Round 5C matched sets (those X units)", () => {
     expect(pointing.ok).toBe(true);
     expect(pointing).toEqual(authored);
     const selector = (pointing as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
-    expect(selector.within_inches).toBe(6);
+    expect(selector.filter).toEqual({ owner: "friendly", all_of: ["THOUSAND SONS", "VEHICLE"], within: { range: { inches: 6 }, of: "this-model" } });
     expect(selector).not.toHaveProperty("reference");
-    expect(selector.keywords).toEqual(["THOUSAND SONS", "VEHICLE"]);
+    expect(selector.count).toEqual({ min: 1, max: 1 });
   });
 
   it("targets only those enemy units (9073 shape): the target is the pool, not every enemy unit", () => {
@@ -142,8 +142,7 @@ describe("Round 5C matched sets (those X units)", () => {
     const result = compileLeaves([source, selectFriendly(), those(["ALPHA"]), mortal()]);
     expect(result.ok).toBe(true);
     const selector = (result as { mechanics: { effect: { effect: { selector: Record<string, unknown> } } } }).mechanics.effect.effect.selector;
-    expect(selector.excluded_keywords ?? selector.none_of).toEqual(["DAMNED"]);
-    expect(selector.keywords).toEqual(["ALPHA"]);
+    expect(selector.filter).toMatchObject({ none_of: ["DAMNED"], all_of: ["ALPHA"] });
   });
 
   it("registers the matched-set widenings (unit-filter from 11, targeting-restriction from 4, attack from 6)", () => {

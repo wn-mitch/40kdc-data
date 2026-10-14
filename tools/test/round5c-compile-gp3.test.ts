@@ -34,8 +34,8 @@ function errorsOf(text: string, pieces: Piece[]): string[] {
 
 const stat = (characteristic: string, value: number): Record<string, unknown> => ({ subject: "this-unit", characteristics: [characteristic], operation: "add", value });
 const keyword = (word: string, subject = "this-unit"): Record<string, unknown> => ({ keywords: [word], subject, negated: false });
-const hasKeyword = (word: string) => ({ type: "has-keyword", parameters: { all_of: [word] } });
-const notShocked = { operator: "not", operands: [{ type: "unit-state", parameters: { state: "battle-shocked" } }] };
+const hasKeyword = (word: string) => ({ type: "matches", parameters: { filter: { all_of: [word] } } });
+const notShocked = { operator: "not", operands: [{ type: "matches", parameters: { filter: { state: "battle-shocked" } } }] };
 const shockedState: Record<string, unknown> = { states: ["battle-shocked"], subject: "this-unit", negated: true };
 
 describe("an If-led sentence gates its own sentence only (compile-instead-scope.ts sentenceIfGates)", () => {
@@ -169,13 +169,13 @@ describe("an Or: choice between keyword grants keeps each option's own condition
     ["SUSTAINED HITS 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
     ["if this unit is rattled", "unit-state", { states: ["battle-shocked"], subject: "this-unit", negated: false }],
   ];
-  const rattled = { type: "unit-state", parameters: { state: "battle-shocked" } };
+  const rattled = { type: "matches", parameters: { filter: { state: "battle-shocked" } } };
 
   it("gates the first option by its own trailing condition and the second by its own", () => {
     const options = mechanicsOf(text, pieces).effect.options as Array<Record<string, any>>;
     expect(options).toHaveLength(2);
-    expect(options[0]).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [rattled] }, effect: { modifier: { abilities: ["Lethal Hits"] } } });
-    expect(options[1]).toMatchObject({ type: "conditional", condition: rattled, effect: { modifier: { abilities: ["Sustained Hits 1"] } } });
+    expect(options[0]).toMatchObject({ type: "conditional", condition: { operator: "not", operands: [rattled] }, effect: { modifier: { keywords: [{ keyword_id: "lethal-hits" }] } } });
+    expect(options[1]).toMatchObject({ type: "conditional", condition: rattled, effect: { modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } } });
   });
 
   it("still refuses a keyword run with no frame to grant it", () => {
@@ -296,7 +296,7 @@ describe("a weapon scope's recipient chain may stack filters after an attack sen
   it("grants the keyword to the merged recipient filter", () => {
     const steps = mechanicsOf(text, pieces).effect.steps as Array<Record<string, any>>;
     expect(steps[1]).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["KEYC"], none_of: ["KEYD"], level: "model" },
-      modifier: { abilities: ["Assault"], weapon_type: "ranged" } });
+      modifier: { keywords: [{ keyword_id: "assault" }], weapons: { type: "ranged" } } });
   });
 
   it("keeps the stacked filter of a different side out of the chain", () => {

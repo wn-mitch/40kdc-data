@@ -48,12 +48,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {}
-          },
-          "range": "objective-control"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {}
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -280,10 +284,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Assault"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "assault"
+              }
+            ]
           }
         },
         {
@@ -324,9 +332,22 @@
       "type": "designate-target",
       "designation": "oath-of-moment",
       "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "within_inches": 12
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
       },
       "applies": {
         "to": "attackers-of-target",
@@ -369,7 +390,9 @@
         "stat": "S",
         "operation": "add",
         "value": 2,
-        "weapon_type": "ranged"
+        "weapons": {
+          "type": "ranged"
+        }
       }
     },
     "scope": {
@@ -411,13 +434,15 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "any_of": [
-                    "DEATHWING",
-                    "RAVENWING",
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "any_of": [
+                      "DEATHWING",
+                      "RAVENWING",
+                      "VEHICLE"
+                    ]
+                  }
                 }
               }
             ]
@@ -549,7 +574,9 @@
       "modifier": {
         "to": "battlefield",
         "via": "deep-strike",
-        "min_enemy_distance": 6
+        "min_enemy_distance": {
+          "inches": 6
+        }
       }
     },
     "scope": {
@@ -580,21 +607,29 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ]
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "objective": {}
-              },
-              "range": "objective-control"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {}
+                  }
+                }
+              }
             }
           },
           "effect": {
@@ -602,8 +637,10 @@
             "target": "this-unit",
             "modifier": {
               "roll": "hit",
-              "weapon_type": "melee",
-              "critical_on": 5
+              "critical_on": 5,
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         }
@@ -680,8 +717,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -689,8 +728,13 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
             ]
           }
         }
@@ -825,7 +869,9 @@
             "stat": "S",
             "operation": "add",
             "value": 2,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -835,7 +881,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -845,7 +893,9 @@
             "stat": "D",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -1111,23 +1161,34 @@
     "source_digest": "3e29093135d2643ca69754cfea7c305321d8d6ec97bb2304ef2836f90ab295cd",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "stealth"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "melee"
+            }
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
         }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -1136,7 +1197,7 @@
       "inner-circle-companions"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "dark-angels"
   },
   {
@@ -1189,17 +1250,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES",
-              "INFANTRY"
-            ]
-          },
-          "range": {
-            "inches": 3
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "INFANTRY"
+                ]
+              }
+            }
           }
         }
       },
@@ -1409,8 +1474,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Precision"
+          "keywords": [
+            {
+              "keyword_id": "precision"
+            }
           ]
         }
       }
@@ -1652,8 +1719,14 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Anti MONSTER 4+"
+          "keywords": [
+            {
+              "keyword_id": "anti",
+              "parameters": {
+                "target_keyword": "MONSTER",
+                "threshold": 4
+              }
+            }
           ]
         }
       }
@@ -1771,122 +1844,152 @@
     "source_digest": "25b91bcd40ecb90380d825fbbbd9b164cff8cec58fd3990e6b4a6e300ffeaf68",
     "version": "2025-q3",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "unit",
-      "select": "start-of-command-phase",
-      "min_choices": 2,
-      "max_choices": 2,
-      "options": [
-        {
-          "name": "Mist-wreathed Shadow Realms",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "operator": "not",
-              "operands": [
-                {
-                  "type": "unit-state",
-                  "parameters": {
-                    "state": "engaged"
-                  }
-                }
-              ]
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
             },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "min_choices": 2,
+        "max_choices": 2,
+        "options": [
+          {
+            "name": "Mist-wreathed Shadow Realms",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "state": "engaged"
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "set-up",
+                    "target": "this-unit",
+                    "modifier": {
+                      "to": "strategic-reserves"
+                    }
+                  },
+                  {
+                    "type": "set-up",
+                    "target": "this-unit",
+                    "modifier": {
+                      "to": "battlefield",
+                      "from": "strategic-reserves",
+                      "ignore_limits": true
+                    }
+                  }
+                ]
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Martial Exemplar",
             "effect": {
               "type": "sequence",
               "steps": [
                 {
-                  "type": "set-up",
-                  "target": "this-unit",
+                  "type": "re-roll",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS ASTARTES"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
                   "modifier": {
-                    "to": "strategic-reserves"
+                    "roll": "hit",
+                    "subset": "ones",
+                    "weapons": {
+                      "type": "melee"
+                    }
                   }
                 },
                 {
-                  "type": "set-up",
-                  "target": "this-unit",
+                  "type": "re-roll",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS ASTARTES"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
                   "modifier": {
-                    "to": "battlefield",
-                    "from": "strategic-reserves",
-                    "ignore_limits": true
+                    "roll": "wound",
+                    "subset": "ones",
+                    "weapons": {
+                      "type": "melee"
+                    }
                   }
                 }
               ]
-            }
-          }
-        },
-        {
-          "name": "Martial Exemplar",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "ADEPTUS ASTARTES"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "ones",
-                  "weapon_type": "melee"
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "No Hiding From the Watchers",
+            "effect": {
+              "type": "feel-no-pain",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
                 }
               },
-              {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "ADEPTUS ASTARTES"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "roll": "wound",
-                  "subset": "ones",
-                  "weapon_type": "melee"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "name": "No Hiding From the Watchers",
-          "effect": {
-            "type": "feel-no-pain",
-            "target": {
-              "owner": "friendly",
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ],
-              "within": {
-                "range": {
-                  "inches": 6
-                },
-                "of": "this-model"
+              "modifier": {
+                "threshold": 4,
+                "against": "mortal"
               }
             },
-            "modifier": {
-              "threshold": 4,
-              "against": "mortal"
-            }
+            "id": "option-3"
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -2089,7 +2192,7 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "1"
+          "count": 1
         }
       }
     },
@@ -2127,8 +2230,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -2183,7 +2291,7 @@
             "of": "attacker",
             "stat": "S"
           },
-          "comparison": "greater-than",
+          "comparison": "gt",
           "right": {
             "of": "defender",
             "stat": "T"
@@ -2192,7 +2300,7 @@
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "this-model",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "operation": "subtract",
@@ -2207,7 +2315,7 @@
       "lion-eljonson"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "faction_id": "dark-angels"
   },

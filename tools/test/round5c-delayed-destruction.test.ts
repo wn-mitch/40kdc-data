@@ -26,7 +26,7 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 }
 
 const DESTROYED_IN_PHASE = {
-  event: "model-destroyed", object: "this-model", window: "phase", count_min: 1,
+  event: "model-destroyed", object: "this-model", window: "phase", count: { min: 1 },
 };
 const PHASE_END = { kind: "phase-end", phase: "any", turn: "either" };
 const FIRST_TIME = ["The first time", "usage-limit", { frequency: "first-this-battle", per: "model" }] as const;
@@ -291,17 +291,17 @@ describe("Reserves arrival binds to the set-up it follows in its own sentence (1
 
   it("T4b: an earlier set-up in the arrival's sentence wins over a following one", () => {
     const text = "Set this unit up here, then Reinforcements step arrives, and set this unit up again.";
-    expect(picked(text, [setUp("Set this unit up here", 1), arrival, setUp("set this unit up again", 2)])).toEqual([1]);
+    expect(picked(text, [setUp("Set this unit up here", 1), arrival, setUp("set this unit up again", 2)])).toEqual([{ inches: 1 }]);
   });
 
   it("T4b: with no earlier set-up in its sentence, the following set-up in that sentence wins", () => {
     const text = "Set this unit up here. Reinforcements step arrives, then set this unit up on the battlefield.";
-    expect(picked(text, [setUp("Set this unit up here", 1), arrival, setUp("set this unit up on the battlefield", 2)])).toEqual([2]);
+    expect(picked(text, [setUp("Set this unit up here", 1), arrival, setUp("set this unit up on the battlefield", 2)])).toEqual([{ inches: 2 }]);
   });
 
   it("T4b: with no set-up in its sentence, the nearest earlier set-up anywhere wins", () => {
     const text = "Set this unit up here. Reinforcements step arrives.";
-    expect(picked(text, [setUp("Set this unit up here", 1), arrival])).toEqual([1]);
+    expect(picked(text, [setUp("Set this unit up here", 1), arrival])).toEqual([{ inches: 1 }]);
   });
 });
 

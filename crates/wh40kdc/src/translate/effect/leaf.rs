@@ -5,7 +5,6 @@
 
 use serde_json::Value;
 
-use super::js::truthy_key;
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
 use super::leaf_shapes::describe_shape_leaf;
@@ -27,6 +26,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "weapon-grant",
     "ability-modifier",
     "ability-activate",
+    "oath-modifier",
     "permission",
     "targeting",
     "counts-as",
@@ -66,9 +66,13 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
 
 /// "each time an attack targets the unit, " — the lead of an `incoming` change.
 pub(crate) fn incoming_lead(m: &P, subj: &str) -> String {
-    let attack = match nn(m, "weapon_type") {
-        Some(t) => format!("a {} attack", jv(t)),
-        None => "an attack".to_string(),
+    let scope = obj(m.get("weapons"));
+    let attack = if nn(m, "weapons").is_some() && scope.len() == 1 && nn(scope, "type").is_some() {
+        format!("a {} attack", jv(scope.get("type").unwrap()))
+    } else if has_weapon(m) {
+        format!("an attack with {}", weapon_noun(m))
+    } else {
+        "an attack".to_string()
     };
     format!("each time {attack} targets {subj}, ")
 }
@@ -132,14 +136,8 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
         );
     }
     if has_weapon(m) {
-        // A weapon exclusion names the one weapon the change skips.
-        let other = if truthy_key(m, "exclude_weapon_name") {
-            format!(" other than \"{}\"", jstr(m.get("exclude_weapon_name")))
-        } else {
-            String::new()
-        };
         let what = format!(
-            "the {stat} of {}{other} equipped by {}",
+            "the {stat} of {} equipped by {}",
             weapon_noun(m),
             weapon_holder(target, ctx)
         );
@@ -474,6 +472,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         }
         "ability-modifier" => ability_modifier(m, subj, ctx),
         "ability-activate" => ability_activate(m, subj),
+        "oath-modifier" => oath_modifier(m, subj, ctx),
         "permission" => permission(m, subj, ctx),
         "targeting" => targeting(m, subj, ctx),
         "weapon-ability-range" => weapon_ability_range(m, subj),
@@ -486,6 +485,12 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
 
 fn ability_activate(m: &P, subj: &str) -> String {
     let label = ability_label(m.get("ability"));
+    if sv(m, "procedure") == Some("oath") {
+        return format!(
+            "{subj} {} the {label} Oath procedure again",
+            v(subj, "resolves")
+        );
+    }
     let consumed = if is_true(m, "ignore_consumed") {
         ", even if it has already been selected this battle"
     } else {

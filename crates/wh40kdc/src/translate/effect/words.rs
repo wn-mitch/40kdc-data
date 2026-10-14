@@ -11,7 +11,7 @@ pub(crate) use super::quantity::*;
 pub(crate) use super::subject::*;
 use serde_json::Value;
 
-use crate::translate::condition::{article, id_label, nn, obj, P};
+use crate::translate::condition::{article, id_label, nn, obj, or_list, P};
 use crate::translate::dekebab;
 use crate::translate::designations::designation_label;
 
@@ -79,58 +79,34 @@ pub(crate) fn dice_case(v: Option<&Value>) -> String {
     jstr(v).replace('d', "D")
 }
 
-/// `^anti[\s-]+(.*)$` (case-insensitive): the remainder after an `anti` prefix and ≥1 separator.
-fn strip_anti_prefix(raw: &str) -> Option<&str> {
-    let prefix = raw.get(..4)?;
-    if !prefix.eq_ignore_ascii_case("anti") {
-        return None;
-    }
-    let after = &raw[4..];
-    let rest = after.trim_start_matches(|c: char| c.is_whitespace() || c == '-');
-    if rest.len() == after.len() {
-        return None;
-    }
-    Some(rest)
-}
-
-/// `^(.*?)[\s-]*(\d+)\s*(?:\+|plus)?$` (case-insensitive): the earliest (name, number) split.
-fn split_trailing_number(s: &str) -> Option<(&str, &str)> {
-    fn number_suffix(suffix: &str) -> Option<&str> {
-        let body = suffix.trim_start_matches(|c: char| c.is_whitespace() || c == '-');
-        let digits_end = body
-            .find(|c: char| !c.is_ascii_digit())
-            .unwrap_or(body.len());
-        if digits_end == 0 {
-            return None;
-        }
-        let tail = body[digits_end..].trim_start_matches(char::is_whitespace);
-        (tail.is_empty() || tail == "+" || tail.eq_ignore_ascii_case("plus"))
-            .then_some(&body[..digits_end])
-    }
-    let cuts = s
-        .char_indices()
-        .map(|(i, _)| i)
-        .chain(std::iter::once(s.len()));
-    for p in cuts {
-        if let Some(digits) = number_suffix(&s[p..]) {
-            return Some((&s[..p], digits));
-        }
-    }
-    None
-}
-
-/// A GW weapon keyword token → bracketed caps (`lethal-hits` → `[LETHAL HITS]`).
-/// Anti-X keywords keep their hyphen and normalize the threshold to `N+`.
+/// A structured catalog weapon keyword reference as a bracketed rules label.
 pub(crate) fn bracket_keyword(k: &Value) -> String {
-    let raw = jv(k);
-    let raw = raw.trim();
-    if let Some(anti) = strip_anti_prefix(raw) {
-        if let Some((name, n)) = split_trailing_number(anti) {
-            return format!("[ANTI-{} {n}+]", dekebab(name).trim().to_uppercase());
-        }
-        return format!("[ANTI-{}]", dekebab(anti).trim().to_uppercase());
+    let Some(reference) = k.as_object() else {
+        return "[?]".to_string();
+    };
+    let parameters = obj(reference.get("parameters"));
+    let name = dekebab(&jstr(reference.get("keyword_id"))).to_uppercase();
+    let qualifier = |key, prefix| {
+        map_arr(parameters, key, jv)
+            .filter(|items| !items.is_empty())
+            .map(|items| format!(" ({prefix} {} units)", or_list(&items)))
+            .unwrap_or_default()
+    };
+    let against = qualifier("required_target_keywords_any", "against");
+    let excluding = qualifier("excluded_target_keywords", "excluding");
+    if sv(reference, "keyword_id") == Some("anti") {
+        let target = nn(parameters, "target_keyword")
+            .map(|target| format!("-{}", jv(target).to_uppercase()))
+            .unwrap_or_default();
+        let threshold = nn(parameters, "threshold")
+            .map(|threshold| format!(" {}+", jv(threshold)))
+            .unwrap_or_default();
+        return format!("[ANTI{target}{threshold}]{against}{excluding}");
     }
-    format!("[{}]", dekebab(raw).to_uppercase())
+    let value = nn(parameters, "value")
+        .map(|value| format!(" {}", dice_case(Some(value))))
+        .unwrap_or_default();
+    format!("[{name}{value}]{against}{excluding}")
 }
 
 pub(crate) fn test_name(test: Option<&Value>) -> String {
@@ -370,6 +346,15 @@ pub(crate) fn pronoun(subj: &str) -> &'static str {
 /// The display name for an ability or Stratagem id: a curated override, else its name part in
 /// Title Case.
 pub(crate) fn ability_label(id: Option<&Value>) -> String {
+    if let Some(reference) =
+        id.filter(|id| id.get("definition_id").is_some() && id.get("ability_id").is_some())
+    {
+        return format!(
+            "{} ({})",
+            id_label(reference.get("definition_id")),
+            ability_label(reference.get("ability_id"))
+        );
+    }
     let id = jstr(id);
     match id.as_str() {
         "nurgles-gift-death-guard" => "Nurgle's Gift (Aura)".to_string(),
@@ -397,78 +382,74 @@ pub(crate) fn weapon_label(id: Option<&Value>) -> String {
     }
 }
 
-/// "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a weapon filter as a noun.
+/// "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a canonical weapon scope.
 pub(crate) fn weapon_noun(m: &P) -> String {
-    let kind = if truthy_key(m, "weapon_type") {
-        format!("{} ", jstr(m.get("weapon_type")))
-    } else {
-        String::new()
+    let scope = obj(m.get("weapons"));
+    let kind = nn(scope, "type")
+        .map(|value| format!("{} ", jv(value)))
+        .unwrap_or_default();
+    let keyword_phrase = |value: &Value| {
+        let refs = value.as_array().map_or_else(
+            || vec![bracket_keyword(value)],
+            |items| items.iter().map(bracket_keyword).collect(),
+        );
+        or_list(&refs)
     };
-    // A name that already carries the noun ("hellforged weapons") must not read "weapons weapons".
-    let raw = if truthy_key(m, "weapon_name") {
-        strip_weapons_suffix(&jstr(m.get("weapon_name")))
-    } else {
-        String::new()
-    };
-    let named = if is_kebab_slug(&raw) {
-        title_case(&raw)
-    } else {
-        raw
-    };
-    let name = if named.is_empty() {
-        String::new()
-    } else {
-        format!("{named} ")
-    };
-    let keyword = if truthy_key(m, "weapon_keyword") {
-        format!(" with [{}]", jstr(m.get("weapon_keyword")).to_uppercase())
-    } else {
-        String::new()
-    };
-    if let Some(r) = nn(m, "weapon_ref") {
-        // A bound weapon ("the selected weapon") or the weapons picked for a named ability.
-        let r = obj(Some(r));
-        if let Some(sel) = nn(r, "selected_by") {
-            let label = ability_label(obj(Some(sel)).get("ability"));
-            return format!("the {kind}weapons selected for {label}{keyword}");
+    let keyword = nn(scope, "keyword")
+        .map(|value| format!(" with {}", keyword_phrase(value)))
+        .unwrap_or_default();
+    let exclude_name = nn(scope, "exclude_name")
+        .map(|value| format!(" other than \"{}\"", jv(value)))
+        .unwrap_or_default();
+    let exclude_keyword = nn(scope, "exclude_keyword")
+        .map(|value| format!(" (excluding weapons with {})", keyword_phrase(value)))
+        .unwrap_or_default();
+    if let Some(reference) = nn(scope, "ref") {
+        let reference = obj(Some(reference));
+        if let Some(selected) = nn(reference, "selected_by") {
+            let label = ability_label(obj(Some(selected)).get("ability"));
+            return format!(
+                "the {kind}weapons selected for {label}{keyword}{exclude_name}{exclude_keyword}"
+            );
         }
-        return format!("the selected {kind}weapon{keyword}");
+        return format!("the selected {kind}weapon{keyword}{exclude_name}{exclude_keyword}");
     }
-    format!("{kind}{name}weapons{keyword}")
-}
-
-/// `s.replace(/\s+weapons?$/i, "")`.
-fn strip_weapons_suffix(s: &str) -> String {
-    let lower = s.to_lowercase();
-    for suffix in ["weapons", "weapon"] {
-        if lower.ends_with(suffix) {
-            let head = &s[..s.len() - suffix.len()];
-            let trimmed = head.trim_end_matches(char::is_whitespace);
-            if trimmed.len() < head.len() {
-                return trimmed.to_string();
-            }
+    let raw = nn(scope, "name")
+        .map(jv)
+        .unwrap_or_default()
+        .trim_end_matches(|character: char| character.is_whitespace())
+        .to_string();
+    let raw = raw
+        .strip_suffix(" weapons")
+        .or_else(|| raw.strip_suffix(" weapon"))
+        .unwrap_or(&raw);
+    let slug = raw.contains('-')
+        && raw.split('-').all(|part| {
+            !part.is_empty()
+                && part
+                    .chars()
+                    .all(|character| character.is_ascii_lowercase() || character.is_ascii_digit())
+        });
+    let named = if slug {
+        title_case(raw)
+    } else {
+        raw.to_string()
+    };
+    format!(
+        "{kind}{}{keyword}{exclude_name}{exclude_keyword}",
+        if named.is_empty() {
+            "weapons".to_string()
+        } else {
+            format!("{named} weapons")
         }
-    }
-    s.to_string()
+    )
 }
 
-/// `/^[a-z0-9]+(-[a-z0-9]+)+$/.test(s)`.
-fn is_kebab_slug(s: &str) -> bool {
-    let parts: Vec<&str> = s.split('-').collect();
-    parts.len() > 1
-        && parts.iter().all(|p| {
-            !p.is_empty()
-                && p.chars()
-                    .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
-        })
-}
-
-/// Whether a modifier carries a weapon filter.
+/// Whether a modifier carries a canonical weapon scope.
 pub(crate) fn has_weapon(m: &P) -> bool {
-    nn(m, "weapon_type").is_some()
-        || nn(m, "weapon_name").is_some()
-        || nn(m, "weapon_keyword").is_some()
-        || nn(m, "weapon_ref").is_some()
+    nn(m, "weapons")
+        .and_then(Value::as_object)
+        .is_some_and(|scope| !scope.is_empty())
 }
 
 /// " with melee weapons" for a roll scoped to a weapon filter, else "".

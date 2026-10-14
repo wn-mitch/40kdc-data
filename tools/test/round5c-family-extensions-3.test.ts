@@ -64,7 +64,7 @@ describe("Round 5C family extensions, third round", () => {
         leaf("unit-state", { states: ["battle-shocked"], subject: "antecedent", negated: true }),
         leaf("feel-no-pain", { subject: "antecedent", threshold: 5, against: "all" }),
       ]);
-      expect(first(mechanics, "aura")).toMatchObject({ target: "friendly-within-aura", modifier: { range: 6, eligible: { required_keywords: ["INFANTRY"] } } });
+      expect(first(mechanics, "aura")).toMatchObject({ target: "friendly-within-aura", modifier: { range: { inches: 6 }, eligible: { owner: "friendly", all_of: ["INFANTRY"] } } });
       expect(first(mechanics, "feel-no-pain")).toMatchObject({ target: "recipient" });
       expect(JSON.stringify(mechanics)).toContain('"subject":"recipient"');
       const wounds = compiled([friendly(["INFANTRY"]), aura(), leaf("mortal-wounds", { recipient: "antecedent", count: "1" })]);
@@ -152,13 +152,13 @@ describe("Round 5C family extensions, third round", () => {
 
   it("limits a characteristic change to one named weapon or to the subject's models with keywords", () => {
     const named = compiled([leaf("characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "add", value: 1, weapon_type: "melee", weapon_name: "Force Sword" })]);
-    expect(first(named, "stat-modifier")).toMatchObject({ target: "this-model", modifier: { stat: "A", weapon_type: "melee", weapon_name: "force sword" } });
+    expect(first(named, "stat-modifier")).toMatchObject({ target: "this-model", modifier: { stat: "A", weapons: { type: "melee", name: "force sword" } } });
     expect(() => normalize("characteristic-modifier", { subject: "this-model", characteristics: ["A"], operation: "add", value: 1, weapon_type: "all", weapon_name: "force sword" })).toThrow(/melee or ranged/u);
     const models = compiled([leaf("characteristic-modifier", { subject: "this-unit", characteristics: ["T"], operation: "add", value: 1, weapon_type: "all", model_keywords: ["CHARACTER"] })]);
     expect(first(models, "stat-modifier")).toMatchObject({ target: { level: "model", member_of: "this-unit", all_of: ["CHARACTER"] } });
     expect(() => normalize("feel-no-pain", { subject: "this-model", threshold: 5, against: "all", model_keywords: ["CHARACTER"] })).toThrow(/models of a unit/u);
     const set = compiled([leaf("characteristic-set", { subject: "this-model", characteristic: "D", value: 2, weapon_type: "melee", weapon_name: "flail" })]);
-    expect(first(set, "stat-modifier")).toMatchObject({ modifier: { stat: "D", operation: "set", value: 2, weapon_name: "flail" } });
+    expect(first(set, "stat-modifier")).toMatchObject({ modifier: { stat: "D", operation: "set", value: 2, weapons: { type: "melee", name: "flail" } } });
   });
 
   it("inflicts any dice amount of mortal wounds, and sets a unit up near where it was destroyed beyond the Reserves limits", () => {

@@ -30,6 +30,7 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     scaled_to_cap,
     unsized_value_reason,
 )
+from wh40kdc.scope import unit_matches_applies_to
 
 EffectTranslation = dict[str, Any]
 
@@ -47,6 +48,11 @@ _ATTACKER_TARGET = "attacker"
 #: The unit-ref that names the other side of an attack from the attacker's view.
 _DEFENDER_TARGETS = frozenset(["defender"])
 
+
+RECIPIENT_SNAPSHOT_UNAVAILABLE = (
+    "trigger-time recipient snapshot is unavailable; current membership cannot "
+    "establish historical recipients"
+)
 _STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible as a buff"
 
 
@@ -55,16 +61,68 @@ def effect_to_buffs(
     source: BuffSource,
     context: EngineContext,
     perspective: str = "attacker",
+    activation: dict[str, Any] | None = None,
 ) -> EffectTranslation:
-    """Walk an ability DSL ``effect`` tree and produce the buff stack it
-    contributes against ``context`` from the given ``perspective``
-    (``"attacker"`` or ``"target"``), plus an ``unsupported`` list naming any
-    branches the buff layer can't express today and an ``activatable`` list of
-    player-decision levers."""
+    """Translate an effect tree and preserve player-controlled activation metadata."""
     out: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    if recipient_snapshot_reason(None, effect) is not None:
+        snapshot = resolve_recipient_snapshots(None, effect, source, context, perspective)
+        if snapshot.get("reason"):
+            out["unsupported"].append(
+                {
+                    "reason": snapshot["reason"],
+                    "effectFragment": effect,
+                }
+            )
+            return out
+        effect = snapshot["effect"]
     ability_id = source.get("abilityId", "effect") if source.get("kind") == "ability" else "effect"
-    opts = {"context": context, "perspective": perspective, "abilityId": ability_id}
+    opts = {
+        "context": context,
+        "perspective": perspective,
+        "abilityId": ability_id,
+        "duration": activation.get("duration") if activation else None,
+    }
     _walk(effect, source, opts, out)
+    if activation and (
+        activation.get("usage") is not None
+        or activation.get("cost") is not None
+        or activation.get("optional") is True
+    ):
+        limits_value = activation.get("usage")
+        limits = limits_value if isinstance(limits_value, list) else [limits_value]
+        counts: list[float] = []
+        for limit in limits:
+            if not _is_object(limit) or limit.get("per") == "model":
+                continue
+            count = limit.get("count")
+            if isinstance(count, (int, float)) and not isinstance(count, bool):
+                counts.append(float(count))
+            elif limit.get("frequency") != "n-per-battle":
+                counts.append(1)
+        group = (
+            {"id": f"{ability_id}?usage", "maxActivations": min(counts)}
+            if counts
+            else None
+        )
+        if out["applied"]:
+            lever: dict[str, Any] = {
+                "id": f"{ability_id}#activate",
+                "label": _label_for_buffs(out["applied"]),
+                "buffs": out["applied"],
+            }
+            if group:
+                lever["group"] = group
+            out["activatable"].append(lever)
+            out["applied"] = []
+        for lever in out["activatable"]:
+            if group and lever.get("group", {}).get("id") != group["id"]:
+                if lever.get("group"):
+                    lever["groups"] = [*(lever.get("groups") or []), group]
+                else:
+                    lever["group"] = group
+            requirement = {key: value for key, value in activation.items() if key != "duration"}
+            lever["requires"] = [requirement, *(lever.get("requires") or [])]
     return out
 
 
@@ -79,9 +137,9 @@ def _is_model_scoped_from_attached_member(node: dict[str, Any], source: BuffSour
     save for the ten Intercessors it joined.
 
     Keyed on the buff *source*, not on the DSL condition — the leak is not limited
-    to abilities gated on ``is-attached`` (an Archon's Shadowfield says only "the
-    bearer"), and the resolver already tags pooled member abilities as
-    ``abilityKind: "attached"``. An ability read as the chosen unit's own
+    to abilities gated on an attachment-role condition (an Archon's Shadowfield
+    says only "the bearer"), and the resolver already tags pooled member abilities
+    as ``abilityKind: "attached"``. An ability read as the chosen unit's own
     (``abilityKind: "unit"``) is unaffected."""
     if source.get("kind") != "ability" or source.get("abilityKind") != "attached":
         return False
@@ -106,20 +164,16 @@ def _aura_filter_keywords(
                 }
             )
             return False
-        required = recipient.get("required_keywords")
-        excluded = recipient.get("excluded_keywords")
+        all_of = recipient.get("all_of", [])
+        any_of = recipient.get("any_of", [])
+        none_of = recipient.get("none_of", [])
+        not_all_of = recipient.get("not_all_of", [])
         if (
-            set(recipient) - {"required_keywords", "excluded_keywords"}
-            or not isinstance(required, list)
-            or not required
-            or any(not isinstance(keyword, str) or not keyword for keyword in required)
-            or (
-                excluded is not None
-                and (
-                    not isinstance(excluded, list)
-                    or not excluded
-                    or any(not isinstance(keyword, str) or not keyword for keyword in excluded)
-                )
+            set(recipient) - {"all_of", "any_of", "none_of", "not_all_of"}
+            or any(
+                not isinstance(keywords, list)
+                or any(not isinstance(keyword, str) or not keyword for keyword in keywords)
+                for keywords in (all_of, any_of, none_of, not_all_of)
             )
         ):
             out["unsupported"].append(
@@ -142,9 +196,13 @@ def _aura_filter_keywords(
             )
             return False
         available = {keyword.lower() for keyword in context_keywords}
-        if any(keyword.lower() not in available for keyword in required):
+        if any(keyword.lower() not in available for keyword in all_of):
             return False
-        if excluded and any(keyword.lower() in available for keyword in excluded):
+        if any_of and not any(keyword.lower() in available for keyword in any_of):
+            return False
+        if any(keyword.lower() in available for keyword in none_of):
+            return False
+        if not_all_of and all(keyword.lower() in available for keyword in not_all_of):
             return False
     if "emitter_filter" in modifier:
         out["unsupported"].append(
@@ -175,6 +233,11 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         plan = _selection.plan_selection(node, source, opts["perspective"], opts["context"])
         if plan["kind"] != "none":
             _selection.translate_selection(plan, node, source, opts, out)
+            return
+    if node.get("type") == "for-each-unit":
+        bound = _selection.bind_each_recipient(node)
+        if bound is not None:
+            _walk(bound, source, opts, out)
             return
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
@@ -210,18 +273,33 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         and node["target"] in _selection.PROVIDER_TARGETS
     ):
         return
-    # A friendly filter's keywords ("friendly BLOOD LEGIONS units") must hold on the crunched unit
-    # when its keywords are known; unknown keywords leave the filter permissive.
-    if _selection.friendly_filter_excludes(node, opts):
-        return
-    # A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
-    # reaches the unit only when one alternative matches its keywords.
-    alternatives = _alternatives_match(node, opts)
-    if alternatives is False:
-        return
-    if alternatives == "unknown":
-        out["unsupported"].append({"reason": _ALTERNATIVES_REASON, "effectFragment": node})
-        return
+    target = node.get("target")
+    if _is_object(target):
+        if target.get("member_of") == "attacker":
+            side = "attacker"
+        elif target.get("member_of") == "defender" or target.get("owner") == "enemy":
+            side = "target"
+        else:
+            side = "attacker" if opts["perspective"] == "attacker" else "target"
+        verdict = _matches_unit_filter(
+            target,
+            opts["context"],
+            side,
+            "enemy" if target.get("owner") == "enemy" else "friendly",
+        )
+        if verdict is False:
+            return
+        if verdict == "unknown":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "unit-filter target: identity, state or model membership "
+                        "is unresolved"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
     # An `incoming` change modifies attacks made against its target. On the buffed unit it is the
     # attacker's side of those attacks, which the `target: "attacker"` form already models; it never
     # modifies the buffed unit's own attacks.
@@ -283,16 +361,16 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         for step in node.get("steps") or []:
             _walk(step, source, opts, out)
     elif node_type == "ability-part":
-        # A part firing on its own moment is gated like a timing-is step; one with only a cost,
-        # a choice or a usage limit is an activation, as a named effect is.
-        if node.get("trigger") is None and (
+        part_opts = {**opts, "duration": node.get("duration", opts.get("duration"))}
+        if (
             node.get("optional") is True
             or node.get("cost") is not None
             or node.get("usage") is not None
         ):
-            _translate_named_effect(node, source, opts, out)
+            _translate_named_effect(node, source, part_opts, out)
         else:
-            _walk(moment_gate(node.get("trigger"), node.get("effect")), source, opts, out)
+            gated = moment_gate(node.get("trigger"), node.get("effect"), node)
+            _walk(gated, source, part_opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
         _enumerate_choice(node, source, opts, out)
@@ -357,26 +435,6 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
                     "effectFragment": node,
                 }
             )
-    elif node_type == "leader-model-ability-grant":
-        out["unsupported"].append(
-            {
-                "reason": (
-                    "leader-model-ability-grant: attached leader beneficiary "
-                    "is not resolved by the buff engine"
-                ),
-                "effectFragment": node,
-            }
-        )
-    elif node_type == "persistent-designation":
-        out["unsupported"].append(
-            {
-                "reason": (
-                    "persistent-designation: retained selection state "
-                    "is not resolved by the buff engine"
-                ),
-                "effectFragment": node,
-            }
-        )
     elif node_type == "designate-target":
         # Mark an enemy unit; when `to: attackers-of-target` or
         # `to: bearer-attacks-target` the nested effect is a buff the attacks
@@ -389,9 +447,34 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         applies_raw = node.get("applies")
         applies = applies_raw if isinstance(applies_raw, dict) else {}
         if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
+            for filt in (
+                applies.get("attacker_filter"),
+                applies.get("attacker_unit_filter"),
+            ):
+                if filt is None:
+                    continue
+                verdict = _matches_unit_filter(
+                    filt, opts["context"], "attacker", "friendly"
+                )
+                if verdict is False:
+                    return
+                if verdict == "unknown":
+                    out["unsupported"].append(
+                        {
+                            "reason": "designate-target attacker filter is unresolved",
+                            "effectFragment": node,
+                        }
+                    )
+                    return
             sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
             _walk(applies.get("effect"), source, opts, sub)
             out["unsupported"].extend(sub["unsupported"])
+            requirement = {
+                "select": node.get("select"),
+                "duration": node.get("duration"),
+            }
+            for lever in sub["activatable"]:
+                lever["requires"] = [requirement, *(lever.get("requires") or [])]
             out["activatable"].extend(sub["activatable"])
             if sub["applied"]:
                 designation_value = node.get("designation")
@@ -403,6 +486,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
                         "id": f"{opts['abilityId']}#{designation}",
                         "label": f"Designated target: {_label_for_buffs(sub['applied'])}",
                         "buffs": sub["applied"],
+                        "requires": [requirement],
                     }
                 )
         else:
@@ -417,6 +501,8 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     elif node_type == "risk-reward":
         # The reward is the buff; the risk (self-damage on a failed test) is not.
         _walk(node.get("reward"), source, opts, out)
+    elif node_type == "stance-selection-capacity":
+        _translate_stance_capacity(node, source, opts, out)
     elif node_type == "stance-select":
         # Pick-one modal buff — each option is an opt-in lever (pick one).
         _enumerate_named_options(node, source, opts, out, f"{opts['abilityId']}?stance", 1)
@@ -657,10 +743,13 @@ def _translate_stat_modifier(
         return
     stat = modifier.get("stat")
     is_on_buffed_unit = _applies_to_buffed_unit(node, opts["perspective"])
-    # `attack_type: melee|ranged` scopes the mod to that attack — express it
-    # as a phase gate — and `weapon_name` to the attacks of that weapon.
+    # Attack classification and structured weapon scopes both become phase/name/keyword gates.
     applicability = combine_optional(
-        _attack_type_applicability(modifier), weapon_applicability(modifier)
+        combine_optional(
+            _attack_type_applicability(modifier),
+            _weapon_type_applicability(modifier),
+        ),
+        weapon_applicability(modifier),
     )
 
     def emit(contribution: dict[str, Any]) -> None:
@@ -790,8 +879,7 @@ def _translate_stat_modifier(
             return
         emit({"type": "toughness-mod", "value": value})
     elif stat == "Sv":
-        # A +1 to Sv means "improve the save by 1", which maps to a save-mod
-        # of -value since save-mod is signed against the *needed roll*.
+        # Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
         if opts["perspective"] != "target":
             out["unsupported"].append(
                 {
@@ -805,7 +893,8 @@ def _translate_stat_modifier(
             return
         if not is_on_buffed_unit:
             return
-        emit({"type": "save-mod", "value": -value})
+        save_mod = value if modifier.get("operation") in ("improve", "worsen") else -value
+        emit({"type": "save-mod", "value": save_mod})
     else:
         out["unsupported"].append(
             {
@@ -934,51 +1023,57 @@ def _translate_feel_no_pain(
 def _translate_keyword_grant(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
-    # Weapon-keyword grants ride with the attacker's profile.
-    if opts["perspective"] != "attacker":
-        return
-    if not _applies_to_buffed_unit(node, "attacker"):
+    """Translate catalog-backed weapon keyword grants without parsing display text."""
+    if opts["perspective"] != "attacker" or not _applies_to_buffed_unit(node, "attacker"):
         return
     modifier = node.get("modifier")
     if not _is_object(modifier):
         return
-    # A selector by keyword reaches only the weapons with that ability; one the catalog parser
-    # cannot read would apply the grant to every weapon, so it is refused rather than over-applied.
-    if (
-        modifier.get("weapon_keyword") is not None
-        and weapon_keyword_id(modifier.get("weapon_keyword")) is None
-    ):
-        out["unsupported"].append({
-            "reason": (
-                "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher "
-                "cannot resolve"
-            ),
-            "effectFragment": node,
-        })
-        return
     removes = modifier.get("removes")
-    for keyword in [k for k in removes if isinstance(k, str)] if isinstance(removes, list) else []:
-        out["unsupported"].append({
-            "reason": (
-                "weapon-ability-removal: the cruncher does not model removing a weapon ability "
-                f'("{keyword}")'
-            ),
-            "effectFragment": {"removes": [keyword]},
-        })
-    abilities = modifier.get("abilities")
-    raws = [k for k in abilities if isinstance(k, str)] if isinstance(abilities, list) else []
-    if not raws:
+    if isinstance(removes, list):
+        for keyword in removes:
+            label = (
+                _keyword_label(keyword)
+                if _is_object(keyword) and isinstance(keyword.get("keyword_id"), str)
+                else "unresolved keyword"
+            )
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "weapon-ability-removal: the cruncher does not model removing "
+                        f'a weapon ability ("{label}")'
+                    ),
+                    "effectFragment": {"removes": [keyword]},
+                }
+            )
+    keywords = modifier.get("keywords")
+    if not isinstance(keywords, list):
         return
     applicability = combine_optional(
         _weapon_type_applicability(modifier), weapon_applicability(modifier)
     )
-    for raw in raws:
-        ref = parse_keyword_grant(raw)
-        if ref is None:
+    for ref in keywords:
+        if not _is_weapon_keyword_ref(ref):
             out["unsupported"].append(
                 {
-                    "reason": f'keyword-grant: cannot parse "{raw}" to a catalog keyword',
-                    "effectFragment": {"keyword": raw},
+                    "reason": "keyword-grant: malformed catalog keyword reference",
+                    "effectFragment": {"keyword": ref},
+                }
+            )
+            continue
+        parameters = ref.get("parameters")
+        if (
+            isinstance(parameters, dict)
+            and "value" in parameters
+            and (
+                not isinstance(parameters["value"], (int, float, str))
+                or isinstance(parameters["value"], bool)
+            )
+        ):
+            out["unsupported"].append(
+                {
+                    "reason": "weapon-ability-grant: keyword rating quantity is unresolved",
+                    "effectFragment": {"keyword": ref},
                 }
             )
             continue
@@ -986,26 +1081,36 @@ def _translate_keyword_grant(
             "source": source,
             "contribution": {"type": "extra-keyword", "keywordRef": ref},
         }
-        if applicability:
-            buff = {**buff, "applicableWhen": applicability}
-        out["applied"].append(buff)
+        out["applied"].append(
+            {**buff, "applicableWhen": applicability} if applicability else buff
+        )
+
+
+def _is_weapon_keyword_ref(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and isinstance(value.get("keyword_id"), str)
+        and bool(value["keyword_id"])
+    )
+
+
+def _weapon_scope(modifier: dict[str, Any]) -> dict[str, Any]:
+    scope = modifier.get("weapons")
+    return scope if isinstance(scope, dict) else {}
 
 
 def _weapon_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
-    """Map a keyword-grant's ``weapon_type`` to the phase its weapons fire in."""
-    if modifier.get("weapon_type") == "melee":
+    scope = _weapon_scope(modifier)
+    if scope.get("type") == "melee":
         return {"phases": ["fight"]}
-    if modifier.get("weapon_type") == "ranged":
+    if scope.get("type") == "ranged":
         return {"phases": ["shooting"]}
     return None
 
 
 def _attack_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
-    """Map a stat-modifier's ``attack_type`` (or equivalent ``weapon_type``) to
-    the phase that attack happens in."""
+    """Map an attack classification to the phase in which it occurs."""
     kind = modifier.get("attack_type")
-    if kind is None:
-        kind = modifier.get("weapon_type")
     if kind == "melee":
         return {"phases": ["fight"]}
     if kind == "ranged":
@@ -1013,14 +1118,8 @@ def _attack_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | Non
     return None
 
 
-#: Narrowing keys that scope a buff to a weapon or a model subset the
-#: cruncher can't resolve at translation time. Applying the buff unfiltered
-#: would silently OVER-APPLY it, so it surfaces as unsupported instead.
-#: ``weapon_name`` is not here: it gates on the attacking weapon's name; nor is
-#: ``weapon_keyword``, which gates on the weapon's abilities (see :func:`weapon_applicability`).
 _UNHONORABLE_NARROWING = (
     "weapon_profile",
-    "weapon_ref",
     "weapon_filter",
     "model_filter",
     "model_scope",
@@ -1028,15 +1127,12 @@ _UNHONORABLE_NARROWING = (
 
 
 def _unhonorable_narrowing(modifier: dict[str, Any]) -> str | None:
-    for k in _UNHONORABLE_NARROWING:
-        if modifier.get(k) is not None:
-            return k
-    # A weapon keyword the catalog parser cannot read would gate on nothing.
-    if (
-        modifier.get("weapon_keyword") is not None
-        and weapon_keyword_id(modifier.get("weapon_keyword")) is None
-    ):
-        return "weapon_keyword"
+    for key in _UNHONORABLE_NARROWING:
+        if modifier.get(key) is not None:
+            return key
+    scope = _weapon_scope(modifier)
+    if scope.get("ref") is not None:
+        return "weapons.ref"
     return None
 
 
@@ -1048,26 +1144,30 @@ def _numeric_value(modifier: dict[str, Any]) -> float:
     return math.nan
 
 
-def weapon_keyword_id(raw: Any) -> str | None:
-    """The catalog keyword id a ``weapon_keyword`` selector names.
-
-    ("Lethal Hits" → "lethal-hits"); None when the keyword parser cannot read it.
-    """
-    if not isinstance(raw, str):
-        return None
-    ref = parse_keyword_grant(raw)
-    return ref["keyword_id"] if ref is not None else None
-
-
 def weapon_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
-    """The weapon-name and weapon-keyword gates a modifier's weapon selectors put on its buffs."""
+    """Translate the canonical structured weapon scope into buff gates."""
+    scope = _weapon_scope(modifier)
     out: dict[str, Any] = {}
-    name = modifier.get("weapon_name")
+    name = scope.get("name")
     if isinstance(name, str):
         out["weaponName"] = name.lower()
-    keyword = weapon_keyword_id(modifier.get("weapon_keyword"))
-    if keyword is not None:
-        out["weaponKeyword"] = keyword
+    excluded_name = scope.get("exclude_name")
+    if isinstance(excluded_name, str):
+        out["excludedWeaponNames"] = [excluded_name.lower()]
+    elif isinstance(excluded_name, list):
+        out["excludedWeaponNames"] = [x.lower() for x in excluded_name if isinstance(x, str)]
+    keyword = scope.get("keyword")
+    if _is_weapon_keyword_ref(keyword):
+        out["weaponKeywords"] = [keyword]
+    elif isinstance(keyword, list) and keyword and all(_is_weapon_keyword_ref(x) for x in keyword):
+        out["weaponKeywords"] = keyword
+    excluded_keyword = scope.get("exclude_keyword")
+    if _is_weapon_keyword_ref(excluded_keyword):
+        out["excludedWeaponKeywords"] = [excluded_keyword]
+    elif isinstance(excluded_keyword, list) and all(
+        _is_weapon_keyword_ref(x) for x in excluded_keyword
+    ):
+        out["excludedWeaponKeywords"] = excluded_keyword
     return out or None
 
 
@@ -1076,6 +1176,17 @@ def combine_optional(a: dict[str, Any] | None, b: dict[str, Any] | None) -> dict
     if a and b:
         return _combine_applicability(a, b)
     return a if a is not None else b
+
+
+def _weapon_gate_part(applicability: dict[str, Any]) -> dict[str, Any]:
+    fields = {
+        "weaponName",
+        "excludedWeaponNames",
+        "weaponKeywords",
+        "excludedWeaponKeywords",
+        "weaponRequirements",
+    }
+    return {key: value for key, value in applicability.items() if key in fields}
 
 
 def with_applicability(buff: Buff, applicability: dict[str, Any] | None) -> Buff:
@@ -1176,28 +1287,38 @@ def _translate_named_region_state(
     consumer: dict[str, Any] = {}
     if _is_object(consumer_raw):
         consumer = consumer_raw
-    gate_raw = consumer.get("beneficiary_gate")
-    gate: dict[str, Any] = {}
-    if _is_object(gate_raw):
-        gate = gate_raw
-    raw_keywords = gate.get("keywords")
-    keywords = (
-        [keyword for keyword in raw_keywords if isinstance(keyword, str)]
-        if isinstance(raw_keywords, list)
-        else []
-    )
-    operator = gate.get("operator")
-    attacker_keywords = opts["context"].get("attackerKeywords")
+    gate_raw = consumer.get("beneficiary_filter")
+    gate = gate_raw if _is_object(gate_raw) else {}
+    allowed = {"owner", "level", "all_of", "any_of", "none_of", "not_all_of"}
+    all_of = gate.get("all_of", [])
+    any_of = gate.get("any_of", [])
+    none_of = gate.get("none_of", [])
+    not_all_of = gate.get("not_all_of", [])
     if (
         not gate
-        or not keywords
-        or operator not in ("and", "or")
-        or not isinstance(attacker_keywords, list)
+        or set(gate) - allowed
+        or any(
+            not isinstance(keywords, list)
+            or any(not isinstance(keyword, str) or not keyword for keyword in keywords)
+            for keywords in (all_of, any_of, none_of, not_all_of)
+        )
     ):
         out["unsupported"].append(
             {
                 "reason": (
-                    "named-region-state beneficiary gate cannot be evaluated "
+                    "named-region-state beneficiary filter cannot be evaluated "
+                    "against current attacker keywords"
+                ),
+                "effectFragment": node,
+            }
+        )
+        return
+    attacker_keywords = opts["context"].get("attackerKeywords")
+    if not isinstance(attacker_keywords, list):
+        out["unsupported"].append(
+            {
+                "reason": (
+                    "named-region-state beneficiary filter cannot be evaluated "
                     "against current attacker keywords"
                 ),
                 "effectFragment": node,
@@ -1206,9 +1327,10 @@ def _translate_named_region_state(
         return
     current = {keyword.lower() for keyword in attacker_keywords if isinstance(keyword, str)}
     eligible = (
-        all(keyword.lower() in current for keyword in keywords)
-        if operator == "and"
-        else any(keyword.lower() in current for keyword in keywords)
+        all(keyword.lower() in current for keyword in all_of)
+        and (not any_of or any(keyword.lower() in current for keyword in any_of))
+        and not any(keyword.lower() in current for keyword in none_of)
+        and not (not_all_of and all(keyword.lower() in current for keyword in not_all_of))
     )
     if not eligible:
         return
@@ -1246,12 +1368,18 @@ def _translate_conditional(
     effect = node.get("effect")
     if not _is_object(condition):
         return
-    verdict = _evaluate_condition(condition, opts["context"])
+    evaluated = condition
+    if node.get("_activation_source") is not None:
+        evaluated = _elide_historical_clocks(condition, opts.get("duration"))
+    verdict = _evaluate_condition(
+        evaluated,
+        opts["context"],
+        opts["perspective"],
+        None if opts.get("grantedHolder") else source,
+    )
     if verdict == "unknown":
-        # A timing the player controls isn't a wall — it's an activation the
-        # player can opt into. Surface it as a lever rather than dropping it.
-        if _condition_mentions_timing(condition):
-            _enumerate_timing_gate(node, source, opts, out)
+        if _condition_mentions_timing(evaluated):
+            _enumerate_timing_gate({**node, "condition": evaluated}, source, opts, out)
         else:
             out["unsupported"].append(
                 {
@@ -1259,13 +1387,12 @@ def _translate_conditional(
                         "conditional: cannot evaluate condition "
                         f'"{_js_str(condition.get("type"))}" against current context'
                     ),
-                    "effectFragment": node,
+                    "effectFragment": node.get("_activation_source", node),
                 }
             )
         return
-    if not verdict:
-        return
-    _walk(effect, source, opts, out)
+    if verdict:
+        _walk(effect, source, opts, out)
 
 
 def _translate_named_effect(
@@ -1280,37 +1407,24 @@ def _translate_named_effect(
     ):
         _walk(node.get("effect"), source, opts, out)
         return
-
-    trigger_value = node.get("trigger")
-    if isinstance(trigger_value, list):
-        triggers = trigger_value
-    elif trigger_value is None:
-        triggers = []
-    else:
-        triggers = [trigger_value]
-    conditions: list[dict[str, Any]] = []
-    for trigger in triggers:
-        if not _is_object(trigger):
-            continue
-        trigger_condition = trigger.get("condition")
-        if _is_object(trigger_condition):
-            conditions.append(trigger_condition)
-
-    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
-    if conditions and len(conditions) == len(triggers):
-        condition = (
-            conditions[0] if len(conditions) == 1 else {"operator": "or", "operands": conditions}
+    gated = moment_gate(node.get("trigger"), node.get("effect"), node)
+    body = gated
+    if _is_object(gated) and _is_object(gated.get("condition")):
+        condition = _elide_historical_clocks(gated["condition"], opts.get("duration"))
+        verdict = _evaluate_condition(
+            condition,
+            opts["context"],
+            opts["perspective"],
+            None if opts.get("grantedHolder") else source,
         )
-        gated_body: dict[str, Any] = {
-            "type": "conditional",
-            "condition": condition,
-            "effect": node.get("effect"),
-        }
-        _walk(gated_body, source, opts, sub)
-    else:
-        _walk(node.get("effect"), source, opts, sub)
-
+        if _condition_mentions_timing(condition) and verdict is not False:
+            body = node.get("effect")
+    sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
+    _walk(body, source, opts, sub)
     out["unsupported"].extend(sub["unsupported"])
+    requirement = {key: value for key, value in node.items() if key != "effect"}
+    for lever in sub["activatable"]:
+        lever["requires"] = [requirement, *(lever.get("requires") or [])]
     out["activatable"].extend(sub["activatable"])
     if sub["applied"]:
         name_value = node.get("name")
@@ -1320,6 +1434,7 @@ def _translate_named_effect(
                 "id": f"{opts['abilityId']}#{name}",
                 "label": name,
                 "buffs": sub["applied"],
+                "requires": [requirement],
             }
         )
 
@@ -1383,37 +1498,169 @@ def _own_move_fact(trigger: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
-def moment_gate(trigger: Any, effect: Any) -> Any:
-    """An effect gated on a trigger (one, or several alternatives) the way a ``timing-is``
-    condition gates it, so the moment is a player-controlled gate and a buff behind it an
-    opt-in lever (``<ability>@<event>``). A trigger on an attack step is met by every attack:
-    only its own condition gates the effect."""
+def moment_gate(trigger: Any, effect: Any, source_fragment: Any = None) -> Any:
+    """Wrap non-attack triggers as synthetic activation-time conditions."""
     if effect is None:
         return effect
+    values = trigger if isinstance(trigger, list) else [trigger]
     triggers = [
-        item
-        for item in (trigger if isinstance(trigger, list) else [trigger])
-        if _is_object(item) and isinstance(item.get("event"), str)
+        value
+        for value in values
+        if _is_object(value) and isinstance(value.get("event"), str)
     ]
-    if not triggers:
+    if not triggers or any(is_attack_step(item) for item in triggers):
         return effect
-    gates: list[dict[str, Any] | None] = []
+    gates: list[dict[str, Any]] = []
     for item in triggers:
-        own = item.get("condition") if _is_object(item.get("condition")) else None
-        if is_attack_step(item):
-            gates.append(own)
-            continue
-        # A unit's own Charge or Advance move is a fact the context carries, not a choice.
-        moment: dict[str, Any] = _own_move_fact(item) or {
+        own_move = _own_move_fact(item)
+        moment = own_move or {
             "type": "timing-is",
             "parameters": {"timing": moment_key(item)},
         }
-        gates.append({"operator": "and", "operands": [moment, own]} if own is not None else moment)
-    # Any alternative met by every attack without a condition leaves nothing to gate.
-    if any(gate is None for gate in gates):
-        return effect
+        parts: list[dict[str, Any]] = [moment]
+        if _is_object(item.get("condition")):
+            parts.append(item["condition"])
+        gates.append(parts[0] if len(parts) == 1 else {"operator": "and", "operands": parts})
     condition = gates[0] if len(gates) == 1 else {"operator": "or", "operands": gates}
-    return {"type": "conditional", "condition": condition, "effect": effect}
+    source_value = source_fragment or {
+        "type": "ability-part",
+        "trigger": trigger,
+        "effect": effect,
+    }
+    return {
+        "type": "conditional",
+        "condition": condition,
+        "effect": effect,
+        "_activation_source": source_value,
+    }
+
+
+def same_snapshot_value(left: Any, right: Any) -> bool:
+    """Compare snapshot records with order-insensitive object keys and ordered arrays."""
+    if left == right:
+        return True
+    if isinstance(left, list) or isinstance(right, list):
+        return (
+            isinstance(left, list)
+            and isinstance(right, list)
+            and len(left) == len(right)
+            and all(same_snapshot_value(a, b) for a, b in zip(left, right, strict=True))
+        )
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        return False
+    left_keys = {key for key, value in left.items() if value is not None}
+    right_keys = {key for key, value in right.items() if value is not None}
+    return left_keys == right_keys and all(
+        same_snapshot_value(left[key], right[key]) for key in left_keys
+    )
+
+
+def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
+    """Detect trigger-time recipient sets that require caller-attested history."""
+
+    def check(value: Any, active_trigger: Any) -> bool:
+        if isinstance(value, list):
+            return any(check(child, active_trigger) for child in value)
+        if not _is_object(value):
+            return False
+        inherited = (
+            value.get("trigger")
+            if value.get("type") == "ability-part" and "trigger" in value
+            else active_trigger
+        )
+        triggers = inherited if isinstance(inherited, list) else [inherited]
+        if value.get("type") == "for-each-unit" and any(
+            _is_object(item)
+            and isinstance(item.get("event"), str)
+            and not is_attack_step(item)
+            for item in triggers
+        ):
+            return True
+        return any(
+            key != "trigger" and check(child, inherited)
+            for key, child in value.items()
+        )
+
+    return RECIPIENT_SNAPSHOT_UNAVAILABLE if check(effect, trigger) else None
+
+
+def resolve_recipient_snapshots(
+    trigger: Any,
+    effect: Any,
+    source: BuffSource,
+    context: EngineContext,
+    perspective: str,
+    base_path: str = "",
+) -> dict[str, Any]:
+    """Resolve caller-attested historical for-each recipients before trigger gating."""
+    side_id = context.get("attackerUnitId" if perspective == "attacker" else "targetUnitId")
+    source_id = source.get("sourceUnitId")
+    if source.get("abilityKind") == "unit" and source_id is None:
+        source_id = side_id
+    snapshots = context.get("recipientSnapshots") or []
+    resolved = False
+    reason: str | None = None
+
+    def visit(node: Any, path: str, event: Any) -> Any:
+        nonlocal resolved, reason
+        if not isinstance(node, dict):
+            return node
+        events = event if isinstance(event, list) else [event]
+        historical = [
+            item for item in events if isinstance(item, dict) and isinstance(item.get("event"), str)
+            and not is_attack_step(item)
+        ]
+        if node.get("type") == "for-each-unit" and historical:
+            matches = [
+                snap for snap in snapshots
+                if isinstance(snap, dict)
+                and source.get("kind") == "ability"
+                and source_id is not None and side_id is not None
+                and same_snapshot_value(snap.get("source"), source)
+                and snap.get("sourceUnitId") == source_id
+                and snap.get("perspective") == perspective
+                and snap.get("recipientUnitId") == side_id
+                and snap.get("selectionPath") == path
+                and same_snapshot_value(snap.get("selector"), node.get("selector"))
+                and any(same_snapshot_value(snap.get("trigger"), item) for item in historical)
+            ]
+            if not matches:
+                reason = RECIPIENT_SNAPSHOT_UNAVAILABLE
+                return {"type": "sequence", "steps": []}
+            if any(snap.get("selected") != matches[0].get("selected") for snap in matches):
+                reason = "conflicting trigger-time recipient snapshots"
+                return {"type": "sequence", "steps": []}
+            resolved = True
+            if not matches[0].get("selected"):
+                return {"type": "sequence", "steps": []}
+            bound = _selection.bind_each_recipient(node, "recipient")
+            if bound is None:
+                reason = "recipient snapshot cannot bind mixed or unresolved recipient effects"
+                return {"type": "sequence", "steps": []}
+            return bound
+        if node.get("type") == "for-each-unit":
+            return node
+        node_type = node.get("type")
+        if node_type in ("sequence", "rules-bundle"):
+            return {
+                **node,
+                "steps": [
+                    visit(step, f"{path}/steps/{index}", event)
+                    for index, step in enumerate(node.get("steps") or [])
+                ],
+            }
+        if node_type == "conditional":
+            return {**node, "effect": visit(node.get("effect"), f"{path}/effect", event)}
+        if node_type == "ability-part":
+            local = node.get("trigger", event)
+            return {
+                **{key: value for key, value in node.items() if key != "trigger"},
+                "effect": visit(node.get("effect"), f"{path}/effect", local),
+            }
+        return node
+
+    transformed = visit(effect, base_path, trigger)
+    return {"effect": transformed, "resolved": resolved, **({"reason": reason} if reason else {})}
 
 
 def _enumerate_choice(
@@ -1428,7 +1675,7 @@ def _enumerate_choice(
         max_choices = 1
     for i, opt in enumerate(options):
         buffs: list[Buff] = []
-        _collect_gated_buffs(opt, source, opts, {}, buffs)
+        _collect_gated_buffs(opt, source, opts, {}, buffs, out["unsupported"])
         if not buffs:
             continue
         out["activatable"].append(
@@ -1459,7 +1706,7 @@ def _enumerate_dice_pool(
         if not _is_object(opt):
             continue
         buffs: list[Buff] = []
-        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs)
+        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs, out["unsupported"])
         if not buffs:
             continue
         opt_name = opt.get("name")
@@ -1472,6 +1719,63 @@ def _enumerate_dice_pool(
                 "group": {"id": opts["abilityId"], "maxActivations": max_activations},
             }
         )
+
+
+def _translate_stance_capacity(
+    node: dict[str, Any], _source: BuffSource, opts: dict[str, Any], out: EffectTranslation
+) -> None:
+    modifier = node.get("modifier")
+    if not _is_object(modifier):
+        modifier = {}
+    ability_id = modifier.get("ability_id")
+    additional = modifier.get("additional_selections")
+    allocation = modifier.get("allocation")
+
+    def is_ref(value: Any) -> bool:
+        return (
+            _is_object(value)
+            and isinstance(value.get("ability_id"), str)
+            and isinstance(value.get("option_id"), str)
+        )
+
+    option = modifier.get("option")
+    options = modifier.get("options")
+    valid = (
+        isinstance(ability_id, str)
+        and isinstance(additional, (int, float))
+        and not isinstance(additional, bool)
+        and allocation in ("fixed-option", "choose-one-option")
+        and (allocation != "fixed-option" or is_ref(option))
+        and (
+            options is None
+            or (isinstance(options, list) and all(is_ref(ref) for ref in options))
+        )
+    )
+    if not valid:
+        out["unsupported"].append(
+            {
+                "reason": "stance-selection-capacity: unresolved option reference",
+                "effectFragment": node,
+            }
+        )
+        return
+    cap_raise: dict[str, Any] = {
+        "ability": ability_id,
+        "by": additional,
+        "allocation": allocation,
+    }
+    if is_ref(option):
+        cap_raise["option"] = option
+    if isinstance(options, list):
+        cap_raise["options"] = options
+    out["activatable"].append(
+        {
+            "id": f"{opts['abilityId']}#cap",
+            "label": f"{additional} more {ability_id} selections",
+            "buffs": [],
+            "capRaise": cap_raise,
+        }
+    )
 
 
 def _enumerate_named_options(
@@ -1491,14 +1795,20 @@ def _enumerate_named_options(
         if not _is_object(opt):
             continue
         buffs: list[Buff] = []
-        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs)
+        _collect_gated_buffs(opt.get("effect"), source, opts, {}, buffs, out["unsupported"])
         if not buffs:
             continue
+        if node.get("type") == "stance-select":
+            option_id = opt.get("id")
+            if not isinstance(option_id, str) or not option_id:
+                continue
+        else:
+            option_id = opt.get("name")
         opt_name = opt.get("name")
         name = opt_name if isinstance(opt_name, str) and opt_name else _label_for_buffs(buffs)
         out["activatable"].append(
             {
-                "id": f"{opts['abilityId']}#{name}",
+                "id": f"{opts['abilityId']}#{option_id}",
                 "label": name,
                 "buffs": buffs,
                 "group": {"id": group_id, "maxActivations": max_activations},
@@ -1509,18 +1819,7 @@ def _enumerate_named_options(
 def _enumerate_menu_actions(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
-    """Emit one opt-in lever per buff-bearing ``resource-action-menu`` action.
-    Unlike :func:`_enumerate_named_options` (stance-select / issue-orders, a
-    pick-one group), each action here is an INDEPENDENT decision with its own
-    trigger and cost — no shared ``group``/``maxActivations`` cap, since a
-    unit's per-phase manoeuvre limit isn't a mutual-exclusion pool the
-    cruncher can enforce (and ``usage.repeatable_if_different_unit``
-    explicitly allows the same action to recur via a different unit in one
-    phase). A single ``eligibility.requires_keyword`` narrows the lever to
-    attackers carrying that keyword; multiple required keywords have no
-    single-field applicability representation today and are left ungated
-    (correctness-conservative: the lever still surfaces, just without that
-    extra restriction attached)."""
+    """Emit independent opt-in levers for modelable resource menu actions."""
     actions = node.get("actions")
     if not isinstance(actions, list):
         actions = []
@@ -1529,25 +1828,79 @@ def _enumerate_menu_actions(
             continue
         eligibility = action.get("eligibility")
         eligibility = eligibility if _is_object(eligibility) else None
-        requires_keyword = eligibility.get("requires_keyword") if eligibility else None
-        applicability: dict[str, Any] = {}
-        if (
-            isinstance(requires_keyword, list)
-            and len(requires_keyword) == 1
-            and isinstance(requires_keyword[0], str)
+        if eligibility is not None and eligibility.get("filter") is not None:
+            side = "attacker" if opts["perspective"] == "attacker" else "target"
+            verdict = _matches_unit_filter(
+                eligibility["filter"], opts["context"], side, "friendly"
+            )
+            if verdict is False:
+                continue
+            if verdict == "unknown":
+                out["unsupported"].append(
+                    {
+                        "reason": "resource-action-menu eligibility filter is unresolved",
+                        "effectFragment": action,
+                    }
+                )
+                continue
+        requirements = eligibility.get("requires") if eligibility is not None else None
+        if isinstance(requirements, list) and any(
+            _is_object(condition)
+            and _evaluate_condition(
+                condition,
+                opts["context"],
+                opts["perspective"],
+                None if opts.get("grantedHolder") else source,
+            )
+            is False
+            for condition in requirements
         ):
-            applicability = {"requiresAttackerKeyword": requires_keyword[0]}
+            continue
+        action_id = action.get("id")
+        if not isinstance(action_id, str) or not action_id:
+            out["unsupported"].append(
+                {
+                    "reason": "resource-action-menu action has no stable id",
+                    "effectFragment": action,
+                }
+            )
+            continue
         buffs: list[Buff] = []
-        _collect_gated_buffs(action.get("effect"), source, opts, applicability, buffs)
+        _collect_gated_buffs(
+            action.get("effect"), source, opts, {}, buffs, out["unsupported"]
+        )
         if not buffs:
             continue
-        label_val = action.get("label")
-        label = label_val if isinstance(label_val, str) and label_val else _label_for_buffs(buffs)
-        id_val = action.get("id")
-        action_id = id_val if isinstance(id_val, str) and id_val else label
-        out["activatable"].append(
-            {"id": f"{opts['abilityId']}#{action_id}", "label": label, "buffs": buffs}
+        label_value = action.get("label")
+        label = (
+            label_value
+            if isinstance(label_value, str) and label_value
+            else _label_for_buffs(buffs)
         )
+        requirement = {key: value for key, value in action.items() if key != "effect"}
+        shared_usage = node.get("shared_usage")
+        shared_usage = shared_usage if _is_object(shared_usage) else None
+        cap = shared_usage.get("unit_max_manoeuvres_per_phase") if shared_usage else None
+        lever: dict[str, Any] = {
+            "id": f"{opts['abilityId']}#{action_id}",
+            "label": label,
+            "buffs": buffs,
+            "requires": [
+                {
+                    "menu_id": node.get("menu_id"),
+                    "pool_id": node.get("pool_id"),
+                    "shared_usage": node.get("shared_usage"),
+                    "capacity": node.get("capacity"),
+                    "action": requirement,
+                }
+            ],
+        }
+        if isinstance(cap, (int, float)) and not isinstance(cap, bool):
+            lever["group"] = {
+                "id": f"{opts['abilityId']}?menu",
+                "maxActivations": cap,
+            }
+        out["activatable"].append(lever)
 
 
 def _enumerate_timing_gate(
@@ -1558,12 +1911,14 @@ def _enumerate_timing_gate(
     condition = node.get("condition")
     if not _is_object(condition):
         return
+    activation = node.get("_activation_source")
+    requirement = None
+    if _is_object(activation):
+        requirement = {key: value for key, value in activation.items() if key != "effect"}
     buffs: list[Buff] = []
     _collect_gated_buffs(node.get("effect"), source, opts, {}, buffs)
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node.get("effect"), source, opts, sub)
-    # A stochastic branch contributes nothing to a timing activation. Preserve
-    # every other unsupported diagnostic discovered while finding inner levers.
     out["unsupported"].extend(
         fragment
         for fragment in sub["unsupported"]
@@ -1574,18 +1929,20 @@ def _enumerate_timing_gate(
             and fragment["effectFragment"].get("type") == "dice-gated"
         )
     )
-    # Inner independent decisions pass straight through as their own levers.
+    if requirement:
+        for lever in sub["activatable"]:
+            lever["requires"] = [requirement, *(lever.get("requires") or [])]
     out["activatable"].extend(sub["activatable"])
-    # Inner unconditional buffs become one lever gated only on the timing.
     if buffs:
         timing = _extract_timing(condition) or "timing"
-        out["activatable"].append(
-            {
-                "id": f"{opts['abilityId']}@{timing}",
-                "label": _label_for_buffs(buffs),
-                "buffs": buffs,
-            }
-        )
+        lever = {
+            "id": f"{opts['abilityId']}@{timing}",
+            "label": _label_for_buffs(buffs),
+            "buffs": buffs,
+        }
+        if requirement:
+            lever["requires"] = [requirement]
+        out["activatable"].append(lever)
 
 
 def _collect_gated_buffs(
@@ -1594,6 +1951,7 @@ def _collect_gated_buffs(
     opts: dict[str, Any],
     applicability: dict[str, Any],
     out_buffs: list[Buff],
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> None:
     """Walk the body of a player gate, collecting the buffs it would
     contribute. Conditions are deferred to ``applicableWhen`` where
@@ -1605,37 +1963,67 @@ def _collect_gated_buffs(
         condition = node.get("condition")
         if not _is_object(condition):
             return
-        app = _condition_to_applicability(condition)
+        app = _condition_to_applicability(condition, opts["perspective"])
         if app == "gate":
             # A nested timing gate: opting into the activation satisfies it.
-            _collect_gated_buffs(node.get("effect"), source, opts, applicability, out_buffs)
+            _collect_gated_buffs(
+                node.get("effect"), source, opts, applicability, out_buffs, diagnostics
+            )
             return
         if app == "context":
             # Can't express as a buff gate — only descend when the condition
             # is definitely active against the current context.
-            if _evaluate_condition(condition, opts["context"]) is True:
-                _collect_gated_buffs(node.get("effect"), source, opts, applicability, out_buffs)
+            verdict = _evaluate_condition(
+                condition,
+                opts["context"],
+                opts["perspective"],
+                None if opts.get("grantedHolder") else source,
+            )
+            if verdict is True:
+                _collect_gated_buffs(
+                    node.get("effect"), source, opts, applicability, out_buffs, diagnostics
+                )
+            elif verdict == "unknown" and diagnostics is not None:
+                diagnostics.append(
+                    {
+                        "reason": (
+                            "activation condition cannot be evaluated against current context"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
             return
         _collect_gated_buffs(
-            node.get("effect"), source, opts, _combine_applicability(applicability, app), out_buffs
+            node.get("effect"),
+            source,
+            opts,
+            _combine_applicability(applicability, app),
+            out_buffs,
+            diagnostics,
         )
         return
     if node_type in ("rules-bundle", "sequence"):
         for step in node.get("steps") or []:
-            _collect_gated_buffs(step, source, opts, applicability, out_buffs)
+            _collect_gated_buffs(step, source, opts, applicability, out_buffs, diagnostics)
         return
     if node_type == "ability-part":
+        part_opts = (
+            opts
+            if node.get("duration") is None
+            else {**opts, "duration": node.get("duration")}
+        )
         if node.get("trigger") is not None or (
             node.get("optional") is not True
             and node.get("cost") is None
             and node.get("usage") is None
         ):
             _collect_gated_buffs(
-                moment_gate(node.get("trigger"), node.get("effect")),
+                moment_gate(node.get("trigger"), node.get("effect"), node),
                 source,
-                opts,
+                part_opts,
                 applicability,
                 out_buffs,
+                diagnostics,
             )
         return
     if node_type in ("choice", "dice-pool-allocation", "dice-gated"):
@@ -1646,8 +2034,57 @@ def _collect_gated_buffs(
     # then attach the accumulated applicability.
     tmp: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node, source, opts, tmp)
+    if diagnostics is not None:
+        diagnostics.extend(tmp["unsupported"])
     for b in tmp["applied"]:
         out_buffs.append(_apply_applicability(b, applicability))
+
+
+def _duration_spans_clock(duration: Any, clock: str) -> bool:
+    if not isinstance(duration, str):
+        return False
+    spans_phases = duration in {
+        "turn",
+        "battle-round",
+        "battle",
+        "permanent",
+        "while-leading",
+        "one-use",
+        "control-lost",
+    } or duration.startswith("until-")
+    if not spans_phases:
+        return False
+    if clock == "phase":
+        return True
+    if clock == "turn":
+        return duration != "turn"
+    return duration not in ("turn", "battle-round")
+
+def _elide_historical_clocks(condition: dict[str, Any], duration: Any) -> dict[str, Any]:
+    """Replace only trigger clocks whose effect lifetime can outlast that clock."""
+    operator = condition.get("operator")
+    operands = condition.get("operands")
+    if isinstance(operator, str) and isinstance(operands, list):
+        return {
+            **condition,
+            "operands": [
+                _elide_historical_clocks(item, duration) if _is_object(item) else item
+                for item in operands
+            ],
+        }
+    condition_type = condition.get("type")
+    clock = (
+        {
+            "phase-is": "phase",
+            "player-turn-is": "turn",
+            "battle-round": "battle-round",
+        }.get(condition_type)
+        if isinstance(condition_type, str)
+        else None
+    )
+    if clock is None or not _duration_spans_clock(duration, clock):
+        return condition
+    return {"type": "timing-is", "parameters": {"timing": f"historical-{clock}"}}
 
 
 def _condition_mentions_timing(condition: dict[str, Any]) -> bool:
@@ -1674,7 +2111,7 @@ def _extract_timing(condition: dict[str, Any]) -> str | None:
     return None
 
 
-def _condition_to_applicability(condition: dict[str, Any]) -> Any:
+def _condition_to_applicability(condition: dict[str, Any], perspective: str) -> Any:
     """Translate a condition into a buff applicability the resolver can gate
     on. Returns ``"gate"`` for a player-controlled timing, or ``"context"``
     when the condition has no declarative buff representation."""
@@ -1685,7 +2122,7 @@ def _condition_to_applicability(condition: dict[str, Any]) -> Any:
         for operand in condition["operands"]:
             if not _is_object(operand):
                 return "context"
-            a = _condition_to_applicability(operand)
+            a = _condition_to_applicability(operand, perspective)
             if a == "gate":
                 continue  # timing operand: satisfied by opting in.
             if a == "context":
@@ -1700,14 +2137,25 @@ def _condition_to_applicability(condition: dict[str, Any]) -> Any:
     if ctype == "phase-is":
         phase = params.get("phase") if params else None
         return {"phases": [phase]} if isinstance(phase, str) else "context"
-    if ctype == "has-keyword":
-        kw = _single_keyword(params)
+    if ctype == "matches":
+        filt = params.get("filter") if params else None
+        if not _is_object(filt) or any(key != "all_of" for key in filt):
+            return "context"
+        kw = _single_keyword(filt)
         if kw is None:
             return "context"
         subject = params.get("subject") if params else None
         if subject == "defender":
             return {"requiresTargetKeyword": kw}
-        return {"requiresAttackerKeyword": kw} if _is_buffed_unit(subject) else "context"
+        if subject == "attacker":
+            return {"requiresAttackerKeyword": kw}
+        if not _is_buffed_unit(subject):
+            return "context"
+        return (
+            {"requiresTargetKeyword": kw}
+            if perspective == "target"
+            else {"requiresAttackerKeyword": kw}
+        )
     if ctype == "attack-is":
         if params is None or any(k != "attack_type" for k in params):
             return "context"
@@ -1723,6 +2171,15 @@ def _condition_to_applicability(condition: dict[str, Any]) -> Any:
 def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
     """Merge two applicabilities; ``phases`` intersect, the rest narrow."""
     out = dict(a)
+    left_weapon = _weapon_gate_part(a)
+    right_weapon = _weapon_gate_part(b)
+    if left_weapon and right_weapon:
+        for field in set(left_weapon) | set(right_weapon):
+            out.pop(field, None)
+        out["weaponRequirements"] = [
+            left_weapon,
+            right_weapon,
+        ]
     if b.get("phases"):
         out["phases"] = (
             [p for p in a["phases"] if p in b["phases"]] if a.get("phases") else b["phases"]
@@ -1741,6 +2198,9 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["excludedTargetKeywords"] = list(
             dict.fromkeys([*(a.get("excludedTargetKeywords") or []), *b["excludedTargetKeywords"]])
         )
+    if not (left_weapon and right_weapon):
+        for field in _weapon_gate_part(b):
+            out[field] = b[field]
     return out
 
 
@@ -1853,11 +2313,140 @@ def _single_keyword(params: dict[str, Any] | None) -> str | None:
         return None
     return all_of[0] if isinstance(all_of[0], str) else None
 
+def _matches_unit_filter(
+    filt: Any,
+    ctx: EngineContext,
+    side: str,
+    owner: str = "friendly",
+) -> bool | str:
+    """Evaluate only unit facts carried by the crunch context."""
+    if not _is_object(filt):
+        return "unknown"
+    unknown = False
+    predicates: dict[str, list[str]] = {}
+    member_side = filt.get("member_of") == "this-unit" or filt.get("member_of") == (
+        "attacker" if side == "attacker" else "defender"
+    )
+    keywords = ctx.get("attackerKeywords" if side == "attacker" else "targetKeywords")
+    for key in ("all_of", "any_of", "none_of", "not_all_of"):
+        value = filt.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+            return "unknown"
+        predicates[key] = value
+    if filt.get("level") == "model" and predicates:
+        unknown = True
+    if predicates:
+        if not isinstance(keywords, list) or not all(isinstance(item, str) for item in keywords):
+            unknown = True
+        elif not unit_matches_applies_to(predicates, keywords):
+            return False
+    for key, value in filt.items():
+        if key in predicates:
+            continue
+        if key == "owner":
+            if value != "any" and value != owner:
+                return False
+        elif key == "unit_ids":
+            if (
+                filt.get("level") != "unit"
+                or not isinstance(value, list)
+                or not value
+                or not all(isinstance(unit_id, str) for unit_id in value)
+            ):
+                return "unknown"
+            identity = ctx.get("attackerUnitId" if side == "attacker" else "targetUnitId")
+            if not isinstance(identity, str):
+                unknown = True
+            elif identity not in value:
+                return False
+        elif key == "any_of_filters":
+            if not isinstance(value, list) or not value:
+                return "unknown"
+            results = [_matches_unit_filter(item, ctx, side, owner) for item in value]
+            if True not in results:
+                if "unknown" not in results:
+                    return False
+                unknown = True
+        elif key == "state" and value == "benefit-of-cover":
+            covered = ctx.get("attackerInCover" if side == "attacker" else "targetInCover")
+            if covered is False:
+                return False
+            if covered is None:
+                unknown = True
+        elif (
+            key == "within"
+            and _is_object(value)
+            and value.get("wholly") is not True
+            and (
+                (side == "attacker" and value.get("of") == "defender")
+                or (side == "target" and value.get("of") == "attacker")
+            )
+        ):
+            range_ref = value.get("range")
+            if range_ref == "half-weapon":
+                half_range = ctx.get("withinHalfRange")
+                if half_range is False:
+                    return False
+                if half_range is not True:
+                    unknown = True
+                continue
+            if (
+                _is_object(range_ref)
+                and isinstance(range_ref.get("per_battle_round"), list)
+                and isinstance(ctx.get("battleRound"), (int, float))
+                and not isinstance(ctx.get("battleRound"), bool)
+            ):
+                tiers = range_ref["per_battle_round"]
+                index = max(int(ctx["battleRound"]) - 1, 0)
+                range_ref = tiers[min(index, len(tiers) - 1)] if tiers else None
+            inches = range_ref.get("inches") if _is_object(range_ref) else None
+            distance = ctx.get("distanceInches")
+            if (
+                not isinstance(inches, (int, float))
+                or isinstance(inches, bool)
+                or not isinstance(distance, (int, float))
+                or isinstance(distance, bool)
+            ):
+                unknown = True
+            elif distance > inches:
+                return False
+        elif key == "level" and value == "unit":
+            continue
+        elif (
+            key == "level"
+            and value == "model"
+            and filt.get("attachment_role") is not None
+            and member_side
+        ):
+            continue
+        elif key == "attachment_role" and filt.get("level") == "model" and member_side:
+            role = ctx.get(
+                "attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole"
+            )
+            if role is None:
+                unknown = True
+            elif role != value:
+                return False
+        elif key == "member_of" and member_side and filt.get("attachment_role") is not None:
+            continue
+        else:
+            unknown = True
+    return "unknown" if unknown else True
 
-def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
+
+def _evaluate_condition(
+    condition: dict[str, Any],
+    ctx: EngineContext,
+    perspective: str = "attacker",
+    source: BuffSource | None = None,
+) -> Any:
     # Compound conditions use {operator, operands}; dispatch on shape.
     if isinstance(condition.get("operator"), str) and isinstance(condition.get("operands"), list):
-        return _evaluate_compound(condition["operator"], condition["operands"], ctx)
+        return _evaluate_compound(
+            condition["operator"], condition["operands"], ctx, perspective, source
+        )
     ctype = condition.get("type")
     params = condition.get("parameters") if _is_object(condition.get("parameters")) else None
     if ctype == "phase-is":
@@ -1886,10 +2475,11 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         filt = p.get("filter")
         types = filt.get("move_types") if _is_object(filt) else None
         types = types if isinstance(types, list) else []
+        count = p.get("count")
         own = (
             p.get("subject") is None
             and p.get("object") is None
-            and p.get("count_min") is None
+            and (count is None or count == {"min": 1, "max": 1})
             and p.get("window") == "turn"
         )
         if (
@@ -1929,6 +2519,23 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         return all(k.lower() in have for k in all_of) and (
             len(any_of) == 0 or any(k.lower() in have for k in any_of)
         )
+    if ctype == "matches":
+        p = params or {}
+        subject = p.get("subject")
+        if subject == "defender":
+            side = "target"
+        elif subject == "attacker":
+            side = "attacker"
+        elif _is_buffed_unit(subject):
+            side = "attacker" if perspective == "attacker" else "target"
+        else:
+            return "unknown"
+        return _matches_unit_filter(
+            p.get("filter"),
+            ctx,
+            side,
+            "enemy" if subject == "defender" else "friendly",
+        )
     if ctype == "army-faction":
         faction = params.get("faction") if params else None
         if not isinstance(faction, str) or ctx.get("armyFaction") is None:
@@ -1949,19 +2556,59 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
             return "unknown"
         return ctx["attackerGuided"]
     if ctype == "attachment":
-        # True whenever the buffed unit is a combined ("attached") unit. We do not thread
-        # per-member leader identity, and a Leader keyword filter is not checked: "attachment
-        # present" is the signal. An undefined flag stays "unknown" so the SPA surfaces the gap.
         p = params or {}
-        if p.get("role") == "led" or p.get("with") is not None:
+        if p.get("with") is not None:
             return "unknown"
-        if ctx.get("attackerAttached") is None:
+        subject = p.get("subject")
+        explicit_side = (
+            "attacker"
+            if subject == "attacker"
+            else "target"
+            if subject == "defender"
+            else None
+        )
+        if explicit_side is None and subject not in (
+            None,
+            "this-model",
+            "this-unit",
+            "ability-unit",
+        ):
             return "unknown"
-        return ctx["attackerAttached"]
+        side = explicit_side or ("attacker" if perspective == "attacker" else "target")
+        attached = ctx.get("attackerAttached" if side == "attacker" else "targetAttached")
+        role = ctx.get(
+            "attackerAttachmentRole" if side == "attacker" else "targetAttachmentRole"
+        )
+        if (
+            explicit_side is None
+            and source is not None
+            and source.get("kind") == "ability"
+            and source.get("abilityKind") in ("attached", "support")
+        ):
+            source_id = source.get("sourceUnitId")
+            roles = ctx.get("attachmentRoles")
+            role = roles.get(source_id) if _is_object(roles) and source_id is not None else None
+            attached = True if source.get("abilityKind") == "attached" else role is not None
+        if attached is False:
+            return False
+        wanted_role = p.get("role")
+        if wanted_role == "attached":
+            return "unknown" if attached is None else attached
+        if wanted_role == "leading":
+            return "unknown" if role is None else role == "leader"
+        if wanted_role == "led" and role == "bodyguard":
+            return True
+        return "unknown"
     return "unknown"
 
 
-def _evaluate_compound(operator: str, operands: list[Any], ctx: EngineContext) -> Any:
+def _evaluate_compound(
+    operator: str,
+    operands: list[Any],
+    ctx: EngineContext,
+    perspective: str,
+    source: BuffSource | None,
+) -> Any:
     """Kleene three-valued evaluator for compound conditions. ``and``
     short-circuits to False on any false operand; ``or`` to True
     symmetrically; ``not`` flips its single operand. Unknown operands that
@@ -1970,7 +2617,7 @@ def _evaluate_compound(operator: str, operands: list[Any], ctx: EngineContext) -
         first = operands[0] if operands else None
         if not _is_object(first):
             return "unknown"
-        v = _evaluate_condition(first, ctx)
+        v = _evaluate_condition(first, ctx, perspective, source)
         if v == "unknown":
             return "unknown"
         return not v
@@ -1981,7 +2628,7 @@ def _evaluate_compound(operator: str, operands: list[Any], ctx: EngineContext) -
         if not _is_object(operand):
             saw_unknown = True
             continue
-        v = _evaluate_condition(operand, ctx)
+        v = _evaluate_condition(operand, ctx, perspective, source)
         if v == "unknown":
             saw_unknown = True
             continue
@@ -2074,47 +2721,6 @@ def _ap_delta(modifier: dict[str, Any]) -> Any:
     return None
 
 
-def parse_keyword_grant(raw: str) -> dict[str, Any] | None:
-    """Parse a printed weapon-keyword string (e.g. ``"Sustained Hits 1"``,
-    ``"Anti-INFANTRY 4+"``, ``"Lethal Hits"``) into a
-    ``{keyword_id, parameters?}`` catalog reference, or None if the form is
-    unrecognised."""
-    import re
-
-    trimmed = raw.strip()
-    if trimmed == "":
-        return None
-
-    # Anti-X N+ → { anti, target_keyword: X, threshold: N }; X may be "A/B" or "non-A".
-    anti_match = re.match(
-        r"^anti-([A-Z][A-Z\s-]*(?:/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$", trimmed, re.IGNORECASE
-    )
-    if anti_match:
-        return {
-            "keyword_id": "anti",
-            "parameters": {
-                "target_keyword": anti_match.group(1).strip(),
-                "threshold": int(anti_match.group(2)),
-            },
-        }
-
-    # "Lethal Hits", "Twin-linked", "Heavy" → kebab-case lookup, no params.
-    # "Sustained Hits 1", "Rapid Fire 2", "Melta 2" → kebab-case + value.
-    value_match = re.match(r"^(.+?)\s+(\d+)$", trimmed)
-    if value_match:
-        return {
-            "keyword_id": _to_kebab_case(value_match.group(1)),
-            "parameters": {"value": int(value_match.group(2))},
-        }
-    return {"keyword_id": _to_kebab_case(trimmed)}
-
-
-def _to_kebab_case(s: str) -> str:
-    import re
-
-    return re.sub(r"[^a-z0-9-]", "", re.sub(r"[\s_]+", "-", s.lower()))
-
-
 _FIDELITY_BINDING_REASON = (
     "selection/history/model/attack predicates are not resolved by the buff engine"
 )
@@ -2188,11 +2794,8 @@ _SELECTOR_FIDELITY_FIELDS = (
     "eligibility",
     "reference",
     "origin",
-    "selection_limit",
+    "limit",
     "bind_as",
-    "within_inches_from",
-    "visible_to",
-    "visibility_required",
 )
 
 
@@ -2211,8 +2814,12 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
     consumer = modifier.get("consumer") or {}
     node_type = node.get("type")
     selection_binding = node_type in ("select-units", "for-each-unit") and (
-        selector.get("target_kind") == "model"
-        or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
+        isinstance(selector.get("filter"), dict)
+        and (
+            selector["filter"].get("level") == "model"
+            or selector["filter"].get("model_names") is not None
+            or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
+        )
     )
     # A designation's own selection (range, visibility, eligibility) is what its
     # lever's player vouches for, so only the `applies` bindings are unresolved.

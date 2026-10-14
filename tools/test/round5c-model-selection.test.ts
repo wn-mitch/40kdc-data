@@ -47,13 +47,13 @@ function selectorOf(mechanics: Record<string, any>): Record<string, any> {
   return selector;
 }
 
-describe("Round 5C per-model usage as the selection's selection_limit", () => {
-  it("lowers a once-per-turn per-model usage to selection_limit on the model selection", () => {
+describe("Round 5C per-model usage as the selection's limit", () => {
+  it("lowers a once-per-turn per-model usage to limit on the model selection", () => {
     const result = resultOf(withUsage(["Each model can only be selected for this ability once per turn", "usage-limit", { frequency: "once-per-turn", per: "model" }]));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     const mechanics = result.mechanics as unknown as Record<string, any>;
-    expect(selectorOf(mechanics)).toMatchObject({ target_kind: "model", selection_limit: { count: 1, period: "turn" } });
+    expect(selectorOf(mechanics)).toMatchObject({ filter: { level: "model" }, limit: { count: 1, period: "turn" } });
     // The cap belongs to each selected model, not to the ability's usage.
     expect(mechanics.usage).toBeUndefined();
   });
@@ -62,14 +62,14 @@ describe("Round 5C per-model usage as the selection's selection_limit", () => {
     const result = resultOf(withUsage(["Each model can only be selected for this ability once per turn", "usage-limit", { frequency: "once-per-battle", per: "model" }]));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(selectorOf(result.mechanics as unknown as Record<string, any>).selection_limit).toEqual({ count: 1, period: "battle" });
+    expect(selectorOf(result.mechanics as unknown as Record<string, any>).limit).toEqual({ count: 1, period: "battle" });
   });
 
   it("maps once-per-command-phase to a phase period when the window is the Command phase", () => {
     const result = resultOf(withUsage(["Each model can only be selected for this ability once per turn", "usage-limit", { frequency: "once-per-command-phase", per: "model" }]));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(selectorOf(result.mechanics as unknown as Record<string, any>).selection_limit).toEqual({ count: 1, period: "phase" });
+    expect(selectorOf(result.mechanics as unknown as Record<string, any>).limit).toEqual({ count: 1, period: "phase" });
   });
 
   it("refuses once-per-command-phase when the ability's window is another phase", () => {
@@ -94,7 +94,7 @@ describe("Round 5C per-model usage as the selection's selection_limit", () => {
     ], text);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(JSON.stringify(result.mechanics)).not.toContain("selection_limit");
+    expect(JSON.stringify(result.mechanics)).not.toContain('"limit"');
     expect((result.mechanics as unknown as Record<string, any>).usage).toEqual({ frequency: "once-per-turn", per: "model" });
   });
 
@@ -123,7 +123,7 @@ const BEAST_MODEL = { side: "friendly", keywords: ["BEAST"], level: "model" };
 const HIT_ROLL = ["The selected model adds 1 to its Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }] as Item;
 
 describe("Round 5C model selection in the bearer's unit (membership@2)", () => {
-  it("folds \"in your unit\" after a model unit-filter into the bearer's unit eligibility", () => {
+  it("folds \"in your unit\" after a model unit-filter into its membership", () => {
     const text = "Select one BEAST model in your unit. The selected model adds 1 to its Hit roll.";
     const result = resultOf([
       ["Select one", "select-unit", { distance: "any", visible: false }],
@@ -134,8 +134,7 @@ describe("Round 5C model selection in the bearer's unit (membership@2)", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(selectorOf(result.mechanics as unknown as Record<string, any>)).toMatchObject({
-      target_kind: "model", keywords: ["BEAST"],
-      eligibility: { type: "same-unit", parameters: { as: "ability-unit" } },
+      filter: { owner: "friendly", all_of: ["BEAST"], level: "model", member_of: "this-unit" },
     });
   });
 
@@ -152,8 +151,7 @@ describe("Round 5C model selection in the bearer's unit (membership@2)", () => {
     ], text);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(JSON.stringify(result.mechanics)).toContain('"as":"stratagem-target"');
-    expect(selectorOf(result.mechanics as unknown as Record<string, any>).eligibility).toEqual({ type: "same-unit", parameters: { as: "stratagem-target" } });
+    expect(selectorOf(result.mechanics as unknown as Record<string, any>).filter).toEqual({ owner: "friendly", all_of: ["BEAST"], level: "model", member_of: "stratagem-target" });
   });
 
   it("refuses this-unit on a Stratagem, which has no bearer", () => {
@@ -224,8 +222,7 @@ describe("Round 5C other-model selection on a one-model bearer", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(selectorOf(result.mechanics as unknown as Record<string, any>)).toMatchObject({
-      target_kind: "model", keywords: ["IMPERIAL KNIGHTS"],
-      eligibility: { operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] },
+      filter: { owner: "friendly", all_of: ["IMPERIAL KNIGHTS"], level: "model", excluding: "this-unit" },
     });
   });
 

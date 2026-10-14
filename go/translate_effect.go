@@ -24,12 +24,8 @@ func ejstrType(e map[string]any) string {
 	return s
 }
 
-// durationClauses maps a duration to its woven clauses: `lead` sits at the
-// front of the sentence, `trail` after the trigger/condition.
+// durationClauses maps a duration to its woven trailing expiry clause.
 func durationClauses(duration any) (string, string) {
-	if duration == "one-use" {
-		return "once per battle", ""
-	}
 	return "", expiryTrail(duration)
 }
 
@@ -60,8 +56,11 @@ func scalingWording(s map[string]any) string {
 		return "for every " + per + " of " + scaleSource(s) + maxTail
 	}
 	c := "for every " + ejstr(s["per"]) + " " + scaleSource(s)
-	if s["within_inches"] != nil && !strings.HasSuffix(c, "within "+ejstr(s["within_inches"])+"\"") {
-		c += " within " + ejstr(s["within_inches"]) + "\""
+	if s["within"] != nil {
+		rangeText := rangePhrase(s["within"])
+		if !strings.HasSuffix(c, "within "+rangeText) {
+			c += " within " + rangeText
+		}
 	}
 	if s["round"] == "up" {
 		c += " (rounding up)"
@@ -69,44 +68,30 @@ func scalingWording(s map[string]any) string {
 	return c + maxTail
 }
 
-func auraEligibleSubject(who string, eligible any) string {
-	e, ok := asMap(eligible)
-	if !ok || e == nil {
-		return who
-	}
-	required := jstrList(e["required_keywords"])
-	excluded := jstrList(e["excluded_keywords"])
-	// States, then keywords all of which it has, then keywords one of which it has.
-	words := append(append([]string{}, jstrList(e["states"])...), required...)
-	if anyOf := jstrList(e["any_keywords"]); len(anyOf) > 0 {
-		words = append(words, strings.Join(anyOf, " or "))
-	}
-	base := who
-	if len(words) > 0 {
-		base = who[:len(who)-4] + strings.Join(words, " ") + " unit"
-	}
-	if len(excluded) > 0 {
-		base += " (excluding " + strings.Join(excluded, " ") + " units)"
-	}
-	return base
-}
-
-// keywordFilterClause renders one aura-role keyword predicate.
-func keywordFilterClause(value any, noun string) string {
-	filter, ok := asMap(value)
-	if !ok || filter == nil {
-		return noun
+func auraRoleFilter(filter map[string]any, noun string) string {
+	relations := map[string]any{}
+	for key, value := range filter {
+		switch key {
+		case "all_of", "any_of", "none_of", "not_all_of":
+		default:
+			relations[key] = value
+		}
 	}
 	s := noun
-	if _, ok := asList(filter["required_keywords"]); ok {
-		if r := strings.Join(jstrList(filter["required_keywords"]), " and "); r != "" {
-			s += " with " + r
-		}
+	if values, ok := asList(filter["all_of"]); ok {
+		s += " with " + strings.Join(cstrList(values), " and ")
 	}
-	if _, ok := asList(filter["excluded_keywords"]); ok {
-		if x := strings.Join(jstrList(filter["excluded_keywords"]), " or "); x != "" {
-			s += " without " + x
-		}
+	if values, ok := asList(filter["any_of"]); ok {
+		s += " with at least one of " + orList(cstrList(values))
+	}
+	if values, ok := asList(filter["none_of"]); ok {
+		s += " without " + orList(cstrList(values))
+	}
+	if values, ok := asList(filter["not_all_of"]); ok {
+		s += " without all of " + strings.Join(cstrList(values), " and ")
+	}
+	if len(relations) > 0 {
+		s += " matching " + filterSubject(relations, effCtx{})
 	}
 	return s
 }
@@ -124,27 +109,30 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 		return "the range of this model's " + named + "abilities is increased by " + ejstr(m["range_bonus"]) + "\"" + capped
 	}
 	rangeText := "range"
-	if l, ok := asList(m["range"]); ok {
-		parts := make([]string, len(l))
-		for i, r := range l {
-			parts[i] = ejstr(r) + "\""
-		}
-		rangeText = strings.Join(parts, "/") + " (by battle round)"
-	} else if m["range"] != nil {
-		rangeText = ejstr(m["range"]) + "\""
+	if m["range"] != nil {
+		rangeText = rangePhrase(m["range"])
 	}
-	who := "an enemy unit"
+	owner := "enemy"
 	if e["target"] == "friendly-within-aura" {
-		who = "a friendly unit"
+		owner = "friendly"
 	}
-	eligibleWho := auraEligibleSubject(who, m["eligible"])
+	recipientFilter := mapOr(m["recipient_filter"])
+	if m["eligible"] != nil {
+		recipientFilter = mapOr(m["eligible"])
+	}
+	filter := map[string]any{"owner": owner}
+	for key, value := range recipientFilter {
+		filter[key] = value
+	}
+	subject := selectorSubject(map[string]any{"filter": filter}, false)
+	eligibleWho := article(subject) + " " + subject
 	recipient := eligibleWho
-	if m["recipient_filter"] != nil {
-		recipient = keywordFilterClause(m["recipient_filter"], eligibleWho)
+	if m["eligible"] != nil && m["recipient_filter"] != nil {
+		recipient = auraRoleFilter(mapOr(m["recipient_filter"]), eligibleWho)
 	}
 	emitter := "this model"
 	if m["emitter_filter"] != nil {
-		emitter = keywordFilterClause(m["emitter_filter"], "this model")
+		emitter = auraRoleFilter(mapOr(m["emitter_filter"]), "this model")
 	}
 	effectText := "that unit is affected"
 	if m["effect"] != nil {
@@ -348,8 +336,6 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		return "roll " + dicePoolLabel(e) + ": " + strings.Join(opts, " / ")
 	case "select-units":
 		return selectUnitsInline(mapOr(e["selector"]), mapOr(e["effect"]), ctx)
-	case "leader-model-ability-grant":
-		return leaderModelAbilityGrantClause(e, ctx)
 	case "persistent-designation":
 		if e["operation"] == "replace" {
 			return persistentDesignationReplacement(e)
@@ -369,7 +355,11 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 			om := mapOr(o)
 			opts = append(opts, ejstr(om["name"])+" ("+describeEffectInline(mapOr(om["effect"]), ctx)+")")
 		}
-		return stancePick(e) + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
+		consum := ""
+		if e["mode"] == "consumable" {
+			consum = " (each may be chosen once per battle)"
+		}
+		return stancePick(e) + consum + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
 	case "stance-selection-capacity":
 		n := jsNumber(m["additional_selections"])
 		if n != n || n == 0 {
@@ -379,17 +369,18 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if n == 1 {
 			times = "one additional time"
 		}
-		// A shared allowance narrowed to some options: spent on any one of them, not one of each.
-		if ids, ok := m["option_ids"].([]any); ok && m["allocation"] != "fixed-option" {
-			names := make([]string, 0, len(ids))
-			for _, id := range ids {
-				names = append(names, titleCase(ejstr(id)))
+		if options, ok := asList(m["options"]); ok && m["allocation"] != "fixed-option" {
+			names := make([]string, 0, len(options))
+			for _, option := range options {
+				names = append(names, titleCase(ejstr(mapOr(option)["option_id"])))
 			}
 			return "you can select " + orList(names) + " " + times + " per battle, shared between them"
 		}
-		subject := "one option of " + titleCase(ejstr(m["stance_id"]))
-		if m["allocation"] == "fixed-option" && m["option_id"] != nil {
-			subject = titleCase(ejstr(m["option_id"]))
+		subject := "one option of " + titleCase(ejstr(m["ability_id"]))
+		if m["allocation"] == "fixed-option" {
+			if option, ok := asMap(m["option"]); ok && option != nil {
+				subject = titleCase(ejstr(option["option_id"]))
+			}
 		}
 		return "you can select " + subject + " " + times + " per battle"
 	case "risk-reward":
@@ -481,13 +472,7 @@ func choicePrompt(e map[string]any) string {
 
 func leadershipTest(e map[string]any, ctx effCtx) string {
 	test := mapOr(e["test"])
-	who := "that unit"
-	switch test["subject"] {
-	case "self":
-		who = "this model"
-	case "target":
-		who = "the target unit"
-	}
+	who := unitRefPhrase(test["subject"], "the unit")
 	kind := "Leadership"
 	if test["kind"] == "battle-shock" {
 		kind = "Battle-shock"
@@ -603,8 +588,6 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		return strings.Join(lines, "\n")
 	case "select-units":
 		return selectUnitsBlock(e, indent, arrow, depth, ctx)
-	case "leader-model-ability-grant":
-		return indent + arrow + capitalize(leaderModelAbilityGrantClause(e, ctx)) + "."
 	case "persistent-designation":
 		if e["operation"] == "replace" {
 			return indent + arrow + capitalize(persistentDesignationReplacement(e)) + "."
@@ -630,15 +613,11 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	case "designate-target":
 		return designateTargetBlock(e, indent, arrow, depth, ctx)
 	case "stance-select":
-		when := "At the start of your turn"
-		if s, ok := e["select"].(string); ok {
-			when = capitalize(eventClause(s))
-		}
 		consum := ""
 		if e["mode"] == "consumable" {
 			consum = " (each may be chosen once per battle)"
 		}
-		lines := []string{indent + arrow + when + ", " + stancePick(e) + consum + stanceAdditive(e) + ":"}
+		lines := []string{indent + arrow + capitalize(stancePick(e)) + consum + stanceAdditive(e) + ":"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
@@ -680,26 +659,15 @@ func selectUnitsBlock(e map[string]any, indent, arrow string, depth int, ctx eff
 	sel := mapOr(e["selector"])
 	inner := mapOr(e["effect"])
 	selectedCtx := selectedContext(ctx, sel)
-	engagement := selectUnitsEngagement(sel)
 	lead := "Select " + selectUnitsSubject(sel) + selectionBinding(sel)
 	header := indent + arrow + lead
-	if engagement != "" {
-		header += ". " + engagement
-	}
 	if containerTypes[ejstrType(inner)] {
-		trimmed := strings.TrimSuffix(header, ".")
 		if selectUnitsPlural(sel) {
-			noun := "unit"
-			if sel["target_kind"] == "model" {
-				noun = "model"
-			}
-			return trimmed + ":\n" + indent + "  -> For each selected " + noun + ":\n" + describeEffect(inner, depth+2, selectedCtx)
+			noun := selectorNoun(sel)
+			return header + ":\n" + indent + "  -> For each selected " + noun + ":\n" + describeEffect(inner, depth+2, selectedCtx)
 		}
-		return trimmed + ":\n" + describeEffect(inner, depth+1, selectedCtx)
+		return strings.TrimSuffix(header, ".") + ":\n" + describeEffect(inner, depth+1, selectedCtx)
 	}
 	nested := selectedRecipient(describeEffectInline(inner, selectedCtx), sel)
-	if engagement != "" {
-		return header + " " + capitalize(nested) + "."
-	}
 	return header + ": " + nested + "."
 }

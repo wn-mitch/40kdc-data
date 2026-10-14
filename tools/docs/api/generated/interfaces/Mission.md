@@ -6,7 +6,7 @@
 
 # Interface: Mission
 
-Defined in: [generated.ts:1544](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1544)
+Defined in: [generated.ts:2885](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2885)
 
 An 11e primary mission (the objective a player scores). Its structured scoring rules live in the same-id primary record in data/core/mission-cards.json and the package's mission-card collection. Which mission a player plays is selected by the Force Disposition matchup matrix (see mission-matchup), keyed on the player's own disposition and their opponent's. Victory points are capped per game and per battle round.
 
@@ -19,7 +19,7 @@ via the `definition` "mission".
 
 > **id**: `string`
 
-Defined in: [generated.ts:1545](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1545)
+Defined in: [generated.ts:2886](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2886)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:1545](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:1546](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1546)
+Defined in: [generated.ts:2887](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2887)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:1546](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **source?**: `string`
 
-Defined in: [generated.ts:1550](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1550)
+Defined in: [generated.ts:2891](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2891)
 
 Mission pack or source the mission originates from.
 
@@ -45,7 +45,7 @@ Mission pack or source the mission originates from.
 
 > `optional` **description?**: `string`
 
-Defined in: [generated.ts:1554](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1554)
+Defined in: [generated.ts:2895](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2895)
 
 Community-authored mission/objective summary (original prose only — no reproduced rules text).
 
@@ -55,7 +55,7 @@ Community-authored mission/objective summary (original prose only — no reprodu
 
 > `optional` **vp\_per\_game\_cap?**: `number`
 
-Defined in: [generated.ts:1558](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1558)
+Defined in: [generated.ts:2899](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2899)
 
 Maximum primary VP scorable across the whole game. 11e default is 45.
 
@@ -65,7 +65,7 @@ Maximum primary VP scorable across the whole game. 11e default is 45.
 
 > `optional` **vp\_per\_round\_cap?**: `number`
 
-Defined in: [generated.ts:1562](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1562)
+Defined in: [generated.ts:2903](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2903)
 
 Maximum primary VP scorable in a single battle round. 11e default is 15.
 
@@ -75,7 +75,7 @@ Maximum primary VP scorable in a single battle round. 11e default is 15.
 
 > `optional` **secondary\_vp\_per\_game\_cap?**: `number`
 
-Defined in: [generated.ts:1566](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1566)
+Defined in: [generated.ts:2907](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2907)
 
 Maximum secondary VP scorable across the whole game. 11e default is 45.
 
@@ -85,7 +85,7 @@ Maximum secondary VP scorable across the whole game. 11e default is 45.
 
 > `optional` **secondary\_vp\_per\_round\_cap?**: `number`
 
-Defined in: [generated.ts:1570](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1570)
+Defined in: [generated.ts:2911](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2911)
 
 Maximum secondary VP scorable in a single battle round. 11e default is 15.
 
@@ -95,7 +95,7 @@ Maximum secondary VP scorable in a single battle round. 11e default is 15.
 
 > `optional` **deployment\_pattern\_ids?**: `string`[]
 
-Defined in: [generated.ts:1574](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1574)
+Defined in: [generated.ts:2915](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2915)
 
 Ids of the deployment-pattern entities (maps) this mission can be played on. Empty until the per-mission maps are confirmed.
 
@@ -105,4 +105,4 @@ Ids of the deployment-pattern entities (maps) this mission can be played on. Emp
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1575](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1575)
+Defined in: [generated.ts:2916](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2916)

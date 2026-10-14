@@ -32,8 +32,8 @@ describe("Round 5C properties of an attack with conditions on its target", () =>
       ["enemy MONSTER unit", "unit-filter", { side: "enemy", keywords: ["MONSTER"] }],
       ["SUSTAINED HITS 1", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }]), text);
     expect(effect.type).toBe("conditional");
-    expect(effect.condition).toMatchObject({ type: "has-keyword", parameters: { subject: "defender", all_of: ["MONSTER"] } });
-    expect(effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"], weapon_type: "ranged" } });
+    expect(effect.condition).toMatchObject({ type: "matches", parameters: { subject: "defender", filter: { all_of: ["MONSTER"] } } });
+    expect(effect.effect).toEqual({ type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], weapons: { type: "ranged" } } });
   });
 
   it("reads list punctuation between properties as one list, and gives an unowned stat to the attack", () => {
@@ -44,8 +44,8 @@ describe("Round 5C properties of an attack with conditions on its target", () =>
       ["LETHAL HITS", "weapon-ability-keyword", { keyword: "Lethal Hits" }],
       ["PRECISION", "weapon-ability-keyword", { keyword: "Precision" }]), text);
     expect(effect).toEqual({ type: "sequence", steps: [
-      { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "improve", value: 1, weapon_type: "melee" } },
-      { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits", "Precision"], weapon_type: "melee" } },
+      { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "improve", value: 1, weapons: { type: "melee" } } },
+      { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "lethal-hits" }, { keyword_id: "precision" }], weapons: { type: "melee" } } },
     ] });
   });
 
@@ -69,8 +69,8 @@ describe("Round 5C properties of an attack with conditions on its target", () =>
       ["with its plasma lance", "attack-filter", { weapon_name: "plasma lance" }],
       ["VEHICLE unit", "unit-filter", { side: "enemy", keywords: ["VEHICLE"] }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }]), text);
-    expect(JSON.stringify(effect.condition)).toContain('"weapon_name":"plasma lance"');
-    expect(JSON.stringify(effect.condition)).toContain('"subject":"defender","all_of":["VEHICLE"]');
+    expect(JSON.stringify(effect.condition)).toContain('"weapons":{"name":"plasma lance"}');
+    expect(JSON.stringify(effect.condition)).toContain('"subject":"defender","filter":{"all_of":["VEHICLE"]}');
   });
 
   it("lets a filter's units' attack scope take a target gate and a duration before its properties", () => {
@@ -87,7 +87,7 @@ describe("Round 5C properties of an attack with conditions on its target", () =>
     if (!result.ok) return;
     const json = JSON.stringify(result.mechanics);
     expect(json).toContain('"all_of":["ALPHA"]');
-    expect(json).toContain("Lethal Hits");
+    expect(json).toContain('"keyword_id":"lethal-hits"');
     expect((result.mechanics as unknown as Record<string, any>).scope.duration).toBe("phase");
   });
 });

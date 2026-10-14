@@ -1287,7 +1287,7 @@ fn handle_translate_effect(args: &Value) -> Value {
         .get("scope")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
-    let applies_to: Option<wh40kdc::AbilityAppliesTo> = args
+    let applies_to: Option<wh40kdc::KeywordPredicate> = args
         .get("applies_to")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());
@@ -1317,7 +1317,7 @@ fn handle_match_applies_to(args: &Value) -> Value {
             Some(json!({ "detail": "match_applies_to.units must be an array" })),
         );
     };
-    let filter: Option<wh40kdc::AbilityAppliesTo> = args
+    let filter: Option<wh40kdc::KeywordPredicate> = args
         .get("applies_to")
         .filter(|v| !v.is_null())
         .and_then(|v| serde_json::from_value(v.clone()).ok());

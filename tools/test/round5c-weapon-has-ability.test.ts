@@ -67,40 +67,40 @@ describe("weapon-has-ability: compilation", () => {
     const mechanics = mechanicsOf(TEXT, grant(), condition("keep"), threshold());
     const steps = mechanics.effect.steps as Array<Record<string, any>>;
     expect(steps).toHaveLength(2);
-    expect(steps[0]).toMatchObject({ type: "weapon-ability-grant", modifier: { abilities: ["Sustained Hits 1"] } });
+    expect(steps[0]).toMatchObject({ type: "weapon-ability-grant", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] } });
     expect(steps[0]!.modifier.if_present).toBeUndefined();
-    expect(steps[1]).toMatchObject({ type: "roll-result", modifier: { roll: "hit", critical_on: 5, weapon_keyword: "Sustained Hits" } });
-    expect(steps[1]!.modifier.weapon_type).toBeUndefined();
+    expect(steps[1]).toMatchObject({ type: "roll-result", modifier: { roll: "hit", critical_on: 5, weapons: { keyword: { keyword_id: "sustained-hits" } } } });
+    expect(steps[1]!.modifier.weapons).toBeDefined();
   });
 
   it("add: the grant raises a rating the weapon already has", () => {
     const steps = mechanicsOf(TEXT, grant(), condition("add"), threshold()).effect.steps as Array<Record<string, any>>;
     expect(steps[0]!.modifier.if_present).toBe("increment");
-    expect(steps[1]!.modifier.weapon_keyword).toBe("Sustained Hits");
+    expect(steps[1]!.modifier.weapons).toMatchObject({ keyword: { keyword_id: "sustained-hits" } });
   });
 
   it("a ranged grant puts the weapon type on the roll result", () => {
     const steps = mechanicsOf(TEXT, grant({ weapon_type: "ranged" }), condition(), threshold()).effect.steps as Array<Record<string, any>>;
-    expect(steps[1]!.modifier).toMatchObject({ weapon_type: "ranged", weapon_keyword: "Sustained Hits" });
+    expect(steps[1]!.modifier).toMatchObject({ weapons: { type: "ranged", keyword: { keyword_id: "sustained-hits" } } });
   });
 
   it("strips a numeric threshold rating and a dice rating from the keyword", () => {
     const anti = mechanicsOf(TEXT, grant({ keyword: "Anti-Infantry 5+" }), condition(), threshold()).effect.steps as Array<Record<string, any>>;
-    expect(anti[1]!.modifier.weapon_keyword).toBe("Anti-Infantry");
+    expect(anti[1]!.modifier.weapons).toEqual({ keyword: { keyword_id: "anti", parameters: { target_keyword: "INFANTRY" } } });
     const melta = mechanicsOf(TEXT, grant({ keyword: "Melta D6" }), condition(), threshold()).effect.steps as Array<Record<string, any>>;
-    expect(melta[1]!.modifier.weapon_keyword).toBe("Melta");
+    expect(melta[1]!.modifier.weapons).toMatchObject({ keyword: { keyword_id: "melta" } });
   });
 
   it("reads a keyword the grant frame folded in a one-element keywords list", () => {
     const { keyword: _keyword, ...frame } = { subject: "this-unit", keyword: "x", weapon_type: "all" };
     const steps = mechanicsOf(TEXT, grant({ ...frame, keywords: ["Lethal Hits"] }), condition(), threshold()).effect.steps as Array<Record<string, any>>;
-    expect(steps[1]!.modifier.weapon_keyword).toBe("Lethal Hits");
+    expect(steps[1]!.modifier.weapons).toEqual({ keyword: { keyword_id: "lethal-hits" } });
   });
 
   it("a duration between the condition and the threshold does not stop the fold", () => {
     const text = `${TEXT.replace("an unmodified", "until the end of the phase, an unmodified")}`;
     const mechanics = mechanicsOf(text, grant(), condition(), ["until the end of the phase", "duration", { endpoint: "end-of-phase" }], threshold());
-    expect(JSON.stringify(mechanics)).toContain('"weapon_keyword":"Sustained Hits"');
+    expect(JSON.stringify(mechanics)).toContain('"keyword_id":"sustained-hits"');
   });
 
   it("refuses a condition with no earlier grant", () => {

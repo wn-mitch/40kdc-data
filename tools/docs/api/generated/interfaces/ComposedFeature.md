@@ -6,7 +6,7 @@
 
 # Interface: ComposedFeature
 
-Defined in: [generated.ts:3651](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3651)
+Defined in: [generated.ts:6355](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6355)
 
 A feature placed on an area template, positioned in the area's centroid-local frame (y-down inches). When the area is placed, rotated, or mirrored, its composed features are carried along.
 
@@ -19,7 +19,7 @@ via the `definition` "composed-feature".
 
 > `optional` **id?**: `string`
 
-Defined in: [generated.ts:3655](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3655)
+Defined in: [generated.ts:6359](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6359)
 
 Kebab-case identifier
 
@@ -29,7 +29,7 @@ Kebab-case identifier
 
 > **template**: `string`
 
-Defined in: [generated.ts:3659](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3659)
+Defined in: [generated.ts:6363](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6363)
 
 Kebab-case identifier
 
@@ -39,7 +39,7 @@ Kebab-case identifier
 
 > **position**: [`Vec23`](Vec23.md)
 
-Defined in: [generated.ts:3660](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3660)
+Defined in: [generated.ts:6364](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6364)
 
 ***
 
@@ -47,7 +47,7 @@ Defined in: [generated.ts:3660](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **rotation\_degrees?**: `number`
 
-Defined in: [generated.ts:3664](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3664)
+Defined in: [generated.ts:6368](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6368)
 
 Clockwise rotation of the feature about its own centroid, within the area-local frame.
 
@@ -57,7 +57,7 @@ Clockwise rotation of the feature about its own centroid, within the area-local 
 
 > `optional` **mirror?**: `"none"` \| `"horizontal"` \| `"vertical"`
 
-Defined in: [generated.ts:3665](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3665)
+Defined in: [generated.ts:6369](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6369)
 
 ***
 
@@ -65,6 +65,6 @@ Defined in: [generated.ts:3665](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **floor?**: `number`
 
-Defined in: [generated.ts:3669](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L3669)
+Defined in: [generated.ts:6373](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L6373)
 
 Ruin floor this feature occupies (0 = ground level).

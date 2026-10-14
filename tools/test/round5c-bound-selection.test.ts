@@ -62,8 +62,8 @@ describe("Round 5C bound selection: a unit measured from a named model", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     const [outer, inner] = selectorsOf(result.mechanics.effect);
-    expect(outer).toMatchObject({ target_kind: "model", bind_as: "anchor" });
-    expect(inner).toMatchObject({ within_inches: 8, within_inches_from: { selection_var: "anchor" } });
+    expect(outer).toMatchObject({ filter: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, count: { min: 1, max: 1 }, bind_as: "anchor" });
+    expect(inner.filter).toMatchObject({ owner: "enemy", all_of: ["BRAVO"], within: { range: { inches: 8 }, of: { selection_var: "anchor" } } });
     expect(inner.bind_as).toBeUndefined();
     // The effect names the inner selection, the unit that suffers the wound.
     expect(JSON.stringify(result.mechanics.effect)).toContain('"target":"selected-unit"');
@@ -82,8 +82,8 @@ describe("Round 5C bound selection: a unit measured from a named model", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     const [, inner] = selectorsOf(result.mechanics.effect);
-    expect(inner).toMatchObject({ visible_to: { selection_var: "anchor" } });
-    expect(inner.within_inches_from).toBeUndefined();
+    expect(inner.filter).toMatchObject({ owner: "enemy", all_of: ["BRAVO"], visible: { to: { selection_var: "anchor" } } });
+    expect(inner.filter.within).toBeUndefined();
   });
 
   it("refuses a reference to a selection the ability does not bind", () => {
@@ -165,8 +165,7 @@ describe("Round 5C bound selection: an inner select with no distance of its own"
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     const [, inner] = selectorsOf(result.mechanics.effect);
-    expect(inner.within_inches_from).toBeUndefined();
-    expect(inner.within_inches).toBeUndefined();
+    expect(inner.filter.within).toBeUndefined();
     const eligibility = JSON.stringify(inner.eligibility);
     expect(eligibility).toContain('"selection_var":"outer"');
     expect(eligibility).toContain('"inches":6');

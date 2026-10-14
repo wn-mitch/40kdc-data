@@ -112,7 +112,7 @@ describe("Round 5C batch-7a mission/composition predicates", () => {
     conditionCase("eligible", { to: "shoot" }, { type: "eligible", parameters: { to: "shoot" } });
     conditionCase("eligible", { to: "be-selected", source_ability_id: "auspex-scan", at: "opponents-previous-turn-end" },
       { type: "eligible", parameters: { to: "be-selected", source_ability: { ability_id: "auspex-scan" }, at: "opponents-previous-turn-end" } });
-    conditionCase("resource", { pool: "cp", at_least: 3 }, { type: "resource", parameters: { pool: "cp", at_least: 3 } });
+    conditionCase("resource", { pool: "cp", at_least: 3 }, { type: "resource", parameters: { pool: "cp", count: { min: 3 } } });
     conditionCase("resource", { pool: "cp", below_max: true, source_ability_id: "auspex-scan" },
       { type: "resource", parameters: { pool: "cp", below_max: true, source_ability: { ability_id: "auspex-scan" } } });
   });
@@ -122,11 +122,11 @@ describe("Round 5C batch-7a mission/composition predicates", () => {
   });
 
   it("compiles the four mission-card board predicates", () => {
-    conditionCase("operation-markers", { side: "friendly", count_min: 2 }, { type: "operation-markers", parameters: { side: "friendly", count_min: 2 } });
+    conditionCase("operation-markers", { side: "friendly", count_min: 2 }, { type: "operation-markers", parameters: { side: "friendly", count: { min: 2 } } });
     conditionCase("operation-markers", { friendly_unit_in_same_terrain_area: true, no_enemy_in_terrain_area: true },
       { type: "operation-markers", parameters: { friendly_unit_in_same_terrain_area: true, no_enemy_in_terrain_area: true } });
-    conditionCase("engagement-fronts", { count_min: 2 }, { type: "engagement-fronts", parameters: { count_min: 2 } });
-    conditionCase("destroyed-while-on-objective", { count_min: 1, destroyer_on_objective: true }, { type: "destroyed-while-on-objective", parameters: { count_min: 1, destroyer_on_objective: true } });
+    conditionCase("engagement-fronts", { count_min: 2 }, { type: "engagement-fronts", parameters: { count: { min: 2 } } });
+    conditionCase("destroyed-while-on-objective", { count_min: 1, destroyer_on_objective: true }, { type: "destroyed-while-on-objective", parameters: { count: { min: 1 }, destroyer_on_objective: true } });
     conditionCase("destroyed-in-tagged-terrain", { tag: "toxic", at_start_of_turn: true }, { type: "destroyed-in-tagged-terrain", parameters: { tag: "toxic", at_start_of_turn: true } });
   });
 });
@@ -135,7 +135,7 @@ describe("Round 5C batch-7a behavior flags", () => {
   it("compiles aura-range@2's range_cap_inches and make-move@2's counts_as_move", () => {
     const grant = leaf("EFFECT", "fights-first", { subject: "this-model" });
     const withCap = compiled([leaf("CONDITION", "aura-range", { side: "friendly", inches: 6, range_cap_inches: 12 }, 2), grant]);
-    expect(withCap.mechanics.effect).toMatchObject({ type: "aura", modifier: { range: 6, range_cap: 12 } });
+    expect(withCap.mechanics.effect).toMatchObject({ type: "aura", modifier: { range: { inches: 6 }, range_cap: { inches: 12 } } });
 
     const move = compiled([leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", counts_as_move: "advance" }, 2)]);
     expect(move.mechanics.effect).toEqual({ type: "move", target: "this-unit", modifier: { move_type: "normal", counts_as_move: "advance" } });

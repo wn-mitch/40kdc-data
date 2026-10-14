@@ -6,7 +6,7 @@
 
 # Interface: LoadoutCondition
 
-Defined in: [generated.ts:1918](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1918)
+Defined in: [generated.ts:1662](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1662)
 
 [composition] Each model (with model_keyword, if given) carries identical weapons of this kind.
 
@@ -16,7 +16,7 @@ Defined in: [generated.ts:1918](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"loadout"`
 
-Defined in: [generated.ts:1919](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1919)
+Defined in: [generated.ts:1663](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1663)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [generated.ts:1919](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **parameters**: `object`
 
-Defined in: [generated.ts:1920](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1920)
+Defined in: [generated.ts:1664](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1664)
 
 #### subject?
 

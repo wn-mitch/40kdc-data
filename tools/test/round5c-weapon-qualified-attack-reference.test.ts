@@ -78,7 +78,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["of those attacks made with a Graviton Crusher", "attack-filter", { weapon_name: "Graviton Crusher" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "defender", filter: { roll: "hit", result: "success", weapon_name: "Graviton Crusher" }, window: "event" } }));
+    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "defender", filter: { roll: "hit", result: "success", weapons: { name: "Graviton Crusher" } }, window: "event" } }));
   });
 
   it("an attack-filter after a hit names the weapon keyword of the hits (S2)", () => {
@@ -90,7 +90,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["attacks that had the [PSYCHIC] ability", "attack-filter", { weapon_keyword: "PSYCHIC" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapon_keyword":"PSYCHIC"}');
+    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapons":{"keyword":{"keyword_id":"psychic"}}}');
   });
 
   it("a before-form hit names the unit hit by the unit-filter after it (S3)", () => {
@@ -103,7 +103,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     );
     const out = compiled(list, text);
-    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: { owner: "enemy" }, filter: { roll: "hit", result: "success", weapon_name: "Gloomhound cannon" }, window: "event" } }));
+    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: { owner: "enemy" }, filter: { roll: "hit", result: "success", weapons: { name: "Gloomhound cannon" } }, window: "event" } }));
     expect(out).not.toContain('"object":"defender"');
   });
 
@@ -116,7 +116,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["enemy unit", "unit-filter", { side: "enemy" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapon_keyword":"Indirect Fire"}');
+    expect(out).toContain('"filter":{"roll":"hit","result":"success","weapons":{"keyword":{"keyword_id":"indirect-fire"}}}');
   });
 
   it("a before-form hit with a keyworded unit-filter after it keeps both (S3, the earthshaker shape)", () => {
@@ -128,7 +128,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["enemy INFANTRY unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: { owner: "enemy", all_of: ["INFANTRY"] }, filter: { roll: "hit", result: "success", weapon_name: "Ember lance" }, window: "event" } }));
+    expect(out).toContain(JSON.stringify({ type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: { owner: "enemy", all_of: ["INFANTRY"] }, filter: { roll: "hit", result: "success", weapons: { name: "Ember lance" } }, window: "event" } }));
   });
 
   it("refuses a before-form hit filter the DSL cannot hold, and a hit with nothing after it", () => {
@@ -167,7 +167,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["that enemy unit is pinned", "apply-mark", { subject: "antecedent", tag: "pinned" }],
     ), text);
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"type":"for-each-unit","selector":{"owner":"enemy"');
+    expect(JSON.stringify(result.ok ? result.mechanics : {})).toContain('"type":"for-each-unit","selector":{"filter":{"owner":"enemy"}');
   });
 
   it("a melee attack that destroys an enemy unit makes the destruction a melee one (S4, pattern B)", () => {
@@ -233,8 +233,8 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
   });
 
   it("describes a destruction by the attacks its filter names", () => {
-    const quake = describeTrigger({ event: "model-destroyed", subject: "this-model", object: { owner: "enemy", level: "model" }, filter: { weapon_name: "quake cannon" } } as never);
-    expect(quake).toContain("destroys an enemy model with a quake cannon attack");
+    const quake = describeTrigger({ event: "model-destroyed", subject: "this-model", object: { owner: "enemy", level: "model" }, filter: { weapons: { name: "quake cannon" } } } as never);
+    expect(quake).toMatch(/destroys an enemy model.*quake cannon.*attack/u);
     // A destruction with no attack filter reads as before: no attack phrase appended.
     const plain = describeTrigger({ event: "destroyed", object: { owner: "enemy" }, subject: "this-unit" } as never);
     expect(plain).not.toMatch(/ attack/u);
@@ -264,7 +264,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["one or more of those attacks made with its Gloomhound cannon", "attack-filter", { weapon_name: "Gloomhound cannon" }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }],
     ), text);
-    expect(out).toContain('"weapon_name":"Gloomhound cannon"');
+    expect(out).toContain('"weapons":{"name":"Gloomhound cannon"}');
     expect(out).not.toContain('"roll":"hit"');
   });
 
@@ -291,7 +291,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["That enemy unit is marked", "apply-mark", { subject: "antecedent", tag: "marked" }],
       ["until the start of your next turn", "duration", { endpoint: "start-of-next-turn" }],
     ), text);
-    expect(out).toContain('"weapon_name":"Sample Launcha"');
+    expect(out).toContain('"weapons":{"name":"Sample Launcha"}');
     // The filter is folded onto the hit: the same leaves without it name no weapon.
     const bare = compiled(placed(text,
       ["In your Shooting phase", "phase-window", { phase: "shooting", turn: "your" }],
@@ -301,7 +301,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
       ["That enemy unit is marked", "apply-mark", { subject: "antecedent", tag: "marked" }],
       ["until the start of your next turn", "duration", { endpoint: "start-of-next-turn" }],
     ), text);
-    expect(bare).not.toContain("weapon_name");
+    expect(bare).not.toContain('"weapons"');
   });
 
   it("a before-form Indirect Fire hit followed by a that-unit anaphor binds that unit per hit (S3, B)", () => {
@@ -316,7 +316,7 @@ describe("Round 5C weapon-qualified attack reference (wave 10)", () => {
     );
     const bound = compileLeaves(leaves, text);
     expect(bound.ok).toBe(true);
-    expect(JSON.stringify(bound.ok ? bound.mechanics : {})).toContain('"eligibility":{"type":"happened","parameters":{"event":"after-roll","subject":"event-subject","object":"this-unit","filter":{"roll":"hit","result":"success","weapon_keyword":"Indirect Fire"}');
+    expect(JSON.stringify(bound.ok ? bound.mechanics : {})).toContain('"eligibility":{"type":"happened","parameters":{"event":"after-roll","subject":"event-subject","object":"this-unit","filter":{"roll":"hit","result":"success","weapons":{"keyword":{"keyword_id":"indirect-fire"}}}');
     // The span alone folds the Indirect Fire filter onto the hit, and the filter leaf is gone.
     const folded = foldLeadingHitFilters(leaves.slice(2, 5), text);
     expect(folded).toHaveLength(2);

@@ -55,17 +55,15 @@ func borrowWeaponsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["from"] != nil {
 		from = replaceFirst(unitsWholeWordRe, strings.TrimPrefix(effectSubject(m["from"], ctx), "all "), "models")
 	}
-	kind := ""
-	if m["weapon_type"] != nil {
-		kind = ejstr(m["weapon_type"]) + " "
+	kind := weaponNoun(m)
+	if kind == "the weapons" {
+		kind = ""
+	} else {
+		kind = strings.TrimSuffix(strings.TrimPrefix(kind, "the "), " weapons") + " "
 	}
 	excl := ""
-	if l, ok := asList(m["exclude_weapon_keyword"]); ok && len(l) > 0 {
-		kws := make([]string, len(l))
-		for i, k := range l {
-			kws[i] = bracketKeyword(k)
-		}
-		excl = " (excluding " + strings.Join(kws, " and ") + " weapons)"
+	if weapons, ok := m["weapons"].(map[string]any); ok && weapons["exclude_keyword"] != nil {
+		excl = " (excluding " + weaponNoun(map[string]any{"weapons": map[string]any{"keyword": weapons["exclude_keyword"]}}) + ")"
 	}
 	until := expiryTrail(m["until"])
 	if until != "" {
@@ -80,17 +78,13 @@ func selectWeaponLeaf(m map[string]any, subj string) string {
 		countV = 1.0
 	}
 	n := jsNumber(countV)
-	kind := ""
-	if m["weapon_name"] != nil {
-		kind = ejstr(m["weapon_name"]) + " "
-	}
-	if m["weapon_type"] != nil {
-		kind += ejstr(m["weapon_type"]) + " "
+	kind := weaponNoun(m)
+	if kind == "the weapons" {
+		kind = ""
+	} else {
+		kind = strings.TrimSuffix(strings.TrimPrefix(kind, "the "), " weapons") + " "
 	}
 	kw := ""
-	if m["weapon_keyword"] != nil {
-		kw = " with [" + strings.ToUpper(ejstr(m["weapon_keyword"])) + "]"
-	}
 	if n == 1 {
 		return "select one " + kind + "weapon" + kw + " equipped by " + subj + "; the effects below refer to it as the selected weapon"
 	}
@@ -99,6 +93,9 @@ func selectWeaponLeaf(m map[string]any, subj string) string {
 
 func abilityActivateLeaf(m map[string]any, subj string) string {
 	label := abilityLabel(m["ability"])
+	if m["procedure"] == "oath" {
+		return subj + " " + ev(subj, "resolves") + " the " + label + " Oath procedure again"
+	}
 	consumed := ""
 	if m["ignore_consumed"] == true {
 		consumed = ", even if it has already been selected this battle"

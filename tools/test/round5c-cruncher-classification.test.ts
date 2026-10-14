@@ -15,7 +15,7 @@ import { classifyUnsupported } from "../src/round5c/pipeline-8b.js";
  */
 
 const source: BuffSource = { kind: "ability", abilityId: "fixture", abilityKind: "unit" };
-const ctx: EngineContext = { phase: "shooting", attackerStationary: false };
+const ctx: EngineContext = { phase: "shooting", attackerStationary: false, attackerKeywords: ["example"] };
 
 describe("pipeline-8b cruncher unsupported classification", () => {
   it("counts a heal effect as outside the damage path, not an unrecognized shape", () => {
@@ -23,11 +23,84 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
   });
 
-  it("counts a stance selection allowance as outside the damage path, but an unlisted unmodelled type stays a gap", () => {
-    const allowance = effectToBuffs({ type: "stance-selection-capacity", scope: "army", stance_id: "doctrine", additional_selections: 1 }, source, ctx).unsupported;
+  it("models a stance selection allowance as an activatable lever, but an unlisted unmodelled type stays a gap", () => {
+    const allowance = effectToBuffs({ type: "stance-selection-capacity", modifier: { ability_id: "doctrine", additional_selections: 1, allocation: "choose-one-option" } }, source, ctx);
     const unlisted = effectToBuffs({ type: "example-unmodelled", target: "this-unit", modifier: {} }, source, ctx).unsupported;
-    expect(classifyUnsupported(allowance)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    expect(allowance.unsupported).toEqual([]);
+    expect(allowance.activatable.map((lever) => lever.capRaise)).toEqual([{ ability: "doctrine", by: 1, allocation: "choose-one-option" }]);
+    expect(classifyUnsupported(allowance.unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
     expect(classifyUnsupported(unlisted)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
+  it("recognizes an Oath policy without granting a live reward or inventing a damage buff", () => {
+    const policy = effectToBuffs({
+      type: "oath-modifier", target: { owner: "friendly", level: "model", has_ability: ["example-oath"] },
+      modifier: { ability: "example-oath", aspect: "quality-persistence", from: "fulfilled" },
+    }, source, ctx);
+    expect(policy.applied).toEqual([]);
+    expect(policy.activatable).toEqual([]);
+    expect(policy.unsupported.length).toBeGreaterThan(0);
+    const classified = classifyUnsupported(policy.unsupported);
+    expect(classified.unrecognizedShape).toBe(0);
+    expect(classified.outsideDamagePath + classified.honestUnknown).toBe(policy.unsupported.length);
+  });
+
+  it("distinguishes missing runtime membership from malformed or unknown effect shapes", () => {
+    const valid = {
+      type: "stat-modifier",
+      target: { level: "model", member_of: "this-unit", attachment_role: "bodyguard" },
+      modifier: { stat: "S", operation: "add", value: 1 },
+    };
+    const reason = "unit-filter target: identity, state or model membership is unresolved";
+    const unsupported = effectToBuffs(valid, source, ctx).unsupported;
+    expect(unsupported.some((item) => item.reason === reason)).toBe(true);
+    expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    expect(classifyUnsupported([{ ...unsupported[0]!, effectFragment: { ...valid, target: { attachment_role: "bodyguard" } } }]))
+      .toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+    expect(classifyUnsupported(effectToBuffs({ type: "unknown-oath-policy" }, source, ctx).unsupported))
+      .toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
+  it("keeps a valid aura's unknown emitter separate from malformed emitter filters", () => {
+    const effect = { type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 },
+      emitter_filter: { all_of: ["EXAMPLE"] },
+      effect: { type: "roll-modifier", target: "recipient", modifier: { roll: "hit", operation: "add", value: 1 } } } };
+    const translated = effectToBuffs(effect, source, ctx);
+    expect(translated.applied).toEqual([]);
+    expect(classifyUnsupported(translated.unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    const malformed = { ...effect, modifier: { ...effect.modifier, emitter_filter: { invented_keyword: "EXAMPLE" } } };
+    expect(classifyUnsupported(effectToBuffs(malformed, source, ctx).unsupported))
+      .toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
+  });
+
+  it("keeps supplied activation and retained-selection context unknown rather than inventing active buffs", () => {
+    const bonus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+    const effects = [
+      { type: "stance-select", mode: "re-selectable", min_choices: 1, max_choices: 1, options: [
+        { id: "example", name: "Example", effect: { type: "conditional", condition: { type: "attack-is", parameters: { attack_type: "psychic" } }, effect: bonus } },
+      ] },
+      { type: "persistent-designation", designation: "example-choice",
+        select: { kind: "unit", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, bind_as: "example" } },
+        selection_policy: "one-time", duration: "battle",
+        consumer: { relation: "attacks-selected-unit", beneficiary: "this-unit", effect: bonus } },
+    ];
+    for (const effect of effects) {
+      const translated = effectToBuffs(effect, source, ctx);
+      expect(translated.applied).toEqual([]);
+      expect(classifyUnsupported(translated.unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });
+    }
+  });
+
+  it("recognizes virtual proximity and the typed Hidden transition as non-damage operations", () => {
+    const effects = [
+      { type: "counts-as", target: "this-unit", modifier: { within: { aura_of: "example-aura" }, of: { owner: "friendly" } } },
+      { type: "rule-state", target: "event-subject", modifier: { direction: "suppressed", rule_kind: "core-rule", rule: "attacking-ends-hidden", attacks: { event_var: "example-attacks" } } },
+    ];
+    for (const effect of effects) {
+      const translated = effectToBuffs(effect, source, ctx);
+      expect(translated.applied).toEqual([]);
+      expect(classifyUnsupported(translated.unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    }
   });
 
   it("counts an eligibility permission as outside the damage path, but keeps an unmodelled core-ability grant a real gap", () => {
@@ -60,9 +133,9 @@ describe("pipeline-8b cruncher unsupported classification", () => {
   const outside = { honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 };
 
   it("looks through a predicated selection: a battle-shock test is off the damage path, a re-roll inside it is a lever", () => {
-    const selector = { owner: "enemy", count: 1, eligibility: { type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: "this-unit" } } };
+    const selector = { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "matches", parameters: { subject: "selected-unit", filter: { engaged_with: "this-unit" } } } };
     expect(classify({ type: "select-units", selector, effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock", modifier: -1 } } })).toEqual(outside);
-    expect(classify({ type: "select-units", selector: { ...selector, owner: "friendly" }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
+    expect(classify({ type: "select-units", selector: { ...selector, filter: { owner: "friendly" } }, effect: { type: "re-roll", target: "selected-unit", modifier: { roll: "wound", subset: "ones" } } })).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
   });
 
   it("counts a dice table off the damage path only when no outcome touches an attack", () => {
@@ -117,7 +190,7 @@ describe("pipeline-8b cruncher unsupported classification", () => {
 
   it("still counts an honest runtime unknown as its own bucket, not outside the damage path", () => {
     const { unsupported } = effectToBuffs(
-      { type: "conditional", condition: { type: "designated", parameters: { subject: "defender", tag: "X" } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
+      { type: "conditional", condition: { type: "matches", parameters: { subject: "defender", filter: { designated: "X" } } }, effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } } },
       source, ctx,
     );
     expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 1, outsideDamagePath: 0, unrecognizedShape: 0 });

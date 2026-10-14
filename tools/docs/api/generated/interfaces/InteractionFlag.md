@@ -6,7 +6,7 @@
 
 # Interface: InteractionFlag
 
-Defined in: [generated.ts:4747](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4747)
+Defined in: [generated.ts:7282](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7282)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "interaction-flag".
@@ -21,7 +21,7 @@ via the `definition` "interaction-flag".
 
 > **ability\_a**: `string`
 
-Defined in: [generated.ts:4748](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4748)
+Defined in: [generated.ts:7283](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7283)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:4748](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **ability\_b**: `string`
 
-Defined in: [generated.ts:4749](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4749)
+Defined in: [generated.ts:7284](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7284)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:4749](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **interaction\_type**: `"replaces"` \| `"conflicts"` \| `"combos"` \| `"sequencing-dependent"` \| `"stacks"` \| `"does-not-stack"`
 
-Defined in: [generated.ts:4750](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4750)
+Defined in: [generated.ts:7285](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7285)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:4750](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **resolution?**: `string`
 
-Defined in: [generated.ts:4751](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4751)
+Defined in: [generated.ts:7286](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7286)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:4751](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **faq\_reference?**: `string`
 
-Defined in: [generated.ts:4752](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4752)
+Defined in: [generated.ts:7287](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7287)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [generated.ts:4752](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:4753](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4753)
+Defined in: [generated.ts:7288](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7288)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [generated.ts:4753](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4754](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4754)
+Defined in: [generated.ts:7289](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7289)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [generated.ts:4754](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **authored\_by?**: `string`
 
-Defined in: [generated.ts:4755](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4755)
+Defined in: [generated.ts:7290](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7290)

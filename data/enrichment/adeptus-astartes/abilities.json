@@ -178,29 +178,37 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "stratagem-target",
-              "of": "this-model",
-              "range": {
-                "inches": 6
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "subject": "stratagem-target"
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "stratagem-target",
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ]
+              "filter": {
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              },
+              "subject": "stratagem-target"
             }
           },
           {
-            "type": "owned-by",
+            "type": "matches",
             "parameters": {
-              "subject": "stratagem-target",
-              "owner": "friendly"
+              "filter": {
+                "owner": "friendly"
+              },
+              "subject": "stratagem-target"
             }
           }
         ]
@@ -338,8 +346,13 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 2"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 2
+            }
+          }
         ]
       }
     },
@@ -525,7 +538,9 @@
             "to": "battlefield",
             "from": "strategic-reserves",
             "via": "deep-strike",
-            "min_enemy_distance": 6,
+            "min_enemy_distance": {
+              "inches": 6
+            },
             "placement": "anywhere"
           }
         },
@@ -613,19 +628,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -773,8 +792,13 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "enemy",
-          "count": 1
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
         },
         "effect": {
           "type": "re-roll",
@@ -976,7 +1000,9 @@
         "modifier": {
           "roll": "hit",
           "succeeds_on": 4,
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1040,8 +1066,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Ignores Cover"
+          "keywords": [
+            {
+              "keyword_id": "ignores-cover"
+            }
           ]
         }
       }
@@ -1138,41 +1166,32 @@
         "operator": "and",
         "operands": [
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "shooting"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
           },
           {
             "type": "happened",
             "parameters": {
-              "event": "destroyed",
-              "object": "event-object",
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
               "filter": {
-                "attack_type": "ranged"
+                "by": "event-subject"
               },
               "window": "event"
             }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
-                }
-              }
-            ]
           }
         ]
       },
@@ -1186,14 +1205,23 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "unit_ids": [
       "victrix-honour-guard"
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "faction_id": "adeptus-astartes"
+    "faction_id": "adeptus-astartes",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    }
   },
   {
     "ability_id": "banner-of-macragge-adeptus-astartes",
@@ -1362,7 +1390,9 @@
         {
           "type": "for-each-unit",
           "selector": {
-            "owner": "friendly",
+            "filter": {
+              "owner": "friendly"
+            },
             "eligibility": {
               "type": "unit-state",
               "parameters": {
@@ -1377,7 +1407,9 @@
             "modifier": {
               "to": "battlefield",
               "from": "transport",
-              "min_enemy_distance": 8
+              "min_enemy_distance": {
+                "inches": 8
+              }
             }
           }
         }
@@ -1426,7 +1458,7 @@
   },
   {
     "ability_id": "angels-wrath-adeptus-astartes",
-    "name": "Angel\u2019s Wrath",
+    "name": "Angel’s Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -1555,8 +1587,13 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Sustained Hits 1"
+          "keywords": [
+            {
+              "keyword_id": "sustained-hits",
+              "parameters": {
+                "value": 1
+              }
+            }
           ]
         }
       }
@@ -1585,15 +1622,19 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "of": {
-                "objective": {
-                  "controlled_by": "friendly"
+              "filter": {
+                "within": {
+                  "range": "objective-control",
+                  "of": {
+                    "objective": {
+                      "controlled_by": "friendly"
+                    }
+                  }
                 }
               },
-              "range": "objective-control"
+              "subject": "this-unit"
             }
           },
           {
@@ -1603,7 +1644,7 @@
                 "of": "attacker",
                 "stat": "D"
               },
-              "comparison": "equal-to",
+              "comparison": "eq",
               "right": {
                 "value": 1
               }
@@ -1682,19 +1723,23 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "ADEPTUS ASTARTES",
-              "VEHICLE"
-            ]
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "VEHICLE"
+                ]
+              }
+            }
           },
-          "range": {
-            "inches": 3
-          }
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -1747,18 +1792,28 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "target_kind": "model",
-          "keywords": [
-            "ADEPTUS ASTARTES",
-            "VEHICLE"
-          ],
-          "range_inches": 3,
-          "selection_limit": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES",
+              "VEHICLE"
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "limit": {
             "count": 1,
             "period": "turn"
-          },
-          "count": 1
+          }
         },
         "effect": {
           "type": "sequence",
@@ -1862,7 +1917,9 @@
           "range": {
             "inches": 12
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -1899,8 +1956,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -1967,8 +2026,13 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Sustained Hits 1"
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
         ]
       }
     },
@@ -2032,8 +2096,10 @@
       "type": "weapon-ability-grant",
       "target": "this-unit",
       "modifier": {
-        "abilities": [
-          "Ignores Cover"
+        "keywords": [
+          {
+            "keyword_id": "ignores-cover"
+          }
         ]
       }
     },
@@ -2063,22 +2129,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -2130,30 +2202,36 @@
         "operator": "or",
         "operands": [
           {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "subject": "this-unit",
-              "state": "on-battlefield"
+              "filter": {
+                "state": "on-battlefield"
+              },
+              "subject": "this-unit"
             }
           },
           {
             "operator": "and",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-unit",
-                  "state": "embarked"
+                  "filter": {
+                    "state": "embarked"
+                  },
+                  "subject": "this-unit"
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "unit-state",
+                    "type": "matches",
                     "parameters": {
-                      "subject": "this-unit",
-                      "state": "in-strategic-reserves"
+                      "filter": {
+                        "state": "in-strategic-reserves"
+                      },
+                      "subject": "this-unit"
                     }
                   }
                 ]
@@ -2165,11 +2243,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "owner": "friendly",
-          "max_count": 3,
-          "keywords": [
-            "ADEPTUS ASTARTES"
-          ]
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS ASTARTES"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 3
+          }
         },
         "effect": {
           "type": "choice",
@@ -2303,22 +2386,28 @@
         "operator": "and",
         "operands": [
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "subject": "event-subject",
-              "of": "this-unit",
-              "range": {
-                "inches": 8
-              }
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 8
+                  },
+                  "of": "this-unit"
+                }
+              },
+              "subject": "event-subject"
             }
           },
           {
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
@@ -2392,7 +2481,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2422,8 +2511,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -2431,8 +2522,13 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
             ]
           }
         }
@@ -2470,12 +2566,17 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "max_count": 1,
-              "keywords": [
-                "ADEPTUS ASTARTES",
-                "INFANTRY"
-              ]
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES",
+                  "INFANTRY"
+                ]
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              }
             },
             "effect": {
               "type": "ability-grant",
@@ -2495,11 +2596,16 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "owner": "friendly",
-              "max_count": 1,
-              "keywords": [
-                "ADEPTUS ASTARTES"
-              ]
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              }
             },
             "effect": {
               "type": "choice",
@@ -2561,8 +2667,10 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Lethal Hits"
+          "keywords": [
+            {
+              "keyword_id": "lethal-hits"
+            }
           ]
         }
       }
@@ -2588,22 +2696,12 @@
     "source_digest": "c6b0fd6c8be05b2a9a9798783379072149232aa4a75acf6ddd4f7a0b8f2f9b84",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "attachment",
-        "parameters": {
-          "subject": "this-model",
-          "role": "leading"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "wound",
-          "operation": "subtract",
-          "value": 1
-        }
+      "type": "roll-modifier",
+      "target": "attacker",
+      "modifier": {
+        "roll": "wound",
+        "operation": "subtract",
+        "value": 1
       }
     },
     "scope": {
@@ -2613,7 +2711,7 @@
       "company-heroes"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "faction_id": "adeptus-astartes"
   },
   {
@@ -2629,10 +2727,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "max_count": 1,
-        "range_inches": 12,
-        "visibility_required": true
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          },
+          "visible": {
+            "to": "this-model"
+          }
+        },
+        "count": {
+          "min": 0,
+          "max": 1
+        }
       },
       "effect": {
         "type": "conditional",
@@ -2647,10 +2757,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Devastating Wounds"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ]
           }
         }
       }
@@ -2730,10 +2844,14 @@
               }
             },
             {
-              "type": "has-ability",
+              "type": "matches",
               "parameters": {
-                "subject": "event-subject",
-                "ability": "deep-strike"
+                "filter": {
+                  "has_ability": [
+                    "deep-strike"
+                  ]
+                },
+                "subject": "event-subject"
               }
             }
           ]
@@ -2775,7 +2893,7 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "1"
+        "count": 1
       }
     },
     "scope": {
@@ -2916,7 +3034,9 @@
           "range": {
             "inches": 12
           },
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -3017,12 +3137,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -3031,12 +3153,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "recipient",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "recipient"
                 }
               }
             ]
@@ -3084,17 +3208,28 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "friendly",
-        "count": 1,
-        "keywords": [
-          "ADEPTUS ASTARTES"
-        ],
-        "within_inches": 12,
-        "reference": "bearer",
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS ASTARTES"
+          ],
+          "within": {
+            "range": {
+              "inches": 12
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
         "eligibility": {
-          "type": "unit-state",
+          "type": "matches",
           "parameters": {
-            "state": "battle-shocked"
+            "filter": {
+              "state": "battle-shocked"
+            }
           }
         }
       },
@@ -3133,69 +3268,97 @@
     "ability_type": "faction",
     "behavior": "activated",
     "effect": {
-      "type": "stance-select",
-      "mode": "consumable",
-      "scope": "army",
-      "select": "start-of-command-phase",
-      "options": [
-        {
-          "name": "Devastator Doctrine",
-          "effect": {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "abilities": [
-                "Assault"
-              ],
-              "weapon_type": "ranged"
-            }
-          }
-        },
-        {
-          "name": "Tactical Doctrine",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "shoot",
-                  "allow": true,
-                  "after": [
-                    "fall-back"
-                  ]
-                }
-              },
-              {
-                "type": "permission",
-                "target": "this-unit",
-                "modifier": {
-                  "activity": "declare-charge",
-                  "allow": true,
-                  "after": [
-                    "fall-back"
-                  ]
-                }
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
               }
-            ]
-          }
-        },
-        {
-          "name": "Assault Doctrine",
-          "effect": {
-            "type": "permission",
-            "target": "this-unit",
-            "modifier": {
-              "activity": "declare-charge",
-              "allow": true,
-              "after": [
-                "advance"
-              ]
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
             }
-          }
+          ]
         }
-      ]
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "consumable",
+        "options": [
+          {
+            "name": "Devastator Doctrine",
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": "this-unit",
+              "modifier": {
+                "weapons": {
+                  "type": "ranged"
+                },
+                "keywords": [
+                  {
+                    "keyword_id": "assault"
+                  }
+                ]
+              }
+            },
+            "id": "option-1"
+          },
+          {
+            "name": "Tactical Doctrine",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "shoot",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": "this-unit",
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "fall-back"
+                    ]
+                  }
+                }
+              ]
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Assault Doctrine",
+            "effect": {
+              "type": "permission",
+              "target": "this-unit",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": true,
+                "after": [
+                  "advance"
+                ]
+              }
+            },
+            "id": "option-3"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -3219,56 +3382,61 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ADEPTUS ASTARTES"
-              ]
+      "type": "choice",
+      "options": [
+        {
+          "type": "rule-state",
+          "target": "event-subject",
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "core-rule",
+            "rule": "attacking-ends-hidden",
+            "attacks": {
+              "event_var": "those-attacks"
             }
-          },
-          {
-            "type": "attack-is",
-            "parameters": {
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "within",
-                "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": {
-                    "inches": 12
-                  }
-                }
-              }
-            ]
           }
-        ]
-      },
-      "effect": {
-        "type": "rule-state",
-        "target": "this-unit",
-        "modifier": {
-          "direction": "granted",
-          "rule_kind": "core-rule",
-          "rule": "benefit-of-cover"
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "move",
+              "target": "event-subject",
+              "modifier": {
+                "move_type": "normal",
+                "distance": "D6"
+              }
+            },
+            {
+              "type": "permission",
+              "target": "event-subject",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          ]
         }
-      }
+      ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "turn"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "binds_event_variable": "those-attacks",
+      "subject": {
+        "owner": "friendly",
+        "any_of": [
+          "PHOBOS",
+          "SCOUT SQUAD"
+        ]
+      }
+    }
   },
   {
     "ability_id": "purgation-run-adeptus-astartes",
@@ -3397,10 +3565,14 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Ignores Cover"
-            ],
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            },
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
           }
         },
         {
@@ -3408,7 +3580,10 @@
           "condition": {
             "type": "rule-active",
             "parameters": {
-              "rule": "devastator-doctrine"
+              "rule": {
+                "ability_id": "combat-doctrines-assault-force-adeptus-astartes",
+                "option_id": "option-1"
+              }
             }
           },
           "effect": {
@@ -3418,7 +3593,9 @@
               "stat": "AP",
               "operation": "improve",
               "value": 1,
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         }
@@ -3455,7 +3632,9 @@
             "stat": "BS",
             "operation": "subtract",
             "value": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -3465,7 +3644,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "ranged"
+            "weapons": {
+              "type": "ranged"
+            }
           }
         },
         {
@@ -3557,10 +3738,12 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "designated",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "tag": "auspex-scanned"
+              "filter": {
+                "designated": "auspex-scanned"
+              },
+              "subject": "defender"
             }
           },
           "effect": {
@@ -3611,28 +3794,34 @@
             "type": "weapon-ability-grant",
             "target": "this-unit",
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
               ]
             }
           },
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "VEHICLE"
-                ]
+                "filter": {
+                  "all_of": [
+                    "VEHICLE"
+                  ]
+                }
               }
             },
             "effect": {
-              "type": "weapon-ability-grant",
+              "type": "roll-result",
               "target": "this-unit",
               "modifier": {
-                "abilities": [
-                  "Critical Hits 5+"
-                ]
+                "roll": "hit",
+                "critical_on": 5
               }
             }
           }
@@ -3655,7 +3844,9 @@
     "source_digest": "b828ce35d1458f4f7f2193f7522e4d7c643202d55e425ee46d9ed94fcf004827",
     "version": "2025-q3",
     "supersedes": null,
-    "unit_ids": ["land-raider"],
+    "unit_ids": [
+      "land-raider"
+    ],
     "faction_id": "adeptus-astartes",
     "detachment_id": "ironstorm-spearhead",
     "ability_type": "stratagem",
@@ -3772,7 +3963,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES"
       ]
     }
@@ -3806,7 +3997,7 @@
       "duration": "until-next-command-phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "CAPTAIN"
       ]
     },
@@ -3863,7 +4054,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "VEHICLE"
       ]
@@ -3923,7 +4114,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "VEHICLE"
       ]
@@ -3950,12 +4141,6 @@
       "event": "move-ended",
       "subject": {
         "owner": "enemy"
-      },
-      "proximity": {
-        "of": "this-model",
-        "range": {
-          "inches": 8
-        }
       }
     },
     "usage": {
@@ -3963,44 +4148,139 @@
       "per": "unit"
     },
     "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "move",
-          "target": "this-unit",
-          "modifier": {
-            "move_type": "normal",
-            "distance": "D6"
-          }
-        },
-        {
-          "type": "conditional",
-          "condition": {
-            "type": "rule-active",
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
             "parameters": {
-              "rule": "divination-discipline"
+              "subject": "this-model",
+              "filter": {
+                "all_of": [
+                  "ADEPTUS ASTARTES"
+                ]
+              }
             }
           },
-          "effect": {
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "all_of": [
+                  "PSYKER"
+                ]
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-model",
+                  "filter": {
+                    "all_of": [
+                      "TERMINATOR"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "movement"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "opponent-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "engaged"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
             "type": "move",
             "target": "this-unit",
             "modifier": {
               "move_type": "normal",
-              "distance": 6
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "has_ability": [
+                    "divination-discipline"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": 6
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "ADEPTUS ASTARTES",
         "PSYKER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "TERMINATOR"
       ]
     },
@@ -4034,7 +4314,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "PHOBOS"
       ]
     },
@@ -4076,21 +4356,27 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "state": "engaged"
+                  "filter": {
+                    "state": "engaged"
+                  }
                 }
               }
             ]
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 6
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
               }
             }
           }
@@ -4129,12 +4415,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {}
-          },
-          "range": "objective-control"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {}
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -4738,8 +5028,10 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Lethal Hits"
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
             ]
           }
         },
@@ -4747,8 +5039,13 @@
           "type": "weapon-ability-grant",
           "target": "this-unit",
           "modifier": {
-            "abilities": [
-              "Sustained Hits 1"
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
             ]
           }
         }

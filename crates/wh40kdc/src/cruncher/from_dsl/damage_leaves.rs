@@ -1,6 +1,6 @@
 //! Leaf translators for critical thresholds (`roll-result`), ignored modifiers
 //! (`ignore-modifiers`) and the core abilities the buff layer models on an attacked unit
-//! (`ability-grant`), plus the `weapon_name`/`weapon_keyword` applicability gate. Mirrors
+//! (`ability-grant`), plus shared canonical `weapons` applicability. Mirrors
 //! `translateRollResult`, `translateIgnoreModifiers`, `translateAbilityGrant`,
 //! `weaponApplicability` and `combineOptional` in `tools/src/cruncher/from-dsl.ts`.
 
@@ -9,27 +9,80 @@ use serde_json::{json, Value};
 use super::applicability::combine;
 use super::js::*;
 use super::leaves::{
-    attack_type_applicability, emit, parse_keyword_grant, roll_label, signed_value,
-    unhonorable_narrowing,
+    attack_type_applicability, emit, roll_label, signed_value, unhonorable_narrowing,
 };
 use super::TranslationPerspective::{Attacker, Target};
 use super::{applies_to_buffed_unit, buff, classify_target, walk, Out, Side, WalkOpts};
 
-/// The catalog keyword id a `weapon_keyword` selector names ("Lethal Hits" → "lethal-hits").
-pub(super) fn weapon_keyword_id(raw: Option<&Value>) -> Option<String> {
-    parse_keyword_grant(raw?.as_str()?).map(|r| r.keyword_id)
+/// Normalize a catalog-backed keyword selector without parsing printed text.
+fn keyword_selection(value: &Value) -> Option<Value> {
+    let refs = match value {
+        Value::Array(values) => values.clone(),
+        Value::Object(_) => vec![value.clone()],
+        _ => return None,
+    };
+    if refs.is_empty()
+        || refs.iter().any(|v| {
+            serde_json::from_value::<crate::cruncher::buffs::WeaponKeywordRef>(v.clone()).is_err()
+        })
+    {
+        return None;
+    }
+    Some(Value::Array(refs))
 }
 
-/// The weapon-name and weapon-keyword gates a modifier's weapon selectors put on its buffs.
+/// Shared canonical weapon scopes become buff gates, preserving selector parameters.
 pub(super) fn weapon_applicability(m: &Obj) -> Option<Value> {
+    let weapons = object(m.get("weapons"))?;
     let mut out = Obj::new();
-    if let Some(name) = m.get("weapon_name").and_then(Value::as_str) {
-        out.insert("weaponName".into(), Value::from(name.to_lowercase()));
+    if let Some(kind) = weapons.get("type").and_then(Value::as_str) {
+        if let Some(phase) = match kind {
+            "melee" => Some("fight"),
+            "ranged" => Some("shooting"),
+            _ => None,
+        } {
+            out.insert("phases".into(), json!([phase]));
+        }
     }
-    if let Some(keyword) = weapon_keyword_id(m.get("weapon_keyword")) {
-        out.insert("weaponKeyword".into(), Value::from(keyword));
+    for (field, gate) in [
+        ("name", "weaponName"),
+        ("exclude_name", "excludedWeaponName"),
+    ] {
+        if let Some(name) = weapons.get(field).and_then(Value::as_str) {
+            out.insert(gate.into(), Value::from(name.to_lowercase()));
+        }
+    }
+    for (field, gate) in [
+        ("keyword", "weaponKeywords"),
+        ("exclude_keyword", "excludedWeaponKeywords"),
+    ] {
+        if let Some(value) = weapons.get(field).and_then(keyword_selection) {
+            out.insert(gate.into(), value);
+        }
     }
     (!out.is_empty()).then_some(Value::Object(out))
+}
+
+pub(super) fn unresolved_weapon_scope(m: &Obj) -> Option<&'static str> {
+    let value = m.get("weapons")?;
+    let Some(scope) = value.as_object() else {
+        return Some("weapons");
+    };
+    if scope.contains_key("ref") {
+        return Some("weapons.ref");
+    }
+    for field in ["keyword", "exclude_keyword"] {
+        if scope
+            .get(field)
+            .is_some_and(|value| keyword_selection(value).is_none())
+        {
+            return Some(match field {
+                "keyword" => "weapons.keyword",
+                _ => "weapons.exclude_keyword",
+            });
+        }
+    }
+    None
 }
 
 /// Both gates merged, or whichever one is present.
@@ -69,17 +122,9 @@ pub(super) fn roll_result(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         return;
     }
     let critical = js_number(m.get("critical_on"));
-    let only_critical = m.keys().all(|k| {
-        [
-            "roll",
-            "critical_on",
-            "attack_type",
-            "weapon_type",
-            "weapon_name",
-            "weapon_keyword",
-        ]
-        .contains(&k.as_str())
-    });
+    let only_critical = m
+        .keys()
+        .all(|k| ["roll", "critical_on", "attack_type", "weapons"].contains(&k.as_str()));
     if !matches!(r, "hit" | "wound") || !only_critical || !d6_threshold(critical) {
         out.unsupported(
             format!("roll-result on \"{r}\": only a critical threshold on hit or wound rolls is modelled"),
@@ -145,11 +190,39 @@ pub(super) fn ignore_modifiers(node: &Obj, opts: &WalkOpts, out: &mut Out) {
 pub(super) fn ability_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let empty = Obj::new();
     let m = object(node.get("modifier")).unwrap_or(&empty);
+    if m.get("ability").is_some_and(Value::is_object) {
+        out.unsupported(
+            "ability-grant: named ability ownership is not resolved by the buff engine",
+            node,
+        );
+        return;
+    }
     // A printed grant carries the granted ability's body: it is the holders' own ability, so it
     // reaches the buffed unit exactly when the grant does, and its "this unit" is the holder.
     if let Some(definition) = m.get("definition").filter(|d| d.is_object()) {
         match classify_target(node) {
-            Side::Buffed => walk(definition, opts, out),
+            Side::Buffed => {
+                if matches!(
+                    node.get("target").and_then(Value::as_str),
+                    Some("this-model" | "model-in-this-unit")
+                ) || node.get("target").is_some_and(|target| {
+                    target.get("level").and_then(Value::as_str) == Some("model")
+                }) {
+                    out.unsupported(
+                        "ability-grant: model-only definition cannot be applied to the entire unit",
+                        node,
+                    );
+                } else {
+                    walk(
+                        definition,
+                        &WalkOpts {
+                            granted_holder: true,
+                            ..opts.clone()
+                        },
+                        out,
+                    );
+                }
+            }
             Side::Unknown => out.unsupported(
                 "ability-grant: the units holding the granted ability are not resolved",
                 node,

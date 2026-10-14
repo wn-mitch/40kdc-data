@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
-import { usageGated } from "../src/data/entities.js";
 import { describeAbility, describeCondition, type Effect } from "../src/translate/index.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
@@ -21,7 +20,7 @@ describe("describer: geometry and relations", () => {
     expect(render(leaf("feel-no-pain", { threshold: 6, against: "mortal" }, { owner: "friendly", all_of: ["GREY KNIGHTS"], within: { range: { inches: 6 }, wholly: true } }))).toBe(
       'Friendly GREY KNIGHTS units wholly within 6" have the Feel No Pain 6+ ability against mortal wounds.',
     );
-    expect(render({ type: "select-units", selector: { owner: "friendly", count: 1, keywords: ["YNNARI", "INFANTRY"], within_inches: 6, wholly: true }, effect: leaf("move", { move_type: "embark" }, "selected-unit") })).toBe(
+    expect(render({ type: "select-units", selector: { filter: { owner: "friendly", all_of: ["YNNARI", "INFANTRY"], within: { range: { inches: 6 }, wholly: true } }, count: { min: 1, max: 1 } }, effect: leaf("move", { move_type: "embark" }, "selected-unit") })).toBe(
       'Select one friendly YNNARI INFANTRY unit wholly within 6": that unit can embark.',
     );
   });
@@ -38,10 +37,10 @@ describe("describer: geometry and relations", () => {
       "Friendly units embarked within the unit can disembark using the Assault Disembarkation rules.",
     );
     expect(render(leaf("ability-grant", { ability: "scouts", value: 9 }, "bearer-transport"))).toBe('The Transport this unit is embarked within gains the Scouts 9" ability.');
-    expect(render({ type: "conditional", condition: { type: "within", parameters: { subject: "this-model", of: "battlefield-centre", range: { inches: 6 } } }, effect: leaf("feel-no-pain", { threshold: 4 }, "this-model") })).toBe(
+    expect(render({ type: "conditional", condition: { type: "matches", parameters: { subject: "this-model", filter: { within: { of: "battlefield-centre", range: { inches: 6 } } } } }, effect: leaf("feel-no-pain", { threshold: 4 }, "this-model") })).toBe(
       'While this model is within 6" of the centre of the battlefield, this model has the Feel No Pain 4+ ability.',
     );
-    expect(describeCondition({ type: "within", parameters: { of: { owner: "friendly", all_of: ["INFANTRY"], lacks_ability: ["lone-operative"] }, range: { inches: 3 } } })).toBe(
+    expect(describeCondition({ type: "matches", parameters: { filter: { within: { of: { owner: "friendly", all_of: ["INFANTRY"], lacks_ability: ["lone-operative"] }, range: { inches: 3 } } } } })).toBe(
       'the unit is within 3" of a friendly INFANTRY unit without the Lone Operative ability',
     );
   });
@@ -60,7 +59,7 @@ describe("describer: geometry and relations", () => {
 });
 
 describe("describer: the ability's own unit inside a selection (ability-unit)", () => {
-  const hitBy = (subject: string) => ({ type: "select-units", selector: { owner: "enemy", count: 1, eligibility: { type: "happened", parameters: { event: "after-roll", subject, object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" } } }, effect: leaf("test", { test: "battle-shock" }, "selected-unit") });
+  const hitBy = (subject: string) => ({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "happened", parameters: { event: "after-roll", subject, object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" } } }, effect: leaf("test", { test: "battle-shock" }, "selected-unit") });
 
   it("names the attacking unit when it is the ability's unit, not the candidate", () => {
     expect(render(hitBy("ability-unit"))).toBe("Select one enemy unit that was hit by an attack made by this unit this phase: that unit must take a Battle-shock test.");
@@ -127,7 +126,7 @@ describe("describer: dice", () => {
     expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("The unit's Hit rolls count as an unmodified 6.");
     // The performing unit's own Agile Manoeuvre roll (compile-manoeuvre-own-roll.ts): the roll is named, not every roll.
     expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toMatch(/the triggering unit gets \+1 to Agile Manoeuvre rolls/iu);
-    expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapon_type: "ranged", incoming: true }))).toBe(
+    expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapons: { type: "ranged" }, incoming: true }))).toBe(
       "Each time a ranged attack targets the unit, an unmodified Hit roll of 1-3 for that attack always fails.",
     );
     expect(render(leaf("re-roll", { roll: "hit", subset: "ones", mandatory: true }, "event-subject"))).toBe("You must re-roll a Hit roll of 1 for attacks made by the triggering unit.");
@@ -141,7 +140,7 @@ describe("describer: battle size and counts", () => {
     expect(render(leaf("resource-gain", { pool: "battle-focus-pool", amount: { incursion: 2, "strike-force": 4, onslaught: 6 }, label: "Battle Focus token" }, "this-model"))).toBe(
       "You gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).",
     );
-    expect(render({ type: "select-units", selector: { owner: "enemy", max_count: BATTLE_SIZE }, effect: leaf("designate", { subject: "selected-unit", tag: "afflicted" }, "selected-unit") })).toBe(
+    expect(render({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { max: BATTLE_SIZE } }, effect: leaf("designate", { subject: "selected-unit", tag: "afflicted" }, "selected-unit") })).toBe(
       "Select up to 1/2/3 enemy units (Incursion/Strike Force/Onslaught): that unit is Afflicted.",
     );
     expect(render({ type: "conditional", condition: { type: "battle-size", parameters: { size: "incursion" } }, effect: leaf("add-unit", { datasheet: "poxwalkers", count: 1, starting_strength: 10, placement: "strategic-reserves" }) })).toBe(
@@ -150,7 +149,7 @@ describe("describer: battle size and counts", () => {
   });
 
   it("prints counts and board scaling sources", () => {
-    expect(render({ type: "select-units", selector: { owner: "friendly", keywords: ["ORKS"], max_count: { count_of: "battle-round" } }, effect: { type: "no-effect" } })).toBe(
+    expect(render({ type: "select-units", selector: { filter: { owner: "friendly", all_of: ["ORKS"] }, count: { max: { count_of: "battle-round" } } }, effect: { type: "no-effect" } })).toBe(
       "Select any number of friendly ORKS units (at most the battle round number): nothing happens.",
     );
     expect(render(leaf("return-models", { count: { count_of: "models-in-bearer-unit", keyword: "SPYDER" } }, "selected-unit"))).toBe(
@@ -213,10 +212,10 @@ describe("describer: abilities, rules and army", () => {
     expect(render(leaf("characteristic-resolution", { stat: "T", rule: "majority", tie: "highest", applies_to: "wound-roll", incoming: true }))).toBe(
       "Each time an attack targets the unit, use the Toughness characteristic of the majority of its models (if tied, the highest) to determine the Wound roll.",
     );
-    expect(render(leaf("borrow-weapons", { from: { embarked_in: "this-unit" }, max_models: 2, weapon_type: "ranged", exclude_weapon_keyword: ["ONE SHOT"], until: "attack-sequence" }))).toBe(
-      "The unit can use one ranged weapon (excluding [ONE SHOT] weapons) from each of up to 2 models embarked within the unit until that unit finishes resolving its attacks; those models cannot shoot.",
+    expect(render(leaf("borrow-weapons", { from: { embarked_in: "this-unit" }, max_models: 2, weapons: { type: "ranged", exclude_keyword: [{ keyword_id: "one-shot" }] }, until: "attack-sequence" }))).toBe(
+      "The unit can use one ranged weapon (excluding weapons with [ONE SHOT]) from each of up to 2 models embarked within the unit until that unit finishes resolving its attacks; those models cannot shoot.",
     );
-    expect(render(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapon_type: "ranged", weapon_ref: { selected_by: { ability: "firing-deck" } } }))).toBe(
+    expect(render(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged", ref: { selected_by: { ability: "firing-deck" } } } }))).toBe(
       "The unit gets +1 to Hit rolls with the ranged weapons selected for Firing Deck.",
     );
     expect(render(leaf("targeting", { by: "event-subject", may: "redirect", target: { owner: "friendly", all_of: ["ANATHEMA PSYKANA"] }, to: "this-unit", if_eligible: true, kind: "attack" }, "attacker"))).toBe(
@@ -228,10 +227,10 @@ describe("describer: abilities, rules and army", () => {
     expect(render(leaf("counts-as", { within: "aura", of: { stratagem_target: "abhorrent" } }, { stratagem_target: "war-dogs" }))).toBe(
       "The war dogs target counts as being within its aura range of the abhorrent target.",
     );
-    expect(render({ type: "select-objective", selector: { count: 1, range: "objective-control", origin: "bearer-unit", controlled_by: "your-army", bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
-      "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it.",
+    expect(render({ type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } }, count: { min: 1, max: 1 }, bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
+      "Select one objective marker you control within range of the unit, binding it as m: that objective marker is mutated until you no longer control it.",
     );
-    expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: 3, range_cap: 12, emitter_filter: { required_keywords: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
+    expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: 12, emitter_filter: { all_of: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
       'While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.',
     );
   });
@@ -257,8 +256,8 @@ const ctx: EngineContext = { phase: "fight", attackerStationary: false };
 describe("cruncher: phase-4 shapes", () => {
   const option = (name: string, requirement: unknown, effect: unknown) => ({ name, requirement, effect });
   const wrap = (name: string, requirement: unknown, effect: unknown) => ({ type: "ability-part", name, effect: { type: "dice-gated", from: { roll_var: "bok" }, requirement, on_success: effect } });
-  const warpBlades = leaf("weapon-ability-grant", { abilities: ["Lethal Hits"], weapon_type: "melee" }, { owner: "friendly" });
-  const bloodlust = leaf("roll-modifier", { roll: "wound", operation: "add", value: 1, weapon_type: "melee" }, { owner: "friendly" });
+  const warpBlades = leaf("weapon-ability-grant", { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } }, { owner: "friendly" });
+  const bloodlust = leaf("roll-modifier", { roll: "wound", operation: "add", value: 1, weapons: { type: "melee" } }, { owner: "friendly" });
 
   it("keeps the Blessings of Khorne levers when the dice pool is re-encoded as a roll (D3)", () => {
     const pool = { type: "dice-pool-allocation", pool: { count: 8, die: "D6" }, max_activations: 2, options: [option("Warp Blades", { type: "pair", min_value: 4 }, warpBlades), option("Wrathful Devotion", { type: "pair", min_value: 5 }, bloodlust)] };
@@ -286,16 +285,20 @@ describe("cruncher: phase-4 shapes", () => {
   });
 
   it("does not widen a bound-weapon buff to every weapon", () => {
-    const result = effectToBuffs(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapon_ref: { weapon_var: "blade" } }), source, ctx);
+    const result = effectToBuffs(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapons: { ref: { weapon_var: "blade" } } }), source, ctx);
     expect(result.applied).toEqual([]);
-    expect(result.unsupported[0]!.reason).toMatch(/weapon_ref/);
+    expect(result.unsupported[0]!.reason).toMatch(/weapons\.ref/);
   });
 
   it("gates an ability with a usage list like one with a single limit", () => {
     const effect = leaf("roll-modifier", { roll: "hit", operation: "add", value: 1 });
-    const list = usageGated("unit", [{ frequency: "n-per-battle", count: 1, per: "model" }, { frequency: "once-per-battle-round", per: "army" }], effect);
-    expect(list).toEqual(usageGated("unit", { frequency: "n-per-battle", count: 1 }, effect));
-    expect(list).not.toEqual(effect);
+    const list = effectToBuffs(effect, source, ctx, "attacker", { usage: [{ frequency: "n-per-battle", count: 1, per: "model" }, { frequency: "once-per-battle-round", per: "army" }] });
+    const single = effectToBuffs(effect, source, ctx, "attacker", { usage: { frequency: "n-per-battle", count: 1 } });
+    expect(list.applied).toEqual([]);
+    expect(single.applied).toEqual([]);
+    expect(list.activatable).toHaveLength(1);
+    expect(single.activatable).toHaveLength(1);
+    expect(list.activatable[0]!.buffs).toEqual(single.activatable[0]!.buffs);
   });
 
   it("keeps a mandatory re-roll of 1s as the same re-roll buff", () => {
@@ -326,7 +329,7 @@ describe("cruncher: phase-4 shapes", () => {
       expect(result.applied).toEqual([]);
       expect(result.unsupported[0]!.reason.startsWith(`${type}:`)).toBe(true);
     }
-    const objective = effectToBuffs({ type: "select-objective", selector: { count: 1, bind_as: "o" }, effect: leaf("roll-modifier", { roll: "hit", operation: "add", value: 1 }) }, source, ctx);
+    const objective = effectToBuffs({ type: "select-objective", selector: { filter: {}, count: { min: 1, max: 1 }, bind_as: "o" }, effect: leaf("roll-modifier", { roll: "hit", operation: "add", value: 1 }) }, source, ctx);
     expect(objective.applied).toEqual([]);
     expect(objective.unsupported[0]!.reason).toMatch(/^select-objective:/);
   });
@@ -342,7 +345,7 @@ describe("describer: agreement on the new references", () => {
   });
 
   it("agrees the verb with a single selected weapon", () => {
-    const text = render(leaf("weapon-ability-grant", { abilities: ["Lethal Hits"], weapon_ref: { weapon_var: "possessed-blade" } }, "this-model"));
+    const text = render(leaf("weapon-ability-grant", { keywords: [{ keyword_id: "lethal-hits" }], weapons: { ref: { weapon_var: "possessed-blade" } } }, "this-model"));
     expect(text).toMatch(/selected [a-z ]*weapon equipped by this model gains \[LETHAL HITS\]/);
   });
 

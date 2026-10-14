@@ -25,7 +25,7 @@
         "keywordRef": {
           "keyword_id": "anti",
           "parameters": {
-            "target_keyword": "Monster/Vehicle",
+            "required_target_keywords_any": ["MONSTER", "VEHICLE"],
             "threshold": 2
           }
         }

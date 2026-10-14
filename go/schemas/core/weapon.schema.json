@@ -51,45 +51,9 @@
           },
           "keywords": {
             "type": "array",
-            "description": "References into the weapon-keyword catalog. Each entry names the catalog id and supplies parameter values (e.g. `Sustained Hits 1` → `{keyword_id: 'sustained-hits', parameters: {value: 1}}`).",
+            "description": "References into the weapon-keyword catalog. Each entry names the catalog id and supplies parameter values.",
             "items": {
-              "type": "object",
-              "properties": {
-                "keyword_id": {
-                  "$ref": "../defs/common.schema.json#/$defs/entity-id"
-                },
-                "parameters": {
-                  "type": "object",
-                  "description": "Reference-site parameters conforming to the catalog entry's required parameters and optional target-keyword applicability gates.",
-                  "properties": {
-                    "value": {
-                      "$ref": "../defs/common.schema.json#/$defs/stat-value"
-                    },
-                    "target_keyword": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64
-                    },
-                    "threshold": {
-                      "type": "integer",
-                      "minimum": 2,
-                      "maximum": 6
-                    },
-                    "required_target_keywords_any": {
-                      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
-                      "minItems": 1,
-                      "description": "The keyword applies only when the target has at least one listed keyword."
-                    },
-                    "excluded_target_keywords": {
-                      "$ref": "../defs/common.schema.json#/$defs/keyword-list",
-                      "description": "The keyword does not apply when the target has any listed keyword."
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              },
-              "required": ["keyword_id"],
-              "additionalProperties": false
+              "$ref": "../defs/common.schema.json#/$defs/weapon-keyword-ref"
             }
           },
           "target_restrictions": {

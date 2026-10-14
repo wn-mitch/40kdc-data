@@ -4,6 +4,8 @@
  */
 
 import { designationLabel } from "./designations.js";
+import { diceCase } from "./effect-words.js";
+import type { AbilityUsage } from "./effect.js";
 
 /** A condition node's parameters. */
 export type P = Record<string, unknown>;
@@ -68,6 +70,41 @@ export function andList(items: string[]): string {
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
+/** Causal links name an exact bound event; sharing its actor is not enough. */
+export function eventRelationPhrase(filter: P): string {
+  let phrase = "";
+  if (filter.caused_by != null) phrase += " as a result of the exact bound event";
+  if (filter.causes != null) phrase += " and causing the exact bound event";
+  return phrase;
+}
+
+/** Inclusive count bounds, shared by selectors and counted predicates. */
+export function countPhrase(value: unknown, defaultMin = 1): string {
+  const c = (value ?? {}) as P;
+  if (c.min != null && c.max != null) {
+    if (c.min === c.max) return `exactly ${diceCase(c.min)}`;
+    return typeof c.min === "number" && typeof c.max === "number" ? `${c.min}-${c.max}` : `between ${diceCase(c.min)} and ${diceCase(c.max)}`;
+  }
+  if (c.max != null) return `at most ${diceCase(c.max)}`;
+  const min = c.min ?? defaultMin;
+  return typeof min === "number" ? `${min}+` : `at least ${diceCase(min)}`;
+}
+
+/** A named rule or one immutable option of a named ability. */
+export function ruleRefPhrase(value: unknown): string {
+  if (value != null && typeof value === "object") {
+    const ref = value as P;
+    return `${idLabel(ref.option_id)} option of ${idLabel(ref.ability_id)}`;
+  }
+  return idLabel(value);
+}
+
+export function keywordList(p: P): string {
+  if (p.chosen_by != null) return `the keyword selected for ${titleCase(str(p.chosen_by))}`;
+  if (Array.isArray(p.any_of)) return orList(p.any_of.map((k) => `"${str(k)}"`));
+  return andList(((p.all_of as unknown[]) ?? []).map((k) => `"${str(k)}"`));
+}
+
 export const ORDINAL = ["zeroth", "first", "second", "third", "fourth", "fifth"];
 export const ord = (n: number): string => ORDINAL[n] ?? `${n}th`;
 
@@ -109,7 +146,7 @@ export function alternativeFilters(f: P): P[] {
 export function unitFilterPhrase(f: P): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
-  const noun = f.level === "model" ? "model" : "unit";
+  const noun = f.level === "model" ? `${f.attachment_role != null ? `${str(f.attachment_role)} ` : ""}model` : "unit";
   // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
   const compact = keywordAlternatives(f);
   let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
@@ -121,17 +158,19 @@ export function unitFilterPhrase(f: P): string {
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
+  if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(str))}`;
+  if (Array.isArray(f.unit_ids)) s += ` with unit ID ${orList(f.unit_ids.map(str))}`;
   if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
   if (f.member_of != null) s += ` in ${unitRefPhrase(f.member_of)}`;
-  if (f.engaged_with != null) s += ` within Engagement Range of ${unitFilterPhrase(f.engaged_with as P)}`;
-  if (f.not_engaged_with != null) s += ` not within Engagement Range of any ${unitFilterPhrase(f.not_engaged_with as P).replace(/^an? /, "")}`;
+  if (f.engaged_with != null) s += ` within Engagement Range of ${unitRefPhrase(f.engaged_with)}`;
+  if (f.not_engaged_with != null) s += ` not within Engagement Range of ${typeof f.not_engaged_with === "object" && f.not_engaged_with !== null && !("selection_var" in f.not_engaged_with) && !("event_var" in f.not_engaged_with) && !("stratagem_target" in f.not_engaged_with) ? `any ${unitRefPhrase(f.not_engaged_with).replace(/^an? /, "")}` : unitRefPhrase(f.not_engaged_with)}`;
   if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}${f.designated_by != null ? ` by ${unitRefPhrase(f.designated_by)}` : ""}`;
   if (f.not_designated != null) s += ` that is not ${designationPhrase(str(f.not_designated))}`;
   if (f.state != null) s += ` that is ${statePhrase(str(f.state))}`;
   if (Array.isArray(f.not_states)) s += ` that is ${andList((f.not_states as unknown[]).map((x) => statePhrase(str(x), true)))}`;
-  if (f.visible === true) s += " that is visible to it";
+  if (f.visible != null) s += ` that is visible to ${unitRefPhrase((f.visible as P).to)}`;
   const within = f.within as P | undefined;
-  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
+  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${placeRefPhrase(within.of)}` : ""}`;
   if (f.excluding != null) s += ` other than ${f.excluding === "this-unit" ? "this unit" : unitRefPhrase(f.excluding)}`;
   return s;
 }
@@ -169,7 +208,25 @@ export function rangePhrase(r: unknown): string {
   const o = r as P;
   if (o.inches != null) return `${str(o.inches)}"`;
   if (o.aura_of != null) return AURA_RANGES[str(o.aura_of)] ?? `the ${idLabel(o.aura_of)} range`;
+  if (Array.isArray(o.per_battle_round)) return `${o.per_battle_round.map(rangePhrase).join(", ")} in battle rounds ${o.per_battle_round.map((_, i) => i + 1).join(", ")} respectively (using the final range in later battle rounds)`;
   return '?"';
+}
+
+/** A spatial anchor, retaining objective and marker identities. */
+export function placeRefPhrase(ref: unknown): string {
+  if (ref === "battlefield-edge") return "a battlefield edge";
+  if (ref === "battlefield-centre") return "the centre of the battlefield";
+  if (ref != null && typeof ref === "object") {
+    const p = ref as P;
+    if (p.objective != null) {
+      const objective = p.objective as P;
+      if (objective.selection_var != null) return "that objective marker";
+      const phrase = objectivePhrase(objective, false, "objective marker");
+      return `${/^[aeiou]/i.test(phrase) ? "an" : "a"} ${phrase}`;
+    }
+    if (p.marker != null) return `${/^[aeiou]/i.test(str(p.marker)) ? "an" : "a"} ${dekebab(str(p.marker))} marker`;
+  }
+  return unitRefPhrase(ref);
 }
 
 export function objectivePhrase(f: P, plural = false, noun = "objective"): string {
@@ -183,6 +240,10 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
   if (f.controlled_by === "friendly") s += " you control";
   if (f.controlled_by === "enemy") s += " your opponent controls";
   if (f.designated != null) s += ` tagged ${dekebab(str(f.designated))}`;
+  if (f.within != null) {
+    const within = f.within as P;
+    s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
+  }
   return s;
 }
 
@@ -242,10 +303,33 @@ export function namedUsePhrase(f: P): string | undefined {
   const noun = NAMED_USE_NOUNS[str(f.kind)];
   return noun == null ? undefined : `the ${idLabel(f.id)} ${noun}`;
 }
+/** Usage limit as a shared phrase for activation limits and used-ability predicates. */
+export function usageClause(u: AbilityUsage | AbilityUsage[]): string {
+  if (Array.isArray(u)) return u.map((x) => usageClause(x)).join(" and ");
+  const n = Number(u.count ?? 1);
+  let base: string;
+  switch (u.frequency) {
+    case "once-per-turn": base = "once per turn"; break;
+    case "once-per-phase": base = "once per phase"; break;
+    case "once-per-battle-round": base = "once per battle round"; break;
+    case "once-per-command-phase": base = "once per Command phase"; break;
+    case "once-per-opponent-turn": base = "once per opponent's turn"; break;
+    case "first-this-battle": base = "the first time this battle"; break;
+    case "first-time-this-phase": base = "the first time this phase"; break;
+    case "n-per-battle": base = n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
+    default: base = dekebab(str(u.frequency));
+  }
+  return u.per != null ? `${base} per ${str(u.per)}` : base;
+}
+
 
 /** Which ability a `used` filter names: one id, every ability with a bracketed keyword, or the same one as a bound use. */
 export function usedAbilityPhrase(f: P): string | undefined {
-  if (f.ability_keyword != null) return `a ${titleCase(str(f.ability_keyword).toLowerCase())} ability`;
-  if (f.same_rule_as != null) return `that same ${f.kind === "stratagem" ? "Stratagem" : "ability"}`;
-  return undefined;
+  let phrase = f.ability_keyword != null ? `a ${titleCase(str(f.ability_keyword).toLowerCase())} ability`
+    : f.same_rule_as != null ? `that same ${f.kind === "stratagem" ? "Stratagem" : "ability"}`
+    : f.source != null || f.usage != null ? namedUsePhrase(f) ?? "an ability" : undefined;
+  if (phrase === undefined) return undefined;
+  if (Array.isArray(f.source)) phrase += ` from ${orList(f.source.map((source) => source === "unit" ? "its datasheet" : source === "enhancement" ? "an Enhancement" : dekebab(str(source))))}`;
+  if (f.usage != null && typeof f.usage === "object") phrase += ` that can be used ${usageClause(f.usage as AbilityUsage)}`;
+  return phrase;
 }

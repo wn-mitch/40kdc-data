@@ -8,31 +8,59 @@ import "math"
 // tools/src/cruncher/from-dsl.ts.
 
 // criticalOnlyKeys are the modifier keys a critical-threshold-only roll-result may carry.
-var criticalOnlyKeys = map[string]bool{"roll": true, "critical_on": true, "attack_type": true, "weapon_type": true, "weapon_name": true, "weapon_keyword": true}
+var criticalOnlyKeys = map[string]bool{"roll": true, "critical_on": true, "attack_type": true, "weapons": true}
 
-// weaponKeywordID is the catalog keyword id a weapon_keyword selector names
-// ("Lethal Hits" -> "lethal-hits"); ok is false when the parser cannot read it.
-func weaponKeywordID(raw any) (string, bool) {
-	s, ok := raw.(string)
-	if !ok {
-		return "", false
+// weaponKeywordSelectors returns the canonical catalog-backed selectors in a
+// weapon scope. A single selector and an explicit any-of array have identical
+// matching semantics; retaining the structured reference preserves parameters
+// such as Anti's target keyword and threshold.
+func weaponKeywordSelectors(raw any) []map[string]any {
+	if one, ok := asMap(raw); ok && one != nil {
+		return []map[string]any{one}
 	}
-	ref := parseKeywordGrant(s)
-	if ref == nil {
-		return "", false
+	list, _ := asList(raw)
+	out := make([]map[string]any, 0, len(list))
+	for _, item := range list {
+		if ref, ok := asMap(item); ok && ref != nil {
+			out = append(out, ref)
+		}
 	}
-	return getStr(ref, "keyword_id"), true
+	return out
 }
 
-// weaponApplicability is the weapon-name and weapon-keyword gates a modifier's
-// weapon selectors put on its buffs (nil when it has neither).
+// weaponApplicability translates the canonical weapon scope to the internal
+// applicability shape consumed by the expected-value engine. Catalog refs are
+// kept intact; runtime matching can therefore distinguish parameterized
+// keywords rather than parsing display strings.
 func weaponApplicability(modifier map[string]any) map[string]any {
+	scope, _ := getMap(modifier, "weapons")
+	if scope == nil {
+		return nil
+	}
 	out := map[string]any{}
-	if name, ok := modifier["weapon_name"].(string); ok {
+	if kind := getStr(scope, "type"); kind != "" {
+		if kind == "melee" {
+			out["phases"] = []any{"fight"}
+		} else if kind == "ranged" {
+			out["phases"] = []any{"shooting"}
+		}
+	}
+	if name := getStr(scope, "name"); name != "" {
 		out["weaponName"] = lower(name)
 	}
-	if keyword, ok := weaponKeywordID(modifier["weapon_keyword"]); ok {
-		out["weaponKeyword"] = keyword
+	if refs := weaponKeywordSelectors(scope["keyword"]); len(refs) > 0 {
+		out["weaponKeywords"] = refs
+	}
+	if name := getStr(scope, "exclude_name"); name != "" {
+		out["excludedWeaponNames"] = []any{lower(name)}
+	}
+	if refs := weaponKeywordSelectors(scope["exclude_keyword"]); len(refs) > 0 {
+		out["excludedWeaponKeywords"] = refs
+	}
+	if scope["ref"] != nil {
+		// A bound weapon is a board selection, not a profile property available
+		// to the cruncher. Refusing it is safer than widening the modifier.
+		out["unresolvedWeaponRef"] = scope["ref"]
 	}
 	if len(out) == 0 {
 		return nil
@@ -222,7 +250,9 @@ func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effec
 	if definition, ok := modifier["definition"].(map[string]any); ok {
 		switch classifyTarget(node) {
 		case "self":
-			dslWalk(definition, source, opts, out)
+			grantedOpts := opts
+			grantedOpts.grantedHolder = true
+			dslWalk(definition, source, grantedOpts, out)
 		case "unknown":
 			out.unsupported = append(out.unsupported, unsup("ability-grant: the units holding the granted ability are not resolved", node))
 		}
@@ -252,26 +282,59 @@ func translateAbilityGrant(node, source map[string]any, opts dslOpts, out *effec
 // that ability offers, which the consumer resolves by the ability's name; other
 // aspects are not modelled.
 func translateAbilityModifier(node, source map[string]any, opts dslOpts, out *effectTranslation) {
-	if modifier, ok := getMap(node, "modifier"); ok && modifier != nil {
-		ability, isStr := modifier["ability"].(string)
-		by, isNum := modifier["value"].(float64)
-		if modifier["aspect"] == "selections" && modifier["operation"] == "add" && isStr &&
-			isNum && by == math.Trunc(by) && !math.IsInf(by, 0) && by > 0 {
-			if !appliesToBuffedUnit(node, opts.perspective) {
-				return
+	out.unsupported = append(out.unsupported, unsup(`effect type "ability-modifier" is not modelled by the buff layer`, node))
+}
+
+// translateStanceCapacity preserves stable ability/option references and the
+// allocation policy used by the capacity consumer.
+func translateStanceCapacity(node map[string]any, opts dslOpts, out *effectTranslation) {
+	modifier, _ := getMap(node, "modifier")
+	ability := getStr(modifier, "ability_id")
+	by, ok := num(modifier["additional_selections"])
+	allocation := getStr(modifier, "allocation")
+	valid := ability != "" && ok && by > 0 &&
+		(allocation == "fixed-option" || allocation == "choose-one-option")
+	ref := func(value any) (map[string]any, bool) {
+		r, ok := asMap(value)
+		if !ok || r == nil || getStr(r, "ability_id") == "" || getStr(r, "option_id") == "" {
+			return nil, false
+		}
+		return map[string]any{"ability_id": getStr(r, "ability_id"), "option_id": getStr(r, "option_id")}, true
+	}
+	var option map[string]any
+	if allocation == "fixed-option" {
+		option, valid = ref(modifier["option"])
+	}
+	var options []any
+	if raw, present := modifier["options"]; present {
+		list, ok := asList(raw)
+		if !ok || len(list) == 0 {
+			valid = false
+		} else {
+			options = make([]any, 0, len(list))
+			for _, item := range list {
+				r, ok := ref(item)
+				if !ok {
+					valid = false
+					break
+				}
+				options = append(options, r)
 			}
-			label := jsStr(by) + " more " + ability + " selections"
-			if by == 1 {
-				label = "One more " + ability + " selection"
-			}
-			out.activatable = append(out.activatable, map[string]any{
-				"id":       opts.abilityID + "#cap",
-				"label":    label,
-				"buffs":    []any{},
-				"capRaise": map[string]any{"ability": ability, "by": by},
-			})
-			return
 		}
 	}
-	out.unsupported = append(out.unsupported, unsup(`effect type "ability-modifier" is not modelled by the buff layer`, node))
+	if !valid {
+		out.unsupported = append(out.unsupported, unsup("stance-selection-capacity: unresolved option reference", node))
+		return
+	}
+	cap := map[string]any{"ability": ability, "by": by, "allocation": allocation}
+	if option != nil {
+		cap["option"] = option
+	}
+	if options != nil {
+		cap["options"] = options
+	}
+	label := jsStr(by) + " more " + ability + " selections"
+	out.activatable = append(out.activatable, map[string]any{
+		"id": opts.abilityID + "#cap", "label": label, "buffs": []any{}, "capRaise": cap,
+	})
 }

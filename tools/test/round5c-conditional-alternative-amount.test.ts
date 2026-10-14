@@ -99,8 +99,8 @@ describe("an instead replacement joins the roll band of the effect it replaces (
       ["instead", "instead", {}],
       ["ROBOT unit", "unit-keyword", robot]);
     expect(mechanics.effect).toMatchObject({ type: "dice-gated", dice: "D6", threshold: 2, comparison: "gte", on_fail: null, on_success: { type: "sequence", steps: [
-      { type: "conditional", condition: { operator: "not", operands: [{ type: "has-keyword", parameters: { all_of: ["ROBOT"] } }] }, effect: { type: "mortal-wounds", modifier: { count: "D3" } } },
-      { type: "conditional", condition: { type: "has-keyword", parameters: { all_of: ["ROBOT"] } }, effect: { type: "mortal-wounds", modifier: { count: "2D3" } } },
+      { type: "conditional", condition: { operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: ["ROBOT"] } } }] }, effect: { type: "mortal-wounds", modifier: { count: "D3" } } },
+      { type: "conditional", condition: { type: "matches", parameters: { filter: { all_of: ["ROBOT"] } } }, effect: { type: "mortal-wounds", modifier: { count: "2D3" } } },
     ] } });
   });
 
@@ -114,8 +114,8 @@ describe("an instead replacement joins the roll band of the effect it replaces (
       ["instead", "instead", {}],
       ["FORTIFICATION or VEHICLE unit", "unit-keyword", fortified]);
     expect(mechanics.effect).toMatchObject({ type: "dice-gated", threshold: 3, on_success: { type: "sequence", steps: [
-      { condition: { operator: "not", operands: [{ type: "has-keyword", parameters: { any_of: ["FORTIFICATION", "VEHICLE"] } }] } },
-      { condition: { type: "has-keyword", parameters: { any_of: ["FORTIFICATION", "VEHICLE"] } } },
+      { condition: { operator: "not", operands: [{ type: "matches", parameters: { filter: { any_of: ["FORTIFICATION", "VEHICLE"] } } }] } },
+      { condition: { type: "matches", parameters: { filter: { any_of: ["FORTIFICATION", "VEHICLE"] } } } },
     ] } });
   });
 
@@ -206,10 +206,10 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
       ["or", "instead", {}, "EFFECT"],
       ["more than 8 inches from foes", "set-up", { subject: "this-unit", to: "battlefield", min_enemy_distance: 8 }, "EFFECT"],
       ["MONSTER unit", "unit-keyword", { keywords: ["MONSTER"], subject: "this-unit", negated: false }, "EFFECT"]);
-    const monster = { type: "has-keyword", parameters: { all_of: ["MONSTER"] } };
+    const monster = { type: "matches", parameters: { filter: { all_of: ["MONSTER"] } } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
-      { condition: { operator: "not", operands: [monster] }, effect: { modifier: { min_enemy_distance: 6 } } },
-      { condition: monster, effect: { modifier: { min_enemy_distance: 8 } } },
+      { condition: { operator: "not", operands: [monster] }, effect: { modifier: { min_enemy_distance: { inches: 6 } } } },
+      { condition: monster, effect: { modifier: { min_enemy_distance: { inches: 8 } } } },
     ] });
   });
 
@@ -222,10 +222,10 @@ describe("authored shapes for the design's sub-shapes compile to their mechanics
       ["up to D3 lost models", "return-models", { subject: "this-unit", count: "D3" }, "EFFECT"],
       ["(not HERO models)", "returned-model-exclusion", { keywords: ["HERO"] }, "EFFECT"],
       ["BATTLELINE unit", "unit-keyword", { keywords: ["BATTLELINE"], subject: "this-unit", negated: false }, "EFFECT"]);
-    const battleline = { type: "has-keyword", parameters: { all_of: ["BATTLELINE"] } };
+    const battleline = { type: "matches", parameters: { filter: { all_of: ["BATTLELINE"] } } };
     expect(mechanics.effect).toMatchObject({ type: "sequence", steps: [
-      { condition: { operator: "not", operands: [battleline] }, effect: { modifier: { count: 1, exclude_model_keyword: ["HERO"] } } },
-      { condition: battleline, effect: { modifier: { count: "D3", exclude_model_keyword: ["HERO"] } } },
+      { condition: { operator: "not", operands: [battleline] }, effect: { target: { level: "model", member_of: "this-unit", none_of: ["HERO"] }, modifier: { count: 1 } } },
+      { condition: battleline, effect: { target: { level: "model", member_of: "this-unit", none_of: ["HERO"] }, modifier: { count: "D3" } } },
     ] });
   });
 });

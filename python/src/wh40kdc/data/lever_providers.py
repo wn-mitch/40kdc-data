@@ -9,7 +9,6 @@ camelCase keys (``id``, ``label``, ``buffs``, ``enabled``, ``source``, ``group``
 
 from __future__ import annotations
 
-import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -22,8 +21,9 @@ Lever = dict[str, Any]
 class AbilityLevers:
     """Levers one provider contributes, the pools they belong to, and the cap raises to resolve.
 
-    ``cap_raises`` maps ``id(lever)`` to ``(lever, {"ability", "by"})``: the TS map is keyed by
-    the lever object, and the lever stays alive in ``buffs`` until it is resolved.
+    ``cap_raises`` maps ``id(lever)`` to the lever and its canonical capacity-raise
+    metadata. The TS map is keyed by the lever object, which remains alive in ``buffs``
+    until the owning stance group is resolved.
     """
 
     def __init__(self) -> None:
@@ -134,9 +134,9 @@ def ability_levers(
         if group and not any(g["id"] == group["id"] for g in out.groups):
             out.groups.append(
                 {
-                    "id": group["id"],
+                    **group,
                     "label": ability.name,
-                    "maxActivations": group["maxActivations"],
+                    "abilityId": ability.id,
                 }
             )
         if act.get("capRaise"):
@@ -343,9 +343,10 @@ def granted_record_levers(
             groups.setdefault(
                 group,
                 {
+                    **act["group"],
                     "id": group,
                     "label": record.name,
-                    "maxActivations": act["group"]["maxActivations"],
+                    "abilityId": record.id,
                 },
             )
             lever["group"] = group
@@ -354,18 +355,12 @@ def granted_record_levers(
     return {"buffs": buffs, "groups": list(groups.values())}
 
 
-def _squash(text: str) -> str:
-    return re.sub(r"[^a-z0-9]", "", text.lower())
-
-
 def resolve_cap_raises(
     levers: list[Lever],
     pending: dict[int, tuple[Lever, dict[str, Any]]],
     groups: list[dict[str, Any]],
 ) -> list[Lever]:
-    """Resolve each cap-raising lever to the pool it raises: the pool whose label (the owning
-    ability's name) matches the ability the DSL names, compared on letters and digits only. A
-    lever whose pool the unit does not have is dropped: there is nothing for it to raise."""
+    """Resolve each cap-raising lever to the stance pool owned by the named ability."""
     out: list[Lever] = []
     for lever in levers:
         entry = pending.get(id(lever))
@@ -373,7 +368,16 @@ def resolve_cap_raises(
             out.append(lever)
             continue
         raise_ = entry[1]
-        group = next((g for g in groups if _squash(g["label"]) == _squash(raise_["ability"])), None)
+        group = next(
+            (
+                candidate
+                for candidate in groups
+                if candidate.get("abilityId") == raise_["ability"]
+                and candidate["id"].endswith("?stance")
+            ),
+            None,
+        )
         if group is not None:
-            out.append({**lever, "raisesCap": {"group": group["id"], "by": raise_["by"]}})
+            allocation = {key: value for key, value in raise_.items() if key != "ability"}
+            out.append({**lever, "raisesCap": {**allocation, "group": group["id"]}})
     return out

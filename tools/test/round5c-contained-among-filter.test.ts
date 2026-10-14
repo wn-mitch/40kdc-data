@@ -77,8 +77,8 @@ describe("Round 5C Stratagems: an among-filter inside an effect names the effect
       ["each of those units", "unit-filter", { side: "friendly", among: "stratagem-targets", targets: "every" }, "EFFECT"],
       ["[LETHAL HITS]", "weapon-ability-keyword", { keyword: "Lethal Hits" }, "EFFECT"]);
     expect(mechanics.effect).toEqual({ type: "sequence", steps: [
-      { type: "weapon-ability-grant", target: first, modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
-      { type: "weapon-ability-grant", target: second, modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
+      { type: "weapon-ability-grant", target: first, modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } } },
+      { type: "weapon-ability-grant", target: second, modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } } },
     ] });
   });
 

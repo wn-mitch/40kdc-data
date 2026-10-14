@@ -8,7 +8,7 @@
 
 > **PlayerTurn** = `"your-turn"` \| `"opponent-turn"` \| `"either"`
 
-Defined in: [generated.ts:82](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L82)
+Defined in: [generated.ts:188](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L188)
 
 Which player's turn this applies during
 

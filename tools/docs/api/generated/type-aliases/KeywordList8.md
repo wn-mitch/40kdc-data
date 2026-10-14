@@ -6,12 +6,8 @@
 
 # Type Alias: KeywordList8
 
-> **KeywordList8** = \[[`Keyword`](Keyword.md), `...Keyword[]`\]
+> **KeywordList8** = [`Keyword`](Keyword.md)[]
 
-Defined in: [generated.ts:738](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L738)
+Defined in: [generated.ts:659](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L659)
 
-The keyword applies only when the target has at least one listed keyword.
-
-## Min Items
-
-1
+Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).

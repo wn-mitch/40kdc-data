@@ -6,7 +6,7 @@
 
 # Interface: Weapon
 
-Defined in: [generated.ts:4309](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4309)
+Defined in: [generated.ts:7052](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7052)
 
 A weapon entry with one or more stat profiles (e.g., standard and overcharge modes).
 
@@ -19,7 +19,7 @@ via the `definition` "weapon".
 
 > **id**: `string`
 
-Defined in: [generated.ts:4310](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4310)
+Defined in: [generated.ts:7053](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7053)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:4310](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **external\_refs?**: [`ExternalReferenceList`](../type-aliases/ExternalReferenceList.md)
 
-Defined in: [generated.ts:4311](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4311)
+Defined in: [generated.ts:7054](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7054)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [generated.ts:4311](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **name**: `string`
 
-Defined in: [generated.ts:4312](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4312)
+Defined in: [generated.ts:7055](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7055)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [generated.ts:4312](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **type**: `"ranged"` \| `"melee"`
 
-Defined in: [generated.ts:4313](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4313)
+Defined in: [generated.ts:7056](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7056)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [generated.ts:4313](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **faction\_id?**: `string`
 
-Defined in: [generated.ts:4317](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4317)
+Defined in: [generated.ts:7060](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7060)
 
 Kebab-case identifier
 
@@ -59,9 +59,9 @@ Kebab-case identifier
 
 ### profiles
 
-> **profiles**: \[\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../type-aliases/StatValue.md); \}; `keywords?`: `object`[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList10`](../type-aliases/KeywordList10.md); `excluded_keywords?`: [`KeywordList11`](../type-aliases/KeywordList11.md); \} \| `null`; \}, ...\{ name: string; range?: number \| "Melee"; stats: \{ A: StatValue; BS?: number \| null; WS?: number \| null; S: StatValue; AP: number; D: StatValue; \[k: string\]: unknown \}; keywords?: \{ keyword\_id: string; parameters?: \{ value?: StatValue; target\_keyword?: string; threshold?: number; required\_target\_keywords\_any?: KeywordList8; excluded\_target\_keywords?: KeywordList9 \} \}\[\]; target\_restrictions?: \{ required\_keywords\_any?: KeywordList10; excluded\_keywords?: KeywordList11 \} \| null \}\[\]\]
+> **profiles**: \[\{ `name`: `string`; `range?`: `number` \| `"Melee"`; `stats`: \{\[`k`: `string`\]: `unknown`; `A`: [`StatValue`](../type-aliases/StatValue.md); `BS?`: `number` \| `null`; `WS?`: `number` \| `null`; `S`: [`StatValue`](../type-aliases/StatValue.md); `AP`: `number`; `D`: [`StatValue`](../type-aliases/StatValue.md); \}; `keywords?`: [`WeaponKeywordRef`](WeaponKeywordRef.md)[]; `target_restrictions?`: \{ `required_keywords_any?`: [`KeywordList11`](../type-aliases/KeywordList11.md); `excluded_keywords?`: [`KeywordList12`](../type-aliases/KeywordList12.md); \} \| `null`; \}, ...\{ name: string; range?: number \| "Melee"; stats: \{ A: StatValue; BS?: number \| null; WS?: number \| null; S: StatValue; AP: number; D: StatValue; \[k: string\]: unknown \}; keywords?: WeaponKeywordRef\[\]; target\_restrictions?: \{ required\_keywords\_any?: KeywordList11; excluded\_keywords?: KeywordList12 \} \| null \}\[\]\]
 
-Defined in: [generated.ts:4321](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4321)
+Defined in: [generated.ts:7064](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7064)
 
 #### Min Items
 
@@ -73,7 +73,7 @@ Defined in: [generated.ts:4321](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:4395](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4395)
+Defined in: [generated.ts:7114](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7114)
 
 ***
 
@@ -81,4 +81,4 @@ Defined in: [generated.ts:4395](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > `optional` **game\_modes?**: [`GameModes7`](../type-aliases/GameModes7.md)
 
-Defined in: [generated.ts:4396](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4396)
+Defined in: [generated.ts:7115](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L7115)

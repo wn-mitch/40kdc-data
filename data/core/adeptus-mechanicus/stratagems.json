@@ -69,7 +69,39 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Infantry",
+        "Skitarii"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          },
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "model-destroyed",
+              "object": "model-in-this-unit",
+              "filter": {
+                "by": "event-subject"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "analytic-reprisals-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -941,7 +973,24 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Electro-Priests"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "not_states": [
+              "engaged"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "momentum-feedback-luminen-auto-choir-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
@@ -1109,7 +1158,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Sicarian"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "precision-onslaught-eradication-cohort-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",

@@ -5,14 +5,11 @@ import "strings"
 // Roster-highlighting scope: resolve which units an ability (typically a
 // detachment rule) benefits, from its curated applies_to keyword filter.
 //
-// A unit matches iff it carries every required_keywords entry and none of the
-// excluded_keywords, compared against the union of its keywords and
-// faction_keywords. Keywords compare without regard to case or apostrophe
-// style (keywordKey): rules print them uppercase, units store datasheet
-// spelling. Two distinct
-// "no constraint" forms: a nil filter matches nothing; a present filter with
-// neither keyword list matches every unit.
-//
+// A unit matches iff it satisfies each present canonical keyword predicate:
+// all_of requires every keyword, any_of requires at least one, none_of forbids
+// every listed keyword, and not_all_of forbids the complete listed set.
+// Two distinct "no constraint" forms remain: nil matches nothing, while a
+// present empty predicate matches every unit.
 // Go mirror of python .../scope.py; pinned by conformance/applies-to.
 
 // unitMatchesAppliesTo reports whether a unit owning ownedKeywords (the union
@@ -25,13 +22,49 @@ func unitMatchesAppliesTo(appliesTo map[string]any, ownedKeywords []string) bool
 	for _, k := range ownedKeywords {
 		owned[keywordKey(k)] = struct{}{}
 	}
-	for _, kw := range getStrList(appliesTo, "required_keywords") {
-		if _, ok := owned[keywordKey(kw)]; !ok {
+	has := func(kw any) bool {
+		s, ok := kw.(string)
+		if !ok {
+			return false
+		}
+		_, ok = owned[keywordKey(s)]
+		return ok
+	}
+	if values, ok := asList(appliesTo["all_of"]); ok {
+		for _, kw := range values {
+			if !has(kw) {
+				return false
+			}
+		}
+	}
+	if values, ok := asList(appliesTo["any_of"]); ok {
+		found := false
+		for _, kw := range values {
+			if has(kw) {
+				found = true
+				break
+			}
+		}
+		if !found {
 			return false
 		}
 	}
-	for _, kw := range getStrList(appliesTo, "excluded_keywords") {
-		if _, ok := owned[keywordKey(kw)]; ok {
+	if values, ok := asList(appliesTo["none_of"]); ok {
+		for _, kw := range values {
+			if has(kw) {
+				return false
+			}
+		}
+	}
+	if values, ok := asList(appliesTo["not_all_of"]); ok {
+		all := true
+		for _, kw := range values {
+			if !has(kw) {
+				all = false
+				break
+			}
+		}
+		if all {
 			return false
 		}
 	}

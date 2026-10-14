@@ -86,7 +86,7 @@ describe("Round 5C named-range reference: the registry", () => {
 describe("Round 5C named-range reference: unit-position range_ref", () => {
   it("measures a unit of the army against Synapse Range with no keyword (5695 shape)", () => {
     const mechanics = compiled(SYNAPSE_TEXT, ["Up to two", "stratagem-target", { count: "up-to", count_max: 2, side: "your-army", selects: "unit", keywords: ["WIDGET"], match: "all", excluded_keywords: [] }], withinSynapseOfArmy, selectedUnitWound);
-    expect(JSON.stringify(mechanics.effect)).toContain('{"type":"within","parameters":{"of":{"owner":"friendly"},"range":{"aura_of":"synapse-tyranids"}}}');
+    expect(JSON.stringify(mechanics.effect)).toContain('{"type":"matches","parameters":{"filter":{"within":{"of":{"owner":"friendly"},"range":{"aura_of":"synapse-tyranids"}}}}}');
     expect(JSON.stringify(mechanics.effect)).not.toContain("all_of");
   });
 
@@ -98,13 +98,13 @@ describe("Round 5C named-range reference: unit-position range_ref", () => {
       ["inside Contagion Range of your gizmo", "unit-position", { kind: "within", range_ref: "contagion", of: "this-unit", subject: "selected-unit", negated: false }],
       ["That gizmo loses 1 wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
     // The eligibility keeps subject selected-unit, the convention record-69 baseline uses; the conformance golden omits it (see the brief).
-    expect(firstOf(mechanics.effect, "select-units")!.selector.eligibility).toEqual({ type: "within", parameters: { subject: "selected-unit", of: "this-unit", range: { aura_of: "nurgles-gift-death-guard" } } });
+    expect(firstOf(mechanics.effect, "select-units")!.selector.eligibility).toEqual({ type: "matches", parameters: { subject: "selected-unit", filter: { within: { of: "this-unit", range: { aura_of: "nurgles-gift-death-guard" } } } } });
   });
 
   it("measures a unit against a named range from this unit or this model (5765, 5805 shapes)", () => {
     const text = "While your unit is inside Synapse Range of your host, it can benefit from it.";
     const mechanics = compiled(text, ["While your unit", "unit-position", { kind: "within", range_ref: "synapse", of: "matching-unit", of_side: "friendly", subject: "this-unit", negated: false }], ["it can benefit from it", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(firstOf(mechanics.effect, "within")!.parameters).toEqual({ of: { owner: "friendly" }, range: { aura_of: "synapse-tyranids" } });
+    expect(firstOf(mechanics.effect, "matches")!.parameters).toEqual({ filter: { within: { of: { owner: "friendly" }, range: { aura_of: "synapse-tyranids" } } } });
   });
 
   it("reads a named-range distance from the bearer on a selection's antecedent (8102 shape)", () => {
@@ -133,7 +133,7 @@ describe("Round 5C named-range reference: unit-position range_ref", () => {
       ["this unit is inside Synapse Range of your host", "unit-position", { kind: "within", range_ref: "synapse", of: "matching-unit", of_side: "friendly", subject: "this-unit", negated: false }],
       ["retreated sideways this phase", "unit-activity", { activities: ["fell-back-this-phase"], subject: "this-unit" }],
       ["it can benefit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(mechanics.effect.condition.operands[0]).toEqual({ type: "within", parameters: { of: { owner: "friendly" }, range: { aura_of: "synapse-tyranids" } } });
+    expect(mechanics.effect.condition.operands[0]).toEqual({ type: "matches", parameters: { filter: { within: { of: { owner: "friendly" }, range: { aura_of: "synapse-tyranids" } } } } });
   });
 
   it("puts a named range in the target restriction for an attack's target (8134 shape)", () => {
@@ -142,7 +142,7 @@ describe("Round 5C named-range reference: unit-position range_ref", () => {
       ["Pick a unit", "stratagem-target", { count: "one", side: "enemy", selects: "unit", keywords: [], match: "all", excluded_keywords: [] }],
       ["inside Contagion Range of a friendly unit", "unit-position", { kind: "within", range_ref: "contagion", of: "matching-unit", of_side: "friendly", subject: "target", negated: false }],
       ["That unit loses 1 wound", "mortal-wounds", { recipient: "target", count: "1" }]);
-    expect(firstOf(mechanics.effect, "within")!.parameters).toEqual({ subject: "defender", of: { owner: "friendly" }, range: { aura_of: "nurgles-gift-death-guard" } });
+    expect(firstOf(mechanics.effect, "matches")!.parameters).toEqual({ subject: "defender", filter: { within: { of: { owner: "friendly" }, range: { aura_of: "nurgles-gift-death-guard" } } } });
   });
 
   it("excludes the keywords of units that are not counted (matching units excluding GADGETS)", () => {
@@ -150,14 +150,14 @@ describe("Round 5C named-range reference: unit-position range_ref", () => {
     const mechanics = compiled(text,
       ["While this unit is inside Synapse Range of a friendly WIDGET unit (excluding GADGETS units)", "unit-position", { kind: "within", range_ref: "synapse", of: "matching-unit", of_side: "friendly", of_keywords: ["WIDGET"], of_excluded_keywords: ["GADGETS"], subject: "this-unit", negated: false }],
       ["it gains the BEACON keyword", "keyword-grant", { subject: "this-unit", keywords: ["BEACON"] }]);
-    expect(firstOf(mechanics.effect, "within")!.parameters).toEqual({ of: { owner: "friendly", all_of: ["WIDGET"], none_of: ["GADGETS"] }, range: { aura_of: "synapse-tyranids" } });
+    expect(firstOf(mechanics.effect, "matches")!.parameters).toEqual({ filter: { within: { of: { owner: "friendly", all_of: ["WIDGET"], none_of: ["GADGETS"] }, range: { aura_of: "synapse-tyranids" } } } });
     expect(firstOf(mechanics.effect, "keyword-grant")!.modifier).toEqual({ keywords: ["BEACON"] });
   });
 
   it("keeps an inches-only leaf exactly as before (regression)", () => {
     const text = "While this unit is within 6\" of a friendly ALPHA unit, it can benefit.";
     const mechanics = compiled(text, ["While this unit is within 6\"", "unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "this-unit", negated: false }], ["it can benefit", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]);
-    expect(firstOf(mechanics.effect, "within")!.parameters).toEqual({ of: "this-unit", range: { inches: 6 } });
+    expect(firstOf(mechanics.effect, "matches")!.parameters).toEqual({ filter: { within: { of: "this-unit", range: { inches: 6 } } } });
   });
 
   it("refuses range_ref with inches, wholly, beyond, a non-unit anchor, or no anchor", () => {
@@ -275,7 +275,7 @@ describe("Round 5C named-range reference: aura_of integrity", () => {
     writeFileSync(join(root, "enrichment", "fab", "abilities.json"), JSON.stringify(rows));
     return root;
   }
-  const ability = (id: string, aura: string) => ({ ability_id: id, effect: { type: "conditional", condition: { type: "within", parameters: { of: { owner: "friendly" }, range: { aura_of: aura } } } } });
+  const ability = (id: string, aura: string) => ({ ability_id: id, effect: { type: "conditional", condition: { type: "matches", parameters: { filter: { within: { of: { owner: "friendly" }, range: { aura_of: aura } } } } } } });
   const check = async (rows: unknown[]): Promise<ValidationResult> => {
     const root = fixture(rows);
     try {

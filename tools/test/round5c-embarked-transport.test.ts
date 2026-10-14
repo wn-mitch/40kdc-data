@@ -38,8 +38,8 @@ describe("unit-state embarked (wave 10)", () => {
     const gate = (negated: boolean) => mechanicsOf(text, "RAW_TEXT",
       ["While this model is stowed within a Hauler", "unit-state", { states: ["embarked"], subject: "this-model", negated }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]).effect.condition;
-    expect(gate(false)).toEqual({ type: "unit-state", parameters: { subject: "this-model", state: "embarked" } });
-    expect(gate(true)).toEqual({ operator: "not", operands: [{ type: "unit-state", parameters: { subject: "this-model", state: "embarked" } }] });
+    expect(gate(false)).toEqual({ type: "matches", parameters: { subject: "this-model", filter: { state: "embarked" } } });
+    expect(gate(true)).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-model", filter: { state: "embarked" } } }] });
   });
 
   it("compiles this unit (the default subject) with no subject parameter", () => {
@@ -47,7 +47,7 @@ describe("unit-state embarked (wave 10)", () => {
     const condition = mechanicsOf(text, "RAW_TEXT",
       ["While this unit is stowed within a Hauler", "unit-state", EMBARKED],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]).effect.condition;
-    expect(condition).toEqual({ type: "unit-state", parameters: { state: "embarked" } });
+    expect(condition).toEqual({ type: "matches", parameters: { filter: { state: "embarked" } } });
   });
 
   it("keeps carrying-units on its own form: the units embarked in the subject", () => {
@@ -55,7 +55,7 @@ describe("unit-state embarked (wave 10)", () => {
     const condition = mechanicsOf(text, "RAW_TEXT",
       ["While a Hauler carries units", "unit-state", { states: ["carrying-units"], subject: "this-unit", negated: false }],
       ["add 1 to the Hit roll", "roll-modifier", { roll: "hit", operation: "add", value: 1 }]).effect.condition;
-    expect(condition).toEqual({ type: "unit-state", parameters: { subject: { embarked_in: "this-unit" }, state: "embarked" } });
+    expect(condition).toEqual({ type: "matches", parameters: { subject: { embarked_in: "this-unit" }, filter: { state: "embarked" } } });
   });
 
   it("refuses an earlier point, a with, another state, and a subject it does not name", () => {
@@ -103,7 +103,7 @@ describe("bearer-transport as a subject (wave 10)", () => {
     const mech = mechanicsOf(text, undefined,
       ["While its Hauler is not a WALKER unit", "unit-keyword", { keywords: ["WALKER"], subject: "bearer-transport", negated: true }],
       ["add 2 to the M characteristic of this model", "characteristic-modifier", { subject: "this-model", characteristics: ["M"], operation: "add", value: 2 }]);
-    expect(mech.effect.condition).toEqual({ operator: "not", operands: [{ type: "has-keyword", parameters: { subject: "bearer-transport", all_of: ["WALKER"] } }] });
+    expect(mech.effect.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "bearer-transport", filter: { all_of: ["WALKER"] } } }] });
   });
 
   it("refuses a Stratagem that names the bearer's Transport: a Stratagem has no bearer", () => {
@@ -131,7 +131,7 @@ describe("select-unit within_origin (wave 10)", () => {
   it("measures the distance from the bearer's Transport: reference beside within_inches", () => {
     const result = selectWith({ scope: "friendly", distance: "within", inches: 6, visible: false, within_origin: "bearer-transport" });
     expect(result.ok).toBe(true);
-    expect(JSON.stringify(result.ok && result.mechanics)).toContain('"within_inches":6,"reference":"bearer-transport"');
+    expect(JSON.stringify(result.ok && result.mechanics)).toContain('"within":{"range":{"inches":6},"of":"bearer-transport"');
   });
 
   it("does not emit a reference without within_origin", () => {
@@ -146,12 +146,15 @@ describe("select-unit within_origin (wave 10)", () => {
     expect(() => selectWith({ scope: "friendly", distance: "any", visible: false, within_origin: "bearer-transport" })).toThrow(/needs a within distance/);
   });
 
-  it("refuses a designated selection measured from the Transport (designate-target has no origin field)", () => {
+  it("preserves the Transport as a designated selection's range origin", () => {
     const text = "Shooting phase. Select one enemy unit within 6\" of its Hauler. Each time this unit makes an attack that targets that unit, you can re-roll the Hit roll.";
     const [select, attack] = placed(text, undefined,
       ["Select one enemy unit within 6\" of its Hauler", "select-unit", { scope: "enemy", distance: "within", inches: 6, visible: false, within_origin: "bearer-transport" }],
       ["Each time this unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }]);
-    expect(() => designation(select!, [attack!], {}, undefined)).toThrow(/bearer's Transport/);
+    expect(designation(select!, [attack!], {}, undefined)).toMatchObject({
+      type: "designate-target",
+      select: { kind: "unit", selector: { filter: { owner: "enemy", within: { range: { inches: 6 }, of: "bearer-transport" } }, count: { min: 1, max: 1 } } },
+    });
   });
 });
 
@@ -210,8 +213,8 @@ describe("objective marker range: the Transport OR the unit (wave 10)", () => {
     const condition = mechanicsOf(CONTROL, "RAW_TEXT", UNIT, HAULER, STICKY).effect.condition;
     expect(condition.operator).toBe("or");
     expect(condition.operands).toEqual([
-      { type: "within", parameters: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } },
-      { type: "within", parameters: { subject: "bearer-transport", of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } },
+      { type: "matches", parameters: { filter: { within: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } } } },
+      { type: "matches", parameters: { subject: "bearer-transport", filter: { within: { of: { objective: { controlled_by: "friendly" } }, range: "objective-control" } } } },
     ]);
   });
 

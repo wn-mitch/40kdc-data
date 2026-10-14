@@ -144,7 +144,7 @@ describe("Round 5C t7 choice and grant bundle", () => {
       ["suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "D3" }],
     ]).effect;
     expect(effect.type).toBe("for-each-unit");
-    expect(effect.selector).toMatchObject({ owner: "enemy", keywords: ["ALPHA"] });
+    expect(effect.selector).toMatchObject({ filter: { owner: "enemy", all_of: ["ALPHA"] } });
   });
 
   // 10328: a reserves arrival binds the set-up its option holds, in the same sentence.
@@ -192,7 +192,7 @@ describe("Round 5C t7 choice and grant bundle", () => {
       ["ALPHA models from your army", "unit-filter", { side: "friendly", keywords: ["ALPHA"], level: "model" }],
       ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }],
     ]).effect;
-    expect(effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, modifier: { abilities: ["Devastating Wounds"] } });
+    expect(effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, modifier: { keywords: [{ keyword_id: "devastating-wounds" }] } });
   });
 
   // The ability-activate version that takes a recipient unit-filter as its subject (ability-activate@3, families/abilities.ts).
@@ -261,7 +261,7 @@ describe("Round 5C t7 keyword menu with a two-run option", () => {
     expect(effect.options).toHaveLength(3);
     expect(effect.options[2]).toMatchObject({ type: "conditional", effect: { type: "sequence" } });
     expect(effect.options[2].effect.steps).toHaveLength(2);
-    expect(effect.options[2].effect.steps.map((step: any) => step.effect.modifier.abilities)).toEqual([["Lethal Hits"], ["Sustained Hits 1"]]);
+    expect(effect.options[2].effect.steps.map((step: any) => step.effect.modifier.keywords)).toEqual([[{ keyword_id: "lethal-hits" }], [{ keyword_id: "sustained-hits", parameters: { value: 1 } }]]);
   });
 
   it("refuses a menu where one run has its qualifier and another run in the menu has none", () => {

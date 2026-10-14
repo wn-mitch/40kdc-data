@@ -48,20 +48,28 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
 describe("Round 5C container-wrap compiler", () => {
   const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
+  it("reports invalid nested recipients without overflowing diagnostic argument limits", () => {
+    let effect: Record<string, unknown> = { type: "stat-modifier", target: "invalid-target",
+      modifier: { stat: "S", operation: "add", value: 1 } };
+    for (let depth = 0; depth < 3; depth += 1) effect = { type: "sequence", steps: [effect] };
+    const result = checkEntry({ ...base(), effect });
+    expect(result.errors.some((error) => error.startsWith("/effect/steps/0/steps/0/steps/0/target "))).toBe(true);
+  });
+
   it("wraps a plain effect in an aura, side and keywords folded in only when authored", () => {
     expect(compiled([
       leaf("CONDITION", "aura-range", { side: "enemy", inches: 6 }),
       leaf("EFFECT", "characteristic-modifier", { subject: "attack", characteristics: ["S"], operation: "add", value: 1, weapon_type: "all" }, 3),
     ]).mechanics.effect).toEqual({
       type: "aura", target: "enemy-within-aura",
-      modifier: { range: 6, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } } },
+      modifier: { range: { inches: 6 }, eligible: { owner: "enemy" }, effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1 } } },
     });
     expect(compiled([
       leaf("CONDITION", "aura-range", { side: "friendly", inches: 3, keywords: ["CHARACTER"] }),
       leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 3),
     ]).mechanics.effect).toEqual({
       type: "aura", target: "friendly-within-aura",
-      modifier: { range: 3, eligible: { required_keywords: ["CHARACTER"] }, effect: { type: "heal", target: "this-unit", modifier: { amount: 1 } } },
+      modifier: { range: { inches: 3 }, eligible: { owner: "friendly", all_of: ["CHARACTER"] }, effect: { type: "heal", target: "this-unit", modifier: { amount: 1 } } },
     });
     expect(rendered(base(), [
       leaf("CONDITION", "aura-range", { side: "enemy", inches: 6 }),
@@ -81,15 +89,14 @@ describe("Round 5C container-wrap compiler", () => {
       leaf("CONDITION", "leader-target", {}),
       leaf("EFFECT", "fights-first", { subject: "this-model" }),
     ]).mechanics.effect).toEqual({
-      type: "leader-model-ability-grant", source: "bearer-unit", beneficiary: "leading-leader-model",
-      attached_unit_filter: null, duration: "while-leading",
-      grant: { recipient: "beneficiary", effect: { type: "ability-grant", modifier: { ability: "fights-first" } } },
-      recipient_binding: "beneficiary-only",
+      type: "ability-grant", target: { level: "model", member_of: "this-unit", attachment_role: "leader" },
+      modifier: { definition: { type: "ability-part", duration: "while-leading",
+        effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } } },
     });
     expect(compiled([
       leaf("CONDITION", "leader-target", { leader_keywords: ["INFANTRY"] }),
       leaf("EFFECT", "fights-first", { subject: "this-model" }),
-    ]).mechanics.effect).toMatchObject({ leader_filter: { keywords: ["INFANTRY"] } });
+    ]).mechanics.effect).toMatchObject({ target: { all_of: ["INFANTRY"], attachment_role: "leader" } });
     expect(rendered(base(), [
       leaf("CONDITION", "leader-target", {}),
       leaf("EFFECT", "fights-first", { subject: "this-model" }),
@@ -123,13 +130,13 @@ describe("Round 5C container-wrap compiler", () => {
       leaf("EVENT", "for-each-unit-select", { scope: "enemy", distance: "any" }),
       leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
     ]).mechanics.effect).toEqual({
-      type: "for-each-unit", selector: { owner: "enemy" },
+      type: "for-each-unit", selector: { filter: { owner: "enemy" } },
       effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } },
     });
     expect(compiled([
       leaf("EVENT", "for-each-unit-select", { scope: "friendly", distance: "within", inches: 6 }),
       leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
-    ]).mechanics.effect).toMatchObject({ selector: { owner: "friendly", within_inches: 6 } });
+    ]).mechanics.effect).toMatchObject({ selector: { filter: { owner: "friendly", within: { range: { inches: 6 }, of: "this-model" } } } });
     expect(rendered(base(), [
       leaf("EVENT", "for-each-unit-select", { scope: "enemy", distance: "any" }),
       leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }),
@@ -178,25 +185,25 @@ describe("Round 5C leading-container compiler", () => {
     expect(result.ok).toBe(false);
   });
 
-  it("compiles stance-select-open into named options, each opened by a named-option leaf", () => {
+  it("compiles stance-select-open into stable-id named options without scope timing", () => {
     expect(compiled([
       leaf("EFFECT", "stance-select-open", { scope: "army", mode: "re-selectable" }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Conqueror Doctrine" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
-      type: "stance-select", mode: "re-selectable", scope: "army",
+      type: "stance-select", mode: "re-selectable",
       options: [
-        { name: "Conqueror Doctrine", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
-        { name: "Ballistic Doctrine", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+        { id: "conqueror-doctrine", name: "Conqueror Doctrine", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "ballistic-doctrine", name: "Ballistic Doctrine", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
       ],
     });
     expect(rendered(base(), [
       leaf("EFFECT", "stance-select-open", { scope: "army", mode: "consumable" }, 1, "A"),
-      leaf("EVENT", "named-option", { label: "Conqueror Doctrine" }, 1, "B"),
+      leaf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 3, "B"),
       leaf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-      leaf("EVENT", "named-option", { label: "Ballistic Doctrine" }, 1, "C"),
+      leaf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 3, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).length).toBeGreaterThan(0);
   });
@@ -219,7 +226,7 @@ describe("Round 5C leading-container compiler", () => {
       leaf("EVENT", "named-option", { label: "Take Aim!" }, 1, "C"),
       leaf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
     ]).mechanics.effect).toEqual({
-      type: "issue-orders", count: 1, range: 6, eligible: { keyword: "INFANTRY" },
+      type: "issue-orders", count: 1, range: { inches: 6 }, eligible: { all_of: ["INFANTRY"] },
       options: [
         { name: "First Rank, Fire!", effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
         { name: "Take Aim!", effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
@@ -244,8 +251,8 @@ describe("Round 5C leading-container compiler", () => {
     ]).mechanics.effect).toEqual({
       type: "dice-pool-allocation", pool: { count: 6, die: "D6" }, max_activations: 1,
       options: [
-        { name: "Path of Slaughter", requirement: { type: "pair", min_value: 3 }, effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
-        { name: "Path of Rage", requirement: { type: "triple", min_value: 4 }, effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
+        { id: "option-1", name: "Path of Slaughter", requirement: { type: "pair", min_value: 3 }, effect: { type: "ability-grant", target: "this-model", modifier: { ability: "fights-first" } } },
+        { id: "option-2", name: "Path of Rage", requirement: { type: "triple", min_value: 4 }, effect: { type: "invulnerable-save", target: "this-model", modifier: { invuln_sv: 4 } } },
       ],
     });
     expect(rendered(base(), [
@@ -276,7 +283,7 @@ describe("Round 5C leading-container compiler", () => {
       leaf("EFFECT", "set-up", { subject: "selected-unit", to: "strategic-reserves", from: "battlefield" }, 1, "C"),
     ]).mechanics.effect).toEqual({
       type: "select-units",
-      selector: { owner: "friendly", count: 1 },
+      selector: { filter: { owner: "friendly" }, count: { min: 1, max: 1 } },
       effect: {
         type: "choice",
         options: [
@@ -359,7 +366,7 @@ describe("Round 5C dice-roll@2 roll_var binding", () => {
 describe("Round 5C stance-selection-capacity", () => {
   it("compiles the pooled and fixed-option allocation shapes", () => {
     expect(compiled([leaf("EFFECT", "stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "choose-one-option" })]).mechanics.effect)
-      .toEqual({ type: "stance-selection-capacity", modifier: { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "choose-one-option" } });
+      .toEqual({ type: "stance-selection-capacity", modifier: { ability_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "choose-one-option" } });
     expect(() => normalizeFingerprintParameters("stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "fixed-option" }))
       .toThrow(/option_id is required/u);
     expect(() => normalizeFingerprintParameters("stance-selection-capacity", { stance_id: "gladius-combat-doctrines", additional_selections: 1, allocation: "fixed-option", option_id: "conqueror-doctrine" }))

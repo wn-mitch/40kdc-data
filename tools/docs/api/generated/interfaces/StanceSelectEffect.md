@@ -6,7 +6,7 @@
 
 # Interface: StanceSelectEffect
 
-Defined in: [generated.ts:2264](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2264)
+Defined in: [generated.ts:3417](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3417)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "stance-select-effect".
@@ -17,7 +17,7 @@ via the `definition` "stance-select-effect".
 
 > **type**: `"stance-select"`
 
-Defined in: [generated.ts:2265](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2265)
+Defined in: [generated.ts:3418](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3418)
 
 ***
 
@@ -25,32 +25,40 @@ Defined in: [generated.ts:2265](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **mode**: `"re-selectable"` \| `"consumable"`
 
-Defined in: [generated.ts:2266](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2266)
+Defined in: [generated.ts:3419](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3419)
 
 ***
 
-### scope?
+### additive?
 
-> `optional` **scope?**: `"unit"` \| `"army"`
+> `optional` **additive?**: `true`
 
-Defined in: [generated.ts:2267](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2267)
-
-***
-
-### select?
-
-> `optional` **select?**: `string`
-
-Defined in: [generated.ts:2268](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2268)
+Defined in: [generated.ts:3420](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3420)
 
 ***
 
 ### options
 
-> **options**: \[\{ `name`: `string`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, \{ `name`: `string`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ name: string; effect: EffectNode }[]`\]
+> **options**: \[\{ `id`: `string`; `name`: `string`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, \{ `id`: `string`; `name`: `string`; `effect`: [`EffectNode`](../type-aliases/EffectNode.md); \}, `...{ id: string; name: string; effect: EffectNode }[]`\]
 
-Defined in: [generated.ts:2272](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2272)
+Defined in: [generated.ts:3424](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3424)
 
 #### Min Items
 
 2
+
+***
+
+### min\_choices?
+
+> `optional` **min\_choices?**: `number`
+
+Defined in: [generated.ts:3441](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3441)
+
+***
+
+### max\_choices?
+
+> `optional` **max\_choices?**: `number`
+
+Defined in: [generated.ts:3442](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3442)

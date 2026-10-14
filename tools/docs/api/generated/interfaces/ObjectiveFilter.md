@@ -6,7 +6,7 @@
 
 # Interface: ObjectiveFilter
 
-Defined in: [generated.ts:955](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L955)
+Defined in: [generated.ts:1506](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1506)
 
 Which objectives. Every listed property must hold.
 
@@ -19,7 +19,7 @@ via the `definition` "objective-filter".
 
 > `optional` **role?**: `"central"` \| `"expansion"` \| `"home"` \| `"non-home"`
 
-Defined in: [generated.ts:956](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L956)
+Defined in: [generated.ts:1507](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1507)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:956](https://github.com/wn-mitch/40kdc-data/blob/a2eb8
 
 > `optional` **home\_of?**: `"friendly"` \| `"enemy"`
 
-Defined in: [generated.ts:960](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L960)
+Defined in: [generated.ts:1511](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1511)
 
 The friendly or the enemy home objective.
 
@@ -37,7 +37,7 @@ The friendly or the enemy home objective.
 
 > `optional` **territory?**: `"your-territory"` \| `"enemy-territory"` \| `"no-mans-land"`
 
-Defined in: [generated.ts:961](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L961)
+Defined in: [generated.ts:1512](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1512)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:961](https://github.com/wn-mitch/40kdc-data/blob/a2eb8
 
 > `optional` **controlled\_by?**: [`Owner`](../type-aliases/Owner.md)
 
-Defined in: [generated.ts:962](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L962)
+Defined in: [generated.ts:1513](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1513)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:962](https://github.com/wn-mitch/40kdc-data/blob/a2eb8
 
 > `optional` **designated?**: `string`
 
-Defined in: [generated.ts:963](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L963)
+Defined in: [generated.ts:1514](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1514)
 
 ***
 
@@ -61,6 +61,16 @@ Defined in: [generated.ts:963](https://github.com/wn-mitch/40kdc-data/blob/a2eb8
 
 > `optional` **name?**: `string`
 
-Defined in: [generated.ts:967](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L967)
+Defined in: [generated.ts:1518](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1518)
 
 Kebab-case identifier
+
+***
+
+### selection\_var?
+
+> `optional` **selection\_var?**: `string`
+
+Defined in: [generated.ts:1522](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L1522)
+
+The objective marker a select-objective step bound.

@@ -6,13 +6,19 @@
 
 # Type Alias: TransportEligibility
 
-> **TransportEligibility** = `object`
+> **TransportEligibility** = `object` & [`TransportEligibility1`](TransportEligibility1.md)
 
-Defined in: [generated.ts:814](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L814)
+Defined in: [generated.ts:936](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L936)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "transport-eligibility".
 
-## Index Signature
+## Type Declaration
 
-\[`k`: `string`\]: `unknown`
+### requires\_capacity\_keyword?
+
+> `optional` **requires\_capacity\_keyword?**: `string`
+
+### embark\_as\_keyword?
+
+> `optional` **embark\_as\_keyword?**: `string`

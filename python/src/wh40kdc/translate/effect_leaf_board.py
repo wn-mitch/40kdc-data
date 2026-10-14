@@ -88,10 +88,8 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
         roll = _obj(roll)
         per_model = roll.get("per_model")
         each = (
-            " for each model in the target unit"
-            if per_model == "target"
-            else " for each model in this unit"
-            if per_model == "this"
+            f" for each model in {effect_subject(per_model)}"
+            if per_model is not None
             else f" for each {for_each_unit_subject(_obj(roll['for_each']))}"
             if roll.get("for_each") is not None
             else ""
@@ -153,38 +151,48 @@ def _detach_phrase(m: dict[str, Any]) -> str:
 
 
 def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    w = _wounds_left(m.get("wounds_remaining"))
+    wounds = _wounds_left(m.get("wounds_remaining"))
     where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
     detach = _detach_phrase(m)
-    if e.get("target") == "this-model":
-        return f"{subj} is set up again{where} with {w} remaining{detach}"
-    if m.get("model_keyword") is not None:
-        kw = f"{jstr(m['model_keyword'])} "
-    elif m.get("bodyguard_only") is True:
-        kw = "Bodyguard "
-    else:
-        kw = ""
-    kind = f"destroyed {kw}model"
+    target = e.get("target")
+    if target == "this-model":
+        return f"{subj} is set up again{where} with {wounds} remaining{detach}"
+    target = e.get("target")
+    if isinstance(target, dict) and target.get("level") == "model":
+        recipients = {key: value for key, value in target.items() if key != "member_of"}
+        models = effect_subject(recipients, ctx).removeprefix("all ")
+        kind = f"destroyed {models.replace('models', 'model')}"
+        what = (
+            f"all destroyed {models}"
+            if m.get("count") == "all"
+            else amount_of(m.get("count"), kind, f"destroyed {models}")
+        )
+        recipient = (
+            f" to {effect_subject(target['member_of'], ctx)}"
+            if target.get("member_of") is not None
+            else ""
+        )
+        return f"return {what}{recipient}{where}, each with {wounds} remaining{detach}"
     what = (
-        f"all {kind}s" if m.get("count") == "all" else amount_of(m.get("count"), kind, f"{kind}s")
+        "all destroyed models"
+        if m.get("count") == "all"
+        else amount_of(m.get("count"), "destroyed model", "destroyed models")
     )
-    excluded = m.get("exclude_model_keyword")
-    excl = (
-        f" (excluding {and_list([jstr(k) for k in excluded])} models)"
-        if isinstance(excluded, list)
-        else ""
-    )
-    return f"return {what}{excl} to {subj}{where}, each with {w} remaining{detach}"
+    return f"return {what} to {subj}{where}, each with {wounds} remaining{detach}"
 
 
-def _destroy_models(m: dict[str, Any], subj: str) -> str:
-    kind = f"{jstr(m['model_keyword'])} model" if m.get("model_keyword") is not None else "model"
-    if m.get("count") == "all":
-        what = f"every {kind} in {subj}"
+def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
+    target = e.get("target")
+    model_target = isinstance(target, dict) and target.get("level") == "model"
+    count = m.get("count")
+    if model_target:
+        what = subj if count == "all" else f"{dice_case(count)} of the {subj.removeprefix('all ')}"
     else:
-        c = dice_case(m.get("count"))
-        what = f"{c} {kind if c == '1' else f'{kind}s'} in {subj}"
-    leader = " (excluding Leader models)" if m.get("exclude_leader") is True else ""
+        what = (
+            f"every model in {subj}"
+            if count == "all"
+            else f"{dice_case(count)} {'model' if dice_case(count) == '1' else 'models'} in {subj}"
+        )
     remove = m.get("remove_from_play") is True
     verb = "remove" if remove else "destroy"
     tail = " from play" if remove else ""
@@ -193,15 +201,18 @@ def _destroy_models(m: dict[str, Any], subj: str) -> str:
         if m.get("ignore_death_triggers") is True
         else ""
     )
-    return f"{verb} {what}{leader}{tail}{triggers}"
+    return f"{verb} {what}{tail}{triggers}"
 
 
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     act = "shoot" if m.get("act") == "shoot" else "fight"
-    if e.get("target") == "event-object":
+    target = e.get("target")
+    if target == "event-object":
         model = "a model in this unit"
     elif subj == "this model":
         model = "this model"
+    elif isinstance(target, dict) and target.get("level") == "model":
+        model = f"a {subj.removeprefix('all ').replace('models', 'model')}"
     else:
         model = f"a model in {subj}"
     gate = m.get("gate")
@@ -226,12 +237,20 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         if ctx.get("destroyed_trigger"):
             lead = f"{before.strip()}, " if before else ""
         else:
-            lead = f"each time {model} is destroyed{f',{before}' if before else ''}, "
+            qualification = f",{before}" if before else ""
+            lead = f"each time {model} is destroyed{qualification}, "
+        if m.get("resolution") == "when-unit-fights":
+            resolution = f"when its unit is selected to fight, it can {act}"
+        elif m.get("resolution") == "after-attacking-unit-finishes":
+            resolution = (
+                f"after the attacking unit has finished making its attacks, it can {act}"
+            )
+        else:
+            resolution = f"it can {act}"
         return (
             f"{lead}roll one {dice_case(gate.get('dice'))}{adds}. "
             f"On {format_comparison(comparison, gate.get('threshold'))}, leave that model on "
-            "the battlefield; "
-            f"it can {act}{removal}"
+            f"the battlefield; {resolution}{removal}"
         )
     if m.get("resolution") == "when-unit-fights":
         return (
@@ -400,7 +419,8 @@ def _mode_clause(m: dict[str, Any]) -> str:
         return ""
     mode = title_case(jstr(m["mode"]))
     disembark = m.get("move_type") == "disembark" or m.get("from") == "transport"
-    return f" using the {f'{mode} Disembarkation' if disembark else mode} rules"
+    rule = f"{mode} Disembarkation" if disembark else mode
+    return f" using the {rule} rules"
 
 
 def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -478,6 +498,8 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         else None
     )
     clauses: list[str] = []
+    if m.get("maximum") == "unlimited":
+        clauses.append(f"{subj} can move any distance")
     if m.get("distance_bonus") is not None:
         n = num(m["distance_bonus"])
         moves = f"{kinds} moves" if kinds else "Move characteristic"
@@ -574,12 +596,15 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s = f"{who_can} {can} be set up on the battlefield{source}"
     if m.get("via") == "deep-strike":
         s += " using the Deep Strike rules"
-    if m.get("via") == "cult-ambush-marker":
+    if m.get("via") == "cult-ambush":
         s += " using a Cult Ambush marker"
     marker_range = m.get("marker_range")
     if isinstance(marker_range, dict):
         wholly = "wholly " if marker_range.get("wholly") is True else ""
-        s += f', {wholly}within {jstr(marker_range.get("inches"))}" of that marker'
+        s += (
+            f", {wholly}within {range_phrase(marker_range.get('range'))} "
+            "of that marker"
+        )
     s += _mode_clause(m)
     if isinstance(m.get("turns"), list):
         turns = re.sub(r", ([^,]*)$", r" or \1", ", ".join(_turn_ord(t) for t in m["turns"]))
@@ -591,9 +616,10 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s += f" as {jstr(m['sections'])} separate sections"
     s += placement_phrase(m) + placement_limits(m, ctx)
     if m.get("within_edge") is not None:
-        s += f' wholly within {jstr(m["within_edge"])}" of a battlefield edge'
+        s += f" wholly within {range_phrase(m['within_edge'])} of a battlefield edge"
     if m.get("min_enemy_distance") is not None:
-        s += f' more than {jstr(m["min_enemy_distance"])}" away from all enemy models'
+        distance = range_phrase(m["min_enemy_distance"])
+        s += f" more than {distance} away from all enemy models"
     md = m.get("min_distance_from")
     if md is not None:
         md = _obj(md)
@@ -625,7 +651,7 @@ def _marker(m: dict[str, Any]) -> str:
     label = re.sub(r" marker$", "", dekebab(jstr(m.get("label"))), flags=re.IGNORECASE)
     consume = "; using the marker consumes it" if m.get("consume") == "on-use" else ""
     if m.get("operation") == "relocate":
-        dist = f' up to {jstr(m["distance"])}"' if m.get("distance") is not None else ""
+        dist = f" up to {range_phrase(m['distance'])}" if m.get("distance") is not None else ""
         unmoved = ""
         if m.get("not_moved_this_turn") is True:
             unmoved = " that has not been moved this turn"
@@ -688,11 +714,7 @@ def _damage_reduction(m: dict[str, Any], subj: str) -> str:
         how = "change the Damage of that attack to 0"
     else:
         how = f"subtract {r} from the Damage characteristic of that attack"
-    weapon = (
-        m.get("weapon_type") is not None
-        or m.get("weapon_name") is not None
-        or m.get("weapon_keyword") is not None
-    )
+    weapon = isinstance(m.get("weapons"), dict) and bool(m["weapons"])
     attack = f"an attack with {weapon_noun(m)}" if weapon else "an attack"
     return f"each time {attack} is allocated to {subj}, {how}"
 
@@ -740,16 +762,15 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
         tail = ", X being its rating" if rated else ""
         return f"{subj} {v(subj, 'has')} the Feel No Pain {threshold}+ ability{against}{tail}"
     if t == "invulnerable-save":
-        vs = (
-            f" against {jstr(m['weapon_type'])} attacks" if m.get("weapon_type") is not None else ""
-        )
+        scope = _obj(m.get("weapons"))
+        vs = f" against {jstr(scope['type'])} attacks" if scope.get("type") else ""
         return f"{subj} {v(subj, 'has')} a {jstr(m.get('invuln_sv'))}+ invulnerable save{vs}"
     if t == "heal":
         return _heal(m, subj)
     if t == "return-models":
         return _return_models(e, m, subj, ctx)
     if t == "destroy-models":
-        return _destroy_models(m, subj)
+        return _destroy_models(e, m, subj)
     if t == "act-on-death":
         return _act_on_death(e, m, subj, ctx)
     if t == "split-unit":

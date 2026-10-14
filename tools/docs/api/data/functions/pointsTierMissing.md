@@ -8,7 +8,7 @@
 
 > **pointsTierMissing**(`unit`, `modelCount`, `ordinal?`): `boolean`
 
-Defined in: [data/pricing.ts:127](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/pricing.ts#L127)
+Defined in: [data/pricing.ts:138](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/pricing.ts#L138)
 
 True when no points tier covers `modelCount` for this `ordinal` — the count
 falls outside every tier's `[models, models_max]` range (below the smallest

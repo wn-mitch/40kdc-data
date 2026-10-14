@@ -46,6 +46,9 @@ import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named
 import { familyExtension, withFamilyExtensions } from "./families/index.js";
 import { EMBARKED_PERMISSION_FAMILIES, normalizeEmbarkedPermissionParameters } from "./embarked-permission-families.js";
 import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./families/abilities.js";
+import { NAMED_ABILITY_STATE_FAMILIES, normalizeNamedAbilityStateParameters } from "./named-ability-state-families.js";
+import { OATH_FAMILIES, normalizeOathParameters } from "./oath-families.js";
+import { ABILITY_USE_FAMILIES, normalizeAbilityUseParameters } from "./ability-use-families.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -128,6 +131,9 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = wit
   ...UNIT_FILTER_FAMILIES,
   ...NAMED_ABILITY_FAMILIES,
   ...GRANTED_FAMILIES,
+  ...NAMED_ABILITY_STATE_FAMILIES,
+  ...OATH_FAMILIES,
+  ...ABILITY_USE_FAMILIES,
   ...COUNT_FAMILIES,
   ...EQUIPPED_WEAPON_COUNT_FAMILIES,
   ...CHARACTERISTIC_AMOUNT_FAMILIES,
@@ -200,7 +206,7 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeAbilityModifierParameters(family, input, version)
     ?? normalizeContainerParameters(family, input, version)
     ?? normalizeUnitFilterParameters(family, input)
-    ?? normalizeNamedRegionParameters(family, input)
+    ?? normalizeNamedRegionParameters(family, input, version)
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)
     ?? normalizeSetUpRestrictionParameters(family, input)
@@ -212,6 +218,9 @@ function familyParameters(family: string, input: Record<string, unknown>, versio
     ?? normalizeMissionPredicateParameters(family, input)
     ?? normalizeNamedAbilityParameters(family, input)
     ?? normalizeGrantedParameters(family, input)
+    ?? normalizeNamedAbilityStateParameters(family, input, version)
+    ?? normalizeOathParameters(family, input)
+    ?? normalizeAbilityUseParameters(family, input)
     ?? normalizeCountParameters(family, input)
     ?? normalizeCharacteristicAmountParameters(family, input)
     ?? normalizeDiscontiguousLeafParameters(family, input)

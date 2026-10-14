@@ -8,7 +8,7 @@
 
 > **encodeShareToken**(`list`): `string`
 
-Defined in: [share/index.ts:43](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/share/index.ts#L43)
+Defined in: [share/index.ts:43](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/share/index.ts#L43)
 
 Encode a list into a URL-safe `share-v1` token using the embedded registry.
 

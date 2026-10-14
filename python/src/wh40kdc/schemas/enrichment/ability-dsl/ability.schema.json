@@ -101,19 +101,10 @@
       "$ref": "#/$defs/ability-usage"
     },
     "applies_to": {
-      "description": "Static, human-curated keyword filter naming which datasheet units this ability benefits, for roster-side highlighting. A unit matches when it carries every keyword in `required_keywords` (across its `keywords` + `faction_keywords`) and none in `excluded_keywords`. This is a denormalized projection distinct from the runtime `effect` condition tree (which mixes static class, runtime-granted markers, and timing gates and must not be scraped for scope). Absent/null means no resolvable unit scope — consumers render no highlight rather than guess.",
+      "description": "Static, human-curated keyword predicate naming which datasheet units this ability benefits, for roster-side highlighting. Null or absence means no resolvable scope; {} matches every unit. This projection is distinct from runtime effect conditions.",
       "oneOf": [
         {
-          "type": "object",
-          "properties": {
-            "required_keywords": {
-              "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-            },
-            "excluded_keywords": {
-              "$ref": "../../defs/common.schema.json#/$defs/keyword-list"
-            }
-          },
-          "additionalProperties": false
+          "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate"
         },
         {
           "type": "null"

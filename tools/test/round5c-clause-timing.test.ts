@@ -137,14 +137,14 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
 
   it("keeps the designated read on the attacker that the designate sets the tag for", () => {
     const mechanics = mechanicsOf(spendLeaves(SPEND_TEXT), SPEND_TEXT);
-    expect(JSON.stringify(mechanics)).toContain('{"type":"designated","parameters":{"subject":"attacker","tag":"yp-spent-this-use"}}');
+    expect(JSON.stringify(mechanics)).toContain('{"type":"matches","parameters":{"subject":"attacker","filter":{"designated":"yp-spent-this-use"}}}');
   });
 
   it("limits an instead that replaces a selected effect to the selection, with no attack leaf in its own clause", () => {
     // The 4243 record's instead clause names no unit: only the first clause says "that target that unit".
     const leaves = spendLeaves(SPEND_TEXT).filter((leaf) => leaf.start_byte !== SPEND_TEXT.indexOf("ranged attacks made by your unit that target that unit"));
     const mechanics = mechanicsOf(leaves, SPEND_TEXT);
-    expect(JSON.stringify(mechanics)).toContain('{"type":"designated","parameters":{"subject":"attacker","tag":"yp-spent-this-use"}}');
+    expect(JSON.stringify(mechanics)).toContain('{"type":"matches","parameters":{"subject":"attacker","filter":{"designated":"yp-spent-this-use"}}}');
     expect(JSON.stringify(mechanics)).toContain('"value":2');
   });
 
@@ -156,7 +156,7 @@ describe("Optional spend before a designated selection (compile.ts designatedSpe
     expect(bonus).toHaveLength(1);
     expect(bonus[0]!.condition).toEqual({ operator: "and", operands: [
       { type: "attack-is", parameters: { attack_type: "ranged" } },
-      { type: "designated", parameters: { subject: "attacker", tag: "yp-spent-this-use" } },
+      { type: "matches", parameters: { subject: "attacker", filter: { designated: "yp-spent-this-use" } } },
     ] });
   });
 
@@ -209,9 +209,9 @@ describe("Instead over a same-sentence group of re-rolls (8903 shape)", () => {
     const conditionals = (mechanics.effect.steps as Record<string, any>[]).filter((step) => step.type === "conditional");
     expect(conditionals).toHaveLength(4);
     const [hitOnes, woundOnes, hitAll, woundInstead] = conditionals as [Record<string, any>, Record<string, any>, Record<string, any>, Record<string, any>];
-    expect(hitOnes.condition).toEqual({ operator: "not", operands: [{ type: "designated", parameters: { subject: "attacker", tag: "privateer-arsenal-yp-spent" } }] });
+    expect(hitOnes.condition).toEqual({ operator: "not", operands: [{ type: "matches", parameters: { subject: "attacker", filter: { designated: "privateer-arsenal-yp-spent" } } }] });
     expect(woundOnes.condition).toEqual(hitOnes.condition);
-    expect(hitAll.condition).toEqual({ type: "designated", parameters: { subject: "attacker", tag: "privateer-arsenal-yp-spent" } });
+    expect(hitAll.condition).toEqual({ type: "matches", parameters: { subject: "attacker", filter: { designated: "privateer-arsenal-yp-spent" } } });
     expect(woundInstead.condition).toEqual(hitAll.condition);
     expect(JSON.stringify(mechanics)).not.toMatch(/"operator":"and","operands":\[\{"type":"designated"[^\]]*\},\{"operator":"not","operands":\[\{"type":"designated"/);
   });
@@ -258,7 +258,7 @@ describe("Parenthesised 'or' replaces a test modifier (7100 shape)", () => {
     const text = "Each enemy unit must take a Battle-shock test, subtracting 1 from that test (or subtracting 2 if this unit is a PSYKER).";
     const tests = nodesOf(mechanicsOf(bearerLeaves(text, "if this unit is a PSYKER"), text), "conditional");
     expect(tests).toHaveLength(2);
-    expect(tests[1]!.condition.operands.at(-1)).toEqual({ type: "has-keyword", parameters: { all_of: ["PSYKER"] } });
+    expect(tests[1]!.condition.operands.at(-1)).toEqual({ type: "matches", parameters: { filter: { all_of: ["PSYKER"] } } });
     expect(JSON.stringify(tests[0]!.condition)).toContain('"all_of":["PSYKER"]');
     expect(tests[0]!.effect.target).toBe("recipient");
     expect(tests[1]!.effect.target).toBe("recipient");
@@ -280,7 +280,7 @@ describe("'Neither X nor Y' as one negated keyword condition on the attack targe
       ["an enemy unit", "unit-filter", { side: "enemy", keywords: ["INFANTRY"] }],
       ["If that enemy unit is neither a MONSTER nor a VEHICLE", "unit-keyword", { keywords: ["MONSTER", "VEHICLE"], subject: "target", negated: true }],
       ["add 1 to the Wound roll", "roll-modifier", { roll: "wound", operation: "add", value: 1 }]), text);
-    expect(JSON.stringify(mechanics.effect.condition)).toContain('{"type":"has-keyword","parameters":{"subject":"defender","all_of":["MONSTER"]}}');
-    expect(JSON.stringify(mechanics.effect.condition)).toContain('{"type":"has-keyword","parameters":{"subject":"defender","all_of":["VEHICLE"]}}');
+    expect(JSON.stringify(mechanics.effect.condition)).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"all_of":["MONSTER"]}}');
+    expect(JSON.stringify(mechanics.effect.condition)).toContain('{"type":"matches","parameters":{"subject":"defender","filter":{"all_of":["VEHICLE"]}}');
   });
 });

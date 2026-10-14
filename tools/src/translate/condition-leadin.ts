@@ -4,7 +4,7 @@
  */
 import { describeCondition, describePredicate, type Condition } from "./condition.js";
 import { describeHappened } from "./condition-history.js";
-import { andList, idLabel, orList, type P, str, titleCase, windowPhrase } from "./condition-refs.js";
+import { andList, orList, type P, ruleRefPhrase, str, titleCase, windowPhrase } from "./condition-refs.js";
 
 /**
  * Render a condition as a predicate on an already-named candidate unit, so selection
@@ -12,7 +12,7 @@ import { andList, idLabel, orList, type P, str, titleCase, windowPhrase } from "
  */
 export function describeSelectionEligibility(c: Condition): string {
   const inner = c.operator === "not" && c.operands?.length === 1 ? c.operands[0]! : c;
-  if (inner.type === "unit-state" && inner.parameters?.state === "battle-shocked" && inner.parameters?.subject == null)
+  if (inner.type === "matches" && (inner.parameters?.filter as P | undefined)?.state === "battle-shocked" && Object.keys(inner.parameters?.filter as P).length === 1 && inner.parameters?.subject == null)
     return inner === c ? "that is Battle-shocked" : "that is not Battle-shocked";
   if (c.operator === "and" && c.operands) {
     const flat = (n: Condition): Condition[] => (n.operator === "and" && n.operands ? n.operands.flatMap(flat) : [n]);
@@ -71,17 +71,13 @@ export function conditionLeadIn(c: Condition): string {
     case "battle-round":
       return describePredicate(c, false).replace(/^during the (\w+) battle round onward$/, "from the $1 battle round onward");
     case "rule-active":
-      return `while the ${idLabel(p.rule)} is active`;
+      return `while the ${ruleRefPhrase(p.rule)} is active`;
+    case "matches":
+      return matchesLeadIn(c, false);
     case "has-keyword":
-      if (p.chosen_by != null) return `if ${describePredicate(c, false)}`;
-      if (p.subject === "defender") return `against ${keywordNames(p)} targets`;
-      if (p.subject == null) return `if the unit has the ${keywordNames(p)} keyword${Array.isArray(p.any_of) || ((p.all_of as unknown[]) ?? []).length > 1 ? "s" : ""}`;
       return `if ${describePredicate(c, false)}`;
     case "attachment":
-      if (p.role === "leading" && (p.subject === "this-model" || p.subject == null)) {
-        const w = (p.with ?? {}) as P;
-        return `while this model is leading a ${Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : ""}unit`;
-      }
+      if (p.role === "leading" && (p.subject === "this-model" || p.subject == null)) return `while ${describePredicate(c, false).replace(/^the model /, "this model ")}`;
       return `while ${describePredicate(c, false)}`;
     case "happened": {
       const f = (p.filter ?? {}) as P;
@@ -107,7 +103,6 @@ export function conditionLeadIn(c: Condition): string {
       return `while ${describePredicate(c, false)}`;
     case "unit-state":
     case "wounds":
-    case "owned-by":
       return `while ${describePredicate(c, false)}`;
     case "attack-is":
       if (p.all_target_same_unit === true) return `when ${describePredicate(c, false)}`;
@@ -129,30 +124,42 @@ export function conditionLeadIn(c: Condition): string {
 }
 
 function negatedLeadIn(c: Condition): string {
-  const p = c.parameters ?? {};
   if (c.type === "same-unit") return `if ${describePredicate(c, true)}`;
-  if (c.type === "has-keyword" && p.chosen_by == null && p.subject === "defender")
-    return negatedTargetKeywords(Array.isArray(p.any_of) ? (p.any_of as unknown[]).map(str) : ((p.all_of as unknown[]) ?? []).map(str));
-  if (c.type === "has-keyword" && p.chosen_by == null && (p.subject == null || p.subject === "recipient")) return `unless the unit has the ${keywordNames(p)} keyword`;
-  if (c.type === "unit-state" || c.type === "designated" || c.type === "owned-by") return `while ${describePredicate(c, true)}`;
+  if (c.type === "matches") return matchesLeadIn(c, true);
+  if (c.type === "unit-state" || c.type === "designated") return `while ${describePredicate(c, true)}`;
   // Otherwise the positive lead-in, turned: "unless an enemy unit is within 12\"".
   return `unless ${conditionLeadIn(c).replace(/^(if|while|when|during|in|against) /, (m, w: string) => (w === "during" || w === "in" || w === "against" ? m : ""))}`;
 }
 
-/** The keyword of `not(has-keyword <subject> X)` with a single keyword, else null. */
+/** A single canonical keyword filter used for compact lead-in grouping. */
 function notKeyword(op: Condition, subject: string): string | null {
   if (op.operator !== "not" || op.operands?.length !== 1) return null;
   const inner = op.operands[0]!;
   const p = inner.parameters ?? {};
-  if (inner.type !== "has-keyword" || p.subject !== subject || !Array.isArray(p.all_of) || p.all_of.length !== 1) return null;
-  return str(p.all_of[0]);
+  const f = (p.filter ?? {}) as P;
+  if (inner.type !== "matches" || p.subject !== subject || Object.keys(f).length !== 1 || !Array.isArray(f.all_of) || f.all_of.length !== 1) return null;
+  return str(f.all_of[0]);
 }
 
-/** A bare single-keyword `has-keyword` on the ability's own unit, else null. */
 function ownKeyword(op: Condition): string | null {
   const p = op.parameters ?? {};
-  if (op.type !== "has-keyword" || p.subject != null || !Array.isArray(p.all_of) || p.all_of.length !== 1) return null;
-  return str(p.all_of[0]);
+  const f = (p.filter ?? {}) as P;
+  if (op.type !== "matches" || p.subject != null || Object.keys(f).length !== 1 || !Array.isArray(f.all_of) || f.all_of.length !== 1) return null;
+  return str(f.all_of[0]);
+}
+
+function matchesLeadIn(c: Condition, negated: boolean): string {
+  const p = c.parameters ?? {};
+  const f = (p.filter ?? {}) as P;
+  const keys = Object.keys(f).filter((key) => key !== "level");
+  if (keys.length === 1 && (f.all_of != null || f.any_of != null)) {
+    if (p.subject === "defender" && negated && Array.isArray(f.all_of) && f.all_of.length > 1) return `against a unit that does not have all of ${andList(f.all_of.map(str))}`;
+    if (p.subject === "defender") return negated ? negatedTargetKeywords(((f.any_of ?? f.all_of) as unknown[]).map(str)) : `against ${keywordNames(f)} targets`;
+    if (p.subject == null || (negated && p.subject === "recipient")) return `${negated ? "unless" : "if"} the unit has the ${keywordNames(f)} keyword${!negated && (Array.isArray(f.any_of) || ((f.all_of as unknown[]) ?? []).length > 1) ? "s" : ""}`;
+    return `${negated ? "unless" : "if"} ${describePredicate(c, false)}`;
+  }
+  if (keys.length === 1 && f.designated != null && p.subject === "defender" && str(f.designated) === str(f.designated).toUpperCase() && !negated) return `against ${str(f.designated)} targets`;
+  return `while ${describePredicate(c, negated)}`;
 }
 
 /**

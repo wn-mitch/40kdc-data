@@ -88,8 +88,8 @@ fn an_attackers_ws_penalty_gates_on_fight_and_its_bs_penalty_on_shooting() {
 fn a_crit_threshold_and_a_reroll_gate_by_weapon_type_and_weapon_name() {
     let result = translate(
         json!({ "type": "sequence", "steps": [
-            { "type": "roll-result", "target": "this-unit", "modifier": { "roll": "wound", "critical_on": 5, "weapon_type": "melee" } },
-            { "type": "re-roll", "target": "this-unit", "modifier": { "roll": "hit", "subset": "ones", "weapon_name": "Fabricated Gun" } },
+            { "type": "roll-result", "target": "this-unit", "modifier": { "roll": "wound", "critical_on": 5, "weapons": {"type": "melee"} } },
+            { "type": "re-roll", "target": "this-unit", "modifier": { "roll": "hit", "subset": "ones", "weapons": {"name": "Fabricated Gun"} } },
         ] }),
         TranslationPerspective::Attacker,
     );
@@ -103,7 +103,7 @@ fn a_crit_threshold_and_a_reroll_gate_by_weapon_type_and_weapon_name() {
 #[test]
 fn a_modifier_with_a_weapon_type_and_a_weapon_name_keeps_both_gates() {
     let result = translate(
-        json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 1, "weapon_type": "melee", "weapon_name": "Fabricated Blade" } }),
+        json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 1, "weapons": {"type": "melee", "name": "Fabricated Blade"} } }),
         TranslationPerspective::Attacker,
     );
     let both = BuffApplicability {
@@ -117,17 +117,20 @@ fn a_modifier_with_a_weapon_type_and_a_weapon_name_keeps_both_gates() {
 #[test]
 fn a_crit_threshold_narrowed_by_a_weapon_keyword_is_gated_on_it_and_an_unreadable_one_refused() {
     let gated = translate(
-        json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapon_keyword": "Pistol" } }),
+        json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapons": {"keyword": {"keyword_id": "pistol"}} } }),
         TranslationPerspective::Attacker,
     );
     assert!(gated.unsupported.is_empty());
     let want = BuffApplicability {
-        weapon_keyword: Some("pistol".into()),
+        weapon_keywords: Some(vec![WeaponKeywordRef {
+            keyword_id: "pistol".into(),
+            parameters: None,
+        }]),
         ..Default::default()
     };
     assert_eq!(gates(&gated), vec![Some(want)]);
     let unreadable = translate(
-        json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapon_keyword": "" } }),
+        json!({ "type": "roll-result", "target": "this-unit", "modifier": { "roll": "hit", "critical_on": 5, "weapons": {"keyword": ""} } }),
         TranslationPerspective::Attacker,
     );
     assert!(unreadable.applied.is_empty());
@@ -138,7 +141,7 @@ fn a_crit_threshold_narrowed_by_a_weapon_keyword_is_gated_on_it_and_an_unreadabl
         .collect();
     assert_eq!(
         reasons,
-        vec!["roll-result: narrows by \"weapon_keyword\" which the cruncher can't resolve here"]
+        vec!["roll-result: narrows by \"weapons.keyword\" which the cruncher can't resolve here"]
     );
 }
 
@@ -226,7 +229,7 @@ fn a_crit_hit_threshold_of_five_with_lethal_hits_raises_wounds() {
 fn a_weapon_named_attacks_lift_reaches_only_that_weapons_attacks() {
     let lift = |name: &str| {
         translate(
-            json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 1, "weapon_name": name } }),
+            json!({ "type": "stat-modifier", "target": "this-unit", "modifier": { "stat": "A", "operation": "improve", "value": 1, "weapons": {"name": name} } }),
             TranslationPerspective::Attacker,
         )
         .applied
@@ -236,7 +239,7 @@ fn a_weapon_named_attacks_lift_reaches_only_that_weapons_attacks() {
 }
 
 #[test]
-fn a_weapon_name_gate_is_permissive_until_the_context_names_the_weapon() {
+fn a_weapon_name_gate_requires_the_context_to_name_the_weapon() {
     let named = Buff {
         source: source(),
         applicable_when: Some(BuffApplicability {
@@ -246,11 +249,38 @@ fn a_weapon_name_gate_is_permissive_until_the_context_names_the_weapon() {
         contribution: BuffContribution::AttacksMod { value: 1.0 },
     };
     let mut ctx = EngineContext::new(Phase::Fight);
-    assert_eq!(resolve_buffs(&[named.clone()], &ctx).attacks_mod.value, 1.0);
+    assert_eq!(resolve_buffs(&[named.clone()], &ctx).attacks_mod.value, 0.0);
     ctx.weapon_names = Some(vec!["bolt rifle".into(), "bolt rifles".into()]);
     assert_eq!(resolve_buffs(&[named.clone()], &ctx).attacks_mod.value, 0.0);
     ctx.weapon_names = Some(vec!["power fist".into()]);
     assert_eq!(resolve_buffs(&[named], &ctx).attacks_mod.value, 1.0);
+}
+
+#[test]
+fn rated_weapon_scopes_preserve_exclusions_and_granted_dependencies() {
+    let effect = json!({"type": "roll-modifier", "target": "this-unit", "modifier": {
+        "roll": "hit", "operation": "add", "value": 1,
+        "weapons": {"keyword": [{"keyword_id": "sustained-hits", "parameters": {"value": 2}}],
+            "exclude_keyword": {"keyword_id": "torrent"}, "exclude_name": "other weapon"}
+    }});
+    let buffs = translate(effect, TranslationPerspective::Attacker).applied;
+    let mut ctx = EngineContext::new(Phase::Shooting);
+    ctx.weapon_names = Some(vec!["test weapon".into()]);
+    ctx.weapon_keyword_refs = Some(vec![WeaponKeywordRef {
+        keyword_id: "sustained-hits".into(),
+        parameters: Some(json!({"value": 1})),
+    }]);
+    assert_eq!(resolve_buffs(&buffs, &ctx).hit_mod.value, 0.0);
+    ctx.weapon_keyword_refs.as_mut().unwrap()[0].parameters = Some(json!({"value": 2}));
+    assert_eq!(resolve_buffs(&buffs, &ctx).hit_mod.value, 1.0);
+    ctx.weapon_keyword_refs
+        .as_mut()
+        .unwrap()
+        .push(WeaponKeywordRef {
+            keyword_id: "torrent".into(),
+            parameters: None,
+        });
+    assert_eq!(resolve_buffs(&buffs, &ctx).hit_mod.value, 0.0);
 }
 
 #[test]
@@ -292,8 +322,12 @@ fn a_printed_grant_to_friendly_units_translates_its_body_for_the_holders() {
             "modifier": { "ability": "fabricated-granted", "definition": body.clone() },
         })
     };
-    let friendly = translate(
-        grant(json!({ "owner": "friendly", "all_of": ["EXAMPLE"] })),
+    let mut context = EngineContext::new(Phase::Shooting);
+    context.attacker_keywords = Some(vec!["EXAMPLE".into()]);
+    let friendly = effect_to_buffs(
+        &grant(json!({ "owner": "friendly", "all_of": ["EXAMPLE"] })),
+        &source(),
+        &context,
         TranslationPerspective::Attacker,
     );
     let contributions: Vec<Value> = friendly
@@ -324,5 +358,62 @@ fn a_printed_grant_to_friendly_units_translates_its_body_for_the_holders() {
         grant(json!({ "owner": "enemy", "all_of": ["EXAMPLE"] })),
         TranslationPerspective::Attacker,
     );
-    assert!(enemy.applied.is_empty() && enemy.unsupported.is_empty());
+    assert!(enemy.applied.is_empty());
+    assert_eq!(
+        enemy
+            .unsupported
+            .iter()
+            .map(|u| u.reason.as_str())
+            .collect::<Vec<_>>(),
+        vec!["unit-filter target: identity, state or model membership is unresolved"]
+    );
+}
+
+#[test]
+fn anti_uses_structural_target_predicates_not_printed_keyword_syntax() {
+    let anti = |parameters: Value| Buff {
+        source: source(),
+        applicable_when: None,
+        contribution: BuffContribution::ExtraKeyword {
+            keyword_ref: WeaponKeywordRef {
+                keyword_id: "anti".into(),
+                parameters: Some(parameters),
+            },
+        },
+    };
+    let baseline = stage(Vec::new(), StageName::Wounds);
+    assert!(
+        stage(
+            vec![anti(
+                json!({"required_target_keywords_any": ["INFANTRY", "VEHICLE"], "threshold": 2})
+            )],
+            StageName::Wounds
+        ) > baseline
+    );
+    assert!(
+        stage(
+            vec![anti(
+                json!({"excluded_target_keywords": ["VEHICLE"], "threshold": 2})
+            )],
+            StageName::Wounds
+        ) > baseline
+    );
+    assert_eq!(
+        stage(
+            vec![anti(
+                json!({"target_keyword": "Non-Vehicle", "threshold": 2})
+            )],
+            StageName::Wounds
+        ),
+        baseline
+    );
+    assert_eq!(
+        stage(
+            vec![anti(
+                json!({"target_keyword": "Infantry/Vehicle", "threshold": 2})
+            )],
+            StageName::Wounds
+        ),
+        baseline
+    );
 }

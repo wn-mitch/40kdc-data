@@ -48,16 +48,16 @@ func TestPhase4AbilityUnitIsBuffed(t *testing.T) {
 }
 
 func TestPhase4RollKeepsDicePoolLevers(t *testing.T) {
-	warp := `{"type":"weapon-ability-grant","target":{"owner":"friendly"},"modifier":{"abilities":["Lethal Hits"],"weapon_type":"melee"}}`
-	blood := `{"type":"roll-modifier","target":{"owner":"friendly"},"modifier":{"roll":"wound","operation":"add","value":1,"weapon_type":"melee"}}`
+	warp := `{"type":"weapon-ability-grant","target":"this-unit","modifier":{"keywords":[{"keyword_id":"lethal-hits"}],"weapons":{"type":"melee"}}}`
+	blood := `{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"wound","operation":"add","value":1,"weapons":{"type":"melee"}}}`
 	pool := j(t, `{"type":"dice-pool-allocation","pool":{"count":8,"die":"D6"},"max_activations":2,"options":[
-		{"name":"Warp Blades","requirement":{"type":"pair","min_value":4},"effect":`+warp+`},
-		{"name":"Wrathful Devotion","requirement":{"type":"pair","min_value":5},"effect":`+blood+`}]}`)
-	wrap := func(name, req, eff string) string {
-		return `{"type":"ability-part","name":"` + name + `","effect":{"type":"dice-gated","from":{"roll_var":"bok"},"requirement":` + req + `,"on_success":` + eff + `}}`
+		{"id":"warp-blades","name":"Warp Blades","requirement":{"type":"pair","min_value":4},"effect":`+warp+`},
+		{"id":"wrathful-devotion","name":"Wrathful Devotion","requirement":{"type":"pair","min_value":5},"effect":`+blood+`}]}`)
+	wrap := func(id, name, req, eff string) string {
+		return `{"type":"ability-part","id":"` + id + `","name":"` + name + `","effect":{"type":"dice-gated","from":{"roll_var":"bok"},"requirement":` + req + `,"on_success":` + eff + `}}`
 	}
 	roll := j(t, `{"type":"roll","dice":"8D6","extra_dice_pool":"blessings-of-khorne-pool","roll_var":"bok","effect":{"type":"choice","min_choices":0,"max_choices":2,"options":[`+
-		wrap("Warp Blades", `{"type":"pair","min_value":4}`, warp)+`,`+wrap("Wrathful Devotion", `{"type":"pair","min_value":5}`, blood)+`]}}`)
+		wrap("warp-blades", "Warp Blades", `{"type":"pair","min_value":4}`, warp)+`,`+wrap("wrathful-devotion", "Wrathful Devotion", `{"type":"pair","min_value":5}`, blood)+`]}}`)
 	before := effectToBuffs(pool, bokSource, fightCtx(nil), "attacker")
 	after := effectToBuffs(roll, bokSource, fightCtx(nil), "attacker")
 	if len(after.activatable) != 2 || len(after.applied) != 0 {
@@ -76,7 +76,7 @@ func TestPhase4UnsizedValuesAreNotApplied(t *testing.T) {
 		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":{"incursion":1,"strike-force":2,"onslaught":3}}}`, `value is set by the battle size`},
 		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":{"count_of":"battle-round"}}}`, `value is set by the number of battle-round`},
 		{`{"type":"stat-modifier","target":"this-unit","modifier":{"stat":"A","operation":"add","value":2},"scaling":{"per":1,"of":"models-embarked-in-bearer"}}`, `scales with models-embarked-in-bearer`},
-		{`{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1,"weapon_ref":{"weapon_var":"blade"}}}`, `weapon_ref`},
+		{`{"type":"roll-modifier","target":"this-unit","modifier":{"roll":"hit","operation":"add","value":1,"weapons":{"ref":{"weapon_var":"blade"}}}}`, `weapons`},
 	}
 	for _, c := range cases {
 		out := effectToBuffs(j(t, c.effect), bokSource, fightCtx(nil), "attacker")

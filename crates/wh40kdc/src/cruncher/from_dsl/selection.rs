@@ -14,7 +14,7 @@ use serde_json::Value;
 
 use super::applicability::{apply_applicability, label_for_buffs};
 use super::js::*;
-use super::TranslationPerspective::{self, Attacker};
+use super::TranslationPerspective::Attacker;
 use super::{applies_to_buffed_unit, walk, Lever, Out, WalkOpts};
 use crate::cruncher::buffs::AbilityKind;
 
@@ -57,60 +57,66 @@ pub(super) fn plan_selection(node: &Obj, opts: &WalkOpts) -> SelectionPlan {
     let Some(selector) = object(node.get("selector")) else {
         return SelectionPlan::None;
     };
-    let friendly = is_str(selector, "owner", "friendly");
-    if !friendly && !is_str(selector, "owner", "enemy") {
+    let Some(filter) = object(selector.get("filter")) else {
         return SelectionPlan::None;
-    }
-    if is_str(selector, "target_kind", "model")
-        || present(selector, "model_names").is_some()
-        || present(selector, "bind_as").is_some()
-    {
-        return SelectionPlan::None;
-    }
-    if !references_selected_unit(node.get("effect").unwrap_or(&Value::Null)) {
-        return SelectionPlan::None;
-    }
-    let keywords = selector.get("keywords");
-    let excluded = selector.get("excluded_keywords");
-    let (Some(keywords), Some(excluded)) = (
-        keywords.map_or(Some(None), |k| keyword_list(k).map(Some)),
-        excluded.map_or(Some(None), |k| keyword_list(k).map(Some)),
-    ) else {
-        return SelectionPlan::Unsupported(
-            "select-units: the selector's keyword lists are malformed",
-        );
     };
+    let friendly = is_str(filter, "owner", "friendly");
+    if !friendly && !is_str(filter, "owner", "enemy") {
+        return SelectionPlan::None;
+    }
+    if is_str(filter, "level", "model") || present(filter, "model_names").is_some() {
+        return SelectionPlan::None;
+    }
+    let binding = selector.get("bind_as").and_then(Value::as_str);
+    if !references_selected_unit(node.get("effect").unwrap_or(&Value::Null), binding) {
+        return SelectionPlan::None;
+    }
+    if selector
+        .get("count")
+        .and_then(|count| count.get("max"))
+        .and_then(Value::as_u64)
+        == Some(0)
+    {
+        return SelectionPlan::Skip;
+    }
+    let predicates: Obj = filter
+        .iter()
+        .filter(|(key, _)| !matches!(key.as_str(), "within" | "visible" | "excluding"))
+        .map(|(key, value)| (key.clone(), value.clone()))
+        .collect();
     let mut selection = node.clone();
     selection.remove("effect");
     let mut requires = vec![Value::Object(selection)];
 
     let (mut effect, applicability, label) = if friendly {
-        if excludes_ability_unit(selector.get("eligibility"))
+        if (excludes_ability_unit(selector.get("eligibility"))
+            || matches!(
+                filter.get("excluding").and_then(Value::as_str),
+                Some("this-unit" | "ability-unit")
+            ))
             && opts.ability_kind != Some(AbilityKind::Support)
         {
             return SelectionPlan::Skip;
         }
-        if keywords.is_some() || excluded.is_some() {
-            let Some(own) = own_keywords(opts) else {
+        match super::conditions::matches_unit_filter(
+            &Value::Object(predicates),
+            opts.context,
+            opts.perspective,
+            "friendly",
+        ) {
+            Some(false) => return SelectionPlan::Skip,
+            None => {
                 return SelectionPlan::Unsupported(
-                    "select-units: the crunched unit's keywords are unavailable for the selector",
-                );
-            };
-            let holds = keywords
-                .as_deref()
-                .unwrap_or_default()
-                .iter()
-                .all(|k| includes_keyword(own, k))
-                && !excluded
-                    .as_deref()
-                    .unwrap_or_default()
-                    .iter()
-                    .any(|k| includes_keyword(own, k));
-            if !holds {
-                return SelectionPlan::Skip;
+                    "select-units: candidate identity or state is unavailable",
+                )
             }
+            Some(true) => {}
         }
-        let effect = node.get("effect").cloned().unwrap_or(Value::Null);
+        let effect = retarget(
+            node.get("effect").unwrap_or(&Value::Null),
+            SELECTED_UNIT,
+            binding,
+        );
         (effect, None, "Selected unit")
     } else {
         let other = if opts.perspective == Attacker {
@@ -118,13 +124,18 @@ pub(super) fn plan_selection(node: &Obj, opts: &WalkOpts) -> SelectionPlan {
         } else {
             "attacker"
         };
-        let gate =
-            match selected_enemy_gate(keywords.as_deref(), excluded.as_deref(), opts.perspective) {
-                Ok(gate) => gate,
-                Err(reason) => return SelectionPlan::Unsupported(reason),
-            };
-        let effect = retarget(node.get("effect").unwrap_or(&Value::Null), other);
-        (effect, gate, "Selected enemy unit")
+        let mut gate = Obj::new();
+        gate.insert(
+            if opts.perspective == Attacker {
+                "targetFilter"
+            } else {
+                "attackerFilter"
+            }
+            .into(),
+            Value::Object(predicates),
+        );
+        let effect = retarget(node.get("effect").unwrap_or(&Value::Null), other, binding);
+        (effect, Some(gate), "Selected enemy unit")
     };
 
     if let Some(gated) = effect
@@ -150,69 +161,128 @@ pub(super) fn plan_selection(node: &Obj, opts: &WalkOpts) -> SelectionPlan {
     }
 }
 
-/// The keyword gate an enemy selector puts on the selected unit. When the crunched unit attacks,
-/// the selected unit is the defender and the gate reads the target's keywords; when it is attacked,
-/// only a single required keyword on the attacker can be gated.
-fn selected_enemy_gate(
-    keywords: Option<&[String]>,
-    excluded: Option<&[String]>,
-    perspective: TranslationPerspective,
-) -> Result<Option<Obj>, &'static str> {
-    let mut out = Obj::new();
-    if let Some(keywords) = keywords.filter(|k| !k.is_empty()) {
-        if keywords.len() > 1 {
-            return Err("select-units: more than one required keyword on the selected enemy unit is not gated by the buff layer");
-        }
-        let key = if perspective == Attacker {
-            "requiresTargetKeyword"
-        } else {
-            "requiresAttackerKeyword"
-        };
-        out.insert(key.into(), Value::from(keywords[0].clone()));
+/// Every matching model pool receives a quantified recipient effect; this is not a player choice.
+pub(super) fn bind_each_recipient(node: &Obj) -> Option<Value> {
+    bind_recipient(node, None)
+}
+
+pub(crate) fn bind_recipient(node: &Obj, target: Option<&Value>) -> Option<Value> {
+    let selector = object(node.get("selector"))?;
+    let filter = target.or_else(|| selector.get("filter").filter(|filter| filter.is_object()))?;
+    if target.is_none() && selector.contains_key("eligibility") {
+        return None;
     }
-    if let Some(excluded) = excluded.filter(|k| !k.is_empty()) {
-        if perspective != Attacker {
-            return Err(
-                "select-units: excluded keywords on the attacking unit are not gated by the buff layer",
-            );
+    fn bind(
+        value: &Value,
+        filter: &Value,
+        binding: Option<&str>,
+        found: &mut bool,
+        other: &mut bool,
+    ) -> Value {
+        match value {
+            Value::Array(values) => Value::Array(
+                values
+                    .iter()
+                    .map(|value| bind(value, filter, binding, found, other))
+                    .collect(),
+            ),
+            Value::Object(node)
+                if !matches!(
+                    node.get("type").and_then(Value::as_str),
+                    Some("select-units" | "for-each-unit")
+                ) =>
+            {
+                Value::Object(
+                    node.iter()
+                        .map(|(key, value)| {
+                            let recipient = value.as_str() == Some("recipient")
+                                || binding.is_some_and(|binding| {
+                                    value.get("selection_var").and_then(Value::as_str)
+                                        == Some(binding)
+                                });
+                            if key == "target" {
+                                *found |= recipient;
+                                *other |= !recipient;
+                            }
+                            let value = if key == "target" && recipient {
+                                filter.clone()
+                            } else {
+                                bind(value, filter, binding, found, other)
+                            };
+                            (key.clone(), value)
+                        })
+                        .collect(),
+                )
+            }
+            _ => value.clone(),
         }
-        out.insert(
-            "excludedTargetKeywords".into(),
-            Value::from(excluded.to_vec()),
-        );
     }
-    Ok((!out.is_empty()).then_some(out))
+    let mut found = false;
+    let mut other = false;
+    let effect = bind(
+        node.get("effect")?,
+        filter,
+        selector.get("bind_as").and_then(Value::as_str),
+        &mut found,
+        &mut other,
+    );
+    (found && !other).then_some(effect)
 }
 
 /// Does the effect name the selected unit as a target anywhere, outside a nested selection?
-fn references_selected_unit(node: &Value) -> bool {
+fn references_selected_unit(node: &Value, binding: Option<&str>) -> bool {
     match node {
-        Value::Array(a) => a.iter().any(references_selected_unit),
+        Value::Array(a) => a
+            .iter()
+            .any(|child| references_selected_unit(child, binding)),
         Value::Object(o) => {
             if is_str(o, "type", "select-units") {
                 return false;
             }
-            if is_str(o, "target", SELECTED_UNIT) {
+            let selected = |value: &Value| {
+                value.as_str() == Some(SELECTED_UNIT)
+                    || binding.is_some_and(|binding| {
+                        value.get("selection_var").and_then(Value::as_str) == Some(binding)
+                    })
+            };
+            if o.get("target").is_some_and(|target| {
+                selected(target) || target.get("member_of").is_some_and(selected)
+            }) {
                 return true;
             }
             o.iter()
-                .any(|(k, v)| k != "target" && references_selected_unit(v))
+                .any(|(k, v)| k != "target" && references_selected_unit(v, binding))
         }
         _ => false,
     }
 }
 
 /// Copy the effect with each `selected-unit` target replaced, leaving nested selections alone.
-fn retarget(node: &Value, target: &str) -> Value {
+fn retarget(node: &Value, target: &str, binding: Option<&str>) -> Value {
     match node {
-        Value::Array(a) => Value::Array(a.iter().map(|c| retarget(c, target)).collect()),
+        Value::Array(a) => Value::Array(a.iter().map(|c| retarget(c, target, binding)).collect()),
         Value::Object(o) if !is_str(o, "type", "select-units") => Value::Object(
             o.iter()
                 .map(|(k, v)| {
-                    let v = if k == "target" && v.as_str() == Some(SELECTED_UNIT) {
+                    let v = if k == "target"
+                        && (v.as_str() == Some(SELECTED_UNIT)
+                            || binding.is_some_and(|binding| {
+                                v.get("selection_var").and_then(Value::as_str) == Some(binding)
+                            })) {
                         Value::from(target)
+                    } else if k == "member_of"
+                        && (v.as_str() == Some(SELECTED_UNIT)
+                            || binding.is_some_and(|binding| {
+                                v.get("selection_var").and_then(Value::as_str) == Some(binding)
+                            }))
+                    {
+                        Value::from(if target == SELECTED_UNIT {
+                            "this-unit"
+                        } else {
+                            target
+                        })
                     } else {
-                        retarget(v, target)
+                        retarget(v, target, binding)
                     };
                     (k.clone(), v)
                 })
@@ -243,28 +313,6 @@ fn excludes_ability_unit(condition: Option<&Value>) -> bool {
         return operands.iter().any(|o| excludes_ability_unit(Some(o)));
     }
     false
-}
-
-/// TS `isKeywordList`: an array of non-empty strings.
-fn keyword_list(v: &Value) -> Option<Vec<String>> {
-    v.as_array()?
-        .iter()
-        .map(|k| k.as_str().filter(|s| !s.is_empty()).map(str::to_string))
-        .collect()
-}
-
-fn includes_keyword(keywords: &[String], keyword: &str) -> bool {
-    let lower = keyword.to_lowercase();
-    keywords.iter().any(|k| k.to_lowercase() == lower)
-}
-
-/// The crunched side's own keywords under the walk's perspective.
-fn own_keywords<'a>(opts: &WalkOpts<'a>) -> Option<&'a [String]> {
-    if opts.perspective == Attacker {
-        opts.context.attacker_keywords.as_deref()
-    } else {
-        opts.context.target_keywords.as_deref()
-    }
 }
 
 /// Offer a planned unit selection as one lever (`<abilityId>#selected`).
@@ -364,38 +412,12 @@ pub(super) fn scaled_to_cap(node: &Obj) -> Option<Obj> {
 
 /// In an ability another unit provides, effects on its own unit or model name that provider.
 pub(super) fn targets_provider(node: &Obj, opts: &WalkOpts) -> bool {
-    opts.ability_kind == Some(AbilityKind::Support)
+    !opts.granted_holder
+        && opts.ability_kind == Some(AbilityKind::Support)
         && node
             .get("target")
             .and_then(Value::as_str)
             .is_some_and(|t| PROVIDER_TARGETS.contains(&t))
-}
-
-/// Whether a friendly unit-filter target names keywords the crunched unit lacks. Only the plain
-/// keyword fields are read; a filter of alternatives is left to the alternatives check, and an
-/// unknown keyword list keeps the filter permissive.
-pub(super) fn friendly_filter_excludes(node: &Obj, opts: &WalkOpts) -> bool {
-    let Some(target) = object(node.get("target")) else {
-        return false;
-    };
-    if !is_str(target, "owner", "friendly")
-        || target.get("any_of_filters").is_some_and(Value::is_array)
-    {
-        return false;
-    }
-    let Some(own) = own_keywords(opts).filter(|k| k.iter().all(|s| !s.is_empty())) else {
-        return false;
-    };
-    let read = |k: &str| target.get(k).and_then(keyword_list);
-    let all = read("all_of").unwrap_or_default();
-    let any = read("any_of");
-    let none = read("none_of").unwrap_or_default();
-    let holds = all.iter().all(|k| includes_keyword(own, k))
-        && any
-            .as_ref()
-            .is_none_or(|any| any.iter().any(|k| includes_keyword(own, k)))
-        && !none.iter().any(|k| includes_keyword(own, k));
-    !holds
 }
 
 /// A change to another ability. Adding selections to the crunched unit's own ability raises the
@@ -433,6 +455,59 @@ pub(super) fn ability_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         buffs: Vec::new(),
         group: None,
         requires: None,
-        cap_raise: Some((ability.to_string(), by as i64)),
+        cap_raise: Some(super::CapRaise {
+            ability: ability.to_string(),
+            by: by as i64,
+            ..Default::default()
+        }),
+    });
+}
+
+/// Extra stance capacity keeps typed authored option references intact.
+pub(super) fn stance_capacity(node: &Obj, opts: &WalkOpts, out: &mut Out) {
+    let Some(modifier) = object(node.get("modifier")) else {
+        return;
+    };
+    let Some(ability) = modifier.get("ability_id").and_then(Value::as_str) else {
+        return;
+    };
+    let Some(by) = modifier
+        .get("additional_selections")
+        .and_then(Value::as_i64)
+        .filter(|by| *by > 0)
+    else {
+        return;
+    };
+    let option = modifier
+        .get("option")
+        .map(|value| serde_json::from_value(value.clone()))
+        .transpose();
+    let options = modifier
+        .get("options")
+        .map(|value| serde_json::from_value(value.clone()))
+        .transpose();
+    let (Ok(option), Ok(options)) = (option, options) else {
+        out.unsupported(
+            "stance-selection-capacity: malformed stable option reference",
+            node,
+        );
+        return;
+    };
+    out.activatable.push(Lever {
+        id: format!("{}#cap", opts.ability_id),
+        label: format!("{by} more {ability} selections"),
+        buffs: Vec::new(),
+        group: None,
+        requires: None,
+        cap_raise: Some(super::CapRaise {
+            ability: ability.into(),
+            by,
+            allocation: modifier
+                .get("allocation")
+                .and_then(Value::as_str)
+                .map(str::to_owned),
+            option,
+            options,
+        }),
     });
 }

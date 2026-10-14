@@ -11,6 +11,7 @@ export {
   type BuffContribution,
   type BuffSource,
   type EngineContext,
+  type RecipientSnapshot,
   type ResolveContext,
   type ResolvedModifiers,
   type WeaponKeywordRef,

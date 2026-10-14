@@ -39,7 +39,8 @@
               "operation": "add",
               "value": 1
             }
-          }
+          },
+          "id": "option-1"
         },
         {
           "name": "Rage-Fuelled Invigoration",
@@ -56,7 +57,8 @@
               "move_type": "consolidation",
               "distance": 6
             }
-          }
+          },
+          "id": "option-2"
         },
         {
           "name": "Total Carnage",
@@ -110,7 +112,8 @@
               },
               "on_fail": null
             }
-          }
+          },
+          "id": "option-3"
         },
         {
           "name": "Martial Excellence",
@@ -132,12 +135,20 @@
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
-                "Sustained Hits 1"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
             }
-          }
+          },
+          "id": "option-4"
         },
         {
           "name": "Warp Blades",
@@ -159,12 +170,17 @@
               "owner": "friendly"
             },
             "modifier": {
-              "abilities": [
-                "Lethal Hits"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lethal-hits"
+                }
+              ]
             }
-          }
+          },
+          "id": "option-5"
         },
         {
           "name": "Decapitating Strikes",
@@ -186,12 +202,14 @@
               "operator": "and",
               "operands": [
                 {
-                  "type": "has-keyword",
+                  "type": "matches",
                   "parameters": {
-                    "subject": "defender",
-                    "all_of": [
-                      "INFANTRY"
-                    ]
+                    "filter": {
+                      "all_of": [
+                        "INFANTRY"
+                      ]
+                    },
+                    "subject": "defender"
                   }
                 },
                 {
@@ -208,12 +226,15 @@
                 "owner": "friendly"
               },
               "modifier": {
-                "abilities": [
-                  "Devastating Wounds"
+                "keywords": [
+                  {
+                    "keyword_id": "devastating-wounds"
+                  }
                 ]
               }
             }
-          }
+          },
+          "id": "option-6"
         }
       ]
     },
@@ -269,7 +290,9 @@
               "modifier": {
                 "roll": "hit",
                 "subset": "ones",
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             },
             {
@@ -278,7 +301,9 @@
               "modifier": {
                 "roll": "wound",
                 "subset": "ones",
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           ]
@@ -329,12 +354,16 @@
           "operator": "not",
           "operands": [
             {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "owner": "enemy"
-                },
-                "range": "engagement"
+                "filter": {
+                  "within": {
+                    "range": "engagement",
+                    "of": {
+                      "owner": "enemy"
+                    }
+                  }
+                }
               }
             }
           ]
@@ -347,10 +376,13 @@
           "on_success": null,
           "on_fail": {
             "type": "destroy-models",
-            "target": "this-unit",
+            "target": {
+              "member_of": "this-unit",
+              "level": "model",
+              "attachment_role": "bodyguard"
+            },
             "modifier": {
-              "count": 1,
-              "exclude_leader": true
+              "count": 1
             }
           }
         }
@@ -582,12 +614,14 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "all_of": [
-            "FLY"
-          ]
+          "filter": {
+            "all_of": [
+              "FLY"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -632,12 +666,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "objective": {}
-          },
-          "range": "objective-control"
+          "filter": {
+            "within": {
+              "range": "objective-control",
+              "of": {
+                "objective": {}
+              }
+            }
+          }
         }
       },
       "effect": {
@@ -750,13 +788,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -766,7 +806,9 @@
           "stat": "D",
           "operation": "add",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -816,7 +858,9 @@
         "modifier": {
           "roll": "hit",
           "subset": "all-failures",
-          "weapon_type": "ranged"
+          "weapons": {
+            "type": "ranged"
+          }
         }
       }
     },
@@ -870,12 +914,16 @@
             "operator": "not",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "enemy"
-                  },
-                  "range": "engagement"
+                  "filter": {
+                    "within": {
+                      "range": "engagement",
+                      "of": {
+                        "owner": "enemy"
+                      }
+                    }
+                  }
                 }
               }
             ]
@@ -939,9 +987,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "designated",
+        "type": "matches",
         "parameters": {
-          "tag": "dual-melee"
+          "filter": {
+            "designated": "dual-melee"
+          }
         }
       },
       "effect": {
@@ -951,7 +1001,9 @@
           "stat": "A",
           "operation": "add",
           "value": 2,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -989,17 +1041,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "WORLD EATERS",
-              "INFANTRY"
-            ]
-          },
-          "range": {
-            "inches": 3
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "WORLD EATERS",
+                  "INFANTRY"
+                ]
+              }
+            }
           }
         }
       },
@@ -1051,11 +1107,15 @@
         "type": "weapon-ability-grant",
         "target": "this-model",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
-          ],
-          "weapon_type": "melee",
-          "weapon_name": "hellforged weapons"
+          "weapons": {
+            "type": "melee",
+            "name": "hellforged weapons"
+          },
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
+          ]
         }
       }
     },
@@ -1177,13 +1237,15 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "subject": "defender",
-              "any_of": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "VEHICLE"
+                ]
+              },
+              "subject": "defender"
             }
           }
         ]
@@ -1240,26 +1302,43 @@
     "ability_type": "unit",
     "behavior": "activated",
     "effect": {
-      "type": "designate-target",
-      "designation": "suppressed",
-      "select": {
-        "scope": "enemy-unit",
-        "count": 1,
-        "timing": "after-this-unit-shoots"
-      },
-      "applies": {
-        "to": "target",
-        "effect": {
-          "type": "roll-modifier",
-          "target": "this-unit",
-          "modifier": {
-            "roll": "hit",
-            "operation": "subtract",
-            "value": 1
-          }
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": "this-unit",
+        "filter": {
+          "kind": "shoot"
         }
       },
-      "duration": "until-next-command-phase"
+      "effect": {
+        "type": "designate-target",
+        "designation": "suppressed",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        },
+        "applies": {
+          "to": "target",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        "duration": "until-next-command-phase"
+      }
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -1377,7 +1456,9 @@
             "modifier": {
               "roll": "hit",
               "subset": "all-failures",
-              "weapon_type": "ranged"
+              "weapons": {
+                "type": "ranged"
+              }
             }
           }
         },
@@ -1478,8 +1559,13 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "count": 1,
-        "owner": "enemy"
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "mortal-wounds",
@@ -1531,12 +1617,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "MONSTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "MONSTER"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1545,12 +1633,14 @@
             "operator": "not",
             "operands": [
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "VEHICLE"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "VEHICLE"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -1565,7 +1655,9 @@
             "target": {
               "owner": "friendly",
               "within": {
-                "range": {"inches":6}
+                "range": {
+                  "inches": 6
+                }
               }
             },
             "modifier": {
@@ -1856,13 +1948,17 @@
             }
           },
           {
-            "type": "within",
+            "type": "matches",
             "parameters": {
-              "of": {
-                "owner": "enemy"
-              },
-              "range": {
-                "inches": 9
+              "filter": {
+                "within": {
+                  "range": {
+                    "inches": 9
+                  },
+                  "of": {
+                    "owner": "enemy"
+                  }
+                }
               }
             }
           }
@@ -2167,12 +2263,14 @@
                 }
               },
               {
-                "type": "has-keyword",
+                "type": "matches",
                 "parameters": {
-                  "subject": "defender",
-                  "all_of": [
-                    "CHARACTER"
-                  ]
+                  "filter": {
+                    "all_of": [
+                      "CHARACTER"
+                    ]
+                  },
+                  "subject": "defender"
                 }
               }
             ]
@@ -2186,7 +2284,9 @@
                 "modifier": {
                   "roll": "hit",
                   "subset": "all-failures",
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               },
               {
@@ -2195,7 +2295,9 @@
                 "modifier": {
                   "roll": "wound",
                   "subset": "all-failures",
-                  "weapon_type": "melee"
+                  "weapons": {
+                    "type": "melee"
+                  }
                 }
               }
             ]
@@ -2336,13 +2438,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "enemy"
-          },
-          "range": {
-            "inches": 12
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": {
+                "owner": "enemy"
+              }
+            }
           }
         }
       },
@@ -2446,9 +2552,14 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "owner": "enemy",
-        "count": 1,
-        "engagement_relation": "engaged-with-bearer"
+        "filter": {
+          "owner": "enemy",
+          "engaged_with": "this-model"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
       },
       "effect": {
         "type": "dice-table",
@@ -2628,16 +2739,20 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "WORLD EATERS"
-            ]
-          },
-          "range": {
-            "inches": 12
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 12
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "WORLD EATERS"
+                ]
+              }
+            }
           }
         }
       },
@@ -2711,10 +2826,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "unit-state",
+                "type": "matches",
                 "parameters": {
-                  "subject": "this-model",
-                  "state": "on-battlefield"
+                  "filter": {
+                    "state": "on-battlefield"
+                  },
+                  "subject": "this-model"
                 }
               }
             ]
@@ -2799,157 +2916,170 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "stance-select",
-      "mode": "re-selectable",
-      "scope": "unit",
-      "select": "start-of-battle-round",
-      "options": [
-        {
-          "name": "The Blood God's Favour",
-          "effect": {
-            "type": "conditional",
-            "condition": {
-              "type": "unit-state",
-              "parameters": {
-                "state": "on-battlefield"
-              }
-            },
+      "type": "ability-part",
+      "trigger": {
+        "event": "round-started"
+      },
+      "effect": {
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "options": [
+          {
+            "name": "The Blood God's Favour",
             "effect": {
-              "type": "re-roll",
-              "target": "this-model",
-              "modifier": {
-                "roll": "blessings-of-khorne",
-                "result_scope": "any-result",
-                "count": 6
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "state": "on-battlefield"
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-model",
+                "modifier": {
+                  "roll": "blessings-of-khorne",
+                  "result_scope": "any-result",
+                  "count": 6
+                }
               }
-            }
-          }
-        },
-        {
-          "name": "Overwhelming Wrath",
-          "effect": {
-            "type": "dice-gated",
-            "dice": "2D6",
-            "threshold": "leadership",
-            "comparison": "gte",
-            "test": {
-              "kind": "leadership",
-              "subject": "target"
             },
-            "on_fail": {
-              "type": "permission",
-              "target": {
-                "owner": "enemy",
-                "within": {
-                  "range": {
-                    "inches": 6
+            "id": "option-1"
+          },
+          {
+            "name": "Overwhelming Wrath",
+            "effect": {
+              "type": "dice-gated",
+              "dice": "2D6",
+              "threshold": "leadership",
+              "comparison": "gte",
+              "test": {
+                "kind": "leadership",
+                "subject": "event-subject"
+              },
+              "on_fail": {
+                "type": "permission",
+                "target": {
+                  "owner": "enemy",
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": "this-model"
+                  }
+                },
+                "modifier": {
+                  "activity": "fall-back",
+                  "allow": false
+                }
+              }
+            },
+            "id": "option-2"
+          },
+          {
+            "name": "Driven by Ultimate Rage",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "ignore-modifiers",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
                   },
-                  "of": "this-model"
+                  "modifier": {
+                    "what": "characteristics",
+                    "stats": [
+                      "M"
+                    ]
+                  }
+                },
+                {
+                  "type": "ignore-modifiers",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "what": "rolls",
+                    "rolls": [
+                      "advance",
+                      "charge"
+                    ]
+                  }
+                },
+                {
+                  "type": "ignore-modifiers",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "what": "characteristics",
+                    "stats": [
+                      "WS"
+                    ],
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
+                },
+                {
+                  "type": "ignore-modifiers",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "what": "rolls",
+                    "rolls": [
+                      "hit"
+                    ],
+                    "weapons": {
+                      "type": "melee"
+                    }
+                  }
                 }
-              },
-              "modifier": {
-                "activity": "fall-back",
-                "allow": false
-              }
-            }
+              ]
+            },
+            "id": "option-3"
           }
-        },
-        {
-          "name": "Driven by Ultimate Rage",
-          "effect": {
-            "type": "sequence",
-            "steps": [
-              {
-                "type": "ignore-modifiers",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "WORLD EATERS"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "what": "characteristics",
-                  "stats": [
-                    "M"
-                  ]
-                }
-              },
-              {
-                "type": "ignore-modifiers",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "WORLD EATERS"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "what": "rolls",
-                  "rolls": [
-                    "advance",
-                    "charge"
-                  ]
-                }
-              },
-              {
-                "type": "ignore-modifiers",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "WORLD EATERS"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "what": "characteristics",
-                  "stats": [
-                    "WS"
-                  ],
-                  "weapon_type": "melee"
-                }
-              },
-              {
-                "type": "ignore-modifiers",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "WORLD EATERS"
-                  ],
-                  "within": {
-                    "range": {
-                      "inches": 6
-                    },
-                    "of": "this-model"
-                  }
-                },
-                "modifier": {
-                  "what": "rolls",
-                  "rolls": [
-                    "hit"
-                  ],
-                  "weapon_type": "melee"
-                }
-              }
-            ]
-          }
-        }
-      ]
+        ]
+      }
     },
     "scope": {
       "duration": "battle-round"
@@ -2989,29 +3119,38 @@
             }
           },
           {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "command"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
           }
         ]
       },
       "effect": {
         "type": "return-models",
-        "target": "this-unit",
+        "target": {
+          "level": "model",
+          "member_of": "this-unit",
+          "attachment_role": "bodyguard"
+        },
         "modifier": {
           "count": 1
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     }
   },
   {
@@ -3042,17 +3181,23 @@
             "stat": "A",
             "operation": "add",
             "value": 3,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
           "type": "weapon-ability-grant",
           "target": "this-model",
           "modifier": {
-            "abilities": [
-              "Devastating Wounds"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "devastating-wounds"
+              }
+            ]
           }
         }
       ]
@@ -3171,7 +3316,9 @@
               "stat": "A",
               "operation": "add",
               "value": 1,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
@@ -3181,7 +3328,9 @@
               "stat": "S",
               "operation": "add",
               "value": 2,
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           }
         ]
@@ -3221,11 +3370,13 @@
         "operator": "and",
         "operands": [
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "all_of": [
-                "POSSESSED"
-              ]
+              "filter": {
+                "all_of": [
+                  "POSSESSED"
+                ]
+              }
             }
           },
           {
@@ -3251,7 +3402,7 @@
     },
     "community_notes": "In your opponent's Shooting phase, when an enemy unit has shot, if a model in this unit was destroyed, the unit can make a D6\" Brazen Fury surge move.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "POSSESSED"
       ]
     },
@@ -3307,10 +3458,17 @@
           "type": "weapon-ability-grant",
           "target": "event-subject",
           "modifier": {
-            "abilities": [
-              "Cleave 1"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "cleave",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ]
           }
         },
         {
@@ -3320,7 +3478,9 @@
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -3353,11 +3513,11 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "CHARACTER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "EPIC HERO"
       ]
     }
@@ -3467,10 +3627,14 @@
                       ]
                     },
                     "modifier": {
-                      "abilities": [
-                        "Lance"
-                      ],
-                      "weapon_type": "melee"
+                      "weapons": {
+                        "type": "melee"
+                      },
+                      "keywords": [
+                        {
+                          "keyword_id": "lance"
+                        }
+                      ]
                     }
                   }
                 ]
@@ -3622,10 +3786,14 @@
             "owner": "friendly"
           },
           "modifier": {
-            "abilities": [
-              "Lance"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lance"
+              }
+            ]
           }
         }
       ]
@@ -3644,7 +3812,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -3702,7 +3870,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -3762,7 +3930,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -3785,141 +3953,341 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "has-keyword",
-        "parameters": {
-          "any_of": [
-            "TITANIC",
-            "MONSTER"
-          ]
-        }
-      },
-      "effect": {
-        "type": "choice",
-        "choice_label": "Idols of Khorne",
-        "options": [
-          {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "has-keyword",
-                  "parameters": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "options": [
+        {
+          "id": "idol-of-infinite-rage",
+          "name": "Idol of Infinite Rage",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "roll-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "roll": "hit",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "roll-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "roll": "wound",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      }
+                    ]
+                  },
+                  "eligible": {
+                    "owner": "friendly",
                     "any_of": [
-                      "JAKHALS",
-                      "GOREMONGERS"
+                      "GOREMONGERS",
+                      "JAKHALS"
+                    ]
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ],
+                    "none_of": [
+                      "TITANIC"
                     ]
                   }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "roll-modifier",
-                      "target": "recipient",
-                      "modifier": {
-                        "roll": "hit",
-                        "operation": "add",
-                        "value": 1
-                      }
-                    },
-                    {
-                      "type": "roll-modifier",
-                      "target": "recipient",
-                      "modifier": {
-                        "roll": "wound",
-                        "operation": "add",
-                        "value": 1
-                      }
-                    }
-                  ]
                 }
-              }
-            }
-          },
-          {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "has-keyword",
-                  "parameters": {
-                    "any_of": [
-                      "JAKHALS",
-                      "GOREMONGERS"
+              },
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 9
+                  },
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "roll-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "roll": "hit",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "roll-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "roll": "wound",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      }
                     ]
-                  }
-                },
-                "effect": {
-                  "type": "sequence",
-                  "steps": [
-                    {
-                      "type": "stat-modifier",
-                      "target": "recipient",
-                      "modifier": {
-                        "stat": "M",
-                        "operation": "add",
-                        "value": 1
-                      }
-                    },
-                    {
-                      "type": "roll-modifier",
-                      "target": "recipient",
-                      "modifier": {
-                        "roll": "advance",
-                        "operation": "add",
-                        "value": 1
-                      }
-                    },
-                    {
-                      "type": "roll-modifier",
-                      "target": "recipient",
-                      "modifier": {
-                        "roll": "charge",
-                        "operation": "add",
-                        "value": 1
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          {
-            "type": "aura",
-            "target": "friendly-within-aura",
-            "modifier": {
-              "range": 6,
-              "effect": {
-                "type": "conditional",
-                "condition": {
-                  "type": "has-keyword",
-                  "parameters": {
+                  },
+                  "eligible": {
+                    "owner": "friendly",
                     "any_of": [
-                      "JAKHALS",
-                      "GOREMONGERS"
+                      "GOREMONGERS",
+                      "JAKHALS"
                     ]
-                  }
-                },
-                "effect": {
-                  "type": "invulnerable-save",
-                  "target": "recipient",
-                  "modifier": {
-                    "invuln_sv": 4
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS",
+                      "TITANIC"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ]
                   }
                 }
               }
-            }
+            ]
           }
-        ]
-      }
+        },
+        {
+          "id": "idol-of-burning-wrath",
+          "name": "Idol of Burning Wrath",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "stat-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "roll-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "advance",
+                              "operation": "add",
+                              "value": 1
+                            }
+                          },
+                          {
+                            "type": "roll-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "charge",
+                              "operation": "add",
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "GOREMONGERS",
+                      "JAKHALS"
+                    ]
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ],
+                    "none_of": [
+                      "TITANIC"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 9
+                  },
+                  "effect": {
+                    "type": "sequence",
+                    "steps": [
+                      {
+                        "type": "stat-modifier",
+                        "target": "recipient",
+                        "modifier": {
+                          "stat": "M",
+                          "operation": "add",
+                          "value": 1
+                        }
+                      },
+                      {
+                        "type": "sequence",
+                        "steps": [
+                          {
+                            "type": "roll-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "advance",
+                              "operation": "add",
+                              "value": 1
+                            }
+                          },
+                          {
+                            "type": "roll-modifier",
+                            "target": "this-unit",
+                            "modifier": {
+                              "roll": "charge",
+                              "operation": "add",
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "GOREMONGERS",
+                      "JAKHALS"
+                    ]
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS",
+                      "TITANIC"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "idol-of-blessed-blood",
+          "name": "Idol of Blessed Blood",
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "effect": {
+                    "type": "invulnerable-save",
+                    "target": "this-unit",
+                    "modifier": {
+                      "invuln_sv": 4
+                    }
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "GOREMONGERS",
+                      "JAKHALS"
+                    ]
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ],
+                    "none_of": [
+                      "TITANIC"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "aura",
+                "target": "friendly-within-aura",
+                "modifier": {
+                  "range": {
+                    "inches": 9
+                  },
+                  "effect": {
+                    "type": "invulnerable-save",
+                    "target": "this-unit",
+                    "modifier": {
+                      "invuln_sv": 4
+                    }
+                  },
+                  "eligible": {
+                    "owner": "friendly",
+                    "any_of": [
+                      "GOREMONGERS",
+                      "JAKHALS"
+                    ]
+                  },
+                  "emitter_filter": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "WORLD EATERS",
+                      "TITANIC"
+                    ],
+                    "any_of": [
+                      "MONSTER",
+                      "TITANIC"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "min_choices": 1,
+      "max_choices": 1
     },
     "scope": {
       "duration": "until-next-command-phase"
@@ -3928,11 +4296,23 @@
     "trigger": {
       "event": "phase-started",
       "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "command"
-        }
-      }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
     }
   },
   {
@@ -3967,10 +4347,14 @@
           "type": "weapon-ability-grant",
           "target": "event-subject",
           "modifier": {
-            "abilities": [
-              "Lance"
-            ],
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            },
+            "keywords": [
+              {
+                "keyword_id": "lance"
+              }
+            ]
           }
         }
       ]
@@ -4014,7 +4398,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4024,7 +4410,9 @@
             "stat": "D",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -4033,7 +4421,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     },
@@ -4066,7 +4454,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -4100,7 +4488,7 @@
     },
     "community_notes": "[APPROX] Modeled as re-rolling the Blessings of Khorne roll while the bearer is on the battlefield; the cap of re-rolling only up to two of the D6 is not modeled (upper bound).",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -4137,7 +4525,10 @@
           "condition": {
             "type": "rule-active",
             "parameters": {
-              "rule": "unbridled-bloodlust"
+              "rule": {
+                "ability_id": "blessings-of-khorne-world-eaters",
+                "option_id": "option-1"
+              }
             }
           },
           "effect": {
@@ -4156,7 +4547,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -4189,7 +4580,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "MONSTER"
       ]
@@ -4249,7 +4640,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "INFANTRY"
       ]
@@ -4297,7 +4688,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "MONSTER"
       ]
@@ -4322,11 +4713,16 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 3,
-        "keywords": [
-          "Jakhals or Goremongers"
-        ],
-        "owner": "friendly"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "Jakhals or Goremongers"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
+        }
       },
       "effect": {
         "type": "set-up",
@@ -4341,7 +4737,7 @@
     },
     "community_notes": "After both players deploy, redeploy up to three JAKHALS and/or GOREMONGERS units; they may be set up in Strategic Reserves regardless of Reserves limits.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     },
@@ -4407,10 +4803,12 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
-          "subject": "this-model",
-          "state": "embarked"
+          "filter": {
+            "state": "embarked"
+          },
+          "subject": "this-model"
         }
       },
       "effect": {
@@ -4472,35 +4870,62 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "max_count": 1,
-          "keywords": [
-            "VEHICLE"
-          ],
-          "owner": "friendly",
-          "within_inches": 6,
-          "target_kind": "model"
-        },
-        "effect": {
-          "type": "designate-target",
-          "designation": "suppressed",
-          "select": {
-            "scope": "enemy-unit",
-            "count": 1,
-            "timing": "after-this-unit-shoots"
-          },
-          "applies": {
-            "to": "target",
-            "effect": {
-              "type": "roll-modifier",
-              "target": "selected-unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
-              }
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "VEHICLE"
+            ],
+            "level": "model",
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
             }
           },
-          "duration": "until-next-command-phase"
+          "count": {
+            "min": 0,
+            "max": 1
+          }
+        },
+        "effect": {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "this-unit",
+            "filter": {
+              "kind": "shoot"
+            }
+          },
+          "effect": {
+            "type": "designate-target",
+            "designation": "suppressed",
+            "select": {
+              "kind": "unit",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                }
+              }
+            },
+            "applies": {
+              "to": "target",
+              "effect": {
+                "type": "roll-modifier",
+                "target": "selected-unit",
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "subtract",
+                  "value": 1
+                }
+              }
+            },
+            "duration": "until-next-command-phase"
+          }
         }
       }
     },
@@ -4509,7 +4934,7 @@
     },
     "community_notes": "[APPROX] The suppressed unit must have been hit by the selected vehicle's attacks and the vehicle is chosen within 6\" of the bearer (or is its transport); the hit-gate and the 6\" pick are not modeled.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -4545,7 +4970,7 @@
       "count": 1
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     },
@@ -4578,16 +5003,20 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "BLOOD LEGIONS"
-            ]
-          },
-          "range": {
-            "inches": 6
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "BLOOD LEGIONS"
+                ]
+              }
+            }
           }
         }
       },
@@ -4757,7 +5186,7 @@
       "duration": "battle"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "LORD ON JUGGERNAUT"
       ]
     },
@@ -4789,7 +5218,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4799,7 +5230,9 @@
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4809,7 +5242,9 @@
             "stat": "D",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -4839,7 +5274,7 @@
     },
     "community_notes": "Melee weapons get +1 A/S/D; each time the bearer's unit destroys an enemy unit in melee you automatically gain 1 Blood Tithe point (no 3+ roll needed).",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -4887,7 +5322,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "SLAUGHTERBOUND"
       ]
     },
@@ -4959,7 +5394,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "DAEMON"
       ]
@@ -5005,7 +5440,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "DAEMON"
       ]
@@ -5054,7 +5489,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Unbridled Bloodlust"
+              "option": "option-1"
             }
           },
           {
@@ -5062,7 +5497,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Rage-Fuelled Invigoration"
+              "option": "option-2"
             }
           },
           {
@@ -5070,7 +5505,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Total Carnage"
+              "option": "option-3"
             }
           },
           {
@@ -5078,7 +5513,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Martial Excellence"
+              "option": "option-4"
             }
           },
           {
@@ -5086,7 +5521,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Warp Blades"
+              "option": "option-5"
             }
           },
           {
@@ -5094,7 +5529,7 @@
             "target": "this-unit",
             "modifier": {
               "ability": "blessings-of-khorne-world-eaters",
-              "option": "Decapitating Strikes"
+              "option": "option-6"
             }
           }
         ]
@@ -5149,7 +5584,7 @@
     },
     "community_notes": "WORLD EATERS DAEMON PRINCE model only: the bearer has MOBILE and adds 1 to Charge rolls.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "DAEMON PRINCE"
       ]
@@ -5186,7 +5621,9 @@
           "stat": "AP",
           "operation": "improve",
           "value": 1,
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          }
         }
       }
     },
@@ -5194,7 +5631,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     },
@@ -5457,7 +5894,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "KHORNE",
         "BERZERKERS"
       ]
@@ -5522,32 +5959,44 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "any_of": [
-            "MONSTER",
-            "TITANIC"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "TITANIC"
+            ]
+          }
         }
       },
       "effect": {
         "type": "designate-target",
         "designation": "bloody-vengeance",
         "select": {
-          "scope": "enemy-unit",
-          "count": 1
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          }
         },
         "applies": {
           "to": "attackers-of-target",
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "any_of": [
-                  "JAKHALS",
-                  "GOREMONGERS"
-                ]
+                "filter": {
+                  "any_of": [
+                    "JAKHALS",
+                    "GOREMONGERS"
+                  ]
+                }
               }
             },
             "effect": {
@@ -5605,12 +6054,14 @@
             }
           },
           {
-            "type": "has-keyword",
+            "type": "matches",
             "parameters": {
-              "any_of": [
-                "MONSTER",
-                "TITANIC"
-              ]
+              "filter": {
+                "any_of": [
+                  "MONSTER",
+                  "TITANIC"
+                ]
+              }
             }
           }
         ]
@@ -5658,7 +6109,7 @@
     },
     "community_notes": "[APPROX] The selected Idol is active for this unit instead of any other active Idol and may repeat an already-used Idol; the grant_type slugs are display labels for the three Idols of Khorne auras (see idols-of-khorne), not ability_id references.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS"
       ]
     }
@@ -5695,30 +6146,38 @@
             "operator": "and",
             "operands": [
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "WORLD EATERS"
-                    ]
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "WORLD EATERS"
+                        ]
+                      }
+                    }
                   }
                 }
               },
               {
-                "type": "within",
+                "type": "matches",
                 "parameters": {
-                  "of": {
-                    "owner": "friendly",
-                    "all_of": [
-                      "MONSTER"
-                    ]
-                  },
-                  "range": {
-                    "inches": 6
+                  "filter": {
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "MONSTER"
+                        ]
+                      }
+                    }
                   }
                 }
               }
@@ -5738,7 +6197,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "JAKHALS"
       ]
     },
@@ -5777,22 +6236,28 @@
             "modifier": {
               "roll": "hit",
               "subset": "ones",
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              }
             }
           },
           {
             "type": "conditional",
             "condition": {
-              "type": "within",
+              "type": "matches",
               "parameters": {
-                "of": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "MONSTER"
-                  ]
-                },
-                "range": {
-                  "inches": 6
+                "filter": {
+                  "within": {
+                    "range": {
+                      "inches": 6
+                    },
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "MONSTER"
+                      ]
+                    }
+                  }
                 }
               }
             },
@@ -5802,7 +6267,9 @@
               "modifier": {
                 "roll": "wound",
                 "subset": "ones",
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           }
@@ -5870,16 +6337,20 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "TRANSPORT"
-            ]
-          },
-          "range": {
-            "inches": 6
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "TRANSPORT"
+                ]
+              }
+            }
           }
         }
       },
@@ -5905,7 +6376,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "INFANTRY"
       ]
@@ -5965,7 +6436,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "VEHICLE"
       ]
@@ -6009,11 +6480,16 @@
       "effect": {
         "type": "select-units",
         "selector": {
-          "count": 1,
-          "owner": "friendly",
-          "keywords": [
-            "WORLD EATERS"
-          ],
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "WORLD EATERS"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
           "eligibility": {
             "type": "unit-state",
             "parameters": {
@@ -6043,7 +6519,7 @@
     },
     "community_notes": "[APPROX] The Rhino must not have been selected to move this phase (precondition not modeled). The disembarking unit sets up wholly within 6\" of the Rhino and may be placed within Engagement Range.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "RHINO"
       ]
@@ -6181,7 +6657,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "VEHICLE"
       ]
@@ -6229,11 +6705,16 @@
           {
             "type": "select-units",
             "selector": {
-              "count": 1,
-              "owner": "friendly",
-              "keywords": [
-                "KHORNE BERZERKERS"
-              ],
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "KHORNE BERZERKERS"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              },
               "eligibility": {
                 "type": "unit-state",
                 "parameters": {
@@ -6265,7 +6746,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "RHINO"
       ]
     },
@@ -6290,13 +6771,22 @@
     "effect": {
       "type": "select-units",
       "selector": {
-        "max_count": 1,
-        "owner": "friendly",
-        "keywords": [
-          "WORLD EATERS"
-        ],
-        "within_inches": 6,
-        "reference": "bearer-unit"
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "WORLD EATERS"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-unit"
+          }
+        },
+        "count": {
+          "min": 0,
+          "max": 1
+        }
       },
       "effect": {
         "type": "sequence",
@@ -6305,10 +6795,14 @@
             "type": "weapon-ability-grant",
             "target": "selected-unit",
             "modifier": {
-              "abilities": [
-                "Lance"
-              ],
-              "weapon_type": "melee"
+              "weapons": {
+                "type": "melee"
+              },
+              "keywords": [
+                {
+                  "keyword_id": "lance"
+                }
+              ]
             }
           },
           {
@@ -6323,10 +6817,14 @@
               "type": "weapon-ability-grant",
               "target": "selected-unit",
               "modifier": {
-                "abilities": [
-                  "Twin-linked"
-                ],
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                },
+                "keywords": [
+                  {
+                    "keyword_id": "twin-linked"
+                  }
+                ]
               }
             }
           }
@@ -6337,7 +6835,7 @@
       "duration": "turn"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -6578,7 +7076,9 @@
         "to": "battlefield",
         "from": "strategic-reserves",
         "subject": "stratagem-target",
-        "min_enemy_distance": 6,
+        "min_enemy_distance": {
+          "inches": 6
+        },
         "placement": "anywhere"
       }
     },
@@ -6632,11 +7132,13 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "MOUNTED"
-                ]
+                "filter": {
+                  "all_of": [
+                    "MOUNTED"
+                  ]
+                }
               }
             },
             "effect": {
@@ -6657,11 +7159,13 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "BEAST"
-                ]
+                "filter": {
+                  "all_of": [
+                    "BEAST"
+                  ]
+                }
               }
             },
             "effect": {
@@ -6682,11 +7186,13 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "INFANTRY"
-                ]
+                "filter": {
+                  "all_of": [
+                    "INFANTRY"
+                  ]
+                }
               }
             },
             "effect": {
@@ -6711,7 +7217,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -6744,7 +7250,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "Blood Legions"
       ]
     },
@@ -6800,11 +7306,13 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "EIGHTBOUND"
-                ]
+                "filter": {
+                  "all_of": [
+                    "EIGHTBOUND"
+                  ]
+                }
               }
             },
             "effect": {
@@ -6814,18 +7322,22 @@
                 "stat": "D",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           },
           {
             "type": "conditional",
             "condition": {
-              "type": "has-keyword",
+              "type": "matches",
               "parameters": {
-                "all_of": [
-                  "EXALTED EIGHTBOUND"
-                ]
+                "filter": {
+                  "all_of": [
+                    "EXALTED EIGHTBOUND"
+                  ]
+                }
               }
             },
             "effect": {
@@ -6835,7 +7347,9 @@
                 "stat": "D",
                 "operation": "add",
                 "value": 1,
-                "weapon_type": "melee"
+                "weapons": {
+                  "type": "melee"
+                }
               }
             }
           }
@@ -6846,7 +7360,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "POSSESSED"
       ]
@@ -6881,7 +7395,17 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Defensive: each time an attack targets the unit, subtract 1 from the attacker's Wound roll (modeled attacker-side, as icon-of-obstinacy / rugged-resilience do). Reactive stratagem, used just after an enemy selects targets in the opponent's Shooting or Fight phase."
+    "community_notes": "Defensive: each time an attack targets the unit, subtract 1 from the attacker's Wound roll (modeled attacker-side, as icon-of-obstinacy / rugged-resilience do). Reactive stratagem, used just after an enemy selects targets in the opponent's Shooting or Fight phase.",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    }
   },
   {
     "ability_id": "immortal-fury-possessed-slaughterband-world-eaters",
@@ -6919,7 +7443,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "POSSESSED"
       ]
@@ -6967,7 +7491,9 @@
         "modifier": {
           "to": "battlefield",
           "via": "deep-strike",
-          "min_enemy_distance": 6
+          "min_enemy_distance": {
+            "inches": 6
+          }
         }
       }
     },
@@ -7038,7 +7564,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "POSSESSED"
       ]
@@ -7116,7 +7642,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "POSSESSED"
       ]
@@ -7148,7 +7674,9 @@
             "stat": "A",
             "operation": "add",
             "value": 1,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         },
         {
@@ -7158,7 +7686,9 @@
             "stat": "S",
             "operation": "add",
             "value": 2,
-            "weapon_type": "melee"
+            "weapons": {
+              "type": "melee"
+            }
           }
         }
       ]
@@ -7190,11 +7720,11 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "CHARACTER"
       ],
-      "excluded_keywords": [
+      "none_of": [
         "EPIC HERO"
       ]
     },
@@ -7233,9 +7763,11 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-state",
+            "type": "matches",
             "parameters": {
-              "state": "battle-shocked"
+              "filter": {
+                "state": "battle-shocked"
+              }
             }
           },
           "effect": {
@@ -7323,11 +7855,15 @@
           "effect": {
             "type": "select-units",
             "selector": {
-              "max_count": 1,
-              "owner": "enemy",
-              "engagement_relation": "engaged-with-bearer",
-              "reference": "bearer-unit",
-              "selection_limit": {
+              "filter": {
+                "owner": "enemy",
+                "engaged_with": "this-unit"
+              },
+              "count": {
+                "min": 0,
+                "max": 1
+              },
+              "limit": {
                 "count": 1,
                 "period": "phase"
               }
@@ -7361,7 +7897,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAEMON",
         "VEHICLE"
       ]
@@ -7388,10 +7924,17 @@
       "type": "weapon-ability-grant",
       "target": "this-model",
       "modifier": {
-        "abilities": [
-          "Cleave 2"
-        ],
-        "weapon_name": "Maulerfiend Fists"
+        "weapons": {
+          "name": "Maulerfiend Fists"
+        },
+        "keywords": [
+          {
+            "keyword_id": "cleave",
+            "parameters": {
+              "value": 2
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -7429,7 +7972,7 @@
     },
     "community_notes": "WORLD EATERS VEHICLE model only: the unit gains the DAEMON keyword.",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "WORLD EATERS",
         "VEHICLE"
       ]
@@ -7502,7 +8045,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAEMON",
         "VEHICLE"
       ]
@@ -7557,7 +8100,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "DAEMON",
         "VEHICLE"
       ]
@@ -7582,21 +8125,16 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
           },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
+          "window": "event"
+        }
       },
       "effect": {
         "type": "move",
@@ -7608,9 +8146,29 @@
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
-    "community_notes": "When an enemy unit that targeted a friendly unengaged DAEMON VEHICLE (excluding TITANIC) has shot, that unit can make a surge move of up to D6\"."
+    "community_notes": "When an enemy unit that targeted a friendly unengaged DAEMON VEHICLE (excluding TITANIC) has shot, that unit can make a surge move of up to D6\".",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "DAEMON",
+              "VEHICLE"
+            ]
+          }
+        }
+      }
+    }
   },
   {
     "ability_id": "adamantine-avalanche-world-eaters",
@@ -7631,15 +8189,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-state",
+        "type": "matches",
         "parameters": {
+          "filter": {
+            "state": "engaged"
+          },
           "subject": {
             "owner": "friendly",
             "all_of": [
               "TERMINATOR SQUAD"
             ]
-          },
-          "state": "engaged"
+          }
         }
       },
       "effect": {
@@ -7659,7 +8219,7 @@
       "duration": "phase"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TERMINATOR SQUAD"
       ]
     },
@@ -7703,7 +8263,7 @@
       "duration": "permanent"
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TERMINATOR SQUAD"
       ]
     }
@@ -7731,7 +8291,9 @@
         "stat": "WS",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -7739,7 +8301,7 @@
     },
     "community_notes": "+1 Weapon Skill on melee attacks, modeled as a WS characteristic modifier (distinct from +1 to Hit; the two stack and must not collide under the single +1-to-Hit cap).",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TERMINATOR SQUAD"
       ]
     }
@@ -7767,7 +8329,9 @@
         "stat": "A",
         "operation": "add",
         "value": 1,
-        "weapon_type": "melee"
+        "weapons": {
+          "type": "melee"
+        }
       }
     },
     "scope": {
@@ -7793,13 +8357,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "has-keyword",
+        "type": "matches",
         "parameters": {
-          "subject": "defender",
-          "any_of": [
-            "MONSTER",
-            "VEHICLE"
-          ]
+          "filter": {
+            "any_of": [
+              "MONSTER",
+              "VEHICLE"
+            ]
+          },
+          "subject": "defender"
         }
       },
       "effect": {
@@ -7835,39 +8401,44 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
-            }
-          }
-        ]
+        "type": "attack-is",
+        "parameters": {
+          "attack_type": "ranged"
+        }
       },
       "effect": {
-        "type": "damage-reduction",
-        "target": "this-unit",
+        "type": "stat-modifier",
+        "target": "attacker",
         "modifier": {
-          "reduction": 1,
-          "weapon_type": "ranged"
+          "stat": "D",
+          "operation": "worsen",
+          "value": 1
         }
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "attack-sequence"
     },
     "community_notes": "lasts until the attacking enemy unit has finished its attacks",
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "TERMINATOR SQUAD"
       ]
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "TERMINATOR SQUAD"
+        ]
+      }
     }
   },
   {
@@ -7897,7 +8468,20 @@
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound."
+    "community_notes": "Friendly WORLD EATERS CHARACTER (excluding EPIC HERO) gains Feel No Pain 4+ against mortal wounds when it suffers a mortal wound.",
+    "trigger": {
+      "event": "damage-allocated",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "WORLD EATERS"
+        ],
+        "none_of": [
+          "EPIC HERO"
+        ]
+      }
+    }
   },
   {
     "ability_id": "lord-of-murder-vorrakh-lord-of-the-frenzied-reavers-world-eaters",
@@ -7920,17 +8504,21 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "within",
+        "type": "matches",
         "parameters": {
-          "of": {
-            "owner": "friendly",
-            "all_of": [
-              "FRENZIED REAVERS",
-              "INFANTRY"
-            ]
-          },
-          "range": {
-            "inches": 3
+          "filter": {
+            "within": {
+              "range": {
+                "inches": 3
+              },
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "FRENZIED REAVERS",
+                  "INFANTRY"
+                ]
+              }
+            }
           }
         }
       },
@@ -7982,10 +8570,14 @@
         "type": "weapon-ability-grant",
         "target": "this-unit",
         "modifier": {
-          "abilities": [
-            "Devastating Wounds"
-          ],
-          "weapon_type": "melee"
+          "weapons": {
+            "type": "melee"
+          },
+          "keywords": [
+            {
+              "keyword_id": "devastating-wounds"
+            }
+          ]
         }
       }
     },
@@ -8054,7 +8646,7 @@
       "optional": true
     },
     "applies_to": {
-      "required_keywords": [
+      "all_of": [
         "FRENZIED REAVERS"
       ]
     }

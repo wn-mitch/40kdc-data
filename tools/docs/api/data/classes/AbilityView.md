@@ -6,7 +6,7 @@
 
 # Class: AbilityView
 
-Defined in: [data/entities.ts:139](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L139)
+Defined in: [data/entities.ts:145](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L145)
 
 An ability, linked to the phases it acts in and the units that have it.
 
@@ -25,7 +25,7 @@ units.find("Kharn")!.abilities
 
 > **new AbilityView**(`raw`, `ds`): `AbilityView`
 
-Defined in: [data/entities.ts:140](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L140)
+Defined in: [data/entities.ts:146](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L146)
 
 #### Parameters
 
@@ -49,7 +49,7 @@ The full generated ability record.
 
 > `readonly` **raw**: [`AbilityDSLEntry`](../../generated/interfaces/AbilityDSLEntry.md)
 
-Defined in: [data/entities.ts:142](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L142)
+Defined in: [data/entities.ts:148](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L148)
 
 The full generated ability record.
 
@@ -61,7 +61,7 @@ The full generated ability record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:147](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L147)
+Defined in: [data/entities.ts:153](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L153)
 
 The ability's id (`ability_id` in the raw record).
 
@@ -77,7 +77,7 @@ The ability's id (`ability_id` in the raw record).
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:151](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L151)
+Defined in: [data/entities.ts:157](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L157)
 
 ##### Returns
 
@@ -91,7 +91,7 @@ Defined in: [data/entities.ts:151](https://github.com/wn-mitch/40kdc-data/blob/a
 
 > **get** **phases**(): [`Phase`](../../generated/type-aliases/Phase.md)[]
 
-Defined in: [data/entities.ts:166](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L166)
+Defined in: [data/entities.ts:173](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L173)
 
 Game phases this ability acts in, unioned across its phase-mappings.
 
@@ -107,7 +107,7 @@ Game phases this ability acts in, unioned across its phase-mappings.
 
 > **get** **units**(): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/entities.ts:171](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L171)
+Defined in: [data/entities.ts:178](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L178)
 
 Units that list this ability in their `ability_ids`.
 
@@ -123,7 +123,7 @@ Units that list this ability in their `ability_ids`.
 
 > **get** **appliesTo**(): `AbilityAppliesTo` \| `undefined`
 
-Defined in: [data/entities.ts:181](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L181)
+Defined in: [data/entities.ts:188](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L188)
 
 The curated `applies_to` keyword filter, or `undefined` when this ability
 declares no resolvable unit scope. When present, it names which datasheet
@@ -140,7 +140,7 @@ units the ability benefits — the contract for roster-side highlighting
 
 > **describe**(): `string`
 
-Defined in: [data/entities.ts:161](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L161)
+Defined in: [data/entities.ts:167](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L167)
 
 Generated plain-English approximation of this ability's effect + scope,
 rendered from the DSL by the conformance-pinned describer
@@ -157,12 +157,11 @@ displayable stand-in.
 
 > **affectsUnit**(`unit`): `boolean`
 
-Defined in: [data/entities.ts:192](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L192)
+Defined in: [data/entities.ts:198](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L198)
 
-Whether this ability's `applies_to` scope includes `unit` — true iff the
-unit carries every `required_keywords` entry and no `excluded_keywords`,
-across its `keywords` + `faction_keywords`. Always `false` when the ability
-has no `applies_to` (no resolvable scope → no highlight). Pinned by the
+Whether this ability's canonical keyword predicate includes `unit`, across
+its `keywords` + `faction_keywords`. Always `false` when the ability has no
+`applies_to` (no resolvable scope → no highlight). Pinned by the
 `conformance/applies-to` corpus.
 
 #### Parameters
@@ -181,7 +180,7 @@ has no `applies_to` (no resolvable scope → no highlight). Pinned by the
 
 > **affectedUnits**(`candidates`): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/entities.ts:201](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L201)
+Defined in: [data/entities.ts:207](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L207)
 
 The subset of `candidates` (typically a roster's units) this ability's
 `applies_to` scope benefits, preserving input order. Empty when the ability
@@ -201,9 +200,9 @@ declares no scope.
 
 ### getBuffs()
 
-> **getBuffs**(`source`, `context?`, `perspective?`): [`Buff`](../type-aliases/Buff.md)[]
+> **getBuffs**(`source`, `context?`, `perspective?`, `rating?`): [`Buff`](../type-aliases/Buff.md)[]
 
-Defined in: [data/entities.ts:214](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L214)
+Defined in: [data/entities.ts:220](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L220)
 
 Buff stack this ability contributes against `context`, with provenance
 tagged via `source` (the caller knows whether this ability is being read
@@ -227,6 +226,10 @@ stat-mods, save rerolls, incoming hit penalties).
 
 [`TranslationPerspective`](../type-aliases/TranslationPerspective.md) = `"attacker"`
 
+##### rating?
+
+`string` \| `number`
+
 #### Returns
 
 [`Buff`](../type-aliases/Buff.md)[]
@@ -235,9 +238,9 @@ stat-mods, save rerolls, incoming hit penalties).
 
 ### describeBuffs()
 
-> **describeBuffs**(`source`, `context?`, `perspective?`): [`EffectTranslation`](../type-aliases/EffectTranslation.md)
+> **describeBuffs**(`source`, `context?`, `perspective?`, `rating?`): [`EffectTranslation`](../type-aliases/EffectTranslation.md)
 
-Defined in: [data/entities.ts:279](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L279)
+Defined in: [data/entities.ts:286](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/data/entities.ts#L286)
 
 Full DSL→Buff translation, including the `unsupported` list of effect
 fragments the buff layer can't model. The SPA renders these as warnings
@@ -256,6 +259,10 @@ so users see which abilities have effects that need a manual toggle.
 ##### perspective?
 
 [`TranslationPerspective`](../type-aliases/TranslationPerspective.md) = `"attacker"`
+
+##### rating?
+
+`string` \| `number`
 
 #### Returns
 

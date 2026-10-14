@@ -1,6 +1,6 @@
 import { type FamilyExtension, optional, withProperties } from "../family-extension-helpers.js";
 import { boundedInteger, enumValue } from "../family-validation.js";
-import { isObject } from "./shared.js";
+import { isObject, namedId } from "./shared.js";
 
 /**
  * Versions of dice-roll, choice-open and named-option: dice a rule rolls and options a player
@@ -97,6 +97,19 @@ export const CHOICE_AND_DICE_EXTENSIONS: readonly FamilyExtension[] = [
       const list = anyOf.map((item, index) => requirement(item, `named-option.requirement_any_of[${index}]`));
       if (new Set(list.map((item) => `${item.type}:${item.min_value}`)).size !== list.length) throw new TypeError("named-option.requirement_any_of lists a requirement twice.");
       return { ...previous(rest), requirement_any_of: list };
+    },
+  },
+  {
+    // Stable semantic identity for menu options. The compiler falls back to source order only for
+    // older reviewed leaves that predate this field; display labels are never used as ids.
+    family: "named-option",
+    version: 3,
+    description: "As the previous version, plus an optional reviewed option_id used as the stable identity of a named option.",
+    schema: (previous) => withProperties(previous, { option_id: optional({ type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }) }),
+    normalize: (input, previous) => {
+      if (input.option_id === undefined) return previous(input);
+      const { option_id: optionId, ...rest } = input;
+      return { ...previous(rest), option_id: namedId(optionId, "named-option.option_id") };
     },
   },
 ];

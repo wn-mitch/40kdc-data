@@ -32,7 +32,7 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   const cap = m.max != null ? ` (to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"})` : "";
   const roll = m.roll as P | undefined;
   if (roll != null) {
-    const each = roll.per_model === "target" ? " for each model in the target unit" : roll.per_model === "this" ? " for each model in this unit"
+    const each = roll.per_model != null ? ` for each model in ${effectSubject(roll.per_model)}`
       : roll.for_each != null ? ` for each ${forEachUnitSubject(roll.for_each as Record<string, unknown>)}` : "";
     // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
     const many = /^\d+$/u.test(jstr(roll.dice)) ? Number(roll.dice) : null;
@@ -66,40 +66,50 @@ function returnModels(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   const where = `${placementPhrase(m)}${placementLimits(m, ctx)}`;
   const detach = detachPhrase(m);
   if (e.target === "this-model") return `${subj} is set up again${where} with ${w} remaining${detach}`;
-  const kw = m.model_keyword != null ? `${jstr(m.model_keyword)} ` : m.bodyguard_only === true ? "Bodyguard " : "";
-  const kind = `destroyed ${kw}model`;
-  const what = m.count === "all" ? `all ${kind}s` : amountOf(m.count, kind, `${kind}s`);
-  const excl = Array.isArray(m.exclude_model_keyword) ? ` (excluding ${andList((m.exclude_model_keyword as unknown[]).map(jstr))} models)` : "";
-  return `return ${what}${excl} to ${subj}${where}, each with ${w} remaining${detach}`;
+  const filter = typeof e.target === "object" && e.target != null ? e.target as P : undefined;
+  if (filter?.level === "model") {
+    const { member_of, ...recipients } = filter;
+    const models = effectSubject(recipients, ctx).replace(/^all /, "");
+    const kind = `destroyed ${models.replace(/\bmodels\b/, "model")}`;
+    const what = m.count === "all" ? `all destroyed ${models}` : amountOf(m.count, kind, `destroyed ${models}`);
+    return `return ${what}${member_of != null ? ` to ${effectSubject(member_of, ctx)}` : ""}${where}, each with ${w} remaining${detach}`;
+  }
+  const what = m.count === "all" ? "all destroyed models" : amountOf(m.count, "destroyed model", "destroyed models");
+  return `return ${what} to ${subj}${where}, each with ${w} remaining${detach}`;
 }
 
-function destroyModels(m: Record<string, unknown>, subj: string): string {
-  const kind = m.model_keyword != null ? `${jstr(m.model_keyword)} model` : "model";
-  const what = m.count === "all" ? `every ${kind} in ${subj}` : `${diceCase(m.count)} ${diceCase(m.count) === "1" ? kind : `${kind}s`} in ${subj}`;
-  const leader = m.exclude_leader === true ? " (excluding Leader models)" : "";
+function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): string {
+  const modelTarget = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
+  const what = modelTarget
+    ? m.count === "all" ? subj : `${diceCase(m.count)} of the ${subj.replace(/^all /, "")}`
+    : m.count === "all" ? `every model in ${subj}` : `${diceCase(m.count)} ${diceCase(m.count) === "1" ? "model" : "models"} in ${subj}`;
   const verb = m.remove_from_play === true ? "remove" : "destroy";
   const tail = m.remove_from_play === true ? " from play" : "";
   const triggers = m.ignore_death_triggers === true ? ", ignoring any rules triggered by their destruction" : "";
-  return `${verb} ${what}${leader}${tail}${triggers}`;
+  return `${verb} ${what}${tail}${triggers}`;
 }
 
 function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const act = m.act === "shoot" ? "shoot" : "fight";
-  const model = e.target === "event-object" ? "a model in this unit" : subj === "this model" ? "this model" : `a model in ${subj}`;
+  const model = e.target === "event-object" ? "a model in this unit" : subj === "this model" ? "this model" : typeof e.target === "object" && e.target != null && (e.target as P).level === "model" ? `a ${subj.replace(/^all /, "").replace(/\bmodels\b/, "model")}` : `a model in ${subj}`;
   const gate = m.gate as { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] } | undefined;
+  const eligibility = m.eligibility != null ? conditionLeadIn(m.eligibility as Condition) : "";
+  const resolution = m.resolution === "when-unit-fights" ? `when its unit is selected to fight, it can ${act}`
+    : m.resolution === "after-attacking-unit-finishes" ? `after the attacking unit has finished making its attacks, it can ${act}`
+    : `it can ${act}`;
   if (gate != null) {
-    const elig = m.eligibility as Condition | undefined;
-    const before = elig ? ` ${conditionLeadIn(elig)}` : "";
-    const adds = (gate.modifiers ?? []).map((g) => `, adding ${jstr(g.value)} ${conditionLeadIn(g.condition ?? {})}`).join("");
+    const before = eligibility ? ` ${eligibility}` : "";
+    const adds = (gate.modifiers ?? []).map((g) => `, adding ${diceCase(g.value)} ${conditionLeadIn(g.condition ?? {})}`).join("");
     const removal = m.removal === "after-destroyed-model-fights" ? `. Remove it after it has ${act === "shoot" ? "shot" : "fought"}` : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
     // Under a destroyed trigger the ability's lead-in already names the death: one lead-in only.
     const lead = ctx.destroyedTrigger ? (before ? `${before.trim()}, ` : "") : `each time ${model} is destroyed${before ? `,${before}` : ""}, `;
-    return `${lead}roll one ${diceCase(gate.dice)}${adds}. On ${formatComparison(jstr(gate.comparison ?? "gte"), gate.threshold)}, leave that model on the battlefield; it can ${act}${removal}`;
+    return `${lead}roll one ${diceCase(gate.dice)}${adds}. On ${formatComparison(jstr(gate.comparison), gate.threshold)}, leave that model on the battlefield; ${resolution}${removal}`;
   }
-  if (m.resolution === "when-unit-fights") return `do not remove ${subj} yet; when its unit is selected to fight, it can ${act}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
-  if (m.resolution === "after-attacking-unit-finishes") return `do not remove ${subj} yet; after the attacking unit has finished making its attacks, it can ${act}; then remove it`;
-  if (ctx.destroyedTrigger) return `${model === "this model" ? "this model" : "that model"} can ${act} before being removed from play`;
-  return `each time ${model} is destroyed, it can ${act} before being removed from play`;
+  const lead = eligibility ? `${eligibility}, ` : "";
+  if (m.resolution === "when-unit-fights") return `${lead}do not remove ${subj} yet; ${resolution}; remove it after its unit has finished fighting or at the end of the phase, whichever happens first`;
+  if (m.resolution === "after-attacking-unit-finishes") return `${lead}do not remove ${subj} yet; ${resolution}; then remove it`;
+  if (ctx.destroyedTrigger) return `${lead}${model === "this model" ? "this model" : "that model"} can ${act} before being removed from play`;
+  return `${lead}each time ${model} is destroyed, it can ${act} before being removed from play`;
 }
 
 function addUnit(m: Record<string, unknown>, ctx: Ctx): string {
@@ -197,6 +207,7 @@ function modeClause(m: Record<string, unknown>): string {
 function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const kinds = Array.isArray(m.applies_to_moves) ? andList((m.applies_to_moves as unknown[]).map((x) => MOVE_NOUNS[jstr(x)] ?? dekebab(jstr(x)))) : null;
   const clauses: string[] = [];
+  if (m.maximum === "unlimited") clauses.push(`${subj} can move any distance`);
   if (m.distance_bonus != null) {
     const n = Number(m.distance_bonus);
     const moves = kinds ? `${kinds} moves` : "Move characteristic";
@@ -232,18 +243,18 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const whoCan = m.allow === false ? noneOf(who) : who;
   let s = m.from === "battlefield" ? `${whoCan} ${can} be removed from the battlefield and set up again` : `${whoCan} ${can} be set up on the battlefield${from}`;
   if (m.via === "deep-strike") s += " using the Deep Strike rules";
-  if (m.via === "cult-ambush-marker") s += " using a Cult Ambush marker";
+  if (m.via === "cult-ambush") s += " using a Cult Ambush marker";
   const markerRange = m.marker_range as P | undefined;
-  if (markerRange != null) s += `, ${markerRange.wholly === true ? "wholly " : ""}within ${jstr(markerRange.inches)}" of that marker`;
+  if (markerRange != null) s += `, ${markerRange.wholly === true ? "wholly " : ""}within ${rangePhrase(markerRange.range)} of that marker`;
   s += modeClause(m);
   if (Array.isArray(m.turns)) s += ` in the Reinforcements step of your ${(m.turns as number[]).map((t) => ORD[t] ?? `${t}th`).join(", ").replace(/, ([^,]*)$/, " or $1")} Movement phase`;
   if (m.arrives === "next-movement-phase") s += ` in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? " (even in the first battle round)" : ""}`;
   if (m.sections != null) s += ` as ${jstr(m.sections)} separate sections`;
   s += placementPhrase(m) + placementLimits(m, ctx);
-  if (m.within_edge != null) s += ` wholly within ${jstr(m.within_edge)}" of a battlefield edge`;
-  if (m.min_enemy_distance != null) s += ` more than ${jstr(m.min_enemy_distance)}" away from all enemy models`;
+  if (m.within_edge != null) s += ` wholly within ${rangePhrase(m.within_edge)} of a battlefield edge`;
+  if (m.min_enemy_distance != null) s += ` more than ${rangePhrase(m.min_enemy_distance)} away from all enemy models`;
   const md = m.min_distance_from as P | undefined;
-  if (md != null) s += ` ${m.allow === false ? "within" : "more than"} ${rangePhrase(md.range)}${m.allow === false ? " of" : " away from"} ${md.of != null ? effectSubject(md.of, ctx) : "this model"}`;
+  if (md != null) s += ` ${m.allow === false ? "within" : "more than"} ${rangePhrase(md.range)}${m.allow === false ? " of" : " away from"} ${md.of != null ? placePhrase(md.of, ctx) : "this model"}`;
   if (m.round_offset != null) s += `, treating the battle round as ${Math.abs(Number(m.round_offset))} ${Number(m.round_offset) < 0 ? "lower" : "higher"} than it is`;
   if (m.wounds_remaining != null) s += `, with ${woundsLeft(m.wounds_remaining)} remaining`;
   s += detachPhrase(m);
@@ -258,7 +269,7 @@ function marker(m: Record<string, unknown>): string {
   const label = dekebab(jstr(m.label)).replace(/ marker$/i, "");
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
   const unmoved = m.not_moved_this_turn === true ? " that has not been moved this turn" : "";
-  if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${jstr(m.distance)}"` : ""}${consume}`;
+  if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
   return `place ${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker${where}${consume}`;
 }
@@ -449,7 +460,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "damage-reduction": {
       const r = jstr(m.reduction);
       const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0" : `subtract ${r} from the Damage characteristic of that attack`;
-      const attack = m.weapon_type != null || m.weapon_name != null || m.weapon_keyword != null ? `an attack with ${weaponNoun(m)}` : "an attack";
+      const attack = m.weapons != null ? `an attack with ${weaponNoun(m)}` : "an attack";
       return `each time ${attack} is allocated to ${subj}, ${how}`;
     }
     case "feel-no-pain": {
@@ -457,7 +468,8 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `${subj} ${v(subj, "has")} the Feel No Pain ${rated ? "X" : jstr(m.threshold)}+ ability${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
     }
     case "invulnerable-save": {
-      const vs = m.weapon_type != null ? ` against ${jstr(m.weapon_type)} attacks` : "";
+      const scope = m.weapons as P | undefined;
+      const vs = scope?.type != null && Object.keys(scope).length === 1 ? ` against ${jstr(scope.type)} attacks` : scope != null ? ` against attacks with ${weaponNoun(m)}` : "";
       return `${subj} ${v(subj, "has")} a ${jstr(m.invuln_sv)}+ invulnerable save${vs}`;
     }
     case "heal": {
@@ -468,7 +480,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `${who} ${v(who, "regains")} up to ${amount} lost ${amount === "1" ? "wound" : "wounds"}`;
     }
     case "return-models": return returnModels(e, m, subj, ctx);
-    case "destroy-models": return destroyModels(m, subj);
+    case "destroy-models": return destroyModels(e, m, subj);
     case "act-on-death": return actOnDeath(e, m, subj, ctx);
     case "split-unit": {
       const strength = m.starting_strength != null ? `, each with a Starting Strength of ${jstr(m.starting_strength)}` : "";

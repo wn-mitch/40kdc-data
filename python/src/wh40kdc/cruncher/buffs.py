@@ -52,6 +52,76 @@ def _rank(s: BuffSource) -> int:
     return _SOURCE_KIND_RANK.get(s.get("kind", ""), 99)
 
 
+
+def _keyword_ref_matches(actual: dict[str, Any], selector: dict[str, Any]) -> bool:
+    if actual.get("keyword_id") != selector.get("keyword_id"):
+        return False
+    actual_params = actual.get("parameters")
+    if not isinstance(actual_params, dict):
+        actual_params = {}
+    expected_params = selector.get("parameters")
+    if not isinstance(expected_params, dict):
+        expected_params = {}
+    for key, expected in expected_params.items():
+        value = actual_params.get(key)
+        if isinstance(expected, str) and isinstance(value, str) and key == "target_keyword":
+            if expected.lower() != value.lower():
+                return False
+        elif isinstance(expected, list):
+            if not isinstance(value, list) or len(value) != len(expected):
+                return False
+            if not all(
+                isinstance(item, str)
+                and any(
+                    isinstance(candidate, str) and item.lower() == candidate.lower()
+                    for candidate in value
+                )
+                for item in expected
+            ):
+                return False
+        elif value != expected:
+            return False
+    return True
+
+
+
+def _weapon_gate_holds(
+    gate: dict[str, Any], refs: list[dict[str, Any]] | None, ctx: EngineContext
+) -> bool:
+    weapon_names = ctx.get("weaponNames")
+    if gate.get("weaponName") is not None and gate["weaponName"] not in (weapon_names or []):
+        return False
+    if gate.get("excludedWeaponNames") and (
+        weapon_names is None or any(name in weapon_names for name in gate["excludedWeaponNames"])
+    ):
+        return False
+    requirements = gate.get("weaponRequirements") or []
+    if any(not _weapon_gate_holds(req, refs, ctx) for req in requirements):
+        return False
+    selectors = gate.get("weaponKeywords")
+    if selectors is not None:
+        if refs is None or not any(
+            _keyword_ref_matches(ref, selector) for selector in selectors for ref in refs
+        ):
+            return False
+    exclusions = gate.get("excludedWeaponKeywords")
+    if exclusions is not None:
+        if refs is None:
+            return False
+        for selector in exclusions:
+            if any(
+                ref.get("keyword_id") == selector.get("keyword_id")
+                and any(
+                    key not in (ref.get("parameters") or {})
+                    for key in (selector.get("parameters") or {})
+                )
+                for ref in refs
+            ):
+                return False
+            if any(_keyword_ref_matches(ref, selector) for ref in refs):
+                return False
+    return True
+
 def _applies(buff: Buff, ctx: EngineContext) -> bool:
     w = buff.get("applicableWhen")
     if not w:
@@ -79,49 +149,77 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         attacker = ctx.get("attackerKeywords") or []
         if w["requiresAttackerKeyword"].lower() not in attacker:
             return False
-    # Range gate: drop only when the distance is known and exceeds the ability's
-    # range (DSL scope.range_inches). Unknown distance is permissive.
     max_range = w.get("maxRangeInches")
     distance = ctx.get("distanceInches")
-    if max_range is not None and distance is not None and distance > max_range:
-        return False
+    if max_range is not None:
+        if (
+            not isinstance(distance, (int, float))
+            or isinstance(distance, bool)
+            or distance > max_range
+        ):
+            return False
     weapon_name = w.get("weaponName")
     weapon_names = ctx.get("weaponNames")
     if weapon_name is not None and weapon_names is not None and weapon_name not in weapon_names:
         return False
-    return True
-
-
-def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
-    """The buffs whose gates hold.
-
-    A weapon-keyword gate reads the weapon's printed keywords plus the keywords other live buffs
-    grant, so one pass is repeated until no further gated buff joins ("weapons with Lethal Hits
-    gain Rapid Fire 1" sees a granted Lethal Hits).
-    """
+    excluded_names = w.get("excludedWeaponNames")
+    if excluded_names and weapon_names is not None and any(
+        name in weapon_names for name in excluded_names
+    ):
+        return False
     weapon_keywords = ctx.get("weaponKeywords")
+    any_keywords = w.get("weaponKeywordsAny")
+    if any_keywords and weapon_keywords is not None and not any(
+        k in weapon_keywords for k in any_keywords
+    ):
+        return False
+    excluded_weapon_keywords = w.get("excludedWeaponKeywords")
+    if (
+        excluded_weapon_keywords
+        and weapon_keywords is not None
+        and any(k in weapon_keywords for k in excluded_weapon_keywords)
+    ):
+        return False
+    return True
+def _live_buffs(buffs: list[Buff], ctx: EngineContext) -> list[Buff]:
+    """Resolve weapon gates while preserving structured keyword ratings."""
+    printed = ctx.get("weaponKeywordRefs")
+    if printed is None and ctx.get("weaponKeywords") is not None:
+        printed = [{"keyword_id": keyword} for keyword in ctx["weaponKeywords"]]
 
-    def gated(b: Buff) -> bool:
-        return (b.get("applicableWhen") or {}).get("weaponKeyword") is not None
+    def gated(buff: Buff) -> bool:
+        gate = buff.get("applicableWhen") or {}
+        return any(
+            gate.get(key) is not None
+            for key in (
+                "weaponKeyword",
+                "weaponKeywords",
+                "excludedWeaponKeywords",
+                "weaponRequirements",
+            )
+        )
 
-    live = [b for b in buffs if (not gated(b) or weapon_keywords is None) and _applies(b, ctx)]
-    if weapon_keywords is None:
-        return live
-    pending = [b for b in buffs if gated(b) and _applies(b, ctx)]
-    joined: list[Buff] = []
+    base = [buff for buff in buffs if _applies(buff, ctx)]
+    selected: list[Buff] = [buff for buff in base if not gated(buff)]
+    pending = [buff for buff in base if gated(buff)]
     while True:
-        keywords = set(weapon_keywords)
-        for b in [*live, *joined]:
-            if b["contribution"].get("type") == "extra-keyword":
-                keywords.add(b["contribution"]["keywordRef"]["keyword_id"])
-        nxt = [b for b in pending if b["applicableWhen"]["weaponKeyword"] in keywords]
-        if not nxt:
+        refs = list(printed) if printed is not None else None
+        if refs is not None:
+            refs.extend(
+                buff["contribution"]["keywordRef"]
+                for buff in selected
+                if buff["contribution"].get("type") == "extra-keyword"
+            )
+        next_buffs = [
+            buff
+            for buff in pending
+            if _weapon_gate_holds(buff.get("applicableWhen") or {}, refs, ctx)
+        ]
+        if not next_buffs:
             break
-        joined.extend(nxt)
-        pending = [b for b in pending if not any(b is j for j in nxt)]
-    # Keep the caller's order so ranking ties break as they did before.
-    kept = [*live, *joined]
-    return [b for b in buffs if any(b is k for k in kept)]
+        selected.extend(next_buffs)
+        pending = [buff for buff in pending if buff not in next_buffs]
+    return [buff for buff in buffs if buff in selected]
 
 
 def _key_of(ref: dict[str, Any]) -> str:

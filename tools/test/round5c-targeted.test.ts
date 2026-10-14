@@ -73,7 +73,7 @@ describe("Round 5C past targeting", () => {
     expect(mechanics.effect.condition).toEqual({ type: "happened", parameters: { event: "targets-selected", subject: "event-subject", object: "this-unit", filter: { kind: "attack" }, window: "event" } });
     expect(result.core?.target_restrictions).toEqual({
       count: "one", selects: "unit", required_keywords: ["GROX"], bound_to: "attacked-unit",
-      eligibility: { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+      eligibility: { type: "matches", parameters: { filter: { not_states: ["engaged"] } } },
     });
   });
 
@@ -196,11 +196,11 @@ describe("Round 5C targeted unit measured from the bearer", () => {
     const mechanics = compiled(leaves(...fromBearer), text).mechanics as Record<string, any>;
     expect(mechanics.trigger).toMatchObject({ event: "attacks-resolved", subject: { owner: "enemy" }, filter: { kind: "shoot" } });
     expect(mechanics.trigger.object).toBeUndefined();
-    expect(mechanics.effect.condition.operands[1]).toEqual({ type: "happened", parameters: {
+    expect(mechanics.effect.condition).toMatchObject({ operator: "and", operands: expect.arrayContaining([{ type: "happened", parameters: {
       event: "targets-selected", subject: "event-subject",
       object: { owner: "friendly", all_of: ["FOOTSOLDIER"], within: { of: "this-model", range: { inches: 3 } } },
       filter: { kind: "attack", attack_type: "ranged" }, window: "event",
-    } });
+    } }]) });
   });
 });
 
@@ -285,7 +285,7 @@ describe("Round 5C targeted unit measured from the bearer: shapes and refusals",
       ["each time a model in that unit makes an attack", "attack", { direction: "makes", unit: "that-unit", attack_type: "any" }],
       ["re-roll a Hit roll of 1", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }]), text).mechanics as Record<string, any>).effect;
     expect(effect).toEqual({ type: "aura", target: "friendly-within-aura", modifier: {
-      range: 6, effect: { type: "re-roll", target: "recipient", modifier: { roll: "hit", subset: "ones" } }, eligible: { required_keywords: ["ALPHA"] },
+      range: { inches: 6 }, effect: { type: "re-roll", target: "recipient", modifier: { roll: "hit", subset: "ones" } }, eligible: { owner: "friendly", all_of: ["ALPHA"] },
     } });
   });
 

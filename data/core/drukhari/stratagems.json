@@ -39,7 +39,14 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Wych Cult"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit"
+    },
     "ability_id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
@@ -325,7 +332,14 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "dividends-of-agony-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
@@ -961,7 +975,15 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords_any": [
+        "Blades for Hire",
+        "Kabal"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "prioritised-victim-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
@@ -1307,7 +1329,14 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Haemonculus Covens"
+      ],
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "triggering-unit"
+    },
     "ability_id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",

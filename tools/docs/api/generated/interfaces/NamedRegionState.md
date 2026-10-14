@@ -6,7 +6,7 @@
 
 # Interface: NamedRegionState
 
-Defined in: [generated.ts:4730](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4730)
+Defined in: [generated.ts:3937](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3937)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "named-region-state".
@@ -17,7 +17,7 @@ via the `definition` "named-region-state".
 
 > **region\_ref**: [`NamedRegionRef`](NamedRegionRef.md)
 
-Defined in: [generated.ts:4731](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4731)
+Defined in: [generated.ts:3938](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3938)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:4731](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **producer**: [`NamedRegionProducer`](NamedRegionProducer.md)
 
-Defined in: [generated.ts:4732](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4732)
+Defined in: [generated.ts:3939](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3939)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [generated.ts:4732](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **consumer**: [`NamedRegionConsumer`](NamedRegionConsumer.md)
 
-Defined in: [generated.ts:4733](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4733)
+Defined in: [generated.ts:3940](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3940)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [generated.ts:4733](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **branch\_precedence**: `"qualified-replaces-default"`
 
-Defined in: [generated.ts:4734](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4734)
+Defined in: [generated.ts:3941](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3941)

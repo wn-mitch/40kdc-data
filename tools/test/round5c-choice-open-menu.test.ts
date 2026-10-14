@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
+import { keywordRef } from "../src/round5c/compile-fragments.js";
 import { currentFamilyVersion } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
@@ -42,8 +43,8 @@ function compiled(text: string, pieces: Piece[]) {
   return result;
 }
 
-const grant = (abilities: string[], extra: Record<string, unknown> = {}) => ({
-  type: "weapon-ability-grant", target: "this-unit", modifier: { abilities, ...extra },
+const grant = (keywords: string[], extra: Record<string, unknown> = {}) => ({
+  type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: keywords.map((keyword) => keywordRef(keyword)), ...extra },
 });
 /** A keyword leaf: its wording in brackets, and the keyword name the compiler grants. */
 const keyword = (name: string, granted = name.replace(/\b\w+/g, (word) => word[0] + word.slice(1).toLowerCase())): Piece => [`[${name}]`, "EFFECT", "weapon-ability-keyword", { keyword: granted }];
@@ -91,9 +92,9 @@ describe("Round 5C choice-open over a keyword menu", () => {
     expect(result.mechanics.effect).toEqual({
       type: "choice",
       options: [
-        { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_name: "ember blades" } },
-        { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Precision"], weapon_name: "ember blades" } },
-        { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Sustained Hits 1"], weapon_name: "ember blades" } },
+        { type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { name: "ember blades" } } },
+        { type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "precision" }], weapons: { name: "ember blades" } } },
+        { type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }], weapons: { name: "ember blades" } } },
       ],
     });
     expect(result.mechanics.scope).toMatchObject({ duration: "phase" });

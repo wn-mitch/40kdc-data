@@ -30,6 +30,19 @@ func rankOf(s map[string]any) int {
 	}
 	return 99
 }
+func anyList(v any) []any {
+	if list, ok := v.([]any); ok {
+		return list
+	}
+	if list, ok := v.([]map[string]any); ok {
+		out := make([]any, len(list))
+		for i, item := range list {
+			out[i] = item
+		}
+		return out
+	}
+	return nil
+}
 
 func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	w, ok := getMap(buff, "applicableWhen")
@@ -66,11 +79,17 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			return false
 		}
 	}
-	// Range gate: drop only when distance is known and exceeds the range.
-	if w["maxRangeInches"] != nil && ctx["distanceInches"] != nil {
-		maxRange, _ := num(w["maxRangeInches"])
-		distance, _ := num(ctx["distanceInches"])
-		if distance > maxRange {
+	maxRangeValue := w["maxRangeInches"]
+	if maxRangeValue == nil {
+		maxRangeValue = w["max_range_inches"]
+	}
+	if maxRangeValue != nil {
+		if ctx["distanceInches"] == nil {
+			return false
+		}
+		maxRange, maxOK := num(maxRangeValue)
+		distance, distanceOK := num(ctx["distanceInches"])
+		if !maxOK || !distanceOK || distance > maxRange {
 			return false
 		}
 	}
@@ -80,10 +99,121 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 			return false
 		}
 	}
+	if excluded, ok := asList(w["excludedWeaponNames"]); ok && len(excluded) > 0 && ctx["weaponNames"] != nil {
+		for _, name := range excluded {
+			if n, ok := name.(string); ok && containsAny(getList(ctx, "weaponNames"), n) {
+				return false
+			}
+		}
+	}
+	// Structured catalog selectors match any selected keyword. Parameters in
+	// the selector are a partial constraint: omitting a parameter intentionally
+	// means any catalog rating.
+	if refs := anyList(w["weaponKeywords"]); len(refs) > 0 {
+		printedRefs := anyList(ctx["weaponKeywordRefs"])
+		if len(printedRefs) > 0 {
+			if !weaponSelectorSetMatches(refs, printedRefs) {
+				return false
+			}
+		} else if weaponSelectorsNeedParameters(refs) || !weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
+			return false
+		}
+	}
+	if refs := anyList(w["excludedWeaponKeywords"]); len(refs) > 0 {
+		printedRefs := anyList(ctx["weaponKeywordRefs"])
+		if len(printedRefs) > 0 {
+			if weaponSelectorSetMatches(refs, printedRefs) {
+				return false
+			}
+		} else if weaponSelectorsNeedParameters(refs) || weaponSelectorIDsMatch(refs, getList(ctx, "weaponKeywords")) {
+			return false
+		}
+	}
+	if w["unresolvedWeaponRef"] != nil {
+		return false
+	}
 	return true
 }
 
-// weaponKeywordGate is the buff's applicableWhen.weaponKeyword, if it carries one.
+func weaponSelectorSetMatches(selectors, printed []any) bool {
+	for _, selectorAny := range selectors {
+		selector, ok := asMap(selectorAny)
+		if !ok || selector == nil {
+			continue
+		}
+		wantID := getStr(selector, "keyword_id")
+		for _, printedAny := range printed {
+			ref, ok := asMap(printedAny)
+			if !ok || ref == nil || getStr(ref, "keyword_id") != wantID {
+				continue
+			}
+			if weaponSelectorParametersMatch(mapOr(selector["parameters"]), mapOr(ref["parameters"])) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func weaponSelectorParametersMatch(want, have map[string]any) bool {
+	for key, value := range want {
+		if have[key] == nil {
+			return false
+		}
+		if canon, ok := value.([]any); ok {
+			haveValues, ok := have[key].([]any)
+			if !ok || !containsAnyV(canon, haveValues) {
+				return false
+			}
+			continue
+		}
+		if value != have[key] {
+			return false
+		}
+	}
+	return true
+}
+
+func weaponKeywordGateRefs(buff map[string]any) []map[string]any {
+	w, _ := getMap(buff, "applicableWhen")
+	raw := anyList(w["weaponKeywords"])
+	refs := make([]map[string]any, 0, len(raw))
+	for _, item := range raw {
+		if ref, ok := asMap(item); ok && ref != nil {
+			refs = append(refs, ref)
+		}
+	}
+	return refs
+}
+func weaponSelectorsNeedParameters(selectors []any) bool {
+	for _, item := range selectors {
+		selector, _ := asMap(item)
+		if selector != nil && len(mapOr(selector["parameters"])) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func weaponSelectorIDsMatch(selectors []any, printed []any) bool {
+	for _, item := range selectors {
+		selector, _ := asMap(item)
+		if selector == nil {
+			continue
+		}
+		want := getStr(selector, "keyword_id")
+		for _, value := range printed {
+			if getStr(map[string]any{"keyword_id": value}, "keyword_id") == want {
+				return true
+			}
+			if s, ok := value.(string); ok && s == want {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func weaponKeywordGate(buff map[string]any) (string, bool) {
 	w, _ := getMap(buff, "applicableWhen")
 	k, ok := w["weaponKeyword"].(string)
@@ -101,11 +231,22 @@ func liveBuffs(buffs []any, ctx map[string]any) []bool {
 	gatedByKeyword := ctx["weaponKeywords"] != nil
 	for i, bAny := range buffs {
 		b, _ := asMap(bAny)
-		_, gated := weaponKeywordGate(b)
+		structuredRefs := weaponKeywordGateRefs(b)
 		if !buffApplies(b, ctx) {
-			continue
+			hasParameters := false
+			for _, ref := range structuredRefs {
+				if len(mapOr(ref["parameters"])) > 0 {
+					hasParameters = true
+					break
+				}
+			}
+			if len(structuredRefs) == 0 || hasParameters {
+				continue
+			}
 		}
-		if gated && gatedByKeyword {
+		_, legacy := weaponKeywordGate(b)
+		structured := len(structuredRefs) > 0
+		if (legacy || structured) && gatedByKeyword {
 			pending[i] = true
 		} else {
 			live[i] = true
@@ -118,7 +259,12 @@ func liveBuffs(buffs []any, ctx map[string]any) []bool {
 		keywords := map[string]bool{}
 		for _, k := range getList(ctx, "weaponKeywords") {
 			if ks, ok := k.(string); ok {
-				keywords[ks] = true
+				keywords[keywordKey(ks)] = true
+			}
+		}
+		for _, raw := range getList(ctx, "weaponKeywordRefs") {
+			if ref, ok := asMap(raw); ok {
+				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
 			}
 		}
 		for i, bAny := range buffs {
@@ -129,7 +275,7 @@ func liveBuffs(buffs []any, ctx map[string]any) []bool {
 			c, _ := getMap(b, "contribution")
 			if getStr(c, "type") == "extra-keyword" {
 				ref, _ := getMap(c, "keywordRef")
-				keywords[getStr(ref, "keyword_id")] = true
+				keywords[keywordKey(getStr(ref, "keyword_id"))] = true
 			}
 		}
 		joined := false
@@ -138,7 +284,18 @@ func liveBuffs(buffs []any, ctx map[string]any) []bool {
 				continue
 			}
 			b, _ := asMap(bAny)
-			if k, _ := weaponKeywordGate(b); keywords[k] {
+			refs := weaponKeywordGateRefs(b)
+			matched := false
+			for _, ref := range refs {
+				if keywords[keywordKey(getStr(ref, "keyword_id"))] {
+					matched = true
+					break
+				}
+			}
+			if legacy, ok := weaponKeywordGate(b); ok {
+				matched = matched || keywords[keywordKey(legacy)]
+			}
+			if matched {
 				pending[i] = false
 				live[i] = true
 				joined = true

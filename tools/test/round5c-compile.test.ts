@@ -65,8 +65,7 @@ describe("Round 5C leaf compiler", () => {
     const result = compiled(leavesOf8561());
     const effect = result.mechanics.effect as { type: string; selector: Record<string, unknown>; effect: { modifier: Record<string, unknown> } };
     expect(effect.type).toBe("select-units");
-    expect(effect.selector).toMatchObject({ max_count: { incursion: 1, "strike-force": 2, onslaught: 3 }, eligibility: { type: expect.any(String) } });
-    expect(effect.selector.count).toBeUndefined();
+    expect(effect.selector).toMatchObject({ count: { min: 0, max: { incursion: 1, "strike-force": 2, onslaught: 3 } }, eligibility: { type: expect.any(String) } });
     expect(effect.effect.modifier).toMatchObject({ arrives: "next-movement-phase", allow_first_round: true });
     // The eligibility is the selection's, not a gate on the whole ability.
     expect(result.mechanics.condition).toBeUndefined();
@@ -80,7 +79,7 @@ describe("Round 5C leaf compiler", () => {
       leaf("EFFECT", "set-up", { subject: "selected-unit", to: "strategic-reserves", from: "battlefield" }),
     ];
     const selector = (compiled(leaves).mechanics.effect as { selector: { eligibility: unknown } }).selector;
-    expect(selector.eligibility).toEqual({ type: "unit-state", parameters: { subject: "selected-unit", state: "engaged", with: "this-model" } });
+    expect(selector.eligibility).toEqual({ type: "matches", parameters: { subject: "selected-unit", filter: { engaged_with: "this-model" } } });
     expect(rendered(authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus"), leaves)).toMatch(/Engagement Range of this model|engaged with this model/iu);
   });
 
@@ -115,14 +114,14 @@ describe("Round 5C leaf compiler", () => {
     const result = gate(() => leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }));
     if (!result.ok) throw new Error(result.errors.join("; "));
     const text = JSON.stringify(result.mechanics);
-    expect(text).toContain('"type":"unit-state"');
+    expect(text).toContain('"type":"matches","parameters":{"subject":{"owner":"enemy","all_of":["MONSTER"]},"filter":{"engaged_with":"this-unit"}}');
     expect(text).toMatch(/"subject":\{[^}]*"owner":"enemy"[^}]*"all_of":\["MONSTER"\]/u);
     expect(text).not.toContain("filtered-units");
     const perRecipient = gate(() => leaf("EFFECT", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "add", value: 1 }, currentFamilyVersion("characteristic-modifier")));
     if (!perRecipient.ok) throw new Error(perRecipient.errors.join("; "));
     expect(perRecipient.mechanics).toMatchObject({ effect: {
       type: "conditional",
-      condition: { type: "unit-state", parameters: { subject: "recipient", state: "engaged" } },
+      condition: { type: "matches", parameters: { subject: "recipient", filter: { engaged_with: "this-unit" } } },
       effect: { type: "stat-modifier", target: { owner: "enemy", all_of: ["MONSTER"] } },
     } });
   });
@@ -144,7 +143,7 @@ describe("Round 5C leaf compiler", () => {
     ]);
     const text = JSON.stringify(result.mechanics);
     // The engaged test is on the unit selected to fight, which is the enemy filter's unit.
-    expect(text).toContain('"type":"unit-state","parameters":{"subject":"event-subject","state":"engaged"');
+    expect(result.mechanics.effect).toMatchObject({ condition: { type: "matches", parameters: { subject: "event-subject", filter: { engaged_with: "this-unit" } } } });
     expect(text).toContain('"subject":{"owner":"enemy"}');
     expect(text).not.toContain("filtered-units");
   });
@@ -156,7 +155,7 @@ describe("Round 5C leaf compiler", () => {
     ]);
     const text = (parameters: Record<string, unknown>) => { const result = state(parameters); return result.ok ? JSON.stringify(result.mechanics) : result.errors.join(); };
     // Without with, the DSL means engaged with any unit; "with this unit" must stay.
-    expect(text({ with: "this-unit" })).toContain('"parameters":{"subject":"event-subject","state":"engaged","with":"this-unit"}');
+    expect(text({ with: "this-unit" })).toContain('"type":"matches","parameters":{"subject":"event-subject","filter":{"engaged_with":"this-unit"}}');
     expect(text({ with: "this-unit", at: "phase-start" })).toContain('"state":"engaged","with":"this-unit","at":"phase-start"');
     expect(compileLeaves([leaf("CONDITION", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false, at: "turn-start" }, currentFamilyVersion("unit-state")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]).ok).toBe(false);
   });
@@ -170,8 +169,8 @@ describe("Round 5C leaf compiler", () => {
       leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
     ]);
     const text = JSON.stringify(result.mechanics);
-    expect(text).toContain('"type":"within","parameters":{"of":{"owner":"friendly","not_states":["engaged"]},"range":{"inches":8}}');
-    expect(text).toContain('"type":"unit-state","parameters":{"state":"engaged","with":{"owner":"friendly","all_of":["VEHICLE"]}}');
+    expect(text).toContain('"type":"matches","parameters":{"filter":{"within":{"of":{"owner":"friendly","not_states":["engaged"]},"range":{"inches":8}}}}');
+    expect(text).toContain('"type":"matches","parameters":{"filter":{"engaged_with":{"owner":"friendly","all_of":["VEHICLE"]}}}}');
     const missing = compileLeaves([leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]);
     expect(missing.ok ? "" : missing.errors.join()).toMatch(/no unit-filter follows it/u);
   });
@@ -206,10 +205,22 @@ describe("Round 5C leaf compiler", () => {
     expect(result.mechanics.behavior).toBe(edict.behavior);
     expect(rendered(edict, [lead(), attack(), leaf("EFFECT", "reroll", { roll: "hit", subset: "failed" })])).toMatch(/attached|leading/iu);
 
-    const hero = authored("aeldari", "piratical-hero-aeldari");
     const two = compiled([lead(), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
       leaf("EFFECT", "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "all" }, 2)]);
-    expect(two.mechanics.effect).toEqual(hero.effect);
+    expect(two.mechanics.effect).toEqual({
+      type: "conditional",
+      condition: { type: "attachment", parameters: { role: "leading", subject: "this-model" } },
+      effect: {
+        type: "sequence",
+        steps: [
+          { type: "roll-modifier", target: "this-unit", modifier: { operation: "add", roll: "hit", value: 1 } },
+          {
+            type: "weapon-ability-grant", target: "this-unit",
+            modifier: { keywords: [{ keyword_id: "sustained-hits", parameters: { value: 1 } }] },
+          },
+        ],
+      },
+    });
   });
 
   it("gives every family one fragment that validates and renders", () => {
@@ -223,14 +234,14 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "resource-action", { resource: "miracle-dice", operation: "gain", amount: 1 }), { type: "resource-gain", target: "this-model", modifier: { pool: "miracle-dice-pool", amount: 1 } }],
       [leaf("EFFECT", "characteristic-set", { subject: "this-model", characteristic: "M", value: 7 }), { type: "stat-modifier", target: "this-model", modifier: { stat: "M", operation: "set", value: 7 } }],
       // The bearer's weapon keyword is a weapon ability on this model, never a unit keyword.
-      [leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "melee" }, 3), { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } }],
+      [leaf("EFFECT", "weapon-ability-grant", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "melee" }, 3), { type: "weapon-ability-grant", target: "this-model", modifier: { keywords: [{ keyword_id: "lethal-hits" }], weapons: { type: "melee" } } }],
       [leaf("EFFECT", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }), { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 5 } }],
       [leaf("EFFECT", "feel-no-pain", { subject: "this-model", threshold: 4, against: "psychic" }), { type: "feel-no-pain", target: "this-model", modifier: { threshold: 4, against: "psychic" } }],
       [leaf("EFFECT", "invulnerable-save", { subject: "this-unit", threshold: 4 }), { type: "invulnerable-save", target: "this-unit", modifier: { invuln_sv: 4 } }],
       [leaf("EFFECT", "fights-first", { subject: "this-unit" }), { type: "ability-grant", target: "this-unit", modifier: { ability: "fights-first" } }],
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristic: "OC", operation: "add", value: 1 }), { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } }],
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "melee" }, 2),
-        { type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 1, weapon_type: "melee" } }],
+        { type: "stat-modifier", target: "this-unit", modifier: { stat: "AP", operation: "improve", value: 1, weapons: { type: "melee" } } }],
       [leaf("EFFECT", "characteristic-modifier", { subject: "this-model", characteristics: ["A", "S"], operation: "add", value: 1, weapon_type: "all" }, 2),
         { type: "sequence", steps: [{ type: "stat-modifier", target: "this-model", modifier: { stat: "A", operation: "add", value: 1 } }, { type: "stat-modifier", target: "this-model", modifier: { stat: "S", operation: "add", value: 1 } }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "1" }), { type: "heal", target: "this-model", modifier: { amount: 1 } }],
@@ -243,7 +254,7 @@ describe("Round 5C leaf compiler", () => {
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["fall-back"], acts: ["shoot"] }), { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, after: ["fall-back"] } }],
       // Shooting after an Advance is [ASSAULT] on ranged weapons; after a Fall Back it is a permission.
       [leaf("EFFECT", "act-after-move", { subject: "this-unit", moves: ["advance", "fall-back"], acts: ["shoot"] }), { type: "sequence", steps: [
-        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Assault"], weapon_type: "ranged" } },
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { keywords: [{ keyword_id: "assault" }], weapons: { type: "ranged" } } },
         { type: "permission", target: "this-unit", modifier: { activity: "shoot", allow: true, after: ["fall-back"] } }] }],
       [leaf("EFFECT", "regain-wounds", { subject: "this-model", amount: "D3" }, 2), { type: "heal", target: "this-model", modifier: { amount: "D3" } }],
     ];

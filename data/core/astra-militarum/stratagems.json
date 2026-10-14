@@ -991,7 +991,22 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Regiment"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
     "ability_id": "on-my-position-bridgehead-strike-astra-militarum",
     "game_version": {
       "edition": "11th",
@@ -1375,7 +1390,37 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "BULLGRYN SQUAD",
+                  "OGRYN SQUAD"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "stirred-to-action-abhuman-auxiliaries-astra-militarum",
     "game_version": {
       "edition": "11th",
@@ -1605,7 +1650,43 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Astra Militarum",
+        "Infantry"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "not_states": [
+                  "engaged"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": "event-subject",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "triggered-alerts-designation-force-astra-militarum",
     "game_version": {
       "edition": "11th",

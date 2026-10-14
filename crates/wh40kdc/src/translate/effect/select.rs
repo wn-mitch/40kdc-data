@@ -1,15 +1,30 @@
 //! The selection containers: `select-units`, `for-each-unit`, `designate-target`,
-//! `persistent-designation` and `leader-model-ability-grant`, with their selector phrases and
-//! bound-selection names. Mirrors the matching helpers in `tools/src/translate/effect.ts`.
+//! and `persistent-designation`, with their selector phrases and bound-selection names.
+//! Mirrors the matching helpers in `tools/src/translate/effect.ts`.
 
 use serde_json::Value;
 
 use super::inline;
 use super::words::*;
-use crate::translate::condition::{
-    describe_selection_eligibility_value, nn, obj, or_list, truthy, P,
-};
+use crate::translate::condition::{describe_selection_eligibility_value, nn, obj, truthy, P};
 use crate::translate::dekebab;
+
+fn selector_filter(sel: &P) -> &P {
+    obj(sel.get("filter"))
+}
+
+fn selector_level(sel: &P) -> &'static str {
+    if sv(selector_filter(sel), "level") == Some("model") {
+        "model"
+    } else {
+        "unit"
+    }
+}
+
+fn selector_bounds(sel: &P) -> (Option<&Value>, Option<&Value>) {
+    let count = obj(sel.get("count"));
+    (nn(count, "min"), nn(count, "max"))
+}
 
 /// "the bound reprise beneficiary" for a selection/event reference, else `fallback`.
 pub(crate) fn selection_ref_name(r: Option<&Value>, fallback: &str) -> String {
@@ -26,7 +41,7 @@ pub(crate) fn selection_binding(sel: &P) -> String {
     match sv(sel, "bind_as").filter(|s| !s.is_empty()) {
         Some(name) => format!(
             ", binding {} as {}",
-            if sv(sel, "selection_mode") == Some("any-number") {
+            if select_units_plural(sel) {
                 "them"
             } else {
                 "it"
@@ -34,15 +49,6 @@ pub(crate) fn selection_binding(sel: &P) -> String {
             dekebab(&name.replace('_', "-"))
         ),
         None => String::new(),
-    }
-}
-
-/// Range/engagement origin phrase for a selector's `reference`.
-pub(super) fn reference_origin(reference: Option<&Value>) -> &'static str {
-    match reference.and_then(Value::as_str) {
-        Some("bearer-transport") => "this model's unit's Transport",
-        Some("bearer-unit") => "this model's unit",
-        _ => "the bearer",
     }
 }
 
@@ -56,24 +62,7 @@ pub(super) fn eligibility_clause(sel: &P, require_object: bool) -> String {
 }
 
 fn target_noun(sel: &P) -> &'static str {
-    if sv(sel, "target_kind") == Some("model") {
-        "model"
-    } else {
-        "unit"
-    }
-}
-
-fn selection_model_filters(sel: &P) -> String {
-    let names = map_arr(sel, "model_names", jv)
-        .map(|n| format!(" named {}", or_list(&n)))
-        .unwrap_or_default();
-    let exclusions = match map_arr(sel, "excluded_keywords", jv) {
-        Some(ex) if !ex.is_empty() => {
-            format!(" (excluding {}s with {})", target_noun(sel), or_list(&ex))
-        }
-        _ => String::new(),
-    };
-    names + &exclusions
+    selector_level(sel)
 }
 
 pub(super) fn selection_limit_phrase(limit: &P, noun: &str) -> String {
@@ -88,138 +77,77 @@ pub(super) fn selection_limit_phrase(limit: &P, noun: &str) -> String {
     )
 }
 
-/// "one enemy Vehicle unit within 12\"" — the `select-units` selector phrase.
-pub(crate) fn select_units_subject(sel: &P) -> String {
-    let kw = map_arr(sel, "keywords", |k| title_case(&jv(k)))
-        .unwrap_or_default()
-        .join(" ");
-    let exact = nn(sel, "count").or_else(|| {
-        (nn(sel, "min_count").is_some() && num(sel.get("min_count")) == num(sel.get("max_count")))
-            .then(|| sel.get("max_count"))
-            .flatten()
-            .filter(|v| !v.is_null())
-    });
-    let bounded = nn(sel, "min_count").is_some() && exact.is_none();
-    let count = exact.or_else(|| sel.get("max_count"));
-    // A cap set by the battle size or by a count reads after the noun: "up to 1/2/3 enemy units
-    // (Incursion/…)".
-    let cap = count.and_then(Value::as_object);
-    let single = num(count) == 1.0;
-    let noun = if single {
-        target_noun(sel).to_string()
-    } else {
-        format!("{}s", target_noun(sel))
-    };
-    let cap_phrase = cap.map(quantity_phrase).unwrap_or_default();
-    let sized = cap.is_some_and(|c| nn(c, "count_of").is_none());
-    let quantity = if cap.is_some() {
-        if sized {
-            format!("up to {}", strip_paren_tail(&cap_phrase))
-        } else {
-            "any number of".to_string()
-        }
-    } else if exact.is_some() {
-        if single {
+/// Shared inclusive cardinality for unit and objective selectors.
+pub(super) fn selector_count(sel: &P) -> (String, bool) {
+    let (min, max) = selector_bounds(sel);
+    let quantity = |value: &Value| {
+        if value.as_f64() == Some(1.0) {
             "one".to_string()
         } else {
-            jstr(count)
+            dice_case(Some(value))
         }
-    } else if bounded {
-        format!(
-            "from {} through {}",
-            jstr(sel.get("min_count")),
-            jstr(sel.get("max_count"))
-        )
-    } else {
-        format!("up to {}", jstr(count))
     };
-    let wholly = if is_true(sel, "wholly") {
-        " wholly"
+    match (min, max) {
+        (Some(min), Some(max)) if !min.is_object() && min == max => {
+            (quantity(min), max.as_f64() != Some(1.0))
+        }
+        (Some(min), Some(max)) if min.as_f64() != Some(0.0) => (
+            format!("from {} through {}", quantity(min), quantity(max)),
+            max.as_f64() != Some(1.0),
+        ),
+        (_, Some(max)) => (
+            format!("up to {}", quantity(max)),
+            max.as_f64() != Some(1.0),
+        ),
+        (Some(min), _) => (format!("at least {}", quantity(min)), true),
+        _ => ("each".to_string(), false),
+    }
+}
+
+pub(super) fn selection_limit(sel: &P, noun: &str) -> String {
+    nn(sel, "limit")
+        .map(|limit| format!(" ({})", selection_limit_phrase(obj(Some(limit)), noun)))
+        .unwrap_or_default()
+}
+
+pub(super) fn selector_subject(sel: &P, plural: bool) -> String {
+    let phrase = super::subject::filter_subject(selector_filter(sel), &Ctx::default());
+    let phrase = phrase.strip_prefix("all ").unwrap_or(&phrase);
+    if plural {
+        phrase.to_string()
     } else {
-        ""
-    };
-    let bound_origin = if truthy_key(sel, "within_inches_from") {
-        format!(
-            " of {}",
-            selection_ref_name(sel.get("within_inches_from"), "the bound source unit")
-        )
-    } else {
-        String::new()
-    };
-    let within = if let Some(w) = nn(sel, "within_inches") {
-        format!("{wholly} within {}\"{bound_origin}", jv(w))
-    } else if let Some(r) = nn(sel, "range_inches") {
-        let origin = if bound_origin.is_empty() {
-            format!(" of {}", reference_origin(sel.get("reference")))
+        phrase
+            .replacen("units", "unit", 1)
+            .replacen("models", "model", 1)
+            .replacen("that are", "that is", 1)
+    }
+}
+
+/// A canonical unit selector, including cardinality, eligibility and selection allowance.
+pub(crate) fn select_units_subject(sel: &P) -> String {
+    let (mut quantity, plural) = selector_count(sel);
+    let (min, max) = selector_bounds(sel);
+    let mut tail = String::new();
+    if let Some(cap) = max.filter(|max| max.is_object() && (min.is_none() || num(min) == 0.0)) {
+        let phrase = dice_case(Some(cap));
+        if cap.get("count_of").is_some() {
+            quantity = "any number of".to_string();
+            tail = format!(" (at most {phrase})");
         } else {
-            bound_origin
-        };
-        format!("{wholly} within {}\"{origin}", jv(r))
-    } else {
-        String::new()
-    };
-    let visible = if truthy_key(sel, "visible_to") {
-        format!(
-            " visible to {}",
-            selection_ref_name(sel.get("visible_to"), "the bound source unit")
-        )
-    } else if is_true(sel, "visibility_required") {
-        " visible to the bearer".to_string()
-    } else {
-        String::new()
-    };
-    let inclusive = if bounded { ", inclusive" } else { "" };
-    let kw = if kw.is_empty() {
-        String::new()
-    } else {
-        format!(" {kw}")
-    };
-    let cap_tail = match cap {
-        None => String::new(),
-        Some(_) if sized => format!(" ({})", paren_inner(&cap_phrase)),
-        Some(_) => format!(" (at most {cap_phrase})"),
-    };
-    let noun = if cap.is_some() {
-        format!("{}s", target_noun(sel))
-    } else {
-        noun
-    };
+            quantity = format!("up to {}", strip_paren_tail(&phrase));
+            tail = format!(" ({})", paren_inner(&phrase));
+        }
+    }
     format!(
-        "{quantity} {}{kw} {noun}{cap_tail}{}{inclusive}{within}{visible}{}",
-        jstr(sel.get("owner")),
-        selection_model_filters(sel),
-        eligibility_clause(sel, true)
+        "{quantity} {}{tail}{}{}",
+        selector_subject(sel, plural),
+        eligibility_clause(sel, true),
+        selection_limit(sel, selector_level(sel))
     )
 }
 
-pub(crate) fn select_units_engagement(sel: &P) -> String {
-    let mut parts = Vec::new();
-    let noun = target_noun(sel);
-    let origin = reference_origin(sel.get("reference"));
-    match sv(sel, "engagement_relation") {
-        Some("engaged-with-bearer") => parts.push(format!(
-            "For each selected {noun}, it must be within Engagement Range of {origin}."
-        )),
-        Some("not-engaged-with-bearer") => parts.push(format!(
-            "For each selected {noun}, it must not be within Engagement Range of {origin}."
-        )),
-        _ => {}
-    }
-    if let Some(limit) = sel.get("selection_limit").filter(|l| truthy(Some(l))) {
-        parts.push(format!(
-            "{}.",
-            capitalize(&selection_limit_phrase(obj(Some(limit)), noun))
-        ));
-    }
-    parts.join(" ")
-}
-
 pub(crate) fn select_units_plural(sel: &P) -> bool {
-    // A cap set by the battle size or a count can select more than one.
-    if nn(sel, "count").is_none() && sel.get("max_count").is_some_and(Value::is_object) {
-        return true;
-    }
-    num(nn(sel, "count").or_else(|| sel.get("max_count"))) > 1.0
+    selector_count(sel).1
 }
 
 /// Global `\b[Tt]<pat>\b` replacement, with `repl(capital)` choosing the text.
@@ -258,7 +186,9 @@ pub(crate) fn selected_recipient(text: &str, sel: &P) -> String {
     } else {
         format!("the selected {noun}")
     };
-    let text = replace_the(text, "he unit's", |cap| {
+    // Membership remains relative to the bearer/current unit, not the selected recipient.
+    let text = text.replace("in the unit", "\u{e000}");
+    let text = replace_the(&text, "he unit's", |cap| {
         if cap {
             format!("Each selected {noun}'s")
         } else {
@@ -272,10 +202,11 @@ pub(crate) fn selected_recipient(text: &str, sel: &P) -> String {
             recipient.clone()
         }
     })
+    .replace('\u{e000}', "in the unit")
 }
 
 pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
-    let model = sv(sel, "target_kind") == Some("model");
+    let model = selector_level(sel) == "model";
     Ctx {
         selected_unit: !model,
         selected_model: model,
@@ -286,116 +217,19 @@ pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
 
 pub(crate) fn select_units_inline(sel: &P, effect: &Value, ctx: &Ctx) -> String {
     let subject = select_units_subject(sel);
-    let engagement = select_units_engagement(sel);
     let binding = selection_binding(sel);
     let nested = selected_recipient(&inline(effect, &selected_context(ctx, sel)), sel);
-    if engagement.is_empty() {
-        format!("select {subject}{binding}: {nested}")
-    } else {
-        format!(
-            "select {subject}{binding}. {engagement} {}",
-            capitalize(&nested)
-        )
-    }
+    format!("select {subject}{binding}: {nested}")
 }
 
-/// Render the beneficiary-only leader relation without exposing a bearer fallback.
-pub(crate) fn leader_model_ability_grant_clause(e: &P, ctx: &Ctx) -> String {
-    let filter = obj(nn(e, "leader_filter"));
-    let identity = if truthy_key(filter, "identity") {
-        title_case(&jstr(filter.get("identity")))
-    } else {
-        String::new()
-    };
-    let keywords = map_arr(filter, "keywords", bracket_keyword)
-        .unwrap_or_default()
-        .join(" and ");
-    let role = if sv(e, "beneficiary") == Some("attached-character-leader") {
-        "the attached CHARACTER leader model"
-    } else {
-        "the attached leader model"
-    };
-    let mut leader = role.to_string();
-    if !identity.is_empty() {
-        leader.push_str(&format!(" identified as {identity}"));
-    }
-    if !keywords.is_empty() {
-        leader.push_str(&format!(" with {keywords}"));
-    }
-    let unit_keywords = map_arr(e, "attached_unit_filter", bracket_keyword)
-        .unwrap_or_default()
-        .join(" and ");
-    let source = if unit_keywords.is_empty() {
-        "the bearer unit".to_string()
-    } else {
-        format!("the bearer unit with {unit_keywords}")
-    };
-    let rendered = inline_with_this_model(e, ctx);
-    format!("while {leader} leads {source}, {rendered}")
-}
-
-/// The granted effect rendered on the leader model, its leading "this model" renamed
-/// (`rendered.replace(/^this model\b/, "that leader model")`).
-fn inline_with_this_model(e: &P, ctx: &Ctx) -> String {
-    let mut nested = obj(nn(obj(e.get("grant")), "effect")).clone();
-    nested.insert("target".into(), Value::from("this-model"));
-    let text = inline(&Value::Object(nested), ctx);
-    match text.strip_prefix("this model") {
-        Some(rest)
-            if !rest
-                .chars()
-                .next()
-                .is_some_and(|c| c.is_ascii_alphanumeric() || c == '_') =>
-        {
-            format!("that leader model{rest}")
-        }
-        _ => text,
-    }
-}
-
-/// "enemy unit within 6\"" — the `for-each-unit` selector phrase.
+/// "enemy unit within 6\"" — the canonical all-matches selector phrase.
 pub(crate) fn for_each_unit_subject(sel: &P) -> String {
-    let list = map_arr(sel, "keywords", |k| title_case(&jv(k))).unwrap_or_default();
-    let keywords = if list.is_empty() {
-        String::new()
-    } else if sv(sel, "keyword_match") == Some("any") {
-        format!("{} ", or_list(&list))
-    } else {
-        format!("{} ", list.join(" "))
-    };
-    let mut within = nn(sel, "within_inches")
-        .map(|w| format!(" within {}\"", jv(w)))
-        .unwrap_or_default();
-    if truthy_key(sel, "within_objective") {
-        within.push_str(&format!(
-            " within range of {}",
-            selection_ref_name(sel.get("within_objective"), "the selected objective marker")
-        ));
-    }
-    let origin = reference_origin(sel.get("reference"));
-    let engagement = match sv(sel, "engagement_relation") {
-        Some("engaged-with-bearer") => format!(" in Engagement Range of {origin}"),
-        Some("not-engaged-with-bearer") => format!(" not in Engagement Range of {origin}"),
-        _ => String::new(),
-    };
-    let member = match sv(sel, "member_of") {
-        Some("bearer-unit") => " in this model's unit",
-        Some("embarked-in-bearer") => " embarked within this model",
-        Some("target") => " in the target unit",
-        _ => "",
-    };
-    // owner any: "each unit within 6\" of …", with no side word.
-    let owner = if sv(sel, "owner") == Some("any") {
-        String::new()
-    } else {
-        format!("{} ", jstr(sel.get("owner")))
-    };
     format!(
-        "{owner}{keywords}{}{}{member}{within}{engagement}{}{}",
-        target_noun(sel),
-        selection_model_filters(sel),
+        "{}{}{}{}",
+        selector_subject(sel, false),
         eligibility_clause(sel, false),
-        selection_binding(sel)
+        selection_binding(sel),
+        selection_limit(sel, selector_level(sel))
     )
 }
 

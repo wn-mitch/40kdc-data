@@ -6,7 +6,7 @@
 
 # Interface: DesignateTargetEffect
 
-Defined in: [generated.ts:2837](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2837)
+Defined in: [generated.ts:3747](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3747)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "designate-target-effect".
@@ -17,7 +17,7 @@ via the `definition` "designate-target-effect".
 
 > **type**: `"designate-target"`
 
-Defined in: [generated.ts:2838](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2838)
+Defined in: [generated.ts:3748](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3748)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [generated.ts:2838](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **designation**: `string`
 
-Defined in: [generated.ts:2839](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2839)
+Defined in: [generated.ts:3749](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3749)
 
 ***
 
@@ -33,83 +33,15 @@ Defined in: [generated.ts:2839](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **select**: `object`
 
-Defined in: [generated.ts:2840](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2840)
+Defined in: [generated.ts:3750](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3750)
 
-#### scope
+#### kind
 
-> **scope**: `"enemy-unit"` \| `"friendly-unit"`
+> **kind**: `"objective"` \| `"unit"`
 
-#### count?
+#### selector
 
-> `optional` **count?**: `number`
-
-#### timing?
-
-> `optional` **timing?**: `string`
-
-#### within\_inches?
-
-> `optional` **within\_inches?**: `number`
-
-#### reference?
-
-> `optional` **reference?**: `"bearer"` \| `"bearer-unit"` \| `"bearer-transport"`
-
-Explicit built-in origin of range and visibility gates, matching select-units. bearer-transport measures from the Transport the origin unit is embarked within.
-
-#### visibility\_required?
-
-> `optional` **visibility\_required?**: `boolean`
-
-#### keywords?
-
-> `optional` **keywords?**: \[`string`, `...string[]`\]
-
-##### Min Items
-
-1
-
-#### keyword\_match?
-
-> `optional` **keyword\_match?**: `"any"` \| `"all"`
-
-#### eligibility?
-
-> `optional` **eligibility?**: [`AbilityDSLCondition3`](../type-aliases/AbilityDSLCondition3.md)
-
-#### visible\_to?
-
-> `optional` **visible\_to?**: [`SelectionReference`](SelectionReference.md)
-
-#### excluded\_keywords?
-
-> `optional` **excluded\_keywords?**: \[`string`, `...string[]`\]
-
-##### Min Items
-
-1
-
-#### bind\_as?
-
-> `optional` **bind\_as?**: `string`
-
-#### within\_inches\_from?
-
-> `optional` **within\_inches\_from?**: [`SelectionReference`](SelectionReference.md)
-
-#### selection\_limit?
-
-> `optional` **selection\_limit?**: `object`
-
-Maximum selections of this same target by this ability across the whole army in the named period.
-
-##### selection\_limit.count
-
-> **count**: `number`
-
-##### selection\_limit.period
-
-> **period**: `"phase"` \| `"turn"` \| `"battle"` \| `"battle-round"`
+> **selector**: [`UnitSelector`](UnitSelector.md) \| [`ObjectiveSelector`](ObjectiveSelector.md)
 
 ***
 
@@ -117,7 +49,7 @@ Maximum selections of this same target by this ability across the whole army in 
 
 > **applies**: `object`
 
-Defined in: [generated.ts:2871](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2871)
+Defined in: [generated.ts:3754](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3754)
 
 #### to
 
@@ -127,25 +59,13 @@ Defined in: [generated.ts:2871](https://github.com/wn-mitch/40kdc-data/blob/a2eb
 
 > **effect**: [`EffectNode`](../type-aliases/EffectNode.md)
 
-#### attacker\_keywords?
+#### attacker\_filter?
 
-> `optional` **attacker\_keywords?**: \[`string`, `...string[]`\]
+> `optional` **attacker\_filter?**: [`UnitFilter`](UnitFilter.md)
 
-All keywords required on each individual friendly attacking MODEL, not on its unit. Only meaningful with to:attackers-of-target.
+#### attacker\_unit\_filter?
 
-##### Min Items
-
-1
-
-#### attacker\_unit\_keywords?
-
-> `optional` **attacker\_unit\_keywords?**: \[`string`, `...string[]`\]
-
-All keywords required on the attacking model's UNIT, including attached-unit keyword unions. Does not require those keywords on the individual model. Only meaningful with to:attackers-of-target.
-
-##### Min Items
-
-1
+> `optional` **attacker\_unit\_filter?**: [`UnitFilter`](UnitFilter.md)
 
 #### beneficiary?
 
@@ -159,6 +79,6 @@ All keywords required on the attacking model's UNIT, including attached-unit key
 
 ### duration?
 
-> `optional` **duration?**: `"phase"` \| `"turn"` \| `"battle"` \| `"battle-round"` \| `"until-next-command-phase"`
+> `optional` **duration?**: [`ScopeDuration`](../type-aliases/ScopeDuration.md)
 
-Defined in: [generated.ts:2889](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L2889)
+Defined in: [generated.ts:3762](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L3762)

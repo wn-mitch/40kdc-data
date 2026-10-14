@@ -54,9 +54,9 @@ describe("Round 5C count by battle round: compiling the selection's cap", () => 
     if (!result.ok) return;
     const effect = result.mechanics.effect as Record<string, any>;
     expect(effect.type).toBe("select-units");
-    expect(effect.selector.max_count).toEqual({ count_of: "battle-round" });
-    expect(effect.selector).not.toHaveProperty("count");
-    expect(effect.selector.keywords).toEqual(["ALPHA"]);
+    expect(effect.selector.count).toEqual({ min: 0, max: { count_of: "battle-round" } });
+    expect(effect.selector).not.toHaveProperty("max_count");
+    expect(effect.selector.filter).toEqual({ owner: "friendly", all_of: ["ALPHA"] });
     const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json");
     expect(validate?.(effect), JSON.stringify(validate?.errors)).toBe(true);
   });
@@ -65,7 +65,7 @@ describe("Round 5C count by battle round: compiling the selection's cap", () => 
     const text = "Select a number of friendly ALPHA units equal to or less than the battle size limit. Those units must take a Battle-shock test.";
     const result = run(text, SELECT, FILTER, ["equal to or less than the battle size limit", "count-by-battle-size", { incursion: 1, "strike-force": 2, onslaught: 3 }], EFFECT);
     expect(result.ok).toBe(true);
-    if (result.ok) expect((result.mechanics.effect as Record<string, any>).selector.max_count).toEqual({ incursion: 1, "strike-force": 2, onslaught: 3 });
+    if (result.ok) expect((result.mechanics.effect as Record<string, any>).selector.count).toEqual({ min: 0, max: { incursion: 1, "strike-force": 2, onslaught: 3 } });
   });
 
   it("refuses both a battle-size and a battle-round count", () => {

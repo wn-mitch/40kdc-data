@@ -70,7 +70,7 @@ describe("groupMembership: a membership becomes its model-level filter's member_
     const json = JSON.stringify(mechanics);
     expect(json).toContain('"member_of":"this-unit"');
     expect(json).toContain('"none_of":["CHARACTER"]');
-    expect(json).toContain('"weapon_type":"melee"');
+    expect(json).toContain('"weapons":{"type":"melee"}');
   });
 
   it("refuses a membership that is not a model of its unit, with the membership text", () => {
@@ -168,7 +168,7 @@ describe("a weapon scope printed before its recipient chain, and the stat-first 
       setA("have an Attacks characteristic of 4", 4),
       ["[HAZARDOUS] ability", "weapon-ability-keyword", { keyword: "Hazardous" }]));
     expect(json).toContain('"member_of":"this-unit"');
-    expect(json).toContain("Hazardous");
+    expect(json).toContain('"keyword_id":"hazardous"');
   });
 
   it("keeps a bare stat after a chain unhoisted: the chain still refuses", () => {
@@ -199,7 +199,7 @@ describe("an attack exclusion (excluded_from attacks)", () => {
       ["have [IGNORES COVER]", "weapon-ability-keyword", { keyword: "Ignores Cover" }]));
     expect(json).toContain('"none_of":["CHARACTER"]');
     expect(json).toContain('"member_of":"this-unit"');
-    expect(json).toContain('"weapon_type":"ranged"');
+    expect(json).toContain('"weapons":{"type":"ranged"}');
     expect(json).not.toContain("unit-filter-target");
   });
 
@@ -220,7 +220,7 @@ describe("a membership filter is not a selection, an aura or a target", () => {
       ["CRYPTEK models", "unit-filter", { side: "friendly", keywords: ["CRYPTEK"], level: "model" }],
       member("in your unit", "stratagem-target"),
       ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }])).toEqual([
-      "A unit-filter whose models belong to a unit has no selection, aura or Stratagem target shape yet.",
+      "This unit-filter relation has no static Stratagem TARGET metadata field.",
     ]);
   });
 });
@@ -236,7 +236,7 @@ describe("a Stratagem's membership with the scope printed first", () => {
       member("in your unit", "stratagem-target"),
       ["[DEVASTATING WOUNDS]", "weapon-ability-keyword", { keyword: "Devastating Wounds" }]));
     expect(json).toContain('"member_of":"stratagem-target"');
-    expect(json).toContain("Devastating Wounds");
+    expect(json).toContain('"keyword_id":"devastating-wounds"');
   });
 });
 
@@ -277,7 +277,7 @@ describe("a weapon property scope naming no weapon keyword binds to a model-grou
       ["[Psychic] attacks have", "weapon-property-scope", { subject: "antecedent", weapon_type: "all", weapon_keyword: "Psychic" }],
       ["+1 S", "characteristic-modifier", { characteristics: ["S"], operation: "add", value: 1 }]));
     expect(json).toContain('"all_of":["ORKS","PSYKER"]');
-    expect(json).toContain('"weapon_keyword":"Psychic"');
+    expect(json).toContain('"weapons":{"keyword":{"keyword_id":"psychic"}}');
   });
 });
 

@@ -6,7 +6,7 @@
 
 # Interface: AlliedKeywordLimit
 
-Defined in: [generated.ts:1122](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1122)
+Defined in: [generated.ts:2428](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2428)
 
 Per-keyword cap on how many units carrying `keyword` may be included via an allied rule at one battle size.
 
@@ -19,7 +19,7 @@ via the `definition` "allied-keyword-limit".
 
 > **keyword**: `string`
 
-Defined in: [generated.ts:1126](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1126)
+Defined in: [generated.ts:2432](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2432)
 
 Keyword the cap counts (matched case-insensitively against a unit's keywords union faction_keywords, e.g. 'Titanic', 'Armiger', 'Character').
 
@@ -29,7 +29,7 @@ Keyword the cap counts (matched case-insensitively against a unit's keywords uni
 
 > **battle\_size**: `"incursion"` \| `"strike-force"` \| `"onslaught"`
 
-Defined in: [generated.ts:1130](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1130)
+Defined in: [generated.ts:2436](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2436)
 
 Battle size this cap applies at.
 
@@ -39,6 +39,6 @@ Battle size this cap applies at.
 
 > **max\_count**: `number`
 
-Defined in: [generated.ts:1134](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1134)
+Defined in: [generated.ts:2440](https://github.com/wn-mitch/40kdc-data/blob/b7ac7531588eb50347a5a2c83b5cdd320c728eb0/tools/src/generated.ts#L2440)
 
 Maximum number of units carrying `keyword` includable via the rule at this battle size.

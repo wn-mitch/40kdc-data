@@ -141,8 +141,7 @@ func resolveEligibleAbilities(ds *Dataset, input map[string]any, phase string) [
 			if !phaseMatches(ability) {
 				continue
 			}
-			scope, _ := getMap(ability.Raw, "scope")
-			if !isAuraScope(scope["range"]) && !reachesOtherUnits(ability.Raw["effect"]) {
+			if !reachesOtherUnits(ability.Raw["effect"]) {
 				continue
 			}
 			pushUnique(rated(map[string]any{"ability": ability, "source": map[string]any{"kind": "support", "sourceUnitId": supportID}, "phases": intersect(ability.Phases())}, supporter, ability))
