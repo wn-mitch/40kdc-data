@@ -21,9 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Node 24: the Round 5C workbench tests open node:sqlite through
+      # `openWorkbench`, which requires it.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - run: cd tools && npm ci
       # Regenerate the TS types from the committed bundle and fail if they
       # drifted (the bundle's own freshness vs the schemas is checked in `rust`).
