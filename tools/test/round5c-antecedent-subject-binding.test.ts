@@ -4,8 +4,11 @@ import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { describeEffect } from "../src/translate/effect.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { ABILITY_MODIFIER_ANTECEDENT, FAMILY_EXTENSIONS_20_ANTECEDENT_SUBJECT_BINDING } from "../src/round5c/family-extensions-20-antecedent-subject-binding.js";
+import { familyExtension } from "../src/round5c/families/index.js";
+import { ABILITY_MODIFIER_ANTECEDENT } from "../src/round5c/families/abilities.js";
+
+/** The family versions the extensions under test create. */
+const ANTECEDENT_SUBJECT_BINDING_VERSIONS: ReadonlySet<string> = new Set(["unit-filter@13", "weapon-property-scope@7", "battle-shock-state@2", "ability-modifier@4", "unit-activity@20"]);
 
 // Fabricated wording only. Each test names the defect it hunts; the compile tests fail on the tree before the change.
 
@@ -40,7 +43,7 @@ function errorsOf(text: string, items: Item[]): string[] {
 const PREVIOUS = (family: string) => {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_ANTECEDENT_SUBJECT_BINDING.includes(extension)) return version - 1;
+    if (extension !== undefined && ANTECEDENT_SUBJECT_BINDING_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error(`The antecedent-subject-binding extensions do not extend ${family}.`);
 };

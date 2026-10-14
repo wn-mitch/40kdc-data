@@ -2,12 +2,12 @@ import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter } from "./compile-unit-filters.js";
 import { STRATAGEM_HEADER } from "./compile-segments.js";
-import { DESTRUCTION_ACTIVITIES } from "./family-extensions-17-triggering-destruction.js";
-import { DESTROYED_STRATAGEM_TARGET } from "./family-extensions-20-antecedent-subject-binding.js";
-import { WINDOWED_DESTRUCTION } from "./family-extensions-20-unit-activity-history-values.js";
+import { DESTRUCTION_ACTIVITIES } from "./families/unit-activity.js";
+import { DESTROYED_STRATAGEM_TARGET } from "./families/unit-activity.js";
+import { WINDOWED_DESTRUCTION } from "./families/unit-activity.js";
 
 /**
- * Destruction by the triggering attacks (family-extensions-17-triggering-destruction.ts). The fold
+ * Destruction by the triggering attacks (unit-activity@15, families/unit-activity.ts). The fold
  * pairs each destruction activity with the unit-filter that names what was destroyed, and with a
  * unit-position that measures it, then stores the object on the activity leaf. The lowering reads
  * that stored object as the DSL `happened` node with window `event`.

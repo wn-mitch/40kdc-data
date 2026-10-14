@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { SCOPE_WEAPON_KEYWORDS } from "../src/round5c/family-extensions-16-weapon-ability-removal.js";
+import { SCOPE_WEAPON_KEYWORDS } from "../src/round5c/families/weapons.js";
 import { describeEffect, type Effect } from "../src/translate/index.js";
 import { effectToBuffs } from "../src/cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../src/cruncher/buffs.js";

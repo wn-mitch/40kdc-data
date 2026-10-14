@@ -6,7 +6,7 @@
  */
 
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { FOLLOWING_FILTER } from "./family-extensions-11.js";
+import { FOLLOWING_FILTER } from "./families/shared.js";
 
 type Node = Record<string, unknown>;
 

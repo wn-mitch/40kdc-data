@@ -6,7 +6,7 @@ import { createValidator } from "../src/schema-loader.js";
 import { describeAbility } from "../src/translate/index.js";
 
 /**
- * Activating the options of an option-bearing rule (activation-families.ts, compile-activation.ts):
+ * Activating the options of an option-bearing rule (families/abilities.ts, compile-activation.ts):
  * which options become active, for whom, whether they replace or join the active option, the
  * earlier pick a `chosen` activation names, and the menu holder and stance flags beside them.
  * Every text here is fabricated wording, not rules text.

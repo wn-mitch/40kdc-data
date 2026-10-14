@@ -1,7 +1,7 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
- * "every model in that unit is within 3\" of ..." (family-extensions-16-every-model-position.ts):
+ * "every model in that unit is within 3\" of ..." (unit-position@23, families/positions.ts):
  * the DSL's `models: "every"` on a within predicate. A within distance is measured to this unit or
  * to the following filter's unit; an objective-range takes no `of`. Every other distance form is
  * refused here, so no branch of the position compiler can drop `models` without a message.

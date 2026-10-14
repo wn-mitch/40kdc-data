@@ -94,9 +94,9 @@ describe("Round 5C leaf describer audit", () => {
       // never shows; the omitted-subject collision is the same one every widened predicate has.
       // into names the Transport a record's other leaves give (an antecedent, a following filter, a bound selection), or this unit;
       // a leaf alone has no unit to name for the first three, so each of those combinations is a problem on its own.
-      // The event-subject subject (family-extensions-16-stratagem-target-alternatives-followup.ts) adds 132 problem
+      // The event-subject subject (eligibility-permission@6) adds 132 problem
       // combinations: the same count the this-unit and this-model subjects give together (264) before it.
-      // The filtered-units subject (family-extensions-20-embarked-units-state-subject-and-moves.ts) names the units of the
+      // The filtered-units subject (eligibility-permission@7) names the units of the
       // unit-filter before the leaf; on its own the preview reads them as friendly units (leaf-preview.ts), so only the
       // combinations whose `into` needs another leaf stay problems: 132 for each of the four subjects (this-unit, this-model,
       // event-subject, filtered-units), 528 in all.

@@ -17,6 +17,9 @@ import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { isTargetRef } from "./compile-target-refs.js";
 import { namedRange } from "./named-ranges.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
+import { CompileError } from "./compile-error.js";
+
+export { CompileError };
 
 export type CompileLeaf = {
   role: string;
@@ -37,8 +40,6 @@ export type CompileLeaf = {
   antecedent_keys?: string[];
 };
 
-export class CompileError extends Error {}
-
 type Node = Record<string, unknown>;
 
 const RESOURCE_POOLS: Record<string, string> = {
@@ -48,13 +49,13 @@ const RESOURCE_POOLS: Record<string, string> = {
 /** Whose models an effect changes. "The bearer" is this-model; leaves still spelling it bearer are on a retired version. */
 const SUBJECT_TARGETS: Record<string, string> = {
   "this-unit": "this-unit", "this-model": "this-model", "selected-unit": "selected-unit",
-  // Later versions of some effect families (family-extensions.ts) also name the triggering unit and the attack's target.
+  // Later versions of some effect families (families/) also name the triggering unit and the attack's target.
   "event-subject": "event-subject", target: "defender",
   // Bound by compile-antecedent.ts only: the unit a moment happens to (damage allocated to it).
   "event-object": "event-object",
   // Bound by compile-antecedent.ts only: the unit an aura reaches.
   recipient: "recipient",
-  // The Transport the bearer is embarked within (family-extensions-16-embarked-transport.ts).
+  // The Transport the bearer is embarked within (bearer-transport, families/shared.ts).
   "bearer-transport": "bearer-transport",
 };
 /** Recipients that stay themselves when a leader is attached; only the ability's own unit widens to the attached unit. */
@@ -553,8 +554,8 @@ function leafEffect(leaf: CompileLeaf, context: Parameters<typeof effect>[1]): N
       return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
     }
     case "counts-as": {
-      // A region grant (family-extensions-15-named-region.ts) names the army rule's region instead of a range;
-      // a named-range grant (family-extensions-16-named-range-reference.ts) names the range and whose units it is measured to.
+      // A region grant (counts-as@2, families/regions.ts) names the army rule's region instead of a range;
+      // a named-range grant (counts-as@3) names the range and whose units it is measured to.
       const modifier: Node = leaf.parameters.range_ref !== undefined
         ? { within: { aura_of: namedRange(leaf.parameters.range_ref).aura_of }, of: { owner: closed(leaf, "of_side") } }
         : leaf.parameters.region !== undefined

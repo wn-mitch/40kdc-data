@@ -197,7 +197,7 @@ describe("Round 5C model selection in the bearer's unit (membership@2)", () => {
 
   it("accepts stratagem-target only in membership version 2", () => {
     expect(currentFamilyVersion("membership")).toBe(3);
-    // Version 3 (family-extensions-16-model-keyword-scope.ts) adds antecedent; version 2 still refuses it.
+    // Version 3 (families/regions.ts) adds antecedent; version 2 still refuses it.
     expect(() => normalizeFingerprintParameters("membership", { relation: "in", of: "antecedent" }, 2)).toThrow();
     expect(normalizeFingerprintParameters("membership", { relation: "in", of: "antecedent" }, 3)).toEqual({ relation: "in", of: "antecedent" });
     expect(normalizeFingerprintParameters("membership", { relation: "in", of: "stratagem-target" }, 2)).toEqual({ relation: "in", of: "stratagem-target" });

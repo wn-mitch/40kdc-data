@@ -5,7 +5,7 @@ type Node = Record<string, unknown>;
 
 /**
  * The designation an optional spend of a pool sets, for version-1 window-use leaves that name no
- * tag. Version 2 leaves name their own tag (family-extensions-16-optional-cost-paid-condition.ts).
+ * tag. Version 2 leaves name their own tag (optional-cost-paid@2, families/army.ts).
  */
 export const OPTIONAL_COST_TAGS: Record<string, string> = { "yp-pool": "yp-spent-this-use" };
 

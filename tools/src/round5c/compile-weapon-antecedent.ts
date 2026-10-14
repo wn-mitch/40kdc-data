@@ -224,7 +224,7 @@ function scopeAttacks(leaf: CompileLeaf, earlier: readonly CompileLeaf[]): { fil
 
 /**
  * An antecedent frame: a weapon-ability-grant or weapon-property-scope with `frame: "antecedent"`
- * (family-extensions-18-frame-antecedent.ts). It names no recipient or weapon type; the binder takes
+ * (weapon-property-scope@5 and weapon-ability-grant@10, families/weapons.ts). It names no recipient or weapon type; the binder takes
  * both from the nearest earlier frame or scope, so the branch it opens shares the sentence's weapons.
  *
  * The source is the nearest earlier grant with no keyword or scope with a subject, bound or not. Refused:

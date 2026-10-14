@@ -1,7 +1,7 @@
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
- * Lowers the named-equipment conditions (family-extensions-16-named-wargear-loadout.ts) to DSL
+ * Lowers the named-equipment conditions (families/wargear.ts) to DSL
  * predicates, and refuses the unit-level pairs the DSL cannot tie to one model. Negation is applied
  * by the caller (compile-conditions.ts `polarity`), so these builders return the affirmative node.
  */

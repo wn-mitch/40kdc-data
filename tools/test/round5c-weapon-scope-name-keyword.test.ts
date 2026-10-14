@@ -3,9 +3,11 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { resolveAuthoredNames } from "../src/round5c/compile-weapon-names.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION } from "../src/round5c/family-extensions-20-weapon-scope-name-keyword-exclusion.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import type { WeaponCatalog } from "../src/round5c/weapon-catalog.js";
+
+/** The family versions the extensions under test create. */
+const WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS: ReadonlySet<string> = new Set(["weapon-property-scope@8", "characteristic-set@8", "roll-modifier@8"]);
 
 /**
  * A scope that names one weapon, a set that selects weapons by keyword, and a roll modifier for named
@@ -63,7 +65,7 @@ describe("family versions: weapon-property-scope weapon_name, characteristic-set
     // Later extensions may sit above this one, so find its version by identity, not as the current one.
     for (const family of ["weapon-property-scope", "characteristic-set", "roll-modifier"]) {
       const versions = Array.from({ length: currentFamilyVersion(family) }, (_, at) => at + 1);
-      const extension = versions.map((version) => familyExtension(family, version)).find((found) => found !== undefined && FAMILY_EXTENSIONS_20_WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION.includes(found));
+      const extension = versions.map((version) => familyExtension(family, version)).find((found) => found !== undefined && WEAPON_SCOPE_NAME_KEYWORD_EXCLUSION_VERSIONS.has(`${found.family}@${found.version}`));
       expect(extension?.description).toMatch(/^As the previous version, plus weapon_/u);
     }
   });

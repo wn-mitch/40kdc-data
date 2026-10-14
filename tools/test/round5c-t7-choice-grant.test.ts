@@ -195,7 +195,7 @@ describe("Round 5C t7 choice and grant bundle", () => {
     expect(effect).toMatchObject({ type: "weapon-ability-grant", target: { owner: "friendly", all_of: ["ALPHA"], level: "model" }, modifier: { abilities: ["Devastating Wounds"] } });
   });
 
-  // The ability-activate version that takes a recipient unit-filter as its subject (family-extensions-16-t7-choice-grant-bundle.ts).
+  // The ability-activate version that takes a recipient unit-filter as its subject (ability-activate@3, families/abilities.ts).
   it("accepts the filtered-units subject on the current ability-activate version, and every value the previous version took", () => {
     const version = currentFamilyVersion("ability-activate");
     expect(version).toBeGreaterThan(2);

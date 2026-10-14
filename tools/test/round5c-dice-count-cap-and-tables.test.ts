@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_DICE_COUNT_CAP_AND_TABLES } from "../src/round5c/family-extensions-20-dice-count-cap-and-tables.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { mergedFilter } from "../src/round5c/compile-unit-filters.js";
 import { createValidator } from "../src/schema-loader.js";
+
+/** The family versions the extensions under test create. */
+const DICE_COUNT_CAP_AND_TABLES_VERSIONS: ReadonlySet<string> = new Set(["dice-roll@6", "reroll@7", "roll-modifier@9", "roll-auto-result@4", "characteristic-set@9"]);
 
 type Item = [string, string, Record<string, unknown>, string?, string?];
 
@@ -45,7 +47,7 @@ function errorsOf(text: string, items: Item[]): string[] {
 const PREVIOUS = (family: string) => {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_DICE_COUNT_CAP_AND_TABLES.includes(extension)) return version - 1;
+    if (extension !== undefined && DICE_COUNT_CAP_AND_TABLES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error(`The dice bundle does not extend ${family}.`);
 };

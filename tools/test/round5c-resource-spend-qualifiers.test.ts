@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_RESOURCE_SPEND_GAIN_QUALIFIERS } from "../src/round5c/family-extensions-20-resource-spend-gain-qualifiers.js";
+import { familyExtension } from "../src/round5c/families/index.js";
+
+/** The family versions the extensions under test create. */
+const RESOURCE_SPEND_GAIN_QUALIFIERS_VERSIONS: ReadonlySet<string> = new Set(["event@27"]);
 
 type Item = [string, string, Record<string, unknown>, string?];
 
@@ -34,7 +36,7 @@ const errorsOf = (text: string, items: Item[]): string[] => {
 const PREVIOUS_EVENT = (() => {
   for (let version = currentFamilyVersion("event"); version > 1; version -= 1) {
     const extension = familyExtension("event", version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_RESOURCE_SPEND_GAIN_QUALIFIERS.includes(extension)) return version - 1;
+    if (extension !== undefined && RESOURCE_SPEND_GAIN_QUALIFIERS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error("The qualifier extension does not extend event.");
 })();

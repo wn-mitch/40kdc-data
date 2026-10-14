@@ -4,7 +4,7 @@ import { isContainerOpener } from "./compile-containers.js";
 type Node = Record<string, unknown>;
 
 /**
- * Activating the options of an option-bearing rule (`ability-activate`, activation-families.ts).
+ * Activating the options of an option-bearing rule (`ability-activate`, families/abilities.ts).
  *
  * "select one Plague. … that enemy unit has the effect of that Plague": the activation names the
  * option picked earlier (`chosen`), and the optionless `choice-open` before it is that pick, not a

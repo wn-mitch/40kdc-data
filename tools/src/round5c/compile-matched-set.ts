@@ -1,6 +1,6 @@
 import { matchingUnit } from "./compile-conditions.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { MATCHED_UNITS } from "./family-extensions-16-those-enemy-units-role.js";
+import { MATCHED_UNITS } from "./families/shared.js";
 
 /**
  * "those X units": the units an earlier unit-position of matching-unit introduced. The pass below

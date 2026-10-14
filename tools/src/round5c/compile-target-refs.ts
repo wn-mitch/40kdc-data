@@ -1,8 +1,8 @@
 import { ANTECEDENT, antecedentKeys } from "./antecedent-families.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { currentFamilyVersion, exactSpan, familyRole } from "./contracts.js";
-import { AMONG_TARGETS } from "./family-extensions-w8-multi.js";
-import { awaitsFollowingFilter, FOLLOWING_FILTER } from "./family-extensions-11.js";
+import { AMONG_TARGETS } from "./families/unit-filters.js";
+import { awaitsFollowingFilter, FOLLOWING_FILTER } from "./families/shared.js";
 import { type TargetHead, targetGroupOf, targetHeads } from "./compile-target-groups.js";
 import { assignTargetModes } from "./compile-target-modes.js";
 

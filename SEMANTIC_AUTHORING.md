@@ -90,7 +90,7 @@ unless it is needed to operate.
   cannot name the unit it binds to. A roll-modifier's `preceding` roll ("adding 1 to the result")
   binds the same way to the nearest roll or test before it (`compile-preceding-roll.ts`). Because the leaf
   stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
-- **A family version widens; it never reinterprets.** A later version (`family-extensions.ts`)
+- **A family version widens; it never reinterprets.** A later version (`tools/src/round5c/families/`)
   adds values or optional parameters and hands the rest of a leaf to the previous version, so
   earlier leaves move across by identity.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to

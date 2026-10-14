@@ -15,8 +15,8 @@ import { ANTECEDENT } from "./antecedent-families.js";
 import { FILTERED_UNITS } from "./compile-antecedent.js";
 import { closed, CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { dslUnitFilter, mergeStackedFilters } from "./compile-unit-filters.js";
-import { FOLLOWING_FILTER } from "./family-extensions-11.js";
-import { ARMY_SUBJECT_RULES } from "./family-extensions-w8-army-construction.js";
+import { FOLLOWING_FILTER } from "./families/shared.js";
+import { ARMY_SUBJECT_RULES } from "./families/army.js";
 
 type Node = Record<string, unknown>;
 

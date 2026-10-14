@@ -23,7 +23,7 @@ import { optionalCostCondition } from "./compile-optional-cost.js";
 import { namedEquipmentPredicate } from "./compile-named-equipment.js";
 import { checkStratagemActivity, stratagemTargetedAnyOf } from "./compile-opponent-stratagem.js";
 import { phaseEdgeDuration } from "./compile-duration-edges.js";
-import { PHASE_EDGE_ENDPOINTS } from "./family-extensions-16-duration-endpoint-vocabulary.js";
+import { PHASE_EDGE_ENDPOINTS } from "./families/durations-and-designations.js";
 import { canonicalDesignation } from "./compile-redesignate.js";
 
 type Node = Record<string, unknown>;
@@ -464,13 +464,13 @@ export function condition(leaf: CompileLeaf): Node {
       if (kind === "within" || kind === "beyond") {
         // Version 4 names what the distance is measured from; earlier versions always meant the
         // distance from this unit to the attack's target, as the authored data measures it.
-        // A named range (range_ref, family-extensions-16-named-range-reference.ts) replaces inches:
+        // A named range (range_ref, unit-position@15) replaces inches:
         // its aura carries the anchor, and `of` says whose units the distance is measured to.
         // range_ref engagement is the Engagement Range itself: the DSL names it as the string "engagement", not an aura.
         const engagement = leaf.parameters.range_ref === "engagement";
         const named = leaf.parameters.range_ref !== undefined && !engagement;
         if (named && kind === "beyond") throw new CompileError("A named range is measured within, not beyond.");
-        // A weapon distance (distance half-weapon, family-extensions-16-multi-weapon-name.ts) is the attacking weapon's half range: a range string, not inches.
+        // A weapon distance (distance half-weapon, unit-position@21) is the attacking weapon's half range: a range string, not inches.
         const weaponDistance = leaf.parameters.distance !== undefined;
         const range = (engagement ? "engagement" : named ? { aura_of: namedRange(leaf.parameters.range_ref).aura_of } : weaponDistance ? "half-weapon" : { inches: closed(leaf, "inches") }) as unknown as Node;
         const inchesOnly = (): Node => {
@@ -478,7 +478,7 @@ export function condition(leaf: CompileLeaf): Node {
           return { inches: closed(leaf, "inches") };
         };
         const wholly = leaf.parameters.wholly === true ? { wholly: true } : {};
-        // Version 22: every model of the subject is within (family-extensions-16-every-model-position.ts).
+        // Version 22: every model of the subject is within (unit-position@23).
         const every = everyModelFlag(leaf);
         // Wave 10: a distance to an objective marker by its designation and controller, or to the
         // enemy deployment zone (a region place, beyond only; compile-set-up-placement folds it).

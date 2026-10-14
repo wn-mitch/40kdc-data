@@ -51,15 +51,15 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
 };
 
 /**
- * Keys whose antecedent a later family version (`family-extensions.ts`) accepts directly, in a
+ * Keys whose antecedent a later family version (`families/`) accepts directly, in a
  * schema of its own rather than through an antecedent version above.
  */
 const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "add 3\" to that unit's Contagion Range": the unit an earlier filter, aura or Stratagem target names
-  // (family-extensions-20-antecedent-subject-binding.ts).
+  // (families/abilities.ts, ability-modifier@4).
   "ability-modifier": ["subject"],
   event: ["subject", "by"],
-  // An embark permission's destination ("that TRANSPORT"), accepted by family-extensions-16-transport-embark-eligibility-followup.ts.
+  // An embark permission's destination ("that TRANSPORT"), accepted by eligibility-permission@5 (families/eligibility.ts).
   "eligibility-permission": ["into"],
   "rule-state": ["subject"],
   "targeting-restriction": ["by", "target"],
@@ -69,7 +69,7 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "roll-modifier": ["subject"],
   reroll: ["subject"],
   "in-region": ["subject"],
-  // "that unit is within your army's Hallowed Ground": the unit an earlier leaf introduced (family-extensions-15-named-region.ts).
+  // "that unit is within your army's Hallowed Ground": the unit an earlier leaf introduced (in-region@3, families/regions.ts).
   "counts-as": ["subject"],
   // "if that unit targeted this unit"; "if one or more units with this ability are selected as a target of that charge".
   targeted: ["subject"],
@@ -78,7 +78,7 @@ const EXTENDED_ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "chosen-option-grant": ["holder"],
   // "change the Damage of that attack to 0" for the model whose save an earlier roll moment names.
   "damage-reduction": ["subject"],
-  // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (family-extensions-w8-multi.ts).
+  // "your **VEHICLE** unit is eligible to shoot …", "do not make an Advance roll for it" (act-after-move@3 and no-advance-roll@3, families/moves.ts).
   "act-after-move": ["subject"],
   "no-advance-roll": ["subject"],
   // "in a turn in which it used its Foo ability": a family whose own enum lists antecedent.

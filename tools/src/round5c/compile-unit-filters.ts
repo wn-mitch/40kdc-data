@@ -1,13 +1,13 @@
 import { exactSpan } from "./contracts.js";
 import { ALTERNATIVELY, OR_CONNECTIVE, ONE_OR_MORE, uncoveredText } from "./compile-target-modes.js";
 import { attackOfFilter, AURA_RECIPIENT, FILTERED_UNITS, momentOfFilter, targetedAttackOfFilter } from "./compile-antecedent.js";
-import { awaitsFollowingFilter } from "./family-extensions-11.js";
-import { EXCLUDED_FROM_ATTACKS } from "./family-extensions-16-model-keyword-scope.js";
-import { FILTER_SUBJECT_TARGET } from "./family-extensions-16-trailing-while-targeting.js";
+import { awaitsFollowingFilter } from "./families/shared.js";
+import { EXCLUDED_FROM_ATTACKS } from "./families/unit-filters.js";
+import { FILTER_SUBJECT_TARGET } from "./families/unit-filters.js";
 import { destinationOf } from "./compile-move-end-nearest.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
-import { MATCHED_UNITS } from "./family-extensions-16-those-enemy-units-role.js";
+import { MATCHED_UNITS } from "./families/shared.js";
 import { destroyedFilter, destroyedModelAfter, destroyedObject, membershipOf, modelRecipientFilter, modelSelection, rollOwnerEvent } from "./compile-model-level.js";
 import { alternativeFilter, collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";

@@ -7,6 +7,11 @@ export type Normalize = (input: Record<string, unknown>) => Record<string, unkno
 
 export type FamilyExtension = {
   family: string;
+  /**
+   * The version this extension creates: one more than the family's version before it. A family's
+   * extensions apply in ascending version, from its base version + 1 with no gap.
+   */
+  version: number;
   description: string;
   /** The new version's schema, from the previous version's. */
   schema: (previous: Schema) => Schema;
@@ -58,9 +63,10 @@ export const KEYWORD_ITEMS = { type: "string", pattern: UNIT_KEYWORD.source };
 export const EVENT_SUBJECT = "event-subject";
 
 /** unit-activity with more activities; the previous version checks the rest with one it knows standing in. */
-export function activitiesExtension(activities: readonly string[], what: string): FamilyExtension {
+export function activitiesExtension(version: number, activities: readonly string[], what: string): FamilyExtension {
   return {
     family: "unit-activity",
+    version,
     description: `As the previous version, plus ${what}.`,
     schema: (previous) => {
       const property = properties(previous).activities!;

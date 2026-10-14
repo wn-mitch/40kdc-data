@@ -1,6 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { keywordList } from "./family-extension-helpers.js";
-import { FOLLOWING_FILTER } from "./family-extensions-11.js";
+import { FOLLOWING_FILTER } from "./families/shared.js";
 import { boundedInteger, enumValue } from "./family-validation.js";
 
 /**

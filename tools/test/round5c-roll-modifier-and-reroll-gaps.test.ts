@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_ROLL_MODIFIER_AND_REROLL_GAPS } from "../src/round5c/family-extensions-20-roll-modifier-and-reroll-gaps.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
+
+/** The family versions the extensions under test create. */
+const ROLL_MODIFIER_AND_REROLL_GAPS_VERSIONS: ReadonlySet<string> = new Set(["roll-modifier@10"]);
 
 type Item = [string, string, Record<string, unknown>];
 
@@ -12,7 +14,7 @@ type Item = [string, string, Record<string, unknown>];
 function extendedVersion(family: string): number {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_ROLL_MODIFIER_AND_REROLL_GAPS.includes(extension)) return version;
+    if (extension !== undefined && ROLL_MODIFIER_AND_REROLL_GAPS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
   }
   throw new Error(`The extension of ${family} is not registered.`);
 }

@@ -123,7 +123,7 @@ describe("Round 5C anaphoric subjects", () => {
       const current = versions.filter((family) => !family.deprecated);
       expect(current, id).toHaveLength(1);
       expect(Math.max(...versions.map((family) => family.version)), id).toBe(current[0]!.version);
-      // The antecedent version may have been widened again since (family-extensions.ts); its predecessor never takes it.
+      // The antecedent version may have been widened again since (families/); its predecessor never takes it.
       const first = antecedentVersion(id)!;
       expect(current[0]!.version, id).toBeGreaterThanOrEqual(first);
       const previous = versions.find((family) => family.version === first - 1)!;

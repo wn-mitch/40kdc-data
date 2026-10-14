@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_16_STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP } from "../src/round5c/family-extensions-16-stratagem-target-alternatives-followup.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
+
+/** The family versions the extensions under test create. */
+const STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP_VERSIONS: ReadonlySet<string> = new Set(["move-through@4", "eligibility-permission@6"]);
 
 /**
  * Stratagem target alternatives, follow-up: a move-through and a move permission on the triggering
@@ -111,7 +113,7 @@ describe("eligibility-permission: the triggering unit as subject", () => {
   // The version just before this follow-up's extension; later extensions may sit above it.
   const AT = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, index) => currentFamilyVersion("eligibility-permission") - index).find((version) => {
     const extension = familyExtension("eligibility-permission", version);
-    return extension !== undefined && FAMILY_EXTENSIONS_16_STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP.includes(extension);
+    return extension !== undefined && STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP_VERSIONS.has(`${extension.family}@${extension.version}`);
   })!;
   const PREVIOUS = AT - 1;
 

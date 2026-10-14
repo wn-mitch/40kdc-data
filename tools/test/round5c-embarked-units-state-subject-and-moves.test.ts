@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES } from "../src/round5c/family-extensions-20-embarked-units-state-subject-and-moves.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { claimedByEmbarkedState } from "../src/round5c/compile-embarked-exclusion.js";
 import { mergeStackedFilters } from "../src/round5c/compile-unit-filters.js";
+
+/** The family versions the extensions under test create. */
+const EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES_VERSIONS: ReadonlySet<string> = new Set(["unit-filter@14", "make-move@6", "eligibility-permission@7", "unit-state@16"]);
 
 // Fabricated wording throughout: "stowed within this Hauler" stands for embarked within this unit.
 
@@ -43,7 +45,7 @@ function refusal(text: string, ...items: Item[]): string {
 const ownVersion = (family: string) => {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES.includes(extension)) return version;
+    if (extension !== undefined && EMBARKED_UNITS_STATE_SUBJECT_AND_MOVES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
   }
   throw new Error(`The embarked-units extension does not extend ${family}.`);
 };

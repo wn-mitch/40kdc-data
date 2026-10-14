@@ -2,10 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_16_SET_UP_RESTRICTION } from "../src/round5c/family-extensions-16-set-up-restriction.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { designationLabel, DESIGNATION_IDS } from "../src/translate/designations.js";
 import { describeEffect, type Effect } from "../src/translate/index.js";
+
+/** The family versions the extensions under test create. */
+const SET_UP_RESTRICTION_VERSIONS: ReadonlySet<string> = new Set(["unit-size@2", "add-unit@3", "unit-position@19", "apply-mark@5"]);
 
 type Item = [string, string, Record<string, unknown>];
 
@@ -13,7 +15,7 @@ type Item = [string, string, Record<string, unknown>];
 const ZONE_BEYOND_ONLY = (() => {
   for (let version = currentFamilyVersion("unit-position"); version > 1; version -= 1) {
     const extension = familyExtension("unit-position", version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_16_SET_UP_RESTRICTION.includes(extension)) return version;
+    if (extension !== undefined && SET_UP_RESTRICTION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
   }
   throw new Error("The set-up restriction extension of unit-position is not registered.");
 })();

@@ -2,14 +2,16 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_SELECT_COUNT_POOL_AND_PAIRING } from "../src/round5c/family-extensions-20-select-count-pool-and-pairing.js";
+import { familyExtension } from "../src/round5c/families/index.js";
+
+/** The family versions the extensions under test create. */
+const SELECT_COUNT_POOL_AND_PAIRING_VERSIONS: ReadonlySet<string> = new Set(["select-unit@6"]);
 
 /** The select-unit version just before the distance-free within_of extension (later extensions may sit above it). */
 function previousSelectUnit(): number {
   for (let version = currentFamilyVersion("select-unit"); version > 1; version -= 1) {
     const extension = familyExtension("select-unit", version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_SELECT_COUNT_POOL_AND_PAIRING.includes(extension)) return version - 1;
+    if (extension !== undefined && SELECT_COUNT_POOL_AND_PAIRING_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error("The extension does not extend select-unit.");
 }

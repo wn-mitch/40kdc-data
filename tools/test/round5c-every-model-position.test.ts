@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION } from "../src/round5c/family-extensions-16-every-model-position.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { describeCondition } from "../src/translate/condition.js";
+
+/** The family versions the extensions under test create. */
+const EVERY_MODEL_POSITION_VERSIONS: ReadonlySet<string> = new Set(["unit-position@23"]);
 
 /**
  * Every-model position: `models: every` on a unit-position within or objective-range. Every
@@ -37,7 +39,7 @@ const POSITION = "unit-position";
 const VERSION = (() => {
   for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
     const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION.includes(extension)) return version;
+    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
   }
   throw new Error("The every-model-position extension does not extend unit-position.");
 })();
@@ -45,7 +47,7 @@ const VERSION = (() => {
 const BEFORE_MODELS = (() => {
   for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
     const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_16_EVERY_MODEL_POSITION.includes(extension)) return version - 1;
+    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error("The every-model extension is not registered.");
 })();

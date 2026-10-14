@@ -3,7 +3,7 @@ import { isTargetRef } from "./compile-target-refs.js";
 
 /**
  * The Transport an embark permission places its subject within (`into`, see
- * family-extensions-16-transport-embark-eligibility-followup.ts). The binder has already resolved
+ * eligibility-permission@5, families/eligibility.ts). The binder has already resolved
  * `antecedent` to a Stratagem target (compile-target-refs.ts settleDestination) or left it for
  * compile-antecedent.ts; a value still `antecedent` here has no unit to name, so it refuses.
  */

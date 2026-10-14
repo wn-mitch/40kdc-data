@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
 // Fabricated wording only: the keywords (ALPHA, BETA) and the sentences are invented; only the sentence shape is kept.

@@ -1,6 +1,7 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { ANTECEDENT } from "./antecedent-families.js";
-import { NAMED_ACTIVITIES, NAMED_ID, namedId } from "./family-extensions-w8-named.js";
+import { NAMED_ACTIVITIES } from "./families/events.js";
+import { NAMED_ID, namedId } from "./families/shared.js";
 import { booleanValue, enumValue, exactKeys } from "./family-validation.js";
 
 /**

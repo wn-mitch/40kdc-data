@@ -5,7 +5,7 @@ import { effect, type CompileLeaf } from "./compile-fragments.js";
 import { trigger, triggerLeaves } from "./compile-triggers.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { usageFor } from "./restriction-families.js";
-import { awaitsFollowingFilter } from "./family-extensions-11.js";
+import { awaitsFollowingFilter } from "./families/shared.js";
 import { namesSelection } from "./compile-targeting-history.js";
 import { prohibitedRollName } from "./compile-roll-prohibition.js";
 

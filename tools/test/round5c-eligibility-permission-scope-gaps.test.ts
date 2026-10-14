@@ -5,8 +5,10 @@ import { foldAsIfPhases } from "../src/round5c/compile-as-if.js";
 import { foldFightNext } from "../src/round5c/compile-fight-next.js";
 import { sentenceSegments } from "../src/round5c/compile-segments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { FAMILY_EXTENSIONS_20_ELIGIBILITY_PERMISSION_SCOPE_GAPS } from "../src/round5c/family-extensions-20-eligibility-permission-scope-gaps.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
+import { familyExtension } from "../src/round5c/families/index.js";
+
+/** The family versions the extensions under test create. */
+const ELIGIBILITY_PERMISSION_SCOPE_GAPS_VERSIONS: ReadonlySet<string> = new Set(["eligibility-permission@8", "no-advance-roll@4"]);
 
 // Fabricated wording only; no rules text.
 
@@ -56,7 +58,7 @@ const normalize = (family: string, parameters: Record<string, unknown>, version 
 const PREVIOUS = (family: string): number => {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_ELIGIBILITY_PERMISSION_SCOPE_GAPS.includes(extension)) return version - 1;
+    if (extension !== undefined && ELIGIBILITY_PERMISSION_SCOPE_GAPS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error(`The bundle does not extend ${family}.`);
 };

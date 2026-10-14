@@ -1,4 +1,4 @@
-import { CompileError } from "./compile-fragments.js";
+import { CompileError } from "./compile-error.js";
 
 /**
  * Named distances an army rule defines ("within Synapse Range"). A name maps to the id of the

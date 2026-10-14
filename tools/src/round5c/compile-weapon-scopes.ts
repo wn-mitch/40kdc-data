@@ -3,7 +3,7 @@ import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { momentNamesUnit } from "./compile-antecedent.js";
 import { sameRun } from "./compile-attack-properties.js";
 import { namesSelection } from "./compile-targeting-history.js";
-import { WEAPON_KEYWORDS } from "./family-extensions-2.js";
+import { WEAPON_KEYWORDS } from "./families/shared.js";
 
 const SCOPE = "weapon-property-scope";
 /**

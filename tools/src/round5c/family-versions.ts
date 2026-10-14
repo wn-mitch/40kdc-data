@@ -5,7 +5,7 @@ import { familyRole, validateFingerprint } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
 import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
 import { ANTECEDENT_KEYS, antecedentVersion } from "./antecedent-families.js";
-import { extensionVersionPairs } from "./family-extensions.js";
+import { extensionVersionPairs } from "./families/index.js";
 
 /**
  * Move leaves from a deprecated family version to its successor, which may be another family.

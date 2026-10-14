@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { describeCondition } from "../src/translate/index.js";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { extensionVersionPairs } from "../src/round5c/family-extensions.js";
+import { extensionVersionPairs } from "../src/round5c/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
 
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, fragment: string];

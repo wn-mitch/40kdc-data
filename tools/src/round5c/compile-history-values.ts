@@ -2,7 +2,7 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 /**
  * Checks for the unit-activity history values that read a moment or an effect elsewhere in the
- * record (family-extensions-20-unit-activity-history-values.ts). The conditions themselves lower in
+ * record (unit-activity@21 and @22, families/unit-activity.ts). The conditions themselves lower in
  * compile-conditions.ts; these refusals keep them from lowering where nothing gives them a meaning.
  */
 

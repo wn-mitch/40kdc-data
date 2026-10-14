@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_UNIT_STATE_AND_PRESENCE_VALUES } from "../src/round5c/family-extensions-20-unit-state-and-presence-values.js";
+import { familyExtension } from "../src/round5c/families/index.js";
+
+/** The family versions the extensions under test create. */
+const UNIT_STATE_AND_PRESENCE_VALUES_VERSIONS: ReadonlySet<string> = new Set(["unit-state@17", "unit-position@25", "unit-filter@15"]);
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -34,7 +36,7 @@ function errorsOf(list: CompileLeaf[], text: string): string {
 function previousVersion(family: string): number {
   for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
     const extension = familyExtension(family, version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_UNIT_STATE_AND_PRESENCE_VALUES.includes(extension)) return version - 1;
+    if (extension !== undefined && UNIT_STATE_AND_PRESENCE_VALUES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error(`The unit-state-and-presence-values wave does not extend ${family}.`);
 }

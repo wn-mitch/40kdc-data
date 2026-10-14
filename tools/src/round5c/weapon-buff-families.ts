@@ -3,7 +3,7 @@ import { enumValue, exactKeys } from "./family-validation.js";
 import {
   BUFF_SUBJECTS, constTrue, nonEmptyString, parameterizedWeaponKeyword, SUBJECTS_WITH_BEARER, WEAPON_TYPES, weaponGrantKeywords,
 } from "./buff-families.js";
-import { WAVE9_KEYWORDS } from "./family-extensions-13-weapon-ability-vocabulary.js";
+import { WAVE9_KEYWORDS } from "./families/weapon-keywords.js";
 
 /**
  * Weapon abilities a weapon can lose ("Do not have [Heavy]"): every grantable value-less keyword, plus the

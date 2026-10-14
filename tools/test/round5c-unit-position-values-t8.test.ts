@@ -4,9 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
-import { familyExtension } from "../src/round5c/family-extensions.js";
-import { FAMILY_EXTENSIONS_20_UNIT_POSITION_AND_REGION_VALUES } from "../src/round5c/family-extensions-20-unit-position-and-region-values.js";
+import { familyExtension } from "../src/round5c/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
+
+/** The family versions the extensions under test create. */
+const UNIT_POSITION_AND_REGION_VALUES_VERSIONS: ReadonlySet<string> = new Set(["unit-position@24"]);
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
@@ -45,7 +47,7 @@ const validEffect = createValidator().compile({ $ref: "https://40kdc.dev/schemas
 const PREVIOUS = (() => {
   for (let version = currentFamilyVersion("unit-position"); version > 1; version -= 1) {
     const extension = familyExtension("unit-position", version);
-    if (extension !== undefined && FAMILY_EXTENSIONS_20_UNIT_POSITION_AND_REGION_VALUES.includes(extension)) return version - 1;
+    if (extension !== undefined && UNIT_POSITION_AND_REGION_VALUES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
   }
   throw new Error("The unit-position and region values extension is not registered.");
 })();
