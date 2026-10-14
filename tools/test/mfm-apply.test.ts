@@ -43,6 +43,9 @@ async function withCopiedData(run: (dataRoot: string) => Promise<void>): Promise
   }
 }
 
+// Each case validates the whole projected dataset, which takes close to 30 s on a CI runner.
+const FULL_VALIDATION_TIMEOUT_MS = 120_000;
+
 describe("applyWrites — dry-run rehearsal fidelity", () => {
   it("rejects a schema-invalid projection in dry-run (the real faction_id bug)", async () => {
     // Drop the required faction_id from one option — exactly the latent defect the
@@ -57,7 +60,7 @@ describe("applyWrites — dry-run rehearsal fidelity", () => {
     );
     // Dry run touches nothing, even on failure.
     expect(bytes(OPTS)).toBe(before);
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("rejects a referential-integrity violation in dry-run (faction_keyword membership)", async () => {
     // A World Eaters unit may only carry the World Eaters home keyword; injecting a
@@ -69,7 +72,7 @@ describe("applyWrites — dry-run rehearsal fidelity", () => {
     await expect(applyWrites(staged, { write: false, label: "test" })).rejects.toThrow(
       /Referential Integrity|faction_keyword|Aeldari/i,
     );
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("accepts a valid projection and writes nothing in dry-run", async () => {
     // Reversing the array is a different serialization but every element stays valid.
@@ -79,7 +82,7 @@ describe("applyWrites — dry-run rehearsal fidelity", () => {
     const before = bytes(OPTS);
     await expect(applyWrites(staged, { write: false, label: "test" })).resolves.toBeUndefined();
     expect(bytes(OPTS)).toBe(before); // dry run never persists
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 });
 
 describe("applyWrites — validation before persistence", () => {
@@ -101,7 +104,7 @@ describe("applyWrites — validation before persistence", () => {
     // The valid earlier file must not be written when projected validation fails.
     expect(bytes(OPTS)).toBe(optsBefore);
     expect(bytes(UNITS)).toBe(unitsBefore);
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 });
 
 describe("prepareWrites — validated snapshot", () => {
@@ -122,7 +125,7 @@ describe("prepareWrites — validated snapshot", () => {
       );
       expect(bytes(target)).toBe(targetBefore);
     });
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("commits the immutable staged bytes even when the caller mutates its staged value", async () => {
     await withCopiedData(async (dataRoot) => {
@@ -139,7 +142,7 @@ describe("prepareWrites — validated snapshot", () => {
       expect(bytes(target)).toBe(expected);
       expect(() => prepared.commit()).toThrow(/commit already used/i);
     });
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("detects added and deleted validation inputs before writing", async () => {
     await withCopiedData(async (dataRoot) => {
@@ -160,7 +163,7 @@ describe("prepareWrites — validated snapshot", () => {
       );
       expect(bytes(target)).toBe(targetBefore);
     });
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("rejects a staged destination symlinked outside the canonical data root", async () => {
     await withCopiedData(async (dataRoot) => {
@@ -176,7 +179,7 @@ describe("prepareWrites — validated snapshot", () => {
       )).rejects.toThrow(/symlinked|escapes/i);
       expect(bytes(outsideTarget)).toBe(outsideBefore);
     });
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 
   it("rechecks the canonical staged destination immediately before commit", async () => {
     await withCopiedData(async (dataRoot) => {
@@ -194,5 +197,5 @@ describe("prepareWrites — validated snapshot", () => {
       expect(() => prepared.commit()).toThrow(/destination became symlinked|escaped/i);
       expect(bytes(path.join(outsideDirectory, path.basename(target)))).toBe(outsideBefore);
     });
-  }, 30_000);
+  }, FULL_VALIDATION_TIMEOUT_MS);
 });
