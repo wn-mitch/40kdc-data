@@ -135,18 +135,31 @@ export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
   return report;
 }
 
-let cached: FamilyAudit[] | null = null;
+const audits = new Map<SemanticFamilyDefinition, FamilyAudit>();
 
-/** The audit of every current family; computed once per process, since it depends only on code. */
+/**
+ * One family's audit, computed once per process, since it depends only on code. Families with
+ * wide parameter domains take minutes to enumerate, so each is audited only when first asked for.
+ */
+function cachedAudit(family: SemanticFamilyDefinition): FamilyAudit {
+  let audit = audits.get(family);
+  if (!audit) {
+    audit = auditFamily(family);
+    audits.set(family, audit);
+  }
+  return audit;
+}
+
+/** The audit of every current family. */
 export function leafDescriberAudit(): FamilyAudit[] {
-  cached ??= REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).map(auditFamily);
-  return cached;
+  return REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).map(cachedAudit);
 }
 
 /** What a reviewer should know about one leaf's English: which of its values the text hides. */
 export function describerGaps(familyId: string, parameters: Record<string, unknown>): string[] {
-  const audit = leafDescriberAudit().find((item) => item.family_id === familyId);
-  if (!audit) return [];
+  const family = REVIEWED_FAMILY_REGISTRY.find((item) => !item.deprecated && item.id === familyId);
+  if (!family) return [];
+  const audit = cachedAudit(family);
   const gaps = new Set(audit.unrendered.filter((name) => name in parameters).map((name) => `The English never shows ${name.replaceAll("_", " ")}.`));
   for (const collision of audit.collisions) {
     if (!(collision.parameter in parameters)) continue;
