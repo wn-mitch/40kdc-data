@@ -1371,7 +1371,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "balistus-grenade-launcher-gilded-blades",
+          "balistus-grenade-launcher",
           "guardian-spear"
         ]
       }
@@ -1406,6 +1406,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
+          "praesidium-shield",
           "sentinel-blade"
         ]
       }
@@ -1440,7 +1441,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "castellan-axe-gilded-blades"
+          "castellan-axe"
         ]
       },
       {

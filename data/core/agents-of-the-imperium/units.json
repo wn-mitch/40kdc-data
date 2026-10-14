@@ -91,12 +91,21 @@
       "sanctifier-melee-weapon"
     ],
     "ability_ids": [
-      "attached-unit",
-      "cherub",
-      "ministorum-sermon",
-      "salvationist-medikit",
-      "scouts-6",
-      "simulacrum-imperialis"
+      "cherub-agents-of-the-imperium",
+      "ministorum-sermon-agents-of-the-imperium",
+      {
+        "id": "salvationist-medikit-agents-of-the-imperium",
+        "wargear": "salvationist-medikit"
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "simulacrum-imperialis-agents-of-the-imperium",
+        "wargear": "simulacrum-imperialis"
+      },
+      "atttached-unit-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -146,7 +155,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 75
       }
     ],
     "keywords": [
@@ -175,10 +184,13 @@
       "master-crafted-power-weapon"
     ],
     "ability_ids": [
-      "feel-no-pain-6",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
       "leader",
-      "tactical-instinct",
-      "unstoppable-champion"
+      "tactical-instinct-agents-of-the-imperium",
+      "unstoppable-champion-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -190,7 +202,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 65,
+        "cost": 75,
         "host_faction": "imperium"
       }
     ],
@@ -270,9 +282,15 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "firing-deck-2",
-      "rapid-deployment"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "rapid-deployment-agents-of-the-imperium"
     ],
     "transport_capacity": {
       "capacity": 13
@@ -361,13 +379,13 @@
       "phase-sword-and-poison-blades"
     ],
     "ability_ids": [
-      "acrobatic-escape",
+      "acrobatic-escape-agents-of-the-imperium",
       "deep-strike",
       "fights-first",
       "infiltrators",
       "lone-operative",
-      "lord-of-deceit-aura",
-      "shadow-assignment"
+      "shadow-assignment-agents-of-the-imperium",
+      "reign-of-confusion-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -448,10 +466,10 @@
       "master-crafted-power-sword"
     ],
     "ability_ids": [
-      "authority-of-the-inquisition",
+      "authority-of-the-inquisition-agents-of-the-imperium",
       "leader",
-      "no-mercy",
-      "psyoculum"
+      "no-mercy-agents-of-the-imperium",
+      "psyoculum-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -542,8 +560,11 @@
       "twin-multi-melta"
     ],
     "ability_ids": [
-      "purge-and-cleanse",
-      "deadly-demise-d3"
+      "purge-and-cleanse-agents-of-the-imperium",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 6
@@ -651,9 +672,12 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "inquisitorial-henchmen",
-      "loyal-henchmen",
-      "tome-skull"
+      "inquisitorial-henchmen-agents-of-the-imperium",
+      "loyal-henchmen-agents-of-the-imperium",
+      {
+        "id": "tome-skull-agents-of-the-imperium",
+        "wargear": "tome-skull"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -752,10 +776,17 @@
       "psychic-shock-wave"
     ],
     "ability_ids": [
-      "blessed-wardings",
+      {
+        "id": "blessed-wardings-agents-of-the-imperium",
+        "wargear": "blessed-wardings"
+      },
       "leader",
-      "power-of-the-rosette",
-      "psychic-gifts"
+      "power-of-the-rosette-agents-of-the-imperium",
+      {
+        "id": "psychic-gifts-agents-of-the-imperium",
+        "wargear": "psychic-gifts"
+      },
+      "authority-of-the-inquisition-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -837,10 +868,16 @@
       "storm-bolter-grey-knights-terminator-squad"
     ],
     "ability_ids": [
-      "ancient-s-banner",
-      "hammerhand-psychic",
-      "narthecium",
-      "rites-of-teleportation",
+      {
+        "id": "ancients-banner-agents-of-the-imperium",
+        "wargear": "ancients-banner"
+      },
+      "hammerhand-agents-of-the-imperium",
+      {
+        "id": "narthecium-agents-of-the-imperium",
+        "wargear": "narthecium"
+      },
+      "rites-of-teleportation-agents-of-the-imperium",
       "deep-strike"
     ],
     "game_version": {
@@ -938,8 +975,8 @@
       "voidsman-rotor-cannon"
     ],
     "ability_ids": [
-      "masters-of-close-confines",
-      "navy-bodyguard"
+      "masters-of-close-confines-agents-of-the-imperium",
+      "navy-bodyguard-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -999,12 +1036,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 115
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190
+        "models": 10,
+        "cost": 220
       }
     ],
     "keywords": [
@@ -1031,19 +1067,22 @@
     "weapon_ids": [
       "black-shield-blades",
       "boltgun",
-      "close-combat-weapon-deathwatch-kill-team",
       "combi-weapon-deathwatch-kill-team",
       "deathwatch-shotgun",
-      "deathwatch-thunder-hammer",
       "frag-cannon",
       "infernus-heavy-bolter",
       "power-weapon",
       "stalker-pattern-boltgun",
-      "xenophase-blade"
+      "xenophase-blade",
+      "knives-and-fists",
+      "heavy-thunder-hammer"
     ],
     "ability_ids": [
-      "astartes-shield",
-      "death-to-the-alien"
+      "death-to-the-alien-agents-of-the-imperium",
+      {
+        "id": "storm-shield-agents-of-the-imperium",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1054,64 +1093,21 @@
     "wargear_budgets": [
       {
         "items": [
-          "stalker-pattern-boltgun"
-        ],
-        "count": 2,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "infernus-heavy-bolter"
-        ],
-        "count": 2,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "deathwatch-thunder-hammer"
-        ],
-        "count": 4,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "black-shield-blades"
-        ],
-        "count": 1,
-        "per_models": 0
-      },
-      {
-        "items": [
-          "astartes-shield"
+          "storm-shield"
         ],
         "count": 2,
         "per_models": 5
-      },
-      {
-        "items": [
-          "deathwatch-shotgun"
-        ],
-        "count": 4,
-        "per_models": 10
-      },
-      {
-        "items": [
-          "frag-cannon"
-        ],
-        "count": 2,
-        "per_models": 10
       }
     ],
     "allied_points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 115,
         "host_faction": "imperium"
       },
       {
-        "models": 6,
-        "models_max": 10,
-        "cost": 190,
+        "models": 10,
+        "cost": 220,
         "host_faction": "imperium"
       }
     ],
@@ -1178,11 +1174,18 @@
       "power-sword-and-neuro-gauntlet"
     ],
     "ability_ids": [
-      "frenzon",
-      "overkill",
-      "scouts-9",
-      "deadly-demise-d3",
-      "lone-operative"
+      "frenzon-agents-of-the-imperium",
+      "overkill-agents-of-the-imperium",
+      {
+        "id": "scouts",
+        "value": 9
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "lone-operative",
+      "shadow-assignment-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1268,9 +1271,15 @@
       "storm-bolter-imperial-rhino"
     ],
     "ability_ids": [
-      "self-repair",
-      "deadly-demise-d3",
-      "firing-deck-2"
+      "self-repair-agents-of-the-imperium",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "firing-deck",
+        "value": 2
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1342,11 +1351,11 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 110
       },
       {
         "models": 10,
-        "cost": 200
+        "cost": 210
       }
     ],
     "keywords": [
@@ -1373,11 +1382,7 @@
       "max": 10
     },
     "weapon_ids": [
-      "astartes-grenade-launcher",
       "bolt-pistol-aquila-kill-team",
-      "close-combat-weapon-aquila-kill-team",
-      "combat-knife",
-      "deathwatch-marksman-bolt-carbine",
       "frag-cannon-aquila-kill-team",
       "heavy-thunder-hammer",
       "hellstorm-bolt-rifle",
@@ -1388,11 +1393,17 @@
       "special-issue-bolt-pistol",
       "stalker-bolt-rifle",
       "xenophase-blade",
-      "boltgun",
-      "plasma-pistol"
+      "knives-and-fists",
+      "grenade-launcher",
+      "deathwatch-marksman-bolt-carbine"
     ],
     "ability_ids": [
-      "kill-team"
+      "kill-team-agents-of-the-imperium",
+      "death-to-the-alien-agents-of-the-imperium",
+      {
+        "id": "storm-shield-agents-of-the-imperium",
+        "wargear": "storm-shield"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1403,12 +1414,12 @@
     "allied_points": [
       {
         "models": 5,
-        "cost": 100,
+        "cost": 110,
         "host_faction": "imperium"
       },
       {
         "models": 10,
-        "cost": 200,
+        "cost": 210,
         "host_faction": "imperium"
       }
     ],
@@ -1476,11 +1487,12 @@
       "vindicare-combat-knife"
     ],
     "ability_ids": [
-      "dead-shot",
-      "shieldbreaker",
+      "dead-shot-agents-of-the-imperium",
+      "shieldbreaker-agents-of-the-imperium",
       "stealth",
       "infiltrators",
-      "lone-operative"
+      "lone-operative",
+      "shadow-assignment-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1563,10 +1575,19 @@
       "webber"
     ],
     "ability_ids": [
-      "arbites-medi-kit",
-      "imperial-law",
-      "nuncio-acquila",
-      "soulguilt-scanner"
+      {
+        "id": "arbites-medi-kit-agents-of-the-imperium",
+        "wargear": "arbites-medi-kit"
+      },
+      "imperial-law-agents-of-the-imperium",
+      {
+        "id": "nuncio-acquila-agents-of-the-imperium",
+        "wargear": "nuncio-acquila"
+      },
+      {
+        "id": "soulguilt-scanner-agents-of-the-imperium",
+        "wargear": "soulguilt-scanner"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1688,10 +1709,13 @@
       "demolition-charge"
     ],
     "ability_ids": [
-      "breaching-team",
-      "cat-unit",
-      "endurant-shield",
-      "gheistskull"
+      "breaching-team-agents-of-the-imperium",
+      "cat-unit-agents-of-the-imperium",
+      {
+        "id": "endurant-shield-agents-of-the-imperium",
+        "wargear": "endurant-shield"
+      },
+      "gheistskull-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1769,12 +1793,13 @@
       "life-draining-touch"
     ],
     "ability_ids": [
-      "abomination",
-      "etheric-emergence",
-      "soulless-horror-aura",
+      "abomination-agents-of-the-imperium",
+      "etheric-emergence-agents-of-the-imperium",
+      "soulless-horror-agents-of-the-imperium",
       "deep-strike",
       "stealth",
-      "lone-operative"
+      "lone-operative",
+      "shadow-assignment-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -1858,7 +1883,11 @@
       "webber"
     ],
     "ability_ids": [
-      "merciless-judgement"
+      "merciless-judgement-agents-of-the-imperium",
+      {
+        "id": "nuncio-acquila-agents-of-the-imperium",
+        "wargear": "nuncio-acquila"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1947,7 +1976,11 @@
       "shock-maul"
     ],
     "ability_ids": [
-      "dedication-to-duty"
+      "dedication-to-duty-agents-of-the-imperium",
+      {
+        "id": "nuncio-acquila-agents-of-the-imperium",
+        "wargear": "nuncio-acquila"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2024,9 +2057,9 @@
       "laspistol"
     ],
     "ability_ids": [
-      "gaze-into-the-empyrean-psychic",
+      "gaze-into-the-empyrean-agents-of-the-imperium",
       "leader",
-      "third-eye-psychic"
+      "third-eye-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2109,8 +2142,9 @@
     ],
     "ability_ids": [
       "leader",
-      "psychic-veil-psychic",
-      "xenos-hunter"
+      "psychic-veil-agents-of-the-imperium",
+      "xenos-hunter-agents-of-the-imperium",
+      "authority-of-the-inquisition-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2161,7 +2195,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 105
       }
     ],
     "keywords": [
@@ -2189,9 +2223,9 @@
     ],
     "ability_ids": [
       "leader",
-      "rites-of-battle",
-      "strategic-knowledge",
-      "watch-master"
+      "strategic-acumen-agents-of-the-imperium",
+      "watch-master-agents-of-the-imperium",
+      "watch-that-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2203,7 +2237,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 105,
         "host_faction": "imperium"
       }
     ],
@@ -2272,10 +2306,14 @@
       "psychic-blast"
     ],
     "ability_ids": [
-      "glovodan-psyber-eagle",
+      {
+        "id": "glovodan-psyber-eagle-agents-of-the-imperium",
+        "wargear": "glovodan-psyber-eagle"
+      },
       "leader",
-      "malefic-wardings-psychic",
-      "spy-network"
+      "malefic-wardings-agents-of-the-imperium",
+      "spy-network-agents-of-the-imperium",
+      "authority-of-the-inquisition-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2366,8 +2404,12 @@
       "power-weapon-sisters-of-battle-squad"
     ],
     "ability_ids": [
-      "defenders-of-the-faith",
-      "incensor-cherub"
+      "defenders-of-the-faith-agents-of-the-imperium",
+      "incensor-cherub-agents-of-the-imperium",
+      {
+        "id": "simulacrum-imperialis-agents-of-the-imperium",
+        "wargear": "simulacrum-imperialis"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2466,18 +2508,27 @@
     "weapon_ids": [
       "armoured-hull",
       "blackstar-rocket-launcher",
-      "hurricane-bolter",
       "stormstrike-missile-launcher",
       "twin-assault-cannon",
       "twin-lascannon"
     ],
     "ability_ids": [
-      "auspex-array",
-      "blackstar-cluster-launcher",
-      "deadly-demise-d6",
+      "auspex-array-agents-of-the-imperium",
+      "blackstar-cluster-launcher-agents-of-the-imperium",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
       "hover",
-      "infernum-halo-launcher",
-      "stealth"
+      "stealth",
+      {
+        "id": "damaged",
+        "value": 5
+      },
+      {
+        "id": "auspex-array-wargear-agents-of-the-imperium",
+        "wargear": "auspex-array"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2557,13 +2608,9 @@
       "zealots-vindictor"
     ],
     "ability_ids": [
-      "holy-hatred",
-      "holy-mission",
-      "holy-piety",
-      "leader",
-      "righteous-smiting",
-      "war-hymns",
-      "zealot"
+      "holy-hatred-agents-of-the-imperium",
+      "zealot-agents-of-the-imperium",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -2656,10 +2703,13 @@
       "voltaic-pistol"
     ],
     "ability_ids": [
-      "backroom-deals",
-      "healing-serum",
+      "backroom-deals-agents-of-the-imperium",
+      {
+        "id": "healing-serum-agents-of-the-imperium",
+        "wargear": "healing-serum"
+      },
       "leader",
-      "warrant-of-trade"
+      "warrant-of-trade-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2766,6 +2816,15 @@
         "namespace": "mfm",
         "id": "57245b91-4131-419f-b76d-1bd1abca079e"
       }
+    ],
+    "ability_ids": [
+      "lone-operative",
+      "on-my-signal-fire-agents-of-the-imperium",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      "tox-cycler-agents-of-the-imperium"
     ]
   },
   {
@@ -2813,8 +2872,7 @@
       "power-sword-and-neuro-gauntlet"
     ],
     "ability_ids": [
-      "assigned-agents",
-      "overkill-inquisitors-hand"
+      "overkill-inquisitors-hand-eversor-assassin-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2875,14 +2933,13 @@
     "weapon_ids": [
       "agent-firearm",
       "agents-implement",
-      "heavy-bolter-inquisitorial-agents",
       "mystic-stave",
-      "plasma-pistol-standard-inquisitors-hand"
+      "heavy-bolter",
+      "plasma-pistol"
     ],
     "ability_ids": [
-      "assigned-agents",
-      "loyal-to-the-cause-inquisitors-hand",
-      "tome-skull-inquisitors-hand"
+      "loyal-to-the-cause-agents-of-the-imperium",
+      "tome-skull-inquisitors-hand-inquisitorial-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -2941,15 +2998,14 @@
     },
     "weapon_ids": [
       "combat-shotgun",
-      "grenade-launcher-frag-inquisitors-hand",
       "gun-stocks",
       "mechanical-bite",
       "shotpistol",
-      "webber-inquisitors-hand"
+      "grenade-launcher",
+      "webber"
     ],
     "ability_ids": [
-      "assigned-agents",
-      "merciless-judgement-inquisitors-hand"
+      "assigned-agents-agents-of-the-imperium"
     ],
     "game_version": {
       "edition": "11th",
@@ -3003,10 +3059,8 @@
       "zealots-vindictor"
     ],
     "ability_ids": [
-      "assigned-agents",
-      "holy-hatred-preacher-teguen",
-      "leader",
-      "zealot-preacher-teguen"
+      "holy-hatred-preacher-teguen-agents-of-the-imperium",
+      "zealot-preacher-teguen-agents-of-the-imperium"
     ],
     "attachment_role": "support",
     "game_version": {

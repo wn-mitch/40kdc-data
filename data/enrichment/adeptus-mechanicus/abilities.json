@@ -1,77 +1,6 @@
 [
   {
-    "ability_id": "deadly-demise-d3",
-    "name": "Deadly Demise D3",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D3",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "archaeopter-stratoraptor"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive"
-  },
-  {
-    "ability_id": "hover",
-    "name": "Hover",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "ca4b567df2eb67644dd49e42e986a2480bb39698b4c2e1baa8c672df61d7dd03",
-    "version": "2025-q3",
-    "effect": {
-      "type": "unit-keyword",
-      "target": "self",
-      "modifier": {
-        "keyword_id": "hover"
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "archaeopter-stratoraptor"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "strafing-run",
+    "ability_id": "strafing-run-adeptus-mechanicus",
     "name": "Strafing Run",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -92,16 +21,24 @@
             }
           },
           {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "A"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "has-keyword",
+                "parameters": {
+                  "subject": "recipient",
+                  "all_of": [
+                    "FLY"
+                  ]
+                }
+              }
+            ]
           }
         ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -110,7 +47,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -118,11 +54,10 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: condition gates on keyword \"A\", which no unit in the dataset has, so the gate never fires and the effect is dead; the intended keyword is unrecoverable from the encoding."
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "command-uplink",
+    "ability_id": "command-uplink-adeptus-mechanicus",
     "name": "Command Uplink",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -133,23 +68,25 @@
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "archaeopter-stratoraptor"
+      "archaeopter-fusilave",
+      "archaeopter-stratoraptor",
+      "archaeopter-transvector"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "chaff-launcher",
+    "ability_id": "chaff-launcher-adeptus-mechanicus",
     "name": "Chaff Launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -159,26 +96,28 @@
     "source_digest": "2966068a5e9674328be11b29d8c87aab75d736797205a5d57438f70435f50a13",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "self",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Smoke"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "archaeopter-stratoraptor"
+      "archaeopter-fusilave",
+      "archaeopter-stratoraptor",
+      "archaeopter-transvector"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "scuttling-walker",
+    "ability_id": "scuttling-walker-adeptus-mechanicus",
     "name": "Scuttling Walker",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -188,54 +127,54 @@
     "source_digest": "7460cdebeea931e493270a2c6b4886ac341dea0695b11673d8f92454ec3a899a",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "normal-move"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "advances"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "falls-back"
-            }
-          }
+      "type": "move-modifier",
+      "target": "this-model",
+      "modifier": {
+        "passthrough": [
+          "friendly-vehicles",
+          "terrain-le-4"
         ]
-      },
-      "effect": {
-        "type": "movement-modifier",
-        "target": "self",
-        "modifier": {
-          "passthrough": [
-            "friendly-vehicles",
-            "terrain-le-4"
-          ]
-        }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "unit_ids": [
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": [
+      {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "normal"
+          ]
+        }
+      },
+      {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "advance"
+          ]
+        }
+      },
+      {
+        "event": "move-ended",
+        "filter": {
+          "move_types": [
+            "fall-back"
+          ]
+        }
+      }
+    ],
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "emanatus-force-field-aura",
+    "ability_id": "emanatus-force-field-adeptus-mechanicus",
     "name": "Emanatus Force Field (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -254,24 +193,36 @@
       },
       "effect": {
         "type": "invulnerable-save",
-        "target": "self",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS MECHANICUS",
+            "BATTLELINE"
+          ],
+          "level": "model",
+          "within": {
+            "range": {
+              "inches": 6
+            }
+          }
+        },
         "modifier": {
           "invuln_sv": 4
         }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "broad-spectrum-data-tether",
+    "ability_id": "broad-spectrum-data-tether-onager-dunecrawler-adeptus-mechanicus",
     "name": "Broad spectrum data-tether",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -282,23 +233,23 @@
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "onager-dunecrawler"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "sentinel-directives",
+    "ability_id": "sentinel-directives-adeptus-mechanicus",
     "name": "Sentinel Directives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -308,54 +259,35 @@
     "source_digest": "d04e741c5904458141a15bf79b3792176b15d968355d012912262091410de924",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "set",
-        "value": 5,
-        "context": "overwatch"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "shooting_type": "snap"
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "succeeds_on": 5,
+          "weapon_type": "ranged"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "kataphron-destroyers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "leader"
-      }
-    },
-    "scope": {
-      "range": "attached",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "cybernetica-datasmith"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "battle-protocols",
+    "ability_id": "battle-protocols-adeptus-mechanicus",
     "name": "Battle Protocols",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -367,11 +299,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "stat": "A",
           "operation": "add",
@@ -380,61 +316,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "cybernetica-datasmith"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "ironstrider-ballistarii"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive"
-  },
-  {
-    "ability_id": "elevated-strider",
+    "ability_id": "elevated-strider-adeptus-mechanicus",
     "name": "Elevated Strider",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -444,22 +336,28 @@
     "source_digest": "fa05b382fa0cf120af7cd0fe6717b4e3bdafbc89ea8824b5de7949ee166a6cec",
     "version": "2025-q3",
     "effect": {
-      "type": "fallback-and-act",
-      "target": "unit",
-      "modifier": {}
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "after": [
+          "fall-back"
+        ]
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "ironstrider-ballistarii"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "galvanic-field",
+    "ability_id": "galvanic-field-adeptus-mechanicus",
     "name": "Galvanic Field",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -471,30 +369,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Lethal Hits"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "tech-priest-manipulus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "defend-the-divine-work",
+    "ability_id": "defend-the-divine-work-adeptus-mechanicus",
     "name": "Defend the Divine Work",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -505,13 +407,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "invuln_sv": 4
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -522,39 +423,11 @@
     "usage": {
       "frequency": "n-per-battle",
       "count": 1
-    }
+    },
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sydonian-dragoons-with-radium-jezzails"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "focused-hunters",
+    "ability_id": "focused-hunters-adeptus-mechanicus",
     "name": "Focused Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -565,14 +438,13 @@
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "hit",
         "subset": "all-failures"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -580,10 +452,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "canticles-of-the-omnissiah",
+    "ability_id": "canticles-of-the-omnissiah-adeptus-mechanicus",
     "name": "Canticles of the Omnissiah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -601,16 +474,159 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "canticle",
-          "selection_required": true
-        }
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "scope": "unit",
+        "select": "start-of-command-phase",
+        "options": [
+          {
+            "name": "Invocation of Machine Vengeance",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "select-units",
+                  "selector": {
+                    "count": 1,
+                    "owner": "enemy"
+                  },
+                  "effect": {
+                    "type": "designate",
+                    "target": "this-unit",
+                    "modifier": {
+                      "subject": "selected-unit",
+                      "tag": "machine-vengeance-target"
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "designated",
+                    "parameters": {
+                      "subject": "defender",
+                      "tag": "machine-vengeance-target"
+                    }
+                  },
+                  "effect": {
+                    "type": "re-roll",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS MECHANICUS"
+                      ]
+                    },
+                    "modifier": {
+                      "roll": "hit",
+                      "result_scope": "any-result"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "Mantra of Discipline",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "keyword-grant",
+                  "target": "this-model",
+                  "modifier": {
+                    "keywords": [
+                      "BATTLELINE"
+                    ]
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS MECHANICUS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "stat": "OC",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS MECHANICUS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "roll": "battle-shock",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS MECHANICUS"
+                    ],
+                    "within": {
+                      "range": {
+                        "inches": 6
+                      },
+                      "of": "this-model"
+                    }
+                  },
+                  "modifier": {
+                    "roll": "leadership",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "Shroudpsalm",
+            "effect": {
+              "type": "ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS MECHANICUS"
+                ],
+                "within": {
+                  "range": {
+                    "inches": 6
+                  },
+                  "of": "this-model"
+                }
+              },
+              "modifier": {
+                "ability": "stealth"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "turn"
     },
     "unit_ids": [
@@ -618,10 +634,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "mechanicus-bodyguard",
+    "ability_id": "mechanicus-bodyguard-adeptus-mechanicus",
     "name": "Mechanicus Bodyguard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -631,14 +648,32 @@
     "source_digest": "2b6214171f4540d3642618228ef1c20370bc89d0f4416c33a5e80cc5d1fd8aba",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "ability_id": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "subject": "this-model",
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS MECHANICUS"
+            ],
+            "excluding": "this-unit"
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "lone-operative"
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -646,10 +681,11 @@
       "thulia-ghuld"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "self-repair-mechanisms",
+    "ability_id": "self-repair-mechanisms-adeptus-mechanicus",
     "name": "Self-repair Mechanisms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -659,25 +695,24 @@
     "source_digest": "7c1c2353ae70eb17f99e9182649f7532186858c88a8fd9cdaca0ccf3d1dd7287",
     "version": "2025-q3",
     "effect": {
-      "type": "resurrection",
-      "target": "self",
+      "type": "heal",
+      "target": "this-model",
       "modifier": {
-        "count": "d3",
-        "type": "wounds"
+        "amount": "D3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "belisarius-cawl"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "supreme-commander",
+    "ability_id": "supreme-commander-adeptus-mechanicus",
     "name": "Supreme Commander",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -687,24 +722,25 @@
     "source_digest": "db5f2bae245a8eb3cca1df9d81a364c92d2b3958c0471ebd7f0f15e2bd8a0f90",
     "version": "2025-q3",
     "effect": {
-      "type": "attack-restriction",
-      "target": "self",
+      "type": "army-rule",
+      "target": "this-model",
       "modifier": {
-        "restriction": "must-be-warlord"
+        "rule": "warlord-required"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "belisarius-cawl"
+      "belisarius-cawl",
+      "thulia-ghuld"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "network-override",
+    "ability_id": "network-override-adeptus-mechanicus",
     "name": "Network Override",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -716,21 +752,42 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "TECH-PRIEST"
+          "all_of": [
+            "TECH PRIEST"
+          ]
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "grant_type": "action-and-shoot-eligibility"
-        }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "start-action",
+              "allow": true,
+              "after": [
+                "advance"
+              ]
+            }
+          },
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "despite": [
+                "performing-action"
+              ]
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "unit_ids": [
@@ -738,10 +795,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "attached-unit",
+    "ability_id": "attached-unit-servitor-battleclade-adeptus-mechanicus",
     "name": "ATTACHED UNIT",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -753,55 +811,38 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
+        "type": "army-rule",
+        "target": "this-unit",
         "modifier": {
-          "ability_id": "attached-unit-eligibility"
+          "rule": "attachment",
+          "with": {
+            "all_of": [
+              "KATAPHRON BREACHERS"
+            ]
+          },
+          "led_by": "character"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "servitor-battleclade"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "feel-no-pain-5",
-    "name": "Feel No Pain 5+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 5
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "fulgurite-electro-priests"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "electro-infusion",
+    "ability_id": "electro-infusion-adeptus-mechanicus",
     "name": "Electro-infusion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -813,7 +854,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
@@ -826,17 +871,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "fulgurite-electro-priests"
     ],
     "ability_type": "unit",
-    "behavior": "reactive"
+    "behavior": "reactive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "blistering-salvoes",
+    "ability_id": "blistering-salvoes-adeptus-mechanicus",
     "name": "Blistering Salvoes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -848,14 +893,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "INFANTRY"
+          "subject": "defender",
+          "all_of": [
+            "INFANTRY"
+          ]
         }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "operation": "add",
@@ -864,46 +912,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "skorpius-disintegrator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting-permission",
-      "target": "self",
-      "modifier": {
-        "attack_type": "ranged",
-        "gate": "within-range",
-        "range": 12
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "sydonian-skatros"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "dread-snipers",
+    "ability_id": "dread-snipers-adeptus-mechanicus",
     "name": "Dread Snipers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -921,25 +940,25 @@
         }
       },
       "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
+        "type": "test",
+        "target": "selected-unit",
         "modifier": {
           "test": "battle-shock"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sydonian-skatros"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "achillan-eye",
+    "ability_id": "achillan-eye-adeptus-mechanicus",
     "name": "Achillan Eye",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -951,14 +970,17 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "target-has-keyword",
+        "type": "has-keyword",
         "parameters": {
-          "keyword": "INFANTRY"
+          "subject": "defender",
+          "all_of": [
+            "INFANTRY"
+          ]
         }
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures"
@@ -966,17 +988,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sydonian-skatros"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "sydonian-sentinel",
+    "ability_id": "sydonian-sentinel-adeptus-mechanicus",
     "name": "Sydonian Sentinel",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -986,51 +1008,24 @@
     "source_digest": "9f7cf4be1984a2bf62747bb6de7d49db48cb03d4d99bd2ea2cf624b0fdd4f956",
     "version": "2025-q3",
     "effect": {
-      "type": "attack-restriction",
-      "target": "self",
+      "type": "army-rule",
+      "target": "this-model",
       "modifier": {
-        "restriction": "cannot-be-warlord"
+        "rule": "warlord-forbidden"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sydonian-skatros"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "unit-keyword",
-      "target": "unit",
-      "modifier": {
-        "keyword_id": "infiltrators"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "sicarian-infiltrators"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "voices-in-the-code",
+    "ability_id": "voices-in-the-code-adeptus-mechanicus",
     "name": "Voices in the Code",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1048,25 +1043,30 @@
         }
       },
       "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
+        "type": "test",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": "engagement"
+          }
+        },
         "modifier": {
           "test": "battle-shock"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sicarian-infiltrators"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "neurostatic-interference-aura",
+    "ability_id": "neurostatic-interference-adeptus-mechanicus",
     "name": "Neurostatic Interference (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1078,32 +1078,61 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "opponent-unit-within-range",
+        "type": "within",
         "parameters": {
-          "range": 6
+          "of": {
+            "owner": "enemy"
+          },
+          "range": {
+            "inches": 6
+          }
         }
       },
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "unit-within-range-of",
+          "type": "within",
           "parameters": {
-            "target_type": "friendly-keyword",
-            "keyword": "ADEPTUS MECHANICUS BATTLELINE"
+            "of": {
+              "owner": "friendly",
+              "all_of": [
+                "ADEPTUS MECHANICUS",
+                "BATTLELINE"
+              ]
+            },
+            "range": {
+              "inches": 6
+            }
           }
         },
         "effect": {
-          "type": "leadership-modifier",
-          "target": "enemy-within-aura",
+          "type": "roll-modifier",
+          "target": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 6
+              }
+            }
+          },
           "modifier": {
+            "roll": "battle-shock",
             "operation": "subtract",
             "value": 2
           }
         },
         "on_fail": {
-          "type": "leadership-modifier",
-          "target": "enemy-within-aura",
+          "type": "roll-modifier",
+          "target": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 6
+              }
+            }
+          },
           "modifier": {
+            "roll": "battle-shock",
             "operation": "subtract",
             "value": 1
           }
@@ -1111,7 +1140,6 @@
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "phase"
     },
     "unit_ids": [
@@ -1119,35 +1147,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "deep-strike",
-    "name": "Deep Strike",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "7f180fb5e7f7d43eac9337cc29101f902ebdec6556e154c6785055d0dae9343d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "deep-strike",
-      "target": "unit",
-      "modifier": {}
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "archaeopter-transvector"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "aerial-deployment",
+    "ability_id": "aerial-deployment-adeptus-mechanicus",
     "name": "Aerial Deployment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1157,15 +1161,39 @@
     "source_digest": "0498f1f874f3045d180e3e4beaa0a52f54fd79dd0d191761c477e33dc5cc033e",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "ingress-move",
-        "timing": "first-movement-phase"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "battle-round",
+            "parameters": {
+              "max": 1
+            }
+          },
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "ingress"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -1173,10 +1201,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "rad-saturation-aura",
+    "ability_id": "rad-saturation-adeptus-mechanicus",
     "name": "Rad-saturation (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1191,25 +1220,34 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "subject": "recipient",
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]
       },
       "effect": {
-        "type": "objective-control-modifier",
-        "target": "enemy-within-aura",
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 3
+            }
+          }
+        },
         "modifier": {
+          "stat": "OC",
           "operation": "subtract",
           "value": 1
         }
       }
     },
     "scope": {
-      "range": "aura-custom",
-      "range_inches": 3,
       "duration": "battle"
     },
     "unit_ids": [
@@ -1217,10 +1255,11 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "enhanced-data-tether",
+    "ability_id": "enhanced-data-tether-adeptus-mechanicus",
     "name": "Enhanced data-tether",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1231,23 +1270,25 @@
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
+      "serberys-raiders",
+      "skitarii-rangers",
       "skitarii-vanguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "omnispex",
+    "ability_id": "omnispex-adeptus-mechanicus",
     "name": "Omnispex",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1257,26 +1298,27 @@
     "source_digest": "a2acc4e178958e0b0016c8a658f00fe7dab6c17484c30d50ad8c83a83224633e",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
+      "skitarii-rangers",
       "skitarii-vanguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "lord-of-the-machine-cult",
+    "ability_id": "lord-of-the-machine-cult-adeptus-mechanicus",
     "ability_type": "unit",
     "authored_by": "40kdc-community",
     "behavior": "passive",
@@ -1284,54 +1326,66 @@
       "steps": [
         {
           "condition": {
+            "operator": "and",
             "operands": [
               {
-                "type": "is-attached"
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
               },
               {
+                "operator": "not",
                 "operands": [
                   {
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "ELECTRO-PRIESTS"
-                    },
-                    "type": "unit-has-keyword"
+                      "all_of": [
+                        "ELECTRO PRIESTS"
+                      ]
+                    }
                   }
-                ],
-                "operator": "not"
+                ]
               }
-            ],
-            "operator": "and"
+            ]
           },
           "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
             "modifier": {
               "threshold": 5
-            },
-            "target": "unit",
-            "type": "feel-no-pain"
+            }
           },
           "type": "conditional"
         },
         {
           "condition": {
+            "operator": "and",
             "operands": [
               {
-                "type": "is-attached"
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
               },
               {
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "ELECTRO-PRIESTS"
-                },
-                "type": "unit-has-keyword"
+                  "all_of": [
+                    "ELECTRO PRIESTS"
+                  ]
+                }
               }
-            ],
-            "operator": "and"
+            ]
           },
           "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
             "modifier": {
               "threshold": 4
-            },
-            "target": "unit",
-            "type": "feel-no-pain"
+            }
           },
           "type": "conditional"
         }
@@ -1345,16 +1399,16 @@
     "source_digest": "ed13babfa9144eed9bf2aa86809e620fc0a0ad2c852add9b8d1a8dceb9ca17a0",
     "name": "Lord of the Machine Cult",
     "scope": {
-      "duration": "permanent",
-      "range": "unit"
+      "duration": "permanent"
     },
     "unit_ids": [
       "tech-priest-dominus"
     ],
-    "version": "2025-q3"
+    "version": "2025-q3",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "dataspike",
+    "ability_id": "dataspike-adeptus-mechanicus",
     "name": "Dataspike",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1375,22 +1429,22 @@
         "type": "mortal-wounds",
         "target": "defender",
         "modifier": {
-          "count": "d6"
+          "count": "D6"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
       "tech-priest-dominus"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "ride-the-thermals",
+    "ability_id": "ride-the-thermals-adeptus-mechanicus",
     "name": "Ride the Thermals",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1402,30 +1456,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
+        "operator": "not",
         "operands": [
           {
-            "type": "phase-is",
+            "type": "unit-state",
             "parameters": {
-              "phase": "shooting"
+              "state": "engaged"
             }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "after-unit-resolves-attacks"
-            }
-          },
-          {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "engagement-state",
-                "parameters": {
-                  "state": "in-engagement-range"
-                }
-              }
-            ]
           }
         ]
       },
@@ -1437,18 +1474,19 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "movement-modifier",
-                "target": "unit",
+                "type": "move",
+                "target": "this-unit",
                 "modifier": {
                   "move_type": "normal",
                   "distance": 6
                 }
               },
               {
-                "type": "attack-restriction",
-                "target": "unit",
+                "type": "permission",
+                "target": "this-unit",
                 "modifier": {
-                  "restriction_type": "no-charge"
+                  "activity": "declare-charge",
+                  "allow": false
                 }
               }
             ]
@@ -1456,28 +1494,39 @@
           {
             "type": "conditional",
             "condition": {
-              "type": "unit-within-range-of",
+              "type": "within",
               "parameters": {
-                "target_type": "friendly-keyword",
-                "keyword": "ADEPTUS MECHANICUS BATTLELINE"
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
+                  ]
+                },
+                "range": {
+                  "inches": 6
+                },
+                "wholly": true,
+                "models": "every"
               }
             },
             "effect": {
               "type": "sequence",
               "steps": [
                 {
-                  "type": "movement-modifier",
-                  "target": "unit",
+                  "type": "move",
+                  "target": "this-unit",
                   "modifier": {
                     "move_type": "normal",
                     "distance": 12
                   }
                 },
                 {
-                  "type": "attack-restriction",
-                  "target": "unit",
+                  "type": "permission",
+                  "target": "this-unit",
                   "modifier": {
-                    "restriction_type": "no-charge"
+                    "activity": "declare-charge",
+                    "allow": false
                   }
                 }
               ]
@@ -1487,18 +1536,27 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "unit_ids": [
       "pteraxii-skystalkers"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "attacks-resolved",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    },
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "breaching-command",
+    "ability_id": "breaching-command-adeptus-mechanicus",
     "name": "Breaching Command",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1509,24 +1567,24 @@
     "version": "2025-q3",
     "effect": {
       "type": "re-roll",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "hit",
         "subset": "ones"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "kataphron-breachers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "optimised-gait",
+    "ability_id": "optimised-gait-adeptus-mechanicus",
     "name": "Optimised Gait",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1537,7 +1595,14 @@
     "version": "2025-q3",
     "effect": {
       "type": "roll-modifier",
-      "target": "friendly-within-aura",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
       "modifier": {
         "roll": "charge",
         "operation": "add",
@@ -1545,17 +1610,17 @@
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "sicarian-ruststalkers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "seekers-of-divine-arcana",
+    "ability_id": "seekers-of-divine-arcana-adeptus-mechanicus",
     "name": "Seekers of Divine Arcana",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1567,29 +1632,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "objective-control-modifier",
-        "target": "unit",
+        "type": "stat-modifier",
+        "target": "this-unit",
         "modifier": {
+          "stat": "OC",
           "operation": "add",
           "value": 1
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "technoarcheologist"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "cogitative-instincts",
+    "ability_id": "cogitative-instincts-adeptus-mechanicus",
     "name": "Cogitative Instincts",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1599,25 +1669,34 @@
     "source_digest": "dabbbe97c2cc7a581c821795a4785fcfae4fef260d5d1cb73e6d4896fbb8b3c8",
     "version": "2025-q3",
     "effect": {
-      "type": "attack-restriction",
-      "target": "enemy-within-aura",
+      "type": "set-up",
+      "target": {
+        "owner": "enemy"
+      },
       "modifier": {
-        "restriction": "reinforcement-denial",
-        "range": 12
+        "allow": false,
+        "to": "battlefield",
+        "from": "strategic-reserves",
+        "min_distance_from": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "permanent"
     },
     "unit_ids": [
       "technoarcheologist"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "electro-shock",
+    "ability_id": "electro-shock-adeptus-mechanicus",
     "name": "Electro-shock",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1635,53 +1714,82 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "defender",
-        "modifier": {
-          "ability_id": "post-attack-debuff"
+        "type": "select-units",
+        "selector": {
+          "owner": "enemy",
+          "count": 1,
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
+            }
+          },
+          "excluded_keywords": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "this-unit",
+              "modifier": {
+                "subject": "selected-unit",
+                "tag": "shocked"
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "M",
+                "operation": "subtract",
+                "value": 2
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "advance",
+                "operation": "subtract",
+                "value": 2
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "roll": "charge",
+                "operation": "subtract",
+                "value": 2
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "corpuscarii-electro-priests"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "scout",
-        "distance": 9
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "serberys-raiders"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "tactica-obliqua",
+    "ability_id": "tactica-obliqua-adeptus-mechanicus",
     "name": "Tactica Obliqua",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1691,29 +1799,87 @@
     "source_digest": "20bcc4bf047bfddaccdd4a890da4c324d1aaa62c9af060784ad1c3da29c289a1",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "reactive"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "event-subject",
+              "of": "this-unit",
+              "range": {
+                "inches": 8
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "choice",
+        "choice_label": "tactica-obliqua-move",
+        "options": [
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": "D6"
+            }
+          },
+          {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "normal",
+              "distance": 6,
+              "ends_within": {
+                "range": {
+                  "inches": 6
+                },
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
+                  ]
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
       "serberys-raiders"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
-    }
+    },
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "dynamic-efficiency",
+    "ability_id": "dynamic-efficiency-adeptus-mechanicus",
     "name": "Dynamic Efficiency",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1723,24 +1889,28 @@
     "source_digest": "3bb31751a3a09940f463f4ba1c39f1b36906ed937156ed216d5eac4772a29f25",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "charge-after-advance"
+        "activity": "declare-charge",
+        "allow": true,
+        "after": [
+          "advance"
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sydonian-dragoons-with-taser-lances"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "line-breakers",
+    "ability_id": "line-breakers-adeptus-mechanicus",
     "name": "Line-breakers",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1757,17 +1927,17 @@
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "serberys-sulphurhounds"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "enginseer",
+    "ability_id": "enginseer-adeptus-mechanicus",
     "name": "Enginseer",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1778,28 +1948,58 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "this-model",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "ADEPTUS MECHANICUS",
+                  "VEHICLE"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "attachment",
+                "parameters": {
+                  "subject": "this-model",
+                  "role": "leading"
+                }
+              }
+            ]
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
-          "ability_id": "lone-operative"
+          "ability": "lone-operative"
         }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "tech-priest-enginseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "omnissiah-s-blessing",
+    "ability_id": "omnissiahs-blessing-adeptus-mechanicus",
     "name": "Omnissiah\u2019s Blessing",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1808,24 +2008,65 @@
     },
     "version": "2025-q3",
     "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 5
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "ADEPTUS MECHANICUS"
+        ],
+        "target_kind": "model",
+        "within_inches": 3,
+        "reference": "bearer",
+        "selection_limit": {
+          "count": 1,
+          "period": "phase"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "heal",
+            "target": "selected-unit",
+            "modifier": {
+              "amount": "D3"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "selected-unit",
+                "all_of": [
+                  "VEHICLE"
+                ]
+              }
+            },
+            "effect": {
+              "type": "feel-no-pain",
+              "target": "selected-unit",
+              "modifier": {
+                "threshold": 5
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
       "tech-priest-enginseer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "vengeance-for-the-omnissiah",
+    "ability_id": "vengeance-for-the-omnissiah-adeptus-mechanicus",
     "name": "Vengeance for the Omnissiah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1839,47 +2080,56 @@
         "operator": "and",
         "operands": [
           {
-            "type": "units-destroyed",
+            "type": "happened",
             "parameters": {
-              "side": "friendly",
-              "window": "battle",
-              "count_min": 1
+              "event": "destroyed",
+              "object": {
+                "owner": "friendly"
+              },
+              "window": "battle"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "ADEPTUS MECHANICUS"
+              "all_of": [
+                "ADEPTUS MECHANICUS"
+              ]
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           },
           {
-            "type": "unit-within-range-of",
+            "type": "within",
             "parameters": {
-              "target_type": "friendly",
-              "range": 12
+              "of": {
+                "owner": "friendly"
+              },
+              "range": {
+                "inches": 12
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "stat-modifier",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "stat": "A",
           "operation": "set",
           "value": 6,
-          "attack_type": "melee"
+          "weapon_type": "melee"
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "unit_ids": [
@@ -1887,10 +2137,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "control-edict",
+    "ability_id": "control-edict-adeptus-mechanicus",
     "name": "Control Edict",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1902,11 +2153,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "all-failures"
@@ -1914,17 +2169,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "skitarii-marshal"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "servo-skull-uplink",
+    "ability_id": "servo-skull-uplink-adeptus-mechanicus",
     "name": "Servo-skull Uplink",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1934,52 +2189,43 @@
     "source_digest": "a26bd489499e93f326b5ee8af2cabf2e6af34660f7c68cd6e120762d3ba695fa",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "once-per-battle-special"
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "SKITARII"
+        ],
+        "within_inches": 6,
+        "reference": "bearer",
+        "eligibility": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "battle-shocked"
+          }
+        }
+      },
+      "effect": {
+        "type": "state-change",
+        "target": "selected-unit",
+        "modifier": {
+          "state": "battle-shocked",
+          "set": false
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "one-use"
     },
     "unit_ids": [
       "skitarii-marshal"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "firing-deck-2",
-    "name": "Firing Deck 2",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 2
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "skorpius-dunerider"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "fire-support",
+    "ability_id": "fire-support-adeptus-mechanicus",
     "name": "Fire Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1998,7 +2244,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures"
@@ -2006,17 +2252,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
       "skorpius-dunerider"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "robotic-bodyguard",
+    "ability_id": "robotic-bodyguard-adeptus-mechanicus",
     "ability_type": "unit",
     "authored_by": "40kdc-community",
     "behavior": "passive",
@@ -2049,16 +2295,16 @@
     "source_digest": "04c6a72e82b4e7c692e58a871133e529a61f564e115450c409c9984c9a5a712b",
     "name": "Robotic Bodyguard",
     "scope": {
-      "duration": "permanent",
-      "range": "unit"
+      "duration": "permanent"
     },
     "unit_ids": [
       "kastelan-robots"
     ],
-    "version": "2025-q3"
+    "version": "2025-q3",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "repulsor-grid",
+    "ability_id": "repulsor-grid-adeptus-mechanicus",
     "name": "Repulsor Grid",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2084,7 +2330,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -2092,10 +2337,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)"
+    "community_notes": "defensive ability (skipped for damage calc)",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "searing-conflagration",
+    "ability_id": "searing-conflagration-adeptus-mechanicus",
     "name": "Searing Conflagration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2105,25 +2351,103 @@
     "source_digest": "f9e53facb3d1c80ae10fed5d808922808b804c6b62cca2bae1d96eb23e690b6e",
     "version": "2025-q3",
     "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "wound",
-        "subset": "ones"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "weapon_name": "phosphor torch"
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "within",
+                  "parameters": {
+                    "of": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ADEPTUS MECHANICUS",
+                        "BATTLELINE"
+                      ]
+                    },
+                    "range": {
+                      "inches": 6
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "ones"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "within",
+              "parameters": {
+                "of": {
+                  "owner": "friendly",
+                  "all_of": [
+                    "ADEPTUS MECHANICUS",
+                    "BATTLELINE"
+                  ]
+                },
+                "range": {
+                  "inches": 6
+                }
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "wound",
+                "subset": "all-failures"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "pteraxii-sterylizors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "bomb-rack",
+    "ability_id": "bomb-rack-adeptus-mechanicus",
     "name": "Bomb Rack",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2140,45 +2464,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "archaeopter-fusilave"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "scouts-6",
-    "name": "Scouts 6\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "scout",
-        "distance": 6
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "skitarii-rangers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "objective-scouted",
+    "ability_id": "objective-scouted-adeptus-mechanicus",
     "name": "Objective Scouted",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2188,306 +2484,21 @@
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "skitarii-rangers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "termite-assault",
-    "name": "Termite Assault",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "269bea0067b82ae677fde6c2f058f18a6ab9946f76b05dbb569947b19385c7de",
-    "version": "2025-q3",
-    "effect": {
-      "type": "sequence",
-      "steps": [
-        {
-          "type": "ability-grant",
-          "target": "self",
-          "modifier": {
-            "grant_type": "must-start-in-reserves"
-          }
-        },
-        {
-          "type": "ability-grant",
-          "target": "self",
-          "modifier": {
-            "grant_type": "reserves-limit-exempt-with-cargo"
-          }
-        },
-        {
-          "type": "ability-grant",
-          "target": "self",
-          "modifier": {
-            "grant_type": "reinforcement-any-of-turns-1-to-3"
-          }
-        },
-        {
-          "type": "disembark-after-move",
-          "target": "self",
-          "modifier": {
-            "after": "deployment",
-            "min_enemy_distance": 9
-          }
-        }
-      ]
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "terrax-pattern-termite"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "mindlock",
-    "name": "Mindlock",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "is-attached"
-          },
-          {
-            "type": "unit-has-keyword",
-            "parameters": {
-              "keyword": "TECH-PRIEST"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "BS",
-              "operation": "add",
-              "value": 1
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "self",
-            "modifier": {
-              "stat": "WS",
-              "operation": "add",
-              "value": 1
-            }
-          }
-        ]
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "battle"
-    },
-    "unit_ids": [
-      "x-101"
-    ],
-    "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "bound-creation",
-    "ability_type": "unit",
-    "authored_by": "40kdc-community",
-    "behavior": "passive",
-    "effect": {
-      "attached_unit_filter": null,
-      "beneficiary": "leading-leader-model",
-      "duration": "while-leading",
-      "grant": {
-        "effect": {
-          "modifier": {
-            "threshold": 5
-          },
-          "type": "feel-no-pain"
-        },
-        "recipient": "beneficiary"
-      },
-      "leader_filter": {
-        "keywords": [
-          "TECH-PRIEST"
-        ]
-      },
-      "recipient_binding": "beneficiary-only",
-      "source": "bearer-unit",
-      "type": "leader-model-ability-grant"
-    },
-    "game_version": {
-      "dataslate": "pre-launch-provisional",
-      "edition": "11th"
-    },
-    "source_digest": "d457641b3506d959aaafe54d4380a1930848ae43182b41d313cd003fbdb04f88",
-    "name": "Bound Creation",
-    "scope": {
-      "duration": "permanent",
-      "range": "unit"
-    },
-    "unit_ids": [
-      "x-101"
-    ],
-    "version": "2025-q3"
-  },
-  {
-    "ability_id": "servitor-bodyguard",
-    "name": "SERVITOR BODYGUARD",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "dcf2dc6ffd52ca778d46cce3aa31bb04d081f0a963e19b12189a8c7af5bf0dc3",
-    "version": "2025-q3",
-    "effect": {
-      "type": "unit-attachment",
-      "target": "unit",
-      "modifier": {
-        "led_by": "tech-priest-infantry"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "x-101"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "titan-guard",
-    "name": "Titan Guard",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "182eec055dd8def2db25563da32fc7ba37d763013235e27b8c79ba5ff805f3d7",
-    "version": "2025-q3",
-    "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "charge",
-        "subset": "all-failures"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "secutarii-hoplites"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "secutarii",
-    "name": "SECUTARII",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "1cecc41107a3a1b28b8d9205fa9b4bee916e3079b45d12d7f8a8b62ca2e818ed",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "is-attached"
-      },
-      "effect": {
-        "type": "ability-grant",
-        "target": "unit",
-        "modifier": {
-          "ability_id": "attached-unit-eligibility"
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "secutarii-hoplites"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "blind-barrage",
-    "name": "Blind Barrage",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "51216552db667ff93a6370ebd42489616ceeb17d95cf08d0dbf6bc79ec0e99b9",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "phase-is",
-        "parameters": {
-          "phase": "shooting"
-        }
-      },
-      "effect": {
-        "type": "roll-modifier",
-        "target": "attacker",
-        "modifier": {
-          "roll": "hit",
-          "operation": "subtract",
-          "value": 1
-        }
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "secutarii-peltasts"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "doctrina-imperatives",
+    "ability_id": "doctrina-imperatives-adeptus-mechanicus",
     "name": "Doctrina Imperatives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2508,17 +2519,20 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "keyword-grant",
-                "target": "unit",
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
                 "modifier": {
-                  "keyword": "Heavy",
+                  "abilities": [
+                    "Heavy"
+                  ],
                   "weapon_type": "ranged"
                 }
               },
               {
-                "type": "bs-modifier",
-                "target": "unit",
+                "type": "stat-modifier",
+                "target": "this-unit",
                 "modifier": {
+                  "stat": "BS",
                   "operation": "improve",
                   "value": 1
                 }
@@ -2529,18 +2543,45 @@
                   "operator": "or",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "all_of": [
+                          "BATTLELINE"
+                        ]
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "within",
+                          "parameters": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        },
+                        {
+                          "type": "within",
+                          "parameters": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -2551,7 +2592,7 @@
                     "roll": "hit",
                     "operation": "subtract",
                     "value": 1,
-                    "context": "melee"
+                    "weapon_type": "melee"
                   }
                 }
               }
@@ -2564,21 +2605,23 @@
             "type": "sequence",
             "steps": [
               {
-                "type": "keyword-grant",
-                "target": "unit",
+                "type": "weapon-ability-grant",
+                "target": "this-unit",
                 "modifier": {
-                  "keyword": "Assault",
+                  "abilities": [
+                    "Assault"
+                  ],
                   "weapon_type": "ranged"
                 }
               },
               {
                 "type": "stat-modifier",
-                "target": "unit",
+                "target": "this-unit",
                 "modifier": {
                   "stat": "WS",
                   "operation": "improve",
                   "value": 1,
-                  "attack_type": "melee"
+                  "weapon_type": "melee"
                 }
               },
               {
@@ -2587,28 +2630,55 @@
                   "operator": "or",
                   "operands": [
                     {
-                      "type": "unit-has-keyword",
+                      "type": "has-keyword",
                       "parameters": {
-                        "keyword": "Battleline"
+                        "all_of": [
+                          "BATTLELINE"
+                        ]
                       }
                     },
                     {
-                      "type": "unit-within-range-of",
-                      "parameters": {
-                        "range": 6,
-                        "target_type": "friendly-keyword",
-                        "keyword": "Adeptus Mechanicus Battleline"
-                      }
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "within",
+                          "parameters": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "ADEPTUS MECHANICUS"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        },
+                        {
+                          "type": "within",
+                          "parameters": {
+                            "of": {
+                              "owner": "friendly",
+                              "all_of": [
+                                "BATTLELINE"
+                              ]
+                            },
+                            "range": {
+                              "inches": 6
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 },
                 "effect": {
                   "type": "stat-modifier",
-                  "target": "unit",
+                  "target": "this-unit",
                   "modifier": {
                     "stat": "AP",
-                    "operation": "add",
-                    "value": -1
+                    "operation": "improve",
+                    "value": 1
                   }
                 }
               }
@@ -2618,20 +2688,15 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle-round"
     },
     "faction_id": "adeptus-mechanicus",
     "ability_type": "faction",
     "behavior": "activated",
-    "unit_ids": [
-      "hastarii-exterminators",
-      "hastarii-fusiliers",
-      "thulia-ghuld"
-    ]
+    "unit_ids": []
   },
   {
-    "ability_id": "noospheric-recon",
+    "ability_id": "noospheric-recon-adeptus-mechanicus",
     "name": "Noospheric Recon",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2651,17 +2716,19 @@
       "steps": [
         {
           "type": "keyword-grant",
-          "target": "all-friendly",
+          "target": {
+            "owner": "friendly",
+            "any_of": [
+              "PTERAXII",
+              "INFILTRATORS",
+              "RANGERS",
+              "SERBERYS RAIDERS",
+              "SERBERYS SULPHURHOUNDS"
+            ]
+          },
           "modifier": {
             "keywords": [
-              "Recon Augury"
-            ],
-            "applies_to_keywords": [
-              "Pteraxii",
-              "Infiltrators",
-              "Rangers",
-              "Serberys Raiders",
-              "Serberys Sulphurhounds"
+              "RECON AUGURY"
             ]
           }
         },
@@ -2674,30 +2741,49 @@
             }
           },
           "effect": {
-            "type": "unit-tag",
-            "target": "enemy-within-aura",
-            "modifier": {
-              "tag": "analysed",
-              "detection_range_bonus": 3,
-              "range_inches": 12,
-              "target_scope": "one-visible-enemy"
+            "type": "select-units",
+            "selector": {
+              "owner": "enemy",
+              "count": 1,
+              "within_inches": 12,
+              "visibility_required": true
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "designate",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "tag": "analysed"
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": "selected-unit",
+                  "modifier": {
+                    "stat": "detection-range",
+                    "operation": "add",
+                    "value": 3
+                  }
+                }
+              ]
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "explorator-dispensation-cohort-acquisitus",
+    "ability_id": "explorator-dispensation-cohort-acquisitus-adeptus-mechanicus",
     "name": "Explorator Dispensation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2714,23 +2800,23 @@
     "behavior": "passive",
     "effect": {
       "type": "ability-grant",
-      "target": "bearer",
+      "target": "this-model",
       "modifier": {
-        "ability_id": "infiltrators"
+        "ability": "infiltrators"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
   {
-    "ability_id": "stealth-screened-cybercanids-cohort-acquisitus",
+    "ability_id": "stealth-screened-cybercanids-upgrade-cohort-acquisitus-adeptus-mechanicus",
     "name": "Stealth-screened Cybercanids",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2747,24 +2833,23 @@
     "behavior": "passive",
     "effect": {
       "type": "ability-grant",
-      "target": "bearer",
+      "target": "this-unit",
       "modifier": {
-        "ability_id": "lone-operative",
-        "range_inches": 15
+        "ability": "lone-operative",
+        "value": 15
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Serberys Raiders"
+        "SERBERYS RAIDERS"
       ]
     }
   },
   {
-    "ability_id": "defect-scrutiny-cohort-acquisitus",
+    "ability_id": "defect-scrutiny-cohort-acquisitus-adeptus-mechanicus",
     "name": "Defect Scrutiny",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2780,28 +2865,26 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ],
-        "scope": "weapon",
-        "attack_type": "ranged"
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "repolarised-augurs-cohort-acquisitus",
+    "ability_id": "repolarised-augurs-cohort-acquisitus-adeptus-mechanicus",
     "name": "Repolarised Augurs",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2817,15 +2900,15 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "unit-tag",
-      "target": "unit",
+      "type": "stat-modifier",
+      "target": "this-unit",
       "modifier": {
-        "tag": "detection-range-reduced",
-        "detection_range_bonus": -3
+        "stat": "detection-range",
+        "operation": "subtract",
+        "value": 3
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
@@ -2835,7 +2918,7 @@
     }
   },
   {
-    "ability_id": "clandestine-reposition-cohort-acquisitus",
+    "ability_id": "clandestine-reposition-cohort-acquisitus-adeptus-mechanicus",
     "name": "Clandestine Reposition",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2851,25 +2934,23 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "set-up",
+      "target": "this-unit",
       "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+        "to": "strategic-reserves"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "war-form-mantles",
+    "ability_id": "war-form-mantles-adeptus-mechanicus",
     "name": "War-form Mantles",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2888,17 +2969,19 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "stat-modifier",
-          "target": "all-friendly",
+          "type": "invulnerable-save",
+          "target": {
+            "owner": "friendly"
+          },
           "modifier": {
-            "stat": "InvSv",
-            "operation": "set",
-            "value": 4
+            "invuln_sv": 4
           }
         },
         {
           "type": "feel-no-pain",
-          "target": "all-friendly",
+          "target": {
+            "owner": "friendly"
+          },
           "modifier": {
             "threshold": 5
           }
@@ -2906,18 +2989,17 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge",
-    "name": "Vingh\u2019s Wafers of Dynamism",
+    "ability_id": "vinghs-wafers-of-dynamism-lords-of-the-forge-adeptus-mechanicus",
+    "name": "Vingh’s Wafers of Dynamism",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2934,31 +3016,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
+        "type": "keyword-grant",
+        "target": "this-unit",
         "modifier": {
-          "ability_id": "mobile",
-          "timing": "first-battle-round",
-          "duration": "battle"
+          "keywords": [
+            "MOBILE"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "applies_to": {
       "required_keywords": [
-        "Cybernetica Datasmith"
+        "CYBERNETICA DATASMITH"
       ]
     }
   },
   {
-    "ability_id": "tl-4-9-lords-of-the-forge",
-    "name": "TL-4\u00d89",
+    "ability_id": "tl-4-9-lords-of-the-forge-adeptus-mechanicus",
+    "name": "TL-4Ø9",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2973,30 +3058,23 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "bearer",
+      "type": "weapon-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
-          "Devastating Wounds",
-          "Hazardous"
-        ],
-        "scope": "weapon",
-        "attack_type": "ranged",
-        "grants_weapon": true
+        "weapon_id": "tl-4-9"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "scriptural-prognosis-lords-of-the-forge",
+    "ability_id": "scriptural-prognosis-lords-of-the-forge-adeptus-mechanicus",
     "name": "Scriptural Prognosis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3013,26 +3091,25 @@
     "behavior": "reactive",
     "effect": {
       "type": "stat-modifier",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "stat": "AP",
-        "operation": "add",
-        "value": -1,
-        "applies_to": "incoming-attacks"
+        "operation": "worsen",
+        "value": 1,
+        "incoming": true
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "overloaded-safeguards-lords-of-the-forge",
+    "ability_id": "overloaded-safeguards-lords-of-the-forge-adeptus-mechanicus",
     "name": "Overloaded Safeguards",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3048,31 +3125,43 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "act-after-move",
-        "moves": [
-          "fall-back"
-        ],
-        "acts": [
-          "shoot",
-          "charge"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "holy-avarice-lords-of-the-forge",
+    "ability_id": "holy-avarice-lords-of-the-forge-adeptus-mechanicus",
     "name": "Holy Avarice",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3088,30 +3177,27 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "stratagem-target",
       "modifier": {
-        "grant_type": "act-after-move",
-        "moves": [
-          "action"
-        ],
-        "acts": [
-          "shoot"
+        "activity": "shoot",
+        "allow": true,
+        "despite": [
+          "performing-action"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "cyber-static-canticles",
+    "ability_id": "cyber-static-canticles-adeptus-mechanicus",
     "name": "Cyber-static Canticles",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3132,55 +3218,74 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "Corpuscarii"
+              "subject": "defender",
+              "all_of": [
+                "CORPUSCARII"
+              ]
             }
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "all-friendly",
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
-              "keywords": [
+              "abilities": [
                 "Lethal Hits"
               ],
-              "scope": "weapon",
-              "attack_type": "ranged"
+              "weapon_type": "ranged"
             }
           }
         },
         {
           "type": "conditional",
           "condition": {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "Fulgurite"
+              "subject": "defender",
+              "all_of": [
+                "FULGURITE"
+              ]
             }
           },
           "effect": {
-            "type": "ability-grant",
-            "target": "all-friendly",
-            "modifier": {
-              "grant_type": "heal-wounds",
-              "amount": "D3",
-              "trigger": "after-fought"
+            "type": "ability-part",
+            "trigger": {
+              "event": "attacks-resolved",
+              "subject": {
+                "owner": "friendly",
+                "all_of": [
+                  "FULGURITE"
+                ]
+              },
+              "filter": {
+                "kind": "fight"
+              }
+            },
+            "effect": {
+              "type": "heal",
+              "target": "event-subject",
+              "modifier": {
+                "amount": "D3"
+              }
             }
           }
         }
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "voltagheist-reliquary-luminen-auto-choir",
+    "ability_id": "voltagheist-reliquary-luminen-auto-choir-adeptus-mechanicus",
     "name": "Voltagheist Reliquary",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3196,24 +3301,36 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "attack-restriction",
-      "target": "bearer",
-      "modifier": {
-        "restriction": "cannot-be-targeted-by-snap-shooting"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "shooting_type": "snap"
+        }
+      },
+      "effect": {
+        "type": "targeting",
+        "target": {
+          "owner": "enemy"
+        },
+        "modifier": {
+          "may": "cannot-target",
+          "target": "this-unit",
+          "kind": "shoot"
+        }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "electromiasmic-brazier-luminen-auto-choir",
+    "ability_id": "electromiasmic-brazier-luminen-auto-choir-adeptus-mechanicus",
     "name": "Electromiasmic Brazier",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3230,23 +3347,22 @@
     "behavior": "passive",
     "effect": {
       "type": "ability-grant",
-      "target": "bearer",
+      "target": "this-model",
       "modifier": {
-        "ability_id": "stealth"
+        "ability": "stealth"
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "echoes-of-the-conduit-wars-luminen-auto-choir",
+    "ability_id": "echoes-of-the-conduit-wars-luminen-auto-choir-adeptus-mechanicus",
     "name": "Echoes of the Conduit Wars",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3266,7 +3382,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "subset": "ones"
@@ -3274,7 +3390,7 @@
         },
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "subset": "ones"
@@ -3283,17 +3399,16 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
   {
-    "ability_id": "chant-of-electrotraction-luminen-auto-choir",
+    "ability_id": "chant-of-electrotraction-luminen-auto-choir-adeptus-mechanicus",
     "name": "Chant of Electrotraction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3309,30 +3424,27 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
+      "type": "permission",
+      "target": "this-unit",
       "modifier": {
-        "grant_type": "act-after-move",
-        "moves": [
+        "activity": "declare-charge",
+        "allow": true,
+        "after": [
           "advance"
-        ],
-        "acts": [
-          "charge"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
   {
-    "ability_id": "momentum-feedback-luminen-auto-choir",
+    "ability_id": "momentum-feedback-luminen-auto-choir-adeptus-mechanicus",
     "name": "Momentum Feedback",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3348,25 +3460,24 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
+      "type": "move",
+      "target": "this-unit",
       "modifier": {
         "move_type": "surge",
         "distance": "D6"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Electro-Priests"
+        "ELECTRO-PRIESTS"
       ]
     }
   },
   {
-    "ability_id": "murderous-imperative",
+    "ability_id": "murderous-imperative-adeptus-mechanicus",
     "name": "Murderous Imperative",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3387,14 +3498,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-tag",
+            "type": "designated",
             "parameters": {
               "tag": "protector-imperative-active"
             }
           },
           "effect": {
             "type": "re-roll",
-            "target": "all-friendly",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -3404,14 +3517,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-tag",
+            "type": "designated",
             "parameters": {
               "tag": "conqueror-imperative-active"
             }
           },
           "effect": {
             "type": "re-roll",
-            "target": "all-friendly",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -3421,17 +3536,16 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii"
+        "SKITARII"
       ]
     }
   },
   {
-    "ability_id": "omnicogitator-eradication-cohort",
+    "ability_id": "omnicogitator-eradication-cohort-adeptus-mechanicus",
     "name": "Omnicogitator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3450,15 +3564,15 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "unit-tag",
-          "target": "bearer",
+          "type": "designate",
+          "target": "this-model",
           "modifier": {
             "tag": "conqueror-imperative-active"
           }
         },
         {
-          "type": "unit-tag",
-          "target": "bearer",
+          "type": "designate",
+          "target": "this-model",
           "modifier": {
             "tag": "protector-imperative-active"
           }
@@ -3466,17 +3580,17 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
   {
-    "ability_id": "martial-signatum-amplificator-eradication-cohort",
+    "ability_id": "martial-signatum-amplificator-eradication-cohort-adeptus-mechanicus",
     "name": "Martial Signatum Amplificator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3492,26 +3606,25 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Skitarii"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Tech-Priest"
+        "TECH-PRIEST"
       ]
     }
   },
   {
-    "ability_id": "belicosa-class-capacitor-vanes-eradication-cohort",
+    "ability_id": "belicosa-class-capacitor-vanes-eradication-cohort-adeptus-mechanicus",
     "name": "Belicosa-class Capacitor Vanes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3531,41 +3644,38 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "Range",
             "operation": "add",
             "value": 6,
-            "scope": "weapon",
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "scope": "weapon",
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "omnissiahs-fury-eradication-cohort",
-    "name": "Omnissiah\u2019s Fury",
+    "ability_id": "omnissiahs-fury-eradication-cohort-adeptus-mechanicus",
+    "name": "Omnissiah’s Fury",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -3584,51 +3694,48 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "A",
             "operation": "add",
             "value": 2,
-            "scope": "weapon",
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "AP",
             "operation": "improve",
             "value": 1,
-            "scope": "weapon",
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         },
         {
           "type": "stat-modifier",
-          "target": "bearer",
+          "target": "this-model",
           "modifier": {
             "stat": "D",
             "operation": "improve",
             "value": 1,
-            "scope": "weapon",
-            "attack_type": "melee"
+            "weapon_type": "melee"
           }
         }
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii Marshal"
+        "SKITARII",
+        "MARSHAL"
       ]
     }
   },
   {
-    "ability_id": "servo-driven-charge-eradication-cohort",
+    "ability_id": "servo-driven-charge-eradication-cohort-adeptus-mechanicus",
     "name": "Servo-driven Charge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3644,28 +3751,26 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Lance"
         ],
-        "scope": "weapon",
-        "attack_type": "melee"
+        "weapon_type": "melee"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "threat-cogitation-targeters-eradication-cohort",
+    "ability_id": "threat-cogitation-targeters-eradication-cohort-adeptus-mechanicus",
     "name": "Threat-cogitation Targeters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3681,30 +3786,39 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "re-roll",
-      "target": "unit",
-      "modifier": {
-        "roll": "damage",
-        "subset": "all-failures",
-        "vs_keywords": [
-          "Monster",
-          "Vehicle"
-        ]
+      "type": "conditional",
+      "condition": {
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
+      },
+      "effect": {
+        "type": "re-roll",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "damage",
+          "result_scope": "any-result",
+          "weapon_type": "ranged"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii",
-        "Vehicle"
+        "SKITARII",
+        "VEHICLE"
       ]
     }
   },
   {
-    "ability_id": "unrelenting-aggression-eradication-cohort",
+    "ability_id": "unrelenting-aggression-eradication-cohort-adeptus-mechanicus",
     "name": "Unrelenting Aggression",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3720,31 +3834,43 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "act-after-move",
-        "moves": [
-          "fall-back"
-        ],
-        "acts": [
-          "shoot",
-          "charge"
-        ]
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        },
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": true,
+            "after": [
+              "fall-back"
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "applies_to": {
       "required_keywords": [
-        "Adeptus Mechanicus"
+        "ADEPTUS MECHANICUS"
       ]
     }
   },
   {
-    "ability_id": "precision-onslaught-eradication-cohort",
+    "ability_id": "precision-onslaught-eradication-cohort-adeptus-mechanicus",
     "name": "Precision Onslaught",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3760,30 +3886,50 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "mortal-wounds",
-      "target": "enemy-within-aura",
-      "modifier": {
-        "dice": "ND6",
-        "dice_per": "model-in-engagement-range",
-        "threshold": 4,
-        "comparison": "gte",
-        "mortal_per_success": 1,
-        "range": "engagement",
-        "target_scope": "one-enemy-in-engagement-range"
+      "type": "ability-part",
+      "trigger": {
+        "event": "move-ended",
+        "subject": "this-unit",
+        "filter": {
+          "move_types": [
+            "charge"
+          ]
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "count": 1,
+          "owner": "enemy",
+          "engagement_relation": "engaged-with-bearer",
+          "reference": "bearer-unit"
+        },
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1,
+            "per": "success",
+            "roll": {
+              "dice": 1,
+              "threshold": 4,
+              "per_model": "this"
+            }
+          }
+        }
       }
     },
     "scope": {
-      "range": "engagement-range",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Sicarian"
+        "SICARIAN"
       ]
     }
   },
   {
-    "ability_id": "unshackled-wrath-eradication-cohort",
+    "ability_id": "unshackled-wrath-eradication-cohort-adeptus-mechanicus",
     "name": "Unshackled Wrath",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3802,54 +3948,50 @@
       "type": "choice",
       "options": [
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1"
             ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Lethal Hits"
             ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keywords": [
+            "abilities": [
               "Sustained Hits 1",
               "Lethal Hits",
               "Hazardous"
             ],
-            "scope": "weapon",
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii"
+        "SKITARII"
       ]
     }
   },
   {
-    "ability_id": "analytic-reprisals-eradication-cohort",
+    "ability_id": "analytic-reprisals-eradication-cohort-adeptus-mechanicus",
     "name": "Analytic Reprisals",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3865,26 +4007,41 @@
     "ability_type": "stratagem",
     "behavior": "reactive",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "grant_type": "shoot-out-of-phase",
-        "restriction": "only-target-attacking-unit"
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "as_if": "shooting-phase"
+          }
+        },
+        {
+          "type": "targeting",
+          "target": "this-unit",
+          "modifier": {
+            "by": "this-unit",
+            "may": "must-target",
+            "target": "event-subject",
+            "kind": "shoot"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "applies_to": {
       "required_keywords": [
-        "Skitarii",
-        "Infantry"
+        "SKITARII",
+        "INFANTRY"
       ]
     }
   },
   {
-    "ability_id": "noospheric-transference",
+    "ability_id": "noospheric-transference-adeptus-mechanicus",
     "name": "Noospheric Transference",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3909,7 +4066,7 @@
           "name": "Electromotive Energisation",
           "effect": {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "M",
               "operation": "add",
@@ -3921,7 +4078,7 @@
           "name": "Microactuator Bracing",
           "effect": {
             "type": "stat-modifier",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "stat": "T",
               "operation": "add",
@@ -3932,12 +4089,11 @@
         {
           "name": "Predation Protocols",
           "effect": {
-            "type": "rule-state",
-            "target": "unit",
+            "type": "permission",
+            "target": "this-unit",
             "modifier": {
-              "direction": "granted",
-              "rule_kind": "core-rule",
-              "rule": "charge"
+              "activity": "declare-charge",
+              "allow": true
             }
           }
         },
@@ -3956,13 +4112,12 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "until-next-command-phase"
     },
     "community_notes": "[APPROX] In the Command phase, selected units gain the Halo Override keyword (max selectable scales with battle size: 1/2/3 for Incursion/Strike Force/Onslaught) and then one Override ability is chosen for them; only the chosen ability is modeled. Predation Protocols is expressed as a granted charge eligibility (rule is charge-after-Advance) and Muted Servomotors as the Stealth hit penalty. Full rule in raw-text store."
   },
   {
-    "ability_id": "cyber-psalm-programming",
+    "ability_id": "cyber-psalm-programming-adeptus-mechanicus",
     "name": "Cyber-psalm Programming",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3983,14 +4138,16 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "LEGIO CYBERNETICA"
+              "all_of": [
+                "LEGIO CYBERNETICA"
+              ]
             }
           },
           "effect": {
-            "type": "movement-modifier",
-            "target": "unit",
+            "type": "move",
+            "target": "this-unit",
             "modifier": {
               "move_type": "normal",
               "distance": 2
@@ -4003,25 +4160,31 @@
             "operator": "and",
             "operands": [
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "LEGIO CYBERNETICA"
+                  "all_of": [
+                    "LEGIO CYBERNETICA"
+                  ]
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "is-battle-shocked"
+                    "type": "unit-state",
+                    "parameters": {
+                      "state": "battle-shocked"
+                    }
                   }
                 ]
               }
             ]
           },
           "effect": {
-            "type": "objective-control-modifier",
-            "target": "unit",
+            "type": "stat-modifier",
+            "target": "this-unit",
             "modifier": {
+              "stat": "OC",
               "operation": "add",
               "value": 1
             }
@@ -4030,13 +4193,12 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "stealth-optimisation",
+    "ability_id": "stealth-optimisation-adeptus-mechanicus",
     "name": "Stealth Optimisation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4063,15 +4225,19 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "SKITARII"
+                      "all_of": [
+                        "SKITARII"
+                      ]
                     }
                   },
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "INFANTRY"
+                      "all_of": [
+                        "INFANTRY"
+                      ]
                     }
                   }
                 ]
@@ -4080,32 +4246,38 @@
                 "operator": "and",
                 "operands": [
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "SKITARII"
+                      "all_of": [
+                        "SKITARII"
+                      ]
                     }
                   },
                   {
-                    "type": "unit-has-keyword",
+                    "type": "has-keyword",
                     "parameters": {
-                      "keyword": "MOUNTED"
+                      "all_of": [
+                        "MOUNTED"
+                      ]
                     }
                   }
                 ]
               },
               {
-                "type": "unit-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "IRONSTRIDER BALLISTARII"
+                  "all_of": [
+                    "IRONSTRIDER BALLISTARII"
+                  ]
                 }
               }
             ]
           },
           "effect": {
-            "type": "keyword-grant",
-            "target": "unit",
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
             "modifier": {
-              "keywords": [
+              "abilities": [
                 "Stealth"
               ]
             }
@@ -4117,24 +4289,32 @@
             "operator": "and",
             "operands": [
               {
-                "type": "attack-is-type",
+                "type": "attack-is",
                 "parameters": {
                   "attack_type": "ranged"
                 }
               },
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "SICARIAN"
+                  "subject": "defender",
+                  "all_of": [
+                    "SICARIAN"
+                  ]
                 }
               },
               {
                 "operator": "not",
                 "operands": [
                   {
-                    "type": "opponent-unit-within-range",
+                    "type": "within",
                     "parameters": {
-                      "range": 12
+                      "of": {
+                        "owner": "enemy"
+                      },
+                      "range": {
+                        "inches": 12
+                      }
                     }
                   }
                 ]
@@ -4154,13 +4334,12 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "benedictions-of-the-omnissiah",
+    "ability_id": "benedictions-of-the-omnissiah-adeptus-mechanicus",
     "name": "Benedictions of the Omnissiah",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4186,19 +4365,19 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "attack-is-type",
+              "type": "attack-is",
               "parameters": {
                 "attack_type": "ranged"
               }
             },
             "effect": {
               "type": "stat-modifier",
-              "target": "unit",
+              "target": "this-unit",
               "modifier": {
                 "stat": "AP",
                 "operation": "improve",
                 "value": 1,
-                "attack_type": "ranged"
+                "weapon_type": "ranged"
               }
             }
           }
@@ -4208,29 +4387,38 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "type": "charged-this-turn"
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "charge"
+                  ]
+                },
+                "window": "turn"
+              }
             },
             "effect": {
               "type": "sequence",
               "steps": [
                 {
                   "type": "stat-modifier",
-                  "target": "unit",
+                  "target": "this-unit",
                   "modifier": {
                     "stat": "S",
                     "operation": "add",
                     "value": 1,
-                    "attack_type": "melee"
+                    "weapon_type": "melee"
                   }
                 },
                 {
                   "type": "stat-modifier",
-                  "target": "unit",
+                  "target": "this-unit",
                   "modifier": {
                     "stat": "A",
                     "operation": "add",
                     "value": 1,
-                    "attack_type": "melee"
+                    "weapon_type": "melee"
                   }
                 }
               ]
@@ -4240,13 +4428,12 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "[APPROX] One Benediction is chosen at the start of the first battle round and stays active for CULT MECHANICUS units all battle; Panegyric Procession's +1 AP applies only within half range, a gate not encoded here. Full rule in raw-text store."
   },
   {
-    "ability_id": "acquisition-at-any-cost",
+    "ability_id": "acquisition-at-any-cost-adeptus-mechanicus",
     "name": "Acquisition at any Cost",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4267,18 +4454,33 @@
         "operator": "or",
         "operands": [
           {
-            "type": "within-range-of-objective",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {
+                  "designated": "acquisition"
+                }
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "opponent-unit-within-range",
-            "parameters": {}
+            "type": "within",
+            "parameters": {
+              "subject": "defender",
+              "of": {
+                "objective": {
+                  "designated": "acquisition"
+                }
+              },
+              "range": "objective-control"
+            }
           }
         ]
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "ones"
@@ -4286,13 +4488,12 @@
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "until-next-command-phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "rad-bombardment",
+    "ability_id": "rad-bombardment-adeptus-mechanicus",
     "name": "Rad-Bombardment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4312,7 +4513,8 @@
       "condition": {
         "type": "battle-round",
         "parameters": {
-          "round": 1
+          "min": 1,
+          "max": 1
         }
       },
       "effect": {
@@ -4322,24 +4524,22 @@
         "comparison": "gte",
         "on_success": {
           "type": "mortal-wounds",
-          "target": "all-enemy",
+          "target": "recipient",
           "modifier": {
-            "count": "D3",
-            "scope": "each-enemy-unit-in-opponent-deployment-zone"
+            "count": "D3"
           }
         },
         "on_fail": null
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle-round"
     },
     "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ \u2192 D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ \u2192 D3 mortal wounds), and the FALLOUT effect across battle rounds 2\u20135 are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "broad-spectrum-targeting-augurs",
-    "name": "Broad\u2011spectrum Targeting Augurs",
+    "ability_id": "broad-spectrum-targeting-augurs-adeptus-mechanicus",
+    "name": "Broad‑spectrum Targeting Augurs",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -4356,9 +4556,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "MONSTER"
+                  "subject": "recipient",
+                  "all_of": [
+                    "MONSTER"
+                  ]
                 }
               }
             ]
@@ -4367,9 +4570,12 @@
             "operator": "not",
             "operands": [
               {
-                "type": "target-has-keyword",
+                "type": "has-keyword",
                 "parameters": {
-                  "keyword": "VEHICLE"
+                  "subject": "recipient",
+                  "all_of": [
+                    "VEHICLE"
+                  ]
                 }
               }
             ]
@@ -4377,10 +4583,10 @@
         ]
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Sustained Hits 1"
           ],
           "weapon_name": "eradication caster"
@@ -4388,7 +4594,6 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -4396,10 +4601,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "monocular-targeting-helms",
+    "ability_id": "monocular-targeting-helms-adeptus-mechanicus",
     "name": "Monocular Targeting Helms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4411,27 +4617,20 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "or",
-        "operands": [
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "MONSTER"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "any_of": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Ignores Cover"
           ],
           "weapon_name": "neutron-fusil"
@@ -4439,7 +4638,6 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "battle"
     },
     "unit_ids": [
@@ -4447,10 +4645,11 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "rod-of-the-war-forge",
+    "ability_id": "rod-of-the-war-forge-adeptus-mechanicus",
     "name": "Rod of the War Forge",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4468,15 +4667,150 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "self",
-        "modifier": {
-          "grant_type": "icon-of-war-selection"
-        }
+        "type": "stance-select",
+        "mode": "re-selectable",
+        "scope": "unit",
+        "select": "command-phase",
+        "options": [
+          {
+            "name": "Fanatical Devotion",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "max_count": 1,
+                "owner": "friendly",
+                "within_inches": 6,
+                "eligibility": {
+                  "type": "has-keyword",
+                  "parameters": {
+                    "any_of": [
+                      "SKITARII",
+                      "THULIA GHULD"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "shoot",
+                      "allow": true,
+                      "after": [
+                        "advance"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": true,
+                      "after": [
+                        "advance"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Adaptive Tactics",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "max_count": 1,
+                "owner": "friendly",
+                "within_inches": 6,
+                "eligibility": {
+                  "type": "has-keyword",
+                  "parameters": {
+                    "any_of": [
+                      "SKITARII",
+                      "THULIA GHULD"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "shoot",
+                      "allow": true,
+                      "after": [
+                        "fall-back"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "permission",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "activity": "declare-charge",
+                      "allow": true,
+                      "after": [
+                        "fall-back"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "The Fires of Mars",
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "max_count": 1,
+                "owner": "friendly",
+                "within_inches": 6,
+                "eligibility": {
+                  "type": "has-keyword",
+                  "parameters": {
+                    "any_of": [
+                      "SKITARII",
+                      "THULIA GHULD"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "ability-activate",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "ability": "doctrina-imperatives-adeptus-mechanicus",
+                      "option": "conqueror-imperative"
+                    }
+                  },
+                  {
+                    "type": "ability-activate",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "ability": "doctrina-imperatives-adeptus-mechanicus",
+                      "option": "protector-imperative"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "until-next-command-phase"
     },
     "unit_ids": [
@@ -4484,40 +4818,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "cybernetic-augmentation",
-    "name": "Cybernetic Augmentation",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "cec23fe9e42eec85726d2ceb18bb851ebdeec3c8e82746703c83e78c6e1a85e5",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "passthrough": [
-          "all-terrain"
-        ]
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "thulia-ghuld"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive",
-    "community_notes": "[APPROX] Models can move through terrain features; the RUIN floor-level placement and base-overhang restrictions are not encoded. Full rule in raw-text store."
-  },
-  {
-    "ability_id": "secutor-of-olympus",
+    "ability_id": "secutor-of-olympus-adeptus-mechanicus",
     "name": "Secutor of Olympus",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4529,27 +4834,13 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start"
-            }
-          },
-          {
-            "type": "target-has-keyword",
-            "parameters": {
-              "keyword": "VEHICLE"
-            }
-          }
-        ]
+        "type": "has-keyword",
+        "parameters": {
+          "subject": "defender",
+          "all_of": [
+            "VEHICLE"
+          ]
+        }
       },
       "effect": {
         "type": "dice-gated",
@@ -4558,7 +4849,14 @@
         "comparison": "gte",
         "on_success": {
           "type": "mortal-wounds",
-          "target": "enemy-within-aura",
+          "target": {
+            "owner": "enemy",
+            "within": {
+              "range": {
+                "inches": 12
+              }
+            }
+          },
           "modifier": {
             "count": "D3+1"
           }
@@ -4566,18 +4864,27 @@
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "phase"
     },
     "unit_ids": [
       "thulia-ghuld"
     ],
     "ability_type": "unit",
-    "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "behavior": "reactive",
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    },
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "defend-the-divine-work-manipulus-skand",
+    "ability_id": "defend-the-divine-work-manipulus-skand-adeptus-mechanicus",
     "name": "Defend the Divine Work",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4588,13 +4895,12 @@
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "invuln_sv": 4
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -4606,10 +4912,11 @@
       "frequency": "n-per-battle",
       "count": 1,
       "per": "unit"
-    }
+    },
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "searing-conflagration-purge-corps-pteraxii-sterylizors",
+    "ability_id": "searing-conflagration-purge-corps-pteraxii-sterylizors-adeptus-mechanicus",
     "name": "Searing Conflagration",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4624,14 +4931,18 @@
         {
           "type": "conditional",
           "condition": {
-            "type": "within-range-of-objective",
+            "type": "within",
             "parameters": {
-              "subject": "target"
+              "subject": "defender",
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
             }
           },
           "effect": {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "ones",
@@ -4645,27 +4956,35 @@
             "operator": "and",
             "operands": [
               {
-                "type": "within-range-of-objective",
+                "type": "within",
                 "parameters": {
-                  "subject": "target"
+                  "subject": "defender",
+                  "of": {
+                    "objective": {}
+                  },
+                  "range": "objective-control"
                 }
               },
               {
-                "type": "unit-within-range-of",
+                "type": "within",
                 "parameters": {
-                  "subject": "unit",
-                  "range": 6,
-                  "keywords": [
-                    "Adeptus Mechanicus",
-                    "Battleline"
-                  ]
+                  "of": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "ADEPTUS MECHANICUS",
+                      "BATTLELINE"
+                    ]
+                  },
+                  "range": {
+                    "inches": 6
+                  }
                 }
               }
             ]
           },
           "effect": {
             "type": "re-roll",
-            "target": "unit",
+            "target": "this-unit",
             "modifier": {
               "roll": "wound",
               "subset": "all-failures",
@@ -4676,17 +4995,17 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "attack-sequence"
     },
     "unit_ids": [
       "purge-corps-pteraxii-sterylizors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "omnispex-purge-corps-skitarii-vanguard",
+    "ability_id": "omnispex-purge-corps-skitarii-vanguard-adeptus-mechanicus",
     "name": "Omnispex",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4696,27 +5015,27 @@
     "source_digest": "ac35d9337e4586e8285303e4a9cc8ad1f2e7415b7e98a19eb3993684681d3165",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Ignores Cover"
         ],
         "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "purge-corps-skitarii-vanguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "adeptus-mechanicus"
   },
   {
-    "ability_id": "rad-saturation-aura-purge-corps-skitarii-vanguard",
+    "ability_id": "rad-saturation-purge-corps-skitarii-vanguard-adeptus-mechanicus",
     "name": "Rad-saturation (Aura)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -4731,31 +5050,1494 @@
         "operator": "not",
         "operands": [
           {
-            "type": "target-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "VEHICLE"
+              "subject": "recipient",
+              "all_of": [
+                "VEHICLE"
+              ]
             }
           }
         ]
       },
       "effect": {
-        "type": "objective-control-modifier",
-        "target": "enemy-within-aura",
+        "type": "stat-modifier",
+        "target": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 3
+            }
+          }
+        },
         "modifier": {
+          "stat": "OC",
           "operation": "subtract",
           "value": 1
         }
       }
     },
     "scope": {
-      "range": "aura-custom",
-      "range_inches": 3,
       "duration": "battle"
     },
     "unit_ids": [
       "purge-corps-skitarii-vanguard"
     ],
     "ability_type": "unit",
-    "behavior": "aura"
+    "behavior": "aura",
+    "faction_id": "adeptus-mechanicus"
+  },
+  {
+    "ability_id": "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Aggressive Impulse",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
+    "name": "Aggressor Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "analytical-divination-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Analytical Divination",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "arch-negator-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Arch-negator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "artisan-explorator-maniple-adeptus-mechanicus",
+    "name": "Artisan",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "auto-divinatory-targeting-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Auto-divinatory Targeting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "auto-oracular-retrieval-explorator-maniple-adeptus-mechanicus",
+    "name": "Auto-oracular Retrieval",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "autoclavic-denunciation-rad-zone-corps-adeptus-mechanicus",
+    "name": "Autoclavic Denunciation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "baleful-halo-rad-zone-corps-adeptus-mechanicus",
+    "name": "Baleful Halo",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Battle-sphere Uplink",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "benevolence-of-the-omnissiah-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Benevolence of the Omnissiah",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Binharic Offence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bionic-endurance-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Bionic Endurance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "broad-spectrum-data-tether-adeptus-mechanicus",
+    "name": "Broad Spectrum Data-tether",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "ironstrider-ballistarii",
+      "sydonian-dragoons-with-radium-jezzails",
+      "sydonian-dragoons-with-taser-lances"
+    ],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "broad-spectrum-data-tether-skorpius-disintegrator-adeptus-mechanicus",
+    "name": "Broad Spectrum Data-tether",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "skorpius-disintegrator",
+      "skorpius-dunerider"
+    ],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bulwark-imperative-rad-zone-corps-adeptus-mechanicus",
+    "name": "Bulwark Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cached-acquisition-explorator-maniple-adeptus-mechanicus",
+    "name": "Cached Acquisition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cantic-thrallnet-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Cantic Thrallnet",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "chant-of-the-remorseless-fist-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Chant of the Remorseless Fist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "clandestine-infiltrator-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Clandestine Infiltrator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cognitive-reinforcement-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Cognitive Reinforcement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "data-blessed-autosermon-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Data-blessed Autosermon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "data-severed-adeptus-mechanicus",
+    "name": "Data-severed",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "cybernetica-datasmith"
+    ],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "doctrina-imperatives-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Doctrina Imperatives",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "faction",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "emotionless-clarity-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Emotionless Clarity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Empowered Mechanisms",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eradication-protocols-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Eradication Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "expedited-purge-protocol-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Expedited Purge Protocol",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "extinction-order-rad-zone-corps-adeptus-mechanicus",
+    "name": "Extinction Order",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "genetor-explorator-maniple-adeptus-mechanicus",
+    "name": "Genetor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "guided-retreat-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Guided Retreat",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "imperative-overload-adeptus-mechanicus",
+    "name": "Imperative Overload",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "incantation-of-the-iron-soul-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Incantation of the Iron Soul",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "incense-exhausts-explorator-maniple-adeptus-mechanicus",
+    "name": "Incense Exhausts",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "infoslave-skull-explorator-maniple-adeptus-mechanicus",
+    "name": "Infoslave Skull",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inloaded-lethality-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Inloaded Lethality",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "isolate-and-destroy-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Isolate and Destroy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lethal-dosage-rad-zone-corps-adeptus-mechanicus",
+    "name": "Lethal Dosage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "litany-of-the-electromancer-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Litany of the Electromancer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lockdown-protocols-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Lockdown Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "logis-explorator-maniple-adeptus-mechanicus",
+    "name": "Logis",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "lord-of-machines-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Lord of Machines",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "luminescent-blessing-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Luminescent Blessing",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "machine-spirit-resurgent-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Machine Spirit Resurgent",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "machine-superiority-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Machine Superiority",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "magos-explorator-maniple-adeptus-mechanicus",
+    "name": "Magos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "malphonic-susurrus-rad-zone-corps-adeptus-mechanicus",
+    "name": "Malphonic Susurrus",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mantle-of-the-gnosticarch-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Mantle of the Gnosticarch",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mechanical-guidance-adeptus-mechanicus",
+    "name": "Mechanical Guidance (Once per turn, per unit)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "manipulus-skand"
+    ],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mechanicus-locum-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Mechanicus Locum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "miniaturised-autosimulacra-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Miniaturised Autosimulacra",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "motive-imperative-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Motive Imperative",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "necromechanic-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Necromechanic",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Neural Overload",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "optimised-targeting-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Optimised Targeting",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "peerless-eradicator-rad-zone-corps-adeptus-mechanicus",
+    "name": "Peerless Eradicator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pinning-fire-adeptus-mechanicus",
+    "name": "Pinning Fire",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "purge-corps-serberys-sulphurhounds"
+    ],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "pre-calibrated-purge-solution-rad-zone-corps-adeptus-mechanicus",
+    "name": "Pre-calibrated Purge Solution",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "preservation-imperatives-purge-corps-deltic-9-adeptus-mechanicus",
+    "name": "Preservation Imperatives",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "purge-corps-deltic-9",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "priority-reclamation-explorator-maniple-adeptus-mechanicus",
+    "name": "Priority Reclamation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Programmed Withdrawal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "radial-suffusion-rad-zone-corps-adeptus-mechanicus",
+    "name": "Radial Suffusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "rad-zone-corps",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reactive-safeguard-explorator-maniple-adeptus-mechanicus",
+    "name": "Reactive Safeguard",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "explorator-maniple",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sanctified-ordnance-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Sanctified Ordnance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shroud-protocols-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Shroud Protocols",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "targeting-override-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Targeting Override",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "temporcopia-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Temporcopia",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transcendent-cogitation-cohort-cybernetica-adeptus-mechanicus",
+    "name": "Transcendent Cogitation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "cohort-cybernetica",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "transoracular-dyad-wafers-haloscreed-battle-clade-adeptus-mechanicus",
+    "name": "Transoracular Dyad Wafers",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "haloscreed-battle-clade",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tribute-of-emphatic-veneration-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Tribute of Emphatic Veneration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "veiled-hunter-skitarii-hunter-cohort-adeptus-mechanicus",
+    "name": "Veiled Hunter",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "skitarii-hunter-cohort",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "verse-of-vengeance-data-psalm-conclave-adeptus-mechanicus",
+    "name": "Verse of Vengeance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "adeptus-mechanicus",
+    "detachment_id": "data-psalm-conclave",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

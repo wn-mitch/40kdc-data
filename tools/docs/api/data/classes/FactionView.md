@@ -6,7 +6,7 @@
 
 # Class: FactionView
 
-Defined in: [data/entities.ts:268](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L268)
+Defined in: [data/entities.ts:474](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L474)
 
 A faction, linked to its units and the records scoped to it.
 
@@ -16,7 +16,7 @@ A faction, linked to its units and the records scoped to it.
 
 > **new FactionView**(`raw`, `ds`): `FactionView`
 
-Defined in: [data/entities.ts:269](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L269)
+Defined in: [data/entities.ts:475](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L475)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ The full generated `Faction` record.
 
 > `readonly` **raw**: [`Faction`](../../generated/interfaces/Faction.md)
 
-Defined in: [data/entities.ts:271](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L271)
+Defined in: [data/entities.ts:477](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L477)
 
 The full generated `Faction` record.
 
@@ -52,7 +52,7 @@ The full generated `Faction` record.
 
 > **get** **id**(): `string`
 
-Defined in: [data/entities.ts:275](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L275)
+Defined in: [data/entities.ts:481](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L481)
 
 ##### Returns
 
@@ -66,11 +66,27 @@ Defined in: [data/entities.ts:275](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **name**(): `string`
 
-Defined in: [data/entities.ts:279](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L279)
+Defined in: [data/entities.ts:485](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L485)
 
 ##### Returns
 
 `string`
+
+***
+
+### logoUrl
+
+#### Get Signature
+
+> **get** **logoUrl**(): `string` \| `undefined`
+
+Defined in: [data/entities.ts:490](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L490)
+
+URL to the faction's logo/emblem image, or `undefined` if unset.
+
+##### Returns
+
+`string` \| `undefined`
 
 ***
 
@@ -80,7 +96,7 @@ Defined in: [data/entities.ts:279](https://github.com/wn-mitch/40kdc-data/blob/0
 
 > **get** **units**(): [`UnitView`](UnitView.md)[]
 
-Defined in: [data/entities.ts:284](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L284)
+Defined in: [data/entities.ts:495](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L495)
 
 Units whose `faction_id` is this faction (may be empty for successors).
 
@@ -96,7 +112,7 @@ Units whose `faction_id` is this faction (may be empty for successors).
 
 > **get** **abilities**(): [`AbilityView`](AbilityView.md)[]
 
-Defined in: [data/entities.ts:289](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L289)
+Defined in: [data/entities.ts:500](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L500)
 
 Faction-scoped abilities (abilities whose `faction_id` is this faction).
 
@@ -112,7 +128,7 @@ Faction-scoped abilities (abilities whose `faction_id` is this faction).
 
 > **get** **weapons**(): [`WeaponView`](WeaponView.md)[]
 
-Defined in: [data/entities.ts:294](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/entities.ts#L294)
+Defined in: [data/entities.ts:505](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/entities.ts#L505)
 
 Distinct weapons carried by this faction's units.
 

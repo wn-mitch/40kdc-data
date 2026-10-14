@@ -1,8 +1,6 @@
-import { describe, it, expect } from "vitest";
-import {
-  storeEntryForFaction,
-  storeSourceForFaction,
-} from "../src/mfm/extract-source-corpus.js";
+import { afterAll, describe, it, expect } from "vitest";
+import { buildSourceCorpus } from "../src/mfm/extract-source-corpus.js";
+import { fixtureRepo } from "./prose-fixture.js";
 import {
   normalizeSourceForDigest,
   sourceDigest,
@@ -223,47 +221,23 @@ describe("source-digest", () => {
   });
 });
 
-describe("storeSourceForFaction", () => {
-  it("accepts only the faction that owns a store entry", () => {
-    const entry = { faction: "grey-knights", raw_text: "Fabricated rule text." };
+describe("buildSourceCorpus", () => {
+  const fx = fixtureRepo();
+  afterAll(() => fx.cleanup());
 
-    expect(storeSourceForFaction(entry, "grey-knights")).toBe("Fabricated rule text.");
-    expect(storeSourceForFaction(entry, "adeptus-mechanicus")).toBeNull();
+  it("keys each annotation's own-owner dump text by faction", () => {
+    const { corpus } = buildSourceCorpus(fx.repo);
+    expect(corpus["warden-host"]?.["grudge-engine"]).toBe("Warden wagon text.");
+    expect(corpus["ember-court"]?.["grudge-engine"]).toBe("Ember wagon text.");
+    expect(corpus["_core"]?.["deep-watch"]).toBe("Core deep watch text.");
+    expect(corpus["warden-host"]?.["hold-fast-iron-vigil"]).toBe("Any phase.\nOne unit.\nHold **fast**.");
   });
 
-  it("maps the store's core key to the shared enrichment pool", () => {
-    const entry = { faction: "core", raw_text: "Fabricated shared rule." };
-
-    expect(storeSourceForFaction(entry, "_core")).toBe("Fabricated shared rule.");
-    expect(storeSourceForFaction(entry, "core")).toBeNull();
-  });
-
-  it("rejects legacy entries with no faction identity", () => {
-    expect(
-      storeSourceForFaction({ raw_text: "Fabricated unscoped rule." }, "orks"),
-    ).toBeNull();
-  });
-});
-
-describe("storeEntryForFaction", () => {
-  it("resolves distinct faction copies of a shared ability id", () => {
-    const store = {
-      orks: {
-        "shared-rule": { faction: "orks", raw_text: "Fabricated Orks rule." },
-      },
-      "tau-empire": {
-        "shared-rule": {
-          faction: "tau-empire",
-          raw_text: "Fabricated T'au rule.",
-        },
-      },
-    };
-
-    expect(storeEntryForFaction(store, "shared-rule", "orks")).toMatchObject({
-      faction: "orks",
-    });
-    expect(storeEntryForFaction(store, "shared-rule", "tau-empire")).toMatchObject({
-      faction: "tau-empire",
-    });
+  it("reports ambiguous and missing annotations instead of guessing a source", () => {
+    const result = buildSourceCorpus(fx.repo);
+    expect(result.corpus["warden-host"]).not.toHaveProperty("twin-guns");
+    expect(result.ambiguous.map((a) => `${a.faction_id}/${a.ability_id}`)).toEqual(["warden-host/twin-guns"]);
+    expect(result.unresolved.map((a) => `${a.faction_id}/${a.ability_id}`)).toEqual(["warden-host/lost-ability"]);
+    expect(result.resolved + result.ambiguous.length + result.unresolved.length).toBe(result.total);
   });
 });

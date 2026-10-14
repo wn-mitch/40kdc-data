@@ -1,11 +1,15 @@
 package wh40kdc
 
+import "strings"
+
 // Roster-highlighting scope: resolve which units an ability (typically a
 // detachment rule) benefits, from its curated applies_to keyword filter.
 //
 // A unit matches iff it carries every required_keywords entry and none of the
 // excluded_keywords, compared against the union of its keywords and
-// faction_keywords. Matching is exact-string and case-sensitive. Two distinct
+// faction_keywords. Keywords compare without regard to case or apostrophe
+// style (keywordKey): rules print them uppercase, units store datasheet
+// spelling. Two distinct
 // "no constraint" forms: a nil filter matches nothing; a present filter with
 // neither keyword list matches every unit.
 //
@@ -19,19 +23,25 @@ func unitMatchesAppliesTo(appliesTo map[string]any, ownedKeywords []string) bool
 	}
 	owned := map[string]struct{}{}
 	for _, k := range ownedKeywords {
-		owned[k] = struct{}{}
+		owned[keywordKey(k)] = struct{}{}
 	}
 	for _, kw := range getStrList(appliesTo, "required_keywords") {
-		if _, ok := owned[kw]; !ok {
+		if _, ok := owned[keywordKey(kw)]; !ok {
 			return false
 		}
 	}
 	for _, kw := range getStrList(appliesTo, "excluded_keywords") {
-		if _, ok := owned[kw]; ok {
+		if _, ok := owned[keywordKey(kw)]; ok {
 			return false
 		}
 	}
 	return true
+}
+
+// keywordKey is how two keyword spellings compare: uppercase, with a curly
+// apostrophe read as a straight one.
+func keywordKey(keyword string) string {
+	return strings.ReplaceAll(strings.ToUpper(keyword), "’", "'")
 }
 
 // abilityAppliesToUnit unions the unit's keywords and faction_keywords and

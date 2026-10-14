@@ -40,7 +40,7 @@ program
   .argument("[path]", "Path to abilities.json file")
   .option(
     "--gw",
-    "Show source text from the private 40kdc-abilities store alongside each ability",
+    "Show GW source text from the private MFM dump (_private/dump.json) alongside each ability",
   )
   .option(
     "--gw-file <path>",

@@ -8,7 +8,7 @@
 
 > **effectToBuffs**(`effect`, `source`, `context`, `perspective?`): [`EffectTranslation`](../type-aliases/EffectTranslation.md)
 
-Defined in: [cruncher/from-dsl.ts:119](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L119)
+Defined in: [cruncher/from-dsl.ts:161](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L161)
 
 Walk an ability DSL `effect` tree and produce the buff stack it contributes
 against `context` from the given `perspective`, plus an `unsupported` list

@@ -29,7 +29,8 @@ const modelIdentities = args.model_identities
 if (!modelIdentities || !['who', 'when', 'what', 'formalizer'].every(key => typeof modelIdentities[key] === 'string' && modelIdentities[key])) {
   throw new Error('model_identities.who, model_identities.when, model_identities.what, and model_identities.formalizer required')
 }
-const rawStoreRoot = args.raw_store_root || join(args.repo_root, '..', '40kdc-abilities')
+// The private dump-prose export (graph/prose-source.js proseRoot; written by `npm run prose -- export`).
+const rawStoreRoot = args.raw_store_root || join(args.repo_root, '_private', 'prose')
 const graphAgent = createTrustedAgent({ driverArgs: args, invokeAgent: agent })
 
 const JSON_VALUE = {}

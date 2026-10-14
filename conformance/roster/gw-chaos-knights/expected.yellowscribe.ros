@@ -17,13 +17,23 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase against A targets, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -116,13 +126,23 @@
             </profile>
             <profile name="Brigand" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase against A targets, the unit's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">During the Shooting phase, while the target unit is within range of an objective marker, the unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -215,13 +235,24 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
+If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -299,13 +330,24 @@
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the unit is below half strength against A targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
+If 1+ enemy units destroyed, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -383,13 +425,23 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -467,13 +519,23 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -551,13 +613,23 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -635,13 +707,23 @@
             </profile>
             <profile name="Karnivore" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description">You can re-roll a failed Charge roll.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -717,20 +799,30 @@
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -806,20 +898,30 @@
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -895,20 +997,30 @@
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -984,20 +1096,30 @@
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1073,20 +1195,30 @@
                 <characteristic name="OC">6</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stalker" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">Unless an enemy unit other than the target unit is within 6" of the target unit, the unit gets +1 to Wound rolls.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise D3" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers D3 mortal wounds.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+              </characteristics>
+            </profile>
+            <profile name="Damaged Objective Control" typeName="Abilities">
+              <characteristics>
+                <characteristic name="Description">While the model is Damaged, subtract its rating from this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1167,25 +1299,25 @@
                 <characteristic name="Description">5+ invulnerable save</characteristic>
               </characteristics>
             </profile>
-            <profile name="Deadly Demise 1" typeName="Abilities">
+            <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Before this model is removed from play:
-  -&gt; Roll one D6: on a 6+, each enemy unit within 6" suffers 1 mortal wound.</characteristic>
+  -&gt; Roll one D6: on a 6+, enemy units within 6" suffer a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Grotesque Regeneration" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of the phase, if the unit has the BEASTS-OF-NURGLE keyword, while the model has lost wounds, unless 1+ self units destroyed phase, until the end of the phase, modify this model's Wounds characteristic to 7.</characteristic>
+                <characteristic name="Description">At the end of each phase, if the unit has the BEASTS OF NURGLE keyword, while the model has lost wounds, unless 1+ models destroyed this phase, until the end of the phase, set this model's Wounds characteristic to 7.</characteristic>
               </characteristics>
             </profile>
-            <profile name="Scouts 6&quot;" typeName="Abilities">
+            <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before the first battle round, the unit can make a Scout move of up to 6".</characteristic>
+                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1238,7 +1370,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
@@ -1248,7 +1380,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1302,7 +1434,7 @@
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Once per battle, the unit has the Infiltrators ability.</characteristic>
+                <characteristic name="Description">Once per battle, the unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
@@ -1312,7 +1444,7 @@
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Deep Strike ability.</characteristic>
+                <characteristic name="Description">The unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>

@@ -27,19 +27,10 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 	case map[string]any:
 		if getStr(node, "type") == "ability-grant" {
 			modifier, _ := getMap(node, "modifier")
-			abilityID := getStr(modifier, "ability_id")
+			abilityID := getStr(modifier, "ability")
 			rulesBundle, _ := modifier["rules_bundle"].(bool)
 			if rulesBundle && abilityID != "" && !seen[abilityID] {
-				factionID := getStr(a.Raw, "faction_id")
-				var target *AbilityView
-				var ok bool
-				if factionID != "" {
-					target, ok = a.ds.Abilities.GetInFaction(abilityID, factionID)
-				}
-				if !ok {
-					target, ok = a.ds.Abilities.GetAny(abilityID)
-				}
-				if ok {
+				if target, ok := a.ds.Abilities.Get(abilityID); ok {
 					targetEffect := target.Raw["effect"]
 					if targetMap, isMap := targetEffect.(map[string]any); isMap &&
 						getStr(targetMap, "type") == "rules-bundle" {
@@ -74,21 +65,94 @@ func (a *AbilityView) resolveRulesBundles(value any, seen map[string]bool) (any,
 	}
 }
 
+// triggerGated gates a reactive ability's effect on its trigger, the way a
+// timing-is condition gates it: the moment is one the player opts into, so a
+// triggered buff is an activatable lever (<ability>@<event>) rather than always on.
+// Several triggers are alternatives. A trigger on an attack step is met by every
+// attack, and an activated ability (a stratagem) is already opt-in, so neither is
+// gated.
+func triggerGated(behavior any, trigger any, effect any) any {
+	gated, _ := triggerGatedStep(behavior, trigger, effect)
+	return gated
+}
+
+// usageGated gates an ability's effect on its usage limit ("once per battle",
+// "once per turn"): using it is the player's choice, so its buffs are an opt-in
+// lever (<ability>@<frequency>). Called only when no trigger already gates the
+// effect. A stratagem is already opt-in.
+func usageGated(abilityType any, usage any, effect any) any {
+	// Several limits that all apply are still one player-chosen use; the first limit names the lever.
+	if l, ok := asList(usage); ok {
+		usage = nil
+		if len(l) > 0 {
+			usage = l[0]
+		}
+	}
+	u, ok := asMap(usage)
+	if effect == nil || !ok || u == nil || abilityType == "stratagem" {
+		return effect
+	}
+	frequency, ok := u["frequency"].(string)
+	if !ok {
+		return effect
+	}
+	return map[string]any{"type": "conditional", "condition": map[string]any{"type": "timing-is", "parameters": map[string]any{"timing": frequency}}, "effect": effect}
+}
+
+// triggerGatedStep is triggerGated, also reporting whether a trigger gated the
+// effect (a usage limit then adds nothing).
+func triggerGatedStep(behavior any, trigger any, effect any) (any, bool) {
+	if behavior != "reactive" {
+		return effect, false
+	}
+	candidates, ok := trigger.([]any)
+	if !ok {
+		candidates = []any{trigger}
+	}
+	// An ability firing on an attack step applies to every attack; its trigger
+	// condition is already how the authored data gates such abilities (in the
+	// effect), so nothing is added.
+	hasEvent := false
+	for _, candidate := range candidates {
+		if t, ok := asMap(candidate); ok && t != nil {
+			_, isEvent := t["event"].(string)
+			if isAttackStep(t) {
+				return effect, false
+			}
+			hasEvent = hasEvent || isEvent
+		}
+	}
+	// With attack steps excluded, momentGate leaves the effect ungated only when
+	// there is no effect or no trigger with an event.
+	return momentGate(trigger, effect), effect != nil && hasEvent
+}
+
 // describeBuffs is the full DSL->Buff translation (applied/unsupported/
-// activatable), with a range-scoped ability's scope.range_inches stamped onto
-// every emitted buff as applicableWhen.maxRangeInches.
+// activatable). An aura (an effect whose target filter reaches units `within`
+// N") gates on distance to the target: the single inch range every such target
+// reaches (auraInches) is stamped onto every emitted buff as
+// applicableWhen.maxRangeInches.
 func (a *AbilityView) describeBuffs(source map[string]any, ctx map[string]any, perspective string) *effectTranslation {
+	return a.describeRatedBuffs(source, ctx, perspective, nil, false)
+}
+
+// describeRatedBuffs is describeBuffs for a rated rule: every {rating: true}
+// in the effect reads the rating the owning unit prints (hasRating).
+func (a *AbilityView) describeRatedBuffs(source map[string]any, ctx map[string]any, perspective string, rating any, hasRating bool) *effectTranslation {
 	if ctx == nil {
 		ctx = map[string]any{"phase": "shooting"}
 	}
-	resolvedEffect, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
-	translated := effectToBuffs(resolvedEffect, source, ctx, perspective)
-	scope, _ := getMap(a.Raw, "scope")
-	rngVal := scope["range_inches"]
-	if !isNumber(rngVal) {
+	bundled, _ := a.resolveRulesBundles(a.Raw["effect"], map[string]bool{a.ID(): true})
+	resolvedEffect := withRating(bundled, rating, hasRating)
+	gated, byTrigger := triggerGatedStep(a.Raw["behavior"], a.Raw["trigger"], resolvedEffect)
+	if !byTrigger {
+		gated = usageGated(a.Raw["ability_type"], a.Raw["usage"], resolvedEffect)
+	}
+	translated := effectToBuffs(gated, source, ctx, perspective)
+	rng, ok := auraInches(resolvedEffect)
+	if !ok {
 		return translated
 	}
-	rng, _ := num(rngVal)
 	gate := func(bAny any) any {
 		b, _ := asMap(bAny)
 		nb := cloneMap(b)
@@ -198,7 +262,8 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		}
 		ability := entry["ability"].(*AbilityView)
 		bs := buffSourceFromEligible(entry)
-		out = append(out, ability.getBuffs(bs, ctx, perspective)...)
+		rating, hasRating := entry["rating"]
+		out = append(out, ability.describeRatedBuffs(bs, ctx, perspective, rating, hasRating).applied...)
 	}
 	return out
 }
@@ -209,4 +274,38 @@ func (ds *Dataset) buffsFor(input, context map[string]any) []any {
 
 func (ds *Dataset) defensiveBuffsFor(input, context map[string]any) []any {
 	return ds.collectBuffs(input, context, "target")
+}
+
+// auraInches is the one inch range every aura-filtered effect target in effect
+// reaches (target.within.range.inches), when there is exactly one.
+func auraInches(effect any) (float64, bool) {
+	found := map[float64]bool{}
+	var walk func(node any)
+	walk = func(node any) {
+		switch x := node.(type) {
+		case []any:
+			for _, c := range x {
+				walk(c)
+			}
+		case map[string]any:
+			if _, typed := x["type"].(string); typed {
+				if target, ok := asMap(x["target"]); ok && target != nil {
+					if inches, ok := mapOr(mapOr(target["within"])["range"])["inches"].(float64); ok {
+						found[inches] = true
+					}
+				}
+			}
+			for _, c := range x {
+				walk(c)
+			}
+		}
+	}
+	walk(effect)
+	if len(found) != 1 {
+		return 0, false
+	}
+	for v := range found {
+		return v, true
+	}
+	return 0, false
 }

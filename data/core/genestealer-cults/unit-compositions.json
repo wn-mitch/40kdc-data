@@ -1297,9 +1297,8 @@
           "length": 92
         },
         "default_weapon_ids": [
-          "armoured-hull-achilles-ridgerunners",
+          "armoured-hull",
           "missile-launcher",
-          "survey-augur",
           "twin-heavy-stubber"
         ]
       }
@@ -1336,7 +1335,7 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "atalan-power-weapon",
+          "power-weapon",
           "stolen-firearms"
         ]
       },
@@ -1486,8 +1485,8 @@
           "length": 35.5
         },
         "default_weapon_ids": [
-          "autopistol-jackal-alphus",
-          "cult-sniper-rifle-jackal-alphus",
+          "autopistol",
+          "cult-sniper-rifle",
           "stolen-blade"
         ]
       }

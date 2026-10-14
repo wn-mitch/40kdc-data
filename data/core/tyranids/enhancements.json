@@ -1,13 +1,13 @@
 [
   {
-    "id": "alien-cunning-invasion-fleet",
+    "id": "alien-cunning-invasion-fleet-tyranids",
     "name": "Alien Cunning",
     "detachment_id": "invasion-fleet",
     "cost": 30,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "alien-cunning-invasion-fleet-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "perfectly-adapted-invasion-fleet",
+    "id": "perfectly-adapted-invasion-fleet-tyranids",
     "name": "Perfectly Adapted",
     "detachment_id": "invasion-fleet",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "perfectly-adapted-invasion-fleet-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,32 +56,14 @@
     ]
   },
   {
-    "id": "synaptic-lynchpin-invasion-fleet",
-    "name": "Synaptic Lynchpin",
-    "detachment_id": "invasion-fleet",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Tyranids"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "adaptive-biology-invasion-fleet",
+    "id": "adaptive-biology-invasion-fleet-tyranids",
     "name": "Adaptive Biology",
     "detachment_id": "invasion-fleet",
     "cost": 25,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "adaptive-biology-invasion-fleet-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -102,7 +84,7 @@
     ]
   },
   {
-    "id": "ominous-presence-crusher-stampede",
+    "id": "ominous-presence-crusher-stampede-tyranids",
     "name": "Ominous Presence",
     "detachment_id": "crusher-stampede",
     "cost": 15,
@@ -110,7 +92,7 @@
       "Monster",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "ominous-presence-crusher-stampede-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -131,7 +113,7 @@
     ]
   },
   {
-    "id": "enraged-reserves-crusher-stampede",
+    "id": "enraged-reserves-crusher-stampede-tyranids",
     "name": "Enraged Reserves",
     "detachment_id": "crusher-stampede",
     "cost": 20,
@@ -139,7 +121,7 @@
       "Monster",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "enraged-reserves-crusher-stampede-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -160,7 +142,7 @@
     ]
   },
   {
-    "id": "null-nodules-crusher-stampede",
+    "id": "null-nodules-crusher-stampede-tyranids",
     "name": "Null Nodules",
     "detachment_id": "crusher-stampede",
     "cost": 10,
@@ -168,7 +150,7 @@
       "Monster",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "null-nodules-crusher-stampede-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -189,7 +171,7 @@
     ]
   },
   {
-    "id": "monstrous-nemesis-crusher-stampede",
+    "id": "monstrous-nemesis-crusher-stampede-tyranids",
     "name": "Monstrous Nemesis",
     "detachment_id": "crusher-stampede",
     "cost": 25,
@@ -197,7 +179,7 @@
       "Monster",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "monstrous-nemesis-crusher-stampede-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -218,14 +200,14 @@
     ]
   },
   {
-    "id": "relentless-hunger-unending-swarm",
+    "id": "relentless-hunger-unending-swarm-tyranids",
     "name": "Relentless Hunger",
     "detachment_id": "unending-swarm",
     "cost": 20,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "relentless-hunger-unending-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -246,14 +228,14 @@
     ]
   },
   {
-    "id": "naturalised-camouflage-unending-swarm",
+    "id": "naturalised-camouflage-unending-swarm-tyranids",
     "name": "Naturalised Camouflage",
     "detachment_id": "unending-swarm",
     "cost": 30,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "naturalised-camouflage-unending-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -274,14 +256,14 @@
     ]
   },
   {
-    "id": "piercing-talons-unending-swarm",
+    "id": "piercing-talons-unending-swarm-tyranids",
     "name": "Piercing Talons",
     "detachment_id": "unending-swarm",
     "cost": 25,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "piercing-talons-unending-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -302,14 +284,14 @@
     ]
   },
   {
-    "id": "adrenalised-onslaught-unending-swarm",
+    "id": "adrenalised-onslaught-unending-swarm-tyranids",
     "name": "Adrenalised Onslaught",
     "detachment_id": "unending-swarm",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "adrenalised-onslaught-unending-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -330,14 +312,14 @@
     ]
   },
   {
-    "id": "regenerating-monstrosity-assimilation-swarm",
+    "id": "regenerating-monstrosity-assimilation-swarm-tyranids",
     "name": "Regenerating Monstrosity",
     "detachment_id": "assimilation-swarm",
     "cost": 20,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "regenerating-monstrosity-assimilation-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -361,14 +343,14 @@
     ]
   },
   {
-    "id": "instinctive-defence-assimilation-swarm",
+    "id": "instinctive-defence-assimilation-swarm-tyranids",
     "name": "Instinctive Defence",
     "detachment_id": "assimilation-swarm",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "instinctive-defence-assimilation-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -389,14 +371,14 @@
     ]
   },
   {
-    "id": "biophagic-flow-aura-assimilation-swarm",
+    "id": "biophagic-flow-aura-assimilation-swarm-tyranids",
     "name": "Biophagic Flow (Aura)",
     "detachment_id": "assimilation-swarm",
     "cost": 10,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "biophagic-flow-aura-assimilation-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -417,14 +399,14 @@
     ]
   },
   {
-    "id": "parasitic-biomorphology-assimilation-swarm",
+    "id": "parasitic-biomorphology-assimilation-swarm-tyranids",
     "name": "Parasitic Biomorphology",
     "detachment_id": "assimilation-swarm",
     "cost": 25,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "parasitic-biomorphology-assimilation-swarm-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -445,14 +427,14 @@
     ]
   },
   {
-    "id": "hunting-grounds-vanguard-onslaught",
+    "id": "hunting-grounds-vanguard-onslaught-tyranids",
     "name": "Hunting Grounds",
     "detachment_id": "vanguard-onslaught",
     "cost": 30,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "hunting-grounds-vanguard-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -473,14 +455,14 @@
     ]
   },
   {
-    "id": "chameleonic-vanguard-onslaught",
+    "id": "chameleonic-vanguard-onslaught-tyranids",
     "name": "Chameleonic",
     "detachment_id": "vanguard-onslaught",
     "cost": 15,
     "keyword_restrictions": [
       "Vanguard Invader"
     ],
-    "ability_id": null,
+    "ability_id": "chameleonic-vanguard-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -501,14 +483,14 @@
     ]
   },
   {
-    "id": "stalker-vanguard-onslaught",
+    "id": "stalker-vanguard-onslaught-tyranids",
     "name": "Stalker",
     "detachment_id": "vanguard-onslaught",
     "cost": 10,
     "keyword_restrictions": [
       "Vanguard Invader"
     ],
-    "ability_id": null,
+    "ability_id": "stalker-vanguard-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -529,14 +511,14 @@
     ]
   },
   {
-    "id": "neuronode-vanguard-onslaught",
+    "id": "neuronode-vanguard-onslaught-tyranids",
     "name": "Neuronode",
     "detachment_id": "vanguard-onslaught",
     "cost": 20,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "neuronode-vanguard-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -557,7 +539,7 @@
     ]
   },
   {
-    "id": "power-of-the-hive-mind-synaptic-nexus",
+    "id": "power-of-the-hive-mind-synaptic-nexus-tyranids",
     "name": "Power of the Hive Mind",
     "detachment_id": "synaptic-nexus",
     "cost": 10,
@@ -565,7 +547,7 @@
       "Psyker",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "power-of-the-hive-mind-synaptic-nexus-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -586,7 +568,7 @@
     ]
   },
   {
-    "id": "psychostatic-disruption-synaptic-nexus",
+    "id": "psychostatic-disruption-synaptic-nexus-tyranids",
     "name": "Psychostatic Disruption",
     "detachment_id": "synaptic-nexus",
     "cost": 30,
@@ -594,7 +576,7 @@
       "Synapse",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "psychostatic-disruption-synaptic-nexus-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -615,7 +597,7 @@
     ]
   },
   {
-    "id": "synaptic-control-synaptic-nexus",
+    "id": "synaptic-control-synaptic-nexus-tyranids",
     "name": "Synaptic Control",
     "detachment_id": "synaptic-nexus",
     "cost": 20,
@@ -623,7 +605,7 @@
       "Synapse",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "synaptic-control-synaptic-nexus-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -644,7 +626,7 @@
     ]
   },
   {
-    "id": "the-dirgeheart-of-kharis-aura-synaptic-nexus",
+    "id": "the-dirgeheart-of-kharis-aura-synaptic-nexus-tyranids",
     "name": "The Dirgeheart of Kharis (Aura)",
     "detachment_id": "synaptic-nexus",
     "cost": 15,
@@ -652,7 +634,7 @@
       "Synapse",
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "the-dirgeheart-of-kharis-aura-synaptic-nexus-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -673,29 +655,11 @@
     ]
   },
   {
-    "id": "synaptic-tyrant-warrior-bioform-onslaught",
-    "name": "Synaptic Tyrant",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Tyranids"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "ocular-adaptation-warrior-bioform-onslaught",
+    "id": "ocular-adaptation-warrior-bioform-onslaught-tyranids",
     "name": "Ocular Adaptation",
     "detachment_id": "warrior-bioform-onslaught",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "ocular-adaptation-warrior-bioform-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -726,29 +690,11 @@
     ]
   },
   {
-    "id": "sensory-assimilation-warrior-bioform-onslaught",
-    "name": "Sensory Assimilation",
-    "detachment_id": "warrior-bioform-onslaught",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Tyranids"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "elevated-might-warrior-bioform-onslaught",
+    "id": "elevated-might-warrior-bioform-onslaught-tyranids",
     "name": "Elevated Might",
     "detachment_id": "warrior-bioform-onslaught",
     "cost": 30,
-    "ability_id": null,
+    "ability_id": "elevated-might-warrior-bioform-onslaught-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -779,14 +725,14 @@
     ]
   },
   {
-    "id": "synaptic-strategy-subterranean-assault",
+    "id": "synaptic-strategy-subterranean-assault-tyranids",
     "name": "Synaptic Strategy",
     "detachment_id": "subterranean-assault",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "synaptic-strategy-subterranean-assault-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -807,14 +753,14 @@
     ]
   },
   {
-    "id": "tremor-senses-subterranean-assault",
+    "id": "tremor-senses-subterranean-assault-tyranids",
     "name": "Tremor Senses",
     "detachment_id": "subterranean-assault",
     "cost": 20,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "tremor-senses-subterranean-assault-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -835,14 +781,14 @@
     ]
   },
   {
-    "id": "vanguard-intellect-subterranean-assault",
+    "id": "vanguard-intellect-subterranean-assault-tyranids",
     "name": "Vanguard Intellect",
     "detachment_id": "subterranean-assault",
     "cost": 15,
     "keyword_restrictions": [
       "Tyranids"
     ],
-    "ability_id": null,
+    "ability_id": "vanguard-intellect-subterranean-assault-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -863,14 +809,14 @@
     ]
   },
   {
-    "id": "trygon-prime-subterranean-assault",
+    "id": "trygon-prime-subterranean-assault-tyranids",
     "name": "Trygon Prime",
     "detachment_id": "subterranean-assault",
     "cost": 20,
     "keyword_restrictions": [
       "Trygon"
     ],
-    "ability_id": null,
+    "ability_id": "trygon-prime-subterranean-assault-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -891,11 +837,11 @@
     ]
   },
   {
-    "id": "encircling-horrors-upgrade-ambush-predators",
+    "id": "encircling-horrors-upgrade-ambush-predators-tyranids",
     "name": "Encircling Horrors (Upgrade)",
     "detachment_id": "ambush-predators",
     "cost": 20,
-    "ability_id": "encircling-horrors-ambush-predators",
+    "ability_id": "encircling-horrors-upgrade-ambush-predators-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -930,7 +876,7 @@
     ]
   },
   {
-    "id": "cryptophotaic-camouflage-upgrade-ambush-predators",
+    "id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
     "name": "Cryptophotaic Camouflage (Upgrade)",
     "detachment_id": "ambush-predators",
     "cost": 15,
@@ -938,7 +884,7 @@
       "Tyranids",
       "Von Ryan’s Leapers"
     ],
-    "ability_id": "cryptophotaic-camouflage-ambush-predators",
+    "ability_id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -959,7 +905,7 @@
     ]
   },
   {
-    "id": "destabilising-predation-upgrade-talons-of-the-norn-queen",
+    "id": "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
     "name": "Destabilising Predation (Upgrade)",
     "detachment_id": "talons-of-the-norn-queen",
     "cost": 20,
@@ -967,7 +913,7 @@
       "Norn Emissary",
       "Tyranids"
     ],
-    "ability_id": "destabilising-predation-talons-of-the-norn-queen",
+    "ability_id": "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -988,7 +934,7 @@
     ]
   },
   {
-    "id": "synaptoprescience-upgrade-talons-of-the-norn-queen",
+    "id": "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids",
     "name": "Synaptoprescience (Upgrade)",
     "detachment_id": "talons-of-the-norn-queen",
     "cost": 30,
@@ -996,7 +942,7 @@
       "Norn Assimilator",
       "Tyranids"
     ],
-    "ability_id": "synaptoprescience-talons-of-the-norn-queen",
+    "ability_id": "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1017,7 +963,7 @@
     ]
   },
   {
-    "id": "adapted-organism-the-vardenghast-swarm",
+    "id": "adapted-organism-the-vardenghast-swarm-tyranids",
     "name": "Adapted Organism",
     "detachment_id": "the-vardenghast-swarm",
     "cost": 0,
@@ -1042,7 +988,7 @@
     ]
   },
   {
-    "id": "psychoclastic-overload-the-vardenghast-swarm",
+    "id": "psychoclastic-overload-the-vardenghast-swarm-tyranids",
     "name": "Psychoclastic Overload",
     "detachment_id": "the-vardenghast-swarm",
     "cost": 0,
@@ -1067,11 +1013,11 @@
     ]
   },
   {
-    "id": "synaptic-linchpin-invasion-fleet",
+    "id": "synaptic-linchpin-invasion-fleet-tyranids",
     "name": "Synaptic Linchpin",
     "detachment_id": "invasion-fleet",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "synaptic-linchpin-invasion-fleet-tyranids",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

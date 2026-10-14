@@ -113,15 +113,22 @@ func runDSLCorpus(t *testing.T, filename string) {
 	for _, cAny := range getList(dsl, "cases") {
 		c, _ := asMap(cAny)
 		abilityID := getStr(c, "abilityId")
-		ability, ok := ds.Abilities.GetAny(abilityID)
-		if !ok {
-			t.Errorf("unknown ability %q", abilityID)
-			continue
+		// A specimen whose ability left the dataset carries its frozen DSL inline.
+		rawEffect, frozen := c["effect"]
+		if !frozen {
+			ability, ok := ds.Abilities.GetAny(abilityID)
+			if !ok {
+				t.Errorf("unknown ability %q", abilityID)
+				continue
+			}
+			rawEffect = ability.Raw["effect"]
 		}
 		source, _ := getMap(c, "source")
 		ctx, _ := getMap(c, "context")
 		perspective := strOr(c, "perspective", "attacker")
-		result := effectToBuffs(ability.Raw["effect"], source, ctx, perspective)
+		// A rated rule reads the unit's printed rating; the case supplies it.
+		rating, hasRating := c["rating"]
+		result := effectToBuffs(withRating(rawEffect, rating, hasRating), source, ctx, perspective)
 		expected, _ := getMap(c, "expected")
 
 		var appliedContribs []any
@@ -188,7 +195,7 @@ func TestDefensiveFromDSLCorpus(t *testing.T) { runDSLCorpus(t, "defensive-from-
 func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
 	effect := map[string]any{
 		"type":   "re-roll",
-		"target": "unit",
+		"target": "this-unit",
 		"modifier": map[string]any{
 			"roll":         "hit",
 			"result_scope": "any-result",

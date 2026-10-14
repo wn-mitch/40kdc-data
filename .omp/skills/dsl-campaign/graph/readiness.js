@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
 import { canonicalJson, sha256 } from './canonical.js'
 import { resolveSourceBinding } from './formalization.js'
+import { proseRoot } from './prose-source.js'
 import { projectRegistry, verifyProjection } from './projection.js'
 import { wholeGraphPriorities } from './retrieval.js'
 import { ensureTask } from './scheduler.js'
@@ -203,7 +203,7 @@ export function prepareCampaign(store, { id, repoRoot, registryPath, prioritizeI
 
 function campaignSourceBinding(repoRoot, entry) {
   try {
-    return resolveSourceBinding(join(repoRoot, '..', '40kdc-abilities'), entry.faction_id, entry.ability_id)
+    return resolveSourceBinding(proseRoot(repoRoot), entry.faction_id, entry.ability_id)
   } catch (error) {
     if (error.code === 'ENOENT' || /source-unavailable|authoritative source entry count: 0/.test(error.message)) return null
     throw error

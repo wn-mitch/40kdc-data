@@ -7,39 +7,43 @@
     "generation": [
       {
         "condition": {
-          "type": "controls-objective",
+          "type": "controls",
           "parameters": {
-            "count_min": 1,
-            "scope": "your-territory"
+            "objective": {
+              "territory": "your-territory"
+            }
           }
         },
         "amount": 1
       },
       {
         "condition": {
-          "type": "controls-objective",
+          "type": "controls",
           "parameters": {
-            "count_min": 1,
-            "exclude": "home"
+            "objective": {
+              "role": "non-home"
+            }
           }
         },
         "amount": 1
       },
       {
         "condition": {
-          "type": "controls-objective",
+          "type": "controls",
           "parameters": {
-            "count_min": 2,
-            "exclude": "home"
+            "objective": {
+              "role": "non-home"
+            },
+            "count_min": 2
           }
         },
         "amount": 1
       },
       {
         "condition": {
-          "type": "objective-majority",
+          "type": "controls",
           "parameters": {
-            "relative_to": "opponent"
+            "compare": "more-than-opponent"
           }
         },
         "amount": 1

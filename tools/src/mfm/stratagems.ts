@@ -2,10 +2,9 @@
  * stratagems.ts — Phase 6: reconcile stratagem numeric/structural fields against
  * the GW MFM dump.
  *
- * The repo stratagem id is `detachmentScopedId(name, detachment-name)` (bare
- * `nameToId(name)` for the 11 core stratagems with no detachment), which is how
- * the dump's (stratagem, detachment) pair slugs — so matching is a direct id
- * lookup, mirroring enhancements (Phase 3A).
+ * The repo stratagem id is the one `mfm:mirror` derives from the dump row
+ * (`<name>-<detachment>-<faction>`, bare for the core stratagems), so matching is
+ * a direct id lookup, mirroring enhancements (Phase 3A).
  *
  * APPLIED from the dump — only fields backed by a reliable FIRST-CLASS column:
  *   - cp_cost   ← `cpCost`   (authoritative numeric).
@@ -43,7 +42,7 @@
  */
 import * as fs from "fs";
 import * as path from "path";
-import { nameToId, detachmentScopedId } from "../converters/id-generator.js";
+import { mirrorIds } from "./mirror/ids.js";
 import { MfmDump, type DetachmentRow, type StratagemRow } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirs, repoDirForFactionName } from "./faction-map.js";
@@ -102,13 +101,26 @@ function stripTags(s: string): string {
   return s.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 }
 
-const PHASE_WORDS: [Phase, RegExp][] = [
-  ["command", /\bcommand phase\b/i],
-  ["movement", /\bmovement phase\b/i],
-  ["shooting", /\bshooting phase\b/i],
-  ["charge", /\bcharge phase\b/i],
-  ["fight", /\bfight phase\b/i],
-];
+const PHASE_NAMES: Phase[] = ["command", "movement", "shooting", "charge", "fight"];
+const PHASE_WORD = `(?:${PHASE_NAMES.join("|")})`;
+/** A run of phase names sharing one "phase(s)": "movement or your charge phase",
+ * "shooting phase or the fight phase" (two runs), "command phase". */
+const PHASE_RUN = new RegExp(
+  `(?:(excluding) (?:the )?)?(${PHASE_WORD}(?:\\s*(?:,|or|and)\\s*(?:your (?:opponent(?:'|’)s )?|the )?${PHASE_WORD})*)\\s+phases?\\b`,
+  "g",
+);
+
+/** The phases a when line names, in the canonical order. "Any phase" is every phase;
+ * "excluding the X phase" takes X out. */
+export function phasesOf(text: string): Phase[] {
+  const named = new Set<Phase>();
+  const excluded = new Set<Phase>();
+  for (const m of text.matchAll(PHASE_RUN)) {
+    for (const p of m[2]!.match(new RegExp(PHASE_WORD, "g")) ?? []) (m[1] ? excluded : named).add(p as Phase);
+  }
+  if (/\b(any|each|every) phase\b/.test(text)) PHASE_NAMES.forEach((p) => named.add(p));
+  return PHASE_NAMES.filter((p) => named.has(p) && !excluded.has(p));
+}
 
 /** Derive { phases, player_turn } from a stratagem's whenRules prose. Either field
  * is null when the prose doesn't determine it (→ keep the authored value). */
@@ -119,8 +131,7 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   if (!whenRulesRaw) return { phases: null, player_turn: null };
   const t = stripTags(whenRulesRaw).toLowerCase();
 
-  const phases: Phase[] = [];
-  for (const [p, re] of PHASE_WORDS) if (re.test(t)) phases.push(p);
+  const phases = phasesOf(t);
 
   // turn ownership: "your opponent's <phase>" → opponent; "your <phase>" → yours;
   // both present, or "any/either" → either; nothing decisive → null.
@@ -135,22 +146,11 @@ export function deriveTrigger(whenRulesRaw: string | undefined | null): {
   return { phases: phases.length ? phases : null, player_turn };
 }
 
-/** Repo id for a dump stratagem: `detachmentScopedId` when detachment-scoped, bare
- *  `nameToId` for the coreless few. Null if the name can't be slugged. The single
- *  id rule shared by {@link buildStratCanon} and {@link stratagemInventory}. */
+/** Repo id for a dump stratagem: the id `mfm:mirror` gives the row (`<name>-<detachment>-<faction>`,
+ *  bare for a core stratagem). Null for a row no faction or detachment owns. The single id rule
+ *  shared by {@link buildStratCanon}, {@link stratagemInventory} and the seed. */
 export function stratagemRepoId(dump: MfmDump, s: StratagemRow): string | null {
-  const name = dump.enName(s);
-  if (!name) return null;
-  try {
-    if (s.detachmentId) {
-      const dn = dump.enName(dump.byId("detachment").get(s.detachmentId));
-      if (!dn) return null;
-      return detachmentScopedId(name, dn);
-    }
-    return nameToId(name);
-  } catch {
-    return null;
-  }
+  return mirrorIds(dump).idOf("stratagem", s.id) ?? null;
 }
 
 /** Stratagem repo-id → canon fields from the dump: cp_cost + first-class

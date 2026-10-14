@@ -1,13 +1,13 @@
 [
   {
-    "id": "oathbound-speculator-needgaard-oathband",
+    "id": "oathbound-speculator-needgaard-oathband-leagues-of-votann",
     "name": "Oathbound Speculator",
     "detachment_id": "needgaard-oathband",
     "cost": 30,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": "oathbound-speculator-needgaard-oathband",
+    "ability_id": "oathbound-speculator-needgaard-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "dead-reckoning-needgaard-oathband",
+    "id": "dead-reckoning-needgaard-oathband-leagues-of-votann",
     "name": "Dead Reckoning",
     "detachment_id": "needgaard-oathband",
     "cost": 10,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "dead-reckoning-needgaard-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "iron-ambassador-needgaard-oathband",
+    "id": "iron-ambassador-needgaard-oathband-leagues-of-votann",
     "name": "Iron Ambassador",
     "detachment_id": "needgaard-oathband",
     "cost": 5,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "iron-ambassador-needgaard-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "ancestral-crest-needgaard-oathband",
+    "id": "ancestral-crest-needgaard-oathband-leagues-of-votann",
     "name": "Ancestral Crest",
     "detachment_id": "needgaard-oathband",
     "cost": 15,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "ancestral-crest-needgaard-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "bastion-shield-hearthband",
+    "id": "bastion-shield-hearthband-leagues-of-votann",
     "name": "Bastion Shield",
     "detachment_id": "hearthband",
     "cost": 25,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "bastion-shield-hearthband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,7 +140,7 @@
     ]
   },
   {
-    "id": "quake-multigenerator-hearthband",
+    "id": "quake-multigenerator-hearthband-leagues-of-votann",
     "name": "Quake Multigenerator",
     "detachment_id": "hearthband",
     "cost": 15,
@@ -148,7 +148,7 @@
       "Kâhl",
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "quake-multigenerator-hearthband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -169,14 +169,14 @@
     ]
   },
   {
-    "id": "ironskein-hearthband",
+    "id": "ironskein-hearthband-leagues-of-votann",
     "name": "Ironskein",
     "detachment_id": "hearthband",
     "cost": 10,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "ironskein-hearthband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -197,7 +197,7 @@
     ]
   },
   {
-    "id": "high-kahl-hearthband",
+    "id": "high-kahl-hearthband-leagues-of-votann",
     "name": "High Kâhl",
     "detachment_id": "hearthband",
     "cost": 30,
@@ -205,7 +205,7 @@
       "Kâhl",
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "high-kahl-hearthband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -226,14 +226,14 @@
     ]
   },
   {
-    "id": "eye-for-weakness-persecution-prospect",
+    "id": "eye-for-weakness-persecution-prospect-leagues-of-votann",
     "name": "Eye for Weakness",
     "detachment_id": "persecution-prospect",
     "cost": 25,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "eye-for-weakness-persecution-prospect-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -254,14 +254,14 @@
     ]
   },
   {
-    "id": "writ-of-acquisition-persecution-prospect",
+    "id": "writ-of-acquisition-persecution-prospect-leagues-of-votann",
     "name": "Writ of Acquisition",
     "detachment_id": "persecution-prospect",
     "cost": 10,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "writ-of-acquisition-persecution-prospect-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -282,14 +282,14 @@
     ]
   },
   {
-    "id": "surgical-saboteur-persecution-prospect",
+    "id": "surgical-saboteur-persecution-prospect-leagues-of-votann",
     "name": "Surgical Saboteur",
     "detachment_id": "persecution-prospect",
     "cost": 10,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "surgical-saboteur-persecution-prospect-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -310,14 +310,14 @@
     ]
   },
   {
-    "id": "nomad-strategist-persecution-prospect",
+    "id": "nomad-strategist-persecution-prospect-leagues-of-votann",
     "name": "Nomad Strategist",
     "detachment_id": "persecution-prospect",
     "cost": 20,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "nomad-strategist-persecution-prospect-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -338,14 +338,14 @@
     ]
   },
   {
-    "id": "delvewerke-navigator-delve-assault-shift",
+    "id": "delvewerke-navigator-delve-assault-shift-leagues-of-votann",
     "name": "Dêlvewerke Navigator",
     "detachment_id": "delve-assault-shift",
     "cost": 25,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "delvewerke-navigator-delve-assault-shift-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -366,14 +366,14 @@
     ]
   },
   {
-    "id": "multiwave-system-jammer-delve-assault-shift",
+    "id": "multiwave-system-jammer-delve-assault-shift-leagues-of-votann",
     "name": "Multiwave System Jammer",
     "detachment_id": "delve-assault-shift",
     "cost": 10,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "multiwave-system-jammer-delve-assault-shift-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -394,14 +394,14 @@
     ]
   },
   {
-    "id": "quake-supervisor-delve-assault-shift",
+    "id": "quake-supervisor-delve-assault-shift-leagues-of-votann",
     "name": "Quake Supervisor",
     "detachment_id": "delve-assault-shift",
     "cost": 20,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "quake-supervisor-delve-assault-shift-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -422,14 +422,14 @@
     ]
   },
   {
-    "id": "piledriver-delve-assault-shift",
+    "id": "piledriver-delve-assault-shift-leagues-of-votann",
     "name": "Piledriver",
     "detachment_id": "delve-assault-shift",
     "cost": 15,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "piledriver-delve-assault-shift-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -450,14 +450,14 @@
     ]
   },
   {
-    "id": "tactical-alchemy-brandfast-oathband",
+    "id": "tactical-alchemy-brandfast-oathband-leagues-of-votann",
     "name": "Tactical Alchemy",
     "detachment_id": "brandfast-oathband",
     "cost": 10,
     "keyword_restrictions": [
       "Kâhl"
     ],
-    "ability_id": null,
+    "ability_id": "tactical-alchemy-brandfast-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -478,14 +478,14 @@
     ]
   },
   {
-    "id": "trivarg-cyber-implant-brandfast-oathband",
+    "id": "trivarg-cyber-implant-brandfast-oathband-leagues-of-votann",
     "name": "Trivärg Cyber Implant",
     "detachment_id": "brandfast-oathband",
     "cost": 40,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "trivarg-cyber-implant-brandfast-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -506,14 +506,14 @@
     ]
   },
   {
-    "id": "precursive-judgement-brandfast-oathband",
+    "id": "precursive-judgement-brandfast-oathband-leagues-of-votann",
     "name": "Precursive Judgement",
     "detachment_id": "brandfast-oathband",
     "cost": 15,
     "keyword_restrictions": [
       "Kâhl"
     ],
-    "ability_id": null,
+    "ability_id": "precursive-judgement-brandfast-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -534,14 +534,14 @@
     ]
   },
   {
-    "id": "signature-restoration-brandfast-oathband",
+    "id": "signature-restoration-brandfast-oathband-leagues-of-votann",
     "name": "Signature Restoration",
     "detachment_id": "brandfast-oathband",
     "cost": 5,
     "keyword_restrictions": [
       "Brôkhyr"
     ],
-    "ability_id": null,
+    "ability_id": "signature-restoration-brandfast-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -562,29 +562,11 @@
     ]
   },
   {
-    "id": "farstryder-node-hearthfyre-arsenal",
-    "name": "Fârstryder Node",
-    "detachment_id": "hearthfyre-arsenal",
-    "cost": 20,
-    "keyword_restrictions": [
-      "Leagues of Votann"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "calculated-tenacity-hearthfyre-arsenal",
+    "id": "calculated-tenacity-hearthfyre-arsenal-leagues-of-votann",
     "name": "Calculated Tenacity",
     "detachment_id": "hearthfyre-arsenal",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "calculated-tenacity-hearthfyre-arsenal-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -613,14 +595,14 @@
     ]
   },
   {
-    "id": "mantle-of-elders-hearthfyre-arsenal",
+    "id": "mantle-of-elders-hearthfyre-arsenal-leagues-of-votann",
     "name": "Mantle of Elders",
     "detachment_id": "hearthfyre-arsenal",
     "cost": 10,
     "keyword_restrictions": [
       "Memnyr Strategist"
     ],
-    "ability_id": null,
+    "ability_id": "mantle-of-elders-hearthfyre-arsenal-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -641,14 +623,14 @@
     ]
   },
   {
-    "id": "graviton-vault-hearthfyre-arsenal",
+    "id": "graviton-vault-hearthfyre-arsenal-leagues-of-votann",
     "name": "Graviton Vault",
     "detachment_id": "hearthfyre-arsenal",
     "cost": 5,
     "keyword_restrictions": [
       "Brôkhyr"
     ],
-    "ability_id": null,
+    "ability_id": "graviton-vault-hearthfyre-arsenal-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -669,14 +651,14 @@
     ]
   },
   {
-    "id": "mercenary-prospector-mercenary-oathband",
+    "id": "mercenary-prospector-mercenary-oathband-leagues-of-votann",
     "name": "Mercenary Prospector",
     "detachment_id": "mercenary-oathband",
     "cost": 20,
     "keyword_restrictions": [
       "Kâhl"
     ],
-    "ability_id": null,
+    "ability_id": "mercenary-prospector-mercenary-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -697,14 +679,14 @@
     ]
   },
   {
-    "id": "metaphysical-brokerage-mercenary-oathband",
+    "id": "metaphysical-brokerage-mercenary-oathband-leagues-of-votann",
     "name": "Metaphysical Brokerage",
     "detachment_id": "mercenary-oathband",
     "cost": 20,
     "keyword_restrictions": [
       "Memnyr Strategist"
     ],
-    "ability_id": null,
+    "ability_id": "metaphysical-brokerage-mercenary-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -725,14 +707,14 @@
     ]
   },
   {
-    "id": "etacarn-sb9-targeting-implant-mercenary-oathband",
+    "id": "etacarn-sb9-targeting-implant-mercenary-oathband-leagues-of-votann",
     "name": "Etacarn SB9 Targeting Implant",
     "detachment_id": "mercenary-oathband",
     "cost": 15,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "etacarn-sb9-targeting-implant-mercenary-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -753,14 +735,14 @@
     ]
   },
   {
-    "id": "asset-manipulator-mercenary-oathband",
+    "id": "asset-manipulator-mercenary-oathband-leagues-of-votann",
     "name": "Asset Manipulator",
     "detachment_id": "mercenary-oathband",
     "cost": 25,
     "keyword_restrictions": [
       "Leagues of Votann"
     ],
-    "ability_id": null,
+    "ability_id": "asset-manipulator-mercenary-oathband-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -781,7 +763,7 @@
     ]
   },
   {
-    "id": "saturation-rounds-upgrade-armoured-trailblazers",
+    "id": "saturation-rounds-upgrade-armoured-trailblazers-leagues-of-votann",
     "name": "Saturation Rounds (Upgrade)",
     "detachment_id": "armoured-trailblazers",
     "cost": 15,
@@ -789,7 +771,7 @@
       "Leagues of Votann",
       "Sagitaur"
     ],
-    "ability_id": "saturation-rounds-armoured-trailblazers",
+    "ability_id": "saturation-rounds-upgrade-armoured-trailblazers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -810,7 +792,7 @@
     ]
   },
   {
-    "id": "optimised-attack-lines-upgrade-armoured-trailblazers",
+    "id": "optimised-attack-lines-upgrade-armoured-trailblazers-leagues-of-votann",
     "name": "Optimised Attack Lines (Upgrade)",
     "detachment_id": "armoured-trailblazers",
     "cost": 15,
@@ -818,7 +800,7 @@
       "Leagues of Votann",
       "Sagitaur"
     ],
-    "ability_id": "optimised-attack-lines-armoured-trailblazers",
+    "ability_id": "optimised-attack-lines-upgrade-armoured-trailblazers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -839,14 +821,14 @@
     ]
   },
   {
-    "id": "pan-spectral-lockons-upgrade-farseekers",
+    "id": "pan-spectral-lockons-upgrade-farseekers-leagues-of-votann",
     "name": "Pan-spectral Lockons (Upgrade)",
     "detachment_id": "farseekers",
     "cost": 10,
     "keyword_restrictions": [
       "Pioneers"
     ],
-    "ability_id": "pan-spectral-lockons-farseekers",
+    "ability_id": "pan-spectral-lockons-upgrade-farseekers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -867,14 +849,14 @@
     ]
   },
   {
-    "id": "ironskein-hearthguard-covenant",
+    "id": "ironskein-hearthguard-covenant-leagues-of-votann",
     "name": "Ironskein",
     "detachment_id": "hearthguard-covenant",
     "cost": 10,
     "keyword_restrictions": [
       "Kâhl"
     ],
-    "ability_id": "ironskein-hearthguard-covenant",
+    "ability_id": "ironskein-hearthguard-covenant-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -895,7 +877,7 @@
     ]
   },
   {
-    "id": "brokhyr-barrage-bane-slayers-bulwark",
+    "id": "brokhyr-barrage-bane-slayers-bulwark-leagues-of-votann",
     "name": "Brôkhyr Barrage",
     "detachment_id": "bane-slayers-bulwark",
     "cost": 0,
@@ -920,7 +902,7 @@
     ]
   },
   {
-    "id": "indomitable-exemplar-bane-slayers-bulwark",
+    "id": "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann",
     "name": "Indomitable Exemplar",
     "detachment_id": "bane-slayers-bulwark",
     "cost": 0,
@@ -945,11 +927,11 @@
     ]
   },
   {
-    "id": "shroudwerke-talismans-upgrade-farseekers",
+    "id": "shroudwerke-talismans-upgrade-farseekers-leagues-of-votann",
     "name": "Shroudwërke Talismans (Upgrade)",
     "detachment_id": "farseekers",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "shroudwerke-talismans-upgrade-farseekers-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -973,11 +955,11 @@
     ]
   },
   {
-    "id": "farstrydr-node-hearthfyre-arsenal",
+    "id": "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",
     "name": "Fârstrydr Node",
     "detachment_id": "hearthfyre-arsenal",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1006,11 +988,11 @@
     ]
   },
   {
-    "id": "high-kahl-hearthguard-covenant",
+    "id": "high-kahl-hearthguard-covenant-leagues-of-votann",
     "name": "High Kâhl",
     "detachment_id": "hearthguard-covenant",
     "cost": 30,
-    "ability_id": null,
+    "ability_id": "high-kahl-hearthguard-covenant-leagues-of-votann",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

@@ -1,13 +1,13 @@
 [
   {
-    "id": "veil-of-darkness-awakened-dynasty",
+    "id": "veil-of-darkness-awakened-dynasty-necrons",
     "name": "Veil of Darkness",
     "detachment_id": "awakened-dynasty",
     "cost": 20,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "veil-of-darkness-awakened-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "nether-realm-casket-awakened-dynasty",
+    "id": "nether-realm-casket-awakened-dynasty-necrons",
     "name": "Nether-realm Casket",
     "detachment_id": "awakened-dynasty",
     "cost": 20,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "nether-realm-casket-awakened-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "phasal-subjugator-aura-awakened-dynasty",
+    "id": "phasal-subjugator-aura-awakened-dynasty-necrons",
     "name": "Phasal Subjugator (Aura)",
     "detachment_id": "awakened-dynasty",
     "cost": 35,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "phasal-subjugator-aura-awakened-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "enaegic-dermal-bond-awakened-dynasty",
+    "id": "enaegic-dermal-bond-awakened-dynasty-necrons",
     "name": "Enaegic Dermal Bond",
     "detachment_id": "awakened-dynasty",
     "cost": 30,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "enaegic-dermal-bond-awakened-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "eternal-madness-annihilation-legion",
+    "id": "eternal-madness-annihilation-legion-necrons",
     "name": "Eternal Madness",
     "detachment_id": "annihilation-legion",
     "cost": 20,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "eternal-madness-annihilation-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "ingrained-superiority-annihilation-legion",
+    "id": "ingrained-superiority-annihilation-legion-necrons",
     "name": "Ingrained Superiority",
     "detachment_id": "annihilation-legion",
     "cost": 5,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "ingrained-superiority-annihilation-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,14 +168,14 @@
     ]
   },
   {
-    "id": "soulless-reaper-annihilation-legion",
+    "id": "soulless-reaper-annihilation-legion-necrons",
     "name": "Soulless Reaper",
     "detachment_id": "annihilation-legion",
     "cost": 15,
     "keyword_restrictions": [
       "Destroyer Cult"
     ],
-    "ability_id": null,
+    "ability_id": "soulless-reaper-annihilation-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -196,14 +196,14 @@
     ]
   },
   {
-    "id": "eldritch-nightmare-annihilation-legion",
+    "id": "eldritch-nightmare-annihilation-legion-necrons",
     "name": "Eldritch Nightmare",
     "detachment_id": "annihilation-legion",
     "cost": 10,
     "keyword_restrictions": [
       "Destroyer Cult"
     ],
-    "ability_id": null,
+    "ability_id": "eldritch-nightmare-annihilation-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -224,14 +224,14 @@
     ]
   },
   {
-    "id": "dimensional-sanctum-canoptek-court",
+    "id": "dimensional-sanctum-canoptek-court-necrons",
     "name": "Dimensional Sanctum",
     "detachment_id": "canoptek-court",
     "cost": 20,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "dimensional-sanctum-canoptek-court-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -252,14 +252,14 @@
     ]
   },
   {
-    "id": "hyperphasic-fulcrum-canoptek-court",
+    "id": "hyperphasic-fulcrum-canoptek-court-necrons",
     "name": "Hyperphasic Fulcrum",
     "detachment_id": "canoptek-court",
     "cost": 15,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "hyperphasic-fulcrum-canoptek-court-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -280,14 +280,14 @@
     ]
   },
   {
-    "id": "autodivinator-canoptek-court",
+    "id": "autodivinator-canoptek-court-necrons",
     "name": "Autodivinator",
     "detachment_id": "canoptek-court",
     "cost": 15,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "autodivinator-canoptek-court-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -308,14 +308,14 @@
     ]
   },
   {
-    "id": "metalodermal-tesla-weave-canoptek-court",
+    "id": "metalodermal-tesla-weave-canoptek-court-necrons",
     "name": "Metalodermal Tesla Weave",
     "detachment_id": "canoptek-court",
     "cost": 10,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "metalodermal-tesla-weave-canoptek-court-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -336,14 +336,14 @@
     ]
   },
   {
-    "id": "honourable-combatant-obeisance-phalanx",
+    "id": "honourable-combatant-obeisance-phalanx-necrons",
     "name": "Honourable Combatant",
     "detachment_id": "obeisance-phalanx",
     "cost": 10,
     "keyword_restrictions": [
       "Overlord"
     ],
-    "ability_id": null,
+    "ability_id": "honourable-combatant-obeisance-phalanx-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -364,14 +364,14 @@
     ]
   },
   {
-    "id": "unflinching-will-obeisance-phalanx",
+    "id": "unflinching-will-obeisance-phalanx-necrons",
     "name": "Unflinching Will",
     "detachment_id": "obeisance-phalanx",
     "cost": 20,
     "keyword_restrictions": [
       "Overlord"
     ],
-    "ability_id": null,
+    "ability_id": "unflinching-will-obeisance-phalanx-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -392,14 +392,14 @@
     ]
   },
   {
-    "id": "warrior-noble-obeisance-phalanx",
+    "id": "warrior-noble-obeisance-phalanx-necrons",
     "name": "Warrior Noble",
     "detachment_id": "obeisance-phalanx",
     "cost": 15,
     "keyword_restrictions": [
       "Overlord"
     ],
-    "ability_id": null,
+    "ability_id": "warrior-noble-obeisance-phalanx-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -420,14 +420,14 @@
     ]
   },
   {
-    "id": "eternal-conqueror-obeisance-phalanx",
+    "id": "eternal-conqueror-obeisance-phalanx-necrons",
     "name": "Eternal Conqueror",
     "detachment_id": "obeisance-phalanx",
     "cost": 25,
     "keyword_restrictions": [
       "Overlord"
     ],
-    "ability_id": null,
+    "ability_id": "eternal-conqueror-obeisance-phalanx-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -448,14 +448,14 @@
     ]
   },
   {
-    "id": "dimensional-overseer-hypercrypt-legion",
+    "id": "dimensional-overseer-hypercrypt-legion-necrons",
     "name": "Dimensional Overseer",
     "detachment_id": "hypercrypt-legion",
     "cost": 25,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "dimensional-overseer-hypercrypt-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -476,14 +476,14 @@
     ]
   },
   {
-    "id": "arisen-tyrant-hypercrypt-legion",
+    "id": "arisen-tyrant-hypercrypt-legion-necrons",
     "name": "Arisen Tyrant",
     "detachment_id": "hypercrypt-legion",
     "cost": 25,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "arisen-tyrant-hypercrypt-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -504,14 +504,14 @@
     ]
   },
   {
-    "id": "hyperspatial-transfer-node-hypercrypt-legion",
+    "id": "hyperspatial-transfer-node-hypercrypt-legion-necrons",
     "name": "Hyperspatial Transfer Node",
     "detachment_id": "hypercrypt-legion",
     "cost": 15,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "hyperspatial-transfer-node-hypercrypt-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -532,14 +532,14 @@
     ]
   },
   {
-    "id": "osteoclave-fulcrum-hypercrypt-legion",
+    "id": "osteoclave-fulcrum-hypercrypt-legion-necrons",
     "name": "Osteoclave Fulcrum",
     "detachment_id": "hypercrypt-legion",
     "cost": 20,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "osteoclave-fulcrum-hypercrypt-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -560,11 +560,11 @@
     ]
   },
   {
-    "id": "dread-majesty-aura-starshatter-arsenal",
+    "id": "dread-majesty-aura-starshatter-arsenal-necrons",
     "name": "Dread Majesty (Aura)",
     "detachment_id": "starshatter-arsenal",
     "cost": 30,
-    "ability_id": null,
+    "ability_id": "dread-majesty-aura-starshatter-arsenal-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -593,14 +593,14 @@
     ]
   },
   {
-    "id": "miniaturised-nebuloscope-starshatter-arsenal",
+    "id": "miniaturised-nebuloscope-starshatter-arsenal-necrons",
     "name": "Miniaturised Nebuloscope",
     "detachment_id": "starshatter-arsenal",
     "cost": 15,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "miniaturised-nebuloscope-starshatter-arsenal-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -621,14 +621,14 @@
     ]
   },
   {
-    "id": "demanding-leader-starshatter-arsenal",
+    "id": "demanding-leader-starshatter-arsenal-necrons",
     "name": "Demanding Leader",
     "detachment_id": "starshatter-arsenal",
     "cost": 10,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "demanding-leader-starshatter-arsenal-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -649,14 +649,14 @@
     ]
   },
   {
-    "id": "chrono-impedance-fields-starshatter-arsenal",
+    "id": "chrono-impedance-fields-starshatter-arsenal-necrons",
     "name": "Chrono-impedance Fields",
     "detachment_id": "starshatter-arsenal",
     "cost": 25,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "chrono-impedance-fields-starshatter-arsenal-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -677,11 +677,11 @@
     ]
   },
   {
-    "id": "destroyer-ankh-cursed-legion",
+    "id": "destroyer-ankh-cursed-legion-necrons",
     "name": "Destroyer Ankh",
     "detachment_id": "cursed-legion",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "destroyer-ankh-cursed-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -710,14 +710,14 @@
     ]
   },
   {
-    "id": "murdermind-cursed-legion",
+    "id": "murdermind-cursed-legion-necrons",
     "name": "Murdermind",
     "detachment_id": "cursed-legion",
     "cost": 15,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "murdermind-cursed-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -744,14 +744,14 @@
     ]
   },
   {
-    "id": "cursed-circlet-cursed-legion",
+    "id": "cursed-circlet-cursed-legion-necrons",
     "name": "Cursed Circlet",
     "detachment_id": "cursed-legion",
     "cost": 25,
     "keyword_restrictions": [
       "Destroyer Cult"
     ],
-    "ability_id": null,
+    "ability_id": "cursed-circlet-cursed-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -772,14 +772,14 @@
     ]
   },
   {
-    "id": "quantum-abacus-cryptek-conclave",
+    "id": "quantum-abacus-cryptek-conclave-necrons",
     "name": "Quantum Abacus",
     "detachment_id": "cryptek-conclave",
     "cost": 15,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "quantum-abacus-cryptek-conclave-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -800,14 +800,14 @@
     ]
   },
   {
-    "id": "atomic-disintegrators-cryptek-conclave",
+    "id": "atomic-disintegrators-cryptek-conclave-necrons",
     "name": "Atomic Disintegrators",
     "detachment_id": "cryptek-conclave",
     "cost": 10,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "atomic-disintegrators-cryptek-conclave-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -828,14 +828,14 @@
     ]
   },
   {
-    "id": "gauntlet-of-compression-cryptek-conclave",
+    "id": "gauntlet-of-compression-cryptek-conclave-necrons",
     "name": "Gauntlet of Compression",
     "detachment_id": "cryptek-conclave",
     "cost": 20,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": null,
+    "ability_id": "gauntlet-of-compression-cryptek-conclave-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -856,14 +856,14 @@
     ]
   },
   {
-    "id": "gravitic-bolas-cryptek-conclave",
+    "id": "gravitic-bolas-cryptek-conclave-necrons",
     "name": "Gravitic Bolas",
     "detachment_id": "cryptek-conclave",
     "cost": 15,
     "keyword_restrictions": [
       "Cryptek"
     ],
-    "ability_id": null,
+    "ability_id": "gravitic-bolas-cryptek-conclave-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -884,7 +884,7 @@
     ]
   },
   {
-    "id": "enlivened-sentinels-upgrade-hand-of-the-dynasty",
+    "id": "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
     "name": "Enlivened Sentinels (Upgrade)",
     "detachment_id": "hand-of-the-dynasty",
     "cost": 20,
@@ -892,7 +892,7 @@
       "Necron Warriors",
       "Necrons"
     ],
-    "ability_id": "enlivened-sentinels-hand-of-the-dynasty",
+    "ability_id": "enlivened-sentinels-upgrade-hand-of-the-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -913,7 +913,7 @@
     ]
   },
   {
-    "id": "tools-of-dominion-upgrade-hand-of-the-dynasty",
+    "id": "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons",
     "name": "Tools of Dominion (Upgrade)",
     "detachment_id": "hand-of-the-dynasty",
     "cost": 15,
@@ -921,7 +921,7 @@
       "Immortals",
       "Necrons"
     ],
-    "ability_id": "tools-of-dominion-hand-of-the-dynasty",
+    "ability_id": "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -942,7 +942,7 @@
     ]
   },
   {
-    "id": "recursive-reanimation-upgrade-skyshroud-spearhead",
+    "id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
     "name": "Recursive Reanimation (Upgrade)",
     "detachment_id": "skyshroud-spearhead",
     "cost": 5,
@@ -950,7 +950,7 @@
       "Necrons",
       "Tomb Blades"
     ],
-    "ability_id": "recursive-reanimation-skyshroud-spearhead",
+    "ability_id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -971,7 +971,7 @@
     ]
   },
   {
-    "id": "deepening-madness-upgrade-skyshroud-spearhead",
+    "id": "deepening-madness-upgrade-skyshroud-spearhead-necrons",
     "name": "Deepening Madness (Upgrade)",
     "detachment_id": "skyshroud-spearhead",
     "cost": 20,
@@ -979,7 +979,7 @@
       "Destroyer Cult",
       "Mounted"
     ],
-    "ability_id": "deepening-madness-skyshroud-spearhead",
+    "ability_id": "deepening-madness-upgrade-skyshroud-spearhead-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1000,14 +1000,14 @@
     ]
   },
   {
-    "id": "prelocational-optimiser-the-phaerons-armoury",
+    "id": "prelocational-optimiser-the-phaerons-armoury-necrons",
     "name": "Prelocational Optimiser",
     "detachment_id": "the-phaerons-armoury",
     "cost": 25,
     "keyword_restrictions": [
       "Necrons"
     ],
-    "ability_id": "prelocational-optimiser-the-phaerons-armoury",
+    "ability_id": "prelocational-optimiser-the-phaerons-armoury-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1028,25 +1028,7 @@
     ]
   },
   {
-    "id": "mortality-shroud-aura-the-phaerons-armoury",
-    "name": "Mortality Shroud (aura)",
-    "detachment_id": "the-phaerons-armoury",
-    "cost": 10,
-    "keyword_restrictions": [
-      "Necrons"
-    ],
-    "ability_id": "mortality-shroud-aura-the-phaerons-armoury",
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "points_provisional": false,
-    "upgrade_tag": true,
-    "max_targets": 3
-  },
-  {
-    "id": "metalline-might-amonhotekhs-guard",
+    "id": "metalline-might-amonhotekhs-guard-necrons",
     "name": "Metalline Might",
     "detachment_id": "amonhotekhs-guard",
     "cost": 0,
@@ -1070,7 +1052,7 @@
     ]
   },
   {
-    "id": "unblemished-legions-amonhotekhs-guard",
+    "id": "unblemished-legions-amonhotekhs-guard-necrons",
     "name": "Unblemished Legions",
     "detachment_id": "amonhotekhs-guard",
     "cost": 0,
@@ -1095,11 +1077,11 @@
     ]
   },
   {
-    "id": "singularity-matrix-pantheon-of-woe",
+    "id": "singularity-matrix-pantheon-of-woe-necrons",
     "name": "Singularity Matrix",
     "detachment_id": "pantheon-of-woe",
     "cost": 45,
-    "ability_id": null,
+    "ability_id": "singularity-matrix-pantheon-of-woe-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1124,11 +1106,11 @@
     ]
   },
   {
-    "id": "quantum-goad-pantheon-of-woe",
+    "id": "quantum-goad-pantheon-of-woe-necrons",
     "name": "Quantum Goad",
     "detachment_id": "pantheon-of-woe",
     "cost": 45,
-    "ability_id": null,
+    "ability_id": "quantum-goad-pantheon-of-woe-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1153,11 +1135,11 @@
     ]
   },
   {
-    "id": "animus-damper-pantheon-of-woe",
+    "id": "animus-damper-pantheon-of-woe-necrons",
     "name": "Animus Damper",
     "detachment_id": "pantheon-of-woe",
     "cost": 35,
-    "ability_id": null,
+    "ability_id": "animus-damper-pantheon-of-woe-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1182,11 +1164,11 @@
     ]
   },
   {
-    "id": "reletavistic-tether-pantheon-of-woe",
+    "id": "reletavistic-tether-pantheon-of-woe-necrons",
     "name": "Reletavistic Tether",
     "detachment_id": "pantheon-of-woe",
     "cost": 40,
-    "ability_id": null,
+    "ability_id": "reletavistic-tether-pantheon-of-woe-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1211,11 +1193,11 @@
     ]
   },
   {
-    "id": "mark-of-the-nekrosor-cursed-legion",
+    "id": "mark-of-the-nekrosor-cursed-legion-necrons",
     "name": "Mark of the Nekrosor",
     "detachment_id": "cursed-legion",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "mark-of-the-nekrosor-cursed-legion-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1239,11 +1221,11 @@
     ]
   },
   {
-    "id": "mortality-shroud-aura-upgrade-the-phaerons-armoury",
+    "id": "mortality-shroud-aura-upgrade-the-phaerons-armoury-necrons",
     "name": "Mortality Shroud (Aura) (Upgrade)",
     "detachment_id": "the-phaerons-armoury",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "mortality-shroud-aura-upgrade-the-phaerons-armoury-necrons",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

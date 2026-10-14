@@ -1,13 +1,13 @@
 [
   {
-    "id": "universal-anathema-ordo-xenos-alien-hunters",
+    "id": "universal-anathema-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "Universal Anathema",
     "detachment_id": "ordo-xenos-alien-hunters",
     "cost": 10,
     "keyword_restrictions": [
       "Agents of the Imperium"
     ],
-    "ability_id": null,
+    "ability_id": "universal-anathema-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "blackweave-shroud-ordo-xenos-alien-hunters",
+    "id": "blackweave-shroud-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "Blackweave Shroud",
     "detachment_id": "ordo-xenos-alien-hunters",
     "cost": 15,
     "keyword_restrictions": [
       "Agents of the Imperium"
     ],
-    "ability_id": null,
+    "ability_id": "blackweave-shroud-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "beacon-angelis-ordo-xenos-alien-hunters",
+    "id": "beacon-angelis-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "Beacon Angelis",
     "detachment_id": "ordo-xenos-alien-hunters",
     "cost": 30,
     "keyword_restrictions": [
       "Watch Master"
     ],
-    "ability_id": null,
+    "ability_id": "beacon-angelis-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters",
+    "id": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "name": "Amulet of Auto-chastisement",
     "detachment_id": "ordo-xenos-alien-hunters",
     "cost": 25,
     "keyword_restrictions": [
       "Watch Master"
     ],
-    "ability_id": null,
+    "ability_id": "amulet-of-auto-chastisement-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,11 +112,11 @@
     ]
   },
   {
-    "id": "liber-heresius-ordo-hereticus-purgation-force",
+    "id": "liber-heresius-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "Liber Heresius",
     "detachment_id": "ordo-hereticus-purgation-force",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "liber-heresius-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -145,14 +145,14 @@
     ]
   },
   {
-    "id": "no-escape-aura-ordo-hereticus-purgation-force",
+    "id": "no-escape-aura-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "No Escape (Aura)",
     "detachment_id": "ordo-hereticus-purgation-force",
     "cost": 25,
     "keyword_restrictions": [
       "Inquisitor"
     ],
-    "ability_id": null,
+    "ability_id": "no-escape-aura-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -173,11 +173,11 @@
     ]
   },
   {
-    "id": "witch-hunter-ordo-hereticus-purgation-force",
+    "id": "witch-hunter-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "Witch Hunter",
     "detachment_id": "ordo-hereticus-purgation-force",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "witch-hunter-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -206,11 +206,11 @@
     ]
   },
   {
-    "id": "ignis-judicium-ordo-hereticus-purgation-force",
+    "id": "ignis-judicium-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "name": "Ignis Judicium",
     "detachment_id": "ordo-hereticus-purgation-force",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "ignis-judicium-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -239,14 +239,14 @@
     ]
   },
   {
-    "id": "formidable-resolve-ordo-malleus-daemon-hunters",
+    "id": "formidable-resolve-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "Formidable Resolve",
     "detachment_id": "ordo-malleus-daemon-hunters",
     "cost": 5,
     "keyword_restrictions": [
       "Inquisitor"
     ],
-    "ability_id": null,
+    "ability_id": "formidable-resolve-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -267,14 +267,14 @@
     ]
   },
   {
-    "id": "daemon-slayer-ordo-malleus-daemon-hunters",
+    "id": "daemon-slayer-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "Daemon Slayer",
     "detachment_id": "ordo-malleus-daemon-hunters",
     "cost": 10,
     "keyword_restrictions": [
       "Inquisitor"
     ],
-    "ability_id": null,
+    "ability_id": "daemon-slayer-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -295,14 +295,14 @@
     ]
   },
   {
-    "id": "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters",
+    "id": "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "Grimoire of True Names (Aura)",
     "detachment_id": "ordo-malleus-daemon-hunters",
     "cost": 10,
     "keyword_restrictions": [
       "Inquisitor"
     ],
-    "ability_id": null,
+    "ability_id": "grimoire-of-true-names-aura-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -323,14 +323,14 @@
     ]
   },
   {
-    "id": "gift-of-the-prescient-ordo-malleus-daemon-hunters",
+    "id": "gift-of-the-prescient-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "name": "Gift of the Prescient",
     "detachment_id": "ordo-malleus-daemon-hunters",
     "cost": 20,
     "keyword_restrictions": [
       "Inquisitor"
     ],
-    "ability_id": null,
+    "ability_id": "gift-of-the-prescient-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -351,14 +351,14 @@
     ]
   },
   {
-    "id": "digital-weapons-imperialis-fleet",
+    "id": "digital-weapons-imperialis-fleet-agents-of-the-imperium",
     "name": "Digital Weapons",
     "detachment_id": "imperialis-fleet",
     "cost": 10,
     "keyword_restrictions": [
       "Agents of the Imperium"
     ],
-    "ability_id": null,
+    "ability_id": "digital-weapons-imperialis-fleet-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -379,14 +379,14 @@
     ]
   },
   {
-    "id": "clandestine-operation-imperialis-fleet",
+    "id": "clandestine-operation-imperialis-fleet-agents-of-the-imperium",
     "name": "Clandestine Operation",
     "detachment_id": "imperialis-fleet",
     "cost": 15,
     "keyword_restrictions": [
       "Agents of the Imperium"
     ],
-    "ability_id": null,
+    "ability_id": "clandestine-operation-imperialis-fleet-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -407,14 +407,14 @@
     ]
   },
   {
-    "id": "fleetmaster-imperialis-fleet",
+    "id": "fleetmaster-imperialis-fleet-agents-of-the-imperium",
     "name": "Fleetmaster",
     "detachment_id": "imperialis-fleet",
     "cost": 20,
     "keyword_restrictions": [
       "Voidfarers"
     ],
-    "ability_id": null,
+    "ability_id": "fleetmaster-imperialis-fleet-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -435,14 +435,14 @@
     ]
   },
   {
-    "id": "combat-landers-imperialis-fleet",
+    "id": "combat-landers-imperialis-fleet-agents-of-the-imperium",
     "name": "Combat Landers",
     "detachment_id": "imperialis-fleet",
     "cost": 10,
     "keyword_restrictions": [
       "Voidfarers"
     ],
-    "ability_id": null,
+    "ability_id": "combat-landers-imperialis-fleet-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -463,7 +463,7 @@
     ]
   },
   {
-    "id": "killer-reflexes-inquisitors-hand",
+    "id": "killer-reflexes-inquisitors-hand-agents-of-the-imperium",
     "name": "Killer Reflexes",
     "detachment_id": "inquisitors-hand",
     "cost": 0,
@@ -487,7 +487,7 @@
     ]
   },
   {
-    "id": "sanctic-slayers-inquisitors-hand",
+    "id": "sanctic-slayers-inquisitors-hand-agents-of-the-imperium",
     "name": "Sanctic Slayers",
     "detachment_id": "inquisitors-hand",
     "cost": 0,
@@ -512,11 +512,11 @@
     ]
   },
   {
-    "id": "intraneural-biotech-veiled-blade-elimination-force",
+    "id": "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Intraneural Biotech",
     "detachment_id": "veiled-blade-elimination-force",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -541,11 +541,11 @@
     ]
   },
   {
-    "id": "decoy-targets-veiled-blade-elimination-force",
+    "id": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Decoy Targets",
     "detachment_id": "veiled-blade-elimination-force",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -570,11 +570,11 @@
     ]
   },
   {
-    "id": "esoteric-explosives-veiled-blade-elimination-force",
+    "id": "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Esoteric Explosives",
     "detachment_id": "veiled-blade-elimination-force",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -599,11 +599,11 @@
     ]
   },
   {
-    "id": "micromelta-rounds-veiled-blade-elimination-force",
+    "id": "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium",
     "name": "Micromelta Rounds",
     "detachment_id": "veiled-blade-elimination-force",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

@@ -1,44 +1,6 @@
 [
   {
-    "id": "aggression-begets-aggression-questor-forgepact",
-    "name": "AGGRESSION BEGETS AGGRESSION",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "questor-forgepact",
-    "cp_cost": 1,
-    "phases": [
-      "shooting"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "bonded-imperative-questor-forgepact",
-    "name": "BONDED IMPERATIVE",
-    "category": "detachment",
-    "type": "epic-deed",
-    "detachment_id": "questor-forgepact",
-    "cp_cost": 1,
-    "phases": [
-      "command"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "courageous-stand-questoris-companions",
+    "id": "courageous-stand-questoris-companions-imperial-knights",
     "name": "COURAGEOUS STAND",
     "category": "detachment",
     "type": "epic-deed",
@@ -51,7 +13,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "courageous-stand-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -68,7 +30,7 @@
     ]
   },
   {
-    "id": "drive-them-out-gate-warden-lance",
+    "id": "drive-them-out-gate-warden-lance-imperial-knights",
     "name": "DRIVE THEM OUT!",
     "category": "detachment",
     "type": "battle-tactic",
@@ -81,7 +43,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "drive-them-out-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -98,7 +60,7 @@
     ]
   },
   {
-    "id": "driven-by-the-past-questoris-companions",
+    "id": "driven-by-the-past-questoris-companions-imperial-knights",
     "name": "DRIVEN BY THE PAST",
     "category": "detachment",
     "type": "epic-deed",
@@ -110,7 +72,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "driven-by-the-past-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -127,7 +89,7 @@
     ]
   },
   {
-    "id": "exemplars-wisdom-spearhead-at-arms",
+    "id": "exemplars-wisdom-spearhead-at-arms-imperial-knights",
     "name": "EXEMPLAR’S WISDOM",
     "category": "detachment",
     "type": "battle-tactic",
@@ -139,7 +101,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "exemplars-wisdom-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -156,7 +118,7 @@
     ]
   },
   {
-    "id": "fire-shocked-dominus-foebreakers",
+    "id": "fire-shocked-dominus-foebreakers-imperial-knights",
     "name": "FIRE SHOCKED",
     "category": "detachment",
     "detachment_id": "dominus-foebreakers",
@@ -167,7 +129,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fire-shocked-dominus-foebreakers",
+    "ability_id": "fire-shocked-dominus-foebreakers-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -184,7 +146,7 @@
     ]
   },
   {
-    "id": "flanking-manoeuvres-freeblade-company",
+    "id": "flanking-manoeuvres-freeblade-company-imperial-knights",
     "name": "FLANKING MANOEUVRES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -196,7 +158,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "flanking-manoeuvres-freeblade-company",
+    "ability_id": "flanking-manoeuvres-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -213,7 +175,7 @@
     ]
   },
   {
-    "id": "foebreaker-firestorm-dominus-foebreakers",
+    "id": "foebreaker-firestorm-dominus-foebreakers-imperial-knights",
     "name": "FOEBREAKER FIRESTORM",
     "category": "detachment",
     "detachment_id": "dominus-foebreakers",
@@ -224,7 +186,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "foebreaker-firestorm-dominus-foebreakers",
+    "ability_id": "foebreaker-firestorm-dominus-foebreakers-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -241,7 +203,7 @@
     ]
   },
   {
-    "id": "fortress-of-intimidation-gate-warden-lance",
+    "id": "fortress-of-intimidation-gate-warden-lance-imperial-knights",
     "name": "FORTRESS OF INTIMIDATION",
     "category": "detachment",
     "type": "epic-deed",
@@ -253,7 +215,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fortress-of-intimidation-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -270,7 +232,7 @@
     ]
   },
   {
-    "id": "full-tilt-freeblade-company",
+    "id": "full-tilt-freeblade-company-imperial-knights",
     "name": "FULL TILT",
     "category": "detachment",
     "type": "wargear",
@@ -282,7 +244,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "full-tilt-freeblade-company",
+    "ability_id": "full-tilt-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -299,7 +261,7 @@
     ]
   },
   {
-    "id": "full-tilt-valourstrike-lance",
+    "id": "full-tilt-valourstrike-lance-imperial-knights",
     "name": "FULL TILT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -311,7 +273,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "full-tilt-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -328,7 +290,7 @@
     ]
   },
   {
-    "id": "ground-shaking-strides-dominus-foebreakers",
+    "id": "ground-shaking-strides-dominus-foebreakers-imperial-knights",
     "name": "GROUND-SHAKING STRIDES",
     "category": "detachment",
     "detachment_id": "dominus-foebreakers",
@@ -339,7 +301,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "ground-shaking-strides-dominus-foebreakers",
+    "ability_id": "ground-shaking-strides-dominus-foebreakers-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -356,7 +318,7 @@
     ]
   },
   {
-    "id": "helm-conditioning-throne-bonded-outriders",
+    "id": "helm-conditioning-throne-bonded-outriders-imperial-knights",
     "name": "HELM CONDITIONING",
     "category": "detachment",
     "detachment_id": "throne-bonded-outriders",
@@ -367,7 +329,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "helm-conditioning-throne-bonded-outriders",
+    "ability_id": "helm-conditioning-throne-bonded-outriders-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -384,7 +346,7 @@
     ]
   },
   {
-    "id": "heros-tread-questoris-companions",
+    "id": "heros-tread-questoris-companions-imperial-knights",
     "name": "HERO’S TREAD",
     "category": "detachment",
     "type": "epic-deed",
@@ -396,7 +358,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "heros-tread-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -413,7 +375,7 @@
     ]
   },
   {
-    "id": "honoured-to-serve-throne-bonded-outriders",
+    "id": "honoured-to-serve-throne-bonded-outriders-imperial-knights",
     "name": "HONOURED TO SERVE",
     "category": "detachment",
     "detachment_id": "throne-bonded-outriders",
@@ -424,7 +386,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "honoured-to-serve-throne-bonded-outriders",
+    "ability_id": "honoured-to-serve-throne-bonded-outriders-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -441,7 +403,7 @@
     ]
   },
   {
-    "id": "in-the-shadow-of-giants-questor-forgepact",
+    "id": "in-the-shadow-of-giants-questor-forgepact-imperial-knights",
     "name": "In the Shadow of Giants",
     "category": "detachment",
     "detachment_id": "questor-forgepact",
@@ -452,7 +414,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "in-the-shadow-of-giants-questor-forgepact",
+    "ability_id": "in-the-shadow-of-giants-questor-forgepact-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -469,7 +431,7 @@
     ]
   },
   {
-    "id": "lancebreaker-gate-warden-lance",
+    "id": "lancebreaker-gate-warden-lance-imperial-knights",
     "name": "LANCEBREAKER",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -481,7 +443,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "lancebreaker-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -498,7 +460,7 @@
     ]
   },
   {
-    "id": "let-duty-be-your-shield-spearhead-at-arms",
+    "id": "let-duty-be-your-shield-spearhead-at-arms-imperial-knights",
     "name": "LET DUTY BE YOUR SHIELD",
     "category": "detachment",
     "type": "epic-deed",
@@ -510,7 +472,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "let-duty-be-your-shield-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -527,26 +489,7 @@
     ]
   },
   {
-    "id": "machine-focus-questor-forgepact",
-    "name": "MACHINE FOCUS",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "questor-forgepact",
-    "cp_cost": 1,
-    "phases": [
-      "command"
-    ],
-    "player_turn": "your-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "mantle-of-the-mentor-spearhead-at-arms",
+    "id": "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
     "name": "MANTLE OF THE MENTOR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -558,7 +501,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mantle-of-the-mentor-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -575,7 +518,7 @@
     ]
   },
   {
-    "id": "marshal-the-defence-gate-warden-lance",
+    "id": "marshal-the-defence-gate-warden-lance-imperial-knights",
     "name": "MARSHAL THE DEFENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -587,7 +530,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "marshal-the-defence-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -604,7 +547,7 @@
     ]
   },
   {
-    "id": "moment-of-glory-questoris-companions",
+    "id": "moment-of-glory-questoris-companions-imperial-knights",
     "name": "MOMENT OF GLORY",
     "category": "detachment",
     "type": "epic-deed",
@@ -616,7 +559,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "moment-of-glory-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -633,7 +576,7 @@
     ]
   },
   {
-    "id": "neural-lash-throne-bonded-outriders",
+    "id": "neural-lash-throne-bonded-outriders-imperial-knights",
     "name": "NEURAL LASH",
     "category": "detachment",
     "detachment_id": "throne-bonded-outriders",
@@ -644,7 +587,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "neural-lash-throne-bonded-outriders",
+    "ability_id": "neural-lash-throne-bonded-outriders-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -661,7 +604,7 @@
     ]
   },
   {
-    "id": "noble-sacrifice-freeblade-company",
+    "id": "noble-sacrifice-freeblade-company-imperial-knights",
     "name": "NOBLE SACRIFICE",
     "category": "detachment",
     "type": "epic-deed",
@@ -677,7 +620,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "noble-sacrifice-freeblade-company",
+    "ability_id": "noble-sacrifice-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -694,7 +637,7 @@
     ]
   },
   {
-    "id": "omnissiahs-grace-questor-forgepact",
+    "id": "omnissiahs-grace-questor-forgepact-imperial-knights",
     "name": "OMNISSIAH’S GRACE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -710,7 +653,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "omnissiahs-grace-questor-forgepact-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -727,7 +670,7 @@
     ]
   },
   {
-    "id": "point-blank-barrage-freeblade-company",
+    "id": "point-blank-barrage-freeblade-company-imperial-knights",
     "name": "POINT-BLANK BARRAGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -739,7 +682,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "point-blank-barrage-freeblade-company",
+    "ability_id": "point-blank-barrage-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -756,7 +699,7 @@
     ]
   },
   {
-    "id": "rotate-ion-shields-valourstrike-lance",
+    "id": "rotate-ion-shields-valourstrike-lance-imperial-knights",
     "name": "ROTATE ION SHIELDS",
     "category": "detachment",
     "type": "wargear",
@@ -768,7 +711,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "rotate-ion-shields-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -785,7 +728,7 @@
     ]
   },
   {
-    "id": "run-them-through-valourstrike-lance",
+    "id": "run-them-through-valourstrike-lance-imperial-knights",
     "name": "RUN THEM THROUGH!",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -797,7 +740,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "run-them-through-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -814,7 +757,7 @@
     ]
   },
   {
-    "id": "squires-of-the-hunt-spearhead-at-arms",
+    "id": "squires-of-the-hunt-spearhead-at-arms-imperial-knights",
     "name": "SQUIRES OF THE HUNT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -826,7 +769,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "squires-of-the-hunt-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -843,7 +786,7 @@
     ]
   },
   {
-    "id": "steadfast-superiority-gate-warden-lance",
+    "id": "steadfast-superiority-gate-warden-lance-imperial-knights",
     "name": "STEADFAST SUPERIORITY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -855,7 +798,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "steadfast-superiority-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -872,7 +815,7 @@
     ]
   },
   {
-    "id": "strength-from-exile-freeblade-company",
+    "id": "strength-from-exile-freeblade-company-imperial-knights",
     "name": "STRENGTH FROM EXILE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -885,7 +828,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "strength-from-exile-freeblade-company",
+    "ability_id": "strength-from-exile-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -902,7 +845,7 @@
     ]
   },
   {
-    "id": "survivor-of-strife-freeblade-company",
+    "id": "survivor-of-strife-freeblade-company-imperial-knights",
     "name": "SURVIVOR OF STRIFE",
     "category": "detachment",
     "type": "epic-deed",
@@ -914,7 +857,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "survivor-of-strife-freeblade-company",
+    "ability_id": "survivor-of-strife-freeblade-company-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -931,7 +874,7 @@
     ]
   },
   {
-    "id": "tactical-foil-valourstrike-lance",
+    "id": "tactical-foil-valourstrike-lance-imperial-knights",
     "name": "TACTICAL FOIL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -943,7 +886,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tactical-foil-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -960,7 +903,7 @@
     ]
   },
   {
-    "id": "thin-their-ranks-spearhead-at-arms",
+    "id": "thin-their-ranks-spearhead-at-arms-imperial-knights",
     "name": "THIN THEIR RANKS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -972,7 +915,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "thin-their-ranks-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -989,26 +932,7 @@
     ]
   },
   {
-    "id": "thronegheist-fury-questor-forgepact",
-    "name": "THRONEGHEIST FURY",
-    "category": "detachment",
-    "type": "strategic-ploy",
-    "detachment_id": "questor-forgepact",
-    "cp_cost": 1,
-    "phases": [
-      "movement"
-    ],
-    "player_turn": "opponent-turn",
-    "timing": "once-per-phase",
-    "target_restrictions": null,
-    "ability_id": null,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    }
-  },
-  {
-    "id": "thunderstomp-valourstrike-lance",
+    "id": "thunderstomp-valourstrike-lance-imperial-knights",
     "name": "THUNDERSTOMP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1020,7 +944,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "thunderstomp-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1037,7 +961,7 @@
     ]
   },
   {
-    "id": "titanic-bombardment-gate-warden-lance",
+    "id": "titanic-bombardment-gate-warden-lance-imperial-knights",
     "name": "TITANIC BOMBARDMENT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1049,7 +973,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "titanic-bombardment-gate-warden-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1066,7 +990,7 @@
     ]
   },
   {
-    "id": "titanic-duel-questoris-companions",
+    "id": "titanic-duel-questoris-companions-imperial-knights",
     "name": "TITANIC DUEL",
     "category": "detachment",
     "type": "epic-deed",
@@ -1079,7 +1003,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "titanic-duel-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1096,7 +1020,7 @@
     ]
   },
   {
-    "id": "unstoppable-warrior-questoris-companions",
+    "id": "unstoppable-warrior-questoris-companions-imperial-knights",
     "name": "UNSTOPPABLE WARRIOR",
     "category": "detachment",
     "type": "epic-deed",
@@ -1108,7 +1032,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unstoppable-warrior-questoris-companions-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1125,7 +1049,7 @@
     ]
   },
   {
-    "id": "vengeance-of-the-machine-cult-questor-forgepact",
+    "id": "vengeance-of-the-machine-cult-questor-forgepact-imperial-knights",
     "name": "VENGEANCE OF THE MACHINE CULT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1141,7 +1065,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeance-of-the-machine-cult-questor-forgepact-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1158,7 +1082,7 @@
     ]
   },
   {
-    "id": "virtue-of-courage-spearhead-at-arms",
+    "id": "virtue-of-courage-spearhead-at-arms-imperial-knights",
     "name": "VIRTUE OF COURAGE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1170,7 +1094,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "virtue-of-courage-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1187,7 +1111,7 @@
     ]
   },
   {
-    "id": "vow-of-retribution-valourstrike-lance",
+    "id": "vow-of-retribution-valourstrike-lance-imperial-knights",
     "name": "VOW OF RETRIBUTION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1199,7 +1123,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vow-of-retribution-valourstrike-lance-imperial-knights",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

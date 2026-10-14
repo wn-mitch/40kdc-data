@@ -13,6 +13,7 @@
  *
  * @packageDocumentation
  */
+import { printedWargearIds } from "./ability-refs.js";
 import type { Unit, WargearOption } from "../generated.js";
 
 /** Inclusive count range a single weapon/wargear id may take in a loadout. */
@@ -978,7 +979,9 @@ function optionsWithPrintedUnitAbilities(
       for (const id of branch) reachable.add(id);
     }
   }
-  const additions = (unit.ability_ids ?? [])
+  // A wargear item whose rule the datasheet prints ({id, wargear} in ability_ids) is stock
+  // equipment even when no option reaches it.
+  const additions = printedWargearIds(unit.ability_ids)
     .filter((id) => (counts.get(id) ?? 0) > 0 && !reachable.has(id))
     .map(
       (id): WargearOption => ({

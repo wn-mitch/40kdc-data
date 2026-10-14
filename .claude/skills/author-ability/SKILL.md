@@ -1,14 +1,15 @@
 ---
 name: Author Ability
-description: One-shot ingest of 40K abilities from a PDF or JSON into 40kdc-data's non-agentic DSL pipeline, capturing raw text into a sibling store keyed by ability_id. Runs end-to-end autonomously (extract → ingest → propose → repair-until-converged → apply → validate → regenerate data-derived artifacts so the branch is push-ready/CI-green) without pausing, and bundles any questions into a single final report. Use for "author/import abilities from this PDF/JSON", "structure these abilities", "fill ability stubs", "build the raw-text lookup". Never hand-writes DSL — the gated classify→assemble→validate→verify pipeline does.
+description: One-shot ingest of 40K abilities from a PDF or JSON into 40kdc-data's non-agentic DSL pipeline. Runs end-to-end autonomously (extract → ingest → propose → repair-until-converged → apply → validate → regenerate data-derived artifacts so the branch is push-ready/CI-green) without pausing, and bundles any questions into a single final report. Use for "author/import abilities from this PDF/JSON", "structure these abilities", "fill ability stubs". Never hand-writes DSL — the gated classify→assemble→validate→verify pipeline does.
 ---
 
 # Skill: Author Ability
 
 Turn raw ability text (a rulebook / faction-pack PDF, or a foreign JSON dump) into
-authored **Ability DSL** in `data/enrichment/<faction>/abilities.json`, and capture
-the original raw text into a durable lookup store — the sibling `40kdc-abilities` git
-repo — keyed by `ability_id`.
+authored **Ability DSL** in `data/enrichment/<faction>/abilities.json`. The canonical
+rule text of every ability is the private MFM dump (`_private/dump.json`); read it with
+`cd tools && npm run prose -- get <faction> <ability_id>`. The pipeline keeps no other
+copy of the prose.
 
 ## Operating mode — one-shot, autonomous, no mid-run pauses
 
@@ -30,8 +31,8 @@ stopping for approval. Author as much as the gate will admit.
 The user may be editing this repo at the same time the pipeline runs (the `propose`/
 `repair` passes are long). Treat the working tree as shared and not yours to clean up.
 
-- **This pipeline writes to three authoring places** — `data/enrichment/<faction>/abilities.json`,
-  `data/_audit/**`, and the out-of-repo `40kdc-abilities` raw-text store — **plus, in the
+- **This pipeline writes to two authoring places** — `data/enrichment/<faction>/abilities.json`
+  and `data/_audit/**` — **plus, in the
   push-ready step (Step 7), a fixed set of regenerated artifacts:** `conformance/**`,
   `crates/wh40kdc/src/data/bundle.generated.json`, `python/src/wh40kdc/_bundle.json`, and
   (only on a real corpus change) `python/src/wh40kdc/_spec.py`. A schema change this run also
@@ -67,13 +68,13 @@ judgement:
    *generation* clause is intentionally NOT re-authored — but because that omits part of the
    rule, the entry is still an approximation and MUST carry the `[APPROX]` mark (below).
 
-This is the opposite contract from the **raw-text store**, which MUST reproduce the
-ability's exact wording. Same ability → two representations: DSL = strongest-case
-mechanical estimate; store = verbatim text. When the verifier weighs faithfulness, it
+This is the opposite contract from the **dump prose**, which is the ability's exact
+wording. Same ability → two representations: DSL = strongest-case mechanical estimate;
+dump = verbatim text. When the verifier weighs faithfulness, it
 judges the *strongest-case mechanic*, not text-completeness.
 
 Corollary for the final report: a "rules update" that only changes a trigger distance,
-a condition, or a resource-gain cadence usually needs **no DSL re-author** (the store holds
+a condition, or a resource-gain cadence usually needs **no DSL re-author** (the dump holds
 the new text, and the DSL models the strongest case). Re-author only for genuine
 effect-magnitude or wrong-effect changes — but if the DSL no longer fully matches the
 current rule, still add the `[APPROX]` mark (below) so the divergence is tracked.
@@ -88,7 +89,7 @@ no downstream regen/approval; promote it to a structured field later only via th
 Schema Change process):
 
 ```
-[APPROX] <exactly what is simplified or dropped vs the full rule>. Full rule in raw-text store. <any prior notes>
+[APPROX] <exactly what is simplified or dropped vs the full rule>. <any prior notes>
 ```
 
 Rules:
@@ -130,7 +131,7 @@ express it, do so.
 **Structured data, never prose — and know which repo you're in.** Committed `data/**`
 (core schemas *and* enrichment DSL) carries only *structured* facts: enums, ids,
 keyword lists, `target_restrictions`, condition/effect trees. The original rule *text*
-lives ONLY in the out-of-repo `40kdc-abilities` store. So when a mechanic resists a
+lives ONLY in the private MFM dump (`_private/`). So when a mechanic resists a
 field, the fix is to author the real structure (or extend the schema — below), **never**
 to retreat into a free-text `notes` / `description` / `community_notes` field and
 restate the rule in prose there. A `notes` string that paraphrases what a structured
@@ -203,9 +204,9 @@ If the user points at a file elsewhere, copy it under `_private/sources/` first.
 
 ## IP safety (non-negotiable)
 
-- Raw GW rule text goes ONLY to git-ignored / out-of-repo places: `_private/**`,
-  the ignored `data/_audit/author-input/<faction>.json` workspace, and the private
-  `40kdc-abilities` store. Never write it into a tracked repository file.
+- Raw GW rule text goes ONLY to git-ignored places: `_private/**` and the ignored
+  `data/_audit/author-input/<faction>.json` workspace. Never write it into a tracked
+  repository file.
 - Never commit source PDFs. Don't paste prose into `name` / `community_notes` / any DSL
   field (the audit flags it `gw-leak`). Names are factual labels and are fine.
 
@@ -281,8 +282,8 @@ cd tools
 npm run author:ingest -- ../_private/manifests/<faction>.manifest.json   # or ../_private/manifests for every file
 ```
 
-Seeds empty stubs into live `abilities.json`, writes the canonical author-input, and
-writes the raw-text store. Note its summary (esp. the "merged into authored" count) for
+Seeds empty stubs into live `abilities.json` and writes the canonical author-input
+(the manifest's `raw_text` goes only there). Note its summary (esp. the "merged into authored" count) for
 the final report.
 
 ### 5. Author: propose → repair-until-converged → apply (the autonomous core)
@@ -313,12 +314,13 @@ cd tools && npm run author:report -- <faction> && cd ..   # omit <faction> for a
 This is `audit:phrasing --review`: it runs the real `describeAbility` (DSL→English) over every
 authored ability and joins, per ability, **the units that carry it** (names from
 `data/core/<faction>/units.json`), its **`ability_id`**, the **verbatim GW source text** (from
-the out-of-repo `40kdc-abilities` store), and the **DSL→English** readout. Output goes to
+the private MFM dump, `_private/dump.json`), and the **DSL→English** readout. Output goes to
 `_private/reports/ability-review-<faction>.md` — **git-ignored, because it embeds GW text; never
 commit it.** Skim it to confirm each authored entry is a faithful strongest-case estimate of its
 rule (strongest-case and `[APPROX]` simplifications are expected, per the IP/fidelity sections);
-surface any genuine mismatch in the final report. Abilities with no store text (e.g. universal
-USRs) render `_(not in raw-text store)_` — expected, not a defect.
+surface any genuine mismatch in the final report. Abilities whose own owner prints no dump text
+render `_(no dump text)_` — check them with `npm run prose -- grep`; they are usually
+misfiled or renamed, and the final report should list them.
 
 ### 7. Make it push-ready — regenerate the data-derived artifacts
 
@@ -441,26 +443,23 @@ End with one consolidated summary:
   `python`/`go` jobs + `parity.yml`); state the `SPEC_VERSION` (and whether it was bumped); flag
   any regen step whose toolchain was missing as a **blocking** follow-up (a stale committed bundle
   turns CI red).
-- **Recommended next actions:** commit in two repos — the `data/enrichment/<faction>` changes
+- **Recommended next actions:** commit the `data/enrichment/<faction>` changes
   **together with** the Step-7 regen outputs (`conformance/**`, the Rust/Python/Go bundles,
-  `SPEC_VERSION`/`_spec.py`/`go/spec.go`) as one push-ready commit, and the `40kdc-abilities` store
-  repo separately; hand-author / Opus-retry the listed residue.
+  `SPEC_VERSION`/`_spec.py`/`go/spec.go`) as one push-ready commit; hand-author / Opus-retry the listed residue.
 
-## The raw-text lookup store
+## Rule prose
 
-`author:ingest` writes to `RAW_TEXT_STORE` (default `../40kdc-abilities`, a sibling of
-the repo; resolved relative to the tool so it's found regardless of cwd):
-- `index.json` — flat `ability_id → { faction, raw_text }` for O(1) lookup.
-- `<faction>.json` — full records (id + hierarchy + provenance + `raw_text`).
-
-It's its own git repo (auto-`git init`ed on first run; writes are additive — existing
-entries are never deleted, same-id entries update in place). Recover any ability's
-original text by reading `<store>/index.json` and indexing by `ability_id`.
+Rule text comes only from the private MFM dump, read through `tools/src/mfm/record-prose.ts`:
+`npm run prose -- get <faction> <ability_id>` prints one ability's text and its `dump.json#<row>`
+ref; `npm run prose -- grep <regex>` searches it. Each ability resolves only through its own
+owner (datasheet, detachment, army rule, or core rules), so a same-named rule in another faction
+is never returned. The manifest's `raw_text` is a transient copy for the classify pass and lives
+only in the git-ignored author-input.
 
 ## Idempotency
 
 Re-running the same input is safe: ids are reused (no duplicate stubs, additive unit
-merges), author-input entries are replaced by id, the store merges additively, and
+merges), author-input entries are replaced by id, and
 `apply` only touches remaining stubs. Authored abilities are never overwritten.
 
 ## Key files

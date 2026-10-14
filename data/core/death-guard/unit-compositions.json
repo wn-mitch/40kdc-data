@@ -1419,8 +1419,8 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "manreaper-strike-maggot-lords",
-          "plaguespurt-gauntlet-maggot-lords"
+          "manreaper",
+          "plaguespurt-gauntlet"
         ]
       },
       {
@@ -1428,8 +1428,8 @@
         "min": 2,
         "max": 2,
         "default_weapon_ids": [
-          "manreaper-strike-maggot-lords",
-          "plaguespurt-gauntlet-maggot-lords"
+          "manreaper",
+          "plaguespurt-gauntlet"
         ]
       }
     ],
@@ -1468,7 +1468,7 @@
         "max": 1,
         "is_leader_model": true,
         "default_weapon_ids": [
-          "plasma-pistol-maggot-lords",
+          "plasma-pistol",
           "power-fist"
         ]
       },
@@ -1479,7 +1479,7 @@
         "max": 1,
         "default_weapon_ids": [
           "blight-launcher",
-          "plague-knives-plague-marines"
+          "plague-knives"
         ]
       },
       {
@@ -1488,7 +1488,7 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "plague-knives-plague-marines",
+          "plague-knives",
           "plague-spewer"
         ]
       },
@@ -1499,7 +1499,7 @@
         "max": 4,
         "default_weapon_ids": [
           "boltgun",
-          "plague-knives-plague-marines"
+          "plague-knives"
         ]
       }
     ],
@@ -1547,7 +1547,7 @@
         "max": 1,
         "default_weapon_ids": [
           "numerological-artefacts",
-          "plasma-pistol-maggot-lords"
+          "plasma-pistol"
         ]
       }
     ],

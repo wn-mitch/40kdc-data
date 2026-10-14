@@ -1,33 +1,6 @@
 [
   {
-    "ability_id": "leader",
-    "name": "Leader",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "0f501f6eb8e6288aaf0dab321e97e20625cad30432251611a559069fc750f98d",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "leader"
-      }
-    },
-    "scope": {
-      "range": "attached",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "memnyr-strategist"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "computational-mastermind",
+    "ability_id": "computational-mastermind-leagues-of-votann",
     "name": "Computational Mastermind",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -48,10 +21,16 @@
             }
           },
           {
-            "type": "within-range-of-objective"
+            "type": "within",
+            "parameters": {
+              "of": {
+                "objective": {}
+              },
+              "range": "objective-control"
+            }
           },
           {
-            "type": "controls-objective"
+            "type": "controls"
           }
         ]
       },
@@ -61,17 +40,17 @@
         "options": [
           {
             "type": "resource-spend",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
-              "pool_id": "yp-pool",
+              "pool": "yp-pool",
               "amount": 1
             }
           },
           {
             "type": "resource-gain",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
-              "pool_id": "yp-pool",
+              "pool": "yp-pool",
               "amount": 1
             }
           }
@@ -79,7 +58,6 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -87,10 +65,11 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "predictive-guidance",
+    "ability_id": "predictive-guidance-leagues-of-votann",
     "name": "Predictive Guidance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -100,14 +79,33 @@
     "source_digest": "9f1122dc84b6c089cda16e5205c740b6d8d02ff60d96b869966f9db3e2658ce0",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
-      "modifier": {
-        "stratagem": "fire-overwatch-or-heroic"
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "fire-overwatch",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "heroic-intervention",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "one-use"
     },
     "unit_ids": [
@@ -115,11 +113,10 @@
     ],
     "ability_type": "unit",
     "behavior": "activated",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: references stratagem id \"fire-overwatch-or-heroic\", which no stratagem file defines; the intended stratagem is unrecoverable from the encoding."
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "decisive-destruction",
+    "ability_id": "decisive-destruction-leagues-of-votann",
     "name": "Decisive Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -138,7 +135,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -146,17 +143,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "einhyr-hearthguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "weavefield-crest",
+    "ability_id": "weavefield-crest-leagues-of-votann",
     "name": "Weavefield crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -167,23 +164,24 @@
     "version": "2025-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "invuln_sv": 5
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "einhyr-hearthguard"
+      "einhyr-hearthguard",
+      "hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "teleport-crest",
+    "ability_id": "teleport-crest-einhyr-hearthguard-leagues-of-votann",
     "name": "Teleport Crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -193,22 +191,24 @@
     "source_digest": "890d708143c259a234fc72b9a3fb0e769f6c45c25efba020e47530bcb231aeb8",
     "version": "2025-q3",
     "effect": {
-      "type": "deep-strike",
-      "target": "self",
-      "modifier": {}
+      "type": "ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "ability": "deep-strike"
+      }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "einhyr-hearthguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "fortify-psychic",
+    "ability_id": "fortify-leagues-of-votann",
     "name": "Fortify (Psychic)",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -220,28 +220,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "feel-no-pain",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "threshold": 5
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "grimnyr"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "grimnyr-s-regard",
+    "ability_id": "grimnyrs-regard-leagues-of-votann",
     "name": "Grimnyr\u2019s Regard",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -251,52 +255,43 @@
     "source_digest": "44da5d969bfde75f3112dacec28ade98a4446bca4811fa19d910249f23d53f81",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "once-per-battle-special"
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "keywords": [
+          "LEAGUES OF VOTANN"
+        ],
+        "within_inches": 12,
+        "reference": "bearer",
+        "eligibility": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "battle-shocked"
+          }
+        }
+      },
+      "effect": {
+        "type": "state-change",
+        "target": "selected-unit",
+        "modifier": {
+          "state": "battle-shocked",
+          "set": false
+        }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "one-use"
     },
     "unit_ids": [
       "grimnyr"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "scouts-9",
-    "name": "Scouts 9\"",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2ff78b89dd5912f5a5624fdc4ae8ebcb3f665b86dd5e9949de1d58b7dd8ec138",
-    "version": "2025-q3",
-    "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "scout",
-        "distance": 9
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hernkyn-pioneers"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "outflanking-mag-riders",
+    "ability_id": "outflanking-mag-riders-leagues-of-votann",
     "name": "Outflanking Mag-Riders",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -306,25 +301,55 @@
     "source_digest": "6f54d8c479caba5d33d3e04e658b70c61da911a80c22aaf21fdf7517788c392d",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "redeploy",
-        "to_reserves": true
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "this-unit",
+              "of": "battlefield-edge",
+              "range": {
+                "inches": 9
+              },
+              "wholly": true
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": "this-unit",
+                  "state": "engaged"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "strategic-reserves"
+        }
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "multiwave-comms-array",
+    "ability_id": "multiwave-comms-array-leagues-of-votann",
     "name": "Multiwave Comms Array",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -335,23 +360,23 @@
     "version": "2025-q3",
     "effect": {
       "type": "cp-gain",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "panspectral-scanner",
+    "ability_id": "panspectral-scanner-leagues-of-votann",
     "name": "Panspectral Scanner",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -370,7 +395,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -378,17 +403,18 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
+      "hekaton-land-fortress",
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "rollbar-searchlight",
+    "ability_id": "rollbar-searchlight-leagues-of-votann",
     "name": "Rollbar Searchlight",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -406,26 +432,28 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "ignore-modifiers",
+        "target": "this-unit",
         "modifier": {
-          "roll": "all",
-          "operation": "ignore-modifiers"
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "hernkyn-pioneers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "destabilising-quakes",
+    "ability_id": "destabilising-quakes-leagues-of-votann",
     "name": "Destabilising Quakes",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -443,25 +471,25 @@
         }
       },
       "effect": {
-        "type": "leadership-modifier",
-        "target": "enemy-within-aura",
+        "type": "test",
+        "target": "selected-unit",
         "modifier": {
           "test": "battle-shock"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "cthonian-earthshakers"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "geomantic-hunters",
+    "ability_id": "geomantic-hunters-leagues-of-votann",
     "name": "Geomantic Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -480,7 +508,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "all-failures"
@@ -488,89 +516,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
       "cthonian-earthshakers"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "deadly-demise-1",
-    "name": "Deadly Demise 1",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "1",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kapricus-carrier"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive"
-  },
-  {
-    "ability_id": "firing-deck-5",
-    "name": "Firing Deck 5",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "28f041d457883078c161d2fe4f6622814a84f1b2f7c90ea87326dae646e61954",
-    "version": "2025-q3",
-    "effect": {
-      "type": "ability-grant",
-      "target": "unit",
-      "modifier": {
-        "ability_id": "firing-deck",
-        "capacity": 5
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "kapricus-carrier"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "scanner-uplinks",
+    "ability_id": "scanner-uplinks-leagues-of-votann",
     "name": "Scanner Uplinks",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -598,17 +554,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "kapricus-carrier"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "smoke-launcher",
+    "ability_id": "smoke-launcher-leagues-of-votann",
     "name": "Smoke Launcher",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -618,26 +574,27 @@
     "source_digest": "2966068a5e9674328be11b29d8c87aab75d736797205a5d57438f70435f50a13",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "self",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Smoke"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "kapricus-carrier"
+      "kapricus-carrier",
+      "kapricus-defenders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "purge-response",
+    "ability_id": "purge-response-leagues-of-votann",
     "name": "Purge Response",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -647,27 +604,78 @@
     "source_digest": "28ecd467da0b60cc953f19dd73d8b4b781da539edb5e26ea3f96d866f694af80",
     "version": "2025-q3",
     "effect": {
-      "type": "roll-modifier",
-      "target": "unit",
-      "modifier": {
-        "roll": "hit",
-        "operation": "set",
-        "value": 5,
-        "context": "overwatch"
+      "type": "conditional",
+      "condition": {
+        "type": "attack-is",
+        "parameters": {
+          "shooting_type": "snap"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "has-ability",
+              "parameters": {
+                "subject": {
+                  "owner": "friendly"
+                },
+                "ability": "fortify-takeover"
+              }
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "succeeds_on": 4,
+                "weapon_type": "ranged"
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "has-ability",
+                  "parameters": {
+                    "subject": {
+                      "owner": "friendly"
+                    },
+                    "ability": "fortify-takeover"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "roll-result",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "hit",
+                "succeeds_on": 5,
+                "weapon_type": "ranged"
+              }
+            }
+          }
+        ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "ironkin-steeljacks-with-heavy-volkanite-disintegrators"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "preymark-crest",
+    "ability_id": "preymark-crest-leagues-of-votann",
     "name": "Preymark Crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -677,70 +685,27 @@
     "source_digest": "bb7e15b7a5af1db5c895c31048a820b8b81de11db334e5d69cc3dbf04a795f1e",
     "version": "2025-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "Precision"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "ironkin-steeljacks-with-heavy-volkanite-disintegrators"
+      "ironkin-steeljacks-with-heavy-volkanite-disintegrators",
+      "ironkin-steeljacks-with-melee-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "deadly-demise-d6",
-    "name": "Deadly Demise D6",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "c2552b66bc19abc07a84224136cc2673d97b834bde4fe0c9ef391ecde0863aa0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "timing-is",
-        "parameters": {
-          "timing": "before-bearer-removed"
-        }
-      },
-      "effect": {
-        "type": "dice-gated",
-        "dice": "D6",
-        "threshold": 6,
-        "comparison": "gte",
-        "on_success": {
-          "type": "mortal-wounds",
-          "target": "enemy-within-aura",
-          "modifier": {
-            "count": "D6",
-            "range": 6
-          }
-        },
-        "on_fail": null
-      }
-    },
-    "scope": {
-      "range": "aura-6",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hekaton-land-fortress"
-    ],
-    "ability_type": "core",
-    "behavior": "reactive"
-  },
-  {
-    "ability_id": "multicog-targeting",
+    "ability_id": "multicog-targeting-leagues-of-votann",
     "name": "MultiCOG Targeting",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -758,84 +723,28 @@
         }
       },
       "effect": {
-        "type": "roll-modifier",
-        "target": "unit",
+        "type": "ignore-modifiers",
+        "target": "this-unit",
         "modifier": {
-          "roll": "all",
-          "operation": "ignore-modifiers"
+          "what": "rolls",
+          "rolls": [
+            "all"
+          ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "hekaton-land-fortress"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "lone-operative",
-    "name": "Lone Operative",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "97e888af23148ae67829335b14b9e547038266533f8a93a670de3e06b8f14cf0",
-    "version": "2025-q3",
-    "effect": {
-      "type": "targeting-permission",
-      "target": "self",
-      "modifier": {
-        "attack_type": "ranged",
-        "gate": "within-range",
-        "range": 12
-      }
-    },
-    "scope": {
-      "range": "self",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "buri-aegnirssen"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "stealth",
-    "name": "Stealth",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "259a208f3b74890127346efa737ed1ed0ecf3b6e96f57eb66b7ae867543fdc25",
-    "version": "2025-q3",
-    "effect": {
-      "type": "roll-modifier",
-      "target": "attacker",
-      "modifier": {
-        "roll": "hit",
-        "operation": "subtract",
-        "value": 1
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "buri-aegnirssen"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "grudge-fuelled-fortitude",
+    "ability_id": "grudge-fuelled-fortitude-leagues-of-votann",
     "name": "Grudge\u2011fuelled Fortitude",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -845,25 +754,32 @@
     "source_digest": "d7f1f4d25784d1eb8d7d81934f8902b7bcba0404a7754afb8a1232a876fb77c5",
     "version": "2025-q3",
     "effect": {
-      "type": "resurrection",
-      "target": "self",
-      "modifier": {
-        "type": "revive-on-first-death",
-        "trigger": "dice-roll"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "return-models",
+        "target": "this-model",
+        "modifier": {
+          "count": 1,
+          "wounds_remaining": "full",
+          "placement": "closest-to-destruction"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "buri-aegnirssen"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "unhinged-vengeance",
+    "ability_id": "unhinged-vengeance-leagues-of-votann",
     "name": "Unhinged Vengeance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -886,7 +802,7 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           }
         ]
@@ -894,55 +810,50 @@
       "effect": {
         "type": "conditional",
         "condition": {
-          "type": "timing-is",
-          "parameters": {
-            "timing": "after-enemy-unit-fires"
-          }
+          "operator": "and",
+          "operands": [
+            {
+              "type": "wounds",
+              "parameters": {
+                "subject": "this-model",
+                "lost": true
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "battle-shocked"
+                  }
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "unit-state",
+                  "parameters": {
+                    "state": "engaged"
+                  }
+                }
+              ]
+            }
+          ]
         },
         "effect": {
-          "type": "conditional",
-          "condition": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "has-lost-wounds"
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "is-battle-shocked"
-                  }
-                ]
-              },
-              {
-                "operator": "not",
-                "operands": [
-                  {
-                    "type": "engagement-state"
-                  }
-                ]
-              },
-              {
-                "type": "timing-is",
-                "parameters": {
-                  "timing": "first-time-this-phase"
-                }
-              }
-            ]
-          },
-          "effect": {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "vengeance-move"
-            }
+          "type": "move",
+          "target": "this-unit",
+          "modifier": {
+            "move_type": "surge",
+            "distance": "D6+2"
           }
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -950,10 +861,23 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "usage": {
+      "frequency": "first-time-this-phase"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "brokhyr-guild-support",
+    "ability_id": "brokhyr-guild-support-leagues-of-votann",
     "name": "Br\u00f4khyr Guild Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -963,24 +887,63 @@
     "source_digest": "5f3bb3740390acc542b85db901a08590d12c9e2bc9a8dfa5a352b80215bdc70f",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "ability_id": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "this-unit",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "LEAGUES OF VOTANN",
+                  "VEHICLE"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          },
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "this-unit",
+              "of": {
+                "owner": "friendly",
+                "all_of": [
+                  "IRONKIN STEELJACKS"
+                ]
+              },
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "lone-operative"
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "brokhyr-iron-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "multispectral-visor",
+    "ability_id": "multispectral-visor-leagues-of-votann",
     "name": "Multispectral Visor",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -999,7 +962,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "wound",
           "subset": "ones"
@@ -1007,17 +970,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "brokhyr-iron-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "forgewrought-expertise",
+    "ability_id": "forgewrought-expertise-leagues-of-votann",
     "name": "Forgewrought Expertise",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1027,52 +990,62 @@
     "source_digest": "a7d50b12a6642a961fd09d482057b51089efef65eadc833ff7d0e3ba9fd58080",
     "version": "2025-q3",
     "effect": {
-      "type": "resurrection",
-      "target": "self",
-      "modifier": {
-        "count": "d3",
-        "type": "wounds"
+      "type": "select-units",
+      "selector": {
+        "owner": "friendly",
+        "count": 1,
+        "within_inches": 3,
+        "reference": "bearer-unit",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "recipient",
+                "all_of": [
+                  "LEAGUES OF VOTANN",
+                  "VEHICLE"
+                ]
+              }
+            },
+            {
+              "type": "has-keyword",
+              "parameters": {
+                "subject": "recipient",
+                "any_of": [
+                  "EXOFRAME",
+                  "IRONKIN STEELJACKS"
+                ]
+              }
+            }
+          ]
+        },
+        "selection_limit": {
+          "count": 1,
+          "period": "turn"
+        }
+      },
+      "effect": {
+        "type": "heal",
+        "target": "selected-unit",
+        "modifier": {
+          "amount": "D3"
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "brokhyr-iron-master"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "feel-no-pain-4",
-    "name": "Feel No Pain 4+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 4
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "berehk-stornbrow"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "break-the-foe",
+    "ability_id": "break-the-foe-leagues-of-votann",
     "name": "Break the Foe",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1084,33 +1057,33 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "attack-is-type",
+        "type": "attack-is",
         "parameters": {
           "attack_type": "melee"
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Sustained Hits 1"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "berehk-stornbrow"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "relentless-avalanche",
+    "ability_id": "relentless-avalanche-leagues-of-votann",
     "name": "Relentless Avalanche",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1120,14 +1093,33 @@
     "source_digest": "8d1d2843fcd7dde1d78a7c63ba0ff0e6e929102b1c3d0e347c354b787c980c4c",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
-      "modifier": {
-        "stratagem": "fire-overwatch-or-heroic"
-      }
+      "type": "choice",
+      "options": [
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "fire-overwatch",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        },
+        {
+          "type": "cost-modifier",
+          "target": "this-model",
+          "modifier": {
+            "of": "stratagem",
+            "id": "heroic-intervention",
+            "operation": "set",
+            "amount": 0,
+            "applies_to": "targeting-this-unit"
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1135,11 +1127,10 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "disputed": true,
-    "dispute_notes": "Dangling reference: references stratagem id \"fire-overwatch-or-heroic\", which no stratagem file defines; the intended stratagem is unrecoverable from the encoding."
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "merciless-eradication",
+    "ability_id": "merciless-eradication-leagues-of-votann",
     "name": "Merciless Eradication",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1149,26 +1140,34 @@
     "source_digest": "9b6e8c88fe7cd3acdc36e1d0525b49dd2dd2a359527dd70681b5082f769e3aaa",
     "version": "2025-q3",
     "effect": {
-      "type": "rule-state",
-      "target": "enemy-within-aura",
+      "type": "permission",
+      "target": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ],
+        "within": {
+          "range": "engagement"
+        }
+      },
       "modifier": {
-        "direction": "suppressed",
-        "rule_kind": "core-rule",
-        "rule": "fall-back"
+        "activity": "fall-back",
+        "allow": false
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "ironkin-steeljacks-with-melee-weapons"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "ancestral-fortune",
+    "ability_id": "ancestral-fortune-leagues-of-votann",
     "name": "Ancestral Fortune",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1182,9 +1181,9 @@
       "steps": [
         {
           "type": "resource-spend",
-          "target": "self",
+          "target": "this-model",
           "modifier": {
-            "pool_id": "yp-pool",
+            "pool": "yp-pool",
             "amount": 1
           }
         },
@@ -1193,26 +1192,26 @@
           "choice_label": "Change one roll made for this model to an unmodified 6",
           "options": [
             {
-              "type": "auto-result",
-              "target": "self",
+              "type": "roll-result",
+              "target": "this-model",
               "modifier": {
                 "roll": "hit",
                 "result": 6
               }
             },
             {
-              "type": "auto-result",
-              "target": "self",
+              "type": "roll-result",
+              "target": "this-model",
               "modifier": {
                 "roll": "wound",
                 "result": 6
               }
             },
             {
-              "type": "auto-result",
-              "target": "self",
+              "type": "roll-result",
+              "target": "this-model",
               "modifier": {
-                "roll": "saving-throw",
+                "roll": "save",
                 "result": 6
               }
             }
@@ -1221,7 +1220,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
@@ -1232,10 +1230,11 @@
     "community_notes": "[APPROX] Once per turn, spend 1YP to change one Hit roll, Wound roll or saving throw made for this model to an unmodified 6; the change applies to a single roll, not all rolls of that kind. Full rule in raw-text store.",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "grim-efficiency",
+    "ability_id": "grim-efficiency-leagues-of-votann",
     "name": "Grim Efficiency",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1245,24 +1244,24 @@
     "source_digest": "f33045445c6b808c29623d79952181f90d115ad099542cbb73b6b7335d596e3e",
     "version": "2025-q3",
     "effect": {
-      "type": "cp-refund",
-      "target": "self",
+      "type": "cp-gain",
+      "target": "this-model",
       "modifier": {
         "amount": 1
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "one-use"
     },
     "unit_ids": [
       "uthar-the-destined"
     ],
     "ability_type": "unit",
-    "behavior": "activated"
+    "behavior": "activated",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "rampart-crest",
+    "ability_id": "rampart-crest-uthar-the-destined-leagues-of-votann",
     "name": "Rampart Crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1274,55 +1273,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "invulnerable-save",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "invuln_sv": 5
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "uthar-the-destined"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "infiltrators",
-    "name": "Infiltrators",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "2eb1b3aa65c0169d2409be3784721358669b3d84f8f704cd9a60b9ea4f58da43",
-    "version": "2025-q3",
-    "effect": {
-      "type": "unit-keyword",
-      "target": "unit",
-      "modifier": {
-        "keyword_id": "infiltrators"
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "one-use"
-    },
-    "unit_ids": [
-      "hernkyn-yaegirs"
-    ],
-    "ability_type": "core",
-    "behavior": "activated"
-  },
-  {
-    "ability_id": "pragmatic-hunters",
+    "ability_id": "pragmatic-hunters-leagues-of-votann",
     "name": "Pragmatic Hunters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1332,32 +1308,64 @@
     "source_digest": "cf47b12c72515c83468b22fb79a7cd4e455abbd7e0ba97317c9b442d56a6369c",
     "version": "2025-q3",
     "effect": {
-      "type": "movement-modifier",
-      "target": "unit",
-      "modifier": {
-        "move_type": "reactive"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "within",
+            "parameters": {
+              "subject": "event-subject",
+              "of": "this-unit",
+              "range": {
+                "inches": 8
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "subject": "this-unit",
+                  "state": "engaged"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal"
+        }
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "unit_ids": [
       "hernkyn-yaegirs"
     ],
     "ability_type": "unit",
-    "behavior": "passive",
+    "behavior": "reactive",
     "trigger": {
-      "event": "enemy-unit-ended-move",
-      "subject": "enemy-unit",
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
       "optional": true
     },
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "exemplar-of-the-einhyr",
+    "ability_id": "exemplar-of-the-einhyr-leagues-of-votann",
     "name": "Exemplar of the Einhyr",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1369,11 +1377,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "friendly-within-aura",
+        "target": "this-unit",
         "modifier": {
           "roll": "charge",
           "operation": "add",
@@ -1382,17 +1394,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "einhyr-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "mass-driver-accelerators",
+    "ability_id": "mass-driver-accelerators-leagues-of-votann",
     "name": "Mass Driver Accelerators",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1405,21 +1417,21 @@
       "type": "mortal-wounds",
       "target": "defender",
       "modifier": {
-        "count": "d3"
+        "count": "D3"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "einhyr-champion"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "breaching-fire",
+    "ability_id": "breaching-fire-leagues-of-votann",
     "name": "Breaching Fire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1438,24 +1450,24 @@
       },
       "effect": {
         "type": "ability-grant",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
-          "ability_id": "benefit-of-cover"
+          "ability": "benefit-of-cover"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "brokhyr-thunderkyn"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "science-guild-support",
+    "ability_id": "science-guild-support-leagues-of-votann",
     "name": "Science Guild Support",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1465,24 +1477,44 @@
     "source_digest": "4078a2de3b4297c4653046c20ed67b1d4a1f292d087ac27913887d7da27c5987",
     "version": "2025-q3",
     "effect": {
-      "type": "ability-grant",
-      "target": "self",
-      "modifier": {
-        "ability_id": "lone-operative"
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "subject": "this-model",
+          "of": {
+            "owner": "friendly",
+            "all_of": [
+              "LEAGUES OF VOTANN",
+              "INFANTRY"
+            ],
+            "excluding": "this-unit"
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-model",
+        "modifier": {
+          "ability": "lone-operative"
+        }
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "permanent"
     },
     "unit_ids": [
       "arkanyst-evaluator"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "resource-transmutation",
+    "ability_id": "resource-transmutation-leagues-of-votann",
     "name": "Resource Transmutation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1500,17 +1532,16 @@
         }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Sustained Hits 1"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "unit_ids": [
@@ -1520,10 +1551,11 @@
     "behavior": "activated",
     "usage": {
       "frequency": "once-per-turn"
-    }
+    },
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "opportunistic-manoeuvre",
+    "ability_id": "opportunistic-manoeuvre-leagues-of-votann",
     "name": "Opportunistic Manoeuvre",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1541,25 +1573,25 @@
         }
       },
       "effect": {
-        "type": "movement-modifier",
-        "target": "unit",
+        "type": "move",
+        "target": "this-unit",
         "modifier": {
-          "move_type": "shoot-and-scoot"
+          "move_type": "normal"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "unit_ids": [
       "kapricus-defenders"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "cyberstimms",
+    "ability_id": "cyberstimms-leagues-of-votann",
     "name": "Cyberstimms",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1577,23 +1609,25 @@
         }
       },
       "effect": {
-        "type": "fight-on-death",
-        "target": "self",
-        "modifier": {}
+        "type": "act-on-death",
+        "target": "this-model",
+        "modifier": {
+          "act": "fight"
+        }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "cthonian-beserks"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "subterranean-explosives",
+    "ability_id": "subterranean-explosives-leagues-of-votann",
     "name": "Subterranean Explosives",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1611,25 +1645,52 @@
         }
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "defender",
-        "modifier": {
-          "ability_id": "post-attack-debuff"
+        "type": "select-units",
+        "selector": {
+          "owner": "enemy",
+          "count": 1,
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "weapon_name": "mole grenade launcher"
+              },
+              "window": "event"
+            }
+          },
+          "excluded_keywords": [
+            "MONSTER",
+            "VEHICLE"
+          ]
+        },
+        "effect": {
+          "type": "targeting",
+          "target": "selected-unit",
+          "modifier": {
+            "may": "cannot-target",
+            "target": "selected-unit",
+            "kind": "stratagem",
+            "stratagem": "fire-overwatch"
+          }
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "cthonian-beserks"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "blistering-advance",
+    "ability_id": "blistering-advance-leagues-of-votann",
     "name": "Blistering Advance",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1639,26 +1700,67 @@
     "source_digest": "d2bfbac73dac869045afb0b3e7b9a78bac5e0b16c6754afcfd1c6504f386186a",
     "version": "2025-q3",
     "effect": {
-      "type": "disembark-after-move",
-      "target": "self",
-      "modifier": {
-        "after": "advance",
-        "can_charge": false,
-        "counts_as_normal_move": true
-      }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "disembark",
+            "allow": true,
+            "after": [
+              "advance"
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "disembarked",
+            "subject": {
+              "owner": "friendly"
+            },
+            "object": "this-model"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "event": "move-ended",
+                "subject": "this-model",
+                "filter": {
+                  "move_types": [
+                    "advance"
+                  ]
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "event-subject",
+              "modifier": {
+                "activity": "declare-charge",
+                "allow": false
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "sagitaur"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "kindred-hero",
+    "ability_id": "kindred-hero-leagues-of-votann",
     "name": "Kindred Hero",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1670,30 +1772,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "is-attached"
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Lethal Hits"
           ]
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "kahl"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "seized-opportunity",
+    "ability_id": "seized-opportunity-leagues-of-votann",
     "name": "Seized Opportunity",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1705,24 +1811,25 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "window": "phase",
-          "count_min": 1
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "phase"
         }
       },
       "effect": {
         "type": "resource-gain",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
-          "pool_id": "yp-pool",
+          "pool": "yp-pool",
           "amount": 1
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "unit_ids": [
@@ -1733,37 +1840,11 @@
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
     "usage": {
       "frequency": "once-per-phase"
-    }
+    },
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "feel-no-pain-6",
-    "name": "Feel No Pain 6+",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "source_digest": "d063208539e576384bf82ff32c2bfcd0798fdea0539cee1305a013dc87ae09c1",
-    "version": "2025-q3",
-    "effect": {
-      "type": "feel-no-pain",
-      "target": "unit",
-      "modifier": {
-        "threshold": 6
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "hearthkyn-warriors"
-    ],
-    "ability_type": "core",
-    "behavior": "passive"
-  },
-  {
-    "ability_id": "luck-has-need-keeps-toil-earns",
+    "ability_id": "luck-has-need-keeps-toil-earns-leagues-of-votann",
     "name": "Luck Has. Need Keeps. Toil Earns.",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1773,24 +1854,21 @@
     "source_digest": "b7839c91742ce711a4223df21826be04e6f781c4b938441d5e232b1abcecd9b2",
     "version": "2025-q3",
     "effect": {
-      "type": "objective-control-modifier",
-      "target": "unit",
-      "modifier": {
-        "sticky": true
-      }
+      "type": "objective-sticky",
+      "target": "this-unit"
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "panspectral-scanning",
+    "ability_id": "panspectral-scanning-leagues-of-votann",
     "name": "Panspectral Scanning",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1809,7 +1887,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -1817,17 +1895,17 @@
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "prioritised-efficiency",
+    "ability_id": "prioritised-efficiency-leagues-of-votann",
     "name": "Prioritised Efficiency",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1841,7 +1919,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "charge",
             "subset": "all-failures"
@@ -1849,7 +1927,7 @@
         },
         {
           "type": "roll-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "hit",
             "operation": "add",
@@ -1859,7 +1937,6 @@
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "until-next-command-phase"
     },
     "faction_id": "leagues-of-votann",
@@ -1869,7 +1946,7 @@
     "unit_ids": []
   },
   {
-    "ability_id": "sagitaur-spearhead",
+    "ability_id": "sagitaur-spearhead-leagues-of-votann",
     "name": "Sagitaur Spearhead",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1886,19 +1963,18 @@
     "behavior": "passive",
     "effect": {
       "type": "ability-grant",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
-        "ability_id": "scouts"
+        "ability": "scouts"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "coordinated-crossfire-armoured-trailblazers",
+    "ability_id": "coordinated-crossfire-armoured-trailblazers-leagues-of-votann",
     "name": "Coordinated Crossfire",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1912,58 +1988,46 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "armoured-trailblazers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "subset": "ones",
+            "weapon_type": "ranged"
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "hit",
-              "subset": "ones",
-              "attack_type": "ranged"
-            }
-          },
-          {
-            "type": "re-roll",
-            "target": "unit",
-            "modifier": {
-              "roll": "wound",
-              "subset": "ones",
-              "attack_type": "ranged"
-            }
+        },
+        {
+          "type": "re-roll",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "wound",
+            "subset": "ones",
+            "weapon_type": "ranged"
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
-    "ability_id": "outflanking-armour-armoured-trailblazers",
+    "ability_id": "outflanking-armour-armoured-trailblazers-leagues-of-votann",
     "name": "Outflanking Armour",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -1988,21 +2052,20 @@
         "owner": "friendly"
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "unit",
+        "type": "move",
+        "target": "selected-unit",
         "modifier": {
-          "grant_type": "ingress-move"
+          "move_type": "ingress"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "turn"
     },
     "community_notes": "[APPROX] Selects up to two friendly SAGITAUR units to make an ingress move; the requirements that they be in Strategic Reserves and that this be used at the end of the opponent's Movement phase from the second battle round onwards are not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "built-to-last-armoured-trailblazers",
+    "ability_id": "built-to-last-armoured-trailblazers-leagues-of-votann",
     "name": "Built to Last",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2031,38 +2094,43 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
-            "type": "attack-stat-compare",
+            "type": "attack-compare",
             "parameters": {
-              "attacker_stat": "S",
+              "left": {
+                "of": "attacker",
+                "stat": "S"
+              },
               "comparison": "greater-than",
-              "target_stat": "T"
+              "right": {
+                "of": "defender",
+                "stat": "T"
+              }
             }
           }
         ]
       },
       "effect": {
         "type": "roll-modifier",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "roll": "wound",
+          "weapon_type": "ranged",
           "operation": "subtract",
-          "value": 1,
-          "attack_type": "ranged"
+          "value": 1
         }
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "saturation-rounds-armoured-trailblazers",
+    "ability_id": "saturation-rounds-upgrade-armoured-trailblazers-leagues-of-votann",
     "name": "Saturation Rounds",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2078,22 +2146,21 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "self",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
-          "ignores-cover"
+        "abilities": [
+          "Ignores Cover"
         ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "optimised-attack-lines-armoured-trailblazers",
+    "ability_id": "optimised-attack-lines-upgrade-armoured-trailblazers-leagues-of-votann",
     "name": "Optimised Attack Lines",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2109,22 +2176,21 @@
     "ability_type": "enhancement",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "self",
+      "type": "weapon-ability-grant",
+      "target": "this-model",
       "modifier": {
-        "keywords": [
+        "abilities": [
           "mobile"
         ]
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "eye-of-the-hunt",
+    "ability_id": "eye-of-the-hunt-leagues-of-votann",
     "name": "Eye of the Hunt",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2141,22 +2207,28 @@
     "behavior": "passive",
     "effect": {
       "type": "roll-modifier",
-      "target": "friendly-within-aura",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 12
+          }
+        }
+      },
       "modifier": {
-        "operation": "add",
         "roll": "hit",
-        "value": 1,
-        "attack_type": "ranged"
+        "weapon_type": "ranged",
+        "operation": "add",
+        "value": 1
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "no-shot-wasted-farseekers",
+    "ability_id": "no-shot-wasted-farseekers-leagues-of-votann",
     "name": "No Shot Wasted",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2170,45 +2242,36 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "farseekers",
     "ability_type": "stratagem",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "keyword-grant",
-        "target": "self",
-        "modifier": {
-          "keywords": [
-            "Lethal Hits"
-          ],
-          "weapon_type": "ranged"
-        }
+      "type": "weapon-ability-grant",
+      "target": "this-model",
+      "modifier": {
+        "abilities": [
+          "Lethal Hits"
+        ],
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
-    "ability_id": "scornful-analysis-farseekers",
+    "ability_id": "scornful-analysis-farseekers-leagues-of-votann",
     "name": "Scornful Analysis",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2222,66 +2285,68 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "farseekers",
     "ability_type": "stratagem",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "select-units",
+          "selector": {
+            "owner": "enemy",
+            "count": 1,
+            "range_inches": 12,
+            "visibility_required": true
           },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "start-of-phase"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "enemy-within-aura",
+          "effect": {
+            "type": "designate",
+            "target": "this-unit",
             "modifier": {
-              "grant_type": "scornful-analysis-designated"
-            }
-          },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "target-has-keyword",
-              "parameters": {
-                "keyword": "scornful-analysis-designated"
-              }
-            },
-            "effect": {
-              "type": "keyword-grant",
-              "target": "all-friendly",
-              "modifier": {
-                "keywords": [
-                  "Ignores Cover"
-                ],
-                "weapon_type": "ranged"
-              }
+              "subject": "selected-unit",
+              "tag": "scornful-analysis-designated",
+              "clears_on": "phase-end"
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "scornful-analysis-designated"
+            }
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "abilities": [
+                "Ignores Cover"
+              ],
+              "weapon_type": "ranged"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "range": "aura-12",
       "duration": "phase"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
-    "ability_id": "economy-of-motion-farseekers",
+    "ability_id": "economy-of-motion-farseekers-leagues-of-votann",
     "name": "Economy of Motion",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2310,26 +2375,36 @@
           {
             "type": "player-turn-is",
             "parameters": {
-              "turn": "opponent"
+              "turn": "opponent-turn"
             }
           },
           {
-            "type": "opponent-unit-within-range",
+            "type": "within",
             "parameters": {
-              "range": 8
+              "of": {
+                "owner": "enemy"
+              },
+              "range": {
+                "inches": 8
+              }
             }
           },
           {
-            "type": "engagement-state",
-            "parameters": {
-              "state": "unengaged"
-            }
+            "operator": "not",
+            "operands": [
+              {
+                "type": "unit-state",
+                "parameters": {
+                  "state": "engaged"
+                }
+              }
+            ]
           }
         ]
       },
       "effect": {
-        "type": "movement-modifier",
-        "target": "self",
+        "type": "move",
+        "target": "this-model",
         "modifier": {
           "move_type": "normal",
           "distance": "D3+3"
@@ -2337,13 +2412,12 @@
       }
     },
     "scope": {
-      "range": "aura-custom",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "pan-spectral-lockons-farseekers",
+    "ability_id": "pan-spectral-lockons-upgrade-farseekers-leagues-of-votann",
     "name": "Pan-spectral Lockons",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2370,29 +2444,55 @@
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "PIONEERS"
+              "all_of": [
+                "PIONEERS"
+              ]
             }
           }
         ]
       },
       "effect": {
-        "type": "ability-grant",
-        "target": "enemy-within-aura",
-        "modifier": {
-          "grant_type": "spotted"
+        "type": "select-units",
+        "selector": {
+          "owner": "enemy",
+          "count": 1,
+          "within_inches": 12,
+          "reference": "bearer-unit",
+          "visibility_required": true
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "subject": "selected-unit",
+                "tag": "SPOTTED"
+              }
+            },
+            {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "detection-range",
+                "operation": "add",
+                "value": 3
+              }
+            }
+          ]
         }
       }
     },
     "scope": {
-      "range": "aura-12",
       "duration": "turn"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "avatars-of-the-ancestors",
+    "ability_id": "avatars-of-the-ancestors-leagues-of-votann",
     "name": "Avatars of the Ancestors",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2409,21 +2509,27 @@
     "behavior": "passive",
     "effect": {
       "type": "re-roll",
-      "target": "friendly-within-aura",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 9
+          }
+        }
+      },
       "modifier": {
         "roll": "wound",
         "subset": "ones",
-        "attack_type": "ranged"
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "aura-9",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "fury-of-the-hearth-hearthguard-covenant",
+    "ability_id": "fury-of-the-hearth-hearthguard-covenant-leagues-of-votann",
     "name": "Fury of the Hearth",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2443,41 +2549,41 @@
       "steps": [
         {
           "type": "stat-modifier",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "stat": "S",
             "operation": "add",
             "value": 1,
-            "attack_type": "ranged"
+            "weapon_type": "ranged"
           }
         },
         {
           "type": "resource-spend",
-          "target": "self",
+          "target": "this-model",
           "modifier": {
-            "pool_id": "yp-pool",
+            "pool": "yp-pool",
             "amount": 1
           }
         },
         {
-          "type": "keyword-grant",
-          "target": "unit",
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
           "modifier": {
-            "keyword": "Sustained Hits",
-            "value": 1,
+            "abilities": [
+              "Sustained Hits 1"
+            ],
             "weapon_type": "ranged"
           }
         }
       ]
     },
     "scope": {
-      "range": "unit",
       "duration": "phase"
     },
     "community_notes": "[APPROX] The +1 S on ranged attacks is unconditional; the [SUSTAINED HITS 1] grant is optional (only if you spend 1 YP). The resource-spend and keyword-grant steps together model that opt-in upgrade, but the sequence does not express that only the Sustained Hits step is gated on the YP spend. Full rule in raw-text store."
   },
   {
-    "ability_id": "materialisation-matrices-hearthguard-covenant",
+    "ability_id": "materialisation-matrices-hearthguard-covenant-leagues-of-votann",
     "name": "Materialisation Matrices",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2493,7 +2599,50 @@
     "ability_type": "stratagem",
     "behavior": "activated",
     "effect": {
-      "type": "conditional",
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "move",
+          "target": "event-subject",
+          "modifier": {
+            "move_type": "ingress"
+          }
+        },
+        {
+          "type": "set-up",
+          "target": "event-subject",
+          "modifier": {
+            "to": "battlefield",
+            "from": "strategic-reserves",
+            "min_enemy_distance": 6,
+            "placement": "anywhere"
+          }
+        },
+        {
+          "type": "permission",
+          "target": "event-subject",
+          "modifier": {
+            "activity": "declare-charge",
+            "allow": false
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "set-up",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "EINHYR HEARTHGUARD"
+        ]
+      },
+      "filter": {
+        "from": "strategic-reserves"
+      },
       "condition": {
         "operator": "and",
         "operands": [
@@ -2504,54 +2653,25 @@
             }
           },
           {
-            "type": "timing-is",
+            "type": "player-turn-is",
             "parameters": {
-              "timing": "making-ingress-move"
+              "turn": "your-turn"
             }
           },
           {
-            "type": "unit-has-keyword",
+            "type": "has-keyword",
             "parameters": {
-              "keyword": "DEEP STRIKE"
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "ingress-move"
-            }
-          },
-          {
-            "type": "ability-grant",
-            "target": "self",
-            "modifier": {
-              "grant_type": "ingress-into-enemy-deployment-zone"
-            }
-          },
-          {
-            "type": "attack-restriction",
-            "target": "self",
-            "modifier": {
-              "action": "charge"
+              "all_of": [
+                "DEEP STRIKE"
+              ]
             }
           }
         ]
       }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "turn"
-    },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    }
   },
   {
-    "ability_id": "ironskein-hearthguard-covenant",
+    "ability_id": "ironskein-hearthguard-covenant-leagues-of-votann",
     "name": "Ironskein",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2568,21 +2688,20 @@
     "behavior": "passive",
     "effect": {
       "type": "stat-modifier",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
-        "operation": "add",
         "stat": "W",
+        "operation": "add",
         "value": 2
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "optimal-application",
+    "ability_id": "optimal-application-leagues-of-votann",
     "name": "Optimal Application",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2612,15 +2731,15 @@
                 }
               },
               {
-                "type": "controls-objective"
+                "type": "controls"
               }
             ]
           },
           "effect": {
             "type": "resource-gain",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
-              "pool_id": "yp-pool",
+              "pool": "yp-pool",
               "amount": 1
             }
           }
@@ -2638,15 +2757,15 @@
             "steps": [
               {
                 "type": "resource-spend",
-                "target": "self",
+                "target": "this-model",
                 "modifier": {
-                  "pool_id": "yp-pool",
+                  "pool": "yp-pool",
                   "amount": 1
                 }
               },
               {
                 "type": "re-roll",
-                "target": "unit",
+                "target": "this-unit",
                 "modifier": {
                   "roll": "hit",
                   "subset": "ones"
@@ -2658,13 +2777,12 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "[APPROX] YP gain is 1 per controlled objective outside your deployment zone with an IRON-MASTER/MEMNYR STRATEGIST model within range (max 2 YP/turn); the model-proximity, deployment-zone exclusion, and 2 YP cap are not encoded. The Shooting-phase effect (optionally spend 1 YP so a selected BR\u00d4KHYR/IRONKIN STEELJACKS/ARKANYST EVALUATOR unit re-rolls Hit rolls of 1) has its unit gating simplified. Full rule in raw-text store."
   },
   {
-    "ability_id": "assailed-from-every-angle",
+    "ability_id": "assailed-from-every-angle-leagues-of-votann",
     "name": "Assailed From Every Angle",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2678,105 +2796,114 @@
     "faction_id": "leagues-of-votann",
     "detachment_id": "persecution-prospect",
     "ability_type": "detachment",
-    "behavior": "activated",
+    "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "select-units",
+          "selector": {
+            "owner": "enemy",
+            "count": 1,
+            "excluded_keywords": [
+              "MONSTER",
+              "VEHICLE"
+            ]
           },
-          {
-            "type": "timing-is",
-            "parameters": {
-              "timing": "selected-to-shoot"
+          "effect": {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "target": "selected-unit",
+              "kind": "shoot"
             }
           }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "attack-restriction",
-            "target": "self",
-            "modifier": {
-              "restriction": "single-target-only",
-              "excluded_target_keywords": [
-                "MONSTER",
-                "VEHICLE"
-              ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "object": "defender",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "phase"
             }
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "was-hit-by-attack",
-              "parameters": {
-                "subject": "target",
-                "count_min": 1
-              }
-            },
-            "effect": {
-              "type": "sequence",
-              "steps": [
-                {
-                  "type": "conditional",
-                  "condition": {
-                    "type": "target-has-keyword",
-                    "parameters": {
-                      "keyword": "assailed"
-                    }
-                  },
-                  "effect": {
-                    "type": "sequence",
-                    "steps": [
-                      {
-                        "type": "movement-modifier",
-                        "target": "defender",
-                        "modifier": {
-                          "move_type": "normal",
-                          "distance": -2
-                        }
-                      },
-                      {
-                        "type": "charge-roll-modifier",
-                        "target": "defender",
-                        "modifier": {
-                          "operation": "subtract",
-                          "value": 2
-                        }
-                      }
-                    ]
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "designated",
+                  "parameters": {
+                    "subject": "defender",
+                    "tag": "assailed"
                   }
                 },
-                {
-                  "type": "keyword-grant",
-                  "target": "defender",
-                  "modifier": {
-                    "keywords": [
-                      "assailed"
-                    ]
-                  }
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "stat-modifier",
+                      "target": "defender",
+                      "modifier": {
+                        "stat": "M",
+                        "operation": "subtract",
+                        "value": 2
+                      }
+                    },
+                    {
+                      "type": "roll-modifier",
+                      "target": "defender",
+                      "modifier": {
+                        "roll": "charge",
+                        "operation": "subtract",
+                        "value": 2
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
+              },
+              {
+                "type": "keyword-grant",
+                "target": "defender",
+                "modifier": {
+                  "keywords": [
+                    "assailed"
+                  ]
+                }
+              }
+            ]
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "range": "any-visible",
       "duration": "battle-round"
     },
-    "community_notes": "community-authored from 10e source (provisional 11e); see #21"
+    "community_notes": "community-authored from 10e source (provisional 11e); see #21",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      },
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "shooting"
+        }
+      }
+    }
   },
   {
-    "ability_id": "martial-leverage",
+    "ability_id": "martial-leverage-leagues-of-votann",
     "name": "Martial Leverage",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2794,31 +2921,32 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "units-destroyed",
+        "type": "happened",
         "parameters": {
-          "side": "enemy",
-          "count_min": 1,
-          "window": "any"
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "window": "battle"
         }
       },
       "effect": {
         "type": "resource-gain",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
-          "pool_id": "yp-pool",
+          "pool": "yp-pool",
           "amount": 1
         }
       }
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "fury-from-the-delve",
-    "name": "Fury From The D\u00ealve",
+    "ability_id": "fury-from-the-delve-leagues-of-votann",
+    "name": "Fury From The Dêlve",
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
@@ -2835,27 +2963,41 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "unit-has-keyword",
-        "parameters": {
-          "keyword": "CTHONIAN BESERKS"
-        }
+        "operator": "and",
+        "operands": [
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "CTHONIAN"
+              ]
+            }
+          },
+          {
+            "type": "has-keyword",
+            "parameters": {
+              "all_of": [
+                "BESERKS"
+              ]
+            }
+          }
+        ]
       },
       "effect": {
         "type": "ability-grant",
-        "target": "unit",
+        "target": "this-unit",
         "modifier": {
-          "grant_type": "deep-strike"
+          "ability": "deep-strike"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "methodical-annihilation",
+    "ability_id": "methodical-annihilation-leagues-of-votann",
     "name": "Methodical Annihilation",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2876,13 +3018,16 @@
         "operator": "or",
         "operands": [
           {
-            "type": "engagement-state",
-            "parameters": {}
+            "type": "unit-state",
+            "parameters": {
+              "state": "engaged"
+            }
           },
           {
-            "type": "disposition-matches",
+            "type": "closest",
             "parameters": {
-              "disposition": "closest-eligible-target"
+              "subject": "defender",
+              "among": "eligible-targets"
             }
           }
         ]
@@ -2892,7 +3037,7 @@
         "steps": [
           {
             "type": "re-roll",
-            "target": "self",
+            "target": "this-model",
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -2901,31 +3046,18 @@
           {
             "type": "conditional",
             "condition": {
-              "operator": "or",
-              "operands": [
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "K\u00c2HL"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "EINHYR HEARTHGUARD"
-                  }
-                },
-                {
-                  "type": "unit-has-keyword",
-                  "parameters": {
-                    "keyword": "\u00dbTHAR THE DESTINED"
-                  }
-                }
-              ]
+              "type": "has-keyword",
+              "parameters": {
+                "any_of": [
+                  "KÂHL",
+                  "EINHYR HEARTHGUARD",
+                  "ÛTHAR THE DESTINED"
+                ]
+              }
             },
             "effect": {
               "type": "stat-modifier",
-              "target": "self",
+              "target": "this-model",
               "modifier": {
                 "stat": "AP",
                 "operation": "subtract",
@@ -2937,13 +3069,12 @@
       }
     },
     "scope": {
-      "range": "self",
       "duration": "phase"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "ruthless-reinvestment",
+    "ability_id": "ruthless-reinvestment-leagues-of-votann",
     "name": "Ruthless Reinvestment",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -2962,10 +3093,17 @@
       "type": "sequence",
       "steps": [
         {
-          "type": "ability-grant",
-          "target": "unit",
+          "type": "ability-activate",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "LEAGUES OF VOTANN"
+            ]
+          },
           "modifier": {
-            "ability_id": "hostile-acquisition"
+            "ability": "prioritised-efficiency-leagues-of-votann",
+            "option": "hostile-acquisition",
+            "exclusive": true
           }
         },
         {
@@ -2981,18 +3119,45 @@
             "steps": [
               {
                 "type": "resource-spend",
-                "target": "self",
+                "target": "this-model",
                 "modifier": {
-                  "pool_id": "yp-pool",
+                  "pool": "yp-pool",
                   "amount": 3
                 }
               },
               {
-                "type": "ability-grant",
-                "target": "unit",
-                "modifier": {
-                  "grant_type": "swap-hostile-acquisition-and-fortify-takeover"
-                }
+                "type": "choice",
+                "choice_label": "swap-acquisition-ability",
+                "options": [
+                  {
+                    "type": "ability-activate",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "LEAGUES OF VOTANN"
+                      ]
+                    },
+                    "modifier": {
+                      "ability": "prioritised-efficiency-leagues-of-votann",
+                      "option": "fortify-takeover",
+                      "exclusive": true
+                    }
+                  },
+                  {
+                    "type": "ability-activate",
+                    "target": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "LEAGUES OF VOTANN"
+                      ]
+                    },
+                    "modifier": {
+                      "ability": "prioritised-efficiency-leagues-of-votann",
+                      "option": "hostile-acquisition",
+                      "exclusive": true
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -3000,13 +3165,12 @@
       ]
     },
     "scope": {
-      "range": "any-on-battlefield",
       "duration": "battle"
     },
     "community_notes": "[APPROX] At the start of the battle LEAGUES OF VOTANN units have the Hostile Acquisition ability; at the end of the Command phase you can spend 3 YP to swap the army between Hostile Acquisition and Fortify Takeover (the optional toggle is modeled as an opaque grant). The clause that units have neither ability except as described by this rule is not encoded. Full rule in raw-text store."
   },
   {
-    "ability_id": "mobile-sensor-relays",
+    "ability_id": "mobile-sensor-relays-leagues-of-votann",
     "name": "Mobile Sensor Relays",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3022,23 +3186,28 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "keyword-grant",
-      "target": "friendly-within-aura",
+      "type": "weapon-ability-grant",
+      "target": {
+        "owner": "friendly",
+        "within": {
+          "range": {
+            "inches": 6
+          }
+        }
+      },
       "modifier": {
-        "keywords": [
-          "sustained-hits"
-        ],
-        "value": 1
+        "abilities": [
+          "Sustained Hits 1"
+        ]
       }
     },
     "scope": {
-      "range": "aura-6",
       "duration": "battle"
     },
     "community_notes": "community-authored from 10e source (provisional 11e); see #21"
   },
   {
-    "ability_id": "oathbound-speculator-needgaard-oathband",
+    "ability_id": "oathbound-speculator-needgaard-oathband-leagues-of-votann",
     "name": "Oathbound Speculator",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3058,7 +3227,7 @@
       "steps": [
         {
           "type": "re-roll",
-          "target": "unit",
+          "target": "this-unit",
           "modifier": {
             "roll": "wound",
             "subset": "ones"
@@ -3088,15 +3257,15 @@
             "steps": [
               {
                 "type": "resource-spend",
-                "target": "self",
+                "target": "this-model",
                 "modifier": {
-                  "pool_id": "yp-pool",
+                  "pool": "yp-pool",
                   "amount": 3
                 }
               },
               {
                 "type": "roll-modifier",
-                "target": "unit",
+                "target": "this-unit",
                 "modifier": {
                   "roll": "wound",
                   "operation": "add",
@@ -3109,13 +3278,12 @@
       ]
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "community_notes": "community-authored; permanent re-roll of Wound rolls of 1 for the bearer's unit, plus an optional 3YP spend each time the unit is selected to shoot or fight for +1 to Wound roll until end of phase."
   },
   {
-    "ability_id": "decisive-destruction-bane-slayers-bulwark",
+    "ability_id": "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
     "name": "Decisive Destruction",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3127,33 +3295,34 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "disposition-matches",
+        "type": "closest",
         "parameters": {
-          "disposition": "closest-eligible-target"
+          "subject": "defender",
+          "among": "eligible-targets"
         }
       },
       "effect": {
         "type": "re-roll",
-        "target": "self",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
           "subset": "ones",
-          "attack_type": "ranged"
+          "weapon_type": "ranged"
         }
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "bane-slayers-bulwark-einhyr-hearthguard"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "fast-firing-targeters-vynn-bane-slayer",
+    "ability_id": "fast-firing-targeters-leagues-of-votann",
     "name": "Fast-firing Targeters",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3163,26 +3332,26 @@
     "source_digest": "fef718169e2b545fafa5954a85dc6531f74f62237df2871b8ef05d747ea1625a",
     "version": "2026-q3",
     "effect": {
-      "type": "keyword-grant",
-      "target": "unit",
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
       "modifier": {
-        "keywords": [
-          "assault"
+        "abilities": [
+          "Assault"
         ]
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "vynn-bane-slayer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "weavefield-crest-vynn-bane-slayer",
+    "ability_id": "weavefield-crest-vynn-bane-slayer-leagues-of-votann",
     "name": "Weavefield Crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3193,23 +3362,23 @@
     "version": "2026-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "invuln_sv": 4
       }
     },
     "scope": {
-      "range": "self",
       "duration": "permanent"
     },
     "unit_ids": [
       "vynn-bane-slayer"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard",
+    "ability_id": "weavefield-crest-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann",
     "name": "Weavefield Crest",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3220,23 +3389,24 @@
     "version": "2026-q3",
     "effect": {
       "type": "invulnerable-save",
-      "target": "self",
+      "target": "this-model",
       "modifier": {
         "invuln_sv": 5
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
-      "bane-slayers-bulwark-einhyr-hearthguard"
+      "bane-slayers-bulwark-einhyr-hearthguard",
+      "bane-slayers-bulwark-hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "panspectral-scanning-bane-slayers-bulwark",
+    "ability_id": "panspectral-scanning-bane-slayers-bulwark-hearthkyn-warriors-leagues-of-votann",
     "name": "Panspectral Scanning",
     "authored_by": "40kdc-community",
     "game_version": {
@@ -3247,52 +3417,25 @@
     "version": "2026-q3",
     "effect": {
       "type": "re-roll",
-      "target": "unit",
+      "target": "this-unit",
       "modifier": {
         "roll": "hit",
         "subset": "ones",
-        "attack_type": "ranged"
+        "weapon_type": "ranged"
       }
     },
     "scope": {
-      "range": "unit",
       "duration": "permanent"
     },
     "unit_ids": [
       "bane-slayers-bulwark-hearthkyn-warriors"
     ],
     "ability_type": "unit",
-    "behavior": "passive"
+    "behavior": "passive",
+    "faction_id": "leagues-of-votann"
   },
   {
-    "ability_id": "weavefield-crest-bane-slayers-bulwark-hearthkyn-warriors",
-    "name": "Weavefield Crest",
-    "authored_by": "40kdc-community",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "source_digest": "690fe2c22bf18401f64e1ebdf24d34e9e95f82ebcd35f3051bf9f6b41f97694b",
-    "version": "2026-q3",
-    "effect": {
-      "type": "invulnerable-save",
-      "target": "self",
-      "modifier": {
-        "invuln_sv": 5
-      }
-    },
-    "scope": {
-      "range": "unit",
-      "duration": "permanent"
-    },
-    "unit_ids": [
-      "bane-slayers-bulwark-hearthkyn-warriors"
-    ],
-    "ability_type": "unit",
-    "behavior": "passive"
-},
-{
-  "ability_id": "breaching-fire-bane-slayers-bulwark",
+  "ability_id": "breaching-fire-bane-slayers-bulwark-brokhyr-thunderkyn-leagues-of-votann",
   "name": "Breaching Fire",
   "authored_by": "40kdc-community",
   "game_version": {
@@ -3309,14 +3452,19 @@
       "count": 1,
       "timing": "after-this-unit-resolves-shooting-attacks",
       "eligibility": {
-        "type": "was-hit-by-attack",
+        "type": "happened",
         "parameters": {
-          "subject": "target",
-          "attack_type": "ranged",
-          "source": {
-            "event_var": "breaching-fire-shooting"
+          "event": "after-roll",
+          "object": "this-unit",
+          "filter": {
+            "roll": "hit",
+            "result": "success",
+            "attack_type": "ranged",
+            "by": {
+              "event_var": "breaching-fire-shooting"
+            }
           },
-          "window": "just-finished-shooting-sequence"
+          "window": "event"
         }
       }
     },
@@ -3326,10 +3474,10 @@
         "LEAGUES OF VOTANN"
       ],
       "effect": {
-        "type": "keyword-grant",
-        "target": "unit",
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
         "modifier": {
-          "keywords": [
+          "abilities": [
             "Ignores Cover"
           ]
         }
@@ -3338,7 +3486,6 @@
     "duration": "phase"
   },
   "scope": {
-    "range": "unit",
     "duration": "phase"
   },
   "unit_ids": [
@@ -3347,8 +3494,7 @@
   "ability_type": "unit",
   "behavior": "reactive",
   "trigger": {
-    "event": "after-unit-resolves-attacks",
-    "subject": "self",
+    "event": "attacks-resolved",
     "condition": {
       "operator": "and",
       "operands": [
@@ -3367,6 +3513,1655 @@
       ]
     },
     "binds_event_variable": "breaching-fire-shooting"
+  },
+  "faction_id": "leagues-of-votann"
+},
+  {
+    "ability_id": "adaptable-avarice-persecution-prospect-leagues-of-votann",
+    "name": "Adaptable Avarice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ancestral-crest-needgaard-oathband-leagues-of-votann",
+    "name": "Ancestral Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ancestral-sentence-needgaard-oathband-leagues-of-votann",
+    "name": "Ancestral Sentence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "asset-manipulator-mercenary-oathband-leagues-of-votann",
+    "name": "Asset Manipulator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "augmented-assault-delve-assault-shift-leagues-of-votann",
+    "name": "Augmented Assault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "auxiliary-contract-mercenary-oathband-leagues-of-votann",
+    "name": "Auxiliary Contract",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bastion-running-brandfast-oathband-leagues-of-votann",
+    "name": "Bastion Running",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "bastion-shield-hearthband-leagues-of-votann",
+    "name": "Bastion Shield",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brekkeknots-hearthband-leagues-of-votann",
+    "name": "Brëkkeknots",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brekkeknots-hearthguard-covenant-leagues-of-votann",
+    "name": "Brëkkeknots",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthguard-covenant",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brokhyr-barrage-bane-slayers-bulwark-leagues-of-votann",
+    "name": "Brôkhyr Barrage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "calculated-tenacity-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Calculated Tenacity",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann",
+    "name": "Claimed for the Kindred",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "claimstaker-reflex-persecution-prospect-leagues-of-votann",
+    "name": "Claimstaker Reflex",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cogitated-need-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Cogitated Need",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "cyberstimm-infusion-delve-assault-shift-leagues-of-votann",
+    "name": "Cyberstimm Infusion",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dead-reckoning-needgaard-oathband-leagues-of-votann",
+    "name": "Dead Reckoning",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Delayed-Fire Rounds",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "delvewerke-navigator-delve-assault-shift-leagues-of-votann",
+    "name": "Dêlvewerke Navigator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "dispersed-formation-persecution-prospect-leagues-of-votann",
+    "name": "Dispersed Formation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "etacarn-sb9-targeting-implant-mercenary-oathband-leagues-of-votann",
+    "name": "Etacarn SB9 Targeting Implant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exposed-flaws-persecution-prospect-leagues-of-votann",
+    "name": "Exposed Flaws",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "eye-for-weakness-persecution-prospect-leagues-of-votann",
+    "name": "Eye for Weakness",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "farstrydr-node-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Fârstrydr Node",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "first-concern-hearthfyre-arsenal-leagues-of-votann",
+    "name": "First Concern",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "frontier-momentum-persecution-prospect-leagues-of-votann",
+    "name": "Frontier Momentum",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "fury-of-the-hearth-hearthband-leagues-of-votann",
+    "name": "Fury of the Hearth",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "grand-artifice-mercenary-oathband-leagues-of-votann",
+    "name": "Grand Artifice",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "graviton-vault-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Graviton Vault",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hidden-accessways-delve-assault-shift-leagues-of-votann",
+    "name": "Hidden Accessways",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "high-kahl-hearthband-leagues-of-votann",
+    "name": "High Kâhl",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "high-kahl-hearthguard-covenant-leagues-of-votann",
+    "name": "High Kâhl",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthguard-covenant",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
+    "name": "Honour of the Hold",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "huntrs-mark-needgaard-oathband-leagues-of-votann",
+    "name": "HunTR’s Mark",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "illuminated-priority-brandfast-oathband-leagues-of-votann",
+    "name": "Illuminated Priority",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "indomitable-exemplar-bane-slayers-bulwark-leagues-of-votann",
+    "name": "Indomitable Exemplar",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "inexorable-efficiency-brandfast-oathband-leagues-of-votann",
+    "name": "Inexorable Efficiency",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "iron-ambassador-needgaard-oathband-leagues-of-votann",
+    "name": "Iron Ambassador",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ironskein-hearthband-leagues-of-votann",
+    "name": "Ironskein",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mantle-of-elders-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Mantle of Elders",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "materialisation-matrices-hearthband-leagues-of-votann",
+    "name": "Materialisation Matrices",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mercenary-prospector-mercenary-oathband-leagues-of-votann",
+    "name": "Mercenary Prospector",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "metaphysical-brokerage-mercenary-oathband-leagues-of-votann",
+    "name": "Metaphysical Brokerage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "mobile-exploitation-mercenary-oathband-leagues-of-votann",
+    "name": "Mobile Exploitation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "multiwave-system-jammer-delve-assault-shift-leagues-of-votann",
+    "name": "Multiwave System Jammer",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "new-horizons-mercenary-oathband-leagues-of-votann",
+    "name": "New Horizons",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "nomad-strategist-persecution-prospect-leagues-of-votann",
+    "name": "Nomad Strategist",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "opportune-advance-bane-slayers-bulwark-leagues-of-votann",
+    "name": "Opportune Advance",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
+    "name": "Opportunistic Escalation",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "optimal-expenditure-mercenary-oathband-leagues-of-votann",
+    "name": "Optimal Expenditure",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ordered-retreat-needgaard-oathband-leagues-of-votann",
+    "name": "Ordered Retreat",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "piledriver-delve-assault-shift-leagues-of-votann",
+    "name": "Piledriver",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "point-blank-fusillade-bane-slayers-bulwark-leagues-of-votann",
+    "name": "Point-blank Fusillade",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "precursive-judgement-brandfast-oathband-leagues-of-votann",
+    "name": "Precursive Judgement",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "preventative-purge-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Preventative Purge",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "privateer-arsenal-mercenary-oathband-leagues-of-votann",
+    "name": "Privateer Arsenal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "mercenary-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quake-multigenerator-hearthband-leagues-of-votann",
+    "name": "Quake Multigenerator",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "quake-supervisor-delve-assault-shift-leagues-of-votann",
+    "name": "Quake Supervisor",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rampart-crest-leagues-of-votann",
+    "name": "Rampart Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kahl"
+    ],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "ranger-tactics-persecution-prospect-leagues-of-votann",
+    "name": "Ranger Tactics",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "reactive-reprisal-needgaard-oathband-leagues-of-votann",
+    "name": "Reactive Reprisal",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "secure-positions-brandfast-oathband-leagues-of-votann",
+    "name": "Secure Positions",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "secure-resources-leagues-of-votann",
+    "name": "Secure Resources",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "bane-slayers-bulwark",
+    "ability_type": "detachment",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "shroudwerke-talismans-upgrade-farseekers-leagues-of-votann",
+    "name": "Shroudwërke Talismans (Upgrade)",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "farseekers",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "signature-restoration-brandfast-oathband-leagues-of-votann",
+    "name": "Signature Restoration",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "superior-craftsmanship-hearthband-leagues-of-votann",
+    "name": "Superior Craftsmanship",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sure-of-purpose-hearthband-leagues-of-votann",
+    "name": "Sure of Purpose",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "surgical-saboteur-persecution-prospect-leagues-of-votann",
+    "name": "Surgical Saboteur",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tactical-alchemy-brandfast-oathband-leagues-of-votann",
+    "name": "Tactical Alchemy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "tectonic-fracture-delve-assault-shift-leagues-of-votann",
+    "name": "Tectonic Fracture",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teleport-crest-kahl-leagues-of-votann",
+    "name": "Teleport Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kahl"
+    ],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "teleport-crest-leagues-of-votann",
+    "name": "Teleport Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "einhyr-champion"
+    ],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "trivarg-cyber-implant-brandfast-oathband-leagues-of-votann",
+    "name": "Trivärg Cyber Implant",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unstoppable-force-delve-assault-shift-leagues-of-votann",
+    "name": "Unstoppable Force",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unwavering-accuracy-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Unwavering Accuracy",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "unyielding-aggression-hearthband-leagues-of-votann",
+    "name": "Unyielding Aggression",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "vengeance-flare-brandfast-oathband-leagues-of-votann",
+    "name": "Vengeance Flare",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "brandfast-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "void-hardened-needgaard-oathband-leagues-of-votann",
+    "name": "Void Hardened",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "needgaard-oathband",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
+    "name": "Wall of Steel",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "hearthfyre-arsenal",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weavefield-crest-einhyr-champion-leagues-of-votann",
+    "name": "Weavefield Crest",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "einhyr-champion"
+    ],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "weavewerke-buttress-delve-assault-shift-leagues-of-votann",
+    "name": "Weavewërke Buttress",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "delve-assault-shift",
+    "ability_type": "stratagem",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "writ-of-acquisition-persecution-prospect-leagues-of-votann",
+    "name": "Writ of Acquisition",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [],
+    "faction_id": "leagues-of-votann",
+    "detachment_id": "persecution-prospect",
+    "ability_type": "enhancement",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
-}
 ]

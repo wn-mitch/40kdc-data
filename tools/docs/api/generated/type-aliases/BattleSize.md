@@ -8,7 +8,7 @@
 
 > **BattleSize** = `"incursion"` \| `"strike-force"`
 
-Defined in: [generated.ts:82](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L82)
+Defined in: [generated.ts:125](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L125)
 
 11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
 

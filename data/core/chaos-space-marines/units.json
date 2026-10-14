@@ -19,7 +19,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 165
+        "cost": 155
       }
     ],
     "keywords": [
@@ -45,11 +45,14 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "ascended-daemon",
-      "daemonic-allegiance",
-      "dark-blessing-aura",
-      "deadly-demise-d3",
-      "lord-of-chaos"
+      "ascended-daemon-chaos-space-marines",
+      "daemonic-allegiance-chaos-space-marines",
+      "dark-blessing-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "lord-of-chaos-heretic-astartes-daemon-prince-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -92,7 +95,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 180
+        "cost": 170
       }
     ],
     "keywords": [
@@ -119,10 +122,14 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "daemonic-destruction",
+      "daemonic-destruction-chaos-space-marines",
       "deep-strike",
-      "flying-horror",
-      "deadly-demise-d3"
+      "flying-horror-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "daemonic-allegiance-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -165,7 +172,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -196,12 +203,13 @@
       "infernal-gaze"
     ],
     "ability_ids": [
-      "chaos-familiar",
-      "death-hex-psychic",
-      "empyric-guidance-psychic",
+      {
+        "id": "chaos-familiar-chaos-space-marines",
+        "wargear": "chaos-familiar"
+      },
+      "death-hex-chaos-space-marines",
       "leader",
-      "marked-by-fate-psychic",
-      "warptime-psychic",
+      "warptime-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -214,14 +222,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 100,
+        "cost": 110,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -267,12 +275,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 100
+        "cost": 105
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 180
+        "cost": 190
       }
     ],
     "keywords": [
@@ -311,10 +319,13 @@
       "power-fist"
     ],
     "ability_ids": [
-      "attached-unit",
+      "attached-unit-chaos-space-marines",
       "stealth",
-      "visions-of-suffering-psychic",
-      "voice-eater"
+      "visions-of-suffering-chaos-space-marines",
+      {
+        "id": "voice-eater-chaos-space-marines",
+        "wargear": "voice-eater"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -386,7 +397,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -416,13 +427,9 @@
       "infernal-gaze"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
+      "gift-of-chaos-chaos-space-marines",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "prescience-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -434,14 +441,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 95,
+        "cost": 100,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "thousand-sons"
       },
       {
         "models": 1,
-        "cost": 105,
+        "cost": 110,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "thousand-sons"
@@ -542,9 +549,12 @@
       "warp-curse"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "dark-ritual",
-      "faithful-flock",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      },
+      "dark-ritual-chaos-space-marines",
+      "faithful-flock-chaos-space-marines",
       "leader"
     ],
     "game_version": {
@@ -595,7 +605,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -622,9 +632,9 @@
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic",
+      "daemonkin-chaos-space-marines",
       "leader",
-      "sacrificial-dagger"
+      "sacrificial-dagger-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -706,7 +716,7 @@
       "fleshmetal-guns"
     ],
     "ability_ids": [
-      "warp-rift-firepower",
+      "warp-rift-firepower-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -750,7 +760,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 160
+        "cost": 155
       }
     ],
     "keywords": [
@@ -782,8 +792,8 @@
       "techno-virus-injector"
     ],
     "ability_ids": [
-      "corrupt-machine-spirits",
-      "spirit-thief"
+      "corrupt-machine-spirits-chaos-space-marines",
+      "spirit-thief-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -825,12 +835,29 @@
     "points": [
       {
         "models": 5,
-        "cost": 175
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 350
+        "cost": 370,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 5,
+        "cost": 215,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      },
+      {
+        "models": 6,
+        "models_max": 10,
+        "cost": 400,
+        "unit_count_min": 3,
+        "unit_count_max": null
       }
     ],
     "keywords": [
@@ -861,7 +888,7 @@
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "despoilers",
+      "despoilers-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -971,8 +998,8 @@
       "close-combat-weapon-cultist-firebrand"
     ],
     "ability_ids": [
-      "cursed-flames",
-      "fiery-faith",
+      "cursed-flames-chaos-space-marines",
+      "fiery-faith-chaos-space-marines",
       "leader"
     ],
     "game_version": {
@@ -1064,8 +1091,15 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1089,6 +1123,36 @@
         "namespace": "mfm",
         "id": "773f87bc-a214-4022-9652-dafaa5bd5fb7"
       }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 200,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 220,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "world-eaters"
+      },
+      {
+        "models": 1,
+        "cost": 210,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "emperors-children"
+      },
+      {
+        "models": 1,
+        "cost": 230,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "emperors-children"
+      }
     ]
   },
   {
@@ -1110,27 +1174,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 250,
+        "cost": 260,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 130,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1156,7 +1220,11 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "unholy-bloodshed"
+      "unholy-bloodshed-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1250,9 +1318,9 @@
       "power-fist-traitor-enforcer"
     ],
     "ability_ids": [
-      "brutal-example",
+      "brutal-example-chaos-space-marines",
       "leader",
-      "mutated-bodyguard"
+      "mutated-bodyguard-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1316,7 +1384,7 @@
     "points": [
       {
         "models": 3,
-        "cost": 65
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1343,10 +1411,10 @@
       "close-combat-weapon-dark-apostle"
     ],
     "ability_ids": [
-      "dark-zealotry",
-      "demagogue",
+      "dark-zealotry-chaos-space-marines",
+      "demagogue-chaos-space-marines",
       "leader",
-      "malign-sacrifice"
+      "malign-sacrifice-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1428,15 +1496,11 @@
       "hideous-mutations-chaos-spawn"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "mind-breaking-mutations-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1504,13 +1568,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1545,11 +1609,15 @@
       "predator-twin-lascannon"
     ],
     "ability_ids": [
-      "annihilator",
-      "blood-hungry-annihilator",
-      "ensorcelled-annihilation",
-      "metalophagic-infection",
-      "deadly-demise-d3"
+      "annihilator-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1560,28 +1628,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 140,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 150,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "thousand-sons"
-      },
-      {
-        "models": 1,
-        "cost": 135,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -1669,8 +1723,11 @@
       "soulflayer-tendrils-and-claws"
     ],
     "ability_ids": [
-      "soul-eater",
-      "deadly-demise-d3"
+      "soul-eater-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1712,13 +1769,13 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1756,7 +1813,7 @@
       "power-fist"
     ],
     "ability_ids": [
-      "stabilisation-talons"
+      "stabilisation-talons-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -1821,10 +1878,13 @@
       "lashing-warp-energies"
     ],
     "ability_ids": [
-      "fortification",
-      "malevolent-locus-aura",
-      "malign-cover",
-      "deadly-demise-d6"
+      "fortification-chaos-space-marines",
+      "malevolent-locus-chaos-space-marines",
+      "malign-cover-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1866,27 +1926,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 235,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1923,8 +1983,8 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "fearsome-aura",
-      "terrifying-assault",
+      "fearsome-chaos-space-marines",
+      "terrifying-assault-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -2024,9 +2084,16 @@
       "magma-cutters"
     ],
     "ability_ids": [
-      "daemonforge",
-      "deadly-demise-d6",
-      "scuttling-walker"
+      "daemonforge-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "scuttling-walker-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2094,13 +2161,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 150,
+        "cost": 145,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2135,11 +2202,15 @@
       "predator-autocannon"
     ],
     "ability_ids": [
-      "destructor",
-      "ensorcelled-destruction",
-      "hail-of-corrosive-disease",
-      "punishing-suppression",
-      "deadly-demise-d3"
+      "destructor-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2150,14 +2221,14 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 145,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2,
         "host_faction": "death-guard"
       },
       {
         "models": 1,
-        "cost": 155,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "death-guard"
@@ -2225,27 +2296,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 270,
+        "cost": 280,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 145,
+        "cost": 150,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2277,7 +2348,11 @@
       "power-fist-chosen"
     ],
     "ability_ids": [
-      "chosen-marauders"
+      "chosen-marauders-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2356,7 +2431,7 @@
     "points": [
       {
         "models": 10,
-        "cost": 70
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2391,7 +2466,7 @@
       "power-weapon"
     ],
     "ability_ids": [
-      "twisted-defence-force"
+      "twisted-defence-force-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2484,10 +2559,16 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
+      "airborne-predator-chaos-space-marines",
       "hover",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2529,13 +2610,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 185,
+        "cost": 180,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 195,
+        "cost": 190,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2566,8 +2647,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "siege-shield"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "siege-shield-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2587,6 +2675,22 @@
       {
         "namespace": "mfm",
         "id": "00bf212d-7582-4d98-bbf9-78abc292edd3"
+      }
+    ],
+    "allied_points": [
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 1,
+        "unit_count_max": 2,
+        "host_faction": "thousand-sons"
+      },
+      {
+        "models": 1,
+        "cost": 195,
+        "unit_count_min": 3,
+        "unit_count_max": null,
+        "host_faction": "thousand-sons"
       }
     ]
   },
@@ -2609,13 +2713,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 160,
+        "cost": 155,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2649,10 +2753,15 @@
       "hades-autocannon"
     ],
     "ability_ids": [
-      "blazing-salvoes",
-      "daemonic-ordnance",
-      "furious-onslaught",
-      "deadly-demise-d3"
+      "daemonic-ordnance-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2731,7 +2840,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -2760,10 +2869,10 @@
       "plasma-pistol-warpsmith"
     ],
     "ability_ids": [
-      "enrage-machine-spirits",
+      "enrage-machine-spirits-chaos-space-marines",
       "leader",
-      "master-of-mechanisms",
-      "warpsmith"
+      "master-of-mechanisms-chaos-space-marines",
+      "warpsmith-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2807,7 +2916,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 85
+        "cost": 90
       }
     ],
     "keywords": [
@@ -2838,9 +2947,10 @@
       "power-fist-chaos-lord-in-terminator-armour"
     ],
     "ability_ids": [
-      "formidably-resilient",
+      "formidably-resilient-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2889,27 +2999,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 110,
+        "cost": 120,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 220,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 120,
+        "cost": 130,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 230,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -2941,7 +3051,7 @@
     ],
     "ability_ids": [
       "infiltrators",
-      "trophy-takers"
+      "trophy-takers-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -2984,7 +3094,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -3011,11 +3121,9 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "a-worthy-skull",
-      "forwards-for-blood",
-      "leader",
-      "trophy-taker",
-      "warp-sighted-butcher"
+      "trophy-taker-chaos-space-marines",
+      "warp-sighted-butcher-chaos-space-marines",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -3082,7 +3190,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 195,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
@@ -3095,7 +3203,7 @@
       {
         "models": 9,
         "models_max": 16,
-        "cost": 215,
+        "cost": 205,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3122,9 +3230,15 @@
       "hideous-mutations-accursed-cultists"
     ],
     "ability_ids": [
-      "howling-horde",
-      "feel-no-pain-6",
-      "scouts-6"
+      "howling-horde-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 6
+      },
+      {
+        "id": "scouts",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3166,7 +3280,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -3204,13 +3318,12 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "dark-ascension-aura",
-      "deadly-demise-1",
-      "devoted-to-destruction",
-      "diseased-malice",
-      "frenzy",
-      "froth-spattered-frenzy",
-      "terrifying-assault"
+      "dark-ascension-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "devoted-to-destruction-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3221,7 +3334,7 @@
     "allied_points": [
       {
         "models": 1,
-        "cost": 110,
+        "cost": 105,
         "host_faction": "death-guard"
       },
       {
@@ -3276,7 +3389,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 80
+        "cost": 85
       }
     ],
     "keywords": [
@@ -3307,9 +3420,10 @@
       "twin-lightning-claws"
     ],
     "ability_ids": [
-      "cruel-hunter",
+      "cruel-hunter-chaos-space-marines",
       "leader",
-      "deep-strike"
+      "deep-strike",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3392,7 +3506,7 @@
       "brutal-assault-weapon"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3435,7 +3549,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -3464,8 +3578,9 @@
       "power-fist-chaos-lord"
     ],
     "ability_ids": [
-      "chance-for-glory",
-      "leader"
+      "chance-for-glory-chaos-space-marines",
+      "leader",
+      "lord-of-chaos-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3514,12 +3629,12 @@
     "points": [
       {
         "models": 3,
-        "cost": 70
+        "cost": 80
       },
       {
         "models": 4,
         "models_max": 6,
-        "cost": 130
+        "cost": 150
       }
     ],
     "keywords": [
@@ -3554,7 +3669,11 @@
       "power-fist"
     ],
     "ability_ids": [
-      "rapid-assault"
+      "rapid-assault-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3615,27 +3734,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 130,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 280,
+        "cost": 290,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 140,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 290,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -3664,7 +3783,7 @@
       "warp-claws"
     ],
     "ability_ids": [
-      "warp-strike",
+      "warp-strike-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -3738,7 +3857,7 @@
       "plasma-pistol-fellgor-beastmen"
     ],
     "ability_ids": [
-      "bestial-raiders"
+      "bestial-raiders-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -3796,7 +3915,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 125
       }
     ],
     "keywords": [
@@ -3827,12 +3946,15 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "siege-crawler-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -3960,13 +4082,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "self-repair-chaos-space-marines",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12,
@@ -4073,12 +4197,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 90
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 170
+        "cost": 180
       }
     ],
     "keywords": [
@@ -4118,7 +4242,11 @@
       "reaper-chaincannon"
     ],
     "ability_ids": [
-      "veterans-of-the-long-war"
+      "veterans-of-the-long-war-chaos-space-marines",
+      {
+        "id": "chaos-icon-chaos-space-marines",
+        "wargear": "chaos-icon"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4191,7 +4319,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 60
+        "cost": 65
       }
     ],
     "keywords": [
@@ -4218,9 +4346,9 @@
       "power-sword"
     ],
     "ability_ids": [
-      "brutal-raider",
+      "brutal-raider-chaos-space-marines",
       "leader",
-      "raider-s-due",
+      "raiders-due-chaos-space-marines",
       "infiltrators"
     ],
     "game_version": {
@@ -4275,7 +4403,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 145
+        "cost": 150
       }
     ],
     "keywords": [
@@ -4310,10 +4438,10 @@
       "reductor-array"
     ],
     "ability_ids": [
-      "choice-samples",
-      "fleet-command",
-      "masters-of-the-maelstrom",
-      "plunder"
+      "choice-samples-chaos-space-marines",
+      "fleet-command-chaos-space-marines",
+      "plunder-chaos-space-marines",
+      "support"
     ],
     "game_version": {
       "edition": "11th",
@@ -4385,11 +4513,18 @@
       "vashtorrs-hammer"
     ],
     "ability_ids": [
-      "indentured-daemon-engines",
-      "reorder-reality",
-      "unholy-mechanisms-aura",
+      "indentured-daemon-engines-chaos-space-marines",
+      "reorder-reality-chaos-space-marines",
+      "unholy-mechanisms-chaos-space-marines",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4432,7 +4567,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 130
+        "cost": 135
       }
     ],
     "keywords": [
@@ -4459,11 +4594,14 @@
       "tyrants-claw-heavy-flamer"
     ],
     "ability_ids": [
-      "hamadrya-s-knowledge-psychic",
+      "hamadryas-knowledge-chaos-space-marines",
       "leader",
-      "lord-of-badab-aura",
+      "lord-of-badab-chaos-space-marines",
       "deep-strike",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4507,7 +4645,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4536,8 +4674,8 @@
       "heralds-talon"
     ],
     "ability_ids": [
-      "head-taker",
-      "herald-of-the-apocalypse-aura",
+      "head-taker-chaos-space-marines",
+      "herald-of-the-apocalypse-chaos-space-marines",
       "leader",
       "deep-strike"
     ],
@@ -4583,7 +4721,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 295
+        "cost": 300
       }
     ],
     "keywords": [
@@ -4611,10 +4749,10 @@
       "talon-of-horus"
     ],
     "ability_ids": [
-      "dark-destiny",
+      "dark-destiny-chaos-space-marines",
       "leader",
-      "supreme-commander",
-      "warmaster",
+      "supreme-commander-chaos-space-marines",
+      "warmaster-chaos-space-marines",
       "deep-strike"
     ],
     "game_version": {
@@ -4669,7 +4807,7 @@
     "points": [
       {
         "models": 2,
-        "cost": 100
+        "cost": 110
       }
     ],
     "keywords": [
@@ -4698,11 +4836,14 @@
       "xyclos-needler"
     ],
     "ability_ids": [
-      "chirurgeon",
-      "enhanced-warriors",
+      "chirurgeon-chaos-space-marines",
+      "enhanced-warriors-chaos-space-marines",
       "leader",
-      "surgeon-acolyte",
-      "feel-no-pain-5"
+      "surgeon-acolyte-chaos-space-marines",
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4750,7 +4891,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 90
+        "cost": 95
       }
     ],
     "keywords": [
@@ -4777,8 +4918,8 @@
       "cyphers-plasma-pistol"
     ],
     "ability_ids": [
-      "agent-of-discord-aura",
-      "guns-blazing",
+      "agent-of-discord-chaos-space-marines",
+      "guns-blazing-chaos-space-marines",
       "lone-operative"
     ],
     "game_version": {
@@ -4861,10 +5002,19 @@
       "skullhurler"
     ],
     "ability_ids": [
-      "deadly-demise-d6-2",
-      "idol-of-blessed-blood",
-      "plough-through-the-enemy",
-      "super-heavy-war-engine"
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
+      "plough-through-the-enemy-chaos-space-marines",
+      {
+        "id": "damaged",
+        "value": 8
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -4928,7 +5078,7 @@
       },
       {
         "models": 3,
-        "cost": 175,
+        "cost": 185,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -4954,9 +5104,8 @@
       "fleshmetal-weapons"
     ],
     "ability_ids": [
-      "cult-of-destruction",
-      "death-frenzy",
-      "deep-strike"
+      "deep-strike",
+      "crushing-charge-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -4999,7 +5148,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 130
       }
     ],
     "keywords": [
@@ -5048,6 +5197,12 @@
         "namespace": "mfm",
         "id": "b390ed9e-515f-46f4-8fab-ad6a526b9623"
       }
+    ],
+    "ability_ids": [
+      "architect-of-ruin-chaos-space-marines",
+      "deep-strike",
+      "headlong-destruction-chaos-space-marines",
+      "leader"
     ]
   },
   {
@@ -5094,8 +5249,8 @@
       "staff-of-possession"
     ],
     "ability_ids": [
-      "daemonkin-psychic-zarkans-daemonkin",
-      "leader"
+      "daemonkin-aranis-zarkan-chaos-space-marines",
+      "sacrificial-dagger-aranis-zarkan-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5162,7 +5317,7 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "for-the-dark-gods"
+      "for-the-dark-gods-zarkans-daemonkin-cultist-mob-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5231,8 +5386,9 @@
       "plasma-pistol"
     ],
     "ability_ids": [
-      "chaos-icon",
-      "veterans-of-the-long-war-zarkans-daemonkin"
+      "veterans-of-the-long-war-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
+      "combat-squad-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",
@@ -5293,7 +5449,8 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "unholy-bloodshed-zarkans-daemonkin"
+      "unholy-bloodshed-zarkans-daemonkin-possessed-chaos-space-marines",
+      "chaos-icon-zarkans-daemonkin-possessed-chaos-space-marines"
     ],
     "game_version": {
       "edition": "11th",

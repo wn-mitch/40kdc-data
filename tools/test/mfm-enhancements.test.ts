@@ -9,7 +9,7 @@ import {
 } from "../src/mfm/enhancements.js";
 
 /**
- * Enhancement matching keys on `detachmentScopedId(name, detachment)`. The dump
+ * Enhancement matching keys on the mirrored id (`<name>-<detachment>-<faction>`). The dump
  * appends parenthetical tags ("(Upgrade)", "(Aura)") to enhancement names, and the
  * repo now KEEPS them (the RAW GW form) — `normalizeName` treats parens as ordinary
  * characters, so a stripped repo name would never match an imported roster line.
@@ -18,6 +18,8 @@ import {
 function dump(): MfmDump {
   return new MfmDump({
     data: {
+      faction_keyword: [{ id: "fk-ac", parentFactionKeywordId: null, localisations: { en: { name: "Adeptus Custodes" } } }],
+      publication: [{ id: "p", factionKeywordId: "fk-ac", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
       detachment: [
         { id: "det-mm", publicationId: "p", localisations: { en: { name: "Might of the Moritoi" } } },
         {
@@ -56,23 +58,25 @@ function dump(): MfmDump {
           localisations: { en: { name: "Synthetic Patrol Relic" } },
         },
       ],
+      keyword: [{ id: "k-fly", localisations: { en: { name: "Fly" } } }],
+      enhancement_excluded_keyword: [{ enhancementId: "e3", keywordId: "k-fly" }],
     },
   });
 }
 
-const CP_ENH_ID = "synthetic-patrol-relic-synthetic-patrol-cadre";
+const CP_ENH_ID = "synthetic-patrol-relic-synthetic-patrol-cadre-adeptus-custodes";
 
 describe("buildEnhCanon", () => {
   it("keeps trailing parenthetical tags (RAW GW form) so ids match imported roster lines", () => {
     const canon = buildEnhCanon(dump());
-    expect(canon.get("auramite-sarcophagus-upgrade-might-of-the-moritoi")).toBe(15);
-    expect(canon.get("interred-expertise-aura-might-of-the-moritoi")).toBe(20);
+    expect(canon.get("auramite-sarcophagus-upgrade-might-of-the-moritoi-adeptus-custodes")).toBe(15);
+    expect(canon.get("interred-expertise-aura-might-of-the-moritoi-adeptus-custodes")).toBe(20);
     // the stripped form must NOT be what we key on
-    expect(canon.has("auramite-sarcophagus-might-of-the-moritoi")).toBe(false);
+    expect(canon.has(["auramite-sarcophagus", "might-of-the-moritoi", "adeptus-custodes"].join("-"))).toBe(false);
   });
 
   it("leaves untagged names alone", () => {
-    expect(buildEnhCanon(dump()).get("plain-relic-might-of-the-moritoi")).toBe(10);
+    expect(buildEnhCanon(dump()).get("plain-relic-might-of-the-moritoi-adeptus-custodes")).toBe(10);
   });
 });
 
@@ -87,6 +91,7 @@ describe("buildEnhCanon", () => {
 function fieldsDump(): MfmDump {
   return new MfmDump({
     data: {
+      publication: [{ id: "p", factionKeywordId: "fk-as", isCombatPatrol: false, isLegends: false, isCoreRules: false, localisations: { en: { name: "Codex" } } }],
       detachment: [{ id: "det", publicationId: "p", localisations: { en: { name: "Chorus of Condemnation" } } }],
       keyword: [{ id: "k-inf", localisations: { en: { name: "Infantry" } } }],
       faction_keyword: [{ id: "fk-as", localisations: { en: { name: "Adepta Sororitas" } } }],
@@ -127,7 +132,7 @@ function fieldsDump(): MfmDump {
 describe("buildEnhFieldCanon", () => {
   it("derives upgrade_tag, max_targets, exclusions and a datasheet+fkw restriction", () => {
     const canon = buildEnhFieldCanon(fieldsDump());
-    const up = canon.get("symphonic-payload-upgrade-chorus-of-condemnation");
+    const up = canon.get("symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas");
     expect(up).toBeDefined();
     expect(up!.upgrade_tag).toBe(true);
     expect(up!.max_targets).toBe(3);
@@ -138,7 +143,7 @@ describe("buildEnhFieldCanon", () => {
   });
 
   it("maps a miniature enhancement's fkw group and its exclusion", () => {
-    const min = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation")!;
+    const min = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
     expect(min.upgrade_tag).toBe(false);
     expect(min.max_targets).toBe(1);
     expect(min.keyword_restrictions).toEqual(["Adepta Sororitas"]);
@@ -148,7 +153,7 @@ describe("buildEnhFieldCanon", () => {
   });
 
   it("preserves divergent groups as explicit alternatives", () => {
-    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation")!;
+    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
     expect(multi.keywordRestrictionsAmbiguous).toBe(true);
     expect(multi.keyword_restrictions).toEqual(["Exorcist", "Infantry"]);
     expect(multi.keyword_restriction_groups).toEqual([["Infantry"], ["Exorcist"]]);
@@ -157,7 +162,7 @@ describe("buildEnhFieldCanon", () => {
 
 describe("authoritative enhancement eligibility", () => {
   it("replaces contradictory stale fields with the single source group", () => {
-    const fields = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation")!;
+    const fields = buildEnhFieldCanon(fieldsDump()).get("plain-relic-chorus-of-condemnation-adepta-sororitas")!;
     const record = {
       id: "stale",
       name: "Fabricated Relic",
@@ -182,7 +187,7 @@ describe("authoritative enhancement eligibility", () => {
   });
 
   it("uses groups only for divergent source alternatives and clears both when absent", () => {
-    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation")!;
+    const multi = buildEnhFieldCanon(fieldsDump()).get("split-relic-chorus-of-condemnation-adepta-sororitas")!;
     const record = {
       id: "stale",
       name: "Fabricated Relic",
@@ -214,7 +219,7 @@ describe("combatPatrolEnhIds", () => {
   it("collects only the Combat-Patrol enhancement ids", () => {
     const cp = combatPatrolEnhIds(dump());
     expect(cp.has(CP_ENH_ID)).toBe(true);
-    expect(cp.has("plain-relic-might-of-the-moritoi")).toBe(false);
+    expect(cp.has("plain-relic-might-of-the-moritoi-adeptus-custodes")).toBe(false);
     expect(cp.size).toBe(1);
   });
 });
@@ -222,7 +227,7 @@ describe("combatPatrolEnhIds", () => {
 describe("runEnhancements matched-play seeding", () => {
   it("seeds a source-complete matched-play enhancement and links its detachment", () => {
     const report = runEnhancements(dump(), false);
-    const id = "plain-relic-might-of-the-moritoi";
+    const id = "plain-relic-might-of-the-moritoi-adeptus-custodes";
     expect(report.seeded).toContainEqual({
       dir: "adeptus-custodes",
       id,
@@ -231,8 +236,12 @@ describe("runEnhancements matched-play seeding", () => {
     });
     const enhancements = report.staged
       .find((entry) => entry.path.endsWith("adeptus-custodes/enhancements.json"))
-      ?.value as { id: string }[];
-    expect(enhancements.some((entry) => entry.id === id)).toBe(true);
+      ?.value as { id: string; external_refs?: unknown }[];
+    // The seed names its dump row, so the mirror keeps it instead of retiring it as unprinted.
+    const seed = enhancements.find((entry) => entry.id === id) as { external_refs?: unknown; exclusion_keywords?: unknown } | undefined;
+    expect(seed?.external_refs).toEqual([{ namespace: "mfm", id: "e3" }]);
+    // Exclusions land with the seed, not on the next pass's reconcile.
+    expect(seed?.exclusion_keywords).toEqual(["Fly"]);
     const detachments = report.staged
       .find((entry) => entry.path.endsWith("adeptus-custodes/detachments.json"))
       ?.value as { id: string; enhancement_ids?: string[] }[];

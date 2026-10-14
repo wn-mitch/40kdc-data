@@ -1,13 +1,13 @@
 [
   {
-    "id": "saintly-example-hallowed-martyrs",
+    "id": "saintly-example-hallowed-martyrs-adepta-sororitas",
     "name": "Saintly Example",
     "detachment_id": "hallowed-martyrs",
     "cost": 10,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "saintly-example-hallowed-martyrs",
+    "ability_id": "saintly-example-hallowed-martyrs-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "through-suffering-strength-hallowed-martyrs",
+    "id": "through-suffering-strength-hallowed-martyrs-adepta-sororitas",
     "name": "Through Suffering, Strength",
     "detachment_id": "hallowed-martyrs",
     "cost": 25,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "through-suffering-strength-hallowed-martyrs",
+    "ability_id": "through-suffering-strength-hallowed-martyrs-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "chaplet-of-sacrifice-hallowed-martyrs",
+    "id": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas",
     "name": "Chaplet of Sacrifice",
     "detachment_id": "hallowed-martyrs",
     "cost": 25,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "chaplet-of-sacrifice-hallowed-martyrs",
+    "ability_id": "chaplet-of-sacrifice-hallowed-martyrs-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,11 +84,11 @@
     ]
   },
   {
-    "id": "mantle-of-ophelia-hallowed-martyrs",
+    "id": "mantle-of-ophelia-hallowed-martyrs-adepta-sororitas",
     "name": "Mantle of Ophelia",
     "detachment_id": "hallowed-martyrs",
     "cost": 20,
-    "ability_id": "mantle-of-ophelia-hallowed-martyrs",
+    "ability_id": "mantle-of-ophelia-hallowed-martyrs-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -117,14 +117,14 @@
     ]
   },
   {
-    "id": "psalm-of-righteous-judgement-penitent-host",
+    "id": "psalm-of-righteous-judgement-penitent-host-adepta-sororitas",
     "name": "Psalm of Righteous Judgement",
     "detachment_id": "penitent-host",
     "cost": 20,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "psalm-of-righteous-judgement-penitent-host",
+    "ability_id": "psalm-of-righteous-judgement-penitent-host-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -145,14 +145,14 @@
     ]
   },
   {
-    "id": "verse-of-holy-piety-penitent-host",
+    "id": "verse-of-holy-piety-penitent-host-adepta-sororitas",
     "name": "Verse of Holy Piety",
     "detachment_id": "penitent-host",
     "cost": 15,
     "keyword_restrictions": [
       "Penitent"
     ],
-    "ability_id": "verse-of-holy-piety-penitent-host",
+    "ability_id": "verse-of-holy-piety-penitent-host-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -173,14 +173,14 @@
     ]
   },
   {
-    "id": "refrain-of-enduring-faith-penitent-host",
+    "id": "refrain-of-enduring-faith-penitent-host-adepta-sororitas",
     "name": "Refrain of Enduring Faith",
     "detachment_id": "penitent-host",
     "cost": 15,
     "keyword_restrictions": [
       "Penitent"
     ],
-    "ability_id": "refrain-of-enduring-faith-penitent-host",
+    "ability_id": "refrain-of-enduring-faith-penitent-host-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -201,11 +201,11 @@
     ]
   },
   {
-    "id": "catechism-of-divine-penitence-penitent-host",
+    "id": "catechism-of-divine-penitence-penitent-host-adepta-sororitas",
     "name": "Catechism of Divine Penitence",
     "detachment_id": "penitent-host",
     "cost": 15,
-    "ability_id": "catechism-of-divine-penitence-penitent-host",
+    "ability_id": "catechism-of-divine-penitence-penitent-host-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -240,14 +240,14 @@
     ]
   },
   {
-    "id": "righteous-rage-bringers-of-flame",
+    "id": "righteous-rage-bringers-of-flame-adepta-sororitas",
     "name": "Righteous Rage",
     "detachment_id": "bringers-of-flame",
     "cost": 15,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "righteous-rage-bringers-of-flame",
+    "ability_id": "righteous-rage-bringers-of-flame-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -268,14 +268,14 @@
     ]
   },
   {
-    "id": "manual-of-saint-griselda-bringers-of-flame",
+    "id": "manual-of-saint-griselda-bringers-of-flame-adepta-sororitas",
     "name": "Manual of Saint Griselda",
     "detachment_id": "bringers-of-flame",
     "cost": 20,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "manual-of-saint-griselda-bringers-of-flame",
+    "ability_id": "manual-of-saint-griselda-bringers-of-flame-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -296,14 +296,14 @@
     ]
   },
   {
-    "id": "fire-and-fury-bringers-of-flame",
+    "id": "fire-and-fury-bringers-of-flame-adepta-sororitas",
     "name": "Fire and Fury",
     "detachment_id": "bringers-of-flame",
     "cost": 30,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "fire-and-fury-bringers-of-flame",
+    "ability_id": "fire-and-fury-bringers-of-flame-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -324,11 +324,11 @@
     ]
   },
   {
-    "id": "iron-surplice-of-saint-istalela-bringers-of-flame",
+    "id": "iron-surplice-of-saint-istalela-bringers-of-flame-adepta-sororitas",
     "name": "Iron Surplice of Saint Istalela",
     "detachment_id": "bringers-of-flame",
     "cost": 10,
-    "ability_id": "iron-surplice-of-saint-istalela-bringers-of-flame",
+    "ability_id": "iron-surplice-of-saint-istalela-bringers-of-flame-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -357,11 +357,11 @@
     ]
   },
   {
-    "id": "litanies-of-faith-army-of-faith",
+    "id": "litanies-of-faith-army-of-faith-adepta-sororitas",
     "name": "Litanies of Faith",
     "detachment_id": "army-of-faith",
     "cost": 10,
-    "ability_id": "litanies-of-faith-army-of-faith",
+    "ability_id": "litanies-of-faith-army-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -390,14 +390,14 @@
     ]
   },
   {
-    "id": "blade-of-saint-ellynor-army-of-faith",
+    "id": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas",
     "name": "Blade of Saint Ellynor",
     "detachment_id": "army-of-faith",
     "cost": 15,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "blade-of-saint-ellynor-army-of-faith",
+    "ability_id": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -418,14 +418,14 @@
     ]
   },
   {
-    "id": "divine-aspect-army-of-faith",
+    "id": "divine-aspect-army-of-faith-adepta-sororitas",
     "name": "Divine Aspect",
     "detachment_id": "army-of-faith",
     "cost": 5,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "divine-aspect-army-of-faith",
+    "ability_id": "divine-aspect-army-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -446,14 +446,14 @@
     ]
   },
   {
-    "id": "triptych-of-the-macharian-crusade-army-of-faith",
+    "id": "triptych-of-the-macharian-crusade-army-of-faith-adepta-sororitas",
     "name": "Triptych of the Macharian Crusade",
     "detachment_id": "army-of-faith",
     "cost": 20,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "triptych-of-the-macharian-crusade-army-of-faith",
+    "ability_id": "triptych-of-the-macharian-crusade-army-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -474,14 +474,14 @@
     ]
   },
   {
-    "id": "triptych-of-judgement-champions-of-faith",
+    "id": "triptych-of-judgement-champions-of-faith-adepta-sororitas",
     "name": "Triptych of Judgement",
     "detachment_id": "champions-of-faith",
     "cost": 15,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "triptych-of-judgement-champions-of-faith",
+    "ability_id": "triptych-of-judgement-champions-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -502,14 +502,14 @@
     ]
   },
   {
-    "id": "mark-of-devotion-champions-of-faith",
+    "id": "mark-of-devotion-champions-of-faith-adepta-sororitas",
     "name": "Mark of Devotion",
     "detachment_id": "champions-of-faith",
     "cost": 30,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "mark-of-devotion-champions-of-faith",
+    "ability_id": "mark-of-devotion-champions-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -530,14 +530,14 @@
     ]
   },
   {
-    "id": "eyes-of-the-oracle-champions-of-faith",
+    "id": "eyes-of-the-oracle-champions-of-faith-adepta-sororitas",
     "name": "Eyes of the Oracle",
     "detachment_id": "champions-of-faith",
     "cost": 10,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "eyes-of-the-oracle-champions-of-faith",
+    "ability_id": "eyes-of-the-oracle-champions-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -558,14 +558,14 @@
     ]
   },
   {
-    "id": "sanctified-amulet-champions-of-faith",
+    "id": "sanctified-amulet-champions-of-faith-adepta-sororitas",
     "name": "Sanctified Amulet",
     "detachment_id": "champions-of-faith",
     "cost": 25,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "sanctified-amulet-champions-of-faith",
+    "ability_id": "sanctified-amulet-champions-of-faith-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -586,7 +586,7 @@
     ]
   },
   {
-    "id": "clarion-of-urgency-chorus-of-condemnation",
+    "id": "clarion-of-urgency-chorus-of-condemnation-adepta-sororitas",
     "name": "Clarion of Urgency",
     "detachment_id": "chorus-of-condemnation",
     "cost": 15,
@@ -594,7 +594,7 @@
       "Adepta Sororitas",
       "Canoness with Jump Pack"
     ],
-    "ability_id": "clarion-of-urgency-chorus-of-condemnation",
+    "ability_id": "clarion-of-urgency-chorus-of-condemnation-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -615,7 +615,7 @@
     ]
   },
   {
-    "id": "symphonic-payload-upgrade-chorus-of-condemnation",
+    "id": "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas",
     "name": "Symphonic Payload (Upgrade)",
     "detachment_id": "chorus-of-condemnation",
     "cost": 10,
@@ -623,7 +623,7 @@
       "Adepta Sororitas",
       "Exorcist"
     ],
-    "ability_id": "symphonic-payload-chorus-of-condemnation",
+    "ability_id": "symphonic-payload-upgrade-chorus-of-condemnation-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -644,7 +644,7 @@
     ]
   },
   {
-    "id": "writ-of-compunction-upgrade-sacred-champions",
+    "id": "writ-of-compunction-upgrade-sacred-champions-adepta-sororitas",
     "name": "Writ of Compunction (Upgrade)",
     "detachment_id": "sacred-champions",
     "cost": 20,
@@ -652,7 +652,7 @@
       "Adepta Sororitas",
       "Celestian Sacresants"
     ],
-    "ability_id": "writ-of-compunction-sacred-champions",
+    "ability_id": "writ-of-compunction-upgrade-sacred-champions-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -673,14 +673,14 @@
     ]
   },
   {
-    "id": "perfervid-haste-sacred-champions",
+    "id": "perfervid-haste-sacred-champions-adepta-sororitas",
     "name": "Perfervid Haste",
     "detachment_id": "sacred-champions",
     "cost": 10,
     "keyword_restrictions": [
       "Adepta Sororitas"
     ],
-    "ability_id": "perfervid-haste-sacred-champions",
+    "ability_id": "perfervid-haste-sacred-champions-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -701,7 +701,7 @@
     ]
   },
   {
-    "id": "hagiomnifex-upgrade-sanctified-orators",
+    "id": "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas",
     "name": "Hagiomnifex (Upgrade)",
     "detachment_id": "sanctified-orators",
     "cost": 25,
@@ -709,7 +709,7 @@
       "Adepta Sororitas",
       "Character"
     ],
-    "ability_id": "hagiomnifex-sanctified-orators",
+    "ability_id": "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -733,7 +733,7 @@
     ]
   },
   {
-    "id": "divine-miracle-sanctuary-guardians",
+    "id": "divine-miracle-sanctuary-guardians-adepta-sororitas",
     "name": "Divine Miracle",
     "detachment_id": "sanctuary-guardians",
     "cost": 0,
@@ -751,7 +751,7 @@
       "Sanctuary Guardians Battle Sisters Squad"
     ],
     "upgrade_tag": true,
-    "ability_id": "divine-miracle-sanctuary-guardians",
+    "ability_id": "divine-miracle-sanctuary-guardians-adepta-sororitas",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -760,7 +760,7 @@
     ]
   },
   {
-    "id": "righteous-fervour-sanctuary-guardians",
+    "id": "righteous-fervour-sanctuary-guardians-adepta-sororitas",
     "name": "Righteous Fervour",
     "detachment_id": "sanctuary-guardians",
     "cost": 0,
@@ -777,7 +777,7 @@
       "Adepta Sororitas",
       "Canoness"
     ],
-    "ability_id": "righteous-fervour-sanctuary-guardians",
+    "ability_id": "righteous-fervour-sanctuary-guardians-adepta-sororitas",
     "external_refs": [
       {
         "namespace": "mfm",

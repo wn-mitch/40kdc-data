@@ -22,6 +22,8 @@
  *                 twins to generic faction_keywords (#36) + stamp
  *                 excluded_faction_keywords for genuine chapter bars (e.g. Librarians)
  *   cull-legends  Drop dump-absent Legends/Forge-World units + prune refs
+ *   reissued-refs Move dead detachment/stratagem/enhancement refs to a reissued row
+ *   mirror        Ability identity from the dump (`mfm:mirror`): stubs, unit ability_ids, retirement
  *   attachment-role  Dump-authoritative leader/support role + leader-attachments
  *                    (supersedes the 10e known-support-10e.ts scrape)
  *   seed-units    Create skeleton units for dump datasheets with no repo entity
@@ -39,7 +41,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { nameToId, detachmentScopedId } from "./converters/id-generator.js";
+import { nameToId } from "./converters/id-generator.js";
 import {
   DEFAULT_DUMP_PATH,
   loadDump,
@@ -59,6 +61,7 @@ import {
   runEnhancements,
   buildEnhReport,
   normalizeEnhancementNames,
+  enhancementRepoId,
 } from "./mfm/enhancements.js";
 import { seedStratagems } from "./mfm/seed-stratagems.js";
 import {
@@ -71,6 +74,8 @@ import {
 } from "./mfm/detachment-fields.js";
 import { runPoints, buildPointsReport } from "./mfm/points.js";
 import { runCull, buildCullReport } from "./mfm/legends-cull.js";
+import { runReissue, buildReissueReport } from "./mfm/reissue.js";
+import { runMirrorCommand } from "./mfm/mirror/cli.js";
 import { runStratagems, buildStratReport } from "./mfm/stratagems.js";
 import { runMissions, buildMissionsReport } from "./mfm/missions.js";
 import {
@@ -265,12 +270,8 @@ function enhIdsByDir(dump: MfmDump): Map<string, Map<string, DumpEntry>> {
       const det = dump.byId("detachment").get(enh.detachmentId);
       const dn = dump.enName(det);
       if (!en || !dn) continue;
-      let id: string;
-      try {
-        id = detachmentScopedId(en, dn);
-      } catch {
-        continue; // skip
-      }
+      const id = enhancementRepoId(dump, enh);
+      if (!id) continue;
       const prev = m.get(id);
       m.set(id, {
         name: prev?.name ?? `${en} / ${dn}`,
@@ -341,11 +342,8 @@ export function coverage(dump: MfmDump): {
     const en = dump.enName(enh);
     const dn = dump.enName(dump.byId("detachment").get(enh.detachmentId));
     if (en && dn) {
-      try {
-        globalEnhIds.add(detachmentScopedId(en, dn));
-      } catch {
-        /* skip */
-      }
+      const id = enhancementRepoId(dump, enh);
+      if (id) globalEnhIds.add(id);
     }
   }
 
@@ -396,7 +394,7 @@ export function coverage(dump: MfmDump): {
       .filter((id) => !globalDetIds.has(id))
       .sort();
 
-    // enhancements — id is detachmentScopedId(enhName, detName)
+    // enhancements — id is the mirrored id (enhancementRepoId)
     const dumpEnhIds = enhsByDir.get(dir) ?? new Map<string, DumpEntry>();
     const repoEnhIds = repoIds(dir, "enhancements.json");
     const enhNew: string[] = [];
@@ -977,7 +975,9 @@ async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
     `Dropped ${report.totalDropped} units; pruned wargear-options ${sum((d) => d.wargearOptionsRemoved)}, ` +
       `compositions ${sum((d) => d.compositionsRemoved)}, leader-entries ${sum((d) => d.leaderEntriesRemoved)}, ` +
       `bodyguard-refs ${sum((d) => d.bodyguardRefsStripped)}, orphan weapons ${sum((d) => d.weaponsRemoved.length)}, ` +
-      `orphan wargear ${sum((d) => d.wargearRemoved.length)}; abilities flagged ${sum((d) => d.abilitiesOrphaned.length)}.`,
+      `orphan wargear ${sum((d) => d.wargearRemoved.length)}; abilities removed ` +
+      `${report.abilities.reduce((n, a) => n + a.removed.length, 0)}, ability unit refs stripped ` +
+      `${report.abilities.reduce((n, a) => n + a.unitRefsStripped, 0)}.`,
   );
   const susp = sum((d) => d.suspicious.length);
   if (susp)
@@ -985,6 +985,21 @@ async function runCullCmd(dump: MfmDump, write: boolean): Promise<void> {
       `⚠ ${susp} possible name-match bug(s) flagged for review (see report).`,
     );
   await applyWrites(report.staged, { write, label: "cull-legends" });
+  if (!write)
+    console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
+async function runReissueCmd(dump: MfmDump, write: boolean): Promise<void> {
+  const report = runReissue(dump);
+  fs.mkdirSync(REPORT_DIR, { recursive: true });
+  const reportPath = path.join(REPORT_DIR, "mfm-reissued-refs.md");
+  fs.writeFileSync(reportPath, buildReissueReport(report, write));
+  console.log(`Reissued-refs report → ${path.relative(REPO_ROOT, reportPath)}`);
+  console.log(
+    `Moved ${report.moved.length} dead mfm refs to reissued rows; ${report.ambiguous.length} ambiguous; ` +
+      `${report.retired.length} retired.`,
+  );
+  await applyWrites(report.staged, { write, label: "reissued-refs" });
   if (!write)
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
@@ -1026,7 +1041,7 @@ async function runSeedStratagemsCmd(
     `Creates repo stratagem entities for dump stratagems with no repo entity. Structural\n` +
     `fields are dump-derived; phases are prose-parsed and timing defaults to\n` +
     `\`once-per-phase\`, so every seed is stamped \`pre-launch-provisional\` for review.\n` +
-    `Prose routes to the store via \`mfm-backfill-store\`, never here.\n\n` +
+    `Prose stays in the private dump (read it with \`npm run prose\`), never here.\n\n` +
     `- **Seeded:** ${report.seeded.length}\n` +
     `- **Held back (Combat Patrol):** ${report.heldBackCombatPatrol.length}\n` +
     `- **Skipped (coreless — manual review):** ${report.skippedCoreless.length}${report.skippedCoreless.length ? ` (${report.skippedCoreless.map((id) => `\`${id}\``).join(", ")})` : ""}\n` +
@@ -1052,12 +1067,6 @@ async function runSeedStratagemsCmd(
     `Seeded ${report.seeded.length}, held back ${report.heldBackCombatPatrol.length} Combat-Patrol, ` +
       `skipped ${report.skippedCoreless.length} coreless / ${report.skippedNoDir.length} no-dir / ${report.skippedNoCanon.length} no-canon.`,
   );
-  if (write && report.seeded.length) {
-    console.log(
-      `Follow-through: run \`npx tsx src/mfm-backfill-store.ts --write\` to push the seeded ` +
-        `stratagems' prose to the store, then rebuild index.json.`,
-    );
-  }
   await applyWrites(report.staged, { write, label: "seed-stratagems" });
   if (!write)
     console.log("DRY RUN — no files written. Re-run with --write to apply.");
@@ -1542,6 +1551,8 @@ export const INGEST_MFM_COMMANDS = [
   "points",
   "points-and-composition-tiers",
   "cull-legends",
+  "reissued-refs",
+  "mirror",
   "stratagems",
   "seed-stratagems",
   "missions",
@@ -1594,6 +1605,9 @@ export async function runIngestMfmCommand(
     await runExternalRefsCmd(dump, options.write, options.onlyDir);
   else if (command === "points") await runPointsCmd(dump, options.write);
   else if (command === "cull-legends") await runCullCmd(dump, options.write);
+  else if (command === "reissued-refs") await runReissueCmd(dump, options.write);
+  else if (command === "mirror")
+    await runMirrorCommand({ dumpPath: options.dumpPath, write: options.write, out: "_private/phase4/mirror-sync" });
   else if (command === "seed-stratagems")
     await runSeedStratagemsCmd(
       dump,

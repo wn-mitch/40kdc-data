@@ -13,22 +13,18 @@ describe("Dataset.defensiveBuffsFor", () => {
   });
 
   it("symmetric: same unit produces distinct buff stacks under each perspective", () => {
-    // For a unit whose army rule is purely attacker-flavoured (Oath of Moment
-    // — re-roll-hits + re-roll-wounds), the attacker walk yields reroll
-    // buffs while the defensive walk drops them.
-    const intercessor = ds.units.find("Intercessor Squad")!;
-    const atk = ds.buffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const def = ds.defensiveBuffsFor(
-      { unitId: intercessor.id, factionId: "adeptus-astartes" },
-      { phase: "shooting" },
-    );
-    const atkRerolls = atk.filter((b) => b.contribution.type === "reroll");
-    const defRerolls = def.filter((b) => b.contribution.type === "reroll");
-    expect(atkRerolls.length).toBeGreaterThan(0);
-    expect(defRerolls.length).toBe(0);
+    // For a unit whose army rule is purely attacker-flavoured (Black Templars'
+    // Templar Vows — +1 to wound in the fight phase), the attacker walk yields
+    // the buff while the defensive walk drops it.
+    const crusader = ds.units.find("Crusader Squad")!;
+    // Templar Vows is the Black Templars supplement's army rule (D7), so the army is Black Templars.
+    const input = { unitId: crusader.id, factionId: "black-templars" };
+    const atk = ds.buffsFor(input, { phase: "fight" });
+    const def = ds.defensiveBuffsFor(input, { phase: "fight" });
+    const atkWound = atk.filter((b) => b.contribution.type === "wound-mod");
+    const defWound = def.filter((b) => b.contribution.type === "wound-mod");
+    expect(atkWound.length).toBeGreaterThan(0);
+    expect(defWound.length).toBe(0);
   });
 
   it("weaponProfiles are ignored under target perspective", () => {
@@ -70,37 +66,36 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       { unitId: "kabalite-warriors", factionId: "drukhari", attachedUnitIds: ["archon"] },
       { phase: "shooting" },
     );
-    expect(invulns(attached, "shadowfield")).toEqual([]);
+    expect(invulns(attached, "shadowfield-drukhari")).toEqual([]);
 
     // …but the Archon crunched as itself keeps it (source kind "unit").
     const own = ds.defensiveBuffsFor(
       { unitId: "archon", factionId: "drukhari" },
       { phase: "shooting" },
     );
-    expect(invulns(own, "shadowfield")).toHaveLength(1);
-    expect(invulns(own, "shadowfield")[0].contribution).toEqual({
+    expect(invulns(own, "shadowfield-drukhari")).toHaveLength(1);
+    expect(invulns(own, "shadowfield-drukhari")[0].contribution).toEqual({
       type: "invulnerable-save",
       threshold: 4,
     });
   });
 
   it("a unit-scoped leader rule still buffs the whole attached unit", () => {
-    // Mental Fortress reads "models in that unit have a 4+ invulnerable save" —
-    // authored `target: "unit"`, so the gate must not touch it (issue #105's
-    // repro, which is a legitimately unit-wide rule).
+    // Epidemius's rule gives the whole unit he leads an invulnerable save — a
+    // legitimately unit-wide rule (issue #105's shape), so the gate must not touch it.
     const attached = ds.defensiveBuffsFor(
-      { unitId: "intercessor-squad", factionId: "adeptus-astartes", attachedUnitIds: ["librarian"] },
+      { unitId: "plaguebearers", factionId: "chaos-daemons", attachedUnitIds: ["epidemius"] },
       { phase: "fight" },
     );
-    const buffs = invulns(attached, "mental-fortress-psychic");
+    const buffs = invulns(attached, "blessed-by-the-plague-god-chaos-daemons");
     expect(buffs).toHaveLength(1);
-    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "librarian" });
+    expect(buffs[0].source).toMatchObject({ abilityKind: "attached", sourceUnitId: "epidemius" });
   });
 
   it("the dropped effect is reported as unsupported, not silently discarded", () => {
-    const shadowfield = ds.abilities.getAny("shadowfield")!;
+    const shadowfield = ds.abilities.getAny("shadowfield-drukhari")!;
     const translated = shadowfield.describeBuffs(
-      { kind: "ability", abilityId: "shadowfield", abilityKind: "attached", sourceUnitId: "archon" },
+      { kind: "ability", abilityId: "shadowfield-drukhari", abilityKind: "attached", sourceUnitId: "archon" },
       { phase: "shooting" },
       "target",
     );
@@ -131,25 +126,25 @@ describe("attached members: model-scoped vs unit-scoped abilities", () => {
       },
       { phase: "command" },
     );
-    expect(keywordsFrom(led, "psychic-gifts")).toEqual([]);
+    expect(keywordsFrom(led, "psychic-gifts-agents-of-the-imperium")).toEqual([]);
     // …while the Inquisitor crunched as itself still carries it.
     const alone = ds.buffsFor(
       { unitId: "inquisitor", factionId: "agents-of-the-imperium" },
       { phase: "command" },
     );
-    expect(keywordsFrom(alone, "psychic-gifts")).toEqual(["psyker"]);
+    expect(keywordsFrom(alone, "psychic-gifts-agents-of-the-imperium")).toEqual(["psyker"]);
 
-    // Surgical Precision is unit-scoped ("that unit's ranged weapons have
-    // [LETHAL HITS]"), so an attached Apothecary Biologis still grants it.
-    const aggressors = ds.buffsFor(
+    // A Palatine's rule grants Lethal Hits to the whole unit she leads, so the
+    // attached Palatine still grants it.
+    const sisters = ds.buffsFor(
       {
-        unitId: "aggressor-squad",
-        factionId: "adeptus-astartes",
-        attachedUnitIds: ["apothecary-biologis"],
+        unitId: "battle-sisters-squad",
+        factionId: "adepta-sororitas",
+        attachedUnitIds: ["palatine"],
       },
       { phase: "shooting" },
     );
-    expect(keywordsFrom(aggressors, "surgical-precision")).toEqual(["lethal-hits"]);
+    expect(keywordsFrom(sisters, "fury-of-the-righteous-adepta-sororitas")).toEqual(["lethal-hits"]);
   });
 });
 

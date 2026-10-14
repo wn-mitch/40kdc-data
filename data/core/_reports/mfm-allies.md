@@ -2,12 +2,13 @@
 
 Mode: **write**
 
-Pools emitted: **19**, skipped: **3**.
+Pools emitted: **20**, skipped: **2**.
 
 ## Emitted
 
 | id | hosts | source faction | datasheets | detachments | warlord | kw-limits |
 |---|---|---|---|---|---|---|
+| adeptus-astartes-allies | Adeptus Astartes, Black Templars, Blood Angels, Dark Angels, Imperial Fists, Iron Hands, Raven Guard, Salamanders, Space Wolves, Ultramarines, White Scars | adeptus-astartes | 10 | — | — | — |
 | aeldari-harlequins | Asuryani | aeldari | 8 | — | — | — |
 | aeldari-ynnari | Asuryani | aeldari | 11 | 1 | — | — |
 | agents-of-the-imperium-allies | Adepta Sororitas, Adeptus Astartes, Adeptus Custodes, Adeptus Mechanicus, Adeptus Titanicus, Astra Militarum, Black Templars, Blood Angels, Dark Angels, Grey Knights, Imperial Fists, Imperial Knights, Iron Hands, Raven Guard, Salamanders, Space Wolves, Ultramarines, White Scars | agents-of-the-imperium | 29 | — | — | 9 |
@@ -32,5 +33,8 @@ Pools emitted: **19**, skipped: **3**.
 
 - `31a47518-f0d5-48c1-8cf8-f1f3ea1c008b` (Titanicus Traitoris): Chaos Warbringer Nemesis Titan; Chaos Warhound Titan; Chaos Reaver Titan; Chaos Warlord Titan
 - `5c07d9ae-8023-43c2-ac7d-6de32fd268b3` (Adeptus Titanicus): Warhound Titan; Warlord Titan; Reaver Titan; Warbringer Nemesis Titan
-- `802478f9-3982-4990-80f7-1bd316e0c312` (802478f9-3982-4990-80f7-1bd316e0c312): 
+
+## New pools (not in overlay — synthesized id)
+
+- `43a5642f-4032-4c6f-9532-ee22e5aa6dc1`
 

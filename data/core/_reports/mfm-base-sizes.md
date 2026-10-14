@@ -8,31 +8,36 @@ never overwritten.
 
 | Metric | Count |
 |---|--:|
-| Filled (was empty) | 2 |
+| Filled (was empty) | 0 |
 | De-drafted (dump confirmed a guess) | 0 |
 | Corrected (dump fixed a draft) | 0 |
-| Confirmed (already matched) | 844 |
-| Review (authored ≠ dump, kept) | 19 |
+| Confirmed (already matched) | 832 |
+| Review (authored ≠ dump, kept) | 24 |
 
 ## Review — authored value the dump contradicts (NOT changed)
 
 - adeptus-astartes/vulkan-hestan: authored round 32 vs dump round 40
+- adeptus-astartes/chaplain-with-jump-pack: authored round 32 vs dump round 40
 - adeptus-astartes/darnath-lysander: authored round 40 vs dump round 50
+- adeptus-astartes/chaplain-in-terminator-armour: authored round 40 vs dump round 50
+- adeptus-astartes/captain-in-terminator-armour: authored round 50 vs dump round 40
+- adeptus-astartes/commander-dante: authored round 50 vs dump round 40
 - aeldari/ynnari-archon: authored round 25 vs dump round 32
 - aeldari/yvraine: authored oval 75x42 vs dump oval 74x42
 - agents-of-the-imperium/voidsmen-at-arms: authored round 32 vs dump round 25
 - astra-militarum/attilan-rough-riders: authored oval 60x35.5 vs dump oval 60x35
-- chaos-space-marines/huron-blackheart: authored round 32 vs dump round 50
 - chaos-space-marines/sorcerer: authored round 32 vs dump round 40
+- chaos-space-marines/huron-blackheart: authored round 32 vs dump round 50
 - drukhari/archon: authored round 25 vs dump round 32
 - emperors-children/sorcerer: authored round 32 vs dump round 40
 - grey-knights/brotherhood-techmarine: authored round 32 vs dump round 40
 - necrons/ctan-shard-of-the-nightbringer: authored round 40 vs dump round 90
-- orks/dakkajet: authored oval 120x92 vs dump round 120
-- orks/blitza-bommer: authored oval 120x92 vs dump round 120
-- orks/burna-bommer: authored oval 120x92 vs dump round 120
 - orks/deffkoptas: authored oval 75x42 vs dump round 75
-- orks/wazbom-blastajet: authored oval 150x95 vs dump round 120
+- orks/wazbom-blastajet: authored oval 150x95 vs dump oval 120x92
+- orks/dakkajet: authored oval 120x92 vs dump round 120
 - orks/weirdboy: authored round 40 vs dump round 50
+- orks/burna-bommer: authored oval 120x92 vs dump round 120
 - orks/nobz: authored round 32 vs dump round 40
+- orks/warboss: authored round 40 vs dump round 50
+- orks/blitza-bommer: authored oval 120x92 vs dump round 120
 

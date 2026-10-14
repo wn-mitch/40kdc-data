@@ -141,7 +141,7 @@ pub struct ReactiveTrigger<'a> {
 ///     .map(|a| a.ability_id.as_str())
 ///     .collect();
 ///
-/// assert_eq!(shooting_abilities, ["berzerker-frenzy"]);
+/// assert_eq!(shooting_abilities, ["berzerker-frenzy-world-eaters"]);
 /// assert_eq!(ds.faction_of(kharn).unwrap().id.as_str(), "world-eaters");
 /// ```
 pub struct Dataset {
@@ -283,28 +283,15 @@ impl Dataset {
                 .unwrap_or(&[])
         })
         .with_id_aliases(crate::share::embedded_registry().aliases.clone());
-        // An ability_id is shared across factions (each faction's enrichment
-        // authors its own copy of e.g. "deadly-demise-d3", and the copies
-        // legitimately diverge); dedupe on (faction_id, id) so every faction's
-        // copy is retained and a unit resolves its own faction's ability — the
-        // same scheme as weapons (issue #59). `faction_id` is stamped at
-        // bundle time from the enrichment directory; only the shared `_core`
-        // pool stays faction-less, reachable through the first-wins fallback.
+        // Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare), so a
+        // plain get() is exact and an old bare faction id resolves to nothing.
         let abilities = Collection::build(
             raw.abilities,
             |a| a.ability_id.to_string(),
             |a| Some(a.name.as_str()),
             |a| a.faction_id.as_ref().map(|e| e.as_str()),
-            |a| {
-                format!(
-                    "{}::{}",
-                    a.faction_id.as_ref().map(|e| e.as_str()).unwrap_or(""),
-                    a.ability_id.as_str()
-                )
-            },
-        )
-        // Per-faction copies diverge (DSL fidelity, unit_ids) — same guard as weapons.
-        .with_unscoped_guard("ability");
+            |a| a.ability_id.to_string(),
+        );
 
         let target_profiles = Collection::build(
             raw.target_profiles,
@@ -581,20 +568,13 @@ impl Dataset {
             .unwrap_or_default()
     }
 
-    /// Abilities referenced by `ability_ids`; unresolved ids are skipped.
-    ///
-    /// Resolves within the unit's own faction first — an ability_id shared
-    /// across factions has per-faction copies that diverge. The fallback
-    /// catches the faction-less `_core` pool (and any id absent from this
-    /// faction's enrichment). Mirror of TS `UnitView.abilities`.
+    /// Abilities referenced by `ability_ids`, in order; unresolved ids are skipped. Ability
+    /// ids are unique, so a chapter unit's supplement ability resolves like any other.
+    /// Mirror of TS `UnitView.abilities`.
     pub fn abilities_of(&self, unit: &Unit) -> Vec<&Ability> {
         unit.ability_ids
             .iter()
-            .filter_map(|id| {
-                self.abilities
-                    .get_in_faction(id.as_str(), unit.faction_id.as_str())
-                    .or_else(|| self.abilities.get_any(id.as_str()))
-            })
+            .filter_map(|r| self.abilities.get(r.id()))
             .collect()
     }
 
@@ -607,7 +587,7 @@ impl Dataset {
     }
 
     /// Phases a source acts in, unioned across its phase-mappings, keyed by the
-    /// `source_type` / `source_id` pair (e.g. `("ability", "berzerker-frenzy")`).
+    /// `source_type` / `source_id` pair (e.g. `("ability", "berzerker-frenzy-world-eaters")`).
     pub fn phases_for(&self, source_type: &str, source_id: &str) -> &[Phase] {
         self.phase_index
             .get(&format!("{source_type}:{source_id}"))
@@ -629,10 +609,7 @@ impl Dataset {
     /// `Dataset.reactiveTriggers`.
     pub fn reactive_triggers(&self) -> Vec<ReactiveTrigger<'_>> {
         let mut out: Vec<ReactiveTrigger<'_>> = Vec::new();
-        // The abilities collection retains one copy per faction of a shared
-        // ability_id; this aggregation is faction-less (ReactiveTrigger carries
-        // no faction), so emit each ability id once — first registered copy
-        // wins, matching the collection's own by-id index and the TS mirror.
+        // Ability ids are unique; the guard keeps each id once should a duplicate slip in.
         let mut seen_ids: HashSet<&str> = HashSet::new();
         for ability in self.abilities.all() {
             if !seen_ids.insert(ability.ability_id.as_str()) {
@@ -959,9 +936,9 @@ fn build_reverse_indexes(
     let mut by_weapon: HashMap<String, Vec<usize>> = HashMap::new();
     let mut by_keyword: HashMap<String, Vec<usize>> = HashMap::new();
     for (idx, unit) in units.all().iter().enumerate() {
-        for ability_id in &unit.ability_ids {
+        for ability_ref in &unit.ability_ids {
             by_ability
-                .entry(ability_id.to_string())
+                .entry(ability_ref.id().to_string())
                 .or_default()
                 .push(idx);
         }

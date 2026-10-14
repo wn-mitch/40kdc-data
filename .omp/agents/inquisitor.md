@@ -67,13 +67,13 @@ format — the orchestrator writes them; you don't.
   (see `.claude/skills/faction-score/SKILL.md`; report is gitignored; never quote
   its GW-prose snippets in committed output).
 - Coverage: `data/_audit/coverage.json` + `summary.md` (DSL→cruncher),
-  `store-coverage.md` (prose availability), `cd tools && npm run audit:coverage`
-  to refresh.
+  `cd tools && npm run audit:coverage` to refresh; prose availability is whether
+  `npm run prose -- get <faction> <id>` resolves.
 - History: `_private/loop-state/roundtrip-*.md` (per-ability fidelity ledger:
   start_cos/best_cos/attempts/status/shape) and `inbox-*.md` (needs-schema +
   RESOLVED postmortems). Read these FIRST — re-litigating a resolved item wastes
   a cycle.
-- Spot-check a claim: `jq '.["<id>"]' ../40kdc-abilities/index.json`,
+- Spot-check a claim: `cd tools && npm run prose -- get <faction> <id>`,
   `cd tools && npx tsx src/cli.ts translate <path>`, grep committed data.
 - Bash read-only; writes only under the scratchpad.
 

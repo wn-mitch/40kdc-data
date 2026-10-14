@@ -3,6 +3,7 @@
 + FACTION KEYWORD: Adeptus Astartes
 + DETACHMENT: Gladius Task Force
 + DETACHMENT: 1st Company Task Force
++ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 365pts
 + POINTS LIMIT: 2000pts
 +
@@ -11,5 +12,5 @@
 + NUMBER OF UNITS: 2
 +++++++++++++++++++++++++++++++++++++++++++++++
 
-1x Gladiator Lancer (160 pts): Armoured Hull, Defensive Array, Lancer laser destroyer
-1x Redemptor Dreadnought (205 pts): Fragstorm Grenade Launchers, Heavy Flamer, Heavy onslaught gatling cannon, Redemptor fist, Storm Bolters
+1x Gladiator Lancer (160 pts): Armoured Hull, Defensive Array, Laser Destroyer
+1x Redemptor Dreadnought (205 pts): Fragstorm Grenade Launchers, Heavy Flamer, Heavy onslaught gatling cannon, Redemptor fist

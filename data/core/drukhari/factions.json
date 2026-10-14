@@ -24,7 +24,8 @@
       }
     ],
     "faction_rule_ids": [
-      "power-from-pain"
+      "power-from-pain-drukhari",
+      "corsairs-and-travelling-players-drukhari"
     ]
   }
 ]

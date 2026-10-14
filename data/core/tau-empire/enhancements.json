@@ -1,13 +1,13 @@
 [
   {
-    "id": "exemplar-of-the-kauyon-kauyon",
+    "id": "exemplar-of-the-kauyon-kauyon-tau-empire",
     "name": "Exemplar of the Kauyon",
     "detachment_id": "kauyon",
     "cost": 20,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "exemplar-of-the-kauyon-kauyon",
+    "ability_id": "exemplar-of-the-kauyon-kauyon-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -31,14 +31,14 @@
     ]
   },
   {
-    "id": "precision-of-the-patient-hunter-kauyon",
+    "id": "precision-of-the-patient-hunter-kauyon-tau-empire",
     "name": "Precision of the Patient Hunter",
     "detachment_id": "kauyon",
     "cost": 15,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "precision-of-the-patient-hunter-kauyon",
+    "ability_id": "precision-of-the-patient-hunter-kauyon-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -59,14 +59,14 @@
     ]
   },
   {
-    "id": "solid-image-projection-unit-kauyon",
+    "id": "solid-image-projection-unit-kauyon-tau-empire",
     "name": "Solid-image Projection Unit",
     "detachment_id": "kauyon",
     "cost": 20,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "solid-image-projection-unit-kauyon",
+    "ability_id": "solid-image-projection-unit-kauyon-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -87,14 +87,14 @@
     ]
   },
   {
-    "id": "through-unity-devastation-kauyon",
+    "id": "through-unity-devastation-kauyon-tau-empire",
     "name": "Through Unity, Devastation",
     "detachment_id": "kauyon",
     "cost": 30,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "through-unity-devastation-kauyon",
+    "ability_id": "through-unity-devastation-kauyon-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -118,14 +118,14 @@
     ]
   },
   {
-    "id": "exemplar-of-the-montka-montka",
+    "id": "exemplar-of-the-montka-montka-tau-empire",
     "name": "Exemplar of the Mont’ka",
     "detachment_id": "montka",
     "cost": 10,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "exemplar-of-the-montka-montka",
+    "ability_id": "exemplar-of-the-montka-montka-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -149,14 +149,14 @@
     ]
   },
   {
-    "id": "strike-swiftly-montka",
+    "id": "strike-swiftly-montka-tau-empire",
     "name": "Strike Swiftly",
     "detachment_id": "montka",
     "cost": 45,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "strike-swiftly-montka",
+    "ability_id": "strike-swiftly-montka-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -177,14 +177,14 @@
     ]
   },
   {
-    "id": "strategic-conqueror-montka",
+    "id": "strategic-conqueror-montka-tau-empire",
     "name": "Strategic Conqueror",
     "detachment_id": "montka",
     "cost": 15,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "strategic-conqueror-montka",
+    "ability_id": "strategic-conqueror-montka-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -205,14 +205,14 @@
     ]
   },
   {
-    "id": "coordinated-exploitation-montka",
+    "id": "coordinated-exploitation-montka-tau-empire",
     "name": "Coordinated Exploitation",
     "detachment_id": "montka",
     "cost": 30,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "coordinated-exploitation-montka",
+    "ability_id": "coordinated-exploitation-montka-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -236,7 +236,7 @@
     ]
   },
   {
-    "id": "puretide-engram-neurochip-retaliation-cadre",
+    "id": "puretide-engram-neurochip-retaliation-cadre-tau-empire",
     "name": "Puretide Engram Neurochip",
     "detachment_id": "retaliation-cadre",
     "cost": 15,
@@ -244,7 +244,7 @@
       "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": "puretide-engram-neurochip-retaliation-cadre",
+    "ability_id": "puretide-engram-neurochip-retaliation-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -265,7 +265,7 @@
     ]
   },
   {
-    "id": "starflare-ignition-system-retaliation-cadre",
+    "id": "starflare-ignition-system-retaliation-cadre-tau-empire",
     "name": "Starflare Ignition System",
     "detachment_id": "retaliation-cadre",
     "cost": 20,
@@ -273,7 +273,7 @@
       "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": "starflare-ignition-system-retaliation-cadre",
+    "ability_id": "starflare-ignition-system-retaliation-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -294,7 +294,7 @@
     ]
   },
   {
-    "id": "internal-grenade-racks-retaliation-cadre",
+    "id": "internal-grenade-racks-retaliation-cadre-tau-empire",
     "name": "Internal Grenade Racks",
     "detachment_id": "retaliation-cadre",
     "cost": 20,
@@ -302,7 +302,7 @@
       "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": "internal-grenade-racks-retaliation-cadre",
+    "ability_id": "internal-grenade-racks-retaliation-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -323,7 +323,7 @@
     ]
   },
   {
-    "id": "prototype-weapon-system-retaliation-cadre",
+    "id": "prototype-weapon-system-retaliation-cadre-tau-empire",
     "name": "Prototype Weapon System",
     "detachment_id": "retaliation-cadre",
     "cost": 15,
@@ -331,7 +331,7 @@
       "Battlesuit",
       "T’au Empire"
     ],
-    "ability_id": "prototype-weapon-system-retaliation-cadre",
+    "ability_id": "prototype-weapon-system-retaliation-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -352,14 +352,14 @@
     ]
   },
   {
-    "id": "kroothawk-flock-kroot-hunting-pack",
+    "id": "kroothawk-flock-kroot-hunting-pack-tau-empire",
     "name": "Kroothawk Flock",
     "detachment_id": "kroot-hunting-pack",
     "cost": 10,
     "keyword_restrictions": [
       "Kroot"
     ],
-    "ability_id": "kroothawk-flock-kroot-hunting-pack",
+    "ability_id": "kroothawk-flock-kroot-hunting-pack-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -380,14 +380,14 @@
     ]
   },
   {
-    "id": "nomadic-hunter-kroot-hunting-pack",
+    "id": "nomadic-hunter-kroot-hunting-pack-tau-empire",
     "name": "Nomadic Hunter",
     "detachment_id": "kroot-hunting-pack",
     "cost": 20,
     "keyword_restrictions": [
       "Trail Shaper"
     ],
-    "ability_id": "nomadic-hunter-kroot-hunting-pack",
+    "ability_id": "nomadic-hunter-kroot-hunting-pack-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -408,14 +408,14 @@
     ]
   },
   {
-    "id": "root-carved-weapons-kroot-hunting-pack",
+    "id": "root-carved-weapons-kroot-hunting-pack-tau-empire",
     "name": "Root-carved Weapons",
     "detachment_id": "kroot-hunting-pack",
     "cost": 10,
     "keyword_restrictions": [
       "War Shaper"
     ],
-    "ability_id": "root-carved-weapons-kroot-hunting-pack",
+    "ability_id": "root-carved-weapons-kroot-hunting-pack-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -436,14 +436,14 @@
     ]
   },
   {
-    "id": "borthrod-gland-kroot-hunting-pack",
+    "id": "borthrod-gland-kroot-hunting-pack-tau-empire",
     "name": "Borthrod Gland",
     "detachment_id": "kroot-hunting-pack",
     "cost": 15,
     "keyword_restrictions": [
       "Flesh Shaper"
     ],
-    "ability_id": "borthrod-gland-kroot-hunting-pack",
+    "ability_id": "borthrod-gland-kroot-hunting-pack-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -464,7 +464,7 @@
     ]
   },
   {
-    "id": "student-of-kauyon-auxiliary-cadre",
+    "id": "student-of-kauyon-auxiliary-cadre-tau-empire",
     "name": "Student of Kauyon",
     "detachment_id": "auxiliary-cadre",
     "cost": 20,
@@ -472,7 +472,7 @@
       "Kroot",
       "Shaper"
     ],
-    "ability_id": "student-of-kauyon-auxiliary-cadre",
+    "ability_id": "student-of-kauyon-auxiliary-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -493,14 +493,14 @@
     ]
   },
   {
-    "id": "admired-leader-auxiliary-cadre",
+    "id": "admired-leader-auxiliary-cadre-tau-empire",
     "name": "Admired Leader",
     "detachment_id": "auxiliary-cadre",
     "cost": 20,
     "keyword_restrictions": [
       "T’au Empire"
     ],
-    "ability_id": "admired-leader-auxiliary-cadre",
+    "ability_id": "admired-leader-auxiliary-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -524,50 +524,14 @@
     ]
   },
   {
-    "id": "fanatical-convert-auxiliary-cadre",
-    "name": "Fanatical Convert",
-    "detachment_id": "auxiliary-cadre",
-    "cost": 10,
-    "keyword_restrictions": [
-      "T’au Empire"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "transponder-lock-module-auxiliary-cadre",
-    "name": "Transponder Lock Module",
-    "detachment_id": "auxiliary-cadre",
-    "cost": 25,
-    "keyword_restrictions": [
-      "T’au Empire"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "supernova-launcher-experimental-prototype-cadre",
+    "id": "supernova-launcher-experimental-prototype-cadre-tau-empire",
     "name": "Supernova Launcher",
     "detachment_id": "experimental-prototype-cadre",
     "cost": 15,
     "keyword_restrictions": [
       "Battlesuit"
     ],
-    "ability_id": "supernova-launcher-experimental-prototype-cadre",
+    "ability_id": "supernova-launcher-experimental-prototype-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -588,14 +552,14 @@
     ]
   },
   {
-    "id": "thermoneutronic-projector-experimental-prototype-cadre",
+    "id": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
     "name": "Thermoneutronic Projector",
     "detachment_id": "experimental-prototype-cadre",
     "cost": 15,
     "keyword_restrictions": [
       "Battlesuit"
     ],
-    "ability_id": "thermoneutronic-projector-experimental-prototype-cadre",
+    "ability_id": "thermoneutronic-projector-experimental-prototype-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -616,14 +580,14 @@
     ]
   },
   {
-    "id": "plasma-accelerator-rifle-experimental-prototype-cadre",
+    "id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
     "name": "Plasma Accelerator Rifle",
     "detachment_id": "experimental-prototype-cadre",
     "cost": 20,
     "keyword_restrictions": [
       "Battlesuit"
     ],
-    "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre",
+    "ability_id": "plasma-accelerator-rifle-experimental-prototype-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -644,25 +608,7 @@
     ]
   },
   {
-    "id": "fusion-blades-experimental-prototype-cadre",
-    "name": "Fusion Blades",
-    "detachment_id": "experimental-prototype-cadre",
-    "cost": 25,
-    "keyword_restrictions": [
-      "T’au Empire"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "negation-emitters-upgrade-advanced-acquisition-cadre",
+    "id": "negation-emitters-upgrade-advanced-acquisition-cadre-tau-empire",
     "name": "Negation Emitters (Upgrade)",
     "detachment_id": "advanced-acquisition-cadre",
     "cost": 15,
@@ -670,7 +616,7 @@
       "Stealth Battlesuits",
       "T’au Empire"
     ],
-    "ability_id": "negation-emitters-advanced-acquisition-cadre",
+    "ability_id": "negation-emitters-upgrade-advanced-acquisition-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -691,11 +637,11 @@
     ]
   },
   {
-    "id": "unmasking-suite-upgrade-advanced-acquisition-cadre",
+    "id": "unmasking-suite-upgrade-advanced-acquisition-cadre-tau-empire",
     "name": "Unmasking Suite (Upgrade)",
     "detachment_id": "advanced-acquisition-cadre",
     "cost": 15,
-    "ability_id": "unmasking-suite-advanced-acquisition-cadre",
+    "ability_id": "unmasking-suite-upgrade-advanced-acquisition-cadre-tau-empire",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -727,7 +673,7 @@
     ]
   },
   {
-    "id": "earth-caste-modifications-sudden-dawn-cadre",
+    "id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
     "name": "Earth Caste Modifications",
     "detachment_id": "sudden-dawn-cadre",
     "cost": 0,
@@ -743,7 +689,7 @@
     "keyword_restrictions": [
       "Commander Cloudspear"
     ],
-    "ability_id": "earth-caste-modifications-sudden-dawn-cadre",
+    "ability_id": "earth-caste-modifications-sudden-dawn-cadre-tau-empire",
     "external_refs": [
       {
         "namespace": "mfm",
@@ -752,7 +698,7 @@
     ]
   },
   {
-    "id": "proximity-scanners-sudden-dawn-cadre",
+    "id": "proximity-scanners-sudden-dawn-cadre-tau-empire",
     "name": "Proximity Scanners",
     "detachment_id": "sudden-dawn-cadre",
     "cost": 0,
@@ -769,7 +715,7 @@
       "Sudden Dawn Cadre Devilfish"
     ],
     "upgrade_tag": true,
-    "ability_id": "proximity-scanners-sudden-dawn-cadre",
+    "ability_id": "proximity-scanners-sudden-dawn-cadre-tau-empire",
     "external_refs": [
       {
         "namespace": "mfm",

@@ -13,6 +13,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from wh40kdc.data.ability_refs import (
+    ability_ref_id,
+    ability_ref_value,
+    unit_ability_ids,
+    with_rating,
+)
+
 if TYPE_CHECKING:
     from wh40kdc.data.dataset import Dataset
 
@@ -25,6 +32,45 @@ def _resolve_all(ids: list[str] | None, get: Any) -> list[Any]:
         if v is not None:
             out.append(v)
     return out
+
+
+def usage_gated(ability_type: Any, usage: Any, effect: Any) -> Any:
+    """An ability's effect gated on its usage limit ("once per battle", "once per turn").
+
+    Using it is the player's choice, so its buffs are an opt-in lever (``<ability>@<frequency>``).
+    Called only when no trigger already gates the effect. A stratagem is already opt-in.
+    """
+    # Several limits that all apply are still one player-chosen use; the first limit names
+    # the lever.
+    limit = (usage[0] if usage else None) if isinstance(usage, list) else usage
+    frequency = limit.get("frequency") if isinstance(limit, dict) else None
+    if effect is None or not isinstance(frequency, str) or ability_type == "stratagem":
+        return effect
+    return {
+        "type": "conditional",
+        "condition": {"type": "timing-is", "parameters": {"timing": frequency}},
+        "effect": effect,
+    }
+
+
+def trigger_gated(behavior: Any, trigger: Any, effect: Any) -> Any:
+    """A reactive ability's effect gated on its trigger, the way a ``timing-is`` condition gates it.
+
+    The moment is one the player opts into, so a triggered buff is an activatable lever
+    (``<ability>@<event>``) rather than always on. Several triggers are alternatives. A trigger
+    on an attack step is met by every attack, and an activated ability (a stratagem) is already
+    opt-in, so neither is gated.
+    """
+    from wh40kdc.cruncher.from_dsl import is_attack_step, moment_gate
+
+    if behavior != "reactive":
+        return effect
+    triggers = trigger if isinstance(trigger, list) else [trigger]
+    # An ability firing on an attack step applies to every attack; its trigger condition is
+    # already how the authored data gates such abilities (in the effect), so nothing is added.
+    if any(is_attack_step(item) for item in triggers):
+        return effect
+    return moment_gate(trigger, effect)
 
 
 class UnitView:
@@ -64,18 +110,20 @@ class UnitView:
 
     @property
     def abilities(self) -> list[AbilityView]:
-        """Abilities referenced by ``ability_ids``, resolved within the unit's
-        own faction first — an ability_id shared across factions has
-        per-faction copies that diverge. The fallback catches the faction-less
-        ``_core`` pool. Unresolved ids are skipped."""
-        faction_id = self.raw.get("faction_id", "")
+        """Abilities referenced by ``ability_ids``; unresolved ids are skipped. Ability ids
+        are unique, so a chapter unit's supplement ability resolves like any other."""
         return _resolve_all(
-            self.raw.get("ability_ids"),
-            lambda id_: (
-                self._ds.abilities.get_in_faction(id_, faction_id)
-                or self._ds.abilities.get_any(id_)
-            ),
+            unit_ability_ids(self.raw.get("ability_ids")),
+            lambda id_: self._ds.abilities.get(id_),
         )
+
+    def rating_of(self, ability_id: str) -> str | int | float | None:
+        """The rating this unit's datasheet prints for a rated rule (the D3 of Deadly
+        Demise D3), if any."""
+        for ref in self.raw.get("ability_ids") or []:
+            if ability_ref_id(ref) == ability_id:
+                return ability_ref_value(ref)
+        return None
 
     @property
     def wargear_options(self) -> list[dict[str, Any]]:
@@ -217,7 +265,7 @@ class AbilityView:
             return effect
 
         modifier = effect.get("modifier")
-        ability_id = modifier.get("ability_id") if isinstance(modifier, dict) else None
+        ability_id = modifier.get("ability") if isinstance(modifier, dict) else None
         if (
             effect.get("type") == "ability-grant"
             and isinstance(modifier, dict)
@@ -225,12 +273,7 @@ class AbilityView:
             and isinstance(ability_id, str)
             and ability_id not in seen
         ):
-            faction_id = self.raw.get("faction_id")
-            target = (
-                self._ds.abilities.get_in_faction(ability_id, faction_id)
-                if isinstance(faction_id, str)
-                else None
-            ) or self._ds.abilities.get_any(ability_id)
+            target = self._ds.abilities.get(ability_id)
             target_effect = target.raw.get("effect") if target is not None else None
             if isinstance(target_effect, dict) and target_effect.get("type") == "rules-bundle":
                 return self._resolve_rules_bundles(target_effect, seen | frozenset([ability_id]))
@@ -249,6 +292,7 @@ class AbilityView:
         source: dict[str, Any],
         context: dict[str, Any] | None = None,
         perspective: str = "attacker",
+        rating: str | int | float | None = None,
     ) -> list[dict[str, Any]]:
         """Buff stack this ability contributes against ``context``.
 
@@ -256,31 +300,38 @@ class AbilityView:
         auto-apply are dropped here; call :meth:`describe_buffs` if you also
         want the diagnostics.
         """
-        return self.describe_buffs(source, context, perspective)["applied"]
+        return self.describe_buffs(source, context, perspective, rating)["applied"]
 
     def describe_buffs(
         self,
         source: dict[str, Any],
         context: dict[str, Any] | None = None,
         perspective: str = "attacker",
+        rating: str | int | float | None = None,
     ) -> dict[str, Any]:
-        """Full DSL→Buff translation, including the ``unsupported`` list."""
+        """Full DSL→Buff translation, including the ``unsupported`` list. ``rating`` is
+        the rating the owning unit prints for a rated rule (``{rating: true}``)."""
         from wh40kdc.cruncher.from_dsl import effect_to_buffs
 
         ctx = context if context is not None else {"phase": "shooting"}
+        # A rated rule ({rating: true}) reads the rating the owning unit prints.
+        resolved = with_rating(self._resolve_rules_bundles(self.raw.get("effect")), rating)
+        moment = trigger_gated(self.raw.get("behavior"), self.raw.get("trigger"), resolved)
         translated = effect_to_buffs(
-            self._resolve_rules_bundles(self.raw.get("effect")),
+            moment
+            if moment is not resolved
+            else usage_gated(self.raw.get("ability_type"), self.raw.get("usage"), resolved),
             source,
             ctx,
             perspective,
         )
-        # A range-scoped ability (DSL scope.range_inches, e.g. a "within 18\""
-        # reroll) gates on distance to the target. Stamp it here, not in the
-        # effect translator, so the effect-translation corpus (bare effects) is
-        # unaffected; the gate is permissive until a caller sets distanceInches.
-        scope = self.raw.get("scope") or {}
-        rng = scope.get("range_inches")
-        if not isinstance(rng, (int, float)) or isinstance(rng, bool):
+        # An aura (an effect whose target filter reaches units `within` N", e.g. a
+        # "within 18\"" reroll) gates on distance to the target. Stamp it here, not
+        # in the effect translator, so the effect-translation corpus (bare effects)
+        # is unaffected; the gate is permissive until a caller sets distanceInches.
+        # Only a single inch range gates.
+        rng = aura_inches(resolved)
+        if rng is None:
             return translated
 
         def gate(b: dict[str, Any]) -> dict[str, Any]:
@@ -460,3 +511,33 @@ class FactionView:
                 seen.add(weapon.id)
                 out.append(weapon)
         return out
+
+
+def aura_inches(effect: Any) -> float | int | None:
+    """The one inch range every aura-filtered effect target in ``effect`` reaches,
+    if there is exactly one (``target.within.range.inches``)."""
+    found: list[float | int] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                walk(item)
+            return
+        if not isinstance(node, dict):
+            return
+        target = node.get("target")
+        if isinstance(node.get("type"), str) and isinstance(target, dict):
+            within = target.get("within")
+            rng = within.get("range") if isinstance(within, dict) else None
+            inches = rng.get("inches") if isinstance(rng, dict) else None
+            if (
+                isinstance(inches, (int, float))
+                and not isinstance(inches, bool)
+                and inches not in found
+            ):
+                found.append(inches)
+        for value in node.values():
+            walk(value)
+
+    walk(effect)
+    return found[0] if len(found) == 1 else None

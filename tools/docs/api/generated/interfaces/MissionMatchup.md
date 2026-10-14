@@ -6,7 +6,7 @@
 
 # Interface: MissionMatchup
 
-Defined in: [generated.ts:439](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L439)
+Defined in: [generated.ts:1522](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1522)
 
 One cell of the 11e Force Disposition matrix: given the player's own Force Disposition and their opponent's, the mission that player plays. Mirrors a single row on a physical Force Disposition card. The (disposition, opponent_disposition) pair is the conceptual key; compound uniqueness across entries is a data convention, not enforced by this schema.
 
@@ -19,7 +19,7 @@ via the `definition` "mission-matchup".
 
 > **id**: `string`
 
-Defined in: [generated.ts:440](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L440)
+Defined in: [generated.ts:1523](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1523)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [generated.ts:440](https://github.com/wn-mitch/40kdc-data/blob/0b695
 
 > **disposition**: `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:444](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L444)
+Defined in: [generated.ts:1527](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1527)
 
 The player's own Force Disposition.
 
@@ -37,7 +37,7 @@ The player's own Force Disposition.
 
 > **opponent\_disposition**: `"take-and-hold"` \| `"disruption"` \| `"purge-the-foe"` \| `"priority-assets"` \| `"reconnaissance"`
 
-Defined in: [generated.ts:448](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L448)
+Defined in: [generated.ts:1531](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1531)
 
 The opponent's Force Disposition.
 
@@ -47,7 +47,7 @@ The opponent's Force Disposition.
 
 > **mission\_id**: `string`
 
-Defined in: [generated.ts:452](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L452)
+Defined in: [generated.ts:1535](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1535)
 
 Kebab-case identifier
 
@@ -57,4 +57,4 @@ Kebab-case identifier
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:453](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L453)
+Defined in: [generated.ts:1536](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L1536)

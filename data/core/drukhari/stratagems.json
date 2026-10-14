@@ -1,6 +1,6 @@
 [
   {
-    "id": "a-challenge-met-spectacle-of-spite",
+    "id": "a-challenge-met-spectacle-of-spite-drukhari",
     "name": "A CHALLENGE MET",
     "category": "detachment",
     "type": "battle-tactic",
@@ -12,7 +12,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "a-challenge-met-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "acrobatic-display-exhibition-of-slaughter",
+    "id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "name": "Acrobatic Display",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -40,7 +40,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "acrobatic-display-exhibition-of-slaughter",
+    "ability_id": "acrobatic-display-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": "acrobatic-display-spectacle-of-spite",
+    "id": "acrobatic-display-spectacle-of-spite-drukhari",
     "name": "ACROBATIC DISPLAY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -69,7 +69,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "acrobatic-display-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -86,7 +86,7 @@
     ]
   },
   {
-    "id": "agonising-onslaught-coven-of-agonies",
+    "id": "agonising-onslaught-coven-of-agonies-drukhari",
     "name": "Agonising Onslaught",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -98,7 +98,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "agonising-onslaught-coven-of-agonies",
+    "ability_id": "agonising-onslaught-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -111,7 +111,7 @@
     ]
   },
   {
-    "id": "berserk-fugue-spectacle-of-spite",
+    "id": "berserk-fugue-spectacle-of-spite-drukhari",
     "name": "BERSERK FUGUE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -123,7 +123,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "berserk-fugue-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -140,7 +140,7 @@
     ]
   },
   {
-    "id": "connoisseurs-of-pain-covenite-coterie",
+    "id": "connoisseurs-of-pain-covenite-coterie-drukhari",
     "name": "CONNOISSEURS OF PAIN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -153,7 +153,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "connoisseurs-of-pain-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -170,7 +170,7 @@
     ]
   },
   {
-    "id": "dance-macabre-reapers-wager",
+    "id": "dance-macabre-reapers-wager-drukhari",
     "name": "DANCE MACABRE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -182,7 +182,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dance-macabre-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -199,7 +199,7 @@
     ]
   },
   {
-    "id": "dark-harvest-realspace-raiders",
+    "id": "dark-harvest-realspace-raiders-drukhari",
     "name": "DARK HARVEST",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -211,7 +211,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dark-harvest-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -228,7 +228,7 @@
     ]
   },
   {
-    "id": "deadly-debut-spectacle-of-spite",
+    "id": "deadly-debut-spectacle-of-spite-drukhari",
     "name": "DEADLY DEBUT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -240,7 +240,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "deadly-debut-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -257,7 +257,7 @@
     ]
   },
   {
-    "id": "deadly-deceivers-kabalite-cartel",
+    "id": "deadly-deceivers-kabalite-cartel-drukhari",
     "name": "DEADLY DECEIVERS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -269,7 +269,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "deadly-deceivers-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -286,7 +286,7 @@
     ]
   },
   {
-    "id": "distillers-of-fear-covenite-coterie",
+    "id": "distillers-of-fear-covenite-coterie-drukhari",
     "name": "DISTILLERS OF FEAR",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -298,7 +298,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "distillers-of-fear-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -315,7 +315,7 @@
     ]
   },
   {
-    "id": "dividends-of-agony-tools-of-torment",
+    "id": "dividends-of-agony-tools-of-torment-drukhari",
     "name": "Dividends of Agony",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -326,7 +326,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "dividends-of-agony-tools-of-torment",
+    "ability_id": "dividends-of-agony-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -343,7 +343,7 @@
     ]
   },
   {
-    "id": "double-cross-kabalite-cartel",
+    "id": "double-cross-kabalite-cartel-drukhari",
     "name": "DOUBLE-CROSS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -355,7 +355,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "double-cross-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -372,7 +372,7 @@
     ]
   },
   {
-    "id": "eager-for-the-kill-realspace-raiders",
+    "id": "eager-for-the-kill-realspace-raiders-drukhari",
     "name": "EAGER FOR THE KILL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -384,7 +384,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "eager-for-the-kill-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -401,7 +401,7 @@
     ]
   },
   {
-    "id": "enemies-without-number-kabalite-cartel",
+    "id": "enemies-without-number-kabalite-cartel-drukhari",
     "name": "ENEMIES WITHOUT NUMBER",
     "category": "detachment",
     "type": "epic-deed",
@@ -413,7 +413,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "enemies-without-number-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -430,7 +430,7 @@
     ]
   },
   {
-    "id": "enfolding-nightmare-covenite-coterie",
+    "id": "enfolding-nightmare-covenite-coterie-drukhari",
     "name": "ENFOLDING NIGHTMARE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -442,7 +442,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "enfolding-nightmare-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -459,7 +459,7 @@
     ]
   },
   {
-    "id": "fateful-role-reapers-wager",
+    "id": "fateful-role-reapers-wager-drukhari",
     "name": "FATEFUL ROLE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -471,7 +471,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fateful-role-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -488,7 +488,7 @@
     ]
   },
   {
-    "id": "feigned-weakness-spectacle-of-spite",
+    "id": "feigned-weakness-spectacle-of-spite-drukhari",
     "name": "FEIGNED WEAKNESS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -500,7 +500,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "feigned-weakness-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -517,7 +517,7 @@
     ]
   },
   {
-    "id": "fighting-shadows-realspace-raiders",
+    "id": "fighting-shadows-realspace-raiders-drukhari",
     "name": "FIGHTING SHADOWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -530,7 +530,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fighting-shadows-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -547,7 +547,7 @@
     ]
   },
   {
-    "id": "hardened-physiology-coven-of-agonies",
+    "id": "hardened-physiology-coven-of-agonies-drukhari",
     "name": "Hardened Physiology",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -559,7 +559,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "hardened-physiology-coven-of-agonies",
+    "ability_id": "hardened-physiology-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -572,7 +572,7 @@
     ]
   },
   {
-    "id": "insensible-to-pain-realspace-raiders",
+    "id": "insensible-to-pain-realspace-raiders-drukhari",
     "name": "INSENSIBLE TO PAIN",
     "category": "detachment",
     "type": "battle-tactic",
@@ -585,7 +585,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "insensible-to-pain-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -602,7 +602,7 @@
     ]
   },
   {
-    "id": "instinctive-spite-realspace-raiders",
+    "id": "instinctive-spite-realspace-raiders-drukhari",
     "name": "INSTINCTIVE SPITE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -615,7 +615,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "instinctive-spite-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -632,7 +632,7 @@
     ]
   },
   {
-    "id": "killers-from-the-dark-spires-kabalite-agonysts",
+    "id": "killers-from-the-dark-spires-kabalite-agonysts-drukhari",
     "name": "Killers From the Dark Spires",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -643,7 +643,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts",
+    "ability_id": "killers-from-the-dark-spires-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -660,7 +660,7 @@
     ]
   },
   {
-    "id": "making-a-point-kabalite-cartel",
+    "id": "making-a-point-kabalite-cartel-drukhari",
     "name": "MAKING A POINT",
     "category": "detachment",
     "type": "battle-tactic",
@@ -672,7 +672,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "making-a-point-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -689,7 +689,7 @@
     ]
   },
   {
-    "id": "malicious-frenzy-reapers-wager",
+    "id": "malicious-frenzy-reapers-wager-drukhari",
     "name": "MALICIOUS FRENZY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -702,7 +702,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "malicious-frenzy-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -719,7 +719,7 @@
     ]
   },
   {
-    "id": "murderers-circus-reapers-wager",
+    "id": "murderers-circus-reapers-wager-drukhari",
     "name": "MURDERER’S CIRCUS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -731,7 +731,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "murderers-circus-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -748,7 +748,7 @@
     ]
   },
   {
-    "id": "night-shield-skysplinter-assault",
+    "id": "night-shield-skysplinter-assault-drukhari",
     "name": "NIGHT SHIELD",
     "category": "detachment",
     "type": "wargear",
@@ -760,7 +760,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "night-shield-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -777,7 +777,7 @@
     ]
   },
   {
-    "id": "planned-strikes-exhibition-of-slaughter",
+    "id": "planned-strikes-exhibition-of-slaughter-drukhari",
     "name": "Planned Strikes",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -788,7 +788,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "planned-strikes-exhibition-of-slaughter",
+    "ability_id": "planned-strikes-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -805,7 +805,7 @@
     ]
   },
   {
-    "id": "poisoners-art-covenite-coterie",
+    "id": "poisoners-art-covenite-coterie-drukhari",
     "name": "POISONER’S ART",
     "category": "detachment",
     "type": "epic-deed",
@@ -817,7 +817,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "poisoners-art-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -834,7 +834,7 @@
     ]
   },
   {
-    "id": "postmortality-covenite-coterie",
+    "id": "postmortality-covenite-coterie-drukhari",
     "name": "POSTMORTALITY",
     "category": "detachment",
     "type": "epic-deed",
@@ -850,7 +850,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "postmortality-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -867,7 +867,7 @@
     ]
   },
   {
-    "id": "pounce-on-the-prey-skysplinter-assault",
+    "id": "pounce-on-the-prey-skysplinter-assault-drukhari",
     "name": "POUNCE ON THE PREY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -879,7 +879,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "pounce-on-the-prey-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -896,7 +896,7 @@
     ]
   },
   {
-    "id": "powerful-creations-coven-of-agonies",
+    "id": "powerful-creations-coven-of-agonies-drukhari",
     "name": "Powerful Creations",
     "category": "detachment",
     "detachment_id": "coven-of-agonies",
@@ -907,7 +907,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "powerful-creations-coven-of-agonies",
+    "ability_id": "powerful-creations-coven-of-agonies-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -920,7 +920,7 @@
     ]
   },
   {
-    "id": "preternatural-agility-spectacle-of-spite",
+    "id": "preternatural-agility-spectacle-of-spite-drukhari",
     "name": "PRETERNATURAL AGILITY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -933,7 +933,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "preternatural-agility-spectacle-of-spite-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -950,7 +950,7 @@
     ]
   },
   {
-    "id": "prioritised-victim-kabalite-agonysts",
+    "id": "prioritised-victim-kabalite-agonysts-drukhari",
     "name": "Prioritised Victim",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -962,7 +962,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "prioritised-victim-kabalite-agonysts",
+    "ability_id": "prioritised-victim-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -979,7 +979,7 @@
     ]
   },
   {
-    "id": "raid-and-fade-realspace-raiders",
+    "id": "raid-and-fade-realspace-raiders-drukhari",
     "name": "RAID AND FADE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -991,7 +991,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "raid-and-fade-realspace-raiders-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1008,7 +1008,7 @@
     ]
   },
   {
-    "id": "salting-the-wound-tools-of-torment",
+    "id": "salting-the-wound-tools-of-torment-drukhari",
     "name": "Salting the Wound",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -1019,7 +1019,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "salting-the-wound-tools-of-torment",
+    "ability_id": "salting-the-wound-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1036,7 +1036,7 @@
     ]
   },
   {
-    "id": "scintillating-tempo-reapers-wager",
+    "id": "scintillating-tempo-reapers-wager-drukhari",
     "name": "SCINTILLATING TEMPO",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1049,7 +1049,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "scintillating-tempo-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1066,7 +1066,7 @@
     ]
   },
   {
-    "id": "sculpting-the-stage-exhibition-of-slaughter",
+    "id": "sculpting-the-stage-exhibition-of-slaughter-drukhari",
     "name": "Sculpting the Stage",
     "category": "detachment",
     "detachment_id": "exhibition-of-slaughter",
@@ -1077,7 +1077,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "sculpting-the-stage-exhibition-of-slaughter",
+    "ability_id": "sculpting-the-stage-exhibition-of-slaughter-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1094,7 +1094,7 @@
     ]
   },
   {
-    "id": "shadows-reach-kabalite-agonysts",
+    "id": "shadows-reach-kabalite-agonysts-drukhari",
     "name": "Shadows’ Reach",
     "category": "detachment",
     "detachment_id": "kabalite-agonysts",
@@ -1105,7 +1105,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "shadows-reach-kabalite-agonysts",
+    "ability_id": "shadows-reach-kabalite-agonysts-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1122,7 +1122,7 @@
     ]
   },
   {
-    "id": "shorten-the-odds-reapers-wager",
+    "id": "shorten-the-odds-reapers-wager-drukhari",
     "name": "SHORTEN THE ODDS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1134,7 +1134,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "shorten-the-odds-reapers-wager-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1151,7 +1151,7 @@
     ]
   },
   {
-    "id": "skyborne-annihilation-skysplinter-assault",
+    "id": "skyborne-annihilation-skysplinter-assault-drukhari",
     "name": "SKYBORNE ANNIHILATION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1163,7 +1163,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "skyborne-annihilation-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1180,7 +1180,7 @@
     ]
   },
   {
-    "id": "swooping-mockery-skysplinter-assault",
+    "id": "swooping-mockery-skysplinter-assault-drukhari",
     "name": "SWOOPING MOCKERY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1192,7 +1192,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "swooping-mockery-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1209,7 +1209,7 @@
     ]
   },
   {
-    "id": "symphony-of-suffering-covenite-coterie",
+    "id": "symphony-of-suffering-covenite-coterie-drukhari",
     "name": "SYMPHONY OF SUFFERING",
     "category": "detachment",
     "type": "epic-deed",
@@ -1221,7 +1221,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "symphony-of-suffering-covenite-coterie-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1238,7 +1238,7 @@
     ]
   },
   {
-    "id": "tailored-toxins-kabalite-cartel",
+    "id": "tailored-toxins-kabalite-cartel-drukhari",
     "name": "TAILORED TOXINS",
     "category": "detachment",
     "type": "epic-deed",
@@ -1251,7 +1251,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tailored-toxins-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1268,7 +1268,7 @@
     ]
   },
   {
-    "id": "taken-alive-kabalite-cartel",
+    "id": "taken-alive-kabalite-cartel-drukhari",
     "name": "TAKEN ALIVE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1280,7 +1280,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "taken-alive-kabalite-cartel-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1297,7 +1297,7 @@
     ]
   },
   {
-    "id": "urgent-metamorphosis-tools-of-torment",
+    "id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "name": "Urgent Metamorphosis",
     "category": "detachment",
     "detachment_id": "tools-of-torment",
@@ -1308,7 +1308,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "urgent-metamorphosis-tools-of-torment",
+    "ability_id": "urgent-metamorphosis-tools-of-torment-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1325,7 +1325,7 @@
     ]
   },
   {
-    "id": "vicious-blades-skysplinter-assault",
+    "id": "vicious-blades-skysplinter-assault-drukhari",
     "name": "VICIOUS BLADES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1337,7 +1337,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vicious-blades-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1354,7 +1354,7 @@
     ]
   },
   {
-    "id": "wraithlike-retreat-skysplinter-assault",
+    "id": "wraithlike-retreat-skysplinter-assault-drukhari",
     "name": "WRAITHLIKE RETREAT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1366,7 +1366,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wraithlike-retreat-skysplinter-assault-drukhari",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

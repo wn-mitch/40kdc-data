@@ -8,7 +8,7 @@
 
 > **StackableBuff** = `object`
 
-Defined in: [data/dataset.ts:59](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L59)
+Defined in: [data/dataset.ts:67](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L67)
 
 One toggleable buff lever for damage analysis: the contributions it adds and
 whether it's on by default. `enabled` is `true` for buffs that always apply
@@ -27,7 +27,7 @@ then crunches the enabled subset; an optimizer searches it.
 
 > **id**: `string`
 
-Defined in: [data/dataset.ts:61](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L61)
+Defined in: [data/dataset.ts:69](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L69)
 
 Stable toggle id (stable across re-enumeration of the same input).
 
@@ -37,7 +37,7 @@ Stable toggle id (stable across re-enumeration of the same input).
 
 > **label**: `string`
 
-Defined in: [data/dataset.ts:63](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L63)
+Defined in: [data/dataset.ts:71](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L71)
 
 Human label for the lever.
 
@@ -47,7 +47,7 @@ Human label for the lever.
 
 > **buffs**: [`Buff`](Buff.md)[]
 
-Defined in: [data/dataset.ts:65](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L65)
+Defined in: [data/dataset.ts:73](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L73)
 
 Contributions this lever adds when enabled (≥1).
 
@@ -57,7 +57,7 @@ Contributions this lever adds when enabled (≥1).
 
 > **enabled**: `boolean`
 
-Defined in: [data/dataset.ts:67](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L67)
+Defined in: [data/dataset.ts:75](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L75)
 
 Default selection state.
 
@@ -67,7 +67,7 @@ Default selection state.
 
 > **source**: [`BuffSource`](BuffSource.md)
 
-Defined in: [data/dataset.ts:69](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L69)
+Defined in: [data/dataset.ts:77](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L77)
 
 Where the lever came from.
 
@@ -77,6 +77,6 @@ Where the lever came from.
 
 > `optional` **group?**: `string`
 
-Defined in: [data/dataset.ts:71](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/dataset.ts#L71)
+Defined in: [data/dataset.ts:79](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/dataset.ts#L79)
 
 Id of the mutually-limited [StackableBuffGroup](StackableBuffGroup.md) this belongs to, if any.

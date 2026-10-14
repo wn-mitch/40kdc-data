@@ -9,10 +9,10 @@
  *
  * ── detachment_rule_ids: structural rule-ability association ──
  * detachment_rule lists the named rule(s) a detachment carries. The rule PROSE is
- * authored enrichment (DSL / raw-text store) and never enters this repo; only the
+ * GW's, stays in the private dump and never enters this repo; only the
  * structural id LINK is dump-derived here. Each dump rule display name is slugged
  * with {@link nameToId} (the same bare-id form the authored rule abilities use,
- * e.g. "Warp Rifts" → `warp-rifts`) and reconciled against the detachment's authored
+ * e.g. "Warp Rifts" → `warp-rifts-chaos-daemons`) and reconciled against the detachment's authored
  * `detachment_rule_id` (deprecated singular) + `detachment_rule_ids`. A link is only
  * ever WRITTEN when its slug resolves to an ability already authored in the dir's
  * enrichment — an unresolved id would fail `integrity.ts`, and inventing the ability
@@ -46,12 +46,13 @@
  *
  * IP: reads only ids and English keyword display names. No rules/lore prose.
  */
+import { mirrorIds } from "./mirror/ids.js";
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
 import { CORE_DIR, ENRICHMENT_DIR, readJsonArray } from "./repo-files.js";
-import { repoDirForFactionName, repoDirs } from "./faction-map.js";
+import { CODEX_CHAPTERS, repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { keywordLabel, factionKeywordLabel } from "./keywords.js";
 import type { StagedWrite } from "./apply.js";
 
@@ -106,8 +107,19 @@ export function requiredKeywordsForDetachment(
     else if (unresolved) unresolved.push(e.factionKeywordId);
   }
   if (labels.length === 0) return null;
+  // A detachment a codex chapter owns is locked to that chapter: an Adeptus Astartes roster may
+  // take Blade of Ultramar only with Ultramarines units. Since data version 963 the dump names
+  // the chapter as the owner instead of listing it beside the Adeptus Astartes owner. Chapters
+  // with their own codex also own their detachments but stay unlocked, so allies remain legal.
+  if (ownName && dir && CODEX_CHAPTERS.has(dir) && labels.length === 1 && labels[0] === ownName) {
+    return [ownName];
+  }
   // Ownership keyword present ⇒ roster-wide enumeration, not a restriction.
   if (ownName && labels.includes(ownName)) return null;
+  // Listing the parent army's keyword (Adeptus Astartes beside every chapter, as Deathwatch
+  // Support does, with no owner of its own) is also an enumeration of everyone: required keywords
+  // must ALL be held, so keeping the list would bar every unit.
+  if (labels.includes("Adeptus Astartes")) return null;
   // Ownership absent: a genuine lock keeps only labels narrower than the roster.
   // Drop the roster/home keyword (slug == dir) and the owner itself — requiring
   // the roster keyword restricts nothing.
@@ -135,22 +147,26 @@ export function tagsForDetachment(dump: MfmDump, detId: string, unresolved?: str
 }
 
 /**
- * Bare slug ids for a detachment's dump rule(s) — one `nameToId` per
- * `detachment_rule` row's English display name, sorted and de-duplicated. This is
- * the same bare-id form the authored rule abilities use (`ability_id`), so it can be
- * reconciled directly against `detachment_rule_id`/`detachment_rule_ids`. A name that
- * cannot slug (throws the entity-id pattern) is skipped. Reads only ids and display
- * names — never rule prose.
+ * Ids for a detachment's dump rule(s) — the id `mfm:mirror` gives each
+ * `detachment_rule` row (`<name>-<faction>`), sorted and de-duplicated. This is the
+ * id the rule's ability record carries, so it reconciles directly against
+ * `detachment_rule_id`/`detachment_rule_ids`. Reads only ids — never rule prose.
  */
 export function ruleIdsForDetachment(dump: MfmDump, detId: string): string[] {
   const ids = new Set<string>();
+  const mirror = mirrorIds(dump);
   for (const r of dump.children("detachment_rule.detachmentId", detId)) {
-    const name = dump.enName(r);
-    if (!name) continue;
-    try {
-      ids.add(nameToId(name));
-    } catch {
-      /* name that cannot form a valid entity id (e.g. all-punctuation) — skip */
+    const id = mirror.idOf("detachment_rule", r.id);
+    if (id) ids.add(id);
+  }
+  // A Combat Patrol's army rules apply only when that patrol is played, so they ride its detachment
+  // (the same links `mfm:mirror` writes; see mirror/rule-links.ts).
+  const pubId = dump.byId("detachment").get(detId)?.publicationId;
+  const publication = pubId ? dump.byId("publication").get(pubId) : undefined;
+  if (publication?.isCombatPatrol && dump.tables.army_rule) {
+    for (const r of dump.table("army_rule")) {
+      if (r.publicationId !== pubId) continue;
+      for (const id of mirror.idsOf("army_rule", r.id, "army-rule")) ids.add(id);
     }
   }
   return [...ids].sort((a, b) => a.localeCompare(b));

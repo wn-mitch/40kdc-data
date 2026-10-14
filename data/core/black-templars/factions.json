@@ -25,7 +25,17 @@
       }
     ],
     "faction_rule_ids": [
-      "templar-vows"
+      "combat-doctrines-black-templars",
+      "transhuman-strategist-black-templars",
+      "heirs-of-sigismund-black-templars"
+    ],
+    "army_construction_rules": [
+      {
+        "type": "faction-keyword-cohesion",
+        "base_faction_keyword": "Adeptus Astartes",
+        "additional_keyword_source": "chapter",
+        "max_distinct": 1
+      }
     ]
   }
 ]

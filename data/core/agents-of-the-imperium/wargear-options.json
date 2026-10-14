@@ -523,15 +523,10 @@
     },
     "is_free": true,
     "replaces": [
-      "power-weapon"
+      "boltgun"
     ],
-    "replacement_choice": [
-      [
-        "astartes-shield"
-      ],
-      [
-        "xenophase-blade"
-      ]
+    "replacement": [
+      "combi-weapon-deathwatch-kill-team"
     ],
     "model_constraint": {
       "model_name": "Watch Sergeant",
@@ -548,44 +543,10 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun",
       "power-weapon"
     ],
-    "replacement_choice": [
-      [
-        "close-combat-weapon-deathwatch-kill-team",
-        "frag-cannon"
-      ],
-      [
-        "astartes-shield",
-        "xenophase-blade"
-      ],
-      [
-        "infernus-heavy-bolter",
-        "close-combat-weapon-deathwatch-kill-team"
-      ],
-      [
-        "stalker-pattern-boltgun",
-        "close-combat-weapon-deathwatch-kill-team"
-      ],
-      [
-        "astartes-shield",
-        "combi-weapon-deathwatch-kill-team"
-      ],
-      [
-        "deathwatch-thunder-hammer"
-      ],
-      [
-        "deathwatch-shotgun",
-        "close-combat-weapon-deathwatch-kill-team"
-      ],
-      [
-        "black-shield-blades"
-      ],
-      [
-        "combi-weapon-deathwatch-kill-team",
-        "xenophase-blade"
-      ]
+    "replacement": [
+      "xenophase-blade"
     ],
     "model_constraint": {
       "model_name": "Watch Sergeant",
@@ -602,23 +563,64 @@
     },
     "is_free": true,
     "replaces": [
-      "boltgun"
+      "boltgun",
+      "power-weapon"
     ],
-    "replacement_choice": [
-      [
-        "astartes-shield"
-      ],
-      [
-        "combi-weapon-deathwatch-kill-team"
-      ]
+    "replacement": [
+      "infernus-heavy-bolter",
+      "knives-and-fists"
     ],
     "model_constraint": {
-      "model_name": "Watch Sergeant",
-      "any_number": true
+      "model_name": "Deathwatch Veteran",
+      "per_n_models": 5
     }
   },
   {
     "id": "deathwatch-kill-team-wgo-mfm-4",
+    "unit_id": "deathwatch-kill-team",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "knives-and-fists",
+      "stalker-pattern-boltgun"
+    ],
+    "model_constraint": {
+      "model_name": "Deathwatch Veteran",
+      "per_n_models": 5
+    }
+  },
+  {
+    "id": "deathwatch-kill-team-wgo-mfm-5",
+    "unit_id": "deathwatch-kill-team",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun",
+      "power-weapon"
+    ],
+    "replacement": [
+      "frag-cannon",
+      "knives-and-fists"
+    ],
+    "model_constraint": {
+      "model_name": "Deathwatch Veteran",
+      "per_n_models": 5
+    }
+  },
+  {
+    "id": "deathwatch-kill-team-wgo-mfm-6",
     "unit_id": "deathwatch-kill-team",
     "faction_id": "agents-of-the-imperium",
     "game_version": {
@@ -635,52 +637,20 @@
         "black-shield-blades"
       ],
       [
-        "close-combat-weapon-deathwatch-kill-team",
-        "infernus-heavy-bolter"
-      ],
-      [
-        "close-combat-weapon-deathwatch-kill-team",
+        "knives-and-fists",
         "deathwatch-shotgun"
       ],
       [
-        "stalker-pattern-boltgun",
-        "close-combat-weapon-deathwatch-kill-team"
-      ],
-      [
-        "close-combat-weapon-deathwatch-kill-team",
-        "frag-cannon"
-      ],
-      [
-        "deathwatch-thunder-hammer"
+        "heavy-thunder-hammer"
       ]
     ],
     "model_constraint": {
-      "model_name": "Deathwatch Veterans",
+      "model_name": "Deathwatch Veteran",
       "any_number": true
     }
   },
   {
-    "id": "deathwatch-kill-team-wgo-mfm-5",
-    "unit_id": "deathwatch-kill-team",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "boltgun"
-    ],
-    "replacement": [
-      "astartes-shield"
-    ],
-    "model_constraint": {
-      "model_name": "Deathwatch Veterans",
-      "any_number": true
-    }
-  },
-  {
-    "id": "deathwatch-kill-team-wgo-mfm-6",
+    "id": "deathwatch-kill-team-wgo-mfm-7",
     "unit_id": "deathwatch-kill-team",
     "faction_id": "agents-of-the-imperium",
     "game_version": {
@@ -692,10 +662,30 @@
       "power-weapon"
     ],
     "replacement": [
-      "astartes-shield"
+      "storm-shield"
     ],
     "model_constraint": {
-      "model_name": "Deathwatch Veterans",
+      "model_name": "Deathwatch Veteran",
+      "any_number": true
+    }
+  },
+  {
+    "id": "deathwatch-kill-team-wgo-mfm-8",
+    "unit_id": "deathwatch-kill-team",
+    "faction_id": "agents-of-the-imperium",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "boltgun"
+    ],
+    "replacement": [
+      "storm-shield"
+    ],
+    "model_constraint": {
+      "model_name": "Deathwatch Veteran",
       "any_number": true
     }
   },
@@ -725,13 +715,13 @@
     },
     "is_free": true,
     "replaces": [
-      "deathwatch-marksman-bolt-carbine"
+      "stalker-bolt-rifle"
     ],
     "replacement": [
-      "combat-knife"
+      "plasma-incinerator"
     ],
     "model_constraint": {
-      "model_name": "Deathwatch Veteran",
+      "model_name": "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists",
       "any_number": true
     }
   },
@@ -749,10 +739,10 @@
     ],
     "replacement": [
       "power-weapon-aquila-kill-team",
-      "astartes-shield"
+      "storm-shield"
     ],
     "model_constraint": {
-      "model_name": "Deathwatch Veteran",
+      "model_name": "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol",
       "any_number": true
     }
   },
@@ -766,35 +756,15 @@
     },
     "is_free": true,
     "replaces": [
-      "stalker-bolt-rifle"
-    ],
-    "replacement": [
-      "plasma-incinerator"
-    ],
-    "model_constraint": {
-      "model_name": "Deathwatch Veteran",
-      "any_number": true
-    }
-  },
-  {
-    "id": "aquila-kill-team-wgo-mfm-4",
-    "unit_id": "aquila-kill-team",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
       "infernus-heavy-bolter-aquila-kill-team"
     ],
     "replacement_choice": [
       [
-        "astartes-grenade-launcher",
-        "hellstorm-bolt-rifle"
+        "frag-cannon-aquila-kill-team"
       ],
       [
-        "frag-cannon-aquila-kill-team"
+        "hellstorm-bolt-rifle",
+        "grenade-launcher"
       ]
     ],
     "model_constraint": {
@@ -1146,13 +1116,13 @@
       "dataslate": "launch"
     },
     "is_free": true,
-    "replacement_choice": [
-      [
-        "infernum-halo-launcher"
-      ],
-      [
-        "auspex-array"
-      ]
+    "replaces": [
+      "blackstar-rocket-launcher",
+      "blackstar-rocket-launcher"
+    ],
+    "replacement": [
+      "stormstrike-missile-launcher",
+      "stormstrike-missile-launcher"
     ],
     "model_constraint": {
       "any_number": true
@@ -1172,43 +1142,6 @@
     ],
     "replacement": [
       "twin-lascannon"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "corvus-blackstar-wgo-mfm-3",
-    "unit_id": "corvus-blackstar",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replaces": [
-      "blackstar-rocket-launcher",
-      "blackstar-rocket-launcher"
-    ],
-    "replacement": [
-      "stormstrike-missile-launcher",
-      "stormstrike-missile-launcher"
-    ],
-    "model_constraint": {
-      "any_number": true
-    }
-  },
-  {
-    "id": "corvus-blackstar-wgo-mfm-4",
-    "unit_id": "corvus-blackstar",
-    "faction_id": "agents-of-the-imperium",
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "launch"
-    },
-    "is_free": true,
-    "replacement": [
-      "hurricane-bolter"
     ],
     "model_constraint": {
       "any_number": true

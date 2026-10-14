@@ -122,79 +122,37 @@
     },
     "game-event": {
       "type": "string",
-      "description": "The single canonical 'when' vocabulary, shared by the reactive `trigger.event` (the dispatch key an event-driven consumer subscribes on) and the `timing-is` condition. Supersedes the former timing-flag entity's step-level vocabulary, adding movement/lifecycle/targeting events. Grouped: phase/turn structure, setup/reserves, movement, combat dice steps, attack lifecycle, destruction, and tests.",
+      "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.",
       "enum": [
-        "start-of-phase",
-        "end-of-phase",
-        "start-of-turn",
-        "end-of-turn",
-        "start-of-opponent-turn",
-        "end-of-opponent-turn",
-        "start-of-battle-round",
-        "start-of-command-phase",
-        "declare-battle-formations",
-        "post-deployment",
-        "unit-set-up",
-        "set-up-from-reserves",
-        "arrives-from-strategic-reserves",
-        "starts-in-strategic-reserves",
-        "game-start-in-reserves",
-        "deep-strike-setup",
-        "reinforcements",
-        "normal-move",
-        "advance-move",
-        "advances",
-        "fall-back-move",
-        "falls-back",
-        "charge-move",
-        "end-of-charge-move",
-        "charge-declaration",
-        "moved-through-terrain",
-        "moved-through-tall-terrain",
-        "enemy-unit-ended-move",
-        "enemy-unit-fell-back",
-        "before-hit-roll",
-        "after-hit-roll",
-        "before-wound-roll",
-        "after-wound-roll",
-        "attack-scores-wound",
-        "before-save-roll",
-        "after-save-roll",
-        "before-damage-roll",
-        "after-damage-roll",
-        "before-charge-roll",
-        "after-charge-roll",
-        "before-advance-roll",
-        "after-advance-roll",
-        "before-battle-shock",
-        "after-battle-shock",
-        "on-unit-selected",
-        "selected-to-shoot",
-        "selected-to-fight",
-        "selected-to-advance",
-        "after-unit-resolves-attacks",
-        "after-scoring-hit",
-        "after-enemy-unit-fires",
-        "on-unit-destroyed",
-        "on-model-destroyed",
-        "first-model-destroyed",
-        "before-bearer-removed",
-        "enemy-unit-destroyed-in-melee",
-        "on-damage-allocated",
-        "battle-shock-test",
-        "leadership-test",
-        "desperate-escape-test",
-        "stratagem-targeted",
-        "ability-target-selected",
-        "end-of-opponent-charge-phase",
-        "enemy-unit-completed-shooting-targeting-bearer",
-        "enemy-unit-selects-bearer-as-charge-target",
-        "enemy-unit-targets-bearer",
-        "enemy-unit-completed-fall-back-from-bearer",
-        "act-of-faith-completed",
-        "act-of-faith-performed",
-        "miracle-die-generated",
-        "enemy-unit-selected-charge-targets-before-charge-move"
+        "battle-started",
+        "battle-formations-declared",
+        "deployment-ended",
+        "round-started",
+        "round-ended",
+        "turn-started",
+        "turn-ended",
+        "phase-started",
+        "phase-ended",
+        "step-started",
+        "selected",
+        "targets-selected",
+        "move-ended",
+        "set-up",
+        "disembarked",
+        "before-roll",
+        "after-roll",
+        "damage-allocated",
+        "attacks-resolved",
+        "destroyed",
+        "model-destroyed",
+        "used",
+        "state-changed",
+        "designation-changed",
+        "designation-resolved",
+        "marker-removed",
+        "objective-gained",
+        "resource-gained",
+        "resource-spent"
       ]
     },
     "battle-size": {
@@ -394,6 +352,839 @@
         "shape"
       ],
       "additionalProperties": false
+    },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "friendly",
+        "enemy",
+        "any"
+      ],
+      "description": "Which player a unit, objective or resource belongs to."
+    },
+    "unit-state": {
+      "type": "string",
+      "enum": [
+        "engaged",
+        "battle-shocked",
+        "embarked",
+        "in-strategic-reserves",
+        "on-battlefield",
+        "hidden",
+        "fights-first",
+        "benefit-of-cover"
+      ],
+      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged)."
+    },
+    "unit-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.",
+      "properties": {
+        "owner": {
+          "$ref": "#/$defs/owner"
+        },
+        "all_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "any_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "none_of": {
+          "$ref": "#/$defs/keyword-list"
+        },
+        "designated": {
+          "$ref": "#/$defs/designation-id",
+          "description": "The unit carries this designation (a tag an effect applied)."
+        },
+        "state": {
+          "$ref": "#/$defs/unit-state"
+        },
+        "level": {
+          "enum": [
+            "unit",
+            "model"
+          ],
+          "description": "model: the filter matches individual models. Default unit."
+        },
+        "visible": {
+          "const": true,
+          "description": "Only units visible to the subject of the enclosing predicate."
+        },
+        "within": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "range"
+          ],
+          "properties": {
+            "range": {
+              "$ref": "#/$defs/range-ref"
+            },
+            "of": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "wholly": {
+              "const": true
+            }
+          },
+          "description": "Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients."
+        },
+        "excluding": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Not this unit (\"another friendly unit\")."
+        },
+        "designated_by": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "The designation was applied by this unit (their Spotted unit). Requires `designated`."
+        },
+        "not_designated": {
+          "$ref": "#/$defs/designation-id",
+          "description": "The unit does not carry this designation."
+        },
+        "embarked_in": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Units embarked within this Transport."
+        },
+        "member_of": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Models (level: model) or units that are part of this unit, attached units included."
+        },
+        "engaged_with": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Units within Engagement Range of at least one unit matching this filter."
+        },
+        "not_engaged_with": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Units within Engagement Range of no unit matching this filter."
+        },
+        "has_ability": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Units with every listed ability."
+        },
+        "lacks_ability": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Units with none of the listed abilities."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "designated_by"
+            ]
+          },
+          "then": {
+            "required": [
+              "designated"
+            ]
+          }
+        }
+      ]
+    },
+    "unit-ref": {
+      "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "this-unit",
+            "this-model",
+            "model-in-this-unit",
+            "attacker",
+            "defender",
+            "event-subject",
+            "event-object",
+            "stratagem-target",
+            "selected-unit",
+            "recipient",
+            "bearer-transport",
+            "ability-unit"
+          ],
+          "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability, even inside a selection's eligibility, where this-unit names the candidate being checked."
+        },
+        {
+          "$ref": "#/$defs/unit-filter"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_var"
+          ],
+          "properties": {
+            "event_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "The object a sibling trigger bound with binds_event_variable."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selection_var"
+          ],
+          "properties": {
+            "selection_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "A unit an earlier selection step bound."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stratagem_target"
+          ],
+          "properties": {
+            "stratagem_target": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "description": "One named target of a Stratagem with several targets (its target_restrictions list names each one)."
+        }
+      ]
+    },
+    "range-ref": {
+      "description": "One reference for every distance.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inches"
+          ],
+          "properties": {
+            "inches": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "string",
+          "enum": [
+            "engagement",
+            "aura",
+            "weapon",
+            "half-weapon",
+            "detection",
+            "objective-control"
+          ],
+          "description": "engagement: Engagement Range. aura: the aura range of the unit the distance is measured from (its aura abilities' own ranges). weapon / half-weapon: the attacking weapon's range, or half of it. detection: detection range. objective-control: the range at which a model counts for an objective."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "aura_of"
+          ],
+          "properties": {
+            "aura_of": {
+              "$ref": "#/$defs/entity-id"
+            }
+          },
+          "description": "The current aura range of another ability, extensions included (Contagion Range is {aura_of: nurgle-s-gift-aura})."
+        }
+      ]
+    },
+    "history-window": {
+      "type": "string",
+      "enum": [
+        "phase",
+        "turn",
+        "round",
+        "battle",
+        "previous-turn",
+        "event"
+      ],
+      "description": "How far back a history condition looks. event: during the triggering event (this attack, this move)."
+    },
+    "objective-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Which objectives. Every listed property must hold.",
+      "properties": {
+        "role": {
+          "enum": [
+            "central",
+            "expansion",
+            "home",
+            "non-home"
+          ]
+        },
+        "home_of": {
+          "enum": [
+            "friendly",
+            "enemy"
+          ],
+          "description": "The friendly or the enemy home objective."
+        },
+        "territory": {
+          "enum": [
+            "your-territory",
+            "enemy-territory",
+            "no-mans-land"
+          ]
+        },
+        "controlled_by": {
+          "$ref": "#/$defs/owner"
+        },
+        "designated": {
+          "$ref": "#/$defs/designation-id"
+        },
+        "name": {
+          "$ref": "#/$defs/entity-id",
+          "description": "A mission-specific named objective."
+        },
+        "selection_var": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The objective marker a select-objective step bound."
+        }
+      }
+    },
+    "region-ref": {
+      "description": "A region of the battlefield.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "territory"
+          ],
+          "properties": {
+            "territory": {
+              "enum": [
+                "your-territory",
+                "enemy-territory",
+                "no-mans-land",
+                "your-deployment-zone",
+                "enemy-deployment-zone",
+                "attacker-territory"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "terrain_area"
+          ],
+          "properties": {
+            "terrain_area": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "designated": {
+                  "$ref": "#/$defs/designation-id"
+                },
+                "footprint": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule_region"
+          ],
+          "properties": {
+            "rule_region": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "region_id"
+              ],
+              "properties": {
+                "region_id": {
+                  "$ref": "#/$defs/entity-id"
+                },
+                "owner_faction": {
+                  "$ref": "#/$defs/entity-id"
+                }
+              }
+            }
+          },
+          "description": "A region an army rule defines (Flow of Magic, Hallowed Ground)."
+        }
+      ]
+    },
+    "event-filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Narrows an event family: which selection, move, roll or rule. Only the properties that make sense for the family are used.",
+      "properties": {
+        "to": {
+          "enum": [
+            "move",
+            "shoot",
+            "fight",
+            "attack",
+            "disembark",
+            "observe",
+            "declare-charge"
+          ],
+          "description": "selected: what the unit was selected to do. attack means shoot or fight."
+        },
+        "kind": {
+          "enum": [
+            "attack",
+            "shoot",
+            "fight",
+            "charge",
+            "stratagem",
+            "ability",
+            "action",
+            "manoeuvre",
+            "order",
+            "ritual",
+            "dark-pact",
+            "act-of-faith",
+            "doctrine",
+            "contract"
+          ],
+          "description": "targets-selected / attacks-resolved / used: which kind of targeting, attack or rule."
+        },
+        "id": {
+          "$ref": "#/$defs/entity-id",
+          "description": "Which one of `kind` (a Stratagem, ability, action…)."
+        },
+        "move_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "normal",
+              "advance",
+              "remain-stationary",
+              "fall-back",
+              "charge",
+              "pile-in",
+              "consolidation",
+              "ingress",
+              "surge",
+              "scout",
+              "disembark"
+            ]
+          }
+        },
+        "mode": {
+          "$ref": "#/$defs/move-mode",
+          "description": "A move type's named mode (a Fall Back's desperate escape, a combat disembark)."
+        },
+        "roll": {
+          "$ref": "#/$defs/roll-kind"
+        },
+        "result": {
+          "$ref": "#/$defs/roll-outcome"
+        },
+        "from": {
+          "enum": [
+            "strategic-reserves",
+            "deep-strike",
+            "cult-ambush",
+            "transport"
+          ]
+        },
+        "through": {
+          "enum": [
+            "terrain",
+            "tall-terrain"
+          ]
+        },
+        "attack_type": {
+          "enum": [
+            "ranged",
+            "melee",
+            "psychic",
+            "mortal"
+          ]
+        },
+        "weapon_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "weapon_keyword": {
+          "type": "string",
+          "minLength": 1
+        },
+        "by": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Who caused it (the unit or model whose attack destroyed the object)."
+        },
+        "timing": {
+          "enum": [
+            "before-removal"
+          ],
+          "description": "destroyed: resolve before the model is removed."
+        },
+        "first": {
+          "const": true,
+          "description": "Only the first time this happens in the window."
+        },
+        "step": {
+          "enum": [
+            "battle-shock",
+            "reinforcements"
+          ]
+        },
+        "state": {
+          "$ref": "#/$defs/unit-state"
+        },
+        "tag": {
+          "$ref": "#/$defs/designation-id"
+        },
+        "pool": {
+          "type": "string",
+          "minLength": 1
+        },
+        "marker": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ability_keyword": {
+          "type": "string",
+          "minLength": 1,
+          "description": "used: any ability whose name carries this keyword in brackets (BONDSMAN for every '(Bondsman)' ability), instead of one `id`."
+        },
+        "same_rule_as": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "event_var"
+          ],
+          "properties": {
+            "event_var": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "used: the same ability or Stratagem the event a trigger bound (binds_event_variable) used."
+        }
+      }
+    },
+    "roll-kind": {
+      "oneOf": [
+        {
+          "enum": [
+            "hit",
+            "wound",
+            "save",
+            "damage",
+            "charge",
+            "advance",
+            "battle-shock",
+            "leadership",
+            "hazard",
+            "psychic",
+            "desperate-escape",
+            "dark-pact",
+            "blessings-of-khorne",
+            "manoeuvre",
+            "channelling"
+          ]
+        },
+        {
+          "$ref": "#/$defs/ability-roll"
+        }
+      ]
+    },
+    "roll-outcome": {
+      "enum": [
+        "success",
+        "failure",
+        "critical"
+      ]
+    },
+    "battle-size-value": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+      "properties": {
+        "incursion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strike-force": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "onslaught": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "incursion",
+        "strike-force",
+        "onslaught"
+      ]
+    },
+    "scaling-source": {
+      "type": "string",
+      "enum": [
+        "enemy-models-in-range",
+        "friendly-models-in-range",
+        "models-in-bearer-unit",
+        "models-in-or-embarked-in-bearer",
+        "models-embarked-in-bearer",
+        "embarked-models-oc",
+        "models-equipped-with",
+        "enemy-units-in-range",
+        "wounds-lost",
+        "battle-round"
+      ],
+      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number."
+    },
+    "roll-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roll_var"
+      ],
+      "description": "The result of a roll an enclosing `roll` step bound: its total, or (with successes_on) how many of its dice rolled that value or higher.",
+      "properties": {
+        "roll_var": {
+          "type": "string",
+          "minLength": 1
+        },
+        "successes_on": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 6
+        }
+      }
+    },
+    "count-of": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count_of"
+      ],
+      "description": "A number equal to how many of `count_of` there are (models in this unit with `keyword`, models equipped with `wargear`, the battle round number).",
+      "properties": {
+        "count_of": {
+          "$ref": "#/$defs/scaling-source"
+        },
+        "keyword": {
+          "$ref": "#/$defs/keyword"
+        },
+        "wargear": {
+          "$ref": "#/$defs/entity-id"
+        },
+        "within_inches": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "count_of": {
+                "const": "models-equipped-with"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "wargear"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "wargear"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "quantity": {
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, or the rating the unit prints for this rule.",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string",
+          "pattern": "^(\\d*D(3|6)(\\+\\d+)?|\\d+)$"
+        },
+        {
+          "$ref": "#/$defs/battle-size-value"
+        },
+        {
+          "$ref": "#/$defs/roll-reference"
+        },
+        {
+          "$ref": "#/$defs/count-of"
+        },
+        {
+          "$ref": "#/$defs/unit-rating"
+        }
+      ]
+    },
+    "move-mode": {
+      "enum": [
+        "ordered-retreat",
+        "desperate-escape",
+        "ongoing",
+        "engaging",
+        "objective",
+        "rapid",
+        "tactical",
+        "combat",
+        "emergency",
+        "assault"
+      ],
+      "description": "A move type's named mode: a Fall Back's ordered retreat or desperate escape, a rapid, combat, assault or emergency disembarkation."
+    },
+    "ability-roll": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of_ability"
+      ],
+      "properties": {
+        "of_ability": {
+          "$ref": "#/$defs/entity-id"
+        }
+      },
+      "description": "The dice a named ability rolls (Reanimation Protocols' roll), not every roll the unit makes."
+    },
+    "place-ref": {
+      "description": "Something a distance is measured to: a unit, an objective marker, a named marker, a battlefield edge or the centre of the battlefield.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/unit-ref"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "objective"
+          ],
+          "properties": {
+            "objective": {
+              "$ref": "#/$defs/objective-filter"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "marker"
+          ],
+          "properties": {
+            "marker": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "enum": [
+            "battlefield-edge",
+            "battlefield-centre"
+          ]
+        }
+      ]
+    },
+    "placement-near": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of",
+        "range"
+      ],
+      "description": "Set up within `range` of `of` (wholly within, if set).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/place-ref"
+        },
+        "range": {
+          "$ref": "#/$defs/range-ref"
+        },
+        "wholly": {
+          "const": true
+        }
+      }
+    },
+    "placement-away": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "of",
+        "range"
+      ],
+      "description": "Set up more than `range` away from `of` (enemy models: {owner: enemy}).",
+      "properties": {
+        "of": {
+          "$ref": "#/$defs/place-ref"
+        },
+        "range": {
+          "$ref": "#/$defs/range-ref"
+        }
+      }
+    },
+    "placement-region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "region"
+      ],
+      "description": "Set up inside a region (wholly inside, if set).",
+      "properties": {
+        "region": {
+          "$ref": "#/$defs/region-ref"
+        },
+        "wholly": {
+          "const": true
+        }
+      }
+    },
+    "designation-id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them."
+    },
+    "unit-rating": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rating"
+      ],
+      "properties": {
+        "rating": {
+          "const": true
+        }
+      },
+      "description": "The rating the unit's datasheet prints for this rule (the D3 of Deadly Demise D3, the 5 of Feel No Pain 5+): the value of the unit's ability_ids entry for the ability that carries this effect."
     }
   }
 }

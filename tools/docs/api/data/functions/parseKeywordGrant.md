@@ -8,7 +8,7 @@
 
 > **parseKeywordGrant**(`raw`): [`WeaponKeywordRef`](../type-aliases/WeaponKeywordRef.md) \| `null`
 
-Defined in: [cruncher/from-dsl.ts:1220](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L1220)
+Defined in: [cruncher/from-dsl.ts:1612](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L1612)
 
 Parse a printed weapon-keyword string (e.g. `"Sustained Hits 1"`,
 `"Anti-INFANTRY 4+"`, `"Lethal Hits"`) into a `{keyword_id, parameters?}`

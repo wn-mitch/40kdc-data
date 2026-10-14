@@ -19,6 +19,11 @@
 //! `bundled-data` feature; build with `default-features = false` for a
 //! types-only crate with no embedded data and no extra dependencies.
 
+// The abilities resolver and an ability's buff translation build on the cruncher's DSL→buff
+// translator.
+#[cfg(feature = "cruncher")]
+mod abilities;
+mod ability_refs;
 mod collection;
 mod dataset;
 mod loadout;
@@ -35,6 +40,12 @@ pub mod battle_sizes;
 #[cfg(feature = "import")]
 pub mod roster;
 
+#[cfg(feature = "cruncher")]
+pub use abilities::{
+    aura_inches, trigger_gated, usage_gated, EligibilityInput, EligibleAbility,
+    EligibleAbilitySource,
+};
+pub use ability_refs::{printed_wargear_ids, rating_of, unit_ability_ids, with_rating};
 pub use collection::Collection;
 pub use dataset::{Dataset, RawData, ReactiveTrigger};
 pub use loadout::{

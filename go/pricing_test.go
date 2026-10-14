@@ -20,9 +20,9 @@ func TestBaseUnitPointsOrdinalBands(t *testing.T) {
 	cases := []struct {
 		models, ordinal, want int
 	}{
-		{5, 1, 165}, {5, 2, 165}, {10, 1, 330},
-		{5, 3, 175}, {10, 3, 340}, {5, 7, 175},
-		{7, 1, 330}, // inside the 6-10 range tier (not the 5-model tier)
+		{5, 1, 175}, {5, 2, 175}, {10, 1, 350},
+		{5, 3, 185}, {10, 3, 360}, {5, 7, 185},
+		{7, 1, 350}, // inside the 6-10 range tier (not the 5-model tier)
 	}
 	for _, c := range cases {
 		if got := baseUnitPoints(ct, c.models, c.ordinal); got != c.want {

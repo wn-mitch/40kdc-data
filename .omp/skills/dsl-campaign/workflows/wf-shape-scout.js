@@ -67,7 +67,7 @@ const graphAgent = createTrustedAgent({ driverArgs: args, invokeAgent: agent })
 // Pin every agent to the loop workspace (subagents inherit the DRIVER cwd, which may be another checkout).
 const PRE = args.repo_root
   ? `Repo root: ${args.repo_root} — cd there first; run every command and resolve every ` +
-    `relative path (including ../40kdc-abilities and ../40kdc-embeddings) against it. ` +
+    `relative path (including ../40kdc-embeddings) against it. ` +
     `Never read or write any other checkout of this repo.\n`
   : ''
 
@@ -486,7 +486,7 @@ for (let round = 0; round < MAX_ROUNDS; round++) {
         expansion: expandCampaignScope(scopeStore, {
           run_id: args.run_id,
           expected_repository_hash: JSON.parse(repository.payload_json).workspace_hash,
-          raw_store_root: join(args.repo_root, '..', '40kdc-abilities'),
+          raw_store_root: join(args.repo_root, '_private', 'prose'), // the dump-prose export (graph/prose-source.js)
           family_template_node_id: certified.family_template_node_id,
           family_members: certified.family_members,
           apply_transaction_id: `${args.run_id}:family-apply:${certified.family_template_node_id.slice(0, 16)}`,

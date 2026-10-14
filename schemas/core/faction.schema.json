@@ -26,6 +26,36 @@
       "uniqueItems": true,
       "description": "References to the faction-wide abilities in display order"
     },
+    "army_construction_rules": {
+      "type": "array",
+      "description": "Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": { "const": "faction-keyword-cohesion" },
+          "base_faction_keyword": {
+            "$ref": "../defs/common.schema.json#/$defs/keyword"
+          },
+          "additional_keyword_source": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Which secondary Faction keyword the constraint counts (e.g. `chapter`)."
+          },
+          "max_distinct": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of distinct additional faction keywords an army may include."
+          }
+        },
+        "required": [
+          "type",
+          "base_faction_keyword",
+          "additional_keyword_source",
+          "max_distinct"
+        ]
+      }
+    },
     "logo_url": {
       "type": "string",
       "format": "uri",

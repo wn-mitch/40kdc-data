@@ -173,17 +173,7 @@ func kwConditional(node, source map[string]any, ctx map[string]any) []any {
 	if !ok {
 		return nil
 	}
-	negated := condition["negated"] == true
-	verdict := kwEvaluateCondition(condition, ctx)
-	if verdict == nil { // unknown
-		return nil
-	}
-	v := verdict.(bool)
-	active := v
-	if negated {
-		active = !v
-	}
-	if !active {
+	if kwEvaluateCondition(condition, ctx) != true {
 		return nil
 	}
 	return kwWalk(node["effect"], source, ctx)
@@ -191,12 +181,32 @@ func kwConditional(node, source map[string]any, ctx map[string]any) []any {
 
 // kwEvaluateCondition returns bool, or nil for "unknown".
 func kwEvaluateCondition(condition, ctx map[string]any) any {
+	if condition["operator"] == "not" {
+		if operands, ok := asList(condition["operands"]); ok && len(operands) > 0 {
+			if first, ok := asMap(operands[0]); ok && first != nil {
+				v := kwEvaluateCondition(first, ctx)
+				if v == nil {
+					return nil
+				}
+				return !v.(bool)
+			}
+		}
+	}
+	params, _ := getMap(condition, "parameters")
 	switch getStr(condition, "type") {
-	case "remained-stationary":
-		return ctx["attackerStationary"] == true
-	case "target-has-keyword":
-		params, _ := getMap(condition, "parameters")
-		kw, ok := params["keyword"].(string)
+	case "happened":
+		filter, _ := getMap(params, "filter")
+		types, _ := asList(filter["move_types"])
+		if params["event"] == "move-ended" && len(types) == 1 && types[0] == "remain-stationary" && params["subject"] == nil {
+			return ctx["attackerStationary"] == true
+		}
+		return nil
+	case "has-keyword":
+		all, _ := asList(params["all_of"])
+		if params["subject"] != "defender" || params["any_of"] != nil || len(all) != 1 {
+			return nil
+		}
+		kw, ok := all[0].(string)
 		if !ok {
 			return nil
 		}

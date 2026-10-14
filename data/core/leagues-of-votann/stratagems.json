@@ -1,6 +1,6 @@
 [
   {
-    "id": "adaptable-avarice-persecution-prospect",
+    "id": "adaptable-avarice-persecution-prospect-leagues-of-votann",
     "name": "ADAPTABLE AVARICE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -16,7 +16,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "adaptable-avarice-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -33,7 +33,7 @@
     ]
   },
   {
-    "id": "ancestral-sentence-needgaard-oathband",
+    "id": "ancestral-sentence-needgaard-oathband-leagues-of-votann",
     "name": "ANCESTRAL SENTENCE",
     "category": "detachment",
     "type": "battle-tactic",
@@ -45,7 +45,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ancestral-sentence-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -62,7 +62,7 @@
     ]
   },
   {
-    "id": "augmented-assault-delve-assault-shift",
+    "id": "augmented-assault-delve-assault-shift-leagues-of-votann",
     "name": "AUGMENTED ASSAULT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -74,7 +74,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "augmented-assault-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id": "auxiliary-contract-mercenary-oathband",
+    "id": "auxiliary-contract-mercenary-oathband-leagues-of-votann",
     "name": "AUXILIARY CONTRACT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -104,7 +104,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "auxiliary-contract-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -121,7 +121,7 @@
     ]
   },
   {
-    "id": "bastion-running-brandfast-oathband",
+    "id": "bastion-running-brandfast-oathband-leagues-of-votann",
     "name": "BASTION RUNNING",
     "category": "detachment",
     "type": "battle-tactic",
@@ -133,7 +133,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "bastion-running-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -150,7 +150,7 @@
     ]
   },
   {
-    "id": "brekkeknots-hearthband",
+    "id": "brekkeknots-hearthband-leagues-of-votann",
     "name": "BRËKKEKNOTS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -163,7 +163,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "brekkeknots-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -180,7 +180,7 @@
     ]
   },
   {
-    "id": "brekkeknots-hearthguard-covenant",
+    "id": "brekkeknots-hearthguard-covenant-leagues-of-votann",
     "name": "Brëkkeknots",
     "category": "detachment",
     "detachment_id": "hearthguard-covenant",
@@ -192,7 +192,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "brekkeknots-hearthguard-covenant",
+    "ability_id": "brekkeknots-hearthguard-covenant-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -209,7 +209,7 @@
     ]
   },
   {
-    "id": "built-to-last-armoured-trailblazers",
+    "id": "built-to-last-armoured-trailblazers-leagues-of-votann",
     "name": "Built to Last",
     "category": "detachment",
     "detachment_id": "armoured-trailblazers",
@@ -220,7 +220,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "built-to-last-armoured-trailblazers",
+    "ability_id": "built-to-last-armoured-trailblazers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -237,7 +237,7 @@
     ]
   },
   {
-    "id": "claimed-for-the-kindred-bane-slayers-bulwark",
+    "id": "claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann",
     "name": "Claimed for the Kindred",
     "category": "detachment",
     "detachment_id": "bane-slayers-bulwark",
@@ -248,7 +248,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "claimed-for-the-kindred-bane-slayers-bulwark",
+    "ability_id": "claimed-for-the-kindred-bane-slayers-bulwark-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -261,7 +261,7 @@
     ]
   },
   {
-    "id": "claimstaker-reflex-persecution-prospect",
+    "id": "claimstaker-reflex-persecution-prospect-leagues-of-votann",
     "name": "CLAIMSTAKER REFLEX",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -273,7 +273,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "claimstaker-reflex-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -290,7 +290,7 @@
     ]
   },
   {
-    "id": "cogitated-need-hearthfyre-arsenal",
+    "id": "cogitated-need-hearthfyre-arsenal-leagues-of-votann",
     "name": "COGITATED NEED",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -302,7 +302,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cogitated-need-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -319,7 +319,7 @@
     ]
   },
   {
-    "id": "coordinated-crossfire-armoured-trailblazers",
+    "id": "coordinated-crossfire-armoured-trailblazers-leagues-of-votann",
     "name": "Coordinated Crossfire",
     "category": "detachment",
     "detachment_id": "armoured-trailblazers",
@@ -330,7 +330,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "coordinated-crossfire-armoured-trailblazers",
+    "ability_id": "coordinated-crossfire-armoured-trailblazers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -347,7 +347,7 @@
     ]
   },
   {
-    "id": "cyberstimm-infusion-delve-assault-shift",
+    "id": "cyberstimm-infusion-delve-assault-shift-leagues-of-votann",
     "name": "CYBERSTIMM INFUSION",
     "category": "detachment",
     "type": "battle-tactic",
@@ -359,7 +359,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "cyberstimm-infusion-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -376,7 +376,7 @@
     ]
   },
   {
-    "id": "delayed-fire-rounds-hearthfyre-arsenal",
+    "id": "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann",
     "name": "DELAYED-FIRE ROUNDS",
     "category": "detachment",
     "type": "wargear",
@@ -388,7 +388,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "delayed-fire-rounds-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -405,7 +405,7 @@
     ]
   },
   {
-    "id": "dispersed-formation-persecution-prospect",
+    "id": "dispersed-formation-persecution-prospect-leagues-of-votann",
     "name": "DISPERSED FORMATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -417,7 +417,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "dispersed-formation-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -434,7 +434,7 @@
     ]
   },
   {
-    "id": "economy-of-motion-farseekers",
+    "id": "economy-of-motion-farseekers-leagues-of-votann",
     "name": "Economy of Motion",
     "category": "detachment",
     "detachment_id": "farseekers",
@@ -445,7 +445,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "economy-of-motion-farseekers",
+    "ability_id": "economy-of-motion-farseekers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -462,7 +462,7 @@
     ]
   },
   {
-    "id": "exposed-flaws-persecution-prospect",
+    "id": "exposed-flaws-persecution-prospect-leagues-of-votann",
     "name": "EXPOSED FLAWS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -474,7 +474,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "exposed-flaws-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -491,7 +491,7 @@
     ]
   },
   {
-    "id": "first-concern-hearthfyre-arsenal",
+    "id": "first-concern-hearthfyre-arsenal-leagues-of-votann",
     "name": "FIRST CONCERN",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -503,7 +503,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "first-concern-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -520,7 +520,7 @@
     ]
   },
   {
-    "id": "frontier-momentum-persecution-prospect",
+    "id": "frontier-momentum-persecution-prospect-leagues-of-votann",
     "name": "FRONTIER MOMENTUM",
     "category": "detachment",
     "type": "battle-tactic",
@@ -532,7 +532,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "frontier-momentum-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -549,7 +549,7 @@
     ]
   },
   {
-    "id": "fury-of-the-hearth-hearthband",
+    "id": "fury-of-the-hearth-hearthband-leagues-of-votann",
     "name": "FURY OF THE HEARTH",
     "category": "detachment",
     "type": "battle-tactic",
@@ -561,7 +561,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "fury-of-the-hearth-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -578,7 +578,7 @@
     ]
   },
   {
-    "id": "fury-of-the-hearth-hearthguard-covenant",
+    "id": "fury-of-the-hearth-hearthguard-covenant-leagues-of-votann",
     "name": "Fury of the Hearth",
     "category": "detachment",
     "detachment_id": "hearthguard-covenant",
@@ -589,7 +589,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "fury-of-the-hearth-hearthguard-covenant",
+    "ability_id": "fury-of-the-hearth-hearthguard-covenant-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -606,7 +606,7 @@
     ]
   },
   {
-    "id": "grand-artifice-mercenary-oathband",
+    "id": "grand-artifice-mercenary-oathband-leagues-of-votann",
     "name": "GRAND ARTIFICE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -618,7 +618,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "grand-artifice-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -635,7 +635,7 @@
     ]
   },
   {
-    "id": "hidden-accessways-delve-assault-shift",
+    "id": "hidden-accessways-delve-assault-shift-leagues-of-votann",
     "name": "HIDDEN ACCESSWAYS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -647,7 +647,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "hidden-accessways-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -664,7 +664,7 @@
     ]
   },
   {
-    "id": "honour-of-the-hold-needgaard-oathband",
+    "id": "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
     "name": "HONOUR OF THE HOLD",
     "category": "detachment",
     "type": "battle-tactic",
@@ -676,7 +676,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "honour-of-the-hold-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -693,7 +693,7 @@
     ]
   },
   {
-    "id": "huntrs-mark-needgaard-oathband",
+    "id": "huntrs-mark-needgaard-oathband-leagues-of-votann",
     "name": "HUNTR’S MARK",
     "category": "detachment",
     "type": "battle-tactic",
@@ -705,7 +705,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "huntrs-mark-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -722,7 +722,7 @@
     ]
   },
   {
-    "id": "illuminated-priority-brandfast-oathband",
+    "id": "illuminated-priority-brandfast-oathband-leagues-of-votann",
     "name": "ILLUMINATED PRIORITY",
     "category": "detachment",
     "type": "wargear",
@@ -734,7 +734,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "illuminated-priority-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -751,7 +751,7 @@
     ]
   },
   {
-    "id": "inexorable-efficiency-brandfast-oathband",
+    "id": "inexorable-efficiency-brandfast-oathband-leagues-of-votann",
     "name": "INEXORABLE EFFICIENCY",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -763,7 +763,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "inexorable-efficiency-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -780,7 +780,7 @@
     ]
   },
   {
-    "id": "materialisation-matrices-hearthband",
+    "id": "materialisation-matrices-hearthband-leagues-of-votann",
     "name": "MATERIALISATION MATRICES",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -792,7 +792,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "materialisation-matrices-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -809,7 +809,7 @@
     ]
   },
   {
-    "id": "materialisation-matrices-hearthguard-covenant",
+    "id": "materialisation-matrices-hearthguard-covenant-leagues-of-votann",
     "name": "Materialisation Matrices",
     "category": "detachment",
     "detachment_id": "hearthguard-covenant",
@@ -820,7 +820,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "materialisation-matrices-hearthguard-covenant",
+    "ability_id": "materialisation-matrices-hearthguard-covenant-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -837,7 +837,7 @@
     ]
   },
   {
-    "id": "mobile-exploitation-mercenary-oathband",
+    "id": "mobile-exploitation-mercenary-oathband-leagues-of-votann",
     "name": "MOBILE EXPLOITATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -849,7 +849,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "mobile-exploitation-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -866,7 +866,7 @@
     ]
   },
   {
-    "id": "new-horizons-mercenary-oathband",
+    "id": "new-horizons-mercenary-oathband-leagues-of-votann",
     "name": "NEW HORIZONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -878,7 +878,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "new-horizons-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -895,7 +895,7 @@
     ]
   },
   {
-    "id": "no-shot-wasted-farseekers",
+    "id": "no-shot-wasted-farseekers-leagues-of-votann",
     "name": "No Shot Wasted",
     "category": "detachment",
     "detachment_id": "farseekers",
@@ -906,7 +906,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "no-shot-wasted-farseekers",
+    "ability_id": "no-shot-wasted-farseekers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -923,7 +923,7 @@
     ]
   },
   {
-    "id": "opportune-advance-bane-slayers-bulwark",
+    "id": "opportune-advance-bane-slayers-bulwark-leagues-of-votann",
     "name": "Opportune Advance",
     "category": "detachment",
     "detachment_id": "bane-slayers-bulwark",
@@ -934,7 +934,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "opportune-advance-bane-slayers-bulwark",
+    "ability_id": "opportune-advance-bane-slayers-bulwark-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -947,7 +947,7 @@
     ]
   },
   {
-    "id": "opportunistic-escalation-brandfast-oathband",
+    "id": "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
     "name": "OPPORTUNISTIC ESCALATION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -959,7 +959,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "opportunistic-escalation-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -976,7 +976,7 @@
     ]
   },
   {
-    "id": "optimal-expenditure-mercenary-oathband",
+    "id": "optimal-expenditure-mercenary-oathband-leagues-of-votann",
     "name": "OPTIMAL EXPENDITURE",
     "category": "detachment",
     "type": "wargear",
@@ -988,7 +988,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "optimal-expenditure-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1005,7 +1005,7 @@
     ]
   },
   {
-    "id": "ordered-retreat-needgaard-oathband",
+    "id": "ordered-retreat-needgaard-oathband-leagues-of-votann",
     "name": "ORDERED RETREAT",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1017,7 +1017,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ordered-retreat-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1034,7 +1034,7 @@
     ]
   },
   {
-    "id": "outflanking-armour-armoured-trailblazers",
+    "id": "outflanking-armour-armoured-trailblazers-leagues-of-votann",
     "name": "Outflanking Armour",
     "category": "detachment",
     "detachment_id": "armoured-trailblazers",
@@ -1045,7 +1045,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "outflanking-armour-armoured-trailblazers",
+    "ability_id": "outflanking-armour-armoured-trailblazers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1062,7 +1062,7 @@
     ]
   },
   {
-    "id": "point-blank-fusillade-bane-slayers-bulwark",
+    "id": "point-blank-fusillade-bane-slayers-bulwark-leagues-of-votann",
     "name": "Point-blank Fusillade",
     "category": "detachment",
     "detachment_id": "bane-slayers-bulwark",
@@ -1073,7 +1073,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "point-blank-fusillade-bane-slayers-bulwark",
+    "ability_id": "point-blank-fusillade-bane-slayers-bulwark-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1086,7 +1086,7 @@
     ]
   },
   {
-    "id": "preventative-purge-hearthfyre-arsenal",
+    "id": "preventative-purge-hearthfyre-arsenal-leagues-of-votann",
     "name": "PREVENTATIVE PURGE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1098,7 +1098,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "preventative-purge-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1115,7 +1115,7 @@
     ]
   },
   {
-    "id": "privateer-arsenal-mercenary-oathband",
+    "id": "privateer-arsenal-mercenary-oathband-leagues-of-votann",
     "name": "PRIVATEER ARSENAL",
     "category": "detachment",
     "type": "wargear",
@@ -1127,7 +1127,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "privateer-arsenal-mercenary-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1144,7 +1144,7 @@
     ]
   },
   {
-    "id": "ranger-tactics-persecution-prospect",
+    "id": "ranger-tactics-persecution-prospect-leagues-of-votann",
     "name": "RANGER TACTICS",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1156,7 +1156,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "ranger-tactics-persecution-prospect-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1173,7 +1173,7 @@
     ]
   },
   {
-    "id": "reactive-reprisal-needgaard-oathband",
+    "id": "reactive-reprisal-needgaard-oathband-leagues-of-votann",
     "name": "REACTIVE REPRISAL",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1185,7 +1185,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "reactive-reprisal-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1202,7 +1202,7 @@
     ]
   },
   {
-    "id": "scornful-analysis-farseekers",
+    "id": "scornful-analysis-farseekers-leagues-of-votann",
     "name": "Scornful Analysis",
     "category": "detachment",
     "detachment_id": "farseekers",
@@ -1213,7 +1213,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "scornful-analysis-farseekers",
+    "ability_id": "scornful-analysis-farseekers-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1230,7 +1230,7 @@
     ]
   },
   {
-    "id": "secure-positions-brandfast-oathband",
+    "id": "secure-positions-brandfast-oathband-leagues-of-votann",
     "name": "SECURE POSITIONS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1246,7 +1246,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "secure-positions-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1263,7 +1263,7 @@
     ]
   },
   {
-    "id": "superior-craftsmanship-hearthband",
+    "id": "superior-craftsmanship-hearthband-leagues-of-votann",
     "name": "SUPERIOR CRAFTSMANSHIP",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1275,7 +1275,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "superior-craftsmanship-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1292,7 +1292,7 @@
     ]
   },
   {
-    "id": "sure-of-purpose-hearthband",
+    "id": "sure-of-purpose-hearthband-leagues-of-votann",
     "name": "SURE OF PURPOSE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1304,7 +1304,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "sure-of-purpose-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1321,7 +1321,7 @@
     ]
   },
   {
-    "id": "tectonic-fracture-delve-assault-shift",
+    "id": "tectonic-fracture-delve-assault-shift-leagues-of-votann",
     "name": "TECTONIC FRACTURE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1333,7 +1333,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "tectonic-fracture-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1350,7 +1350,7 @@
     ]
   },
   {
-    "id": "unstoppable-force-delve-assault-shift",
+    "id": "unstoppable-force-delve-assault-shift-leagues-of-votann",
     "name": "UNSTOPPABLE FORCE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1362,7 +1362,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unstoppable-force-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1379,7 +1379,7 @@
     ]
   },
   {
-    "id": "unwavering-accuracy-hearthfyre-arsenal",
+    "id": "unwavering-accuracy-hearthfyre-arsenal-leagues-of-votann",
     "name": "UNWAVERING ACCURACY",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1391,7 +1391,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unwavering-accuracy-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1408,7 +1408,7 @@
     ]
   },
   {
-    "id": "unyielding-aggression-hearthband",
+    "id": "unyielding-aggression-hearthband-leagues-of-votann",
     "name": "UNYIELDING AGGRESSION",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1420,7 +1420,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "unyielding-aggression-hearthband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1437,7 +1437,7 @@
     ]
   },
   {
-    "id": "vengeance-flare-brandfast-oathband",
+    "id": "vengeance-flare-brandfast-oathband-leagues-of-votann",
     "name": "VENGEANCE FLARE",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1449,7 +1449,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "vengeance-flare-brandfast-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1466,7 +1466,7 @@
     ]
   },
   {
-    "id": "void-hardened-needgaard-oathband",
+    "id": "void-hardened-needgaard-oathband-leagues-of-votann",
     "name": "VOID HARDENED",
     "category": "detachment",
     "type": "wargear",
@@ -1479,7 +1479,7 @@
     "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "void-hardened-needgaard-oathband-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1496,7 +1496,7 @@
     ]
   },
   {
-    "id": "wall-of-steel-hearthfyre-arsenal",
+    "id": "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
     "name": "WALL OF STEEL",
     "category": "detachment",
     "type": "battle-tactic",
@@ -1508,7 +1508,7 @@
     "player_turn": "your-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "wall-of-steel-hearthfyre-arsenal-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
@@ -1525,7 +1525,7 @@
     ]
   },
   {
-    "id": "weavewerke-buttress-delve-assault-shift",
+    "id": "weavewerke-buttress-delve-assault-shift-leagues-of-votann",
     "name": "WEAVEWËRKE BUTTRESS",
     "category": "detachment",
     "type": "strategic-ploy",
@@ -1537,7 +1537,7 @@
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": null,
+    "ability_id": "weavewerke-buttress-delve-assault-shift-leagues-of-votann",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

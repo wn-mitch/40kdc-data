@@ -627,7 +627,7 @@
     {
       "source": "data.enhancement.localisations.*.rules",
       "candidate_pointer": null,
-      "reason": "Localized rules prose is routed to the private raw-text store rather than copied into core data."
+      "reason": "Localized rules prose stays in the private MFM dump rather than being copied into core data."
     },
     {
       "source": "data.enhancement.publicationId",

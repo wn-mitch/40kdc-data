@@ -12,7 +12,7 @@
  *
  * units.find("Kharn")!.abilities
  *   .filter(a => a.phases.includes("shooting"))
- *   .map(a => a.id); // ["berzerker-frenzy"]
+ *   .map(a => a.id); // ["berzerker-frenzy-world-eaters"]
  *
  * @example
  * import { factions } from "@alpaca-software/40kdc-data";

@@ -58,8 +58,15 @@
       "twin-assault-cannon"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
@@ -105,13 +112,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 200,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 215,
+        "cost": 225,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -149,10 +156,17 @@
       "sublimator"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
       "deep-strike",
-      "surge-of-wrath-psychic",
-      "warrior-strategist"
+      "surge-of-wrath-grey-knights",
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -244,9 +258,15 @@
       "twin-assault-cannon"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6",
-      "legacy-of-jerulas"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 16
@@ -292,7 +312,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -324,9 +344,9 @@
     ],
     "ability_ids": [
       "leader",
-      "might-of-titan-psychic",
+      "might-of-titan-grey-knights",
       "deep-strike",
-      "warrior-strategist"
+      "warrior-strategist-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -408,9 +428,11 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "fire-focus",
-      "fire-support",
-      "deadly-demise-d3"
+      "fire-focus-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 6
@@ -455,27 +477,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 130,
+        "cost": 145,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 290,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 140,
+        "cost": 155,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 270,
+        "cost": 300,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -508,7 +530,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctity-of-purpose",
+      "sanctity-of-purpose-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -563,13 +585,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 195,
+        "cost": 205,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 210,
+        "cost": 220,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -602,9 +624,16 @@
       "nemesis-greatsword"
     ],
     "ability_ids": [
-      "indomitable-spirit-psychic",
+      "indomitable-spirit-grey-knights",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -692,10 +721,20 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "aerial-assault",
-      "deadly-demise-d6-2",
+      "aerial-assault-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6+2"
+      },
       "hover",
-      "thunderhawk-cluster-bombs"
+      {
+        "id": "thunderhawk-cluster-bombs-grey-knights",
+        "wargear": "thunderhawk-cluster-bombs"
+      },
+      {
+        "id": "damaged",
+        "value": 10
+      }
     ],
     "transport_capacity": {
       "capacity": 30
@@ -777,10 +816,15 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "firing-deck-2",
-      "self-repair",
-      "truesilver-aegis-aura",
-      "deadly-demise-d3"
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      "truesilver-aegis-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -826,7 +870,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 95
+        "cost": 100
       }
     ],
     "keywords": [
@@ -857,8 +901,8 @@
       "storm-bolter-brother-captain"
     ],
     "ability_ids": [
-      "eye-of-judgement-psychic",
-      "hammerhand-psychic",
+      "eye-of-judgement-grey-knights",
+      "hammerhand-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -944,8 +988,11 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "guidance-of-the-ancients-psychic",
+      {
+        "id": "deadly-demise",
+        "value": 1
+      },
+      "guidance-of-the-ancients-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -989,7 +1036,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 100
+        "cost": 105
       }
     ],
     "keywords": [
@@ -1018,8 +1065,8 @@
       "storm-bolter-castellan-crowe"
     ],
     "ability_ids": [
-      "champion-of-the-order-of-purifiers-psychic",
-      "foesight-psychic",
+      "champion-of-the-order-of-purifiers-grey-knights",
+      "foesight-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -1065,12 +1112,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 115
+        "cost": 125
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 230
+        "cost": 250
       }
     ],
     "keywords": [
@@ -1101,8 +1148,11 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctifying-ritual-psychic",
-      "scouts-6",
+      "sanctifying-ritual-grey-knights",
+      {
+        "id": "scouts",
+        "value": 6
+      },
       "deep-strike"
     ],
     "game_version": {
@@ -1158,7 +1208,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -1187,10 +1237,10 @@
       "servo-arm"
     ],
     "ability_ids": [
-      "blessing-of-the-omnissiah",
-      "guardians-of-the-machine",
+      "blessing-of-the-omnissiah-grey-knights",
+      "guardians-of-the-machine-grey-knights",
       "leader",
-      "techmarine",
+      "techmarine-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1235,13 +1285,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 100,
+        "cost": 105,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -1272,9 +1322,9 @@
       "vortex-of-doom"
     ],
     "ability_ids": [
-      "haloed-in-soulfire-psychic",
+      "haloed-in-soulfire-grey-knights",
       "leader",
-      "sanctic-hood",
+      "sanctic-hood-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1319,7 +1369,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 70
+        "cost": 75
       }
     ],
     "keywords": [
@@ -1346,8 +1396,8 @@
       "storm-bolter-brotherhood-champion"
     ],
     "ability_ids": [
-      "clarion-of-haste-psychic",
-      "inspiring-exemplar",
+      "clarion-of-haste-grey-knights",
+      "inspiring-exemplar-grey-knights",
       "leader",
       "deep-strike"
     ],
@@ -1392,27 +1442,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 105,
+        "cost": 115,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 210,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 115,
+        "cost": 125,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 220,
+        "cost": 240,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1444,7 +1494,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "righteous-persecution",
+      "righteous-persecution-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1536,8 +1586,11 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "strafing-run",
-      "deadly-demise-d3"
+      "strafing-run-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1579,27 +1632,27 @@
     "points": [
       {
         "models": 5,
-        "cost": 125,
+        "cost": 135,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 250,
+        "cost": 270,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 135,
+        "cost": 145,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 260,
+        "cost": 280,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1632,7 +1685,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "personal-teleporters",
+      "personal-teleporters-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1688,7 +1741,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 65
+        "cost": 70
       }
     ],
     "keywords": [
@@ -1716,8 +1769,8 @@
     ],
     "ability_ids": [
       "leader",
-      "litanies-of-sanctity",
-      "zealous-path",
+      "litanies-of-sanctity-grey-knights",
+      "zealous-path-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1761,53 +1814,53 @@
     "points": [
       {
         "models": 4,
-        "cost": 170,
+        "cost": 185,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 5,
-        "cost": 215,
+        "cost": 230,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 360,
+        "cost": 385,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 460,
+        "cost": 490,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 4,
-        "cost": 210,
+        "cost": 225,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 5,
-        "cost": 255,
+        "cost": 270,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 400,
+        "cost": 425,
         "unit_count_min": 3,
         "unit_count_max": null
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 500,
+        "cost": 530,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -1839,9 +1892,15 @@
       "storm-bolter-paladin-squad"
     ],
     "ability_ids": [
-      "ancient-s-banner",
-      "apothecary-s-narthecium",
-      "attuned-onslaught-psychic",
+      {
+        "id": "ancients-banner-grey-knights",
+        "wargear": "ancients-banner"
+      },
+      {
+        "id": "apothecarys-narthecium-grey-knights",
+        "wargear": "apothecarys-narthecium"
+      },
+      "attuned-onslaught-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -1928,8 +1987,15 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -1975,7 +2041,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 125
+        "cost": 130
       }
     ],
     "keywords": [
@@ -2004,9 +2070,9 @@
       "storm-bolter-grand-master-voldus"
     ],
     "ability_ids": [
-      "hammer-aflame-psychic",
+      "hammer-aflame-grey-knights",
       "leader",
-      "sanctuary-psychic",
+      "sanctuary-grey-knights",
       "deep-strike"
     ],
     "game_version": {
@@ -2051,21 +2117,21 @@
     "points": [
       {
         "models": 4,
-        "cost": 140
+        "cost": 150
       },
       {
         "models": 5,
-        "cost": 175
+        "cost": 185
       },
       {
         "models": 6,
         "models_max": 8,
-        "cost": 300
+        "cost": 315
       },
       {
         "models": 9,
         "models_max": 10,
-        "cost": 360
+        "cost": 380
       }
     ],
     "keywords": [
@@ -2096,8 +2162,16 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "force-edge-psychic",
-      "deep-strike"
+      "force-edge-grey-knights",
+      "deep-strike",
+      {
+        "id": "ancients-banner-grey-knights",
+        "wargear": "ancients-banner"
+      },
+      {
+        "id": "apothecarys-narthecium-grey-knights",
+        "wargear": "apothecarys-narthecium"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2178,8 +2252,11 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "interceptor",
-      "deadly-demise-d3"
+      "interceptor-grey-knights",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -2263,9 +2340,16 @@
       "typhoon-missile-launcher"
     ],
     "ability_ids": [
-      "armoured-resilience",
+      "armoured-resilience-grey-knights",
       "hover",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -2288,6 +2372,12 @@
       {
         "namespace": "mfm",
         "id": "74899fa9-1678-4669-9dce-ffcade67a8a2"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "hurricane-bolter",
+        "cost": 10
       }
     ]
   },
@@ -2337,8 +2427,7 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "force-edge-psychic",
-      "gate-of-infinity"
+      "force-edge-crowes-sanctifiers-brotherhood-terminator-squad-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2406,9 +2495,8 @@
       "storm-bolter"
     ],
     "ability_ids": [
-      "sanctifying-ritual-psychic",
-      "combat-squads-crowes-sanctifiers",
-      "gate-of-infinity"
+      "combat-squad-grey-knights",
+      "sanctifying-ritual-crowes-sanctifiers-strike-squad-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2476,8 +2564,7 @@
       "twin-lascannon"
     ],
     "ability_ids": [
-      "guidance-of-the-ancients-psychic-crowes-sanctifiers",
-      "gate-of-infinity"
+      "guidance-of-the-ancients-crowes-sanctifiers-venerable-dreadnought-grey-knights"
     ],
     "game_version": {
       "edition": "11th",
@@ -2540,12 +2627,11 @@
     },
     "weapon_ids": [
       "black-blade-of-antwyr",
-      "purifying-flame-castellan-crowe",
-      "storm-bolter-castellan-crowe"
+      "purifying-flame",
+      "storm-bolter"
     ],
     "ability_ids": [
-      "foesight-psychic",
-      "gate-of-infinity"
+      "foesight-sanctifiers-castellan-crowe-grey-knights"
     ],
     "game_version": {
       "edition": "11th",

@@ -2224,7 +2224,7 @@
         },
         "default_weapon_ids": [
           "barblauncher",
-          "chitinous-claws-and-teeth-barbgaunts"
+          "chitinous-claws-and-teeth"
         ]
       }
     ],
@@ -2294,7 +2294,7 @@
           "diameter": 28.5
         },
         "default_weapon_ids": [
-          "chitinous-claws-and-teeth-termagants",
+          "chitinous-claws-and-teeth",
           "fleshborer"
         ]
       }
@@ -2329,7 +2329,7 @@
           "diameter": 40
         },
         "default_weapon_ids": [
-          "leapers-talons"
+          "chitinous-talons"
         ]
       }
     ],

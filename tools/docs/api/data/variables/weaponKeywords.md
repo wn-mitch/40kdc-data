@@ -8,6 +8,6 @@
 
 > `const` **weaponKeywords**: [`Collection`](../classes/Collection.md)\<[`WeaponKeyword`](../../generated/interfaces/WeaponKeyword.md), [`WeaponKeywordView`](../classes/WeaponKeywordView.md)\> = `dataset.weaponKeywords`
 
-Defined in: [data/index.ts:83](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/data/index.ts#L83)
+Defined in: [data/index.ts:156](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/data/index.ts#L156)
 
 Catalog of weapon keywords (Lethal Hits, Sustained Hits N, Anti-X N+, ...).

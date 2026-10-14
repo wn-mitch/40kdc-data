@@ -6,7 +6,7 @@
  *   - reconcile  → links core entities that ALREADY exist to their abilities
  *   - seed-core  → creates the core entities that are MISSING (new detachments /
  *                  stratagems / enhancements a pack added), with `id == ability_id`
- *                  so there is one id across core / abilities.json / raw-text store
+ *                  so there is one id across core / abilities.json / dump-prose lookups
  *                  (no divergent mapping to reconcile later)
  *
  * Non-agentic and IP-safe: it writes only structured facts (ids, enums, integer

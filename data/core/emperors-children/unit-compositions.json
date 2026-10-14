@@ -796,7 +796,7 @@
         "max": 3,
         "default_weapon_ids": [
           "blissblade",
-          "bolt-pistol-callous-blades"
+          "bolt-pistol"
         ],
         "is_leader_model": false,
         "base_size_mm": {
@@ -830,8 +830,8 @@
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
-          "power-sword-infractors"
+          "bolt-pistol",
+          "power-sword"
         ],
         "is_leader_model": true,
         "base_size_mm": {
@@ -844,7 +844,7 @@
         "min": 9,
         "max": 9,
         "default_weapon_ids": [
-          "bolt-pistol-callous-blades",
+          "bolt-pistol",
           "duelling-sabre"
         ],
         "is_leader_model": false,
@@ -885,7 +885,7 @@
         "max": 1,
         "default_weapon_ids": [
           "phoenix-power-spear",
-          "power-fist-lord-exultant"
+          "power-fist"
         ],
         "is_leader_model": false,
         "base_size_mm": {

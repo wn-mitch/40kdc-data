@@ -120,7 +120,7 @@ const OVERLAY: Record<string, OverlayEntry> = {
     id: "brood-brothers",
     name: "Brood Brothers",
     label: "Brood Brothers",
-    removes_ability_ids: ["voice-of-command"],
+    removes_ability_ids: ["voice-of-command-astra-militarum"],
     warlord_required_keyword: "Genestealer Cults",
     notes:
       "A Genestealer Cults army may include ASTRA MILITARUM units. A GENESTEALER CULTS model must be the Warlord; included Astra Militarum models lose Voice of Command.",

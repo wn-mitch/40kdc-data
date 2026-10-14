@@ -204,7 +204,24 @@
     },
     "ability_ids": {
       "type": "array",
-      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" }
+      "description": "The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9\", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).",
+      "items": {
+        "oneOf": [
+          { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+          {
+            "title": "Unit ability ref",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "anyOf": [{ "required": ["value"] }, { "required": ["wargear"] }],
+            "properties": {
+              "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+              "value": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+              "wargear": { "$ref": "../defs/common.schema.json#/$defs/entity-id", "description": "The wargear item (a weapons.json or wargear.json id) that prints this ability." }
+            }
+          }
+        ]
+      }
     },
     "wargear_budgets": {
       "type": "array",

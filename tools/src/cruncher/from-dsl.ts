@@ -11,14 +11,17 @@
  * mortal wound triggers — as `unsupported` so the SPA can surface "this
  * ability has effects we can't auto-apply" rather than silently dropping them.
  *
- * The walker classifies an effect's `target` against the attacker
- * perspective: `self`, `bearer`, `unit`, `attached-unit`, `attacker`, and
- * `friendly-within-aura` are all treated as "applies to my unit". `defender`,
- * `enemy-within-aura`, and `all-enemy` are dropped without being marked
- * unsupported — those are defender-side mods and would surface from the
- * target's perspective (M3 work), not the attacker's.
+ * The walker classifies an effect's `target` unit-ref against the attacker
+ * perspective: `this-unit`, `this-model`, `selected-unit`, `recipient`,
+ * `attacker`, and a `{owner: "friendly"}` unit filter are all treated as
+ * "applies to my unit" (an `aura` container's `friendly-within-aura` likewise).
+ * `defender`, a `{owner: "enemy"}` filter, and `enemy-within-aura` are dropped
+ * without being marked unsupported — those are defender-side mods and surface
+ * from the target's perspective, not the attacker's. Any other binding
+ * (`event-subject`, `stratagem-target`, …) is not known to be the buffed unit
+ * and contributes nothing.
  *
- * The one exception is core rule 19.04: `self`/`bearer` name a single *model*,
+ * The one exception is core rule 19.04: `this-model` names a single *model*,
  * so when such an effect is pooled in from another member of a combined unit
  * (`source.abilityKind === "attached"`) it stays on that model and is reported
  * as `unsupported` rather than buffing the whole unit.
@@ -85,7 +88,7 @@ export type EffectTranslation = {
 /**
  * Whose perspective the translation runs from.
  *
- * - `"attacker"`: the buffed unit is *firing*. `target: "unit"/"self"` etc.
+ * - `"attacker"`: the buffed unit is *firing*. `target: "this-unit"/"this-model"` etc.
  *   become attacker-side mods (re-rolls, hit/wound mods, A/S shifts, granted
  *   keywords). `target: "defender"` is silently dropped — that's incoming
  *   penalty math relevant when the buffed unit is the *target*, surfaced via
@@ -97,21 +100,14 @@ export type EffectTranslation = {
  *   only mods (re-rolls, hit/wound mods, A/S shifts) drop silently because
  *   they describe what the buffed unit does when *attacking*.
  *
- * The bs-modifier effect (a -1 to incoming hit rolls, e.g. Benefit of Cover)
- * becomes a `hit-mod` buff under target perspective so it stacks correctly
- * with attacker-side modifiers in the resolver's ±1 cap.
+ * A Ballistic Skill stat-modifier on the attacker (a -1 to incoming hit rolls,
+ * e.g. Benefit of Cover) becomes a `hit-mod` buff under target perspective so
+ * it stacks correctly with attacker-side modifiers in the resolver's ±1 cap.
  */
 export type TranslationPerspective = "attacker" | "target";
 
 /** Targets that resolve to the buffed unit itself. */
-const SELF_TARGETS = new Set([
-  "self",
-  "bearer",
-  "unit",
-  "attached-unit",
-  "friendly-within-aura",
-  "all-friendly",
-]);
+const SELF_TARGETS = new Set(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"]);
 
 /**
  * The subset of {@link SELF_TARGETS} that names a single *model* — the ability's
@@ -121,7 +117,7 @@ const SELF_TARGETS = new Set([
  * its bodyguard, or vice-versa), it is not a buff on the combined unit — see
  * {@link isModelScopedFromAttachedMember}.
  */
-const MODEL_TARGETS = new Set(["self", "bearer"]);
+const MODEL_TARGETS = new Set(["this-model"]);
 
 /** Diagnostic emitted for a model-scoped effect pooled in from an attached member. */
 const MODEL_SCOPED_REASON =
@@ -150,8 +146,8 @@ function isModelScopedFromAttachedMember(
 
 /** Aliases the DSL uses when a node specifically calls out "the attacker". */
 const ATTACKER_TARGET = "attacker";
-/** Aliases the DSL uses when a node specifically calls out "the defender". */
-const DEFENDER_TARGETS = new Set(["defender", "enemy-within-aura", "all-enemy"]);
+/** The unit-ref that names the other side of an attack from the attacker's view. */
+const DEFENDER_TARGETS = new Set(["defender"]);
 
 /**
  * Walk an ability DSL `effect` tree and produce the buff stack it contributes
@@ -203,6 +199,27 @@ function walk(
     out.unsupported.push({ reason: FIDELITY_BINDING_REASON, effectFragment: currentNode });
     return;
   }
+  // A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
+  // applying the printed value would over- or under-state it.
+  const unsized = unsizedValueReason(currentNode);
+  if (unsized != null) {
+    out.unsupported.push({ reason: unsized, effectFragment: currentNode });
+    return;
+  }
+  // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
+  // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
+  // modifies the buffed unit's own attacks.
+  const incoming = isObject(currentNode.modifier) && currentNode.modifier.incoming === true && classifyTarget(currentNode) === "self";
+  if (incoming) {
+    if (opts.perspective === "attacker") return;
+    if (currentNode.type === "roll-modifier" || currentNode.type === "stat-modifier") {
+      const { incoming: _incoming, ...modifier } = currentNode.modifier as Record<string, unknown>;
+      walk({ ...currentNode, target: ATTACKER_TARGET, modifier }, source, opts, out);
+    } else {
+      out.unsupported.push({ reason: `${String(currentNode.type)}: an incoming change to attacks against the unit is not modelled`, effectFragment: currentNode });
+    }
+    return;
+  }
   const type = currentNode.type;
   switch (type) {
     case "re-roll":
@@ -217,11 +234,8 @@ function walk(
     case "feel-no-pain":
       translateFeelNoPain(currentNode, source, opts, out);
       return;
-    case "keyword-grant":
+    case "weapon-ability-grant":
       translateKeywordGrant(currentNode, source, opts, out);
-      return;
-    case "bs-modifier":
-      translateBsModifier(currentNode, source, opts, out);
       return;
     case "damage-reduction":
       translateDamageReduction(currentNode, source, opts, out);
@@ -239,8 +253,14 @@ function walk(
     case "sequence":
       for (const step of (currentNode.steps as unknown[]) ?? []) walk(step, source, opts, out);
       return;
-    case "named-effect":
-      translateNamedEffect(currentNode, source, opts, out);
+    case "ability-part":
+      // A part firing on its own moment is gated like a timing-is step; one with only a cost,
+      // a choice or a usage limit is an activation, as a named effect is.
+      if (currentNode.trigger == null && (currentNode.optional === true || currentNode.cost != null || currentNode.usage != null)) {
+        translateNamedEffect(currentNode, source, opts, out);
+      } else {
+        walk(momentGate(currentNode.trigger, currentNode.effect), source, opts, out);
+      }
       return;
     case "choice":
       enumerateChoice(currentNode, source, opts, out);
@@ -254,12 +274,32 @@ function walk(
     case "dice-pool-allocation":
       enumerateDicePool(currentNode, source, opts, out);
       return;
+    case "roll":
+      // A pool roll whose dice are allocated to named options (Blessings of Khorne) is the same
+      // lever set dice-pool-allocation produced; any other bound roll only scopes its nested effect.
+      if (!enumerateRollAllocation(currentNode, source, opts, out)) walk(currentNode.effect, source, opts, out);
+      return;
+    case "select-objective":
+      out.unsupported.push({ reason: "select-objective: the bound objective marker is not resolved by the buff engine", effectFragment: currentNode });
+      return;
+    case "characteristic-resolution":
+      out.unsupported.push({ reason: "characteristic-resolution: which models' characteristic applies depends on the unit's model mix; not resolved by the buff engine", effectFragment: currentNode });
+      return;
+    case "borrow-weapons":
+      out.unsupported.push({ reason: "borrow-weapons: the passengers' weapons are not added to the Transport's profile by the buff engine", effectFragment: currentNode });
+      return;
+    case "select-weapon":
+      out.unsupported.push({ reason: "select-weapon: a bound weapon is not resolved by the buff engine", effectFragment: currentNode });
+      return;
     case "select-units":
       walk(currentNode.effect, source, opts, out);
       return;
     case "aura": {
       const modifier = isObject(currentNode.modifier) ? currentNode.modifier : undefined;
-      if (!appliesToBuffedUnit(currentNode, opts.perspective)) return;
+      // An aura's own target names the side it reaches, not a unit-ref: friendly recipients are the
+      // buffed side, enemy ones the other.
+      const side = currentNode.target === "friendly-within-aura" ? "self" : currentNode.target === "enemy-within-aura" ? "defender" : "unknown";
+      if (side === "unknown" || (side === "defender" && opts.perspective !== "target")) return;
       if (modifier?.recipient_filter !== undefined) {
         const keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
         const matches = evaluateKeywordFilter(modifier.recipient_filter, keywords);
@@ -343,6 +383,12 @@ function classifyTarget(
   node: Record<string, unknown>,
 ): "self" | "attacker" | "defender" | "unknown" {
   const target = node.target;
+  // A unit filter reaches every unit it matches: friendly ones are the buffed side, enemy ones the other.
+  if (isObject(target) && !("event_var" in target) && !("selection_var" in target)) {
+    if (target.owner === "friendly") return "self";
+    if (target.owner === "enemy") return "defender";
+    return "unknown";
+  }
   if (typeof target !== "string") return "unknown";
   if (target === ATTACKER_TARGET) return "attacker";
   if (DEFENDER_TARGETS.has(target)) return "defender";
@@ -392,7 +438,17 @@ function translateReroll(
   // A historical migration (2026-weapon-keywords) mis-defaulted such nodes to
   // `subset: "all-failures"`; honor the value as the source of truth so any
   // stray data of that shape can't silently over-apply the reroll.
-  const subset = modifier.value === 1 ? "ones" : modifier.subset;
+  //
+  // `result_scope: "any-result"` (no `subset`) is the DSL's shape for an unrestricted, optional
+  // re-roll ("you can re-roll the Wound roll", no "of 1"/"failed" qualifier) — see
+  // compile-fragments.ts and named-region-family.ts. It resolves to the same buff contribution as
+  // "all-failures": a rational player holding an *optional* reroll always exercises it on a fail
+  // (strictly improves the outcome) and never on an already-passing roll (rerolling a pass can
+  // only convert some of those passes to fails; there's no scenario where an expected-value-
+  // maximizing player takes that trade for a plain "re-roll" grant with no crit-fishing framing).
+  // So the two subsets are behaviorally identical to the pass/crit optimizer in engine.ts, and no
+  // new probability modelling is needed — only recognizing the shape.
+  const subset = modifier.value === 1 ? "ones" : modifier.subset === undefined && modifier.result_scope === "any-result" ? "all-failures" : modifier.subset;
   // Under target perspective, only "save" rerolls fire on the buffed unit.
   if (opts.perspective === "target" && roll !== "save") return;
   // Finite permissions are non-linear over a roll pool. Until the cruncher
@@ -413,7 +469,7 @@ function translateReroll(
     return;
   }
   out.unsupported.push({
-    reason: `re-roll on "${String(roll)}" (subset "${String(subset)}") is outside the damage path`,
+    reason: `re-roll on "${rollLabel(roll)}" (subset "${String(subset)}") is outside the damage path`,
     effectFragment: node,
   });
 }
@@ -485,7 +541,7 @@ function translateRollModifier(
       return;
     default:
       out.unsupported.push({
-        reason: `roll-modifier on "${String(roll)}" is outside the damage path`,
+        reason: `roll-modifier on "${rollLabel(roll)}" is outside the damage path`,
         effectFragment: node,
       });
   }
@@ -525,6 +581,15 @@ function translateStatModifier(
   // and routes by attacker/defender rather than going through `signedValue`.
   if (stat === "AP") {
     translateApModifier(node, modifier, opts, out, emit);
+    return;
+  }
+
+  // Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
+  // (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
+  if (stat === "BS") {
+    if (opts.perspective !== "target" || classifyTarget(node) !== "attacker") return;
+    const bs = signedValue(modifier);
+    if (bs !== null) out.applied.push({ source, contribution: { type: "hit-mod", value: bs } });
     return;
   }
 
@@ -650,30 +715,28 @@ function translateFeelNoPain(
     });
     return;
   }
-  // `modifier.scope` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
-  // (default "all"). Schema's `modifier` is `additionalProperties: true`, so
-  // any string lands here; we accept the documented values and route
-  // everything else to unsupported so a typo ("mortals", "mortal-wound")
+  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
+  // (default "all"). Anything else routes to unsupported so a malformed value
   // can't silently masquerade as an all-FNP. `psychic-and-mortal` folds into
   // the mortal stream (its mortal-wound coverage is exact; the psychic-attack
   // half is invisible to the buff layer); bare `psychic` has no stream to
   // attach to, so it stays unsupported rather than overstating defence.
-  const rawScope = modifier.scope;
+  const rawAgainst = modifier.against;
   let scope: "all" | "mortal" = "all";
-  if (rawScope !== undefined) {
-    if (rawScope === "all" || rawScope === "mortal") {
-      scope = rawScope;
-    } else if (rawScope === "psychic-and-mortal") {
+  if (rawAgainst !== undefined) {
+    if (rawAgainst === "all" || rawAgainst === "mortal") {
+      scope = rawAgainst;
+    } else if (rawAgainst === "psychic-and-mortal") {
       scope = "mortal";
-    } else if (rawScope === "psychic") {
+    } else if (rawAgainst === "psychic") {
       out.unsupported.push({
-        reason: 'feel-no-pain: scope "psychic" (psychic attacks are not tracked by the buff layer)',
+        reason: 'feel-no-pain: against "psychic" (psychic attacks are not tracked by the buff layer)',
         effectFragment: node,
       });
       return;
     } else {
       out.unsupported.push({
-        reason: `feel-no-pain: unrecognised scope "${String(rawScope)}" (expected "all" or "mortal")`,
+        reason: `feel-no-pain: unrecognised against "${String(rawAgainst)}" (expected "all" or "mortal")`,
         effectFragment: node,
       });
       return;
@@ -700,9 +763,7 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
-  // The DSL grants keywords in two shapes: a singular `keyword` string (often
-  // with a `weapon_type`) or a `keywords` array. Accept both.
-  const raws = keywordGrantList(modifier);
+  const raws = Array.isArray(modifier.abilities) ? modifier.abilities.filter((k): k is string => typeof k === "string") : [];
   if (raws.length === 0) return;
   // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only
   // keyword shouldn't fire in the shooting phase. Express it as a phase gate.
@@ -719,16 +780,6 @@ function translateKeywordGrant(
     const buff: Buff = { source, contribution: { type: "extra-keyword", keywordRef: ref } };
     out.applied.push(applicability ? { ...buff, applicableWhen: applicability } : buff);
   }
-}
-
-/** Normalise a keyword-grant modifier's singular `keyword` and/or `keywords` array. */
-function keywordGrantList(modifier: Record<string, unknown>): string[] {
-  const out: string[] = [];
-  if (typeof modifier.keyword === "string") out.push(modifier.keyword);
-  if (Array.isArray(modifier.keywords)) {
-    for (const k of modifier.keywords) if (typeof k === "string") out.push(k);
-  }
-  return out;
 }
 
 /** Map a keyword-grant's `weapon_type` to the phase its weapons fire in. */
@@ -759,7 +810,7 @@ function attackTypeApplicability(modifier: Record<string, unknown>): BuffApplica
  * stays faithful for other consumers; the optimizer just doesn't assume it.
  * `weapon_type`/`attack_type` are NOT here — those map cleanly to a phase gate.
  */
-const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_filter", "model_filter", "model_scope"];
+const UNHONORABLE_NARROWING = ["weapon_name", "weapon_profile", "weapon_keyword", "weapon_ref", "weapon_filter", "model_filter", "model_scope"];
 function unhonorableNarrowing(modifier: Record<string, unknown>): string | undefined {
   return UNHONORABLE_NARROWING.find((k) => modifier[k] != null);
 }
@@ -839,26 +890,6 @@ function translateInvulnerableSave(
   out.applied.push({ source, contribution: { type: "invulnerable-save", threshold } });
 }
 
-function translateBsModifier(
-  node: Record<string, unknown>,
-  source: BuffSource,
-  opts: WalkOpts,
-  out: EffectTranslation,
-): void {
-  // A bs-modifier on `target: "attacker"` is a defender-side rule: it
-  // penalises *incoming* hit rolls (e.g. Benefit of Cover). Translate it
-  // as a `hit-mod` buff under target perspective so the resolver's ±1 cap
-  // composes with attacker-side mods.
-  if (opts.perspective !== "target") return;
-  const cls = classifyTarget(node);
-  if (cls !== "attacker") return; // a bs-modifier on self wouldn't make sense.
-  const modifier = node.modifier;
-  if (!isObject(modifier)) return;
-  const value = signedValue(modifier);
-  if (value === null) return;
-  out.applied.push({ source, contribution: { type: "hit-mod", value } });
-}
-
 function translateNamedRegionState(
   node: Record<string, unknown>,
   source: BuffSource,
@@ -919,7 +950,6 @@ function translateConditional(
   const condition = node.condition;
   const effect = node.effect;
   if (!isObject(condition)) return;
-  const negated = condition.negated === true;
   const verdict = evaluateCondition(condition, opts.context);
   if (verdict === "unknown") {
     // A timing the player controls (e.g. "start of phase") isn't a wall — it's
@@ -935,8 +965,7 @@ function translateConditional(
     }
     return;
   }
-  const active = negated ? !verdict : verdict;
-  if (!active) return;
+  if (!verdict) return;
   walk(effect, source, opts, out);
 }
 
@@ -983,6 +1012,56 @@ function translateNamedEffect(
 // `applicableWhen` so the resolver gates them per-target.
 // ---------------------------------------------------------------------------
 
+/** Rolls inside every attack: a trigger on one applies to each attack it modifies. */
+const ATTACK_STEP_ROLLS: ReadonlySet<string> = new Set(["hit", "wound", "save", "damage"]);
+
+/** A trigger on a step of every attack (a hit, wound, save or damage roll, or allocating damage). */
+export function isAttackStep(trigger: unknown): boolean {
+  if (!isObject(trigger)) return false;
+  if (trigger.event === "damage-allocated") return true;
+  const roll = isObject(trigger.filter) ? trigger.filter.roll : undefined;
+  return (trigger.event === "before-roll" || trigger.event === "after-roll") && typeof roll === "string" && ATTACK_STEP_ROLLS.has(roll);
+}
+
+/** The lever key of a trigger: its event family and the filter value that tells moments apart. */
+export function momentKey(trigger: Record<string, unknown>): string {
+  const f = isObject(trigger.filter) ? trigger.filter : {};
+  const detail = [f.to, f.kind, f.roll, Array.isArray(f.move_types) ? f.move_types.join("+") : undefined, f.from]
+    .find((v): v is string => typeof v === "string" && v.length > 0);
+  return detail ? `${String(trigger.event)}:${detail}` : String(trigger.event);
+}
+
+/** The unit's own move the engine context records: a Charge move is "charged this turn". */
+function ownMoveFact(trigger: Record<string, unknown>): Record<string, unknown> | undefined {
+  if (trigger.event !== "move-ended" || (trigger.subject != null && trigger.subject !== "this-unit")) return undefined;
+  const types = isObject(trigger.filter) && Array.isArray(trigger.filter.move_types) ? trigger.filter.move_types : [];
+  if (types.length !== 1 || (types[0] !== "charge" && types[0] !== "advance")) return undefined;
+  return { type: "happened", parameters: { event: "move-ended", filter: { move_types: types }, window: "turn" } };
+}
+
+/**
+ * An effect gated on a trigger (one, or several alternatives) the way a `timing-is` condition
+ * gates it, so the moment is a player-controlled gate and a buff behind it an opt-in lever
+ * (`<ability>@<event>`). A trigger on an attack step is met by every attack: only its own
+ * condition gates the effect.
+ */
+export function momentGate(trigger: unknown, effect: unknown): unknown {
+  if (effect == null) return effect;
+  const triggers = (Array.isArray(trigger) ? trigger : [trigger])
+    .filter((item): item is Record<string, unknown> => isObject(item) && typeof item.event === "string");
+  if (triggers.length === 0) return effect;
+  const gates = triggers.map((item) => {
+    const own = isObject(item.condition) ? item.condition : null;
+    if (isAttackStep(item)) return own;
+    // A unit's own Charge or Advance move is a fact the context carries, not a choice.
+    const moment = ownMoveFact(item) ?? { type: "timing-is", parameters: { timing: momentKey(item) } };
+    return own ? { operator: "and", operands: [moment, own] } : moment;
+  });
+  // Any alternative met by every attack without a condition leaves nothing to gate.
+  if (gates.some((gate) => gate === null)) return effect;
+  return { type: "conditional", condition: gates.length === 1 ? gates[0] : { operator: "or", operands: gates }, effect };
+}
+
 /** Emit one lever per buff-bearing choice, retaining its shared selection cap. */
 function enumerateChoice(
   node: Record<string, unknown>,
@@ -1027,6 +1106,39 @@ function enumerateDicePool(
       group: { id: opts.abilityId, maxActivations },
     });
   }
+}
+
+/**
+ * A `roll` whose nested effect is a choice of dice gates on that roll (`from` + `requirement`): the
+ * general encoding of a dice-pool allocation. Emits the same levers `enumerateDicePool` does (ids
+ * `<ability>#<option name>`, one group capped by the choice's max_choices). Returns false when the
+ * roll is not such an allocation.
+ */
+function enumerateRollAllocation(
+  node: Record<string, unknown>,
+  source: BuffSource,
+  opts: WalkOpts,
+  out: EffectTranslation,
+): boolean {
+  const choice = node.effect;
+  if (!isObject(choice) || choice.type !== "choice" || !Array.isArray(choice.options)) return false;
+  const gates = choice.options.map((opt) => {
+    const part = isObject(opt) && opt.type === "ability-part" ? opt : undefined;
+    const gate = part ? part.effect : opt;
+    return isObject(gate) && gate.type === "dice-gated" && gate.requirement != null && isObject(gate.from) && gate.from.roll_var === node.roll_var
+      ? { name: part && typeof part.name === "string" ? part.name : undefined, effect: gate.on_success }
+      : undefined;
+  });
+  if (gates.some((g) => g == null)) return false;
+  const maxActivations = typeof choice.max_choices === "number" ? choice.max_choices : 1;
+  for (const gate of gates) {
+    const buffs: Buff[] = [];
+    collectGatedBuffs(gate!.effect, source, opts, {}, buffs);
+    if (buffs.length === 0) continue;
+    const name = gate!.name ?? labelForBuffs(buffs);
+    out.activatable.push({ id: `${opts.abilityId}#${name}`, label: name, buffs, group: { id: opts.abilityId, maxActivations } });
+  }
+  return true;
 }
 
 /** Emit one opt-in lever per buff-bearing named option (stance-select / issue-orders). */
@@ -1176,9 +1288,9 @@ function collectGatedBuffs(
         collectGatedBuffs(step, source, opts, applicability, outBuffs);
       }
       return;
-    case "named-effect":
-      if (node.optional !== true && node.cost == null && node.trigger == null && node.usage == null) {
-        collectGatedBuffs(node.effect, source, opts, applicability, outBuffs);
+    case "ability-part":
+      if (node.trigger != null || (node.optional !== true && node.cost == null && node.usage == null)) {
+        collectGatedBuffs(momentGate(node.trigger, node.effect), source, opts, applicability, outBuffs);
       }
       return;
     case "choice":
@@ -1234,7 +1346,6 @@ function extractTiming(condition: Record<string, unknown>): string | undefined {
 function conditionToApplicability(
   condition: Record<string, unknown>,
 ): BuffApplicability | "context" | "gate" {
-  if (condition.negated === true) return "context";
   if (typeof condition.operator === "string" && Array.isArray(condition.operands)) {
     if (condition.operator !== "and") return "context";
     let merged: BuffApplicability = {};
@@ -1255,18 +1366,16 @@ function conditionToApplicability(
       const phase = params?.phase;
       return typeof phase === "string" ? { phases: [phase as Phase] } : "context";
     }
-    case "target-has-keyword": {
-      const kw = params?.keyword;
-      return typeof kw === "string" ? { requiresTargetKeyword: kw } : "context";
+    case "has-keyword": {
+      const kw = singleKeyword(params);
+      if (kw === undefined) return "context";
+      if (params?.subject === "defender") return { requiresTargetKeyword: kw };
+      return isBuffedUnit(params?.subject) ? { requiresAttackerKeyword: kw } : "context";
     }
-    case "unit-has-keyword": {
-      const kw = params?.keyword;
-      return typeof kw === "string" ? { requiresAttackerKeyword: kw } : "context";
-    }
-    case "attack-is-type": {
-      const t = params?.attack_type;
-      if (t === "melee") return { phases: ["fight"] };
-      if (t === "ranged") return { phases: ["shooting"] };
+    case "attack-is": {
+      if (params == null || Object.keys(params).some((k) => k !== "attack_type")) return "context";
+      if (params.attack_type === "melee") return { phases: ["fight"] };
+      if (params.attack_type === "ranged") return { phases: ["shooting"] };
       return "context";
     }
     default:
@@ -1366,6 +1475,18 @@ function keywordLabel(ref: WeaponKeywordRef): string {
 // Condition evaluator
 // ---------------------------------------------------------------------------
 
+/** The buffed unit: the ability's own unit (or model), or the unit an aura is applied to. */
+function isBuffedUnit(subject: unknown): boolean {
+  return subject == null || subject === "this-unit" || subject === "ability-unit" || subject === "this-model" || subject === "recipient";
+}
+
+/** The one keyword a `has-keyword` names, else undefined. */
+function singleKeyword(params: Record<string, unknown> | undefined): string | undefined {
+  const all = Array.isArray(params?.all_of) ? params!.all_of : [];
+  if (params?.any_of != null || all.length !== 1 || typeof all[0] !== "string") return undefined;
+  return all[0];
+}
+
 function evaluateCondition(
   condition: Record<string, unknown>,
   ctx: EngineContext,
@@ -1386,10 +1507,11 @@ function evaluateCondition(
       if (typeof wanted !== "string") return "unknown";
       return ctx.phase === wanted;
     }
-    case "attack-is-type": {
-      const attackType = (condition.parameters as Record<string, unknown> | undefined)?.attack_type;
-      if (attackType === "melee") return ctx.phase === "fight";
-      if (attackType === "ranged") return ctx.phase === "shooting";
+    case "attack-is": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      if (Object.keys(params).some((k) => k !== "attack_type")) return "unknown";
+      if (params.attack_type === "melee") return ctx.phase === "fight";
+      if (params.attack_type === "ranged") return ctx.phase === "shooting";
       return "unknown";
     }
     case "timing-is": {
@@ -1398,32 +1520,54 @@ function evaluateCondition(
       if (ctx.timing === undefined) return "unknown";
       return ctx.timing === wanted;
     }
-    case "remained-stationary":
-      return ctx.attackerStationary === true;
-    case "charged-this-turn":
-      // A player-controlled context flag (did the buffed unit charge this turn?),
-      // mirroring `remained-stationary`. Undefined → the caller couldn't pin it
-      // down, so stay "unknown" and let the SPA surface the gap.
-      if (ctx.attackerCharged === undefined) return "unknown";
-      return ctx.attackerCharged;
-    case "target-has-keyword": {
-      const kw = (condition.parameters as Record<string, unknown> | undefined)?.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.targetKeywords ?? []).includes(kw.toLowerCase());
+    case "happened": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      const types = isObject(params.filter) && Array.isArray(params.filter.move_types) ? params.filter.move_types : [];
+      const own = params.subject == null && params.object == null && params.count_min == null && params.window === "turn";
+      if (!own || params.event !== "move-ended" || types.length !== 1 || Object.keys(params.filter as object).length !== 1) return "unknown";
+      // Player-controlled context flags for the buffed unit's own move this turn. An undefined
+      // charge flag means the caller couldn't pin it down: stay "unknown" so the SPA surfaces it.
+      if (types[0] === "remain-stationary") return ctx.attackerStationary === true;
+      if (types[0] === "charge") return ctx.attackerCharged === undefined ? "unknown" : ctx.attackerCharged;
+      return "unknown";
     }
-    case "unit-has-keyword": {
-      const kw = (condition.parameters as Record<string, unknown> | undefined)?.keyword;
-      if (typeof kw !== "string") return "unknown";
-      return (ctx.attackerKeywords ?? []).includes(kw.toLowerCase());
+    case "has-keyword": {
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      // A keyword the player picked is not in the context.
+      if (params.chosen_by != null) return "unknown";
+      const pool = params.subject === "defender" ? ctx.targetKeywords : isBuffedUnit(params.subject) ? ctx.attackerKeywords : undefined;
+      if (pool === undefined && params.subject !== "defender" && !isBuffedUnit(params.subject)) return "unknown";
+      const have = (pool ?? []).map((k) => k.toLowerCase());
+      const all = Array.isArray(params.all_of) ? params.all_of : [];
+      const any = Array.isArray(params.any_of) ? params.any_of : [];
+      if (![...all, ...any].every((k) => typeof k === "string")) return "unknown";
+      return all.every((k) => have.includes(String(k).toLowerCase())) && (any.length === 0 || any.some((k) => have.includes(String(k).toLowerCase())));
     }
-    case "is-attached":
-    case "model-is-leader":
-      // True whenever the buffed unit is a combined ("attached") unit. We do
-      // not thread per-member leader identity — "attachment present" is the
-      // signal both conditions gate on. Undefined flag (caller couldn't
-      // determine attachment) stays "unknown" so the SPA surfaces the gap.
+    case "army-faction": {
+      const faction = (condition.parameters as Record<string, unknown> | undefined)?.faction;
+      if (typeof faction !== "string" || ctx.armyFaction === undefined) return "unknown";
+      return ctx.armyFaction === faction;
+    }
+    case "battle-size": {
+      const size = (condition.parameters as Record<string, unknown> | undefined)?.size;
+      if (typeof size !== "string" || ctx.battleSize === undefined) return "unknown";
+      return ctx.battleSize === size;
+    }
+    case "guided": {
+      // Guided is read for the attacking unit: a For the Greater Good unit, not an Observer, targeting a Spotted unit.
+      const subject = (condition.parameters as Record<string, unknown> | undefined)?.subject;
+      if ((subject != null && !isBuffedUnit(subject)) || ctx.attackerGuided === undefined) return "unknown";
+      return ctx.attackerGuided;
+    }
+    case "attachment": {
+      // True whenever the buffed unit is a combined ("attached") unit. We do not thread
+      // per-member leader identity, and a Leader keyword filter is not checked: "attachment
+      // present" is the signal. An undefined flag stays "unknown" so the SPA surfaces the gap.
+      const params = (condition.parameters ?? {}) as Record<string, unknown>;
+      if (params.role === "led" || params.with != null) return "unknown";
       if (ctx.attackerAttached === undefined) return "unknown";
       return ctx.attackerAttached;
+    }
     default:
       return "unknown";
   }
@@ -1567,6 +1711,30 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/** A roll kind for a diagnostic: "hit", or the ability whose dice it is. */
+function rollLabel(roll: unknown): string {
+  return isObject(roll) && typeof roll.of_ability === "string" ? `${roll.of_ability} roll` : String(roll);
+}
+
+/** Numeric modifier fields whose size a buff reads. */
+const SIZED_FIELDS = ["value", "count", "amount"];
+
+/**
+ * Why a leaf's size cannot be read here, or undefined: a `scaling` block (the size depends on models
+ * or wounds on the board) or a value bound to the battle size, a roll or a count.
+ */
+function unsizedValueReason(node: Record<string, unknown>): string | undefined {
+  if (!isObject(node.modifier) || typeof node.type !== "string") return undefined;
+  if (isObject(node.scaling)) return `${node.type}: the value scales with ${String(node.scaling.of)}; not resolved by the buff engine`;
+  for (const field of SIZED_FIELDS) {
+    const v = node.modifier[field];
+    if (!isObject(v)) continue;
+    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}` : "the battle size";
+    return `${node.type}: its ${field} is set by ${what}; not resolved by the buff engine`;
+  }
+  return undefined;
+}
+
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";
 function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
   const selector = isObject(node.selector) ? node.selector : undefined;
@@ -1585,14 +1753,14 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
       select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
       applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
       applies?.beneficiary != null || applies?.reference != null)) ||
-    (node.type === "named-effect" && hasUnresolvedTriggerBinding(node.trigger)) ||
+    (node.type === "ability-part" && hasUnresolvedTriggerBinding(node.trigger)) ||
     (node.type === "named-region-state" && consumer?.attack_condition != null)
   );
 }
 
 function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
   if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
-  return isObject(trigger) && (trigger.caused_by != null || trigger.source_ability != null);
+  return isObject(trigger) && ((isObject(trigger.filter) && trigger.filter.by != null) || trigger.source_ability != null);
 }
 
 /** Filters the recipient unit; emitter identity is not part of EngineContext. */

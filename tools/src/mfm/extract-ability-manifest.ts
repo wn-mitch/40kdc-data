@@ -3,16 +3,16 @@
  * skeleton unit's DATASHEET abilities, straight from the GW MFM dump.
  *
  * The `author-ability` pipeline ingests a JSON manifest (one record per ability,
- * SKILL.md §3) whose `raw_text` lands ONLY in the out-of-repo `40kdc-abilities`
- * store; the committed repo gets community DSL, never the prose. This tool produces
+ * SKILL.md §3) whose `raw_text` lands ONLY in git-ignored author-input; the
+ * committed repo gets community DSL, never the prose. This tool produces
  * that manifest for the freshly-seeded units whose `ability_ids` are still empty:
  *
  *   - It emits only `abilityType === "datasheet"` rows (the unit-specific abilities).
  *     `core` (USRs: Deep Strike, Lone Operative …) and `faction` rows are shared and
  *     already authored — the pipeline would merge them by name, but they are out of
  *     scope here and add noise, so they are skipped.
- *   - `raw_text` is the dump's `localisations.en.rules`, HTML-stripped (the store
- *     wants verbatim prose; the `<b>/<u>` tags are presentation only).
+ *   - `raw_text` is the dump's `localisations.en.rules`, HTML-stripped (the
+ *     classify pass wants verbatim prose; the `<b>/<u>` tags are presentation only).
  *
  * Output: `_private/manifests/<faction>.manifest.json` (git-ignored — it carries GW
  * text). IP: nothing this tool writes goes into committed `data/**`.
@@ -20,6 +20,7 @@
  * Usage:
  *   npx tsx src/mfm/extract-ability-manifest.ts --dir <faction> (--unit <id> ... | --all-skeletons)
  */
+import { mirrorIds } from "./mirror/ids.js";
 import * as fs from "fs";
 import * as path from "path";
 import { loadDump, MfmDump, type DatasheetRow } from "./loader.js";
@@ -116,6 +117,7 @@ function main() {
   const daById = dump.byId("datasheet_ability");
   const existing = existingAbilityIds(dir);
 
+  const ids = mirrorIds(dump);
   const records: ManifestRecord[] = [];
   const skipped: string[] = [];
   const missingShared: string[] = [];
@@ -137,9 +139,12 @@ function main() {
       if (!name) continue;
       const behavior: "passive" | "aura" = ab.isAura ? "aura" : "passive";
 
+      // The id `mfm:mirror` gives the row (its variant and printing faction included).
+      const mirrored = ids.idOf("datasheet_ability", ab.id, ab.abilityType === "core" ? "_core" : undefined) ?? ids.idOf("datasheet_ability", ab.id);
       if (ab.abilityType === "datasheet") {
         // Unit-specific → a new stub for the pipeline to author.
         records.push({
+          ...(mirrored ? { ability_id: mirrored } : {}),
           faction: dir,
           name,
           raw_text: rules,
@@ -157,12 +162,8 @@ function main() {
         // existing entry's unit_ids (no new stub). A non-matching shared ability is
         // a genuine gap (e.g. a value-variant USR not yet authored) — report it,
         // don't fabricate a duplicate.
-        let id: string;
-        try {
-          id = nameToId(name);
-        } catch {
-          continue;
-        }
+        const id = mirrored;
+        if (!id) continue;
         if (existing.has(id)) {
           records.push({
             faction: dir,

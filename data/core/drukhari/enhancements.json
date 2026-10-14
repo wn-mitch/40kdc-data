@@ -1,13 +1,13 @@
 [
   {
-    "id": "phantasmal-smoke-skysplinter-assault",
+    "id": "phantasmal-smoke-skysplinter-assault-drukhari",
     "name": "Phantasmal Smoke",
     "detachment_id": "skysplinter-assault",
     "cost": 15,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "phantasmal-smoke-skysplinter-assault-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "dark-vitality-realspace-raiders",
+    "id": "dark-vitality-realspace-raiders-drukhari",
     "name": "Dark Vitality",
     "detachment_id": "realspace-raiders",
     "cost": 20,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "dark-vitality-realspace-raiders-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "sadistic-fulcrum-skysplinter-assault",
+    "id": "sadistic-fulcrum-skysplinter-assault-drukhari",
     "name": "Sadistic Fulcrum",
     "detachment_id": "skysplinter-assault",
     "cost": 15,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "sadistic-fulcrum-skysplinter-assault-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "labyrinthine-cunning-realspace-raiders",
+    "id": "labyrinthine-cunning-realspace-raiders-drukhari",
     "name": "Labyrinthine Cunning",
     "detachment_id": "realspace-raiders",
     "cost": 25,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "labyrinthine-cunning-realspace-raiders-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "spiteful-raider-skysplinter-assault",
+    "id": "spiteful-raider-skysplinter-assault-drukhari",
     "name": "Spiteful Raider",
     "detachment_id": "skysplinter-assault",
     "cost": 10,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "spiteful-raider-skysplinter-assault-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "eye-of-spite-realspace-raiders",
+    "id": "eye-of-spite-realspace-raiders-drukhari",
     "name": "Eye of Spite",
     "detachment_id": "realspace-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-spite-realspace-raiders-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,14 +168,14 @@
     ]
   },
   {
-    "id": "nightmare-shroud-skysplinter-assault",
+    "id": "nightmare-shroud-skysplinter-assault-drukhari",
     "name": "Nightmare Shroud",
     "detachment_id": "skysplinter-assault",
     "cost": 20,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "nightmare-shroud-skysplinter-assault-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -196,14 +196,14 @@
     ]
   },
   {
-    "id": "crucible-of-malediction-realspace-raiders",
+    "id": "crucible-of-malediction-realspace-raiders-drukhari",
     "name": "Crucible of Malediction",
     "detachment_id": "realspace-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Haemonculus"
     ],
-    "ability_id": null,
+    "ability_id": "crucible-of-malediction-realspace-raiders-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -224,11 +224,11 @@
     ]
   },
   {
-    "id": "archraider-reapers-wager",
+    "id": "archraider-reapers-wager-drukhari",
     "name": "Archraider",
     "detachment_id": "reapers-wager",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "archraider-reapers-wager-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -257,11 +257,11 @@
     ]
   },
   {
-    "id": "webway-walker-reapers-wager",
+    "id": "webway-walker-reapers-wager-drukhari",
     "name": "Webway Walker",
     "detachment_id": "reapers-wager",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "webway-walker-reapers-wager-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -290,14 +290,14 @@
     ]
   },
   {
-    "id": "reapers-cowl-reapers-wager",
+    "id": "reapers-cowl-reapers-wager-drukhari",
     "name": "Reaper’s Cowl",
     "detachment_id": "reapers-wager",
     "cost": 25,
     "keyword_restrictions": [
       "Harlequins"
     ],
-    "ability_id": null,
+    "ability_id": "reapers-cowl-reapers-wager-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -318,14 +318,14 @@
     ]
   },
   {
-    "id": "conductor-of-torment-reapers-wager",
+    "id": "conductor-of-torment-reapers-wager-drukhari",
     "name": "Conductor of Torment",
     "detachment_id": "reapers-wager",
     "cost": 20,
     "keyword_restrictions": [
       "Drukhari"
     ],
-    "ability_id": null,
+    "ability_id": "conductor-of-torment-reapers-wager-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -346,14 +346,14 @@
     ]
   },
   {
-    "id": "pharmacophex-spectacle-of-spite",
+    "id": "pharmacophex-spectacle-of-spite-drukhari",
     "name": "Pharmacophex",
     "detachment_id": "spectacle-of-spite",
     "cost": 15,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "pharmacophex-spectacle-of-spite-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -374,14 +374,14 @@
     ]
   },
   {
-    "id": "chronoshard-spectacle-of-spite",
+    "id": "chronoshard-spectacle-of-spite-drukhari",
     "name": "Chronoshard",
     "detachment_id": "spectacle-of-spite",
     "cost": 15,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "chronoshard-spectacle-of-spite-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -402,14 +402,14 @@
     ]
   },
   {
-    "id": "periapt-of-torments-spectacle-of-spite",
+    "id": "periapt-of-torments-spectacle-of-spite-drukhari",
     "name": "Periapt of Torments",
     "detachment_id": "spectacle-of-spite",
     "cost": 25,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "periapt-of-torments-spectacle-of-spite-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -430,14 +430,14 @@
     ]
   },
   {
-    "id": "morghennas-curse-spectacle-of-spite",
+    "id": "morghennas-curse-spectacle-of-spite-drukhari",
     "name": "Morghenna’s Curse",
     "detachment_id": "spectacle-of-spite",
     "cost": 20,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "morghennas-curse-spectacle-of-spite-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -458,14 +458,14 @@
     ]
   },
   {
-    "id": "master-regenesist-covenite-coterie",
+    "id": "master-regenesist-covenite-coterie-drukhari",
     "name": "Master Regenesist",
     "detachment_id": "covenite-coterie",
     "cost": 25,
     "keyword_restrictions": [
       "Haemonculus"
     ],
-    "ability_id": null,
+    "ability_id": "master-regenesist-covenite-coterie-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -486,14 +486,14 @@
     ]
   },
   {
-    "id": "master-nemesine-covenite-coterie",
+    "id": "master-nemesine-covenite-coterie-drukhari",
     "name": "Master Nemesine",
     "detachment_id": "covenite-coterie",
     "cost": 5,
     "keyword_restrictions": [
       "Haemonculus"
     ],
-    "ability_id": null,
+    "ability_id": "master-nemesine-covenite-coterie-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -514,14 +514,14 @@
     ]
   },
   {
-    "id": "master-artisan-covenite-coterie",
+    "id": "master-artisan-covenite-coterie-drukhari",
     "name": "Master Artisan",
     "detachment_id": "covenite-coterie",
     "cost": 20,
     "keyword_restrictions": [
       "Haemonculus"
     ],
-    "ability_id": null,
+    "ability_id": "master-artisan-covenite-coterie-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -542,14 +542,14 @@
     ]
   },
   {
-    "id": "master-repugnomancer-aura-covenite-coterie",
+    "id": "master-repugnomancer-aura-covenite-coterie-drukhari",
     "name": "Master Repugnomancer (Aura)",
     "detachment_id": "covenite-coterie",
     "cost": 15,
     "keyword_restrictions": [
       "Haemonculus"
     ],
-    "ability_id": null,
+    "ability_id": "master-repugnomancer-aura-covenite-coterie-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -570,14 +570,14 @@
     ]
   },
   {
-    "id": "leechbite-plate-kabalite-cartel",
+    "id": "leechbite-plate-kabalite-cartel-drukhari",
     "name": "Leechbite Plate",
     "detachment_id": "kabalite-cartel",
     "cost": 5,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "leechbite-plate-kabalite-cartel-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -598,14 +598,14 @@
     ]
   },
   {
-    "id": "webway-awl-kabalite-cartel",
+    "id": "webway-awl-kabalite-cartel-drukhari",
     "name": "Webway Awl",
     "detachment_id": "kabalite-cartel",
     "cost": 25,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "webway-awl-kabalite-cartel-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -626,14 +626,14 @@
     ]
   },
   {
-    "id": "informant-network-kabalite-cartel",
+    "id": "informant-network-kabalite-cartel-drukhari",
     "name": "Informant Network",
     "detachment_id": "kabalite-cartel",
     "cost": 30,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "informant-network-kabalite-cartel-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -654,14 +654,14 @@
     ]
   },
   {
-    "id": "towering-arrogance-kabalite-cartel",
+    "id": "towering-arrogance-kabalite-cartel-drukhari",
     "name": "Towering Arrogance",
     "detachment_id": "kabalite-cartel",
     "cost": 20,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "towering-arrogance-kabalite-cartel-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -682,7 +682,7 @@
     ]
   },
   {
-    "id": "periapt-of-torments-exhibition-of-slaughter",
+    "id": "periapt-of-torments-exhibition-of-slaughter-drukhari",
     "name": "Periapt of Torments",
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
@@ -690,7 +690,7 @@
       "Drukhari",
       "Succubus"
     ],
-    "ability_id": "periapt-of-torments-exhibition-of-slaughter",
+    "ability_id": "periapt-of-torments-exhibition-of-slaughter-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -711,7 +711,7 @@
     ]
   },
   {
-    "id": "hyperstimm-trafficker-exhibition-of-slaughter",
+    "id": "hyperstimm-trafficker-exhibition-of-slaughter-drukhari",
     "name": "Hyperstimm Trafficker",
     "detachment_id": "exhibition-of-slaughter",
     "cost": 20,
@@ -719,7 +719,7 @@
       "Drukhari",
       "Succubus"
     ],
-    "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter",
+    "ability_id": "hyperstimm-trafficker-exhibition-of-slaughter-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -740,7 +740,7 @@
     ]
   },
   {
-    "id": "towering-arrogance-kabalite-agonysts",
+    "id": "towering-arrogance-kabalite-agonysts-drukhari",
     "name": "Towering Arrogance",
     "detachment_id": "kabalite-agonysts",
     "cost": 15,
@@ -748,7 +748,7 @@
       "Archon",
       "Drukhari"
     ],
-    "ability_id": "towering-arrogance-kabalite-agonysts",
+    "ability_id": "towering-arrogance-kabalite-agonysts-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -769,7 +769,7 @@
     ]
   },
   {
-    "id": "contempt-for-rivals-kabalite-agonysts",
+    "id": "contempt-for-rivals-kabalite-agonysts-drukhari",
     "name": "Contempt for Rivals",
     "detachment_id": "kabalite-agonysts",
     "cost": 20,
@@ -777,7 +777,7 @@
       "Archon",
       "Drukhari"
     ],
-    "ability_id": "contempt-for-rivals-kabalite-agonysts",
+    "ability_id": "contempt-for-rivals-kabalite-agonysts-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -798,7 +798,7 @@
     ]
   },
   {
-    "id": "gnarlskin-experimentor-tools-of-torment",
+    "id": "gnarlskin-experimentor-tools-of-torment-drukhari",
     "name": "Gnarlskin Experimentor",
     "detachment_id": "tools-of-torment",
     "cost": 20,
@@ -806,7 +806,7 @@
       "Drukhari",
       "Haemonculus"
     ],
-    "ability_id": "gnarlskin-experimentor-tools-of-torment",
+    "ability_id": "gnarlskin-experimentor-tools-of-torment-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -827,11 +827,11 @@
     ]
   },
   {
-    "id": "elixir-of-the-corpse-courts-upgrade-tools-of-torment",
+    "id": "elixir-of-the-corpse-courts-upgrade-tools-of-torment-drukhari",
     "name": "Elixir of the Corpse Courts (Upgrade)",
     "detachment_id": "tools-of-torment",
     "cost": 15,
-    "ability_id": "elixir-of-the-corpse-courts-tools-of-torment",
+    "ability_id": "elixir-of-the-corpse-courts-upgrade-tools-of-torment-drukhari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -862,7 +862,7 @@
     ]
   },
   {
-    "id": "superior-soulcraft-coven-of-agonies",
+    "id": "superior-soulcraft-coven-of-agonies-drukhari",
     "name": "Superior Soulcraft",
     "detachment_id": "coven-of-agonies",
     "cost": 0,
@@ -887,7 +887,7 @@
     ]
   },
   {
-    "id": "toxin-laced-blades-coven-of-agonies",
+    "id": "toxin-laced-blades-coven-of-agonies-drukhari",
     "name": "Toxin-laced Blades",
     "detachment_id": "coven-of-agonies",
     "cost": 0,

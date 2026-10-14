@@ -29,7 +29,7 @@
     ]
   },
   {
-    "id": "counter-offensive",
+    "id": "counteroffensive",
     "name": "COUNTER-OFFENSIVE",
     "category": "core",
     "type": "strategic-ploy",
@@ -38,14 +38,20 @@
     "phases": [
       "fight"
     ],
-    "player_turn": "either",
+    "player_turn": "opponent-turn",
     "timing": "once-per-phase",
     "target_restrictions": null,
-    "ability_id": "counter-offensive",
+    "ability_id": "counteroffensive",
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "33bd61f7-4741-4c27-a8d8-2e13b20ca121"
+      }
+    ]
   },
   {
     "id": "epic-challenge",
@@ -194,8 +200,7 @@
     "detachment_id": null,
     "cp_cost": 1,
     "phases": [
-      "movement",
-      "charge"
+      "movement"
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-turn",

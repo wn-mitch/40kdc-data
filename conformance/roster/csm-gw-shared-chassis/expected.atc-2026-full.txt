@@ -2,7 +2,7 @@
 + PLAYER NAME: —
 + TEAM NAME: —
 + FACTIONS USED: Chaos Space Marines
-+ DISPOSITION: Purge The Foe
++ DISPOSITION: Disruption
 + DETACHMENT: Hurons Marauders
 + ARMY POINTS: 295pts
 +

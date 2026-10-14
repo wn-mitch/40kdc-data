@@ -73,13 +73,14 @@
     "expected": { "matchedIds": ["trooper", "tank"] }
   },
   {
-    "caseId": "case-sensitive-no-loose-match",
-    "applies_to": { "required_keywords": ["Infantry"] },
+    "caseId": "case-and-apostrophe-insensitive",
+    "applies_to": { "required_keywords": ["INFANTRY", "T'AU EMPIRE"] },
     "units": [
-      { "id": "lowercase", "keywords": ["infantry"] },
-      { "id": "titlecase", "keywords": ["Infantry"] }
+      { "id": "datasheet-spelling", "keywords": ["Infantry"], "faction_keywords": ["T’au Empire"] },
+      { "id": "lowercase", "keywords": ["infantry"], "faction_keywords": ["t’au empire"] },
+      { "id": "other-faction", "keywords": ["Infantry"], "faction_keywords": ["Astra Militarum"] }
     ],
-    "expected": { "matchedIds": ["titlecase"] }
+    "expected": { "matchedIds": ["datasheet-spelling", "lowercase"] }
   },
   {
     "caseId": "order-preserved-across-matches",

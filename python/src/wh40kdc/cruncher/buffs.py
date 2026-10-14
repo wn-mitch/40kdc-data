@@ -23,6 +23,10 @@ from typing import Any
 Buff = dict[str, Any]
 BuffSource = dict[str, Any]
 ResolvedModifiers = dict[str, Any]
+#: The engine context (TS ``EngineContext``). Beyond phase/timing/attacker state it may carry
+#: ``armyFaction`` (Army Faction id), ``battleSize`` (``incursion`` / ``strike-force`` /
+#: ``onslaught``) and ``attackerGuided`` (the attacker is Guided); each drives its condition
+#: and leaves it "unknown" when absent.
 EngineContext = dict[str, Any]
 
 #: Stable ordering used to break ties when multiple buffs claim the same field.

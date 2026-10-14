@@ -17,8 +17,7 @@ func namedRegionEffect(keywords []any, operator string, defaultEffect map[string
 		}
 	}
 	return map[string]any{
-		"type":   "named-region-state",
-		"target": "all-friendly",
+		"type": "named-region-state",
 		"modifier": map[string]any{
 			"consumer": map[string]any{
 				"beneficiary_gate": map[string]any{
@@ -153,7 +152,7 @@ func TestPersistentDesignationRequiresRetainedSelectionState(t *testing.T) {
 		"consumer": map[string]any{
 			"effect": map[string]any{
 				"type":   "re-roll",
-				"target": "bearer",
+				"target": "this-model",
 				"modifier": map[string]any{
 					"roll":   "hit",
 					"subset": "all-failures",
@@ -185,12 +184,12 @@ func TestRulesBundleWalksEveryEffectStep(t *testing.T) {
 		"steps": []any{
 			map[string]any{
 				"type":     "re-roll",
-				"target":   "unit",
+				"target":   "this-unit",
 				"modifier": map[string]any{"roll": "hit", "subset": "ones"},
 			},
 			map[string]any{
 				"type":     "re-roll",
-				"target":   "unit",
+				"target":   "this-unit",
 				"modifier": map[string]any{"roll": "wound", "subset": "ones"},
 			},
 		},

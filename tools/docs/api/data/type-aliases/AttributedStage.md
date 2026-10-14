@@ -8,7 +8,7 @@
 
 > **AttributedStage** = `object`
 
-Defined in: [cruncher/attribution.ts:34](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L34)
+Defined in: [cruncher/attribution.ts:34](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L34)
 
 A pipeline stage with its value decomposed across the toggleable buffs.
 
@@ -18,7 +18,7 @@ A pipeline stage with its value decomposed across the toggleable buffs.
 
 > **name**: [`Stage`](Stage.md)\[`"name"`\]
 
-Defined in: [cruncher/attribution.ts:35](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L35)
+Defined in: [cruncher/attribution.ts:35](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L35)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [cruncher/attribution.ts:35](https://github.com/wn-mitch/40kdc-data/
 
 > **expected**: `number`
 
-Defined in: [cruncher/attribution.ts:37](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L37)
+Defined in: [cruncher/attribution.ts:37](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L37)
 
 Stage value with every buff on — identical to [crunch](../functions/crunch.md)'s stage.
 
@@ -36,7 +36,7 @@ Stage value with every buff on — identical to [crunch](../functions/crunch.md)
 
 > **detail**: `string`
 
-Defined in: [cruncher/attribution.ts:39](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L39)
+Defined in: [cruncher/attribution.ts:39](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L39)
 
 The engine's stage detail string, unchanged.
 
@@ -46,7 +46,7 @@ The engine's stage detail string, unchanged.
 
 > **baseline**: `number`
 
-Defined in: [cruncher/attribution.ts:41](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L41)
+Defined in: [cruncher/attribution.ts:41](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L41)
 
 Stage value with all groupable buffs removed (intrinsics kept).
 
@@ -56,7 +56,7 @@ Stage value with all groupable buffs removed (intrinsics kept).
 
 > **lifts**: [`StageLift`](StageLift.md)[]
 
-Defined in: [cruncher/attribution.ts:43](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L43)
+Defined in: [cruncher/attribution.ts:43](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L43)
 
 Per-group marginal effect; groups whose |delta| ≤ epsilon are dropped.
 
@@ -66,7 +66,7 @@ Per-group marginal effect; groups whose |delta| ≤ epsilon are dropped.
 
 > **residual**: `number`
 
-Defined in: [cruncher/attribution.ts:49](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L49)
+Defined in: [cruncher/attribution.ts:49](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L49)
 
 `expected − baseline − Σ lifts`. Non-zero when buffs collide under a cap
 (two +1s sharing one ±1 cap each show ≈0 lift; the real +1 lands here),
@@ -78,6 +78,6 @@ so a UI can surface it honestly as "overlap (capped)".
 
 > **intrinsics**: `string`[]
 
-Defined in: [cruncher/attribution.ts:51](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/attribution.ts#L51)
+Defined in: [cruncher/attribution.ts:51](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/attribution.ts#L51)
 
 Active weapon-keyword ids (intrinsic, auto-injected); display-only.

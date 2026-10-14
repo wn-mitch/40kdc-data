@@ -44,7 +44,7 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
             interactions, community_notes as applicable)…": null },
   "approx_notes": ["[APPROX] own-words note for each clause not modeled"],
   "dropped_clauses": [],
-  "adopted_shapes": ["re-roll", "charged-this-turn"],
+  "adopted_shapes": ["re-roll", "happened"],
   "resisted_schema": null,
   "self_grade": { "describer_output": "…", "verdict": "faithful|approx|needs-schema", "concerns": [] },
   "confidence": 0.85
@@ -62,7 +62,7 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
 - Prior art (adoption over invention): grep committed data before proposing
   anything — `grep -rl '"type": "stance-select"' data/enrichment/`,
   `grep -B2 -A8 '"type": "<leaf>"' data/enrichment/<faction>/abilities.json`.
-- Store lookup (read-only): `jq '.["<ability_id>"]' ../40kdc-abilities/index.json`.
+- Prose lookup (read-only): `cd tools && npm run prose -- get <faction> <ability_id>` (the private MFM dump).
 - **Self-check via the reference describer**: Write your candidate entry as a
   one-element JSON array to the scratchpad (NEVER inside the repo), then
   `cd tools && npx tsx src/cli.ts translate <scratchpad>/candidate.json`
@@ -74,8 +74,8 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
 - **Prose is authoritative.** Wrong scalars are bugs; a clause you cannot model
   becomes an `[APPROX] …` community_note in your own words — never a silent drop,
   never a distortion of the effect tree.
-- **Canonical condition ids are cruncher levers.** Use `charged-this-turn`, not a
-  `timing-is: charge-move` paraphrase; a precondition whose encoding would drop a
+- **Lever-bearing predicates stay as the cruncher reads them.** A charge
+  precondition is `happened {event: move-ended, filter: {move_types: [charge]}, window: turn}`, not a trigger-moment paraphrase; a precondition whose encoding would drop a
   stratagem/buff lever belongs in [APPROX] notes, not in the effect tree. Never
   chase cosine by re-phrasing canonical ids away — fidelity score is advisory,
   the levers are contractual.
@@ -87,7 +87,7 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
   never add shapes yourself — file `resisted_schema` for warpsmith/inquisitor.
   Cost calibration: schema + 4 byte-identical describer ports + conformance
   corpus + SPEC_VERSION bump + 4-file version lockstep.
-- Check `stance-select` / `designate-target` / `select-units` / `auto-result` /
+- Check `stance-select` / `designate-target` / `select-units` / `roll-result` /
   `rule-state` / `conditional` before concluding anything is unrepresentable.
 - Army-wide rules get `applies_to: null` (highlighting tests pin this).
 
@@ -104,13 +104,13 @@ those IDs. Copied presence-only evidence, stale leases, and cross-task envelopes
 Mined from 30 ability-coverage session transcripts (2026-07-12). Own-words rules; corrections weighted highest.
 
 - Never punt a modelable core-rules mechanic (move-type filters, multi-event triggers) into community_notes when the vocabulary exists or can be added additively — extend the DSL instead; community_notes is reserved only for genuine out-of-model roster-construction preconditions like mono-codex gating (e.g. oath's mono-codex +1 Wound).
-- Ground every shape decision in the actual source text and check the real effect/condition schema + describer before asserting a gap — warp-stalkers' move-through-models was already expressible via engagement-passthrough + movement-modifier's excludes_keyword; don't declare a schema gap from a note or memory.
+- Ground every shape decision in the actual source text and check the real effect/condition schema + describer before asserting a gap — warp-stalkers' move-through-models was already expressible via move-modifier's passthrough; don't declare a schema gap from a note or memory.
 - When a mechanic genuinely can't be expressed, keep the original DSL and file a needs-schema inbox block (_private/loop-state/inbox-<faction>.md) rather than force-fitting an overstating/understating shape to hit a cosine number.
-- Sequence schema changes first (leaf types in the single-effect enum + allOf modifier guards; containers as $defs in the effect-node oneOf), then regen types, then describers, then the actual data re-authoring last — so one conformance regen captures every change.
-- Give parameterless effects an optional modifier field, not a required empty {} — requiring modifier:{} makes the coverage audit's empty-stub heuristic false-positive on legitimate no-param effects (disembark, deep-strike, fight-first).
+- Sequence schema changes first (a leaf type is a closed {type, target, modifier} variant in single-effect's oneOf; containers as $defs in the effect-node oneOf), then regen types, then describers, then the actual data re-authoring last — so one conformance regen captures every change.
+- Give parameterless effects an optional modifier field, not a required empty {} — requiring modifier:{} makes the coverage audit's empty-stub heuristic false-positive on legitimate no-param effects (end-attack-sequence, objective-sticky).
 - Re-check the committed live data before editing from an external review — the working tree can be ahead of (or diverge from) the review's reproduced DSL snippets via parallel-session drift; edit from real current data, not the review text.
 - Add a shape when a rule is being tortured into an existing one that can't express it faithfully, and reuse an existing shape when it genuinely fits even if a note claims otherwise; check closed PRs (#27's dice-pool mortal-wounds, on-death timing-is) and grep the dataset for existing usage of a target effect/grant type before inventing vocabulary.
-- keyword-grant is the weapon-ability shape only (always 'the unit's weapons gain X') — it must not grant a unit-level keyword like CAPTAIN; that is a real shape gap (unit-keyword-grant is army-wide, unit-keyword renders as an ability name), not a one-line data swap.
+- Keep unit keywords and weapon abilities apart: keyword-grant{keywords} gives the target UNIT keywords (CAPTAIN, a shared WAGON tag); weapon-ability-grant{abilities} gives its weapons abilities ('Lethal Hits', 'Sustained Hits 1'); ability-grant{ability} names a core ability (data/core/unit-keywords.json) or an ability record. Picking the wrong one renders the wrong subject.
 - Detachment-scoped ability_ids (stratagems, enhancements, detachment rules) take the full -<detachment-slug> suffix even when the name is unique, because names repeat across detachments; a bare-slug side-table doesn't back-resolve, so migration needs per-record judgment.
 - Preserve explicit user/builder input verbatim and only infer when a value is absent; mark inferred values with a provisional flag so consumers distinguish builder-authored (provisional:false) from heuristic guesses.
 - Fix importer gaps as bugs, not constraints — teach the importer to derive pricing from the dump (wargear_option.points) and mint priced ability-granting wargear entities (Banner-of-Macragge pattern) rather than hand-modeling data; priced items must be produced by the import pipeline.

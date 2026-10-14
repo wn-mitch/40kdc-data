@@ -1,0 +1,1105 @@
+[
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "re-roll",
+    "target": "ability-unit",
+    "modifier": {
+     "roll": "hit",
+     "subset": "ones"
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "x",
+    "abilityKind": "unit"
+   },
+   "ctx": {
+    "phase": "shooting"
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "x",
+      "abilityKind": "unit"
+     },
+     "contribution": {
+      "type": "reroll",
+      "roll": "hit",
+      "subset": "ones"
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "dice-pool-allocation",
+    "pool": {
+     "count": 8,
+     "die": "D6"
+    },
+    "max_activations": 2,
+    "options": [
+     {
+      "name": "Warp Blades",
+      "requirement": {
+       "type": "pair",
+       "min_value": 4
+      },
+      "effect": {
+       "type": "weapon-ability-grant",
+       "target": {
+        "owner": "friendly"
+       },
+       "modifier": {
+        "abilities": [
+         "Lethal Hits"
+        ],
+        "weapon_type": "melee"
+       }
+      }
+     },
+     {
+      "name": "Wrathful Devotion",
+      "requirement": {
+       "type": "pair",
+       "min_value": 5
+      },
+      "effect": {
+       "type": "roll-modifier",
+       "target": {
+        "owner": "friendly"
+       },
+       "modifier": {
+        "roll": "wound",
+        "operation": "add",
+        "value": 1,
+        "weapon_type": "melee"
+       }
+      }
+     }
+    ]
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [],
+   "activatable": [
+    {
+     "id": "blessings-of-khorne#Warp Blades",
+     "label": "Warp Blades",
+     "buffs": [
+      {
+       "source": {
+        "kind": "ability",
+        "abilityId": "blessings-of-khorne",
+        "abilityKind": "army"
+       },
+       "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+         "keyword_id": "lethal-hits"
+        }
+       },
+       "applicableWhen": {
+        "phases": [
+         "fight"
+        ]
+       }
+      }
+     ],
+     "group": {
+      "id": "blessings-of-khorne",
+      "maxActivations": 2
+     }
+    },
+    {
+     "id": "blessings-of-khorne#Wrathful Devotion",
+     "label": "Wrathful Devotion",
+     "buffs": [
+      {
+       "source": {
+        "kind": "ability",
+        "abilityId": "blessings-of-khorne",
+        "abilityKind": "army"
+       },
+       "contribution": {
+        "type": "wound-mod",
+        "value": 1
+       }
+      }
+     ],
+     "group": {
+      "id": "blessings-of-khorne",
+      "maxActivations": 2
+     }
+    }
+   ]
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "roll",
+    "dice": "8D6",
+    "extra_dice_pool": "blessings-of-khorne-pool",
+    "roll_var": "bok",
+    "effect": {
+     "type": "choice",
+     "min_choices": 0,
+     "max_choices": 2,
+     "options": [
+      {
+       "type": "ability-part",
+       "name": "Warp Blades",
+       "effect": {
+        "type": "dice-gated",
+        "from": {
+         "roll_var": "bok"
+        },
+        "requirement": {
+         "type": "pair",
+         "min_value": 4
+        },
+        "on_success": {
+         "type": "weapon-ability-grant",
+         "target": {
+          "owner": "friendly"
+         },
+         "modifier": {
+          "abilities": [
+           "Lethal Hits"
+          ],
+          "weapon_type": "melee"
+         }
+        }
+       }
+      },
+      {
+       "type": "ability-part",
+       "name": "Wrathful Devotion",
+       "effect": {
+        "type": "dice-gated",
+        "from": {
+         "roll_var": "bok"
+        },
+        "requirement": {
+         "type": "pair",
+         "min_value": 5
+        },
+        "on_success": {
+         "type": "roll-modifier",
+         "target": {
+          "owner": "friendly"
+         },
+         "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1,
+          "weapon_type": "melee"
+         }
+        }
+       }
+      }
+     ]
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [],
+   "activatable": [
+    {
+     "id": "blessings-of-khorne#Warp Blades",
+     "label": "Warp Blades",
+     "buffs": [
+      {
+       "source": {
+        "kind": "ability",
+        "abilityId": "blessings-of-khorne",
+        "abilityKind": "army"
+       },
+       "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+         "keyword_id": "lethal-hits"
+        }
+       },
+       "applicableWhen": {
+        "phases": [
+         "fight"
+        ]
+       }
+      }
+     ],
+     "group": {
+      "id": "blessings-of-khorne",
+      "maxActivations": 2
+     }
+    },
+    {
+     "id": "blessings-of-khorne#Wrathful Devotion",
+     "label": "Wrathful Devotion",
+     "buffs": [
+      {
+       "source": {
+        "kind": "ability",
+        "abilityId": "blessings-of-khorne",
+        "abilityKind": "army"
+       },
+       "contribution": {
+        "type": "wound-mod",
+        "value": 1
+       }
+      }
+     ],
+     "group": {
+      "id": "blessings-of-khorne",
+      "maxActivations": 2
+     }
+    }
+   ]
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "roll",
+    "dice": "D3",
+    "roll_var": "r",
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "A",
+      "operation": "add",
+      "value": {
+       "roll_var": "r"
+      }
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "stat-modifier: its value is set by a bound roll; not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "A",
+     "operation": "add",
+     "value": {
+      "incursion": 1,
+      "strike-force": 2,
+      "onslaught": 3
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "stat-modifier: its value is set by the battle size; not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "A",
+     "operation": "add",
+     "value": {
+      "count_of": "battle-round"
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "stat-modifier: its value is set by the number of battle-round; not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "A",
+     "operation": "add",
+     "value": 2
+    },
+    "scaling": {
+     "per": 1,
+     "of": "models-embarked-in-bearer",
+     "max_value": 22
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "stat-modifier: the value scales with models-embarked-in-bearer; not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "operation": "add",
+     "value": 1,
+     "weapon_ref": {
+      "weapon_var": "blade"
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "roll-modifier: narrows by \"weapon_ref\" which the cruncher can't resolve here"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "usageGated",
+  "input": {
+   "abilityType": "unit",
+   "usage": [
+    {
+     "frequency": "n-per-battle",
+     "count": 1,
+     "per": "model"
+    },
+    {
+     "frequency": "once-per-battle-round",
+     "per": "army"
+    }
+   ],
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "operation": "add",
+     "value": 1
+    }
+   }
+  },
+  "output": {
+   "type": "conditional",
+   "condition": {
+    "type": "timing-is",
+    "parameters": {
+     "timing": "n-per-battle"
+    }
+   },
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "operation": "add",
+     "value": 1
+    }
+   }
+  }
+ },
+ {
+  "fn": "usageGated",
+  "input": {
+   "abilityType": "unit",
+   "usage": {
+    "frequency": "n-per-battle",
+    "count": 1
+   },
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "operation": "add",
+     "value": 1
+    }
+   }
+  },
+  "output": {
+   "type": "conditional",
+   "condition": {
+    "type": "timing-is",
+    "parameters": {
+     "timing": "n-per-battle"
+    }
+   },
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "operation": "add",
+     "value": 1
+    }
+   }
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "re-roll",
+    "target": "this-unit",
+    "modifier": {
+     "roll": "hit",
+     "subset": "ones",
+     "mandatory": true
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "blessings-of-khorne",
+      "abilityKind": "army"
+     },
+     "contribution": {
+      "type": "reroll",
+      "roll": "hit",
+      "subset": "ones"
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "army-faction",
+     "parameters": {
+      "faction": "tau-empire"
+     }
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "armyFaction": "tau-empire"
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "blessings-of-khorne",
+      "abilityKind": "army"
+     },
+     "contribution": {
+      "type": "hit-mod",
+      "value": 1
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "army-faction",
+     "parameters": {
+      "faction": "tau-empire"
+     }
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "armyFaction": "necrons"
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "army-faction",
+     "parameters": {
+      "faction": "tau-empire"
+     }
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "conditional: cannot evaluate condition \"army-faction\" against current context"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "battle-size",
+     "parameters": {
+      "size": "onslaught"
+     }
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "battleSize": "onslaught"
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "blessings-of-khorne",
+      "abilityKind": "army"
+     },
+     "contribution": {
+      "type": "hit-mod",
+      "value": 1
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "battle-size",
+     "parameters": {
+      "size": "onslaught"
+     }
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "battleSize": "incursion"
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "guided",
+     "parameters": {}
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "attackerGuided": true
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [
+    {
+     "source": {
+      "kind": "ability",
+      "abilityId": "blessings-of-khorne",
+      "abilityKind": "army"
+     },
+     "contribution": {
+      "type": "hit-mod",
+      "value": 1
+     }
+    }
+   ],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "guided",
+     "parameters": {}
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false,
+    "attackerGuided": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "conditional",
+    "condition": {
+     "type": "guided",
+     "parameters": {}
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "conditional: cannot evaluate condition \"guided\" against current context"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "roll-modifier",
+    "target": "this-unit",
+    "modifier": {
+     "roll": {
+      "of_ability": "reanimation-protocols-necrons"
+     },
+     "operation": "add",
+     "value": 1
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "roll-modifier on \"reanimation-protocols-necrons roll\" is outside the damage path"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "characteristic-resolution",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "T",
+     "rule": "highest",
+     "max_models": 2,
+     "bind_as": "b"
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "characteristic-resolution: which models' characteristic applies depends on the unit's model mix; not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "borrow-weapons",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "T",
+     "rule": "highest",
+     "max_models": 2,
+     "bind_as": "b"
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "borrow-weapons: the passengers' weapons are not added to the Transport's profile by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "select-weapon",
+    "target": "this-unit",
+    "modifier": {
+     "stat": "T",
+     "rule": "highest",
+     "max_models": 2,
+     "bind_as": "b"
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "select-weapon: a bound weapon is not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ },
+ {
+  "fn": "effectToBuffs",
+  "input": {
+   "effect": {
+    "type": "select-objective",
+    "selector": {
+     "count": 1,
+     "bind_as": "o"
+    },
+    "effect": {
+     "type": "roll-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "roll": "hit",
+      "operation": "add",
+      "value": 1
+     }
+    }
+   },
+   "source": {
+    "kind": "ability",
+    "abilityId": "blessings-of-khorne",
+    "abilityKind": "army"
+   },
+   "ctx": {
+    "phase": "fight",
+    "attackerStationary": false
+   },
+   "perspective": "attacker"
+  },
+  "output": {
+   "applied": [],
+   "unsupported": [
+    "select-objective: the bound objective marker is not resolved by the buff engine"
+   ],
+   "activatable": []
+  }
+ }
+]

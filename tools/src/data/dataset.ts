@@ -5,6 +5,7 @@
  *
  * @packageDocumentation
  */
+import { unitAbilityIds } from "./ability-refs.js";
 import type {
   AlliedRule,
   DeploymentPattern,
@@ -205,20 +206,11 @@ export class Dataset {
     });
     this.abilities = new Collection({
       items: raw.abilities,
+      // Ability ids are unique across the dataset (`<name>-<faction>`; core rules bare),
+      // so a plain get() is exact. An old bare faction id resolves to nothing.
       idOf: (a) => a.ability_id,
-      // An ability_id is shared across factions (each faction's enrichment
-      // authors its own copy of e.g. "deadly-demise-d3", and the copies
-      // legitimately diverge); key on (faction_id, id) so every faction's copy
-      // is retained and a unit resolves its own faction's ability — the same
-      // scheme as weapons (issue #59). `faction_id` is stamped at bundle time
-      // from the enrichment directory; only the shared `_core` pool stays
-      // faction-less, reachable through the getAny fallback.
-      dedupeKeyOf: (a) => `${a.faction_id ?? ""}::${a.ability_id}`,
       nameOf: (a) => a.name,
       factionOf: (a) => a.faction_id,
-      // Per-faction copies diverge (DSL fidelity, unit_ids), so a
-      // faction-less get() of a shared id is a bug — same guard as weapons.
-      guardUnscoped: true,
       entityLabel: "ability",
       wrap: (a) => new AbilityView(a, this),
     });
@@ -683,6 +675,7 @@ export class Dataset {
         source,
         ctx,
         "attacker",
+        entry.rating,
       );
       // Stratagems cost CP — opt-in, not on by default.
       const isStratagem = entry.source.kind === "detachment-stratagem";
@@ -766,7 +759,7 @@ export class Dataset {
         continue;
       }
       const source = bufferSourceFromEligible(entry);
-      out.push(...entry.ability.getBuffs(source, ctx, perspective));
+      out.push(...entry.ability.getBuffs(source, ctx, perspective, entry.rating));
     }
 
     return out;
@@ -782,7 +775,7 @@ export class Dataset {
       this.phaseIndex.set(key, existing);
     }
     for (const unit of raw.units) {
-      for (const abilityId of unit.ability_ids ?? [])
+      for (const abilityId of unitAbilityIds(unit.ability_ids))
         push(this.unitsByAbility, abilityId, unit);
       for (const weaponId of unit.weapon_ids ?? [])
         push(this.unitsByWeapon, weaponId, unit);

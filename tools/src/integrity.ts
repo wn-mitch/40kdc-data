@@ -3,6 +3,8 @@ import { glob } from "glob";
 import { resolve, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ValidationResult } from "./validate.js";
+import { checkTargetProfiles } from "./integrity-target-profiles.js";
+import { checkDslShapes } from "./integrity-shapes.js";
 import { baseLoadout, checkUnitLegality, type LoadoutModel, type LoadoutTier } from "./data/loadout.js";
 import type { Unit, WargearOption } from "./generated.js";
 
@@ -66,7 +68,8 @@ export const COLLISION_POLICIES: Record<string, CollisionPolicy> = {
   detachments: { policy: "faction-scoped", idKey: "id" },
   "wargear-options": { policy: "faction-scoped", idKey: "id" },
   "unit-compositions": { policy: "faction-scoped", idKey: "unit_id" },
-  abilities: { policy: "faction-scoped", idKey: "ability_id" },
+  // Ability ids carry their faction (`<name>-<faction>`) and are unique across the dataset.
+  abilities: { policy: "unique", idKey: "ability_id" },
   // Attachment records are keyed by leader; a shared leader chassis carries a
   // distinct bodyguard list per faction, and consumers scan (never collapse).
   "leader-attachments": { policy: "faction-scoped", idKey: "leader_id" },
@@ -108,7 +111,7 @@ interface PointsTierLike {
 }
 interface UnitLike {
   id?: string;
-  ability_ids?: string[];
+  ability_ids?: (string | { id: string; value?: string | number; wargear?: string })[];
   faction_keywords?: string[];
   weapon_ids?: string[];
   points?: PointsTierLike[];
@@ -354,6 +357,47 @@ export function diceTableInvariantErrors(effect: unknown): string[] {
   return errors;
 }
 
+/**
+ * Every ability `unit_ids` entry must name a core unit (in any faction dir: a chapter's
+ * enrichment can list its parent roster's units). A unit the live game dropped takes its
+ * abilities with it (`ingest-mfm cull-legends`), so a dangling id is a missed prune.
+ */
+async function checkAbilityUnitRefs(root: string, result: ValidationResult): Promise<void> {
+  const units = new Set<string>();
+  for (const f of await glob("core/*/units.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_")) continue;
+    try {
+      for (const u of readArray<{ id?: string }>(f)) if (u.id) units.add(u.id);
+    } catch {
+      // structural problems are the AJV pass's job
+    }
+  }
+  const files = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
+  for (const file of files.sort()) {
+    const faction = basename(dirname(file));
+    if (faction.startsWith("_") && faction !== "_core") continue;
+    let abilities: Array<{ ability_id?: string; id?: string; unit_ids?: string[] }>;
+    try {
+      abilities = readArray(file);
+    } catch {
+      continue;
+    }
+    abilities.forEach((a, index) => {
+      const dangling = (a.unit_ids ?? []).filter((u) => !units.has(u));
+      if (!dangling.length) return;
+      result.failed++;
+      result.errors.push({
+        file,
+        index,
+        errors: dangling.map((u) => ({
+          path: `/${index}/unit_ids`,
+          message: `ability "${a.ability_id ?? a.id}": unit_id "${u}" is no core unit — drop it (and the ability, if no unit is left)`,
+        })),
+      });
+    });
+  }
+}
+
 function checkMissionCardLinks(root: string, result: ValidationResult): void {
   const missionsFile = resolve(root, "core/missions.json");
   const missionCardsFile = resolve(root, "core/mission-cards.json");
@@ -512,10 +556,31 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   };
 
   checkMissionCardLinks(root, result);
+  await checkAbilityUnitRefs(root, result);
+  await checkDslShapes(root, result);
+  await checkTargetProfiles(root, result);
 
   // Shared core ability pool, available to every faction (optional).
   const coreAbilities = new Set<string>();
   loadAbilityIds(resolve(root, "enrichment/_core/abilities.json"), coreAbilities);
+  // Every ability record id (unique across dirs), and those whose DSL reads the unit's rating.
+  const abilityRecordIds = new Set<string>();
+  const ratedAbilityIds = new Set<string>();
+  // A stub awaits authoring, so a rating on a ref to it has nothing to read yet.
+  const stubAbilityIds = new Set<string>();
+  for (const f of await glob("enrichment/*/abilities.json", { cwd: root, absolute: true })) {
+    if (basename(dirname(f)).startsWith("_") && basename(dirname(f)) !== "_core") continue;
+    try {
+      for (const a of readArray<AbilityLike & { effect?: unknown }>(f)) {
+        if (!a.ability_id) continue;
+        abilityRecordIds.add(a.ability_id);
+        if (/"rating":true/.test(JSON.stringify(a.effect ?? null))) ratedAbilityIds.add(a.ability_id);
+        if ((a as { stub?: unknown }).stub === true) stubAbilityIds.add(a.ability_id);
+      }
+    } catch {
+      // unreadable file: reported by schema validation
+    }
+  }
   const coreAbilityById = new Map<string, AbilityLike & { id?: string; effect?: unknown }>();
   try {
     for (const ability of readArray<AbilityLike & { id?: string; effect?: unknown }>(
@@ -564,8 +629,6 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       });
     }
 
-    const defined = new Set<string>(coreAbilities);
-    loadAbilityIds(resolve(root, `enrichment/${faction}/abilities.json`), defined);
     const home = FACTION_HOME_KEYWORD[faction];
 
     result.totalFiles++;
@@ -574,12 +637,17 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       result.totalItems++;
       const errs: Array<{ path: string; message: string }> = [];
 
-      for (const aid of u.ability_ids ?? []) {
-        if (!defined.has(aid)) {
-          errs.push({
-            path: `/${i}/ability_ids`,
-            message: `unit "${u.id}": ability_id "${aid}" is not defined in ${faction} enrichment`,
-          });
+      // Ability ids are unique across the dataset: a ref resolves to the one record carrying it,
+      // wherever it lives (a chapter unit names the supplement's record).
+      for (const ref of u.ability_ids ?? []) {
+        const aid = typeof ref === "string" ? ref : ref.id;
+        const rated = typeof ref !== "string" && ref.value !== undefined;
+        if (!abilityRecordIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": ability_id "${aid}" resolves to no ability record` });
+        } else if (ratedAbilityIds.has(aid) && !rated) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" reads the unit's rating ({rating: true}); list it as {"id": "${aid}", "value": …}` });
+        } else if (rated && !ratedAbilityIds.has(aid) && !stubAbilityIds.has(aid)) {
+          errs.push({ path: `/${i}/ability_ids`, message: `unit "${u.id}": "${aid}" carries a value but its record reads no rating` });
         }
       }
 
@@ -612,7 +680,11 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
   // (e.g. negating an enemy's Lone Operative); a same-faction check would falsely
   // fail those cross-faction references. faction-rule slugs resolve against the
   // `faction_rule_ids` set declared on the factions.
-  const allAbilityIds = new Set<string>(coreAbilities);
+  // Core abilities (Deep Strike, Scouts, …) are catalog entries rather than ability records.
+  // A root without the catalog (a partial fixture tree) has no core abilities to resolve against.
+  const coreCatalogFile = resolve(root, "core/unit-keywords.json");
+  const coreCatalog = existsSync(coreCatalogFile) ? readArray<{ id: string }>(coreCatalogFile) : [];
+  const allAbilityIds = new Set<string>([...coreAbilities, ...coreCatalog.map((k) => k.id)]);
   const abilityIdsByFaction = new Map<string, Set<string>>();
   const abilityRecordsByFaction = new Map<string, Map<string, AbilityLike & { id?: string; effect?: unknown }>>();
   const abilityFiles = await glob("enrichment/*/abilities.json", { cwd: root, absolute: true });
@@ -679,16 +751,15 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
     }
   };
 
-  /** Collect entity-backed ability grants, including reusable rules bundles. */
-  const collectAbilityGrantRefs = (node: unknown, out: string[]): void => {
+  /** Collect every ability grant's named ability, and whether it grants a reusable rules bundle. */
+  const collectAbilityGrantRefs = (node: unknown, out: Array<{ abilityId: string; bundle: boolean }>): void => {
     if (Array.isArray(node)) {
       for (const value of node) collectAbilityGrantRefs(value, out);
     } else if (node !== null && typeof node === "object") {
       const effect = node as Record<string, unknown>;
       if (effect.type === "ability-grant" && effect.modifier !== null && typeof effect.modifier === "object") {
         const modifier = effect.modifier as Record<string, unknown>;
-        const abilityId = modifier.ability_id;
-        if (modifier.rules_bundle === true && typeof abilityId === "string") out.push(abilityId);
+        if (typeof modifier.ability === "string") out.push({ abilityId: modifier.ability, bundle: modifier.rules_bundle === true });
       }
       for (const value of Object.values(effect)) collectAbilityGrantRefs(value, out);
     }
@@ -712,7 +783,7 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
       collectSourceAbilityRefs(a, sourceAbilityRefs);
       const refs: Array<{ kind: string; rule: string }> = [];
       collectRuleStateRefs(a.effect, refs);
-      const abilityGrantRefs: string[] = [];
+      const abilityGrantRefs: Array<{ abilityId: string; bundle: boolean }> = [];
       collectAbilityGrantRefs(a.effect, abilityGrantRefs);
       const diceTableErrors: string[] = [];
       collectDiceTableErrors(a.effect, diceTableErrors);
@@ -751,7 +822,15 @@ export async function checkReferentialIntegrity(dataRoot?: string): Promise<Vali
         });
       }
 
-      for (const abilityId of abilityGrantRefs) {
+      for (const { abilityId, bundle } of abilityGrantRefs) {
+        if (!bundle) {
+          // A plain grant names a core ability or any ability record.
+          if (!allAbilityIds.has(abilityId)) errs.push({
+            path: `/${i}/effect`,
+            message: `ability "${a.id ?? a.ability_id}": ability-grant "${abilityId}" names neither a core ability nor an ability record`,
+          });
+          continue;
+        }
         const grantedAbility = factionAbilityRecords?.get(abilityId) ?? coreAbilityById.get(abilityId);
         if (!grantedAbility) {
           errs.push({

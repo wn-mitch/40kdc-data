@@ -8,7 +8,7 @@
 
 > **EffectTranslation** = `object`
 
-Defined in: [cruncher/from-dsl.ts:71](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L71)
+Defined in: [cruncher/from-dsl.ts:78](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L78)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [cruncher/from-dsl.ts:71](https://github.com/wn-mitch/40kdc-data/blo
 
 > **applied**: [`Buff`](Buff.md)[]
 
-Defined in: [cruncher/from-dsl.ts:72](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L72)
+Defined in: [cruncher/from-dsl.ts:79](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L79)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [cruncher/from-dsl.ts:72](https://github.com/wn-mitch/40kdc-data/blo
 
 > **unsupported**: [`UnsupportedFragment`](UnsupportedFragment.md)[]
 
-Defined in: [cruncher/from-dsl.ts:73](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L73)
+Defined in: [cruncher/from-dsl.ts:80](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L80)
 
 ***
 
@@ -32,6 +32,6 @@ Defined in: [cruncher/from-dsl.ts:73](https://github.com/wn-mitch/40kdc-data/blo
 
 > **activatable**: [`ActivatableBuff`](ActivatableBuff.md)[]
 
-Defined in: [cruncher/from-dsl.ts:75](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/cruncher/from-dsl.ts#L75)
+Defined in: [cruncher/from-dsl.ts:82](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/cruncher/from-dsl.ts#L82)
 
 Buffs sitting behind a player decision — see [ActivatableBuff](ActivatableBuff.md).

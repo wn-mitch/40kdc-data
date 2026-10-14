@@ -18,13 +18,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 220,
+        "cost": 210,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 240,
+        "cost": 230,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -57,8 +57,15 @@
       "twin-heavy-bolter"
     ],
     "ability_ids": [
-      "assault-ramp",
-      "deadly-demise-d6"
+      "assault-ramp-emperors-children",
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 5
+      }
     ],
     "transport_capacity": {
       "capacity": 14
@@ -103,7 +110,7 @@
     "points": [
       {
         "models": 5,
-        "cost": 145
+        "cost": 155
       }
     ],
     "keywords": [
@@ -135,9 +142,8 @@
       "reaper-autocannon"
     ],
     "ability_ids": [
-      "bloody-fury",
       "deep-strike",
-      "lethal-obsession"
+      "lethal-obsession-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -240,13 +246,9 @@
       "force-weapon"
     ],
     "ability_ids": [
-      "empyric-guidance-psychic",
-      "gift-of-chaos-psychic",
       "leader",
-      "prescience-psychic",
-      "twisted-sorceries-psychic",
-      "warped-interference-psychic",
-      "wracking-agonies-psychic"
+      "warped-interference-emperors-children",
+      "wracking-agonies-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -290,13 +292,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 90,
+        "cost": 95,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 1,
-        "cost": 100,
+        "cost": 105,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -331,10 +333,10 @@
       "screamer-pistol"
     ],
     "ability_ids": [
-      "euphoric-strikes",
+      "euphoric-strikes-emperors-children",
       "leader",
-      "lord-of-the-host",
-      "perfectionists"
+      "lord-of-the-host-emperors-children",
+      "perfectionists-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -406,9 +408,9 @@
       "screamer-pistol"
     ],
     "ability_ids": [
-      "doom-siren",
+      "doom-siren-emperors-children",
       "leader",
-      "obsessive-annunciation"
+      "obsessive-annunciation-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -475,15 +477,11 @@
       "hideous-mutations"
     ],
     "ability_ids": [
-      "deadly-demise-1",
-      "feel-no-pain-5",
-      "lethal-ichor",
-      "mind-breaking-mutations-aura",
-      "regenerating-monstrosities",
-      "scouts-6",
-      "scouts-8",
-      "scuttling-horrors",
-      "to-slake-its-rage"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      },
+      "scuttling-horrors-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -530,13 +528,13 @@
     "points": [
       {
         "models": 1,
-        "cost": 170,
+        "cost": 165,
         "unit_count_min": 1,
         "unit_count_max": 1
       },
       {
         "models": 1,
-        "cost": 185,
+        "cost": 180,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -565,10 +563,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "deadly-demise-d3",
-      "ecstatic-death",
-      "excessive-vigour-aura",
-      "lord-of-excess"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "ecstatic-death-emperors-children",
+      "excessive-vigour-emperors-children",
+      "lord-of-excess-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -610,13 +611,13 @@
     "points": [
       {
         "models": 6,
-        "cost": 145,
+        "cost": 160,
         "unit_count_min": 1,
         "unit_count_max": 2
       },
       {
         "models": 6,
-        "cost": 160,
+        "cost": 175,
         "unit_count_min": 3,
         "unit_count_max": null
       }
@@ -646,7 +647,7 @@
       "sonic-blaster"
     ],
     "ability_ids": [
-      "terrifying-crescendo"
+      "terrifying-crescendo-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -698,12 +699,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 80
+        "cost": 85
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 160
+        "cost": 170
       }
     ],
     "keywords": [
@@ -736,9 +737,12 @@
       "rapture-lash-tormentors"
     ],
     "ability_ids": [
-      "icon-of-excess",
+      {
+        "id": "icon-of-excess-emperors-children",
+        "wargear": "icon-of-excess"
+      },
       "infiltrators",
-      "objective-defiled"
+      "objective-defiled-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -828,13 +832,15 @@
       "havoc-launcher"
     ],
     "ability_ids": [
-      "assault-vehicle",
-      "fire-support",
-      "firing-deck-2",
-      "meet-any-challenge",
-      "self-repair",
-      "sorcerous-support",
-      "deadly-demise-d3"
+      "assault-vehicle-emperors-children",
+      {
+        "id": "firing-deck",
+        "value": 2
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "transport_capacity": {
       "capacity": 12
@@ -886,7 +892,7 @@
       },
       {
         "models": 1,
-        "cost": 235,
+        "cost": 225,
         "unit_count_min": 2,
         "unit_count_max": null
       }
@@ -916,10 +922,13 @@
       "infernal-cannon"
     ],
     "ability_ids": [
-      "daemonic-destruction",
-      "stimulated-by-pain",
+      "daemonic-destruction-emperors-children",
+      "stimulated-by-pain-emperors-children",
       "deep-strike",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -993,12 +1002,18 @@
       "serpentine-tail"
     ],
     "ability_ids": [
-      "daemon-primarch-of-slaanesh",
-      "daemonic-poisons",
-      "serpentine",
-      "supreme-commander",
+      "daemon-primarch-of-slaanesh-emperors-children",
+      "daemonic-poisons-emperors-children",
+      "supreme-commander-emperors-children",
       "deep-strike",
-      "deadly-demise-d6"
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1041,7 +1056,7 @@
     "points": [
       {
         "models": 1,
-        "cost": 120
+        "cost": 130
       }
     ],
     "keywords": [
@@ -1068,11 +1083,14 @@
       "lash-of-torment"
     ],
     "ability_ids": [
-      "a-challenge-worthy-of-skill",
-      "duellist-s-hubris",
+      "a-challenge-worthy-of-skill-emperors-children",
+      "duellists-hubris-emperors-children",
       "leader",
       "lone-operative",
-      "feel-no-pain-5"
+      {
+        "id": "feel-no-pain",
+        "value": 5
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1144,10 +1162,16 @@
       "heldrake-claws"
     ],
     "ability_ids": [
-      "airborne-predator",
-      "flame-wreathed",
+      "airborne-predator-emperors-children",
       "hover",
-      "deadly-demise-d3"
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1190,12 +1214,12 @@
     "points": [
       {
         "models": 5,
-        "cost": 85
+        "cost": 95
       },
       {
         "models": 6,
         "models_max": 10,
-        "cost": 160
+        "cost": 175
       }
     ],
     "keywords": [
@@ -1225,8 +1249,15 @@
       "rapture-lash-infractors"
     ],
     "ability_ids": [
-      "excessive-assault",
-      "scouts-6"
+      "excessive-assault-emperors-children",
+      {
+        "id": "scouts",
+        "value": 6
+      },
+      {
+        "id": "icon-of-excess-emperors-children",
+        "wargear": "icon-of-excess"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1305,12 +1336,15 @@
       "maulerfiend-fists"
     ],
     "ability_ids": [
-      "glutton-for-punishment",
-      "savage-exaltation",
-      "siege-crawler",
-      "snarling-protector",
-      "the-scent-of-blood",
-      "deadly-demise-d3"
+      "glutton-for-punishment-emperors-children",
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -1383,7 +1417,7 @@
       "bolt-pistol"
     ],
     "ability_ids": [
-      "daemonic-patrons"
+      "daemonic-patrons-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1444,7 +1478,7 @@
     },
     "weapon_ids": [
       "blissblade",
-      "bolt-pistol-callous-blades"
+      "bolt-pistol"
     ],
     "game_version": {
       "edition": "11th",
@@ -1468,6 +1502,9 @@
         "namespace": "mfm",
         "id": "4afabec4-3f10-4544-8e8c-692dc62811be"
       }
+    ],
+    "ability_ids": [
+      "daemonic-patrons-callous-blades-flawless-blades-emperors-children"
     ]
   },
   {
@@ -1503,12 +1540,13 @@
       "max": 10
     },
     "weapon_ids": [
-      "bolt-pistol-callous-blades",
       "duelling-sabre",
-      "power-sword-infractors"
+      "bolt-pistol",
+      "power-sword"
     ],
     "ability_ids": [
-      "excessive-assault-callous-blades"
+      "excessive-assault-callous-blades-infractors-emperors-children",
+      "icon-of-excess-callous-blades-infractors-emperors-children"
     ],
     "game_version": {
       "edition": "11th",
@@ -1571,10 +1609,10 @@
     },
     "weapon_ids": [
       "phoenix-power-spear",
-      "power-fist-lord-exultant"
+      "power-fist"
     ],
     "ability_ids": [
-      "peerless-killer-callous-blades"
+      "peerless-killer-emperors-children"
     ],
     "game_version": {
       "edition": "11th",

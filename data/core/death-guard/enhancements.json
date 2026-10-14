@@ -1,13 +1,13 @@
 [
   {
-    "id": "daemon-weapon-of-nurgle-virulent-vectorium",
+    "id": "daemon-weapon-of-nurgle-virulent-vectorium-death-guard",
     "name": "Daemon Weapon of Nurgle",
     "detachment_id": "virulent-vectorium",
     "cost": 10,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "daemon-weapon-of-nurgle-virulent-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -28,14 +28,14 @@
     ]
   },
   {
-    "id": "furnace-of-plagues-virulent-vectorium",
+    "id": "furnace-of-plagues-virulent-vectorium-death-guard",
     "name": "Furnace of Plagues",
     "detachment_id": "virulent-vectorium",
     "cost": 25,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "furnace-of-plagues-virulent-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -56,14 +56,14 @@
     ]
   },
   {
-    "id": "arch-contaminator-virulent-vectorium",
+    "id": "arch-contaminator-virulent-vectorium-death-guard",
     "name": "Arch Contaminator",
     "detachment_id": "virulent-vectorium",
     "cost": 25,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "arch-contaminator-virulent-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -84,14 +84,14 @@
     ]
   },
   {
-    "id": "revolting-regeneration-virulent-vectorium",
+    "id": "revolting-regeneration-virulent-vectorium-death-guard",
     "name": "Revolting Regeneration",
     "detachment_id": "virulent-vectorium",
     "cost": 30,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "revolting-regeneration-virulent-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -112,14 +112,14 @@
     ]
   },
   {
-    "id": "eye-of-affliction-mortarions-hammer",
+    "id": "eye-of-affliction-mortarions-hammer-death-guard",
     "name": "Eye of Affliction",
     "detachment_id": "mortarions-hammer",
     "cost": 20,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "eye-of-affliction-mortarions-hammer-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -140,14 +140,14 @@
     ]
   },
   {
-    "id": "bilemaw-blight-mortarions-hammer",
+    "id": "bilemaw-blight-mortarions-hammer-death-guard",
     "name": "Bilemaw Blight",
     "detachment_id": "mortarions-hammer",
     "cost": 10,
     "keyword_restrictions": [
       "Malignant Plaguecaster"
     ],
-    "ability_id": null,
+    "ability_id": "bilemaw-blight-mortarions-hammer-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -168,7 +168,7 @@
     ]
   },
   {
-    "id": "insectile-murmuration-upgrade-flyblown-host",
+    "id": "insectile-murmuration-upgrade-flyblown-host-death-guard",
     "name": "Insectile Murmuration (Upgrade)",
     "detachment_id": "flyblown-host",
     "cost": 15,
@@ -176,7 +176,7 @@
       "Death Guard",
       "Plague Marines"
     ],
-    "ability_id": "insectile-murmuration-flyblown-host",
+    "ability_id": "insectile-murmuration-upgrade-flyblown-host-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -197,7 +197,7 @@
     ]
   },
   {
-    "id": "rejuvenating-swarm-paragons-of-putrescence",
+    "id": "rejuvenating-swarm-paragons-of-putrescence-death-guard",
     "name": "Rejuvenating Swarm",
     "detachment_id": "paragons-of-putrescence",
     "cost": 20,
@@ -205,7 +205,7 @@
       "Death Guard",
       "Infantry"
     ],
-    "ability_id": "rejuvenating-swarm-paragons-of-putrescence",
+    "ability_id": "rejuvenating-swarm-paragons-of-putrescence-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -229,14 +229,14 @@
     ]
   },
   {
-    "id": "shriekworm-familiar-mortarions-hammer",
+    "id": "shriekworm-familiar-mortarions-hammer-death-guard",
     "name": "Shriekworm Familiar",
     "detachment_id": "mortarions-hammer",
     "cost": 15,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "shriekworm-familiar-mortarions-hammer-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -257,7 +257,7 @@
     ]
   },
   {
-    "id": "plagueveil-upgrade-flyblown-host",
+    "id": "plagueveil-upgrade-flyblown-host-death-guard",
     "name": "Plagueveil (Upgrade)",
     "detachment_id": "flyblown-host",
     "cost": 15,
@@ -265,7 +265,7 @@
       "Death Guard",
       "Plague Marines"
     ],
-    "ability_id": "plagueveil-flyblown-host",
+    "ability_id": "plagueveil-upgrade-flyblown-host-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -286,14 +286,14 @@
     ]
   },
   {
-    "id": "tendrilous-emissions-mortarions-hammer",
+    "id": "tendrilous-emissions-mortarions-hammer-death-guard",
     "name": "Tendrilous Emissions",
     "detachment_id": "mortarions-hammer",
     "cost": 30,
     "keyword_restrictions": [
       "Lord of Virulence"
     ],
-    "ability_id": null,
+    "ability_id": "tendrilous-emissions-mortarions-hammer-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -314,14 +314,14 @@
     ]
   },
   {
-    "id": "final-ingredient-champions-of-contagion",
+    "id": "final-ingredient-champions-of-contagion-death-guard",
     "name": "Final Ingredient",
     "detachment_id": "champions-of-contagion",
     "cost": 20,
     "keyword_restrictions": [
       "Biologus Putrifier"
     ],
-    "ability_id": null,
+    "ability_id": "final-ingredient-champions-of-contagion-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -342,14 +342,14 @@
     ]
   },
   {
-    "id": "visions-of-virulence-champions-of-contagion",
+    "id": "visions-of-virulence-champions-of-contagion-death-guard",
     "name": "Visions of Virulence",
     "detachment_id": "champions-of-contagion",
     "cost": 15,
     "keyword_restrictions": [
       "Malignant Plaguecaster"
     ],
-    "ability_id": null,
+    "ability_id": "visions-of-virulence-champions-of-contagion-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -370,14 +370,14 @@
     ]
   },
   {
-    "id": "needle-of-nurgle-champions-of-contagion",
+    "id": "needle-of-nurgle-champions-of-contagion-death-guard",
     "name": "Needle of Nurgle",
     "detachment_id": "champions-of-contagion",
     "cost": 25,
     "keyword_restrictions": [
       "Plague Surgeon"
     ],
-    "ability_id": null,
+    "ability_id": "needle-of-nurgle-champions-of-contagion-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -398,14 +398,14 @@
     ]
   },
   {
-    "id": "cornucophagus-champions-of-contagion",
+    "id": "cornucophagus-champions-of-contagion-death-guard",
     "name": "Cornucophagus",
     "detachment_id": "champions-of-contagion",
     "cost": 35,
     "keyword_restrictions": [
       "Lord of Poxes"
     ],
-    "ability_id": null,
+    "ability_id": "cornucophagus-champions-of-contagion-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -426,14 +426,14 @@
     ]
   },
   {
-    "id": "beckoning-blight-tallyband-summoners",
+    "id": "beckoning-blight-tallyband-summoners-death-guard",
     "name": "Beckoning Blight",
     "detachment_id": "tallyband-summoners",
     "cost": 20,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "beckoning-blight-tallyband-summoners-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -454,14 +454,14 @@
     ]
   },
   {
-    "id": "fell-harvester-tallyband-summoners",
+    "id": "fell-harvester-tallyband-summoners-death-guard",
     "name": "Fell Harvester",
     "detachment_id": "tallyband-summoners",
     "cost": 10,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "fell-harvester-tallyband-summoners-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -482,14 +482,14 @@
     ]
   },
   {
-    "id": "entropic-knell-tallyband-summoners",
+    "id": "entropic-knell-tallyband-summoners-death-guard",
     "name": "Entropic Knell",
     "detachment_id": "tallyband-summoners",
     "cost": 15,
     "keyword_restrictions": [
       "Great Unclean One"
     ],
-    "ability_id": null,
+    "ability_id": "entropic-knell-tallyband-summoners-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -510,14 +510,14 @@
     ]
   },
   {
-    "id": "tome-of-bounteous-blessings-tallyband-summoners",
+    "id": "tome-of-bounteous-blessings-tallyband-summoners-death-guard",
     "name": "Tome of Bounteous Blessings",
     "detachment_id": "tallyband-summoners",
     "cost": 20,
     "keyword_restrictions": [
       "Malignant Plaguecaster"
     ],
-    "ability_id": null,
+    "ability_id": "tome-of-bounteous-blessings-tallyband-summoners-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -538,14 +538,14 @@
     ]
   },
   {
-    "id": "witherbone-pipes-shamblerot-vectorium",
+    "id": "witherbone-pipes-shamblerot-vectorium-death-guard",
     "name": "Witherbone Pipes",
     "detachment_id": "shamblerot-vectorium",
     "cost": 25,
     "keyword_restrictions": [
       "Noxious Blightbringer"
     ],
-    "ability_id": null,
+    "ability_id": "witherbone-pipes-shamblerot-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -566,14 +566,14 @@
     ]
   },
   {
-    "id": "lord-of-the-walking-pox-shamblerot-vectorium",
+    "id": "lord-of-the-walking-pox-shamblerot-vectorium-death-guard",
     "name": "Lord of the Walking Pox",
     "detachment_id": "shamblerot-vectorium",
     "cost": 15,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "lord-of-the-walking-pox-shamblerot-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -594,14 +594,14 @@
     ]
   },
   {
-    "id": "sorrowsyphon-shamblerot-vectorium",
+    "id": "sorrowsyphon-shamblerot-vectorium-death-guard",
     "name": "Sorrowsyphon",
     "detachment_id": "shamblerot-vectorium",
     "cost": 10,
     "keyword_restrictions": [
       "Malignant Plaguecaster"
     ],
-    "ability_id": null,
+    "ability_id": "sorrowsyphon-shamblerot-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -622,14 +622,14 @@
     ]
   },
   {
-    "id": "talisman-of-burgeoning-shamblerot-vectorium",
+    "id": "talisman-of-burgeoning-shamblerot-vectorium-death-guard",
     "name": "Talisman of Burgeoning",
     "detachment_id": "shamblerot-vectorium",
     "cost": 25,
     "keyword_restrictions": [
       "Death Guard"
     ],
-    "ability_id": null,
+    "ability_id": "talisman-of-burgeoning-shamblerot-vectorium-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -650,14 +650,14 @@
     ]
   },
   {
-    "id": "face-of-death-death-lords-chosen",
+    "id": "face-of-death-death-lords-chosen-death-guard",
     "name": "Face of Death",
     "detachment_id": "death-lords-chosen",
     "cost": 10,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "face-of-death-death-lords-chosen-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -678,14 +678,14 @@
     ]
   },
   {
-    "id": "vile-vigour-death-lords-chosen",
+    "id": "vile-vigour-death-lords-chosen-death-guard",
     "name": "Vile Vigour",
     "detachment_id": "death-lords-chosen",
     "cost": 15,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "vile-vigour-death-lords-chosen-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -706,14 +706,14 @@
     ]
   },
   {
-    "id": "warprot-talisman-death-lords-chosen",
+    "id": "warprot-talisman-death-lords-chosen-death-guard",
     "name": "Warprot Talisman",
     "detachment_id": "death-lords-chosen",
     "cost": 30,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "warprot-talisman-death-lords-chosen-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -734,14 +734,14 @@
     ]
   },
   {
-    "id": "helm-of-the-fly-king-death-lords-chosen",
+    "id": "helm-of-the-fly-king-death-lords-chosen-death-guard",
     "name": "Helm of The Fly King",
     "detachment_id": "death-lords-chosen",
     "cost": 20,
     "keyword_restrictions": [
       "Terminator"
     ],
-    "ability_id": null,
+    "ability_id": "helm-of-the-fly-king-death-lords-chosen-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -762,14 +762,14 @@
     ]
   },
   {
-    "id": "parasitic-woe-reaper-upgrade-contagion-engines",
+    "id": "parasitic-woe-reaper-upgrade-contagion-engines-death-guard",
     "name": "Parasitic Woe‑reaper (Upgrade)",
     "detachment_id": "contagion-engines",
     "cost": 15,
     "keyword_restrictions": [
       "Contagion Engines"
     ],
-    "ability_id": "parasitic-woe-reaper-contagion-engines",
+    "ability_id": "parasitic-woe-reaper-upgrade-contagion-engines-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -790,11 +790,11 @@
     ]
   },
   {
-    "id": "lancet-of-the-worldsore-upgrade-contagion-engines",
+    "id": "lancet-of-the-worldsore-upgrade-contagion-engines-death-guard",
     "name": "Lancet of the Worldsore (Upgrade)",
     "detachment_id": "contagion-engines",
     "cost": 15,
-    "ability_id": "lancet-of-the-worldsore-contagion-engines",
+    "ability_id": "lancet-of-the-worldsore-upgrade-contagion-engines-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -825,7 +825,7 @@
     ]
   },
   {
-    "id": "host-of-the-hybridised-pox-paragons-of-putrescence",
+    "id": "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard",
     "name": "Host of the Hybridised Pox",
     "detachment_id": "paragons-of-putrescence",
     "cost": 40,
@@ -833,7 +833,7 @@
       "Death Guard",
       "Infantry"
     ],
-    "ability_id": "host-of-the-hybridised-pox-paragons-of-putrescence",
+    "ability_id": "host-of-the-hybridised-pox-paragons-of-putrescence-death-guard",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -854,7 +854,7 @@
     ]
   },
   {
-    "id": "bountiful-regeneration-maggot-lords",
+    "id": "bountiful-regeneration-maggot-lords-death-guard",
     "name": "Bountiful Regeneration",
     "detachment_id": "maggot-lords",
     "cost": 0,
@@ -879,7 +879,7 @@
     ]
   },
   {
-    "id": "noisome-veil-maggot-lords",
+    "id": "noisome-veil-maggot-lords-death-guard",
     "name": "Noisome Veil",
     "detachment_id": "maggot-lords",
     "cost": 0,

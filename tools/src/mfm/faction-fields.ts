@@ -15,6 +15,7 @@
  * IP: reads only ids and English display names (army-rule / faction-keyword names),
  * never rules or lore prose.
  */
+import { mirrorIds } from "./mirror/ids.js";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump } from "./loader.js";
@@ -86,22 +87,15 @@ function factionKeywordByDir(dump: MfmDump): Map<string, string> {
 export function runFactionFields(dump: MfmDump): FactionFieldsReport {
   const fkByDir = factionKeywordByDir(dump);
 
-  // fkId → nameToId of every army rule the keyword owns. Strip a trailing
-  // parenthetical tag ("Nurgle's Gift (Aura)") the repo drops from the slug, so the
-  // derived candidate matches the authored faction_rule_ids (mirrors cleanEnhName).
+  // fkId → the army rule rows the keyword owns; each becomes the id `mfm:mirror` gives it
+  // in the faction's dir (`<name>-<faction>`).
   const armyRuleById = dump.byId("army_rule");
+  const ids = mirrorIds(dump);
   const armyRulesByFk = new Map<string, string[]>();
   for (const edge of dump.table("army_rule_faction_keyword")) {
-    const name = dump.enName(armyRuleById.get(edge.armyRuleId))?.replace(/\s*\([^)]*\)\s*$/, "").trim();
-    if (!name) continue;
-    let slug: string;
-    try {
-      slug = nameToId(name);
-    } catch {
-      continue;
-    }
+    if (!armyRuleById.get(edge.armyRuleId)) continue;
     const list = armyRulesByFk.get(edge.factionKeywordId) ?? [];
-    if (!list.includes(slug)) list.push(slug);
+    if (!list.includes(edge.armyRuleId)) list.push(edge.armyRuleId);
     armyRulesByFk.set(edge.factionKeywordId, list);
   }
 
@@ -127,7 +121,10 @@ export function runFactionFields(dump: MfmDump): FactionFieldsReport {
     let changed = false;
 
     // faction_rule_ids — fill-only / confirm / review.
-    const candidates = armyRulesByFk.get(fkId) ?? [];
+    const candidates = [...new Set((armyRulesByFk.get(fkId) ?? []).flatMap((row) => {
+      const id = ids.idOf("army_rule", row, dir) ?? ids.idOf("army_rule", row);
+      return id ? [id] : [];
+    }))];
     const ruleAuthored = record.faction_rule_ids;
     if (candidates.length > 0) {
       if (ruleAuthored === undefined) {

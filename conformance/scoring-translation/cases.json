@@ -96,7 +96,7 @@
         "End of your turn: 6 VP when 3+ objectives tagged consecrated [highest tier]",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
-        "End of the battle: 5 VP when 1+ objectives tagged consecrated (opponent home)"
+        "End of the battle: 5 VP when 1+ objectives (opponent home) tagged consecrated"
       ]
     }
   },
@@ -116,7 +116,7 @@
     "expected": {
       "awards": [
         "End of the opponent's turn (round 2+): 3 VP when you control 1+ objectives (your home)",
-        "+ End of the opponent's turn (round 2+): 2 VP when you control your deployment zone with at most 0 enemy units"
+        "+ End of the opponent's turn (round 2+): 2 VP when an enemy unit is not within your deployment zone"
       ]
     }
   },
@@ -137,7 +137,7 @@
         "End of your turn: 3 VP when 1+ enemy units destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of your Command phase (round 2+): 6 VP when you hold more objectives than the opponent",
-        "End of your turn (round 2+): 4 VP when you destroyed more enemy units this turn than friendly units previous turn"
+        "End of your turn (round 2+): 4 VP when you destroyed more enemy units this turn than friendly units in the previous turn"
       ]
     }
   },
@@ -241,7 +241,7 @@
       "awards": [
         "End of your turn: 3 VP when 1+ enemy units destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
-        "End of your turn (round 2+): 5 VP when you destroyed more enemy units this turn than friendly units previous turn",
+        "End of your turn (round 2+): 5 VP when you destroyed more enemy units this turn than friendly units in the previous turn",
         "End of your turn (round 2+): 5 VP when you control 1+ objectives (opponent home)"
       ]
     }
@@ -294,7 +294,7 @@
     "cardId": "punishment",
     "expected": {
       "awards": [
-        "End of any turn: 5 VP when 1+ enemy units tagged condemned (left battlefield this turn)",
+        "End of any turn: 5 VP when 1+ enemy units tagged condemned destroyed this turn",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of your Command phase (round 2+): 5 VP when you hold more objectives than the opponent",
         "End of the battle: 8 VP when you control 1+ objectives (opponent home)"
@@ -340,7 +340,7 @@
         "End of your turn: 3 VP when you control 1+ central objectives",
         "End of your turn: 2 VP when 1+ enemy units destroyed that started the turn in a terrain area",
         "End of your Command phase (round 2+): 4 VP per controlled non home objective",
-        "End of the battle: 5 VP when you control your territory with at most 0 enemy units"
+        "End of the battle: 5 VP when an enemy unit is not wholly within your territory"
       ]
     }
   },
@@ -378,7 +378,7 @@
     "cardId": "surveil-the-foe",
     "expected": {
       "awards": [
-        "End of your turn: 4 VP when 1+ enemy units tagged surveilled (this turn)",
+        "End of your turn: 4 VP when an enemy unit is tagged surveilled",
         "End of your Command phase (round 2+): 4 VP when you control 1+ objectives (excluding home)",
         "End of your Command phase (round 2+): 4 VP when you hold more objectives than the opponent",
         "End of your turn (round 2+): 5 VP when no opponent operation markers on the battlefield"

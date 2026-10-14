@@ -5,6 +5,7 @@
  *
  * @packageDocumentation
  */
+import { abilityRefId, abilityRefValue, unitAbilityIds, withRating } from "./ability-refs.js";
 import type {
   AbilityDSLEntry,
   Faction,
@@ -17,12 +18,14 @@ import type {
 import type { Buff, BuffSource, EngineContext } from "../cruncher/buffs.js";
 import { buffsFromKeyword } from "../cruncher/from-keyword.js";
 import {
+  isAttackStep,
   effectToBuffs,
+  momentGate,
   type EffectTranslation,
   type TranslationPerspective,
 } from "../cruncher/from-dsl.js";
 import type { Dataset } from "./dataset.js";
-import { describeAbility, type AbilityAppliesTo } from "../translate/effect.js";
+import { describeAbility, type AbilityAppliesTo, type AbilityLike } from "../translate/effect.js";
 import { unitMatchesAppliesTo } from "../scope.js";
 
 /** A unit, linked to its faction, weapons, and abilities. */
@@ -95,13 +98,16 @@ export class UnitView {
   /** Abilities referenced by `ability_ids`; unresolved ids are skipped. */
   get abilities(): AbilityView[] {
     return resolveAll(
-      this.raw.ability_ids,
-      // Resolve within the unit's faction first — an ability_id shared across
-      // factions has per-faction copies that diverge. The fallback catches the
-      // faction-less `_core` pool (and any id absent from this faction's
-      // enrichment).
-      (id) => this.ds.abilities.getInFaction(id, this.raw.faction_id) ?? this.ds.abilities.getAny(id),
+      unitAbilityIds(this.raw.ability_ids),
+      // Ability ids are unique: a chapter unit's supplement ability resolves like any other.
+      (id) => this.ds.abilities.get(id),
     );
+  }
+
+  /** The rating this unit's datasheet prints for a rated rule (the D3 of Deadly Demise D3), if any. */
+  ratingOf(abilityId: string): string | number | undefined {
+    const ref = (this.raw.ability_ids ?? []).find((r) => abilityRefId(r) === abilityId);
+    return ref === undefined ? undefined : abilityRefValue(ref);
   }
 
   /** Wargear options (weapon swaps, add-ons, choices) authored for this unit. */
@@ -157,7 +163,8 @@ export class AbilityView {
    * displayable stand-in.
    */
   describe(): string {
-    return describeAbility(this.raw);
+    // The describer reads the effect tree structurally; typed modifiers (a named region's) carry no index signature.
+    return describeAbility(this.raw as unknown as AbilityLike);
   }
 
   /** Game phases this ability acts in, unioned across its phase-mappings. */
@@ -213,8 +220,9 @@ export class AbilityView {
     source: BuffSource,
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
+    rating?: string | number,
   ): Buff[] {
-    return this.describeBuffs(source, context, perspective).applied;
+    return this.describeBuffs(source, context, perspective, rating).applied;
   }
 
   /**
@@ -239,12 +247,9 @@ export class AbilityView {
     const node = effect as Record<string, unknown>;
     if (node.type === "ability-grant" && node.modifier !== null && typeof node.modifier === "object") {
       const modifier = node.modifier as Record<string, unknown>;
-      const abilityId = modifier.ability_id;
+      const abilityId = modifier.ability;
       if (modifier.rules_bundle === true && typeof abilityId === "string" && !seen.has(abilityId)) {
-        const factionId = this.raw.faction_id;
-        const target =
-          (factionId ? this.ds.abilities.getInFaction(abilityId, factionId) : undefined) ??
-          this.ds.abilities.getAny(abilityId);
+        const target = this.ds.abilities.get(abilityId);
         const targetEffect = target?.raw.effect as unknown;
         if (
           targetEffect !== null &&
@@ -278,20 +283,24 @@ export class AbilityView {
     source: BuffSource,
     context?: EngineContext,
     perspective: TranslationPerspective = "attacker",
+    rating?: string | number,
   ): EffectTranslation {
     const ctx: EngineContext = context ?? { phase: "shooting" };
+    // A rated rule ({rating: true}) reads the rating the owning unit prints.
+    const resolved = withRating(this.resolveRulesBundles(this.raw.effect), rating);
+    const moment = triggerGated(this.raw.behavior, this.raw.trigger, resolved);
     const translated = effectToBuffs(
-      this.resolveRulesBundles(this.raw.effect),
+      moment !== resolved ? moment : usageGated(this.raw.ability_type, this.raw.usage, resolved),
       source,
       ctx,
       perspective,
     );
-    // A range-scoped ability (DSL `scope.range_inches`, e.g. a "within 18\""
-    // reroll) gates on distance to the target. Stamp it here rather than in the
-    // effect translator so the `effect-translation` corpus (bare effects) is
-    // unaffected; the gate is permissive until a caller sets `distanceInches`.
-    const range = (this.raw.scope as { range_inches?: number } | undefined)?.range_inches;
-    if (typeof range !== "number") return translated;
+    // An aura (an effect whose target filter reaches units `within` N", e.g. a "within 18\""
+    // reroll) gates on distance to the target. Stamp it here rather than in the effect
+    // translator so the `effect-translation` corpus (bare effects) is unaffected; the gate is
+    // permissive until a caller sets `distanceInches`. Only a single inch range gates.
+    const range = auraInches(resolved);
+    if (range === undefined) return translated;
     const gate = (b: Buff): Buff => ({
       ...b,
       applicableWhen: { ...b.applicableWhen, maxRangeInches: range },
@@ -302,6 +311,50 @@ export class AbilityView {
       activatable: translated.activatable.map((a) => ({ ...a, buffs: a.buffs.map(gate) })),
     };
   }
+}
+
+/** The one inch range every aura-filtered effect target in `effect` reaches, if there is exactly one. */
+export function auraInches(effect: unknown): number | undefined {
+  const found = new Set<number>();
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (node === null || typeof node !== "object") return;
+    const rec = node as Record<string, unknown>;
+    const target = rec.target as { within?: { range?: { inches?: unknown } } } | undefined;
+    if (typeof rec.type === "string" && target && typeof target === "object" && typeof target.within?.range?.inches === "number") found.add(target.within.range.inches);
+    Object.values(rec).forEach(walk);
+  };
+  walk(effect);
+  return found.size === 1 ? [...found][0] : undefined;
+}
+
+/**
+ * A reactive ability's effect gated on its trigger, the way a `timing-is` condition gates it:
+ * the moment is one the player opts into, so a triggered buff is an activatable lever
+ * (`<ability>@<event>`) rather than always on. Several triggers are alternatives. A trigger on
+ * an attack step is met by every attack, and an activated ability (a stratagem) is already
+ * opt-in, so neither is gated.
+ */
+export function triggerGated(behavior: unknown, trigger: unknown, effect: unknown): unknown {
+  if (behavior !== "reactive") return effect;
+  const triggers = Array.isArray(trigger) ? trigger : [trigger];
+  // An ability firing on an attack step applies to every attack; its trigger condition is
+  // already how the authored data gates such abilities (in the effect), so nothing is added.
+  if (triggers.some(isAttackStep)) return effect;
+  return momentGate(trigger, effect);
+}
+
+/**
+ * An ability's effect gated on its usage limit ("once per battle", "once per turn"): using it is
+ * the player's choice, so its buffs are an opt-in lever (`<ability>@<frequency>`). Called only
+ * when no trigger already gates the effect. A stratagem is already opt-in as a stratagem.
+ */
+export function usageGated(abilityType: unknown, usage: unknown, effect: unknown): unknown {
+  // Several limits that all apply are still one player-chosen use; the first limit names the lever.
+  const limit = Array.isArray(usage) ? usage[0] : usage;
+  const frequency = limit !== null && typeof limit === "object" ? (limit as { frequency?: unknown }).frequency : undefined;
+  if (effect == null || typeof frequency !== "string" || abilityType === "stratagem") return effect;
+  return { type: "conditional", condition: { type: "timing-is", parameters: { timing: frequency } }, effect };
 }
 
 /** A weapon, linked to the units that carry it. */

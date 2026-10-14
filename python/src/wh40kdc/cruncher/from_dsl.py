@@ -5,7 +5,7 @@ translator could not auto-apply.
 The buff layer is intentionally a subset of the DSL: it covers the math the
 cruncher's expected-value engine reads and reports everything else — choice
 nodes (player decisions), dice-gated effects (stochastic), defender-side
-bs-modifier, attack-restrictions, unsupported ability grants, mortal wound
+Ballistic Skill modifiers, attack-restrictions, unsupported ability grants, mortal wound
 triggers — as ``unsupported`` so a UI can surface "this ability has effects
 we can't auto-apply" rather than silently dropping them.
 
@@ -21,23 +21,28 @@ import math
 from typing import Any, TypeGuard
 
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
+from wh40kdc.cruncher.from_dsl_shapes import (
+    UNSUPPORTED_SHAPE_REASONS,
+    enumerate_roll_allocation,
+    roll_label,
+    unsized_value_reason,
+)
 
 EffectTranslation = dict[str, Any]
 
 #: Targets that resolve to the buffed unit itself.
-_SELF_TARGETS = frozenset(
-    ["self", "bearer", "unit", "attached-unit", "friendly-within-aura", "all-friendly"]
-)
+_SELF_TARGETS = frozenset(["this-unit", "ability-unit", "this-model", "selected-unit", "recipient"])
 #: The subset of :data:`_SELF_TARGETS` naming a single *model* (the bearer) rather
 #: than its unit. Core rule 19.04: a rule affecting one specified model applies
 #: only to that model, even while it is part of an attached unit.
-_MODEL_TARGETS = frozenset(["self", "bearer"])
+_MODEL_TARGETS = frozenset(["this-model"])
 #: Diagnostic emitted for a model-scoped effect pooled in from an attached member.
 _MODEL_SCOPED_REASON = (
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)"
 )
 _ATTACKER_TARGET = "attacker"
-_DEFENDER_TARGETS = frozenset(["defender", "enemy-within-aura", "all-enemy"])
+#: The unit-ref that names the other side of an attack from the attacker's view.
+_DEFENDER_TARGETS = frozenset(["defender"])
 
 _STOCHASTIC_DICE_GATED_REASON = "dice-gated effect: stochastic; not expressible as a buff"
 
@@ -154,7 +159,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         return
     # Core rule 19.04 gate, applied before any leaf translation and under both
     # perspectives. Safe at this level because no container node (`sequence`,
-    # `conditional`, `choice`, …) carries a `self`/`bearer` target — only leaves
+    # `conditional`, `choice`, …) carries a `this-model` target — only leaves
     # do — so this can never swallow a subtree holding unit-scoped effects too.
     if _is_model_scoped_from_attached_member(node, source):
         out["unsupported"].append({"reason": _MODEL_SCOPED_REASON, "effectFragment": node})
@@ -163,6 +168,37 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         node = {**node, "target": opts["defaultTarget"]}
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
+        return
+    # A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed
+    # size here: applying the printed value would over- or under-state it.
+    unsized = unsized_value_reason(node)
+    if unsized is not None:
+        out["unsupported"].append({"reason": unsized, "effectFragment": node})
+        return
+    # An `incoming` change modifies attacks made against its target. On the buffed unit it is the
+    # attacker's side of those attacks, which the `target: "attacker"` form already models; it never
+    # modifies the buffed unit's own attacks.
+    node_modifier = node.get("modifier")
+    if (
+        _is_object(node_modifier)
+        and node_modifier.get("incoming") is True
+        and _classify_target(node) == "self"
+    ):
+        if opts["perspective"] == "attacker":
+            return
+        if node.get("type") in ("roll-modifier", "stat-modifier"):
+            stripped = {k: v for k, v in node_modifier.items() if k != "incoming"}
+            _walk({**node, "target": _ATTACKER_TARGET, "modifier": stripped}, source, opts, out)
+        else:
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        f"{_js_str(node.get('type'))}: an incoming change to attacks "
+                        "against the unit is not modelled"
+                    ),
+                    "effectFragment": node,
+                }
+            )
         return
     node_type = node.get("type")
     if node_type == "re-roll":
@@ -173,10 +209,8 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         _translate_stat_modifier(node, source, opts, out)
     elif node_type == "feel-no-pain":
         _translate_feel_no_pain(node, source, opts, out)
-    elif node_type == "keyword-grant":
+    elif node_type == "weapon-ability-grant":
         _translate_keyword_grant(node, source, opts, out)
-    elif node_type == "bs-modifier":
-        _translate_bs_modifier(node, source, opts, out)
     elif node_type == "damage-reduction":
         _translate_damage_reduction(node, source, opts, out)
     elif node_type == "invulnerable-save":
@@ -188,8 +222,17 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     elif node_type in ("rules-bundle", "sequence"):
         for step in node.get("steps") or []:
             _walk(step, source, opts, out)
-    elif node_type == "named-effect":
-        _translate_named_effect(node, source, opts, out)
+    elif node_type == "ability-part":
+        # A part firing on its own moment is gated like a timing-is step; one with only a cost,
+        # a choice or a usage limit is an activation, as a named effect is.
+        if node.get("trigger") is None and (
+            node.get("optional") is True
+            or node.get("cost") is not None
+            or node.get("usage") is not None
+        ):
+            _translate_named_effect(node, source, opts, out)
+        else:
+            _walk(moment_gate(node.get("trigger"), node.get("effect")), source, opts, out)
     elif node_type == "choice":
         # Player decision — each branch becomes an opt-in lever (pick one).
         _enumerate_choice(node, source, opts, out)
@@ -205,13 +248,33 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         # Player spends dice on options at runtime — each buff-bearing option
         # becomes an opt-in lever, grouped under the pool's activation cap.
         _enumerate_dice_pool(node, source, opts, out)
+    elif node_type == "roll":
+        # A pool roll whose dice are allocated to named options (Blessings of Khorne) is the
+        # same lever set dice-pool-allocation produced; any other bound roll only scopes its
+        # nested effect.
+        if not enumerate_roll_allocation(
+            node, source, opts, out, _collect_gated_buffs, _label_for_buffs
+        ):
+            _walk(node.get("effect"), source, opts, out)
+    elif node_type in UNSUPPORTED_SHAPE_REASONS:
+        out["unsupported"].append(
+            {"reason": UNSUPPORTED_SHAPE_REASONS[node_type], "effectFragment": node}
+        )
     elif node_type == "select-units":
         # Targeting wrapper — the selected units receive the nested effect.
         _walk(node.get("effect"), source, opts, out)
     elif node_type == "aura":
-        # Aura targets are perspective-sensitive; non-applicable directions are
-        # silently dropped just like the leaf translators.
-        if not _applies_to_buffed_unit(node, opts["perspective"]):
+        # An aura's own target names the side it reaches, not a unit-ref: friendly
+        # recipients are the buffed side, enemy ones the other.
+        aura_target = node.get("target")
+        side = (
+            "self"
+            if aura_target == "friendly-within-aura"
+            else "defender"
+            if aura_target == "enemy-within-aura"
+            else "unknown"
+        )
+        if side == "unknown" or (side == "defender" and opts["perspective"] != "target"):
             return
         modifier = node.get("modifier")
         if not _is_object(modifier):
@@ -308,6 +371,14 @@ def _classify_target(node: dict[str, Any]) -> str:
     """Classify a node's ``target`` field: ``"self"`` / ``"attacker"`` /
     ``"defender"`` / ``"unknown"``."""
     target = node.get("target")
+    # A unit filter reaches every unit it matches: friendly ones are the buffed side,
+    # enemy ones the other.
+    if _is_object(target) and "event_var" not in target and "selection_var" not in target:
+        if target.get("owner") == "friendly":
+            return "self"
+        if target.get("owner") == "enemy":
+            return "defender"
+        return "unknown"
     if not isinstance(target, str):
         return "unknown"
     if target == _ATTACKER_TARGET:
@@ -386,7 +457,7 @@ def _translate_reroll(
     out["unsupported"].append(
         {
             "reason": (
-                f're-roll on "{_js_str(roll)}" (subset "{_js_str(subset)}") '
+                f're-roll on "{roll_label(roll)}" (subset "{_js_str(subset)}") '
                 "is outside the damage path"
             ),
             "effectFragment": node,
@@ -458,7 +529,7 @@ def _translate_roll_modifier(
     if contribution_type is None:
         out["unsupported"].append(
             {
-                "reason": f'roll-modifier on "{_js_str(roll)}" is outside the damage path',
+                "reason": f'roll-modifier on "{roll_label(roll)}" is outside the damage path',
                 "effectFragment": node,
             }
         )
@@ -503,6 +574,18 @@ def _translate_stat_modifier(
     # AP has an inverted sign convention and offensive/defensive variants.
     if stat == "AP":
         _translate_ap_modifier(node, modifier, opts, out, emit)
+        return
+
+    # Ballistic Skill on the attacker is a defender-side rule: it penalises incoming hit rolls
+    # (e.g. Benefit of Cover), so it is a `hit-mod` under target perspective.
+    if stat == "BS":
+        if opts["perspective"] != "target" or _classify_target(node) != "attacker":
+            return
+        bs = _signed_value(modifier)
+        if bs is not None:
+            out["applied"].append(
+                {"source": source, "contribution": {"type": "hit-mod", "value": bs}}
+            )
         return
 
     value = _signed_value(modifier)
@@ -623,13 +706,13 @@ def _translate_feel_no_pain(
         )
         return
     threshold = _intify(threshold)
-    # `modifier.scope` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
-    # (default "all"); anything else is routed to unsupported so a typo can't
+    # `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
+    # (default "all"); anything else is routed to unsupported so a malformed value can't
     # masquerade as an all-FNP. `psychic-and-mortal` folds into the mortal
     # stream (its mortal-wound coverage is exact; the psychic-attack half is
     # invisible to the buff layer); bare `psychic` has no stream to attach to,
     # so it stays unsupported rather than overstating defence.
-    raw_scope = modifier.get("scope")
+    raw_scope = modifier.get("against")
     scope = "all"
     if raw_scope is not None:
         if raw_scope in ("all", "mortal"):
@@ -640,7 +723,7 @@ def _translate_feel_no_pain(
             out["unsupported"].append(
                 {
                     "reason": (
-                        'feel-no-pain: scope "psychic" '
+                        'feel-no-pain: against "psychic" '
                         "(psychic attacks are not tracked by the buff layer)"
                     ),
                     "effectFragment": node,
@@ -651,7 +734,7 @@ def _translate_feel_no_pain(
             out["unsupported"].append(
                 {
                     "reason": (
-                        f'feel-no-pain: unrecognised scope "{_js_str(raw_scope)}" '
+                        f'feel-no-pain: unrecognised against "{_js_str(raw_scope)}" '
                         '(expected "all" or "mortal")'
                     ),
                     "effectFragment": node,
@@ -677,7 +760,8 @@ def _translate_keyword_grant(
     modifier = node.get("modifier")
     if not _is_object(modifier):
         return
-    raws = _keyword_grant_list(modifier)
+    abilities = modifier.get("abilities")
+    raws = [k for k in abilities if isinstance(k, str)] if isinstance(abilities, list) else []
     if not raws:
         return
     applicability = _weapon_type_applicability(modifier)
@@ -698,17 +782,6 @@ def _translate_keyword_grant(
         if applicability:
             buff = {**buff, "applicableWhen": applicability}
         out["applied"].append(buff)
-
-
-def _keyword_grant_list(modifier: dict[str, Any]) -> list[str]:
-    """Normalise a keyword-grant modifier's singular ``keyword`` and/or
-    ``keywords`` array."""
-    out: list[str] = []
-    if isinstance(modifier.get("keyword"), str):
-        out.append(modifier["keyword"])
-    if isinstance(modifier.get("keywords"), list):
-        out.extend(k for k in modifier["keywords"] if isinstance(k, str))
-    return out
 
 
 def _weapon_type_applicability(modifier: dict[str, Any]) -> dict[str, Any] | None:
@@ -740,6 +813,7 @@ _UNHONORABLE_NARROWING = (
     "weapon_name",
     "weapon_profile",
     "weapon_keyword",
+    "weapon_ref",
     "weapon_filter",
     "model_filter",
     "model_scope",
@@ -832,25 +906,6 @@ def _translate_invulnerable_save(
     )
 
 
-def _translate_bs_modifier(
-    node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
-) -> None:
-    # A bs-modifier on `target: "attacker"` is a defender-side rule: it
-    # penalises *incoming* hit rolls. Translate as a hit-mod under target
-    # perspective so the resolver's ±1 cap composes with attacker-side mods.
-    if opts["perspective"] != "target":
-        return
-    if _classify_target(node) != "attacker":
-        return  # a bs-modifier on self wouldn't make sense.
-    modifier = node.get("modifier")
-    if not _is_object(modifier):
-        return
-    value = _signed_value(modifier)
-    if value is None:
-        return
-    out["applied"].append({"source": source, "contribution": {"type": "hit-mod", "value": value}})
-
-
 def _translate_named_region_state(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
@@ -935,7 +990,6 @@ def _translate_conditional(
     effect = node.get("effect")
     if not _is_object(condition):
         return
-    negated = condition.get("negated") is True
     verdict = _evaluate_condition(condition, opts["context"])
     if verdict == "unknown":
         # A timing the player controls isn't a wall — it's an activation the
@@ -953,8 +1007,7 @@ def _translate_conditional(
                 }
             )
         return
-    active = (not verdict) if negated else verdict
-    if not active:
+    if not verdict:
         return
     _walk(effect, source, opts, out)
 
@@ -1018,6 +1071,93 @@ def _translate_named_effect(
 # ---------------------------------------------------------------------------
 # Activatable-lever enumeration
 # ---------------------------------------------------------------------------
+
+
+# Rolls inside every attack: a trigger on one applies to each attack it modifies.
+_ATTACK_STEP_ROLLS: frozenset[str] = frozenset({"hit", "wound", "save", "damage"})
+
+
+def is_attack_step(trigger: Any) -> bool:
+    """A trigger on a step of every attack (a hit, wound, save or damage roll, or allocating
+    damage)."""
+    if not _is_object(trigger):
+        return False
+    if trigger.get("event") == "damage-allocated":
+        return True
+    filt = trigger.get("filter")
+    roll = filt.get("roll") if _is_object(filt) else None
+    return (
+        trigger.get("event") in ("before-roll", "after-roll")
+        and isinstance(roll, str)
+        and roll in _ATTACK_STEP_ROLLS
+    )
+
+
+def moment_key(trigger: dict[str, Any]) -> str:
+    """The lever key of a trigger: its event family and the filter value that tells moments
+    apart (``<event>[:<detail>]``)."""
+    filt = trigger.get("filter")
+    f = filt if _is_object(filt) else {}
+    move_types = f.get("move_types")
+    candidates = [
+        f.get("to"),
+        f.get("kind"),
+        f.get("roll"),
+        "+".join(_js_str(t) for t in move_types) if isinstance(move_types, list) else None,
+        f.get("from"),
+    ]
+    detail = next((v for v in candidates if isinstance(v, str) and len(v) > 0), None)
+    event = _js_str(trigger.get("event"))
+    return f"{event}:{detail}" if detail else event
+
+
+def _own_move_fact(trigger: dict[str, Any]) -> dict[str, Any] | None:
+    """The unit's own move the engine context records: a Charge move is "charged this turn"."""
+    subject = trigger.get("subject")
+    if trigger.get("event") != "move-ended" or (subject is not None and subject != "this-unit"):
+        return None
+    filt = trigger.get("filter")
+    types = filt.get("move_types") if _is_object(filt) else None
+    types = types if isinstance(types, list) else []
+    if len(types) != 1 or types[0] not in ("charge", "advance"):
+        return None
+    return {
+        "type": "happened",
+        "parameters": {"event": "move-ended", "filter": {"move_types": types}, "window": "turn"},
+    }
+
+
+def moment_gate(trigger: Any, effect: Any) -> Any:
+    """An effect gated on a trigger (one, or several alternatives) the way a ``timing-is``
+    condition gates it, so the moment is a player-controlled gate and a buff behind it an
+    opt-in lever (``<ability>@<event>``). A trigger on an attack step is met by every attack:
+    only its own condition gates the effect."""
+    if effect is None:
+        return effect
+    triggers = [
+        item
+        for item in (trigger if isinstance(trigger, list) else [trigger])
+        if _is_object(item) and isinstance(item.get("event"), str)
+    ]
+    if not triggers:
+        return effect
+    gates: list[dict[str, Any] | None] = []
+    for item in triggers:
+        own = item.get("condition") if _is_object(item.get("condition")) else None
+        if is_attack_step(item):
+            gates.append(own)
+            continue
+        # A unit's own Charge or Advance move is a fact the context carries, not a choice.
+        moment: dict[str, Any] = _own_move_fact(item) or {
+            "type": "timing-is",
+            "parameters": {"timing": moment_key(item)},
+        }
+        gates.append({"operator": "and", "operands": [moment, own]} if own is not None else moment)
+    # Any alternative met by every attack without a condition leaves nothing to gate.
+    if any(gate is None for gate in gates):
+        return effect
+    condition = gates[0] if len(gates) == 1 else {"operator": "or", "operands": gates}
+    return {"type": "conditional", "condition": condition, "effect": effect}
 
 
 def _enumerate_choice(
@@ -1228,14 +1368,19 @@ def _collect_gated_buffs(
         for step in node.get("steps") or []:
             _collect_gated_buffs(step, source, opts, applicability, out_buffs)
         return
-    if node_type == "named-effect":
-        if (
+    if node_type == "ability-part":
+        if node.get("trigger") is not None or (
             node.get("optional") is not True
             and node.get("cost") is None
-            and node.get("trigger") is None
             and node.get("usage") is None
         ):
-            _collect_gated_buffs(node.get("effect"), source, opts, applicability, out_buffs)
+            _collect_gated_buffs(
+                moment_gate(node.get("trigger"), node.get("effect")),
+                source,
+                opts,
+                applicability,
+                out_buffs,
+            )
         return
     if node_type in ("choice", "dice-pool-allocation", "dice-gated"):
         # A decision (or stochastic roll) nested inside an activation. The
@@ -1277,8 +1422,6 @@ def _condition_to_applicability(condition: dict[str, Any]) -> Any:
     """Translate a condition into a buff applicability the resolver can gate
     on. Returns ``"gate"`` for a player-controlled timing, or ``"context"``
     when the condition has no declarative buff representation."""
-    if condition.get("negated") is True:
-        return "context"
     if isinstance(condition.get("operator"), str) and isinstance(condition.get("operands"), list):
         if condition["operator"] != "and":
             return "context"
@@ -1301,14 +1444,18 @@ def _condition_to_applicability(condition: dict[str, Any]) -> Any:
     if ctype == "phase-is":
         phase = params.get("phase") if params else None
         return {"phases": [phase]} if isinstance(phase, str) else "context"
-    if ctype == "target-has-keyword":
-        kw = params.get("keyword") if params else None
-        return {"requiresTargetKeyword": kw} if isinstance(kw, str) else "context"
-    if ctype == "unit-has-keyword":
-        kw = params.get("keyword") if params else None
-        return {"requiresAttackerKeyword": kw} if isinstance(kw, str) else "context"
-    if ctype == "attack-is-type":
-        t = params.get("attack_type") if params else None
+    if ctype == "has-keyword":
+        kw = _single_keyword(params)
+        if kw is None:
+            return "context"
+        subject = params.get("subject") if params else None
+        if subject == "defender":
+            return {"requiresTargetKeyword": kw}
+        return {"requiresAttackerKeyword": kw} if _is_buffed_unit(subject) else "context"
+    if ctype == "attack-is":
+        if params is None or any(k != "attack_type" for k in params):
+            return "context"
+        t = params.get("attack_type")
         if t == "melee":
             return {"phases": ["fight"]}
         if t == "ranged":
@@ -1421,6 +1568,20 @@ def _keyword_label(ref: dict[str, Any]) -> str:
 # ---------------------------------------------------------------------------
 
 
+def _is_buffed_unit(subject: Any) -> bool:
+    """The buffed unit: the ability's own unit (or model), or the unit an aura is applied to."""
+    return subject is None or subject in ("this-unit", "ability-unit", "this-model", "recipient")
+
+
+def _single_keyword(params: dict[str, Any] | None) -> str | None:
+    """The one keyword a ``has-keyword`` names, else None."""
+    all_of = params.get("all_of") if params else None
+    all_of = all_of if isinstance(all_of, list) else []
+    if (params or {}).get("any_of") is not None or len(all_of) != 1:
+        return None
+    return all_of[0] if isinstance(all_of[0], str) else None
+
+
 def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
     # Compound conditions use {operator, operands}; dispatch on shape.
     if isinstance(condition.get("operator"), str) and isinstance(condition.get("operands"), list):
@@ -1432,7 +1593,9 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         if not isinstance(wanted, str):
             return "unknown"
         return ctx.get("phase") == wanted
-    if ctype == "attack-is-type":
+    if ctype == "attack-is":
+        if any(k != "attack_type" for k in (params or {})):
+            return "unknown"
         attack_type = params.get("attack_type") if params else None
         if attack_type == "melee":
             return ctx.get("phase") == "fight"
@@ -1446,24 +1609,80 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         if ctx.get("timing") is None:
             return "unknown"
         return ctx["timing"] == wanted
-    if ctype == "remained-stationary":
-        return ctx.get("attackerStationary") is True
-    if ctype == "charged-this-turn":
-        if ctx.get("attackerCharged") is None:
+    if ctype == "happened":
+        p = params or {}
+        filt = p.get("filter")
+        types = filt.get("move_types") if _is_object(filt) else None
+        types = types if isinstance(types, list) else []
+        own = (
+            p.get("subject") is None
+            and p.get("object") is None
+            and p.get("count_min") is None
+            and p.get("window") == "turn"
+        )
+        if (
+            not own
+            or p.get("event") != "move-ended"
+            or len(types) != 1
+            or not _is_object(filt)
+            or len(filt) != 1
+        ):
             return "unknown"
-        return ctx["attackerCharged"]
-    if ctype == "target-has-keyword":
-        kw = params.get("keyword") if params else None
-        if not isinstance(kw, str):
+        # Player-controlled context flags for the buffed unit's own move this turn. An undefined
+        # charge flag means the caller couldn't pin it down: stay "unknown" so the SPA surfaces it.
+        if types[0] == "remain-stationary":
+            return ctx.get("attackerStationary") is True
+        if types[0] == "charge":
+            charged = ctx.get("attackerCharged")
+            return "unknown" if charged is None else charged
+        return "unknown"
+    if ctype == "has-keyword":
+        p = params or {}
+        # A keyword the player picked is not in the context.
+        if p.get("chosen_by") is not None:
             return "unknown"
-        return kw.lower() in (ctx.get("targetKeywords") or [])
-    if ctype == "unit-has-keyword":
-        kw = params.get("keyword") if params else None
-        if not isinstance(kw, str):
+        subject = p.get("subject")
+        if subject == "defender":
+            pool = ctx.get("targetKeywords")
+        elif _is_buffed_unit(subject):
+            pool = ctx.get("attackerKeywords")
+        else:
             return "unknown"
-        return kw.lower() in (ctx.get("attackerKeywords") or [])
-    if ctype in ("is-attached", "model-is-leader"):
-        # "attachment present" is the signal both conditions gate on.
+        have = [k.lower() for k in (pool or [])]
+        raw_all, raw_any = p.get("all_of"), p.get("any_of")
+        all_of: list[Any] = raw_all if isinstance(raw_all, list) else []
+        any_of: list[Any] = raw_any if isinstance(raw_any, list) else []
+        if not all(isinstance(k, str) for k in [*all_of, *any_of]):
+            return "unknown"
+        return all(k.lower() in have for k in all_of) and (
+            len(any_of) == 0 or any(k.lower() in have for k in any_of)
+        )
+    if ctype == "army-faction":
+        faction = params.get("faction") if params else None
+        if not isinstance(faction, str) or ctx.get("armyFaction") is None:
+            return "unknown"
+        return ctx["armyFaction"] == faction
+    if ctype == "battle-size":
+        size = params.get("size") if params else None
+        if not isinstance(size, str) or ctx.get("battleSize") is None:
+            return "unknown"
+        return ctx["battleSize"] == size
+    if ctype == "guided":
+        # Guided is read for the attacking unit: a For the Greater Good unit, not an
+        # Observer, targeting a Spotted unit.
+        subject = params.get("subject") if params else None
+        if (subject is not None and not _is_buffed_unit(subject)) or ctx.get(
+            "attackerGuided"
+        ) is None:
+            return "unknown"
+        return ctx["attackerGuided"]
+    if ctype == "attachment":
+        # True whenever the buffed unit is a combined ("attached") unit. We do not thread
+        # per-member leader identity, and a Leader keyword filter is not checked: "attachment
+        # present" is the signal. An undefined flag stays "unknown" so the SPA surfaces the gap.
+        p = params or {}
+        if p.get("role") == "led" or p.get("with") is not None:
+            return "unknown"
         if ctx.get("attackerAttached") is None:
             return "unknown"
         return ctx["attackerAttached"]
@@ -1651,7 +1870,9 @@ _DESIGNATION_SELECTION_FIDELITY_FIELDS = (
 def _trigger_has_unresolved_source(trigger: Any) -> bool:
     if not _is_object(trigger):
         return False
-    return any(trigger.get(key) is not None for key in ("caused_by", "source_ability"))
+    filt = trigger.get("filter")
+    by = filt.get("by") if _is_object(filt) else None
+    return by is not None or trigger.get("source_ability") is not None
 
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
@@ -1674,7 +1895,9 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
     )
     trigger_value = node.get("trigger")
     triggers = trigger_value if isinstance(trigger_value, list) else [trigger_value]
-    source_binding = any(_trigger_has_unresolved_source(trigger) for trigger in triggers)
+    source_binding = node_type == "ability-part" and any(
+        _trigger_has_unresolved_source(trigger) for trigger in triggers
+    )
     return (
         selection_binding
         or designation_binding

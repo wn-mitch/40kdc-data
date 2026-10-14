@@ -1,6 +1,6 @@
 [
   {
-    "id": "firstdrawn-blade-windrider-host",
+    "id": "firstdrawn-blade-windrider-host-aeldari",
     "name": "Firstdrawn Blade",
     "detachment_id": "windrider-host",
     "cost": 10,
@@ -8,7 +8,7 @@
       "Asuryani",
       "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "firstdrawn-blade-windrider-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -29,14 +29,14 @@
     ]
   },
   {
-    "id": "phoenix-gem-warhost",
+    "id": "phoenix-gem-warhost-aeldari",
     "name": "Phoenix Gem",
     "detachment_id": "warhost",
     "cost": 35,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "phoenix-gem-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": "mirage-field-windrider-host",
+    "id": "mirage-field-windrider-host-aeldari",
     "name": "Mirage Field",
     "detachment_id": "windrider-host",
     "cost": 25,
@@ -65,7 +65,7 @@
       "Asuryani",
       "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "mirage-field-windrider-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -86,7 +86,7 @@
     ]
   },
   {
-    "id": "seersight-strike-windrider-host",
+    "id": "seersight-strike-windrider-host-aeldari",
     "name": "Seersight Strike",
     "detachment_id": "windrider-host",
     "cost": 15,
@@ -95,7 +95,7 @@
       "Mounted",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "seersight-strike-windrider-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -116,7 +116,7 @@
     ]
   },
   {
-    "id": "echoes-of-ulthanesh-windrider-host",
+    "id": "echoes-of-ulthanesh-windrider-host-aeldari",
     "name": "Echoes of Ulthanesh",
     "detachment_id": "windrider-host",
     "cost": 20,
@@ -124,7 +124,7 @@
       "Asuryani",
       "Mounted"
     ],
-    "ability_id": null,
+    "ability_id": "echoes-of-ulthanesh-windrider-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -145,7 +145,7 @@
     ]
   },
   {
-    "id": "guiding-presence-armoured-warhost",
+    "id": "guiding-presence-armoured-warhost-aeldari",
     "name": "Guiding Presence",
     "detachment_id": "armoured-warhost",
     "cost": 25,
@@ -153,7 +153,7 @@
       "Aeldari",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "guiding-presence-armoured-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -174,14 +174,14 @@
     ]
   },
   {
-    "id": "light-of-clarity-spirit-conclave",
+    "id": "light-of-clarity-spirit-conclave-aeldari",
     "name": "Light of Clarity",
     "detachment_id": "spirit-conclave",
     "cost": 30,
     "keyword_restrictions": [
       "Spiritseer"
     ],
-    "ability_id": null,
+    "ability_id": "light-of-clarity-spirit-conclave-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -202,50 +202,14 @@
     ]
   },
   {
-    "id": "stave-of-kurnos-spirit-conclave",
-    "name": "Stave of Kurnos",
-    "detachment_id": "spirit-conclave",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "harmonisation-matrix-armoured-warhost",
-    "name": "Harmonisation Matrix",
-    "detachment_id": "armoured-warhost",
-    "cost": 30,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "rune-of-mists-spirit-conclave",
+    "id": "rune-of-mists-spirit-conclave-aeldari",
     "name": "Rune of Mists",
     "detachment_id": "spirit-conclave",
     "cost": 10,
     "keyword_restrictions": [
       "Spiritseer"
     ],
-    "ability_id": null,
+    "ability_id": "rune-of-mists-spirit-conclave-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -266,7 +230,7 @@
     ]
   },
   {
-    "id": "spirit-stone-of-raelyth-armoured-warhost",
+    "id": "spirit-stone-of-raelyth-armoured-warhost-aeldari",
     "name": "Spirit Stone of Raelyth",
     "detachment_id": "armoured-warhost",
     "cost": 20,
@@ -274,7 +238,7 @@
       "Aeldari",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "spirit-stone-of-raelyth-armoured-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -295,32 +259,14 @@
     ]
   },
   {
-    "id": "guileful-strategist-armoured-warhost",
-    "name": "Guileful Strategist",
-    "detachment_id": "armoured-warhost",
-    "cost": 15,
-    "keyword_restrictions": [
-      "Aeldari"
-    ],
-    "ability_id": null,
-    "is_unique": true,
-    "game_version": {
-      "edition": "11th",
-      "dataslate": "pre-launch-provisional"
-    },
-    "points_provisional": true,
-    "upgrade_tag": false,
-    "max_targets": 1
-  },
-  {
-    "id": "higher-duty-spirit-conclave",
+    "id": "higher-duty-spirit-conclave-aeldari",
     "name": "Higher Duty",
     "detachment_id": "spirit-conclave",
     "cost": 25,
     "keyword_restrictions": [
       "Spiritseer"
     ],
-    "ability_id": null,
+    "ability_id": "higher-duty-spirit-conclave-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -341,14 +287,14 @@
     ]
   },
   {
-    "id": "cegorachs-coil-ghosts-of-the-webway",
+    "id": "cegorachs-coil-ghosts-of-the-webway-aeldari",
     "name": "Cegorach’s Coil",
     "detachment_id": "ghosts-of-the-webway",
     "cost": 25,
     "keyword_restrictions": [
       "Troupe Master"
     ],
-    "ability_id": null,
+    "ability_id": "cegorachs-coil-ghosts-of-the-webway-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -369,14 +315,14 @@
     ]
   },
   {
-    "id": "mask-of-secrets-ghosts-of-the-webway",
+    "id": "mask-of-secrets-ghosts-of-the-webway-aeldari",
     "name": "Mask of Secrets",
     "detachment_id": "ghosts-of-the-webway",
     "cost": 15,
     "keyword_restrictions": [
       "Harlequins"
     ],
-    "ability_id": null,
+    "ability_id": "mask-of-secrets-ghosts-of-the-webway-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -397,14 +343,14 @@
     ]
   },
   {
-    "id": "murders-jest-ghosts-of-the-webway",
+    "id": "murders-jest-ghosts-of-the-webway-aeldari",
     "name": "Murder’s Jest",
     "detachment_id": "ghosts-of-the-webway",
     "cost": 20,
     "keyword_restrictions": [
       "Death Jester"
     ],
-    "ability_id": null,
+    "ability_id": "murders-jest-ghosts-of-the-webway-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -425,14 +371,14 @@
     ]
   },
   {
-    "id": "mistweave-ghosts-of-the-webway",
+    "id": "mistweave-ghosts-of-the-webway-aeldari",
     "name": "Mistweave",
     "detachment_id": "ghosts-of-the-webway",
     "cost": 15,
     "keyword_restrictions": [
       "Shadowseer"
     ],
-    "ability_id": null,
+    "ability_id": "mistweave-ghosts-of-the-webway-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -453,14 +399,14 @@
     ]
   },
   {
-    "id": "timeless-strategist-warhost",
+    "id": "timeless-strategist-warhost-aeldari",
     "name": "Timeless Strategist",
     "detachment_id": "warhost",
     "cost": 15,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "timeless-strategist-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -481,14 +427,14 @@
     ]
   },
   {
-    "id": "gift-of-foresight-warhost",
+    "id": "gift-of-foresight-warhost-aeldari",
     "name": "Gift of Foresight",
     "detachment_id": "warhost",
     "cost": 15,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "gift-of-foresight-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -509,7 +455,7 @@
     ]
   },
   {
-    "id": "psychic-destroyer-warhost",
+    "id": "psychic-destroyer-warhost-aeldari",
     "name": "Psychic Destroyer",
     "detachment_id": "warhost",
     "cost": 30,
@@ -517,7 +463,7 @@
       "Asuryani",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "psychic-destroyer-warhost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -538,14 +484,14 @@
     ]
   },
   {
-    "id": "craftworlds-champion-guardian-battlehost",
+    "id": "craftworlds-champion-guardian-battlehost-aeldari",
     "name": "Craftworld’s Champion",
     "detachment_id": "guardian-battlehost",
     "cost": 25,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "craftworlds-champion-guardian-battlehost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -566,14 +512,14 @@
     ]
   },
   {
-    "id": "ethereal-pathway-guardian-battlehost",
+    "id": "ethereal-pathway-guardian-battlehost-aeldari",
     "name": "Ethereal Pathway",
     "detachment_id": "guardian-battlehost",
     "cost": 30,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "ethereal-pathway-guardian-battlehost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -594,14 +540,14 @@
     ]
   },
   {
-    "id": "protector-of-the-paths-guardian-battlehost",
+    "id": "protector-of-the-paths-guardian-battlehost-aeldari",
     "name": "Protector of the Paths",
     "detachment_id": "guardian-battlehost",
     "cost": 20,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "protector-of-the-paths-guardian-battlehost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -622,14 +568,14 @@
     ]
   },
   {
-    "id": "breath-of-vaul-guardian-battlehost",
+    "id": "breath-of-vaul-guardian-battlehost-aeldari",
     "name": "Breath of Vaul",
     "detachment_id": "guardian-battlehost",
     "cost": 10,
     "keyword_restrictions": [
       "Asuryani"
     ],
-    "ability_id": null,
+    "ability_id": "breath-of-vaul-guardian-battlehost-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -650,14 +596,14 @@
     ]
   },
   {
-    "id": "gaze-of-ynnead-devoted-of-ynnead",
+    "id": "gaze-of-ynnead-devoted-of-ynnead-aeldari",
     "name": "Gaze of Ynnead",
     "detachment_id": "devoted-of-ynnead",
     "cost": 15,
     "keyword_restrictions": [
       "Farseer"
     ],
-    "ability_id": null,
+    "ability_id": "gaze-of-ynnead-devoted-of-ynnead-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -678,14 +624,14 @@
     ]
   },
   {
-    "id": "storm-of-whispers-devoted-of-ynnead",
+    "id": "storm-of-whispers-devoted-of-ynnead-aeldari",
     "name": "Storm of Whispers",
     "detachment_id": "devoted-of-ynnead",
     "cost": 10,
     "keyword_restrictions": [
       "Warlock"
     ],
-    "ability_id": null,
+    "ability_id": "storm-of-whispers-devoted-of-ynnead-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -706,14 +652,14 @@
     ]
   },
   {
-    "id": "borrowed-vigour-devoted-of-ynnead",
+    "id": "borrowed-vigour-devoted-of-ynnead-aeldari",
     "name": "Borrowed Vigour",
     "detachment_id": "devoted-of-ynnead",
     "cost": 10,
     "keyword_restrictions": [
       "Archon"
     ],
-    "ability_id": null,
+    "ability_id": "borrowed-vigour-devoted-of-ynnead-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -734,14 +680,14 @@
     ]
   },
   {
-    "id": "morbid-might-devoted-of-ynnead",
+    "id": "morbid-might-devoted-of-ynnead-aeldari",
     "name": "Morbid Might",
     "detachment_id": "devoted-of-ynnead",
     "cost": 15,
     "keyword_restrictions": [
       "Succubus"
     ],
-    "ability_id": null,
+    "ability_id": "morbid-might-devoted-of-ynnead-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -762,7 +708,7 @@
     ]
   },
   {
-    "id": "lucid-eye-seer-council",
+    "id": "lucid-eye-seer-council-aeldari",
     "name": "Lucid Eye",
     "detachment_id": "seer-council",
     "cost": 30,
@@ -770,7 +716,7 @@
       "Asuryani",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "lucid-eye-seer-council-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -791,7 +737,7 @@
     ]
   },
   {
-    "id": "runes-of-warding-seer-council",
+    "id": "runes-of-warding-seer-council-aeldari",
     "name": "Runes of Warding",
     "detachment_id": "seer-council",
     "cost": 25,
@@ -799,7 +745,7 @@
       "Asuryani",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "runes-of-warding-seer-council-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -820,7 +766,7 @@
     ]
   },
   {
-    "id": "stone-of-eldritch-fury-seer-council",
+    "id": "stone-of-eldritch-fury-seer-council-aeldari",
     "name": "Stone of Eldritch Fury",
     "detachment_id": "seer-council",
     "cost": 15,
@@ -828,7 +774,7 @@
       "Asuryani",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "stone-of-eldritch-fury-seer-council-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -849,7 +795,7 @@
     ]
   },
   {
-    "id": "torc-of-morai-heg-seer-council",
+    "id": "torc-of-morai-heg-seer-council-aeldari",
     "name": "Torc of Morai-Heg",
     "detachment_id": "seer-council",
     "cost": 20,
@@ -857,7 +803,7 @@
       "Asuryani",
       "Psyker"
     ],
-    "ability_id": null,
+    "ability_id": "torc-of-morai-heg-seer-council-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -878,11 +824,11 @@
     ]
   },
   {
-    "id": "aspect-of-murder-aspect-host",
+    "id": "aspect-of-murder-aspect-host-aeldari",
     "name": "Aspect of Murder",
     "detachment_id": "aspect-host",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "aspect-of-murder-aspect-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -911,11 +857,11 @@
     ]
   },
   {
-    "id": "mantle-of-wisdom-aspect-host",
+    "id": "mantle-of-wisdom-aspect-host-aeldari",
     "name": "Mantle of Wisdom",
     "detachment_id": "aspect-host",
     "cost": 20,
-    "ability_id": null,
+    "ability_id": "mantle-of-wisdom-aspect-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -944,11 +890,11 @@
     ]
   },
   {
-    "id": "shimmerstone-aspect-host",
+    "id": "shimmerstone-aspect-host-aeldari",
     "name": "Shimmerstone",
     "detachment_id": "aspect-host",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "shimmerstone-aspect-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -977,11 +923,11 @@
     ]
   },
   {
-    "id": "strategic-savant-aspect-host",
+    "id": "strategic-savant-aspect-host-aeldari",
     "name": "Strategic Savant",
     "detachment_id": "aspect-host",
     "cost": 10,
-    "ability_id": null,
+    "ability_id": "strategic-savant-aspect-host-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1010,14 +956,14 @@
     ]
   },
   {
-    "id": "key-of-ghosts-serpents-brood",
+    "id": "key-of-ghosts-serpents-brood-aeldari",
     "name": "Key of Ghosts",
     "detachment_id": "serpents-brood",
     "cost": 20,
     "keyword_restrictions": [
       "Harlequins"
     ],
-    "ability_id": null,
+    "ability_id": "key-of-ghosts-serpents-brood-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1041,14 +987,14 @@
     ]
   },
   {
-    "id": "weavers-wail-serpents-brood",
+    "id": "weavers-wail-serpents-brood-aeldari",
     "name": "Weavers' Wail",
     "detachment_id": "serpents-brood",
     "cost": 20,
     "keyword_restrictions": [
       "Troupe Master"
     ],
-    "ability_id": null,
+    "ability_id": "weavers-wail-serpents-brood-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1069,14 +1015,14 @@
     ]
   },
   {
-    "id": "fanged-leer-serpents-brood",
+    "id": "fanged-leer-serpents-brood-aeldari",
     "name": "Fanged Leer",
     "detachment_id": "serpents-brood",
     "cost": 10,
     "keyword_restrictions": [
       "Death Jester"
     ],
-    "ability_id": null,
+    "ability_id": "fanged-leer-serpents-brood-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1097,14 +1043,14 @@
     ]
   },
   {
-    "id": "shedskin-raiment-serpents-brood",
+    "id": "shedskin-raiment-serpents-brood-aeldari",
     "name": "Shedskin Raiment",
     "detachment_id": "serpents-brood",
     "cost": 25,
     "keyword_restrictions": [
       "Shadowseer"
     ],
-    "ability_id": null,
+    "ability_id": "shedskin-raiment-serpents-brood-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1125,14 +1071,14 @@
     ]
   },
   {
-    "id": "pirate-prince-eldritch-raiders",
+    "id": "pirate-prince-eldritch-raiders-aeldari",
     "name": "Pirate Prince",
     "detachment_id": "eldritch-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Prince Yriel"
     ],
-    "ability_id": null,
+    "ability_id": "pirate-prince-eldritch-raiders-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1153,14 +1099,14 @@
     ]
   },
   {
-    "id": "alacritous-assault-eldritch-raiders",
+    "id": "alacritous-assault-eldritch-raiders-aeldari",
     "name": "Alacritous Assault",
     "detachment_id": "eldritch-raiders",
     "cost": 20,
     "keyword_restrictions": [
       "Anhrathe"
     ],
-    "ability_id": null,
+    "ability_id": "alacritous-assault-eldritch-raiders-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1181,14 +1127,14 @@
     ]
   },
   {
-    "id": "exotic-munitions-eldritch-raiders",
+    "id": "exotic-munitions-eldritch-raiders-aeldari",
     "name": "Exotic Munitions",
     "detachment_id": "eldritch-raiders",
     "cost": 15,
     "keyword_restrictions": [
       "Anhrathe"
     ],
-    "ability_id": null,
+    "ability_id": "exotic-munitions-eldritch-raiders-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1209,7 +1155,7 @@
     ]
   },
   {
-    "id": "adrenal-infusions-eldritch-raiders",
+    "id": "adrenal-infusions-eldritch-raiders-aeldari",
     "name": "Adrenal Infusions",
     "detachment_id": "eldritch-raiders",
     "cost": 20,
@@ -1217,7 +1163,7 @@
       "Anhrathe",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "adrenal-infusions-eldritch-raiders-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1238,14 +1184,14 @@
     ]
   },
   {
-    "id": "infamy-aura-corsair-coterie",
+    "id": "infamy-aura-corsair-coterie-aeldari",
     "name": "Infamy (Aura)",
     "detachment_id": "corsair-coterie",
     "cost": 25,
     "keyword_restrictions": [
       "Anhrathe"
     ],
-    "ability_id": null,
+    "ability_id": "infamy-aura-corsair-coterie-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1266,14 +1212,14 @@
     ]
   },
   {
-    "id": "webway-pathstone-corsair-coterie",
+    "id": "webway-pathstone-corsair-coterie-aeldari",
     "name": "Webway Pathstone",
     "detachment_id": "corsair-coterie",
     "cost": 25,
     "keyword_restrictions": [
       "Anhrathe"
     ],
-    "ability_id": null,
+    "ability_id": "webway-pathstone-corsair-coterie-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1294,7 +1240,7 @@
     ]
   },
   {
-    "id": "archraider-corsair-coterie",
+    "id": "archraider-corsair-coterie-aeldari",
     "name": "Archraider",
     "detachment_id": "corsair-coterie",
     "cost": 35,
@@ -1302,7 +1248,7 @@
       "Anhrathe",
       "Character"
     ],
-    "ability_id": null,
+    "ability_id": "archraider-corsair-coterie-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1323,7 +1269,7 @@
     ]
   },
   {
-    "id": "voidstone-corsair-coterie",
+    "id": "voidstone-corsair-coterie-aeldari",
     "name": "Voidstone",
     "detachment_id": "corsair-coterie",
     "cost": 15,
@@ -1331,7 +1277,7 @@
       "Anhrathe",
       "Infantry"
     ],
-    "ability_id": null,
+    "ability_id": "voidstone-corsair-coterie-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1352,7 +1298,7 @@
     ]
   },
   {
-    "id": "a-foot-in-the-future-fateful-performance",
+    "id": "a-foot-in-the-future-fateful-performance-aeldari",
     "name": "A Foot in the Future",
     "detachment_id": "fateful-performance",
     "cost": 15,
@@ -1360,7 +1306,7 @@
       "Harlequins",
       "Troupe Master"
     ],
-    "ability_id": "a-foot-in-the-future-fateful-performance",
+    "ability_id": "a-foot-in-the-future-fateful-performance-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1381,7 +1327,7 @@
     ]
   },
   {
-    "id": "mistweave-fateful-performance",
+    "id": "mistweave-fateful-performance-aeldari",
     "name": "Mistweave",
     "detachment_id": "fateful-performance",
     "cost": 20,
@@ -1389,7 +1335,7 @@
       "Harlequins",
       "Shadowseer"
     ],
-    "ability_id": "mistweave-fateful-performance",
+    "ability_id": "mistweave-fateful-performance-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1410,7 +1356,7 @@
     ]
   },
   {
-    "id": "camouflaged-snipers-upgrade-path-of-the-outcast",
+    "id": "camouflaged-snipers-upgrade-path-of-the-outcast-aeldari",
     "name": "Camouflaged Snipers (Upgrade)",
     "detachment_id": "path-of-the-outcast",
     "cost": 10,
@@ -1418,7 +1364,7 @@
       "Asuryani",
       "Rangers"
     ],
-    "ability_id": "camouflaged-snipers-path-of-the-outcast",
+    "ability_id": "camouflaged-snipers-upgrade-path-of-the-outcast-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1439,7 +1385,7 @@
     ]
   },
   {
-    "id": "shadowfall-masks-upgrade-twilight-flickers",
+    "id": "shadowfall-masks-upgrade-twilight-flickers-aeldari",
     "name": "Shadowfall Masks (Upgrade)",
     "detachment_id": "twilight-flickers",
     "cost": 15,
@@ -1447,7 +1393,7 @@
       "Harlequins",
       "Troupe"
     ],
-    "ability_id": "shadowfall-masks-twilight-flickers",
+    "ability_id": "shadowfall-masks-upgrade-twilight-flickers-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1468,14 +1414,14 @@
     ]
   },
   {
-    "id": "prelude-performer-twilight-flickers",
+    "id": "prelude-performer-twilight-flickers-aeldari",
     "name": "Prelude Performer",
     "detachment_id": "twilight-flickers",
     "cost": 20,
     "keyword_restrictions": [
       "Harlequins"
     ],
-    "ability_id": "prelude-performer-twilight-flickers",
+    "ability_id": "prelude-performer-twilight-flickers-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1496,7 +1442,7 @@
     ]
   },
   {
-    "id": "guided-jump-kygharils-protectors",
+    "id": "guided-jump-kygharils-protectors-aeldari",
     "name": "Guided Jump",
     "detachment_id": "kygharils-protectors",
     "cost": 0,
@@ -1521,7 +1467,7 @@
     ]
   },
   {
-    "id": "seers-hand-kygharils-protectors",
+    "id": "seers-hand-kygharils-protectors-aeldari",
     "name": "Seer’s Hand",
     "detachment_id": "kygharils-protectors",
     "cost": 0,
@@ -1545,11 +1491,11 @@
     ]
   },
   {
-    "id": "stave-of-kurnous-spirit-conclave",
+    "id": "stave-of-kurnous-spirit-conclave-aeldari",
     "name": "Stave of Kurnous",
     "detachment_id": "spirit-conclave",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "stave-of-kurnous-spirit-conclave-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",
@@ -1573,11 +1519,11 @@
     ]
   },
   {
-    "id": "assassins-eye-upgrade-path-of-the-outcast",
+    "id": "assassins-eye-upgrade-path-of-the-outcast-aeldari",
     "name": "Assassins' Eye (Upgrade)",
     "detachment_id": "path-of-the-outcast",
     "cost": 15,
-    "ability_id": null,
+    "ability_id": "assassins-eye-upgrade-path-of-the-outcast-aeldari",
     "is_unique": true,
     "game_version": {
       "edition": "11th",

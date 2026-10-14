@@ -29,13 +29,11 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("faction-fields over the real
     expect(byDir.get("adepta-sororitas")?.ruleConfirmed).toBe(true);
   });
 
-  it("reports both authored and owned rule sets without overwriting authored ids", () => {
+  it("confirms the army rules the mirror stored for a faction with several", () => {
+    // `mfm:mirror` writes both of Death Guard's army rules, so this pass confirms rather than reviews.
     const dg = byDir.get("death-guard");
-    expect(dg?.ruleConfirmed).toBeFalsy();
-    expect(dg?.ruleReview).toEqual({
-      authored: ["nurgle-s-gift-aura"],
-      candidates: ["nurgles-gift", "pact-of-decay"],
-    });
+    expect(dg?.ruleConfirmed).toBe(true);
+    expect(dg?.ruleReview).toBeUndefined();
     expect(dg?.ruleFilled).toBeUndefined();
   });
 

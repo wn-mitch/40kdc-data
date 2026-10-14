@@ -25,7 +25,8 @@
       }
     ],
     "faction_rule_ids": [
-      "nurgle-s-gift-aura"
+      "nurgles-gift-death-guard",
+      "pact-of-decay-death-guard"
     ]
   }
 ]

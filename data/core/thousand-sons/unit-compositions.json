@@ -1329,8 +1329,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "force-weapon-rubric-marines",
-          "inferno-bolt-pistol-prism-of-zadophon",
+          "force-weapon",
+          "inferno-bolt-pistol",
           "malefic-curse"
         ]
       },

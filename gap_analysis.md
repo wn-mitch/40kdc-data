@@ -226,18 +226,18 @@ Unmapped dump fields with a candidate repo destination:
 | `/phases` | unimplemented | unresolved-candidate | `data.stratagem_phase.phase` | REJECTED source: stratagem_phase is a buggy denormalized index whose rows routinely contradict the card's own whenRules (Insane Bravery 'Command phase' tagged chargePhase, Holy Avarice 'Your Shooting phase' tagged commandPhase, Scriptural Prognosis 'opponent's Shooting phase or the Fight phase' tagged all five). Writing from it would regress authored phases, so authored phases win and stratagems.ts derives phases from whenRules prose for review only. |
 | `/game_modes` (+1) | partial | derived | `data.stratagem.publicationId`<br>`data.publication.isCombatPatrol` | Publication mode is consumed by the MFM golden inventory; current reconciliation does not write game_modes onto stratagem entities. |
 | `/detachment_id` | unimplemented | unresolved-candidate | `data.stratagem.detachmentId`<br>`data.detachment.localisations.*.name` | The current traversal uses the MFM detachment only for identity and inventory routing; it does not resolve or write the repository detachment reference. |
-| `/target_restrictions` | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Target and restriction prose belongs to the separate raw-text store; no current structured extraction writes this object. |
+| `/target_restrictions` | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Target and restriction prose stays in the private MFM dump; no current structured extraction writes this object. |
 | `/phases/*` | unimplemented | unresolved-candidate | `data.stratagem_phase.phase` | REJECTED source: see /phases — stratagem_phase disagrees with the card whenRules too often to write; authored phases win, prose parse is review-only. |
-| `/target_restrictions/notes` | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Freeform restriction notes remain authored from prose-store inputs and are not copied from MFM rules prose. |
-| `/target_restrictions/excluded_keywords` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Keyword exclusions remain authored from prose-store inputs; MFM provides no structured target-keyword relation here. |
-| `/target_restrictions/required_keywords` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Required keyword gates remain authored from prose-store inputs; MFM provides no structured target-keyword relation here. |
-| `/target_restrictions/required_keywords_any` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Alternative keyword gates remain authored from prose-store inputs; MFM provides no structured target-keyword relation here. |
+| `/target_restrictions/notes` | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Freeform restriction notes remain authored from the private dump prose and are not copied from MFM rules prose. |
+| `/target_restrictions/excluded_keywords` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Keyword exclusions remain authored from the private dump prose; MFM provides no structured target-keyword relation here. |
+| `/target_restrictions/required_keywords` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Required keyword gates remain authored from the private dump prose; MFM provides no structured target-keyword relation here. |
+| `/target_restrictions/required_keywords_any` (+1) | unimplemented | prose-store-only | `data.stratagem.localisations.*.targetRules`<br>`data.stratagem.localisations.*.restrictionRules` | Alternative keyword gates remain authored from the private dump prose; MFM provides no structured target-keyword relation here. |
 
 Unmapped dump fields with a candidate repo destination:
 
 | Dump source | Candidate field | Reason |
 |---|---|---|
-| `data.stratagem.localisations.*.effectRules` | `/ability_id` | Effect prose is routed to the separate raw-text store; ability links are not inferred from it here. |
+| `data.stratagem.localisations.*.effectRules` | `/ability_id` | Effect prose stays in the private MFM dump; ability links are not inferred from it here. |
 | `data.stratagem.secondaryEffectAdditionalCPCost` | `/cp_cost` | The core schema represents only one CP cost, so alternate-effect additional CP is intentionally not conflated with cp_cost. |
 
 ### target-profile (`schemas/core/target-profile.schema.json`)
@@ -457,13 +457,13 @@ Unmapped faction keywords owning live datasheets (no repo dir — Titanicus etc.
 Dump data intentionally excluded from the repo. Listed so the axes above are
 not read as oversights.
 
-- **GW prose → out-of-repo store.** Ability/rules/lore text is never committed here; it lands in the sibling `40kdc-abilities` store (tracked by `npm run audit:store-coverage`).
+- **GW prose → private dump only.** Ability/rules/lore text is never committed here; tools read it from `_private/dump.json` through `mfm/record-prose.ts` (`npm run prose`).
 - **Artwork references** (`bannerImage`, `rowImage`) are excluded from published data.
 - **Legends / Forge-World tail.** Datasheets the live dump omits are dropped, never backfilled (see `ingest-mfm cull-legends`).
 - **Unmapped Titanicus factions.** Adeptus Titanicus / Titanicus Traitoris own live datasheets but have no repo faction dir; surfaced separately, not ingested.
 - **Combat-Patrol hold-back.** CP-only datasheets/detachments/enhancements are held back unless `--include-combat-patrol` is passed.
 
-Populated prose/artwork-dominant tables with no consumer (route to the store, not the repo):
+Populated prose/artwork-dominant tables with no consumer (prose stays in the private dump, not the repo):
 
 | Table | Rows | ip_class | Description |
 |---|--:|---|---|

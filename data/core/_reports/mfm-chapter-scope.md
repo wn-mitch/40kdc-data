@@ -7,7 +7,7 @@ where a chapter is barred from a generic unit with no same-name replacement.
 
 | Metric | Count |
 |---|--:|
-| Units matched | 194 |
+| Units matched | 177 |
 | faction_keywords collapsed | 0 |
 | excluded_faction_keywords set | 0 |
 | Repo units with no dump datasheet | 0 |

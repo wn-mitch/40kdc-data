@@ -6,7 +6,7 @@
 
 # Interface: InteractionFlag
 
-Defined in: [generated.ts:1458](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1458)
+Defined in: [generated.ts:4747](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4747)
 
 This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
 via the `definition` "interaction-flag".
@@ -21,7 +21,7 @@ via the `definition` "interaction-flag".
 
 > **ability\_a**: `string`
 
-Defined in: [generated.ts:1459](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1459)
+Defined in: [generated.ts:4748](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4748)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [generated.ts:1459](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **ability\_b**: `string`
 
-Defined in: [generated.ts:1460](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1460)
+Defined in: [generated.ts:4749](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4749)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [generated.ts:1460](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **interaction\_type**: `"replaces"` \| `"conflicts"` \| `"combos"` \| `"sequencing-dependent"` \| `"stacks"` \| `"does-not-stack"`
 
-Defined in: [generated.ts:1461](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1461)
+Defined in: [generated.ts:4750](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4750)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [generated.ts:1461](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **resolution?**: `string`
 
-Defined in: [generated.ts:1462](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1462)
+Defined in: [generated.ts:4751](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4751)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [generated.ts:1462](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **faq\_reference?**: `string`
 
-Defined in: [generated.ts:1463](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1463)
+Defined in: [generated.ts:4752](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4752)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [generated.ts:1463](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **disputed?**: `boolean`
 
-Defined in: [generated.ts:1464](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1464)
+Defined in: [generated.ts:4753](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4753)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [generated.ts:1464](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > **game\_version**: [`GameVersionReference`](GameVersionReference.md)
 
-Defined in: [generated.ts:1465](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1465)
+Defined in: [generated.ts:4754](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4754)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [generated.ts:1465](https://github.com/wn-mitch/40kdc-data/blob/0b69
 
 > `optional` **authored\_by?**: `string`
 
-Defined in: [generated.ts:1466](https://github.com/wn-mitch/40kdc-data/blob/0b6959256a79cf859a201d8971874d4a811c6024/tools/src/generated.ts#L1466)
+Defined in: [generated.ts:4755](https://github.com/wn-mitch/40kdc-data/blob/a2eb8df438860bb8af02958d2ac93851b300db39/tools/src/generated.ts#L4755)

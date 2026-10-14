@@ -1,0 +1,5 @@
+[
+  { "ability_id": "vigil", "unit_ids": ["warden-squad"] },
+  { "ability_id": "star-lantern", "unit_ids": ["warden-squad", "retired-walker"] },
+  { "ability_id": "old-oath", "unit_ids": ["retired-walker"] }
+]

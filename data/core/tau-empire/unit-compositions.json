@@ -2128,8 +2128,8 @@
         },
         "default_weapon_ids": [
           "airbursting-fragmentation-projector",
-          "battlesuit-fists-commander-in-enforcer-battlesuit",
-          "plasma-rifle-commander-in-enforcer-battlesuit"
+          "battlesuit-fists",
+          "plasma-rifle"
         ]
       }
     ],
@@ -2223,7 +2223,7 @@
         },
         "default_weapon_ids": [
           "accelerator-burst-cannon",
-          "armoured-hull-devilfish",
+          "armoured-hull",
           "twin-pulse-carbine"
         ]
       }
