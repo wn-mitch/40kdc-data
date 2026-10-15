@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Questions, SystemOneResult } from "@typesafe-ai/sdk";
 
+import { askChoiceRanked, JevBudget, JevPermanentError } from "../src/round5c/jev-core.js";
 import { runJevProposer, type JevClient } from "../src/round5c/jev-proposer.js";
 
 // Fabricated wording only; no GW rule prose.
@@ -106,5 +107,26 @@ describe("Jev proposer", () => {
     expect(result.budget_exhausted).toBe(true);
     expect(calls).toHaveLength(0);
     expect(result.proposals.slice(1).every((proposal) => proposal.status === "skipped-budget")).toBe(true);
+  });
+});
+
+describe("Jev request failures", () => {
+  const failing = (status: number) => {
+    let calls = 0;
+    const client: JevClient = { async systemOne() { calls += 1; throw Object.assign(new Error(`HTTP ${status}`), { status }); } };
+    return { client, calls: () => calls };
+  };
+  const ask = (client: JevClient) => askChoiceRanked(client, 1000, new JevBudget(1), "span:1", "family", { phrase: "x" }, "Which?", { a: "A", b: "B" });
+
+  it("stops the run on an error no retry can fix, such as no credits", async () => {
+    const { client, calls } = failing(402);
+    await expect(ask(client)).rejects.toBeInstanceOf(JevPermanentError);
+    expect(calls()).toBe(1);
+  });
+
+  it("keeps a rate limit transient: retried, then unanswered", async () => {
+    const { client, calls } = failing(429);
+    await expect(ask(client)).resolves.toBeNull();
+    expect(calls()).toBe(3);
   });
 });

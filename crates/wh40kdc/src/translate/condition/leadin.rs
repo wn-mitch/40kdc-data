@@ -126,13 +126,24 @@ pub fn condition_lead_in_value(c: &Value) -> String {
                     _ => {}
                 }
             }
-            if is(p, "event", "disembarked") && nn(p, "subject").is_none() {
+            if is(p, "event", "disembarked")
+                && nn(p, "subject").is_none()
+                && nn(f, "transport").is_none()
+            {
                 return format!(
                     "if the unit disembarked from a Transport {}",
                     window_phrase(p.get("window"))
                 )
                 .trim_end()
                 .to_string();
+            }
+            // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+            if is(p, "event", "used")
+                && is(p, "window", "event")
+                && nn(f, "ability_keyword").is_none()
+                && nn(f, "same_rule_as").is_none()
+            {
+                return format!("while {}", describe_happened(p, false));
             }
             if (is(p, "event", "destroyed") || is(p, "event", "model-destroyed"))
                 && is(p, "object", "event-object")
@@ -176,7 +187,9 @@ pub fn condition_lead_in_value(c: &Value) -> String {
             }
         }
         "attack-compare" => format!("when {}", pred()),
-        "model-count" | "loadout" => format!("if {}", pred()),
+        "model-count" | "loadout" | "equipped-weapon-count" | "named-weapon" | "unit-wargear" => {
+            format!("if {}", pred())
+        }
         "within" | "in-region" => format!("while {}", pred()),
         _ => format!("if {}", pred()),
     }

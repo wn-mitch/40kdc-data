@@ -4,12 +4,14 @@
  * for any family it does not handle itself.
  */
 
-import { closed, type CompileLeaf } from "./compile-fragments.js";
+import { LIST_BUILDING_DESIGNATIONS } from "../translate/designations.js";
+import { armyRuleEffect } from "./compile-army.js";
+import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
 /** The effect for a board or economy family, or undefined when the family is not one of them. */
-export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => string): Node | undefined {
+export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Node | string): Node | undefined {
   switch (leaf.family_id) {
     case "make-move": {
       const modifier: Node = { move_type: closed(leaf, "move_type") };
@@ -17,15 +19,20 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
       if (leaf.parameters.ends_within_inches !== undefined) modifier.ends_within = { range: { inches: closed(leaf, "ends_within_inches") } };
       // Version 2 (batch 7a): the move counts as a different kind of move for later checks.
       if (leaf.parameters.counts_as_move !== undefined) modifier.counts_as_move = closed(leaf, "counts_as_move");
-      return { type: "move", target: closed(leaf, "subject"), modifier };
+      // Folded from "as if it were your Movement phase" after the move (compile-as-if.ts).
+      if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
+      // Version 6: the disembark mode ("an assault disembark move").
+      if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
+      return { type: "move", target: unitOf(leaf, "subject"), modifier };
     }
     case "move-distance":
       return { type: "move-modifier", target: closed(leaf, "subject"), modifier: { applies_to_moves: closed(leaf, "move_types"), distance_bonus: closed(leaf, "bonus") } };
     case "move-through": {
-      const modifier: Node = { passthrough: [closed(leaf, "passthrough")] };
+      // A pair of listed tokens (move-through@4, families/moves.ts) is one list.
+      const modifier: Node = { passthrough: Array.isArray(leaf.parameters.passthrough) ? [...leaf.parameters.passthrough] : [closed(leaf, "passthrough")] };
       if (leaf.parameters.applies_to_moves !== undefined) modifier.applies_to_moves = closed(leaf, "applies_to_moves");
       if (leaf.parameters.ignore_vertical !== undefined) modifier.ignore_vertical = closed(leaf, "ignore_vertical");
-      return { type: "move-modifier", target: closed(leaf, "subject"), modifier };
+      return { type: "move-modifier", target: unitOf(leaf, "subject"), modifier };
     }
     case "set-up": {
       const modifier: Node = { to: closed(leaf, "to") };
@@ -33,12 +40,29 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = closed(leaf, "min_enemy_distance");
       if (leaf.parameters.within_edge !== undefined) modifier.within_edge = closed(leaf, "within_edge");
       if (leaf.parameters.round_offset !== undefined) modifier.round_offset = closed(leaf, "round_offset");
-      return { type: "set-up", target: closed(leaf, "subject"), modifier };
+      if (leaf.parameters.placement !== undefined) modifier.placement = closed(leaf, "placement");
+      if (leaf.parameters.ignore_limits === true) modifier.ignore_limits = true;
+      // Version 4: set up using a Cult Ambush marker, touching it unless a range is given.
+      if (leaf.parameters.via !== undefined) modifier.via = closed(leaf, "via");
+      if (leaf.parameters.marker_inches !== undefined) modifier.marker_range = { inches: closed(leaf, "marker_inches"), ...(leaf.parameters.marker_wholly === true ? { wholly: true } : {}) };
+      // Folded from wounds-remaining, starting-strength and leaves-attached-unit (compile-model-state.ts).
+      if (leaf.parameters.wounds_remaining !== undefined) modifier.wounds_remaining = countValue(closed(leaf, "wounds_remaining"));
+      if (leaf.parameters.detach === true) modifier.detach = true;
+      if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
+      // Version 5: a forbidden ("cannot be set up") or required ("must be set up") set-up.
+      if (leaf.parameters.allow === false) modifier.allow = false;
+      if (leaf.parameters.mandatory === true) modifier.mandatory = true;
+      Object.assign(modifier, foldedPlacement(leaf, modifier.placement));
+      // A set-up restriction (compile-set-up-placement.ts): the side whose set-ups are forbidden.
+      const target_ = leaf.parameters.restricted_owner !== undefined ? { owner: closed(leaf, "restricted_owner") } : unitOf(leaf, "subject");
+      return { type: "set-up", target: target_, modifier };
     }
     case "battlefield-marker": {
       const modifier: Node = { label: closed(leaf, "label") };
       if (leaf.parameters.operation !== undefined) modifier.operation = closed(leaf, "operation");
       if (leaf.parameters.distance !== undefined) modifier.distance = closed(leaf, "distance");
+      // Version 2: only a marker not yet moved this turn.
+      if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
       return { type: "marker", target: closed(leaf, "subject"), modifier };
     }
     case "transport-capacity": {
@@ -97,17 +121,23 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
     }
     case "apply-mark": {
       const modifier: Node = { tag: closed(leaf, "tag") };
+      if (LIST_BUILDING_DESIGNATIONS.has(String(modifier.tag))) throw new CompileError("A list-building designation (the Warlord) cannot be applied by a rule.");
       if (leaf.parameters.clear !== undefined) modifier.clear = closed(leaf, "clear");
-      return { type: "designate", target: closed(leaf, "subject"), modifier };
+      // apply-mark@4: who applied it, and when it ends (compile-designation-expiry.ts sets clears_on).
+      if (leaf.parameters.by !== undefined) modifier.by = closed(leaf, "by");
+      if (leaf.parameters.clears_on !== undefined) modifier.clears_on = leaf.parameters.clears_on;
+      // apply-mark@5: the selected objective marker carries the tag (designate's objective subject).
+      // The stratagem's effect has no unit to tag, so the target is this unit, as optional costs do.
+      if (leaf.parameters.subject === "selected-objective") {
+        if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("apply-mark names the selected objective marker, but this record selects no objective marker.");
+        if (leaf.parameters.by !== undefined) throw new CompileError("A designation on an objective marker has no applier; drop by.");
+        modifier.subject = { objective: { selection_var: leaf.parameters.selection_var } };
+        return { type: "designate", target: "this-unit", modifier };
+      }
+      return { type: "designate", target: unitOf(leaf, "subject"), modifier };
     }
-    case "army-construction": {
-      const modifier: Node = { rule: closed(leaf, "rule") };
-      const withKeywords = leaf.parameters.with_keywords as string[] | undefined;
-      if (withKeywords) modifier.with = { all_of: withKeywords };
-      if (leaf.parameters.max !== undefined) modifier.max = closed(leaf, "max");
-      if (leaf.parameters.led_by !== undefined) modifier.led_by = closed(leaf, "led_by");
-      return { type: "army-rule", target: "this-unit", modifier };
-    }
+    case "army-construction":
+      return armyRuleEffect(leaf);
     case "return-models": {
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.wounds_remaining !== undefined) {
@@ -115,6 +145,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
         if (wr !== "full") modifier.wounds_remaining = countValue(wr);
       }
       if (leaf.parameters.model_keyword !== undefined) modifier.model_keyword = closed(leaf, "model_keyword");
+      if (leaf.parameters.exclude_model_keyword !== undefined) modifier.exclude_model_keyword = closed(leaf, "exclude_model_keyword");
       if (leaf.parameters.bodyguard_only === true) modifier.bodyguard_only = true;
       return { type: "return-models", target: target(leaf.parameters.subject), modifier };
     }
@@ -133,6 +164,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
         mode === "model" ? { by: "model" }
           : mode === "counts" ? { model_counts: closed(leaf, "model_counts") }
             : { by: { model_keyword: closed(leaf, "model_keywords") } };
+      // Folded from a starting-strength qualifier (compile-model-state.ts): each resulting unit's.
+      if (leaf.parameters.starting_strength !== undefined) modifier.starting_strength = closed(leaf, "starting_strength");
       return { type: "split-unit", target: "this-unit", modifier };
     }
     case "add-unit": {
@@ -140,7 +173,23 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
       const count = countValue(closed(leaf, "count"));
       const base: Node = source === "datasheet" ? { datasheet: closed(leaf, "datasheet") } : { copy_of: "event-object" };
       const join = leaf.parameters.join === true;
-      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }) } };
+      // A copy that leaves models out, comes back whole, resets [One Shot] weapons or waits in Reserves.
+      const copy: Node = {
+        ...(leaf.parameters.copy_excluded_keywords !== undefined ? { excluded_keywords: closed(leaf, "copy_excluded_keywords") } : {}),
+        ...(leaf.parameters.at_starting_strength === true ? { at_starting_strength: true } : {}),
+        ...(leaf.parameters.reset_one_shot === true ? { reset_one_shot: true } : {}),
+      };
+      if (Object.keys(copy).length && source === "datasheet") throw new CompileError("Only a copy of a destroyed unit can leave models out, return at Starting Strength or reset [One Shot] weapons.");
+      if (Object.keys(copy).length && join) throw new CompileError("Models joining an existing unit are not a copy: excluded keywords, Starting Strength and [One Shot] resets apply only to a new unit.");
+      const held = leaf.parameters.held_in === undefined ? {} : { placement: closed(leaf, "held_in") };
+      // "… and set it up anywhere on the battlefield": the set-up folded in (compile-set-up-placement.ts).
+      const placed = foldedPlacement(leaf, leaf.parameters.set_up_placement);
+      // Folded from a unit-size qualifier (compile-model-state.ts): how many models the new unit contains.
+      const size = leaf.parameters.model_count ?? leaf.parameters.models;
+      if (size !== undefined && (join || source !== "datasheet")) throw new CompileError("Only a new unit of a named datasheet takes a size; a copy or models joining a unit already say how many.");
+      // "If you do, that unit can be set up within Engagement Range of the destroyed unit" (compile-set-up-placement.ts permissionLimit).
+      const permitted = leaf.parameters.folded_allow_engagement_with !== undefined ? { allow_engagement_with: leaf.parameters.folded_allow_engagement_with } : {};
+      return { type: "add-unit", target: "this-unit", modifier: { ...base, ...(join ? { model_count: count, join: "this-unit" } : { count }), ...(size !== undefined ? { model_count: structuredClone(size) } : {}), ...copy, ...held, ...placed, ...permitted } };
     }
     case "battle-shock-state": {
       const recipient = String(closed(leaf, "recipient"));
@@ -150,6 +199,21 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => str
     default:
       return undefined;
   }
+}
+
+/**
+ * The placement limits folded onto a set-up or add-unit (compile-set-up-placement.ts) as DSL
+ * fields, with "not within Engagement Range of any enemy units" added to its placement keywords.
+ */
+function foldedPlacement(leaf: CompileLeaf, placement: unknown): Node {
+  const result: Node = {};
+  if (leaf.parameters.folded_near !== undefined) result.near = structuredClone(leaf.parameters.folded_near);
+  if (leaf.parameters.folded_away_from !== undefined) result.away_from = structuredClone(leaf.parameters.folded_away_from);
+  if (leaf.parameters.folded_in_region !== undefined) result.in_region = structuredClone(leaf.parameters.folded_in_region);
+  const keywords = placement === undefined ? [] : Array.isArray(placement) ? [...placement] : [placement];
+  if (leaf.parameters.folded_unengaged === true && !keywords.includes("unengaged")) keywords.push("unengaged");
+  if (keywords.length) result.placement = keywords.length === 1 ? keywords[0] : keywords;
+  return result;
 }
 
 /** A count/amount family value ("1", "D3", "all") as the DSL prefers it: a number when it is one. */

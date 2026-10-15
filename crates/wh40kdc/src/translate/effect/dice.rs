@@ -30,6 +30,23 @@ pub(super) fn dice_table_result_label(results: Option<&Value>) -> String {
         .join(", ")
 }
 
+/// "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)".
+pub(super) fn dice_table_head(e: &P) -> String {
+    match e.get("count").and_then(Value::as_f64) {
+        Some(n) if n >= 2.0 => format!(
+            "roll {} {} and resolve each one{}",
+            fnum(n),
+            dice_case(e.get("dice")),
+            if e.get("distinct") == Some(&Value::Bool(true)) {
+                " (re-rolling any repeated result)"
+            } else {
+                ""
+            }
+        ),
+        _ => format!("roll one {}", dice_case(e.get("dice"))),
+    }
+}
+
 pub(super) fn dice_table_inline(e: &P, ctx: &Ctx) -> String {
     let outcomes: Vec<String> = items(e, "outcomes")
         .iter()
@@ -42,11 +59,7 @@ pub(super) fn dice_table_inline(e: &P, ctx: &Ctx) -> String {
             )
         })
         .collect();
-    format!(
-        "roll one {}: {}",
-        dice_case(e.get("dice")),
-        outcomes.join("; ")
-    )
+    format!("{}: {}", dice_table_head(e), outcomes.join("; "))
 }
 
 /// A roll-with-rider `sequence`: `[dice-gated rider, unconditional primary]`.

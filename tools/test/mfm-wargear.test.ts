@@ -1763,6 +1763,22 @@ describe("makeResolver per-unit priority overrides", () => {
   });
 });
 
+describe("makeResolver fuzzy fallback", () => {
+  it("bridges one-edit spelling drift", () => {
+    const audit: { name: string; from: string; to: string }[] = [];
+    const r = makeResolver(new Set(["absolver-bolt-pistol"]), audit);
+    expect(r("Absolvor bolt pistol")).toBe("absolver-bolt-pistol");
+    expect(audit).toHaveLength(1);
+  });
+
+  it("never bridges a reviewed pair of distinct weapons one edit apart", () => {
+    const audit: { name: string; from: string; to: string }[] = [];
+    const r = makeResolver(new Set(["balesword", "plague-flail"]), audit);
+    expect(r("Bilesword")).toBeNull();
+    expect(audit).toEqual([]);
+  });
+});
+
 describe("limitedSetBudgets — per-item duplicate cap capture", () => {
   // A multi-item shared set (the Cadian special-weapon pattern): pick `choiceLimit`
   // per `modelCount` models, but no more than `duplicateLimit` of the SAME item.

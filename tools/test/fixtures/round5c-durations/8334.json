@@ -1,0 +1,188 @@
+{
+ "id": 8334,
+ "source_text": "xxxx xxxxxxxx xxxxx xx xxxx xxxxxx xxxxx, wwww wwwww w **xxxxxxxx** xx **xxxxxxxxxx** xxxx xxxx xxxx xxxx xx xxxxxxxx xx xxxx x xxxxxx, xxxxxxx xx xxxx xxxx xxxx, xx xxx xx xx xxx xxxxxxxxxxx, or xxxxxxxx x xxxxxx.\nxxxx xxxx.\nxxxxx xxx xxx xx xxx xxxx, xxxxx xxxxx xxxxxx xxx xxx xxxx xxxxxxxxx xxxxxxxxx xx xxxxx xx xxxx xxxx.",
+ "leaves": [
+  {
+   "role": "RESTRICTION",
+   "family_id": "use-window",
+   "family_version": 1,
+   "parameters": {
+    "your_phases": [
+     "movement",
+     "charge"
+    ],
+    "opponent_phases": [],
+    "either_phases": []
+   },
+   "start_byte": 0,
+   "end_byte": 40,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "friendly",
+    "any_keywords": [
+     "DRUKHARI",
+     "HARLEQUINS"
+    ]
+   },
+   "start_byte": 57,
+   "end_byte": 90,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-owner",
+   "family_version": 1,
+   "parameters": {
+    "owner": "friendly"
+   },
+   "start_byte": 91,
+   "end_byte": 105,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "selected",
+    "owner": "friendly",
+    "move_types": [
+     "normal",
+     "advance",
+     "fall-back"
+    ],
+    "to": "move"
+   },
+   "start_byte": 106,
+   "end_byte": 161,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up",
+    "owner": "friendly"
+   },
+   "start_byte": 163,
+   "end_byte": 191,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "targets-selected",
+    "owner": "friendly",
+    "action_kind": "charge"
+   },
+   "start_byte": 196,
+   "end_byte": 213,
+   "fragment": "WHEN"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "triggering-target",
+   "family_version": 3,
+   "parameters": {
+    "selects": "unit",
+    "keywords": [],
+    "match": "all"
+   },
+   "start_byte": 215,
+   "end_byte": 224,
+   "fragment": "TARGET"
+  },
+  {
+   "role": "DURATION",
+   "family_id": "duration",
+   "family_version": 3,
+   "parameters": {
+    "endpoint": "end-of-turn"
+   },
+   "start_byte": 226,
+   "end_byte": 251,
+   "fragment": "EFFECT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "targeting-restriction",
+   "family_version": 3,
+   "parameters": {
+    "may": "cannot-target",
+    "kind": "stratagem",
+    "weapon_type": "all",
+    "target": "this-unit",
+    "by": "enemy-units",
+    "stratagem": "fire-overwatch"
+   },
+   "start_byte": 253,
+   "end_byte": 326,
+   "fragment": "EFFECT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "targeting",
+   "target": {
+    "owner": "enemy"
+   },
+   "modifier": {
+    "by": {
+     "owner": "enemy"
+    },
+    "may": "cannot-target",
+    "kind": "stratagem",
+    "target": "this-unit",
+    "stratagem": "fire-overwatch"
+   }
+  },
+  "scope": {
+   "duration": "turn"
+  },
+  "behavior": "reactive",
+  "trigger": [
+   {
+    "event": "selected",
+    "subject": {
+     "owner": "friendly",
+     "any_of": [
+      "DRUKHARI",
+      "HARLEQUINS"
+     ]
+    },
+    "filter": {
+     "move_types": [
+      "normal",
+      "advance",
+      "fall-back"
+     ],
+     "to": "move"
+    }
+   },
+   {
+    "event": "set-up",
+    "subject": {
+     "owner": "friendly"
+    }
+   },
+   {
+    "event": "targets-selected",
+    "subject": {
+     "owner": "friendly"
+    },
+    "filter": {
+     "kind": "charge"
+    }
+   }
+  ]
+ }
+}

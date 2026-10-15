@@ -26,6 +26,28 @@
       "uniqueItems": true,
       "description": "References to the faction-wide abilities in display order"
     },
+    "keyword_limits": {
+      "type": "array",
+      "description": "Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "keywords": { "$ref": "../defs/common.schema.json#/$defs/keyword-list" },
+          "max": { "type": "integer", "minimum": 0 },
+          "mode": {
+            "enum": ["units", "alternatives"],
+            "default": "units",
+            "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both)."
+          },
+          "exempt_faction_keywords": {
+            "$ref": "../defs/common.schema.json#/$defs/keyword-list",
+            "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap)."
+          }
+        },
+        "required": ["keywords", "max"]
+      }
+    },
     "army_construction_rules": {
       "type": "array",
       "description": "Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.",

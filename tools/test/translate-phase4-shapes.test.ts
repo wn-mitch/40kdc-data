@@ -112,7 +112,7 @@ describe("describer: dice", () => {
         { type: "ability-part", name: "Total Carnage", effect: { type: "dice-gated", from: { roll_var: "bok" }, requirement: { any_of: [{ type: "pair", min_value: 6 }, { type: "triple", min_value: 3 }] }, on_success: { type: "no-effect" } } }] } };
     const text = render(effect);
     expect(text).toContain("Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:");
-    expect(text).toContain("Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.");
+    expect(text).toContain("- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.");
     expect(text).toContain("using a pair of 6+ or triple of 3+ from that roll's unused dice");
   });
 
@@ -125,6 +125,8 @@ describe("describer: dice", () => {
   it("renders an ability's own roll, unmodified results, fail thresholds and mandatory re-rolls", () => {
     expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe("The unit gets +1 to Reanimation Protocols rolls.");
     expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("The unit's Hit rolls count as an unmodified 6.");
+    // The performing unit's own Agile Manoeuvre roll (compile-manoeuvre-own-roll.ts): the roll is named, not every roll.
+    expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toMatch(/the triggering unit gets \+1 to Agile Manoeuvre rolls/iu);
     expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapon_type: "ranged", incoming: true }))).toBe(
       "Each time a ranged attack targets the unit, an unmodified Hit roll of 1-3 for that attack always fails.",
     );
@@ -227,7 +229,7 @@ describe("describer: abilities, rules and army", () => {
       "The war dogs target counts as being within its aura range of the abhorrent target.",
     );
     expect(render({ type: "select-objective", selector: { count: 1, range: "objective-control", origin: "bearer-unit", controlled_by: "your-army", bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
-      "Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it.",
+      "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it.",
     );
     expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: 3, range_cap: 12, emitter_filter: { required_keywords: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
       'While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.',

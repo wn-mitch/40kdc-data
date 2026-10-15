@@ -4,8 +4,9 @@ import { join } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY } from "../src/round5c/contracts.js";
 import { coreCheckErrors } from "../src/round5c/core-checks.js";
+import { prefillFromSource } from "../src/round5c/leaf-prefill.js";
 
 // Fabricated records and wording only.
 
@@ -46,6 +47,39 @@ describe("Round 5C restrictions", () => {
     expect(two.ok ? [] : two.errors).toContain("More than one usage limit; the entry has one usage.");
   });
 
+  it.each(["phase", "turn", "battle round", "battle"])("reuses the same once-per-%s qualifier across independently scoped allowances", (period) => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "usage-limit" && !item.deprecated)!;
+    const parameters = normalizeFingerprintParameters("usage-limit", prefillFromSource(family, `Once per ${period}`), family.version);
+    for (const per of ["army", "unit", "model"]) {
+      const result = compiled([
+        leaf("RESTRICTION", "usage-limit", parameters),
+        leaf("RESTRICTION", "usage-scope", { per }),
+        grant(),
+      ]);
+      expect(result.mechanics.usage).toEqual({
+        frequency: period === "battle" ? "n-per-battle" : `once-per-${period.replace(" ", "-")}`,
+        ...(period === "battle" ? { count: 1 } : {}),
+        per,
+      });
+    }
+  });
+
+  it("does not guess an allowance owner from a frequency qualifier alone", () => {
+    const result = compileLeaves([leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase" }), grant()]);
+    expect(result.ok ? [] : result.errors).toContain("Usage frequency needs a reviewed usage scope.");
+  });
+
+  it("refuses an owner without a frequency and conflicting owner qualifications", () => {
+    const orphan = compileLeaves([leaf("RESTRICTION", "usage-scope", { per: "model" }), grant()]);
+    expect(orphan.ok ? [] : orphan.errors).toContain("Usage scope has no frequency.");
+    const conflict = compileLeaves([
+      leaf("RESTRICTION", "usage-limit", { frequency: "once-per-phase", per: "model" }),
+      leaf("RESTRICTION", "usage-scope", { per: "army" }),
+      grant(),
+    ]);
+    expect(conflict.ok ? [] : conflict.errors).toContain("Conflicting usage scopes.");
+  });
+
   it("turns a choice into an optional trigger, or an activated ability without one", () => {
     const withEvent = compiled([leaf("RESTRICTION", "optional-use", { who: "you" }), leaf("EVENT", "event", { kind: "charge" }), grant()]);
     expect(withEvent.mechanics).toMatchObject({ behavior: "reactive", trigger: { event: "move-ended", filter: { move_types: ["charge"] }, optional: true } });
@@ -79,6 +113,26 @@ describe("Round 5C restrictions", () => {
     expect(coreCheckErrors(root, "relic", bearers(["ORACLE"], "all"))[0]).toMatch(/core requires/u);
   });
 
+  it("accepts a bearer spelled differently from core when both admit the same units, and only then", () => {
+    const bearers = (keywords: string[], match: string) => compiled([leaf("RESTRICTION", "bearer-eligibility", { keywords, match }), grant()]).checks;
+    const root = dataRoot([], [
+      { id: "node", ability_id: "node", keyword_restriction_groups: [["Clan Forge"], ["Loremaster"]] },
+      { id: "blade", ability_id: "blade", keyword_restrictions: ["Hive Faction", "Gilded Warden"] },
+    ]);
+    writeFileSync(join(root, "core", "fixture", "units.json"), JSON.stringify([
+      { id: "forge-smith", name: "Clan Forge Smith", keywords: ["Character", "Clan Forge", "Smith"], faction_keywords: ["Hive Faction"] },
+      { id: "forge-walkers", name: "Clan Forge Walkers", keywords: ["Clan Forge", "Walker"], faction_keywords: ["Hive Faction"] },
+      { id: "loremaster", name: "Loremaster", keywords: ["Character", "Loremaster"], faction_keywords: ["Hive Faction"] },
+      { id: "gilded-warden", name: "Gilded Warden", keywords: ["Character", "Champion", "Warden's Blades"], faction_keywords: ["Hive Faction"] },
+      { id: "champion", name: "Champion", keywords: ["Character", "Champion"], faction_keywords: ["Hive Faction"] },
+    ]));
+    // SMITH and CLAN FORGE admit different units (Clan Forge Walkers), so only the same set passes.
+    expect(coreCheckErrors(root, "node", bearers(["SMITH", "LOREMASTER"], "any"))[0]).toMatch(/core allows/u);
+    // The datasheet-scoped core group names the unit; the printed keywords pick out the same one.
+    expect(coreCheckErrors(root, "blade", bearers(["CHAMPION", "WARDEN'S BLADES"], "all"))).toEqual([]);
+    expect(coreCheckErrors(root, "blade", bearers(["CHAMPION"], "all"))[0]).toMatch(/core requires/u);
+  });
+
   it("turns stratagem moments into their trigger events", () => {
     const trigger = (kind: string) => compiled([leaf("EVENT", "event", { kind }), grant()]).mechanics.trigger;
     expect(trigger("enemy-selected-targets")).toEqual({ event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit" });
@@ -93,7 +147,7 @@ describe("Round 5C restrictions", () => {
     const inTarget = (item: CompileLeaf): CompileLeaf => ({ ...item, fragment: "TARGET" });
     const result = compiled([
       inTarget(leaf("RESTRICTION", "stratagem-target", { count: "one", side: "your-army", selects: "unit", keywords: ["INFANTRY", "WARDENS"], match: "all", excluded_keywords: ["TITANIC"] })),
-      inTarget(leaf("CONDITION", "unit-activity", { activity: "selected-to-shoot-this-phase", subject: "this-unit", negated: true })),
+      inTarget(leaf("CONDITION", "unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: true })),
       inTarget(leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", negated: true })),
       { ...grant(), fragment: "EFFECT" },
     ]);
@@ -125,8 +179,42 @@ describe("Round 5C restrictions", () => {
     expect(attacked.core?.target_restrictions).toEqual({ count: "one", side: "your-army", selects: "unit", required_keywords_any: ["WARDENS", "ORACLES"], bound_to: "attacked-unit" });
   });
 
+  it("reads a TARGET, a trigger's subject and an attack's target from one unit-filter leaf", () => {
+    const filter = (parameters: Record<string, unknown>) => leaf("CONDITION", "unit-filter", parameters);
+    const target = compiled([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" },
+      { ...filter({ side: "friendly", keywords: ["INFANTRY"], any_keywords: ["ORACLES", "WARDENS"], states: ["unengaged"] }), fragment: "TARGET" },
+      { ...grant(), fragment: "EFFECT" },
+    ]);
+    expect(target.core).toEqual({ target_restrictions: {
+      count: "one", side: "your-army", selects: "unit", required_keywords: ["INFANTRY"],
+      eligibility: { operator: "and", operands: [
+        { type: "has-keyword", parameters: { any_of: ["ORACLES", "WARDENS"] } },
+        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+      ] },
+    } });
+    // "each time a friendly WARDENS unit" + an event with no owner: the trigger's subject.
+    expect(compiled([filter({ side: "friendly", keywords: ["WARDENS"] }), leaf("EVENT", "event", { kind: "enemy-has-shot" }), grant()]).mechanics.trigger)
+      .toMatchObject({ event: "attacks-resolved", subject: { owner: "friendly", all_of: ["WARDENS"] } });
+    // After an attack, the attack's target: a gate on the defender.
+    const attack = compiled([
+      leaf("EVENT", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }),
+      filter({ side: "enemy", keywords: ["VEHICLE"] }),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    expect(attack.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "has-keyword", parameters: { subject: "defender", all_of: ["VEHICLE"] } } });
+    // "One ADEPTUS CUSTODES model": the who leaf's noun says model.
+    expect(compiled([
+      { ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" },
+      { ...filter({ side: "friendly", keywords: ["CHARACTER"], level: "model" }), fragment: "TARGET" },
+      { ...grant(), fragment: "EFFECT" },
+    ]).core).toMatchObject({ target_restrictions: { selects: "model", required_keywords: ["CHARACTER"] } });
+    // A side-less TARGET leaf needs its unit-filter.
+    expect(compileLeaves([{ ...leaf("RESTRICTION", "stratagem-target", { count: "one" }), fragment: "TARGET" }, grant()]).ok).toBe(false);
+  });
+
   it("refuses a TARGET without exactly one target leaf", () => {
-    const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
+    const result = compileLeaves([{ ...leaf("CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }), fragment: "TARGET" }, grant()]);
     expect(result.ok ? [] : result.errors).toEqual(["A stratagem TARGET needs exactly one target leaf; found 0."]);
   });
 

@@ -2,8 +2,9 @@ import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumValue, exactKeys } from "./family-validation.js";
 
 /**
- * Restrictions: who may use an ability, in which phases, and how often. How often compiles to
- * the entry's `usage`. Which phases (a stratagem's WHEN) and which bearer (an enhancement's
+ * Restrictions: who may use an ability, in which phases, and how often. A frequency qualifier
+ * and its reviewed allowance ownership compose into the entry's `usage`. Which phases (a
+ * stratagem's WHEN) and which bearer (an enhancement's
  * "<KEYWORD> model only") are already recorded on the core stratagem and enhancement records
  * from the Munitorum dump, so those leaves compile to nothing and are checked against core
  * instead; a disagreement blocks approval rather than writing a second source of truth.
@@ -28,6 +29,8 @@ export const TARGET_COUNTS = ["one", "one-or-more", "up-to"] as const;
 export const TARGET_SIDES = ["your-army", "enemy"] as const;
 export const TARGET_SELECTS = ["unit", "model"] as const;
 export const TARGET_BINDINGS = ["triggering-unit", "attacked-unit"] as const;
+/** Who holds the options chosen from a menu. */
+export const CHOSEN_OPTION_HOLDERS = ["this-model", "this-unit"] as const;
 
 const keywordList = { type: "array", items: { type: "string", pattern: UNIT_KEYWORD.source }, minItems: 0, uniqueItems: true } as const;
 
@@ -43,6 +46,30 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: {
       type: "object",
       required: ["count", "side", "selects", "keywords", "match", "excluded_keywords"],
+      properties: {
+        count: { enum: TARGET_COUNTS },
+        count_max: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["up-to"] } },
+        side: { enum: TARGET_SIDES },
+        selects: { enum: TARGET_SELECTS },
+        keywords: keywordList,
+        match: { enum: KEYWORD_MATCH },
+        excluded_keywords: keywordList,
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "stratagem-target",
+    version: 2,
+    role: "RESTRICTION",
+    kinds: ["stratagem"],
+    label: "Stratagem target",
+    description: "As version 1, but side, keywords, match and excluded_keywords can all be left out: then the leaf is only the count and unit-or-model (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A stratagem's TARGET: how many, whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
+    starter: { count: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["count"],
       properties: {
         count: { enum: TARGET_COUNTS },
         count_max: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["up-to"] } },
@@ -133,6 +160,49 @@ export const RESTRICTION_FAMILIES: readonly SemanticFamilyDefinition[] = [
       type: "object",
       required: ["frequency", "per"],
       properties: { frequency: { enum: USAGE_FREQUENCIES_V2 }, per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "usage-limit",
+    version: 3,
+    role: "RESTRICTION",
+    label: "Usage frequency",
+    description: "A frequency qualifier, independent of army, unit or model ownership. The optional per field records a reviewed binding; otherwise a separate usage-scope leaf supplies it. Frequency alone does not choose an allowance owner.",
+    starter: { frequency: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["frequency"],
+      properties: { frequency: { enum: USAGE_FREQUENCIES_V2 }, per: { enum: USAGE_PER } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "chosen-option-grant",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Holder of the chosen options",
+    description: "\"This model has that ability\" / \"has those abilities\" after a menu (\"select one of the abilities in the X section\"): the options chosen from that menu apply, held by this model or this unit. It adds no effect of its own; a record with no menu opener before it cannot compile.",
+    starter: { holder: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["holder"],
+      properties: { holder: { enum: CHOSEN_OPTION_HOLDERS } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "usage-scope",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Usage allowance ownership",
+    description: "Qualifies an ability's usage allowance as counted per army, unit or model; any explicitly leaves entity granularity unspecified. It supplies no frequency. A restriction on repeatedly selecting or affecting a target is not the ability's usage ownership.",
+    starter: { per: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["per"],
+      properties: { per: { enum: USAGE_PER } },
       additionalProperties: false,
     },
   },
@@ -228,6 +298,12 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
   switch (family) {
     case "stratagem-target": {
       const count = enumValue(input.count, TARGET_COUNTS, "stratagem-target.count");
+      // Version 2: count and unit-or-model alone, the unit-filter after it naming the rest.
+      if (version >= 2 && !("side" in input)) {
+        // The unit-filter's level says unit or model; selects is only for the full form.
+        exactKeys(input, count === "up-to" ? ["count", "count_max"] : ["count"], family);
+        return { count, ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 2, 10, "stratagem-target.count_max") } : {}) };
+      }
       exactKeys(input, count === "up-to" ? ["count", "count_max", "side", "selects", "keywords", "match", "excluded_keywords"] : ["count", "side", "selects", "keywords", "match", "excluded_keywords"], family);
       return {
         count,
@@ -252,9 +328,20 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
     case "optional-use":
       exactKeys(input, ["who"], family);
       return { who: enumValue(input.who, version === 1 ? OPTIONAL_USERS_WITH_BEARER : OPTIONAL_USERS, "optional-use.who") };
-    case "usage-limit":
-      exactKeys(input, ["frequency", "per"], family);
-      return { frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"), per: enumValue(input.per, USAGE_PER, "usage-limit.per") };
+    case "usage-limit": {
+      const hasScope = version < 3 || "per" in input;
+      exactKeys(input, hasScope ? ["frequency", "per"] : ["frequency"], family);
+      return {
+        frequency: enumValue(input.frequency, version >= 2 ? USAGE_FREQUENCIES_V2 : USAGE_FREQUENCIES, "usage-limit.frequency"),
+        ...(hasScope ? { per: enumValue(input.per, USAGE_PER, "usage-limit.per") } : {}),
+      };
+    }
+    case "chosen-option-grant":
+      exactKeys(input, ["holder"], family);
+      return { holder: enumValue(input.holder, CHOSEN_OPTION_HOLDERS, "chosen-option-grant.holder") };
+    case "usage-scope":
+      exactKeys(input, ["per"], family);
+      return { per: enumValue(input.per, USAGE_PER, "usage-scope.per") };
     case "use-window":
     case "activation-window": {
       exactKeys(input, ["your_phases", "opponent_phases", "either_phases"], family);
@@ -279,10 +366,11 @@ export function normalizeRestrictionParameters(family: string, input: Record<str
   }
 }
 
-/** The entry's usage for a usage-limit leaf, in the DSL's spelling. */
+/** A frequency in the DSL's spelling, with ownership only when the leaf explicitly records it. */
 export function usageFor(parameters: Record<string, unknown>): Record<string, unknown> {
-  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 } : { frequency: parameters.frequency };
-  return { ...frequency, ...(parameters.per !== "any" ? { per: parameters.per } : {}) };
+  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 }
+    : parameters.frequency === "twice-per-battle" ? { frequency: "n-per-battle", count: 2 } : { frequency: parameters.frequency };
+  return { ...frequency, ...(parameters.per !== undefined && parameters.per !== "any" ? { per: parameters.per } : {}) };
 }
 
 /** What core must say for a use-window: the same phases, and one turn when every phase has one owner. */

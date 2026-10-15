@@ -18,6 +18,7 @@ fn placement_name(k: &str) -> Option<&'static str> {
         "coherency" => "in Unit Coherency",
         "unengaged" => "not within Engagement Range of any enemy units",
         "strategic-reserves" => "in Strategic Reserves",
+        "cult-ambush" => "in Cult Ambush",
         "anywhere" => "anywhere on the battlefield",
         "connected-sections" => "with its sections touching",
         "deployment-zone" => "wholly within your deployment zone",
@@ -71,6 +72,14 @@ pub(crate) fn place_phrase(of: Option<&Value>, ctx: &Ctx) -> String {
             let label = dekebab(&jv(marker));
             let label = strip_suffix_ci(&label, " marker");
             return format!("{} {label} marker", article(&label));
+        }
+        // The enemy deployment zone (a region-ref place): the printed name.
+        if let Some(territory) = nn(o, "territory") {
+            return if jv(territory) == "enemy-deployment-zone" {
+                "your opponent's deployment zone".to_string()
+            } else {
+                dekebab(&jv(territory))
+            };
         }
         if let Some(objective) = nn(o, "objective") {
             let f = obj(Some(objective));

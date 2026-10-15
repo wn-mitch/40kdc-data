@@ -9,7 +9,8 @@ use super::menu::{duration_clauses, menu_block};
 use super::select::*;
 use super::words::*;
 use super::{
-    child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_pick, ty,
+    child, choice_prompt, inline, is_container, items, part_head, part_inline, stance_additive,
+    stance_pick, ty,
 };
 use crate::translate::condition::{condition_lead_in_value, nn, obj, truthy};
 use crate::translate::event_clause;
@@ -51,6 +52,12 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             }
             format!("{indent}-> {}.", capitalize(&part_inline(e, ctx)))
         }
+        // A grant printed with its ability: the holder and name, then the ability one level deeper.
+        "ability-grant" if super::leaf_ability::is_defined_grant(e) => format!(
+            "{indent}{arrow}{}:\n{}",
+            capitalize(&super::leaf_ability::defined_grant_head(e, ctx)),
+            block(&super::leaf_ability::definition_part(e), depth + 1, ctx)
+        ),
         "choice" => {
             let mut out = format!("{indent}{}:\n", capitalize(&choice_prompt(e)));
             out.push_str(
@@ -72,8 +79,8 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         "select-objective" => super::bind::select_objective_block(e, depth, ctx),
         "dice-table" => {
             let mut lines = vec![format!(
-                "{indent}{arrow}Roll one {}:",
-                dice_case(e.get("dice"))
+                "{indent}{arrow}{}:",
+                capitalize(&dice_table_head(e))
             )];
             for o in items(e, "outcomes") {
                 let o = obj(Some(o));
@@ -212,8 +219,9 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 ""
             };
             let mut lines = vec![format!(
-                "{indent}{arrow}{when}, {}{consumable}:",
-                stance_pick(e)
+                "{indent}{arrow}{when}, {}{consumable}{}:",
+                stance_pick(e),
+                stance_additive(e)
             )];
             for o in items(e, "options") {
                 let o = obj(Some(o));

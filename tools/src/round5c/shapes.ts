@@ -7,10 +7,11 @@ import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
 import { getCurrentCoverage } from "./coverage.js";
 import { bumpWorkbenchRevision, withTransaction } from "./db.js";
-import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
+import { checkEntry, entryWithMechanics, resolveCheckedEntity, round5cDataRoot } from "./entries.js";
 import { untiledRuns } from "./leaves.js";
 import { assertReviewer, requireHuman, type Actor } from "./authority.js";
 import { tiledSources } from "./leaf-view.js";
+import { ownAbilityIds } from "./own-abilities.js";
 
 /**
  * Shapes: sources fully described by leaves, grouped by the order of their leaf roles and
@@ -33,6 +34,12 @@ type Member = { id: number; faction_id: string; ability_id: string; name: string
 /** Current sources fully described by trusted leaves, optionally for one faction. */
 function tiledMembers(db: DatabaseSync, factionId: string | null): Member[] {
   return tiledSources(db, { factionId });
+}
+
+/** Each member's compile options: the ability its "this ability" names (own-abilities.ts). */
+function ownOptions(db: DatabaseSync): (member: Member) => { abilityId?: string; name?: string } {
+  const own = ownAbilityIds(db, round5cDataRoot());
+  return (member) => ({ abilityId: own.get(member.id), name: member.name ?? undefined });
 }
 
 type EntryState = { status: string; inputs_hash: string; mechanics_hash: string };
@@ -61,9 +68,10 @@ export type ShapeSummary = { signature: string; members: number; distinct_source
 export function listShapes(db: DatabaseSync, options: { factionId?: string } = {}): { shapes: ShapeSummary[]; tiled: number } {
   const members = tiledMembers(db, options.factionId?.trim() || null);
   const states = entryStates(db);
+  const compileOptions = ownOptions(db);
   const shapes = new Map<string, ShapeSummary & { sources: Set<string> }>();
   for (const member of members) {
-    const compiled = compileLeaves(member.leaves, member.source_text);
+    const compiled = compileLeaves(member.leaves, member.source_text, compileOptions(member));
     const entry = shapes.get(compiled.signature) ?? { signature: compiled.signature, members: 0, distinct_sources: 0, compiles: 0, approved: 0, open: 0, first_error: null, sources: new Set<string>() };
     entry.members += 1;
     entry.sources.add(member.source_hash);
@@ -88,7 +96,7 @@ export type ShapeMember = {
   authored_text: string | null;
   compiled_text: string | null;
   /** The stratagem target the leaves set on the core record, when they set one. */
-  core_target: Record<string, unknown> | null;
+  core_target: Record<string, unknown> | Array<Record<string, unknown>> | null;
   differs: boolean;
   state: "approved" | "rejected" | "stale" | "open";
   errors: string[];
@@ -97,7 +105,7 @@ export type ShapeMember = {
 function render(factionId: string, abilityId: string, compiled: Compiled): { authored: string | null; compiled: string | null; errors: string[]; differs: boolean } {
   let original: Record<string, unknown>;
   try {
-    original = resolveAbilityEntity(round5cDataRoot(), factionId, abilityId).entry;
+    original = resolveCheckedEntity(round5cDataRoot(), factionId, abilityId).entry;
   } catch (error) {
     return { authored: null, compiled: null, errors: [error instanceof Error ? error.message : String(error)], differs: true };
   }
@@ -118,8 +126,9 @@ function render(factionId: string, abilityId: string, compiled: Compiled): { aut
 export function getShape(db: DatabaseSync, signature: string, options: { factionId?: string } = {}): { signature: string; members: ShapeMember[] } {
   const states = entryStates(db);
   const groups = new Map<string, ShapeMember>();
+  const compileOptions = ownOptions(db);
   for (const member of tiledMembers(db, options.factionId?.trim() || null)) {
-    const compiled = compileLeaves(member.leaves, member.source_text);
+    const compiled = compileLeaves(member.leaves, member.source_text, compileOptions(member));
     if (compiled.signature !== signature) continue;
     const state = memberState(states.get(member.id), compilationInputsHash(db, member.id), compiled);
     const shown = render(member.faction_id, member.ability_id, compiled);
@@ -156,6 +165,7 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
   assertReviewer(actor, input.reviewer);
   return withTransaction(db, () => {
     const members = new Map(tiledMembers(db, null).map((member) => [member.id, member]));
+    const compileOptions = ownOptions(db);
     const batchId = `batch_${randomUUID()}`;
     db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'review', ?, ?, ?)")
       .run(batchId, input.reviewer, new Date().toISOString(), JSON.stringify({ action: `shape-${status}`, signature: input.signature }));
@@ -164,7 +174,7 @@ function decide(db: DatabaseSync, value: unknown, status: "approved" | "rejected
     for (const id of input.ids) {
       const source = members.get(id);
       if (!source) throw new ShapeError(409, `Source version ${id} is no longer current and fully described; reload the shape.`);
-      const compiled = compileLeaves(source.leaves, source.source_text);
+      const compiled = compileLeaves(source.leaves, source.source_text, compileOptions(source));
       if (compiled.signature !== input.signature) throw new ShapeError(409, `${source.faction_id}/${source.ability_id} no longer has this shape; reload it.`);
       if (!compiled.ok) throw new ShapeError(422, `${source.faction_id}/${source.ability_id} does not compile: ${compiled.errors.join("; ")}`);
       if (status === "approved") {

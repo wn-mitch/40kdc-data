@@ -5,6 +5,7 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
+import { compileLeaves } from "../src/round5c/compile.js";
 import { currentFamilyVersion, normalizeFingerprintParameters, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { FAMILY_VERSION_MAPPINGS, mapToLatest, upgradeFamilyVersions } from "../src/round5c/family-versions.js";
@@ -90,19 +91,40 @@ describe("Round 5C family version registry", () => {
     expect(mapToLatest("attack", 1, { direction: "makes", unit: "bearers-unit", attack_type: "melee" })?.parameters).toEqual({ direction: "makes", unit: "bearers-unit", attack_type: "melee" });
     expect(mapToLatest("optional-use", 1, { who: "you" })?.parameters).toEqual({ who: "you" });
     expect(mapToLatest("characteristic-modifier", 2, { subject: "attack", characteristics: ["S"], operation: "add", value: 1, weapon_type: "all" })?.parameters.subject).toBe("attack");
-    expect(mapToLatest("feel-no-pain", 1, { subject: "this-unit", threshold: 6, against: "all" })).toEqual({ family: "feel-no-pain", version: 2, parameters: { subject: "this-unit", threshold: 6, against: "all" } });
+    expect(mapToLatest("feel-no-pain", 1, { subject: "this-unit", threshold: 6, against: "all" })).toEqual({ family: "feel-no-pain", version: 4, parameters: { subject: "this-unit", threshold: 6, against: "all" } });
   });
 
   it("moves every event kind to version 6, and an old attack event through attack to its current version", () => {
-    expect(mapToLatest("event", 5, { kind: "enemy-has-shot" })).toEqual({ family: "event", version: 9, parameters: { kind: "enemy-has-shot" } });
-    expect(mapToLatest("event", 4, { kind: "phase-end", phase: "fight", turn: "your" })).toEqual({ family: "event", version: 9, parameters: { kind: "phase-end", phase: "fight", turn: "your" } });
-    expect(mapToLatest("event", 3, { kind: "attack-made" })).toEqual({ family: "attack", version: 4, parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } });
+    expect(mapToLatest("event", 5, { kind: "enemy-has-shot" })).toEqual({ family: "event", version: currentFamilyVersion("event"), parameters: { kind: "enemy-has-shot" } });
+    expect(mapToLatest("event", 4, { kind: "phase-end", phase: "fight", turn: "your" })).toEqual({ family: "event", version: currentFamilyVersion("event"), parameters: { kind: "phase-end", phase: "fight", turn: "your" } });
+    expect(mapToLatest("event", 3, { kind: "attack-made" })).toEqual({ family: "attack", version: currentFamilyVersion("attack"), parameters: { direction: "makes", unit: "that-unit", attack_type: "any" } });
     expect(normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 6)).toEqual({ kind: "this-model-destroyed" });
     expect(() => normalizeFingerprintParameters("event", { kind: "this-model-destroyed" }, 5)).toThrow(/event.kind/u);
   });
 });
 
 describe("Round 5C family version upgrade", () => {
+  it("preserves reviewed ownership when a bound limit moves to the frequency-qualifier version", () => {
+    const db = fixture([{ ability_id: "sentry", raw_text: "Once per turn, this sentry holds position." }]);
+    try {
+      legacyLeaf(db, "sentry", "Once per turn", "usage-limit", 2, { frequency: "once-per-turn", per: "model" });
+      upgradeFamilyVersions(db);
+      const row = db.prepare(`
+        SELECT fingerprints.family_version, fingerprints.parameters_json FROM annotations
+        JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+        WHERE annotations.status = 'active' AND fingerprints.family_id = 'usage-limit'
+      `).get() as { family_version: number; parameters_json: string };
+      const result = compileLeaves([
+        { role: "RESTRICTION", family_id: "usage-limit", family_version: row.family_version, parameters: JSON.parse(row.parameters_json), start_byte: 0 },
+        { role: "EFFECT", family_id: "fights-first", family_version: 2, parameters: { subject: "this-unit" }, start_byte: 20 },
+      ]);
+      if (!result.ok) throw new Error(result.errors.join("; "));
+      expect(result.mechanics.usage).toEqual({ frequency: "once-per-turn", per: "model" });
+    } finally {
+      db.close();
+    }
+  });
+
   it("merges the bearer and this-model meanings of one span into one annotation and one decided surface", () => {
     const db = fixture([
       { ability_id: "ward", raw_text: `${TARGETED}, subtract 1 from the Hit roll.` },
@@ -120,7 +142,7 @@ describe("Round 5C family version upgrade", () => {
 
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 3, repointed_surfaces: 1, unmapped: [] });
-      const successor = validateFingerprint(db, "attack", { direction: "targeted", unit: "this-model", attack_type: "any" }, 4);
+      const successor = validateFingerprint(db, "attack", { direction: "targeted", unit: "this-model", attack_type: "any" }, currentFamilyVersion("attack"));
       const active = db.prepare("SELECT span_id, fingerprint_id FROM annotations WHERE status = 'active' ORDER BY span_id").all() as Array<{ span_id: number; fingerprint_id: string }>;
       // One annotation per span, both on the one current fingerprint: no duplicate for the merged span.
       expect(active).toHaveLength(2);
@@ -145,7 +167,7 @@ describe("Round 5C family version upgrade", () => {
       judge.run("cand-bearer-only", bearer.fingerprint, hash);
 
       const report = upgradeFamilyVersions(db);
-      const successor = validateFingerprint(db, "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }, 2);
+      const successor = validateFingerprint(db, "feel-no-pain", { subject: "this-model", threshold: 5, against: "all" }, currentFamilyVersion("feel-no-pain"));
       expect(report).toMatchObject({ repointed_judgments: 2, judgment_conflicts: 1 });
       const onSuccessor = db.prepare("SELECT candidate_id FROM candidate_judgments WHERE queried_fingerprint_id = ? ORDER BY candidate_id").all(successor);
       expect(onSuccessor).toEqual([{ candidate_id: "cand-bearer-only" }, { candidate_id: "cand-shared" }]);
@@ -176,15 +198,15 @@ describe("Round 5C family version upgrade", () => {
       const retiredBefore = pieces(retired);
 
       const report = upgradeFamilyVersions(db);
-      // reroll also migrates now (its version 2 adds weapon_type, defaulting old leaves to "all").
+      // reroll also migrates now (2 adds weapon_type, defaulting old leaves to "all"; 3 adds the optional rolls list, 4 adds each).
       expect(report).toMatchObject({ migrated_proposal_pieces: 3, unmapped_proposal_pieces: 1 });
       expect(pieces(open)).toEqual([
-        piece("attack", 4, "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
+        piece("attack", currentFamilyVersion("attack"), "EVENT", { direction: "targeted", unit: "this-model", attack_type: "any" }),
         { text: "rest", family_id: null },
-        piece("reroll", 2, "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
+        piece("reroll", currentFamilyVersion("reroll"), "EFFECT", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);
-      // weapon-ability-grant now continues 3->4 too (version 4 only adds optional filters/flags; identity map).
-      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", 4, "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
+      // weapon-ability-grant continues 3->4->5 too (4 adds optional filters/flags, 5 makes the keyword optional; identity maps).
+      expect(pieces(dismissed)).toEqual([piece("weapon-ability-grant", currentFamilyVersion("weapon-ability-grant"), "EFFECT", { subject: "this-model", keyword: "Lethal Hits", weapon_type: "all" })]);
       // A phase start that never named its phase has no current meaning; it is left, not guessed.
       expect(pieces(retired)).toEqual(retiredBefore);
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_proposal_pieces: 0 });

@@ -7,7 +7,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { canonicalize, hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
-import { familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, validateFingerprint } from "../src/round5c/contracts.js";
 import { dropUncoveredRegions, importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna } from "../src/round5c/proposal.js";
 import { lunaStdinEnvelope } from "../src/round5c/luna-schema.js";
 import { getCurrentCoverage } from "../src/round5c/coverage.js";
@@ -136,7 +136,7 @@ function existingRerollSpan(ability: RequestAbility) {
     role: "EFFECT",
     status: "EXISTING",
     family_id: "reroll",
-    family_version: 2,
+    family_version: currentFamilyVersion("reroll"),
     parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
@@ -476,14 +476,14 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: 7 },
-        2,
+        currentFamilyVersion("characteristic-set"),
         "The bearer's M characteristic is 7",
       )).toMatch(/^fp_/);
       expect(validateFingerprint(
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "Sv", value: 3 },
-        2,
+        currentFamilyVersion("characteristic-set"),
         "its Sv characteristic is 3",
       )).toMatch(/^fp_/);
     } finally {
@@ -498,7 +498,7 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: { source: "D6" } },
-        2,
+        currentFamilyVersion("characteristic-set"),
         "Set the bearer's M characteristic to D6",
       )).toMatch(/^fp_/);
       expect(() => normalizeFingerprintParameters("characteristic-set", {
@@ -515,7 +515,7 @@ describe("Round 5C characteristic-set family", () => {
         value.db,
         "characteristic-set",
         { subject: "this-model", characteristic: "M", value: { source: "D3" } },
-        2,
+        4,
         "Set the bearer's M characteristic to D6",
       )).toThrow(/exact source span/i);
     } finally {
@@ -540,7 +540,7 @@ describe("Round 5C characteristic-set family", () => {
           role: "COMBINATOR",
           status: "EXISTING",
           family_id: "instead",
-          family_version: 1,
+          family_version: currentFamilyVersion("instead"),
           parameters: {},
         },
         {
@@ -548,8 +548,8 @@ describe("Round 5C characteristic-set family", () => {
           role: "RESTRICTION",
           status: "EXISTING",
           family_id: "usage-limit",
-          family_version: 2,
-          parameters: { frequency: "once-per-battle", per: "any" },
+          family_version: currentFamilyVersion("usage-limit"),
+          parameters: { frequency: "once-per-battle" },
         },
       ];
 
@@ -615,8 +615,8 @@ describe("Round 5C turn and faction leaves", () => {
       for (const turn of ["battle-round", "player-turn", "opponent-turn"]) {
         expect(validateFingerprint(value.db, "turn-start", { turn }, 1)).toMatch(/^fp_/);
       }
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, source)).toMatch(/^fp_/);
-      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 2, source)).toThrow(/exact source span/i);
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, source)).toMatch(/^fp_/);
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Other Guard" } }, 3, source)).toThrow(/exact source span/i);
       expect(() => normalizeFingerprintParameters("army-faction", { faction: "Example Guard" })).toThrow(/source-qualified/i);
     } finally {
       value.db.close();
@@ -628,16 +628,16 @@ describe("Round 5C turn and faction leaves", () => {
     const value = fixture([{ abilityId: "reference-rule", source }]);
     try {
       // Elsewhere in the ability's own source text: accepted even though it's outside the span.
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 2, "gain a point", {
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "Example Guard" } }, 3, "gain a point", {
         wholeSourceText: source,
       })).toMatch(/^fp_/);
       // A same-response binding reference: accepted even though it names no literal quote at all.
-      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "that faction" } }, 2, "gain a point", {
+      expect(validateFingerprint(value.db, "army-faction", { faction: { source: "that faction" } }, 3, "gain a point", {
         wholeSourceText: source,
         bindingSurfaces: new Set(["that faction"]),
       })).toMatch(/^fp_/);
       // Found nowhere — not the span, not the ability's own text, not a binding — still rejected.
-      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Nonexistent Guard" } }, 2, "gain a point", {
+      expect(() => validateFingerprint(value.db, "army-faction", { faction: { source: "Nonexistent Guard" } }, 3, "gain a point", {
         wholeSourceText: source,
         bindingSurfaces: new Set(["that faction"]),
       })).toThrow(/must occur in the exact source span/i);

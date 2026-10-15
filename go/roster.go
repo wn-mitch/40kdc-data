@@ -1,5 +1,10 @@
 package wh40kdc
 
+import (
+	"sort"
+	"strings"
+)
+
 // Whole-army roster legality: the per-unit loadout check (loadout.go) layered
 // with the nine army-construction dimensions. Go mirror of
 // tools/src/data/roster-resolve.ts (validateRosterCore / NormRoster).
@@ -182,6 +187,25 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			errV("enhancement-on-non-character", enhID, idx)
 		}
 		kws := keywordSet(view, su.keywordOverrides)
+		// 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
+		// (Upgrades included). Mirror of TS enhancement-on-epic-hero.
+		if _, epic := kws["Epic Hero"]; epic || getStr(view.Raw, "role") == "epic-hero" {
+			errV("enhancement-on-epic-hero", enhID, idx)
+		}
+		// A unit whose every model is excluded_from_enhancements has no model that
+		// can carry the Enhancement. Mirror of TS enhancement-on-excluded-model.
+		if rows, _ := ds.unitCompositionOf(view.Raw); len(rows) > 0 {
+			allExcluded := true
+			for _, rAny := range rows {
+				if r, ok := asMap(rAny); !ok || r["excluded_from_enhancements"] != true {
+					allExcluded = false
+					break
+				}
+			}
+			if allExcluded {
+				errV("enhancement-on-excluded-model", enhID, idx)
+			}
+		}
 		eligible := true
 		if rawGroups, present := enh["keyword_restriction_groups"]; present && rawGroups != nil {
 			eligible = false
@@ -270,6 +294,7 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 	ordinals := map[string]int{}
+	unitCosts := make([]int, len(spec.units))
 	total := 0
 	for idx, su := range spec.units {
 		view := views[idx]
@@ -278,13 +303,15 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		ord := ordinals[su.unitID] + 1
 		ordinals[su.unitID] = ord
-		total += hostUnitPoints(view.Raw, su.modelCount, ord, rosterFaction)
-		total += wargearPoints(view.Raw, su.counts)
+		cost := armyUnitPoints(view.Raw, su.modelCount, ord, rosterFaction, spec.detachmentIDs)
+		cost += wargearPoints(view.Raw, su.counts)
 		if su.enhancementID != "" {
 			if eAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
-				total += asInt(eAny.(map[string]any)["cost"])
+				cost += asInt(eAny.(map[string]any)["cost"])
 			}
 		}
+		unitCosts[idx] = cost
+		total += cost
 	}
 	if limit, ok := pointsLimitForBattleSize(spec.battleSize); ok && total > limit {
 		errV("points-over-limit", "roster", -1)
@@ -402,6 +429,263 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		errV("no-warlord", "roster", -1)
 	} else if warlords > 1 {
 		errV("multiple-warlords", "roster", -1)
+	}
+
+	// --- Detachment Warlord requirement (e.g. Devoted of Ynnead). -------------
+	// Checked only when a Warlord is chosen; a missing one is no-warlord above.
+	for _, d := range detachments {
+		mandated := map[string]bool{}
+		for _, m := range getList(d, "mandatory_warlord_datasheet_ids") {
+			if id, ok := m.(string); ok {
+				mandated[id] = true
+			}
+		}
+		if len(mandated) == 0 || warlords == 0 {
+			continue
+		}
+		satisfied := false
+		for _, su := range spec.units {
+			if su.isWarlord && mandated[su.unitID] {
+				satisfied = true
+				break
+			}
+		}
+		if !satisfied {
+			errV("warlord-not-mandated", getStr(d, "id"), -1)
+		}
+	}
+
+	// --- Detachment datasheet exclusions (e.g. Shadow Legion). ----------------
+	for _, d := range detachments {
+		excluded := map[string]bool{}
+		for _, x := range getList(d, "excluded_datasheet_ids") {
+			if id, ok := x.(string); ok {
+				excluded[id] = true
+			}
+		}
+		for idx, su := range spec.units {
+			if excluded[su.unitID] {
+				errV("detachment-excluded-datasheet", su.unitID, idx)
+			}
+		}
+	}
+
+	// --- Unit limit per datasheet (11e Select Battle Size). Mirror of TS. -----
+	// incursion 2 / strike-force 3, doubled for BATTLELINE (incl. detachment-
+	// granted) and DEDICATED TRANSPORT units; every EPIC HERO is limited to 1.
+	unitLimit, unitLimitOk := unitLimitForBattleSize(spec.battleSize)
+	type copyCount struct{ count, limit int }
+	copies := map[string]*copyCount{}
+	var copyOrder []string
+	for idx, v := range views {
+		if v == nil {
+			continue
+		}
+		kws := keywordSet(v, spec.units[idx].keywordOverrides)
+		role := getStr(v.Raw, "role")
+		_, epic := kws["Epic Hero"]
+		_, battleline := kws["Battleline"]
+		_, transport := kws["Dedicated Transport"]
+		limit, ok := unitLimit, unitLimitOk
+		if role == "epic-hero" || epic {
+			limit, ok = 1, true
+		} else if ok && (role == "battleline" || role == "dedicated-transport" || battleline || transport) {
+			limit *= 2
+		}
+		if !ok {
+			continue
+		}
+		id := v.ID()
+		c, seen := copies[id]
+		if !seen {
+			c = &copyCount{0, limit}
+			copies[id] = c
+			copyOrder = append(copyOrder, id)
+		}
+		c.count++
+		if limit > c.limit {
+			c.limit = limit
+		}
+	}
+	for _, id := range copyOrder {
+		if c := copies[id]; c.count > c.limit {
+			errV("unit-limit-exceeded", id, -1)
+		}
+	}
+
+	// --- Enhancement limit (incursion 2, strike-force 4), distinct choices. ---
+	if enhLimit, ok := enhancementLimitForBattleSize(spec.battleSize); ok {
+		chosen := map[string]bool{}
+		for _, su := range spec.units {
+			if su.enhancementID != "" {
+				chosen[su.enhancementID] = true
+			}
+		}
+		if len(chosen) > enhLimit {
+			errV("enhancement-limit-exceeded", "roster", -1)
+		}
+	}
+
+	// --- Army-wide keyword caps (faction keyword_limits). Mirror of TS. -------
+	sortedStrs := func(xs []string) []string {
+		out := append([]string(nil), xs...)
+		sort.Strings(out)
+		return out
+	}
+	sameStrs := func(a, b []string) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i := range a {
+			if a[i] != b[i] {
+				return false
+			}
+		}
+		return true
+	}
+	for _, klAny := range getList(rosterFaction, "keyword_limits") {
+		kl, ok := asMap(klAny)
+		if !ok {
+			continue
+		}
+		keys := sortedStrs(getStrList(kl, "keywords"))
+		limit := asInt(kl["max"])
+		overridden := false
+		for _, d := range detachments {
+			for _, oAny := range getList(d, "keyword_limit_overrides") {
+				o, ok := asMap(oAny)
+				if !ok || !sameStrs(sortedStrs(getStrList(o, "keywords")), keys) {
+					continue
+				}
+				om := asInt(o["max"])
+				if !overridden || om > limit {
+					limit = om
+				}
+				overridden = true
+			}
+		}
+		exempt := getStrList(kl, "exempt_faction_keywords")
+		var counted []map[string]struct{}
+		for idx, v := range views {
+			if v == nil {
+				continue
+			}
+			isExempt := false
+			for _, fk := range getStrList(v.Raw, "faction_keywords") {
+				if contains(exempt, fk) {
+					isExempt = true
+					break
+				}
+			}
+			if !isExempt {
+				counted = append(counted, keywordSet(v, spec.units[idx].keywordOverrides))
+			}
+		}
+		// "units": units carrying every keyword. "alternatives": distinct
+		// keywords present on any unit (Farsight / Ethereal).
+		count := 0
+		if getStr(kl, "mode") == "alternatives" {
+			for _, k := range keys {
+				for _, kws := range counted {
+					if _, has := kws[k]; has {
+						count++
+						break
+					}
+				}
+			}
+		} else {
+			for _, kws := range counted {
+				all := true
+				for _, k := range keys {
+					if _, has := kws[k]; !has {
+						all = false
+						break
+					}
+				}
+				if all {
+					count++
+				}
+			}
+		}
+		if count > limit {
+			errV("keyword-limit-exceeded", strings.Join(keys, "+"), -1)
+		}
+	}
+
+	// --- Exclusive allied pools (the army faction's own pool-only units). -----
+	// Mirror of TS: the rule must be offered, and its points cap and
+	// Warlord/Enhancement locks apply; a selected detachment's mandatory or
+	// granted Warlord datasheets lift the Warlord lock.
+	detachmentWarlords := map[string]bool{}
+	for _, d := range detachments {
+		for _, id := range getStrList(d, "mandatory_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+		for _, id := range getStrList(d, "granted_warlord_datasheet_ids") {
+			detachmentWarlords[id] = true
+		}
+	}
+	if spec.factionID != "" {
+		for _, ruleAny := range ds.AlliedRules.All() {
+			rule, ok := asMap(ruleAny)
+			if !ok || rule["exclusive"] != true || getStr(rule, "source_faction_id") != spec.factionID {
+				continue
+			}
+			pool := getStrList(rule, "source_datasheet_ids")
+			var members []int
+			for idx, su := range spec.units {
+				if views[idx] != nil && getStr(views[idx].Raw, "faction_id") == spec.factionID && contains(pool, su.unitID) {
+					members = append(members, idx)
+				}
+			}
+			if len(members) == 0 {
+				continue
+			}
+			armyAny := getStrList(rule, "army_keywords_any")
+			armyGate := len(armyAny) == 0
+			for _, k := range armyAny {
+				if _, has := armyKeywordSet[k]; has {
+					armyGate = true
+					break
+				}
+			}
+			detAny := getStrList(rule, "detachment_ids")
+			detGate := len(detAny) == 0
+			for _, id := range detAny {
+				if contains(spec.detachmentIDs, id) {
+					detGate = true
+					break
+				}
+			}
+			if !armyGate || !detGate {
+				for _, idx := range members {
+					errV("ally-pool-not-offered", spec.units[idx].unitID, idx)
+				}
+			}
+			for _, pAny := range getList(rule, "points_limits") {
+				p, ok := asMap(pAny)
+				if !ok || getStr(p, "battle_size") != spec.battleSize {
+					continue
+				}
+				spent := 0
+				for _, idx := range members {
+					spent += unitCosts[idx]
+				}
+				if spent > asInt(p["max_points"]) {
+					errV("ally-points-over-limit", getStr(rule, "id"), -1)
+				}
+				break
+			}
+			for _, idx := range members {
+				su := spec.units[idx]
+				if rule["cannot_be_warlord"] == true && su.isWarlord && !detachmentWarlords[su.unitID] {
+					errV("ally-cannot-be-warlord", su.unitID, idx)
+				}
+				if rule["cannot_take_enhancements"] == true && su.enhancementID != "" {
+					errV("ally-cannot-take-enhancements", su.unitID, idx)
+				}
+			}
+		}
 	}
 
 	// --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------

@@ -1,0 +1,155 @@
+{
+ "id": 10074,
+ "source_text": "xx xxxx xxxxxxxxxxxx xxxxxxxx xxxxx, wwww wwww ww xxxxx xxxx ww xxx xx or xxxx x xxxxxx, xxxxxxx xx xxxx xxxx xxxx xxxxxx 8\" xx xxxx xxxxx, xxx xxxxx xxxxxxxx xxxxxx xx xxx xxxxxxxxx.",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "phase-window",
+   "family_version": 2,
+   "parameters": {
+    "phase": "movement",
+    "turn": "opponent"
+   },
+   "start_byte": 0,
+   "end_byte": 35,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy"
+   },
+   "start_byte": 50,
+   "end_byte": 60,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "set-up"
+   },
+   "start_byte": 64,
+   "end_byte": 70,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "move-ended",
+    "move_types": [
+     "normal",
+     "advance",
+     "fall-back"
+    ]
+   },
+   "start_byte": 74,
+   "end_byte": 114,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-position",
+   "family_version": 14,
+   "parameters": {
+    "kind": "within",
+    "inches": 8,
+    "of": "this-model",
+    "subject": "event-subject",
+    "negated": false
+   },
+   "start_byte": 115,
+   "end_byte": 138,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "eligibility-permission",
+   "family_version": 4,
+   "parameters": {
+    "subject": "this-unit",
+    "activity": "disembark",
+    "allow": true
+   },
+   "start_byte": 140,
+   "end_byte": 182,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null,
+ "baseline_mechanics": {
+  "effect": {
+   "type": "conditional",
+   "condition": {
+    "operator": "and",
+    "operands": [
+     {
+      "operator": "and",
+      "operands": [
+       {
+        "type": "phase-is",
+        "parameters": {
+         "phase": "movement"
+        }
+       },
+       {
+        "type": "player-turn-is",
+        "parameters": {
+         "turn": "opponent-turn"
+        }
+       }
+      ]
+     },
+     {
+      "type": "within",
+      "parameters": {
+       "subject": "event-subject",
+       "of": "this-model",
+       "range": {
+        "inches": 8
+       }
+      }
+     }
+    ]
+   },
+   "effect": {
+    "type": "permission",
+    "target": "this-unit",
+    "modifier": {
+     "activity": "disembark",
+     "allow": true
+    }
+   }
+  },
+  "scope": {
+   "duration": "phase"
+  },
+  "behavior": "reactive",
+  "trigger": [
+   {
+    "event": "set-up",
+    "subject": {
+     "owner": "enemy"
+    }
+   },
+   {
+    "event": "move-ended",
+    "filter": {
+     "move_types": [
+      "normal",
+      "advance",
+      "fall-back"
+     ]
+    },
+    "subject": {
+     "owner": "enemy"
+    }
+   }
+  ]
+ }
+}

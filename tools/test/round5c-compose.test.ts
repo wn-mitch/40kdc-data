@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, shapeSignature, type CompileLeaf } from "../src/round5c/compile.js";
-import { currentFamilyVersion } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 
 // Fabricated wording only. The compiler reads nothing but the punctuation and joining words
@@ -142,7 +142,7 @@ describe("Round 5C composition rules", () => {
     const result = compiled(text, [
       ["Whenever a model here swings", "EVENT", "attack", attack("makes", "this-unit", "melee")],
       ["re-roll a one", "EFFECT", "reroll", { roll: "hit", subset: "ones" }],
-      ["If it charged this turn", "CONDITION", "unit-activity", { activity: "charged-this-turn", subject: "this-unit", negated: false }],
+      ["If it charged this turn", "CONDITION", "unit-activity", { activities: ["charged-this-turn"], subject: "this-unit", negated: false }],
       ["re-roll the swing", "EFFECT", "reroll", { roll: "hit", subset: "all" }],
       ["instead", "COMBINATOR", "instead", {}],
     ]);
@@ -177,6 +177,173 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.trigger).toEqual({ event: "move-ended", filter: { move_types: ["charge"] } });
   });
 
+  it("lets a selection pick only a unit those attacks hit", () => {
+    const text = "After this model has shot, pick one enemy unit hit by one or more of those attacks. That unit takes 1 wound.";
+    const pieces: Piece[] = [
+      ["After this model has shot", "EVENT", "event", { kind: "after-shooting" }],
+      ["pick one enemy unit", "EVENT", "select-unit", { scope: "enemy", distance: "any", visible: false }],
+      ["hit by one or more of those attacks", "CONDITION", "hit-by-attacks", { subject: "selected-unit" }],
+      ["That unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }],
+    ];
+    // The hit is the selection's eligibility, not a gate on the ability: no hit, no unit to select.
+    expect(compiled(text, pieces).mechanics.effect).toEqual({
+      type: "select-units",
+      selector: { owner: "enemy", count: 1, eligibility: {
+        type: "happened", parameters: { event: "after-roll", subject: "event-subject", object: "this-unit", filter: { roll: "hit", result: "success" }, window: "event" },
+      } },
+      effect: { type: "mortal-wounds", target: "selected-unit", modifier: { count: 1 } },
+    });
+  });
+
+  describe("weapon-ability keyword leaves under a keyword-less frame", () => {
+    const frame = (phrase: string, weapon_type = "all"): Piece => [phrase, "EFFECT", "weapon-ability-grant", { subject: "this-unit", weapon_type }];
+    const keyword = (name: string): Piece => [`[${name}]`, "EFFECT", "weapon-ability-keyword", { keyword: name }];
+    const grant = (abilities: string[], weapon_type?: string) => ({
+      type: "weapon-ability-grant", target: "this-unit", modifier: { abilities, ...(weapon_type ? { weapon_type } : {}) },
+    });
+
+    it("grants every keyword joined by and", () => {
+      const text = "Ranged guns carried by this unit's models gain [Lethal Hits] and [Sustained Hits 1].";
+      expect(compiled(text, [frame("Ranged guns carried by this unit's models gain", "ranged"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual(grant(["Lethal Hits", "Sustained Hits 1"], "ranged"));
+    });
+
+    it("offers one keyword when they are joined by or, even across sentences", () => {
+      const text = "This unit's attacks gain: [Lethal Hits]. Or: [Sustained Hits 1].";
+      expect(compiled(text, [frame("This unit's attacks gain"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+    });
+
+    it("offers one bulleted keyword, and lets a later frame take the selected one", () => {
+      const bullets = "Guns carried by this unit's models gain one of these:\n■ [Lethal Hits]\n■ [Sustained Hits 1]";
+      expect(compiled(bullets, [frame("Guns carried by this unit's models gain"), keyword("Lethal Hits"), keyword("Sustained Hits 1")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+      const selected = "Pick the [Lethal Hits] or [Sustained Hits 1] ability. Guns carried by this unit's models gain the picked ability.";
+      expect(compiled(selected, [keyword("Lethal Hits"), keyword("Sustained Hits 1"), frame("Guns carried by this unit's models gain the picked ability")]).mechanics.effect)
+        .toEqual({ type: "choice", options: [grant(["Lethal Hits"]), grant(["Sustained Hits 1"])] });
+    });
+
+    it("refuses a keyword with no frame, and a frame with no keyword", () => {
+      expect(failures("Gain [Lethal Hits].", [keyword("Lethal Hits")])[0]).toMatch(/no weapon-ability-grant frame/u);
+      expect(failures("Guns carried by this unit's models gain it.", [frame("Guns carried by this unit's models gain it")])[0]).toMatch(/needs weapon-ability-keyword leaves/u);
+    });
+  });
+
+  describe("neutral attack-property scopes", () => {
+    const scope = (phrase: string, weapon_type: string, subject = "this-unit"): Piece =>
+      [phrase, "CONDITION", "weapon-property-scope", { subject, weapon_type }];
+    const stat = (phrase: string, characteristic: string, value: number, bindings = {}): Piece =>
+      [phrase, "EFFECT", "characteristic-modifier", { characteristics: [characteristic], operation: "improve", value, ...bindings }];
+    const keyword: Piece = ["[Lethal Hits]", "EFFECT", "weapon-ability-keyword", { keyword: "Lethal Hits" }];
+
+    it.each(["all", "melee", "ranged"])("binds a separate AP operand to the explicit %s scope", (weaponType) => {
+      const text = "Scoped properties: +2 AP.";
+      expect(compiled(text, [scope("Scoped properties", weaponType), stat("+2 AP", "AP", 2)]).mechanics.effect).toEqual({
+        type: "stat-modifier", target: "this-unit",
+        modifier: { stat: "AP", operation: "improve", value: 2, ...(weaponType === "all" ? {} : { weapon_type: weaponType }) },
+      });
+    });
+
+    it("binds a keyword and stat operand without changing their recipient or source order", () => {
+      const text = "Scoped properties: +2 AP and [Lethal Hits].";
+      expect(compiled(text, [scope("Scoped properties", "ranged", "this-model"), stat("+2 AP", "AP", 2), keyword]).mechanics.effect).toEqual({
+        type: "sequence", steps: [
+          { type: "stat-modifier", target: "this-model", modifier: { stat: "AP", operation: "improve", value: 2, weapon_type: "ranged" } },
+          { type: "weapon-ability-grant", target: "this-model", modifier: { abilities: ["Lethal Hits"], weapon_type: "ranged" } },
+        ],
+      });
+    });
+
+    it("retains keyword choices across sentence boundaries", () => {
+      const text = "Scoped properties: [Lethal Hits]. Or [Sustained Hits 1].";
+      expect(compiled(text, [
+        scope("Scoped properties", "melee"), keyword,
+        ["[Sustained Hits 1]", "EFFECT", "weapon-ability-keyword", { keyword: "Sustained Hits 1" }],
+      ]).mechanics.effect).toEqual({ type: "choice", options: [
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Lethal Hits"], weapon_type: "melee" } },
+        { type: "weapon-ability-grant", target: "this-unit", modifier: { abilities: ["Sustained Hits 1"], weapon_type: "melee" } },
+      ] });
+    });
+
+    it("does not carry stat scope into a different sentence or silently replace reviewed bindings", () => {
+      expect(failures("Scoped properties. +2 AP.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2)]))
+        .toContain("An attack-property scope needs a following weapon property in its clause.");
+      for (const bindings of [{ subject: "this-model" }, { weapon_type: "melee" }]) {
+        expect(failures("Scoped properties: +2 AP.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2, bindings)])[0])
+          .toMatch(/conflicts with its reviewed attack-property scope/u);
+      }
+    });
+
+    it("does not turn an attack scope into a model characteristic buff or an implicit mixed choice", () => {
+      expect(failures("Scoped properties: +2 T.", [scope("Scoped properties", "ranged"), stat("+2 T", "T", 2)]))
+        .toContain("An attack-property scope cannot modify a model characteristic.");
+      expect(failures("Scoped properties: +2 AP or [Lethal Hits].", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2), keyword]))
+        .toContain("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+      expect(failures("Scoped properties: +2 AP or +3 A.", [scope("Scoped properties", "ranged"), stat("+2 AP", "AP", 2), stat("+3 A", "A", 3)]))
+        .toContain("An attack-property choice containing stat adjustments needs an explicit composition relation.");
+    });
+  });
+
+  describe("unit-filter leaves naming who an aura reaches or a selection may pick", () => {
+    const filter = (phrase: string, parameters: Record<string, unknown>): Piece => [phrase, "CONDITION", "unit-filter", parameters];
+    const wound: Piece = ["that unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "that-unit", count: "1" }];
+
+    it("gives a range-only aura its side and keywords", () => {
+      const text = "While a friendly INFANTRY unit is within 6\" of this unit, add 1 to the hit roll.";
+      const result = compiled(text, [
+        filter("friendly INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"] }),
+        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }],
+        ["add 1 to the hit roll", "EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ]);
+      expect(result.mechanics.effect).toMatchObject({ type: "aura", target: "friendly-within-aura", modifier: { range: 6, eligible: { required_keywords: ["INFANTRY"] } } });
+    });
+
+    it("lets a scope-less selection pick by keyword, any one of them through its eligibility", () => {
+      const text = "Select one friendly INFANTRY or VEHICLE unit: that unit takes 1 wound.";
+      const result = compiled(text, [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }],
+        filter("friendly INFANTRY or VEHICLE unit", { side: "friendly", any_keywords: ["INFANTRY", "VEHICLE"] }), wound,
+      ]);
+      expect(result.mechanics.effect).toMatchObject({ type: "select-units", selector: {
+        owner: "friendly", count: 1, eligibility: { type: "has-keyword", parameters: { any_of: ["INFANTRY", "VEHICLE"] } },
+      } });
+      expect((result.mechanics.effect as { selector: Record<string, unknown> }).selector.keywords).toBeUndefined();
+      // Other than this unit, and unengaged: both are checks on the candidate.
+      const other = compiled("Select one other friendly unengaged INFANTRY unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }],
+        filter("other friendly unengaged INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"], states: ["unengaged"], other: true }), wound,
+      ]);
+      expect(other.mechanics.effect).toMatchObject({ selector: { keywords: ["INFANTRY"], eligibility: { operator: "and", operands: [
+        { operator: "not", operands: [{ type: "unit-state", parameters: { state: "engaged" } }] },
+        { operator: "not", operands: [{ type: "same-unit", parameters: { as: "ability-unit" } }] },
+      ] } } });
+      const all = compiled("Select one enemy MONSTER unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }], filter("enemy MONSTER unit", { side: "enemy", keywords: ["MONSTER"] }), wound,
+      ]);
+      expect(all.mechanics.effect).toMatchObject({ selector: { owner: "enemy", keywords: ["MONSTER"] } });
+      // The same range wording after a selection is its distance, not an aura.
+      const near = compiled("Select one enemy MONSTER unit within 6\" of this unit: that unit takes 1 wound.", [
+        ["Select one", "EVENT", "select-unit", { distance: "any", visible: false }], filter("enemy MONSTER unit", { side: "enemy", keywords: ["MONSTER"] }),
+        ["within 6\" of this unit", "CONDITION", "aura-range", { inches: 6 }], wound,
+      ]);
+      expect(near.mechanics.effect).toMatchObject({ type: "select-units", selector: { owner: "enemy", keywords: ["MONSTER"], within_inches: 6 } });
+    });
+
+    it("refuses a filter with nothing to name, and reaches units wholly within, in a state, with any one keyword", () => {
+      expect(failures("A friendly INFANTRY unit: that unit takes 1 wound.", [filter("friendly INFANTRY unit", { side: "friendly", keywords: ["INFANTRY"] }), wound])[0])
+        .toMatch(/needs a select-unit or attack right before it/u);
+      const aura = compiled("While a friendly battle-shocked INFANTRY or VEHICLE unit is wholly within 6\" of this unit, add 1 to the hit roll.", [
+        filter("friendly battle-shocked INFANTRY or VEHICLE unit", { side: "friendly", any_keywords: ["INFANTRY", "VEHICLE"], states: ["battle-shocked"] }),
+        ["wholly within 6\" of this unit", "CONDITION", "aura-range", { inches: 6, wholly: true }],
+        ["add 1 to the hit roll", "EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }],
+      ]);
+      expect(aura.mechanics.effect).toMatchObject({ type: "aura", modifier: { wholly: true, eligible: { states: ["battle-shocked"], any_keywords: ["INFANTRY", "VEHICLE"] } } });
+      expect(aura.rendered).toMatch(/a friendly battle-shocked INFANTRY or VEHICLE unit is wholly within 6"/u);
+      // Keywords keep accented capitals, as some factions print them.
+      expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", keywords: ["brôkhyr"] }, 1)).toEqual({ side: "friendly", keywords: ["BRÔKHYR"] });
+    });
+  });
+
   it("gates one band that reaches the top face with dice-gated", () => {
     const result = compiled("Roll one D6: on a 4+, this unit takes 1 wound.", [
       ["Roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
@@ -186,11 +353,27 @@ describe("Round 5C composition rules", () => {
     expect(result.mechanics.effect).toEqual({ type: "dice-gated", dice: "D6", threshold: 4, comparison: "gte", on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
   });
 
+  it.each(["D3", "D6"])("binds a minimum-only branch after an exact result on %s", (dice) => {
+    const text = `Roll one ${dice}: on a 1, this unit takes 1 wound; on a 2+, this unit takes 2 wounds.`;
+    const result = compiled(text, [
+      [`Roll one ${dice}`, "EVENT", "dice-roll", { dice }],
+      ["on a 1", "CONDITION", "roll-result", { from: 1, to: 1 }],
+      ["this unit takes 1 wound", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" }],
+      ["on a 2+", "CONDITION", "roll-result", { from: 2 }],
+      ["this unit takes 2 wounds", "EFFECT", "mortal-wounds", { recipient: "this-unit", count: "2" }],
+    ]);
+    expect(result.mechanics.effect).toEqual({ type: "dice-table", dice, outcomes: [
+      { results: [1], effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } } },
+      { results: dice === "D3" ? [2, 3] : [2, 3, 4, 5, 6],
+        effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: 2 } } },
+    ] });
+  });
+
   it("folds a per-model roll and a has-not-fought condition into fighting on death", () => {
     const text = "Whenever a model here falls, if that model has not fought this phase, roll one D6. On a 2+, leave it; it fights after the attackers finish.";
     const result = compiled(text, [
       ["Whenever a model here falls", "EVENT", "event", { kind: "model-destroyed" }],
-      ["if that model has not fought this phase", "CONDITION", "unit-activity", { activity: "fought-this-phase", subject: "this-unit", negated: true }],
+      ["if that model has not fought this phase", "CONDITION", "unit-activity", { activities: ["fought-this-phase"], subject: "this-unit", negated: true }],
       ["roll one D6", "EVENT", "dice-roll", { dice: "D6" }],
       ["On a 2+", "CONDITION", "roll-result", { from: 2, to: 6 }],
       ["leave it; it fights after the attackers finish", "EFFECT", "fight-on-death", { timing: "after-the-attacking-unit-finishes" }],

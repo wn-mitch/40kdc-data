@@ -1,4 +1,4 @@
-import { closed, type CompileLeaf } from "./compile-fragments.js";
+import { closed, type CompileLeaf, unitOf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
@@ -14,7 +14,7 @@ function withinOf(leaf: CompileLeaf): unknown {
 
 /** The `target` a `test`/`test-exemption` leaf names: a fixed role, or an owner+range filter. */
 function testTarget(leaf: CompileLeaf): Node | string {
-  const target = closed(leaf, "target") as string;
+  const target = unitOf(leaf, "target");
   if (target !== "enemy" && target !== "friendly") return target;
   const node: Node = { owner: target };
   const range = leaf.parameters.range;
@@ -69,6 +69,7 @@ export function testEffect(leaf: CompileLeaf): Node | undefined {
       if (leaf.parameters.count !== undefined) modifier.count = closed(leaf, "count");
       if (leaf.parameters.weapon_type !== undefined) modifier.weapon_type = closed(leaf, "weapon_type");
       if (leaf.parameters.weapon_keyword !== undefined) modifier.weapon_keyword = closed(leaf, "weapon_keyword");
+      if (leaf.parameters.weapon_name !== undefined) modifier.weapon_name = closed(leaf, "weapon_name");
       return { type: "select-weapon", target: closed(leaf, "target"), modifier };
     }
     default:

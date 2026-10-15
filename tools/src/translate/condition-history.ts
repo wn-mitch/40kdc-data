@@ -1,5 +1,14 @@
 /** The `happened` history predicate as English ("the unit charged this turn"). */
-import { dekebab, designationPhrase, idLabel, moveKinds, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+import { dekebab, designationPhrase, idLabel, moveKinds, namedUsePhrase, objectivePhrase, type P, pastOf, rollWord, str, subjectOf, titleCase, unitRefPhrase, usedAbilityPhrase, windowPhrase, withWindow } from "./condition-refs.js";
+
+/** A rule of one kind being used now, when the filter names none. */
+const IN_PROGRESS: Record<string, string> = {
+  ability: "an ability", stratagem: "a Stratagem", manoeuvre: "an Agile Manoeuvre", action: "an action", order: "an Order",
+  ritual: "a Ritual", "dark-pact": "a Dark Pact", "act-of-faith": "an Act of Faith", doctrine: "a Combat Doctrine", contract: "a contract",
+};
+
+/** The printed name of a resource pool a history condition reads. */
+const RESOURCE_TERMS: Record<string, string> = { "yp-pool": "YP" };
 
 export function describeHappened(p: P, negated: boolean): string {
   const neg = negated ? "not " : "";
@@ -20,12 +29,25 @@ export function describeHappened(p: P, negated: boolean): string {
       if (to === "fight") return withWindow(`${who} ${negated ? "has not" : "has"} fought`, p.window);
       return withWindow(`${who} ${negated ? "has not" : "has"} been selected to ${to === "attack" ? "shoot or fight" : dekebab(to)}`, p.window);
     }
-    case "set-up":
-      return withWindow(`${who} ${negated ? "was not" : "was"} set up`, p.window);
-    case "targets-selected":
-      return withWindow(`${who} ${negated ? "has not" : "has"} selected ${p.object != null ? `${unitRefPhrase(p.object)} as a target` : "targets"}`, p.window);
-    case "disembarked":
-      return withWindow(`${who} ${didNot("disembark")} from a Transport`, p.window);
+    case "set-up": {
+      const from: Record<string, string> = { "deep-strike": " using Deep Strike", "strategic-reserves": " from Strategic Reserves", "cult-ambush": " from Cult Ambush", transport: " from a Transport" };
+      return withWindow(`${who} ${negated ? "was not" : "was"} set up${from[str(f.from)] ?? ""}`, p.window);
+    }
+    case "targets-selected": {
+      // A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit is the one targeted, whoever targeted it.
+      if (f.kind === "stratagem" && f.id !== undefined) {
+        const target = p.object != null ? unitRefPhrase(p.object) : "the unit";
+        return withWindow(`${target} ${negated ? "has not" : "has"} been targeted with the ${idLabel(f.id)} Stratagem`, p.window);
+      }
+      // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+      const atk = f.attack_type ? str(f.attack_type) : "";
+      const what = p.object != null ? `${unitRefPhrase(p.object)} as a target${atk ? ` of its ${atk} attacks` : ""}` : `targets${atk ? ` for its ${atk} attacks` : ""}`;
+      return withWindow(`${who} ${negated ? "has not" : "has"} selected ${what}`, p.window);
+    }
+    case "disembarked": {
+      const from = f.transport == null ? "a Transport" : f.transport === "this-unit" || f.transport === "this-model" ? "this Transport" : unitRefPhrase(f.transport);
+      return withWindow(`${who} ${didNot("disembark")} from ${from}`, p.window);
+    }
     case "after-roll": {
       const obj = unitRefPhrase(p.object, "the unit");
       const target = obj === "the target unit" ? "the target" : obj;
@@ -41,6 +63,11 @@ export function describeHappened(p: P, negated: boolean): string {
         const hits = n > 1 ? `${n}+ ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
         return `${neg}${target} was hit by ${hits}${attacker}${weapon}${by}${when}`;
       }
+      // Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
+      if (p.subject != null) {
+        const outcome = f.result === "failure" ? " and failed it" : f.result === "success" ? " and passed it" : "";
+        return `${neg}${who} made a ${rollWord(f.roll)} roll${outcome} ${windowPhrase(p.window)}`.trimEnd();
+      }
       return `${neg}a ${rollWord(f.roll)} roll ${f.result ? `was a ${str(f.result)} ` : "was made "}${windowPhrase(p.window)}`.trimEnd();
     }
     case "damage-allocated": {
@@ -54,17 +81,27 @@ export function describeHappened(p: P, negated: boolean): string {
       if (p.object === "event-object" && p.window === "event") {
         return f.attack_type ? `${neg}destroyed by a ${str(f.attack_type)} attack${f.weapon_name ? ` made with ${str(f.weapon_name)}` : ""}` : `${neg}destroyed by any attack`;
       }
+      // "this model": the destroyed model is this one, not any model of the unit.
+      if (p.object === "this-model") return withWindow(negated ? "this model was not destroyed" : "this model was destroyed", p.window);
       const obj = (typeof p.object === "object" && p.object ? p.object : {}) as P;
       const kws = Array.isArray(obj.all_of) ? `${(obj.all_of as unknown[]).map(str).join(" ")} ` : "";
       const owner = obj.owner != null ? `${str(obj.owner)} ` : "";
       if (f.by != null) {
-        const when = p.window === "event" ? "with its just-resolved attacks" : windowPhrase(p.window);
+        // A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
+        const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
+        const when = p.window === "event" ? `with its just-resolved ${atk}attacks` : `${atk ? `with ${atk}attacks ` : ""}${windowPhrase(p.window)}`;
         return `${neg}${unitRefPhrase(f.by)} has destroyed ${n}+ ${owner}${kws}${noun}s ${when}`.trimEnd();
       }
       const tagged = obj.designated != null ? ` ${designationPhrase(str(obj.designated))}` : "";
       return `${neg}${withWindow(`${n}+ ${owner}${kws}${noun}s${tagged} destroyed`, p.window)}`;
     }
     case "used": {
+      // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+      if (p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) {
+        const kind = str(f.kind ?? "ability");
+        const rule = namedUsePhrase(f) ?? IN_PROGRESS[kind] ?? `a ${dekebab(kind)}`;
+        return `${who} is ${negated ? "not " : ""}${kind === "ability" || kind === "stratagem" ? "using" : "performing"} ${rule}`;
+      }
       if (f.kind === "action") {
         let s = `${neg}${n}+ actions completed`;
         if (f.id != null) s += ` (${dekebab(str(f.id))})`;
@@ -82,6 +119,13 @@ export function describeHappened(p: P, negated: boolean): string {
       return `${neg}you newly control ${n}+ objectives ${windowPhrase(p.window)}`.trimEnd();
     case "designation-changed":
       return `${neg}${withWindow(`${n}+ ${unitRefPhrase(p.object, "units")} became ${designationPhrase(str(f.tag))}`, p.window)}`;
+    // "you spent YP in that turn" (optional-cost-paid window turn): a negated read is "you spent no YP".
+    case "resource-spent": {
+      const pool = str(f.pool);
+      const what = RESOURCE_TERMS[pool] ?? dekebab(pool);
+      const spent = negated ? `you spent no ${what}` : `you spent ${what}`;
+      return withWindow(spent, p.window);
+    }
     default:
       return `${neg}${withWindow(`${dekebab(event)} happened`, p.window)}`;
   }

@@ -147,10 +147,16 @@ fn aura_eligible_subject(who: &str, eligible: Option<&Value>) -> String {
     };
     let required = map_arr(e, "required_keywords", jv).unwrap_or_default();
     let excluded = map_arr(e, "excluded_keywords", jv).unwrap_or_default();
-    let base = if required.is_empty() {
+    // States, then keywords all of which it has, then keywords one of which it has.
+    let mut words = map_arr(e, "states", jv).unwrap_or_default();
+    words.extend(required);
+    if let Some(any_of) = map_arr(e, "any_keywords", jv) {
+        words.push(any_of.join(" or "));
+    }
+    let base = if words.is_empty() {
         who.to_string()
     } else {
-        format!("{}{} unit", &who[..who.len() - 4], required.join(" "))
+        format!("{}{} unit", &who[..who.len() - 4], words.join(" "))
     };
     if excluded.is_empty() {
         base
@@ -213,7 +219,17 @@ fn aura_clause(e: &P, m: &P, ctx: &Ctx) -> String {
     let capped = nn(m, "range_cap")
         .map(|c| format!(" (to a maximum of {}\", extensions included)", jv(c)))
         .unwrap_or_default();
-    format!("while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}")
+    let wholly = if is_true(m, "wholly") { "wholly " } else { "" };
+    format!("while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}")
+}
+
+/// " (in addition to any already active)" when a stance pick joins the active options.
+fn stance_additive(e: &P) -> &'static str {
+    if is_true(e, "additive") {
+        " (in addition to any already active)"
+    } else {
+        ""
+    }
 }
 
 /// "select one", "select two", "select up to two" — how many menu options are picked.
@@ -269,7 +285,15 @@ fn part_head(e: &P) -> String {
         _ => String::new(),
     };
     let optional = truthy_key(e, "optional");
-    let named = if truthy_key(e, "name") {
+    // A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+    let label = if truthy_key(e, "name") && moment.is_empty() && !optional {
+        format!("{}{level}", jstr(e.get("name")))
+    } else {
+        String::new()
+    };
+    let named = if !label.is_empty() {
+        String::new()
+    } else if truthy_key(e, "name") {
         format!(
             "{}{}{level}",
             if optional { "you can use " } else { "use " },
@@ -289,7 +313,7 @@ fn part_head(e: &P) -> String {
         None => String::new(),
     };
     let (_, trail) = duration_clauses(e.get("duration"));
-    join_nonempty(&[&moment, &usage, &named, &cost, trail], ", ")
+    join_nonempty(&[&label, &moment, &usage, &named, &cost, trail], ", ")
 }
 
 fn part_inline(e: &P, ctx: &Ctx) -> String {
@@ -398,8 +422,9 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         }
         "designate-target" => designate_target_inline(e, ctx),
         "stance-select" => format!(
-            "{}: {}",
+            "{}{}: {}",
             stance_pick(e),
+            stance_additive(e),
             items(e, "options")
                 .iter()
                 .map(|o| {
@@ -421,6 +446,17 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             } else {
                 format!("{} additional times", fnum(n))
             };
+            // A shared allowance narrowed to some options: spent on any one of them, not one of each.
+            if sv(m, "allocation") != Some("fixed-option") {
+                if let Some(ids) = arr(m, "option_ids") {
+                    let names: Vec<String> =
+                        ids.iter().map(|id| title_case(&jstr(Some(id)))).collect();
+                    return format!(
+                        "you can select {} {times} per battle, shared between them",
+                        crate::translate::condition::or_list(&names)
+                    );
+                }
+            }
             let subject = match nn(m, "option_id") {
                 Some(opt) if sv(m, "allocation") == Some("fixed-option") => title_case(&jv(opt)),
                 _ => format!("one option of {}", title_case(&jstr(m.get("stance_id")))),

@@ -417,6 +417,316 @@
         "tools/src/mfm/faction-fields.ts#runFactionFields"
       ],
       "reason": "The verified hierarchy relation names a parent keyword; runFactionFields resolves it to the repo parent faction id and fills/confirms parent_faction_id."
+    },
+    "/keyword_limits": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group.limit",
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Route each group's faction keyword to a repo dir and build one cap per group."
+        }
+      ],
+      "filters": [
+        "Skip a group with no limit (it only carries a detachment minimum).",
+        "Replace the authored list; clear it when the dump derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "keyword_restriction_group rows are the army-wide caps for the faction keyword they name."
+    },
+    "/keyword_limits/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group.limit",
+        "data.keyword_restriction_group_keyword.keywordId"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Build one cap from one restriction group."
+        }
+      ],
+      "filters": [
+        "Skip a group with no limit."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "keyword_restriction_group rows are the army-wide caps for the faction keyword they name."
+    },
+    "/keyword_limits/*/keywords": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Resolve the group's keyword rows to labels, sorted."
+        }
+      ],
+      "filters": [
+        "Drop unresolved keyword ids."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "A unit counts toward the cap when it carries every keyword of the group."
+    },
+    "/keyword_limits/*/keywords/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Resolve one keyword row to its label."
+        }
+      ],
+      "filters": [
+        "Drop unresolved keyword ids."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "Each member is one keyword of the group."
+    },
+    "/keyword_limits/*/max": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group.limit"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Copy the group limit."
+        }
+      ],
+      "filters": [
+        "Emit only for a non-null limit."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "The group limit is the cap."
+    },
+    "/keyword_limits/*/exempt_faction_keywords": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group.excludedFactionKeywordId",
+        "data.faction_keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group.excludedFactionKeywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Resolve the excluded faction keyword to its label."
+        }
+      ],
+      "filters": [
+        "Emit only when the group names an excluded faction keyword."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "Units carrying the excluded faction keyword do not count toward the cap."
+    },
+    "/keyword_limits/*/exempt_faction_keywords/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group.excludedFactionKeywordId",
+        "data.faction_keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group.excludedFactionKeywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Resolve the excluded faction keyword to its label."
+        }
+      ],
+      "filters": [
+        "Emit only when present."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "The single excluded faction keyword."
+    },
+    "/keyword_limits/*/mode": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.miniature_keyword.keywordId",
+        "data.datasheet_faction_keyword.factionKeywordId"
+      ],
+      "joins": [
+        {
+          "relation": "keyword_restriction_group.factionKeywordId",
+          "direction": "parent",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/faction-fields.ts#keywordLimitsByDir",
+          "operation": "Emit `alternatives` when the group lists several keywords and no live datasheet carries them all."
+        }
+      ],
+      "filters": [
+        "Omit for single-keyword groups and for groups whose keywords share a datasheet (the default units mode)."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/faction-fields.ts#runFactionFields"
+      ],
+      "reason": "Keywords spread over different datasheets are alternatives (Farsight or Ethereals); keywords on one datasheet name that datasheet."
     }
   },
   "unmapped_mfm_fields": [

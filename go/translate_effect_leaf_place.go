@@ -12,25 +12,39 @@ import (
 
 var dieDiceSuffixRe = regexp.MustCompile(`\b(die|dice)$`)
 
+// woundsLeft is what a set-up or returned model has left: "its full wounds",
+// "half of its starting number of wounds", "3 wounds", "D3 wounds".
+func woundsLeft(wr any) string {
+	if wr == nil || wr == "full" {
+		return "its full wounds"
+	}
+	if wr == "half-starting" {
+		return "half of its starting number of wounds"
+	}
+	if isLiteral(wr) {
+		n := diceCase(wr)
+		return n + " " + woundsNoun(n, "wound")
+	}
+	return amountOf(wr, "wound", "wounds")
+}
+
+// detachPhrase is ", as a separate unit with a Starting Strength of 1 (it is
+// no longer part of its attached unit)".
+func detachPhrase(m map[string]any) string {
+	if m["detach"] != true {
+		return ""
+	}
+	strength := ""
+	if m["starting_strength"] != nil {
+		strength = " with a Starting Strength of " + ejstr(m["starting_strength"])
+	}
+	return ", as a separate unit" + strength + " (it is no longer part of its attached unit)"
+}
+
 func returnModelsLeaf(e, m map[string]any, subj string, ctx effCtx) string {
-	w := "its full wounds"
-	if wr := m["wounds_remaining"]; wr != nil && wr != "full" {
-		if isLiteral(wr) {
-			n := diceCase(wr)
-			w = n + " " + woundsNoun(n, "wound")
-		} else {
-			w = amountOf(wr, "wound", "wounds")
-		}
-	}
+	w := woundsLeft(m["wounds_remaining"])
 	where := placementPhrase(m) + placementLimits(m, ctx)
-	detach := ""
-	if m["detach"] == true {
-		strength := ""
-		if m["starting_strength"] != nil {
-			strength = " with a Starting Strength of " + ejstr(m["starting_strength"])
-		}
-		detach = ", as a separate unit" + strength + " (it is no longer part of its attached unit)"
-	}
+	detach := detachPhrase(m)
 	if e["target"] == "this-model" {
 		return subj + " is set up again" + where + " with " + w + " remaining" + detach
 	}
@@ -96,7 +110,11 @@ func addUnitLeaf(m map[string]any, ctx effCtx) string {
 		case literal:
 			units = jsNumStr(n) + " new units"
 		}
-		what = units + " identical to " + effectSubject(m["copy_of"], ctx)
+		excluded := ""
+		if l, ok := asList(m["excluded_keywords"]); ok {
+			excluded = " (excluding " + orList(jstrList(l)) + " models)"
+		}
+		what = units + " identical to " + effectSubject(m["copy_of"], ctx) + excluded
 	} else {
 		switch {
 		case n == 1:
@@ -107,7 +125,16 @@ func addUnitLeaf(m map[string]any, ctx effCtx) string {
 			what = amountOf(m["count"], sheet+" unit", sheet+" units")
 		}
 	}
-	return "add " + what + models + strength + " to your army" + where + engage
+	full := ""
+	if m["at_starting_strength"] == true {
+		full = ", at its Starting Strength and with all of its wounds remaining"
+	}
+	oneShot := ""
+	if m["reset_one_shot"] == true {
+		oneShot = ", with its [ONE SHOT] weapons counted as not having been shot"
+	}
+	// Where the unit goes comes first, then what it comes back with.
+	return "add " + what + models + strength + " to your army" + where + full + oneShot + engage
 }
 
 // passItem renders a typed pass-through item: "models (excluding MONSTER and

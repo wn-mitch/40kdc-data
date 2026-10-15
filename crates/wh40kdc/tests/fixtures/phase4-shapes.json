@@ -569,7 +569,7 @@
     "duration": "permanent"
    }
   },
-  "output": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Use Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
+  "output": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
  },
  {
   "fn": "ability",
@@ -1329,7 +1329,7 @@
     "duration": "permanent"
    }
   },
-  "output": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it."
+  "output": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it."
  },
  {
   "fn": "ability",
@@ -1506,5 +1506,121 @@
    }
   },
   "output": "All friendly units lose their Orders when it becomes Battle-shocked."
+ },
+ {
+  "fn": "condition",
+  "input": {
+   "type": "designated",
+   "parameters": {
+    "tag": "shaken"
+   }
+  },
+  "output": "the unit is shaken"
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "designate",
+    "target": "this-unit",
+    "modifier": {
+     "tag": "shaken"
+    }
+   },
+   "scope": {
+    "duration": "permanent"
+   }
+  },
+  "output": "The unit is shaken."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-fight-phase"
+   }
+  },
+  "output": "Until the end of your next Fight phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-shooting-phase"
+   }
+  },
+  "output": "Until the end of your next Shooting phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-your-next-movement-phase"
+   }
+  },
+  "output": "Until the end of your next Movement phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-end-of-opponent-next-movement-phase"
+   }
+  },
+  "output": "Until the end of your opponent's next Movement phase, subtract 1 from the selected unit's Leadership characteristic."
+ },
+ {
+  "fn": "ability",
+  "input": {
+   "effect": {
+    "type": "stat-modifier",
+    "target": "selected-unit",
+    "modifier": {
+     "stat": "Ld",
+     "operation": "subtract",
+     "value": 1
+    }
+   },
+   "scope": {
+    "duration": "until-start-of-opponent-next-command-phase"
+   }
+  },
+  "output": "Until the start of your opponent's next Command phase, subtract 1 from the selected unit's Leadership characteristic."
  }
 ]

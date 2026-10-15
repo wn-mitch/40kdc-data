@@ -9,6 +9,7 @@
 //! phrasing change here is a semantic corpus change (bump `SPEC_VERSION`).
 
 mod board;
+mod equipment;
 mod history;
 mod js;
 mod leadin;

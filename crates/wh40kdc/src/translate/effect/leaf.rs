@@ -5,11 +5,12 @@
 
 use serde_json::Value;
 
+use super::js::truthy_key;
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
 use super::leaf_shapes::describe_shape_leaf;
 use super::words::*;
-use crate::translate::condition::{and_list, nn, obj, P};
+use crate::translate::condition::{and_list, nn, obj, or_list, P};
 
 /// Every single-effect type; anything else is a container.
 pub(crate) const LEAF_TYPES: &[&str] = &[
@@ -22,6 +23,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "ability-grant",
     "keyword-grant",
     "weapon-ability-grant",
+    "weapon-ability-range",
     "weapon-grant",
     "ability-modifier",
     "ability-activate",
@@ -130,8 +132,14 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
         );
     }
     if has_weapon(m) {
+        // A weapon exclusion names the one weapon the change skips.
+        let other = if truthy_key(m, "exclude_weapon_name") {
+            format!(" other than \"{}\"", jstr(m.get("exclude_weapon_name")))
+        } else {
+            String::new()
+        };
         let what = format!(
-            "the {stat} of {} equipped by {}",
+            "the {stat} of {}{other} equipped by {}",
             weapon_noun(m),
             weapon_holder(target, ctx)
         );
@@ -382,6 +390,26 @@ fn roll_result(m: &P, subj: &str) -> String {
             return format!("{subj} automatically {} {roll} tests", v(subj, "fails"));
         }
     }
+    // count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+    if !led && nn(m, "count").and_then(|c| c.as_f64()) == Some(1.0) {
+        let outcome = match result {
+            Some("pass") => "automatically succeeds".to_string(),
+            Some("fail") => "automatically fails".to_string(),
+            _ => format!(
+                "counts as {}{}",
+                if is_true(m, "unmodified") {
+                    "an unmodified "
+                } else {
+                    ""
+                },
+                jstr(m.get("result"))
+            ),
+        };
+        return format!(
+            "one of {}{scope} {outcome}",
+            of_or_possessive(subj, &format!("{roll} rolls"))
+        );
+    }
     let whose = if led {
         format!("the {roll} roll for that attack")
     } else {
@@ -426,7 +454,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "re-roll" => re_roll(target, m, subj, ctx),
         "roll-result" => roll_result(m, subj),
         "end-attack-sequence" => "the attack sequence ends".to_string(),
-        "ability-grant" => ability_grant(m, subj),
+        "ability-grant" => ability_grant(e, m, subj, ctx),
         "keyword-grant" => keyword_grant(m, subj),
         "weapon-ability-grant" => weapon_ability_grant(target, m, subj, ctx),
         "weapon-grant" => {
@@ -448,6 +476,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "ability-activate" => ability_activate(m, subj),
         "permission" => permission(m, subj, ctx),
         "targeting" => targeting(m, subj, ctx),
+        "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
         "rule-state" => rule_state(m, subj),
         _ => describe_shape_leaf(e, m, subj, ctx)
@@ -462,13 +491,45 @@ fn ability_activate(m: &P, subj: &str) -> String {
     } else {
         ""
     };
+    let exclusive = if is_true(m, "exclusive") {
+        " (and no other option is)"
+    } else {
+        ""
+    };
     if let Some(sel) = nn(m, "select") {
-        let how = if sv(obj(Some(sel)), "by") == Some("roll") {
-            format!("make a new {label} roll and activate one result it allows")
+        let sel = obj(Some(sel));
+        let n = num(sel.get("count"));
+        let n = if n.is_nan() || n == 0.0 { 1.0 } else { n };
+        let from = option_names(sel, "from");
+        let how = if sv(sel, "by") == Some("roll") {
+            let results = if n == 1.0 {
+                "one result".to_string()
+            } else {
+                format!("{} results", fnum(n))
+            };
+            let among = if from.is_empty() {
+                String::new()
+            } else {
+                format!(" among the {} options", or_list(&from))
+            };
+            format!("make a new {label} roll and activate {results} it allows{among}")
         } else {
-            format!("select one option of {label}")
+            let count = if n == 1.0 { "one".to_string() } else { fnum(n) };
+            let what = if !from.is_empty() {
+                format!("of the {} options", or_list(&from))
+            } else if n == 1.0 {
+                "option".to_string()
+            } else {
+                "options".to_string()
+            };
+            format!("select {count} {what} of {label}")
         };
-        return format!("{how} for {subj}, in addition to any already active{consumed}");
+        let join = if is_true(m, "exclusive") {
+            "in place of"
+        } else {
+            "in addition to"
+        };
+        return format!("{how} for {subj}, {join} any already active{consumed}");
     }
     let instead = nn(m, "override")
         .map(|o| {
@@ -478,19 +539,30 @@ fn ability_activate(m: &P, subj: &str) -> String {
             )
         })
         .unwrap_or_default();
+    if is_true(m, "all_options") {
+        return format!("every option of {label} is active for {subj}{consumed}");
+    }
+    if arr(m, "options").is_some() {
+        return format!(
+            "the {} options of {label} are active for {subj}{exclusive}{consumed}",
+            and_list(&option_names(m, "options"))
+        );
+    }
     match nn(m, "option") {
         None => format!(
             "{subj} {} the {label} ability now{instead}",
             v(subj, "resolves")
         ),
         Some(opt) => format!(
-            "the {} option of {label} is active for {subj}{}{consumed}",
-            title_case(&jv(opt)),
-            if is_true(m, "exclusive") {
-                " (and no other option is)"
-            } else {
-                ""
-            }
+            "the {} option of {label} is active for {subj}{exclusive}{consumed}",
+            title_case(&jv(opt))
         ),
     }
+}
+
+/// Option ids as their display names.
+fn option_names(m: &P, k: &str) -> Vec<String> {
+    arr(m, k)
+        .map(|list| list.iter().map(|o| title_case(&jv(o))).collect())
+        .unwrap_or_default()
 }

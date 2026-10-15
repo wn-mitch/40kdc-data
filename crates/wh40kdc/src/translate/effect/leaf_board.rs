@@ -7,8 +7,11 @@ use serde_json::{Map, Value};
 use super::leaf_move::*;
 use super::leaf_rules::*;
 use super::placement::{placement_limits, placement_phrase};
+use super::select::for_each_unit_subject;
 use super::words::*;
-use crate::translate::condition::{and_list, condition_lead_in_value, nn, obj, range_phrase, P};
+use crate::translate::condition::{
+    and_list, condition_lead_in_value, nn, obj, or_list, range_phrase, P,
+};
 
 fn wounds(n: &str, noun: &str) -> String {
     if n == "1" {
@@ -43,21 +46,52 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
         None => String::new(),
     };
     let who = format!("{subj}{range}");
+    // "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    let cap = match nn(m, "max") {
+        Some(max) => format!(
+            " (to a maximum of {} mortal {})",
+            jstr(Some(max)),
+            if max.as_f64() == Some(1.0) {
+                "wound"
+            } else {
+                "wounds"
+            }
+        ),
+        None => String::new(),
+    };
     if let Some(roll) = nn(m, "roll") {
         let roll = obj(Some(roll));
-        let each = match sv(roll, "per_model") {
-            Some("target") => " for each model in the target unit",
-            Some("this") => " for each model in this unit",
-            _ => "",
+        let each = match (sv(roll, "per_model"), nn(roll, "for_each")) {
+            (Some("target"), _) => " for each model in the target unit".to_string(),
+            (Some("this"), _) => " for each model in this unit".to_string(),
+            (_, Some(selector)) => {
+                format!(" for each {}", for_each_unit_subject(obj(Some(selector))))
+            }
+            _ => String::new(),
         };
-        let dice = if each.is_empty() {
-            dice_case(roll.get("dice"))
+        // A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
+        let count = jstr(roll.get("dice"));
+        let many = if !count.is_empty() && count.chars().all(|c| c.is_ascii_digit()) {
+            Some(count)
         } else {
-            format!("one {}", dice_case(roll.get("dice")))
+            None
+        };
+        let dice = match many {
+            Some(n) if !each.is_empty() && n == "1" => "one D6".to_string(),
+            Some(n) => format!("{n} D6"),
+            None if each.is_empty() => dice_case(roll.get("dice")),
+            None => format!("one {}", dice_case(roll.get("dice"))),
+        };
+        // "for each 1": a die at or under the threshold succeeds.
+        let band = if sv(roll, "comparison") != Some("lte") {
+            format!("{}+", jstr(roll.get("threshold")))
+        } else if roll.get("threshold").and_then(|t| t.as_f64()) == Some(1.0) {
+            "1".to_string()
+        } else {
+            format!("result of {} or less", jstr(roll.get("threshold")))
         };
         return format!(
-            "roll {dice}{each}: for each {}+, {who} {} {suffered}{psychic}",
-            jstr(roll.get("threshold")),
+            "roll {dice}{each}: for each {band}, {who} {} {suffered}{psychic}{cap}",
             v(&who, "suffers")
         );
     }
@@ -73,29 +107,13 @@ fn mortal_wounds(m: &P, subj: &str) -> String {
     } else {
         String::new()
     };
-    format!("{who} {} {suffered}{per}{psychic}", v(&who, "suffers"))
+    format!("{who} {} {suffered}{per}{psychic}{cap}", v(&who, "suffers"))
 }
 
 fn return_models(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let wr = m.get("wounds_remaining");
-    let w = match wr {
-        None | Some(Value::Null) => "its full wounds".to_string(),
-        Some(x) if x.as_str() == Some("full") => "its full wounds".to_string(),
-        Some(x) if is_literal(Some(x)) => {
-            let n = dice_case(Some(x));
-            format!("{n} {}", wounds(&n, "wound"))
-        }
-        Some(x) => amount_of(Some(x), "wound", "wounds"),
-    };
+    let w = wounds_left(m.get("wounds_remaining"));
     let place = format!("{}{}", placement_phrase(m), placement_limits(m, ctx));
-    let detach = if is_true(m, "detach") {
-        let strength = nn(m, "starting_strength")
-            .map(|s| format!(" with a Starting Strength of {}", jv(s)))
-            .unwrap_or_default();
-        format!(", as a separate unit{strength} (it is no longer part of its attached unit)")
-    } else {
-        String::new()
-    };
+    let detach = detach_phrase(m);
     if target.and_then(Value::as_str) == Some("this-model") {
         return format!("{subj} is set up again{place} with {w} remaining{detach}");
     }
@@ -271,22 +289,37 @@ fn add_unit(m: &P, ctx: &Ctx) -> String {
     };
     let one = n == 1.0;
     let what = match nn(m, "copy_of") {
-        Some(copy) => format!(
-            "{} identical to {}",
-            if one {
-                "a new unit".to_string()
-            } else if literal {
-                format!("{} new units", fnum(n))
-            } else {
-                amount_of(count, "new unit", "new units")
-            },
-            effect_subject(Some(copy), ctx)
-        ),
+        Some(copy) => {
+            format!(
+                "{} identical to {}",
+                if one {
+                    "a new unit".to_string()
+                } else if literal {
+                    format!("{} new units", fnum(n))
+                } else {
+                    amount_of(count, "new unit", "new units")
+                },
+                effect_subject(Some(copy), ctx)
+            ) + &map_arr(m, "excluded_keywords", jv)
+                .map(|k| format!(" (excluding {} models)", or_list(&k)))
+                .unwrap_or_default()
+        }
         None if one => format!("a {name} unit"),
         None if literal => format!("{} {name} units", fnum(n)),
         None => amount_of(count, &format!("{name} unit"), &format!("{name} units")),
     };
-    format!("add {what}{models}{strength} to your army{place}{engage}")
+    // Where the unit goes comes first, then what it comes back with.
+    let full = if is_true(m, "at_starting_strength") {
+        ", at its Starting Strength and with all of its wounds remaining"
+    } else {
+        ""
+    };
+    let one_shot = if is_true(m, "reset_one_shot") {
+        ", with its [ONE SHOT] weapons counted as not having been shot"
+    } else {
+        ""
+    };
+    format!("add {what}{models}{strength} to your army{place}{full}{one_shot}{engage}")
 }
 
 /// The board-axis leaves; anything unknown degrades to `[type]`.
@@ -368,8 +401,11 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         Some("destroy-models") => destroy_models(m, subj),
         Some("act-on-death") => act_on_death(target, m, subj, ctx),
         Some("split-unit") => {
+            let strength = nn(m, "starting_strength")
+                .map(|s| format!(", each with a Starting Strength of {}", jv(s)))
+                .unwrap_or_default();
             if sv(m, "by") == Some("model") {
-                return format!("split {subj} into units of one model each");
+                return format!("split {subj} into units of one model each{strength}");
             }
             let by = m.get("by").and_then(Value::as_object);
             if let Some(kws) = by.and_then(|b| b.get("model_keyword")) {
@@ -379,14 +415,14 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                         .map(|a| a.iter().map(jv).collect())
                         .unwrap_or_default();
                     return format!(
-                        "split {subj} into one unit of each of its {} models",
+                        "split {subj} into one unit of each of its {} models{strength}",
                         and_list(&names)
                     );
                 }
             }
             let counts = map_arr(m, "model_counts", jv).unwrap_or_default();
             format!(
-                "split {subj} into {} units of {} models",
+                "split {subj} into {} units of {} models{strength}",
                 counts.len(),
                 and_list(&counts)
             )
@@ -398,7 +434,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             effect_subject(m.get("also"), ctx)
         ),
         Some("move") => movement(m, subj, ctx),
-        Some("move-modifier") => move_modifier(m, subj),
+        Some("move-modifier") => move_modifier(m, subj, ctx),
         Some("set-up") => set_up(m, subj, ctx),
         Some("marker") => marker(m),
         Some("transport-capacity") => transport_capacity(m),
@@ -478,7 +514,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             v(subj, "controls")
         ),
         Some("designate") => designate(m, subj, ctx),
-        Some("army-rule") => army_rule(m, subj, ctx),
+        Some("army-rule") => army_rule(m, subj, ctx, e.get("target")),
         Some(t) => format!("[{t}]"),
         None => "[unknown]".to_string(),
     }

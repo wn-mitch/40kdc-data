@@ -462,6 +462,37 @@
    "describe": "for melee attacks made with [LANCE] weapons",
    "lead_in": "while making melee attacks made with [LANCE] weapons",
    "eligibility": "if for melee attacks made with [LANCE] weapons"
+  },
+  {
+   "input": {
+    "type": "eligible",
+    "parameters": {
+     "subject": "this-unit",
+     "to": "embark-within",
+     "transport": "ability-unit"
+    }
+   },
+   "describe": "the unit is able to embark within this unit",
+   "lead_in": "if the unit is able to embark within this unit",
+   "eligibility": "that is able to embark within this unit"
+  },
+  {
+   "input": {
+    "operator": "not",
+    "operands": [
+     {
+      "type": "eligible",
+      "parameters": {
+       "subject": "this-unit",
+       "to": "embark-within",
+       "transport": "this-unit"
+      }
+     }
+    ]
+   },
+   "describe": "the unit is not able to embark within that Transport",
+   "lead_in": "unless the unit is able to embark within that Transport",
+   "eligibility": "that is not able to embark within that Transport"
   }
  ],
  "triggers": [
@@ -642,7 +673,7 @@
      "range": "engagement"
     }
    },
-   "text": "each time you use a Stratagem within Engagement Range of this unit"
+   "text": "each time your opponent uses a Stratagem within Engagement Range of this unit"
   }
  ]
 }

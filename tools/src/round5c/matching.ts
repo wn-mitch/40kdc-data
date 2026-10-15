@@ -105,9 +105,14 @@ export function normalizedSurface(source: string): string {
 
 const SURFACE_EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 
-/** The leaf-surface key of source wording: normalized, without edge punctuation. */
+/** Edge punctuation is not wording, except a sign introducing a numeric term. */
 export function leafSurfaceKey(text: string): string {
-  return normalizedSurface(text.replace(SURFACE_EDGE_PUNCTUATION, ""));
+  const normalized = normalizedSurface(text);
+  const numeric = /^([\s\p{P}]*?)([+-−])\s*\d/u.exec(normalized);
+  const wording = numeric
+    ? normalized.slice(numeric[1]!.length).replace(/[\s\p{P}]+$/gu, "")
+    : normalized.replace(SURFACE_EDGE_PUNCTUATION, "");
+  return wording;
 }
 
 function record(value: unknown, label: string): Record<string, unknown> {

@@ -104,6 +104,90 @@ describe("Round 5C leaf compiler", () => {
     expect(effect.modifier.ends_when?.operands).toHaveLength(2);
   });
 
+  it("tests a condition on a bare filter's units as any unit that meets it, or per recipient when a later leaf points back", () => {
+    const unitState = currentFamilyVersion("unit-state");
+    // The later leaf is built after the gate's two, so it sits after them in the source.
+    const gate = (later: () => CompileLeaf) => compileLeaves([
+      leaf("CONDITION", "unit-filter", { side: "enemy", keywords: ["MONSTER"] }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }, unitState),
+      later(),
+    ]);
+    const result = gate(() => leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }));
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"type":"unit-state"');
+    expect(text).toMatch(/"subject":\{[^}]*"owner":"enemy"[^}]*"all_of":\["MONSTER"\]/u);
+    expect(text).not.toContain("filtered-units");
+    const perRecipient = gate(() => leaf("EFFECT", "characteristic-modifier", { subject: "antecedent", characteristics: ["OC"], operation: "add", value: 1 }, currentFamilyVersion("characteristic-modifier")));
+    if (!perRecipient.ok) throw new Error(perRecipient.errors.join("; "));
+    expect(perRecipient.mechanics).toMatchObject({ effect: {
+      type: "conditional",
+      condition: { type: "unit-state", parameters: { subject: "recipient", state: "engaged" } },
+      effect: { type: "stat-modifier", target: { owner: "enemy", all_of: ["MONSTER"] } },
+    } });
+  });
+
+  it("binds a selected unit to a key lowered as any unit-ref, even when the family's enum does not list it", () => {
+    const result = compiled([
+      leaf("EVENT", "select-unit", { scope: "friendly", distance: "any", visible: false }, currentFamilyVersion("select-unit")),
+      leaf("EFFECT", "core-ability-grant", { subject: "antecedent", ability: "infiltrators" }, currentFamilyVersion("core-ability-grant")),
+    ]);
+    expect(JSON.stringify(result.mechanics)).toContain('{"type":"ability-grant","target":"selected-unit","modifier":{"ability":"infiltrators"}}');
+  });
+
+  it("binds conditions between a filter and its moment to the moment's unit, not to any unit", () => {
+    const result = compiled([
+      leaf("CONDITION", "unit-filter", { side: "enemy" }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "antecedent", with: "this-unit", negated: false }, currentFamilyVersion("unit-state")),
+      leaf("EVENT", "event", { kind: "selected", to: "fight" }, currentFamilyVersion("event")),
+      leaf("EFFECT", "mortal-wounds", { recipient: "antecedent", count: "1" }, currentFamilyVersion("mortal-wounds")),
+    ]);
+    const text = JSON.stringify(result.mechanics);
+    // The engaged test is on the unit selected to fight, which is the enemy filter's unit.
+    expect(text).toContain('"type":"unit-state","parameters":{"subject":"event-subject","state":"engaged"');
+    expect(text).toContain('"subject":{"owner":"enemy"}');
+    expect(text).not.toContain("filtered-units");
+  });
+
+  it("names this unit in engaged-with, and reads a state at an earlier point", () => {
+    const state = (parameters: Record<string, unknown>) => compileLeaves([
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "event-subject", negated: false, ...parameters }, currentFamilyVersion("unit-state")),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    const text = (parameters: Record<string, unknown>) => { const result = state(parameters); return result.ok ? JSON.stringify(result.mechanics) : result.errors.join(); };
+    // Without with, the DSL means engaged with any unit; "with this unit" must stay.
+    expect(text({ with: "this-unit" })).toContain('"parameters":{"subject":"event-subject","state":"engaged","with":"this-unit"}');
+    expect(text({ with: "this-unit", at: "phase-start" })).toContain('"state":"engaged","with":"this-unit","at":"phase-start"');
+    expect(compileLeaves([leaf("CONDITION", "unit-state", { states: ["below-starting-strength"], subject: "this-unit", negated: false, at: "turn-start" }, currentFamilyVersion("unit-state")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]).ok).toBe(false);
+  });
+
+  it("measures a distance or engagement to the unit-filter right after it", () => {
+    const result = compiled([
+      leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")),
+      leaf("CONDITION", "unit-filter", { side: "friendly", states: ["unengaged"] }, currentFamilyVersion("unit-filter")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", with: "following-filter", negated: false }, currentFamilyVersion("unit-state")),
+      leaf("CONDITION", "unit-filter", { side: "friendly", keywords: ["VEHICLE"] }, currentFamilyVersion("unit-filter")),
+      leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 }),
+    ]);
+    const text = JSON.stringify(result.mechanics);
+    expect(text).toContain('"type":"within","parameters":{"of":{"owner":"friendly","not_states":["engaged"]},"range":{"inches":8}}');
+    expect(text).toContain('"type":"unit-state","parameters":{"state":"engaged","with":{"owner":"friendly","all_of":["VEHICLE"]}}');
+    const missing = compileLeaves([leaf("CONDITION", "unit-position", { kind: "within", inches: 8, of: "following-filter", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position")), leaf("EFFECT", "roll-modifier", { roll: "hit", operation: "add", value: 1 })]);
+    expect(missing.ok ? "" : missing.errors.join()).toMatch(/no unit-filter follows it/u);
+  });
+
+  it("negates where a move cannot end, and keeps must as the default", () => {
+    const leaves = (polarity?: string) => [
+      leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", distance: 6 }, 2),
+      leaf("RESTRICTION", "move-must-end", { match: "all", ...(polarity ? { polarity } : {}) }, currentFamilyVersion("move-must-end")),
+      leaf("CONDITION", "unit-state", { states: ["engaged"], subject: "this-unit", negated: false }, currentFamilyVersion("unit-state")),
+    ];
+    const ends = (polarity?: string) => (compiled(leaves(polarity)).mechanics.effect as { modifier: { ends_when: { operator?: string; operands?: unknown[]; type?: string } } }).modifier.ends_when;
+    expect(ends("cannot")).toEqual({ operator: "not", operands: [ends()] });
+    expect(ends("must")).toEqual(ends());
+    expect(ends().operator).toBeUndefined();
+  });
+
   it("gates a whole non-Stratagem ability on its own phase window, in the turn each phase belongs to", () => {
     const window = leaf("RESTRICTION", "activation-window", { your_phases: [], opponent_phases: ["shooting"], either_phases: ["fight"] });
     const result = compiled([window, leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);

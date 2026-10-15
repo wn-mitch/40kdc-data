@@ -18,8 +18,10 @@ from wh40kdc.translate.condition_refs import (
 from wh40kdc.translate.condition_refs import (
     _designation_phrase,
     _state_phrase,
+    alternative_filters,
     dekebab,
     id_label,
+    keyword_alternatives,
     range_phrase,
     title_case,
 )
@@ -319,12 +321,21 @@ def ability_label(id: Any) -> str:
     return _ABILITY_LABELS.get(jstr(id), id_label(jstr(id)))
 
 
-_WEAPON_LABELS = {"imperiums-sword": "Imperium's Sword"}
+_WEAPON_LABELS = {
+    "imperiums-sword": "Imperium's Sword",
+    "imperiums-sword-assault-brethren": "Imperium's Sword",
+    "tl-4-9-lords-of-the-forge": "TL-4ø9",
+    "eadbanger-wurrband": "'Eadbanger",
+}
 
 
 def weapon_label(id: Any) -> str:
-    """The display name for a granted weapon id: a curated override, else Title Case."""
-    return _WEAPON_LABELS.get(jstr(id), title_case(jstr(id)))
+    """The display name for a granted weapon id: a curated override, else Title Case of the id.
+
+    A trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
+    """
+    key = jstr(id)
+    return _WEAPON_LABELS.get(key, title_case(re.sub(r"-drone$", "", key)))
 
 
 def weapon_noun(m: dict[str, Any]) -> str:
@@ -389,11 +400,21 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     all_of = f.get("all_of")
     all_s = f"{' '.join(jstr(x) for x in all_of)} " if isinstance(all_of, list) else ""
     noun = "models" if f.get("level") == "model" else "units"
-    s = f"{owner}{all_s}{noun}"
+    # "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+    compact = keyword_alternatives(f)
+    s = f"{owner}{or_list(compact)} {noun}" if compact is not None else f"{owner}{all_s}{noun}"
+    # Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+    if isinstance(f.get("any_of_filters"), list) and compact is None:
+        alts = [
+            re.sub(r"^all ", "", filter_subject(a, ctx), count=1) for a in alternative_filters(f)
+        ]
+        s += f" that are {or_list(alts)}"
     if isinstance(f.get("any_of"), list):
         s += f" with the {or_list([jstr(x) for x in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {or_list([jstr(x) for x in f['none_of']])} {noun})"
+    if isinstance(f.get("not_all_of"), list):
+        s += f" (excluding {' '.join(jstr(x) for x in f['not_all_of'])} {noun})"
     within = f.get("within")
     if within is not None:
         w = within if isinstance(within, dict) else {}
@@ -414,6 +435,8 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         s += f" that are not {_designation_phrase(jstr(f['not_designated']), True)}"
     if f.get("state") is not None:
         s += f" that are {_state_phrase(jstr(f['state']))}"
+    if isinstance(f.get("not_states"), list):
+        s += f" that are {and_list([_state_phrase(jstr(x), True) for x in f['not_states']])}"
     if f.get("excluding") is not None:
         s += f" other than {effect_subject(f['excluding'], ctx)}"
     bounded = (
@@ -422,6 +445,7 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         or f.get("designated") is not None
         or f.get("not_designated") is not None
         or f.get("state") is not None
+        or f.get("not_states") is not None
         or f.get("embarked_in") is not None
         or f.get("member_of") is not None
         or f.get("engaged_with") is not None

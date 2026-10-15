@@ -4607,5 +4607,41 @@
         "id": "5cbddc5f-cee3-477b-bbd4-4cd0991cc804"
       }
     ]
+  },
+  {
+    "id": "tl-4-9-lords-of-the-forge",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d088b600-22ea-427f-9fe4-ea1a8202e2f8"
+      }
+    ],
+    "name": "TL-4ø9",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "TL-4ø9",
+        "range": 24,
+        "stats": {
+          "A": 3,
+          "S": 11,
+          "AP": -2,
+          "D": "D3+2",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

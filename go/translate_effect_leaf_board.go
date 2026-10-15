@@ -33,6 +33,15 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		rng = " within " + rangePhrase(m["range"])
 	}
 	who := subj + rng
+	// "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+	cap := ""
+	if m["max"] != nil {
+		noun := "wounds"
+		if f, ok := m["max"].(float64); ok && f == 1 {
+			noun = "wound"
+		}
+		cap = " (to a maximum of " + ejstr(m["max"]) + " mortal " + noun + ")"
+	}
 	if roll, ok := asMap(m["roll"]); ok && roll != nil {
 		each := ""
 		switch roll["per_model"] {
@@ -40,12 +49,33 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 			each = " for each model in the target unit"
 		case "this":
 			each = " for each model in this unit"
+		default:
+			if selector, ok := asMap(roll["for_each"]); ok && selector != nil {
+				each = " for each " + forEachUnitSubject(selector)
+			}
 		}
+		// A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
 		dice := diceCase(roll["dice"])
 		if each != "" {
 			dice = "one " + dice
 		}
-		return "roll " + dice + each + ": for each " + ejstr(roll["threshold"]) + "+, " + who + " " + ev(who, "suffers") + " " + suffered + psychic
+		if count := ejstr(roll["dice"]); plainCountRe.MatchString(count) {
+			if each != "" && count == "1" {
+				dice = "one D6"
+			} else {
+				dice = count + " D6"
+			}
+		}
+		// "for each 1": a die at or under the threshold succeeds.
+		band := ejstr(roll["threshold"]) + "+"
+		if roll["comparison"] == "lte" {
+			if f, ok := roll["threshold"].(float64); ok && f == 1 {
+				band = "1"
+			} else {
+				band = "result of " + ejstr(roll["threshold"]) + " or less"
+			}
+		}
+		return "roll " + dice + each + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -55,8 +85,11 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		}
 		per = " for each model in " + them
 	}
-	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic
+	return who + " " + ev(who, "suffers") + " " + suffered + per + psychic + cap
 }
+
+// plainCountRe matches a plain number of dice ("7"), which are that many D6.
+var plainCountRe = regexp.MustCompile(`^\d+$`)
 
 var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
@@ -202,6 +235,9 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 	}
 	s := subj + " can " + verb + upTo + moveModeClause(m)
+	if m["as_if"] == "movement-phase" {
+		s += " as if it were your Movement phase"
+	}
 	if _, ok := asList(m["passthrough"]); ok {
 		s += ", moving over " + passthroughList(m["passthrough"]) + " as though they were not there"
 	}
@@ -214,9 +250,19 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	if when, ok := asMap(m["ends_when"]); ok && when != nil {
 		s += "; it must end that move where " + describeCondition(when)
+		if m["ends_when_replaces"] == true {
+			s += " (instead of the usual threshold)"
+		}
+	}
+	if en, ok := asMap(m["ends_nearest"]); ok && en != nil {
+		s += "; " + endsNearestPhrase(en, ctx, "it", "that move")
 	}
 	if m["allow_engagement"] == true {
-		s += "; it can end that move within Engagement Range of enemy units"
+		if m["engaged_with"] == "nearest-move-end" {
+			s += "; it can end that move within Engagement Range of that enemy unit"
+		} else {
+			s += "; it can end that move within Engagement Range of enemy units"
+		}
 	}
 	if m["counts_as_move"] != nil {
 		s += "; that move counts as " + movedPhrase(m["counts_as_move"])
@@ -227,7 +273,53 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	return s
 }
 
-func moveModifierLeaf(m map[string]any, subj string) string {
+// endsNearestPhrase mirrors endsNearestPhrase in the TypeScript describer: the closest unit's name,
+// with the waiver's alternative end when waives is closest-enemy-model.
+func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string {
+	// The enemy unit the trigger names is "that enemy unit", not the closest of a group.
+	// An objective names no unit: any marker, or the one a select-objective bound.
+	var named string
+	eventSubject, _ := e["of"].(string)
+	if eventSubject == "event-subject" {
+		named = ""
+	} else if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
+		named = "objective marker"
+		if obj, ok := asMap(of["objective"]); ok && obj != nil && obj["selection_var"] != nil {
+			named = "selected objective"
+		}
+	} else {
+		named = effectSubject(e["of"], ctx)
+		for _, article := range []string{"an ", "a ", "the ", "all "} {
+			if strings.HasPrefix(named, article) {
+				named = strings.TrimPrefix(named, article)
+				break
+			}
+		}
+		named = strings.Replace(named, " units", " unit", 1)
+		named = strings.ReplaceAll(named, " units)", ")")
+	}
+	nearest := "as close as possible to the closest " + named
+	if eventSubject == "event-subject" {
+		nearest = "as close as possible to that enemy unit"
+	}
+	must := who + " must end " + moveRef
+	if e["per"] == "model" {
+		unit := who
+		if who == "it" {
+			unit = "the unit"
+		}
+		must = "each model in " + unit + " must end " + moveRef
+	}
+	if e["waives"] == "closest-enemy-model" {
+		return must + " either closer to the closest enemy model or " + nearest
+	}
+	if e["instead_of"] == "closest-enemy-unit" {
+		return must + " " + nearest + ", instead of as close as possible to the closest enemy unit"
+	}
+	return must + " " + nearest
+}
+
+func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	kinds := ""
 	if l, ok := asList(m["applies_to_moves"]); ok {
 		parts := make([]string, len(l))
@@ -262,6 +354,21 @@ func moveModifierLeaf(m map[string]any, subj string) string {
 	if m["no_end_in_engagement"] == true {
 		clauses = append(clauses, subj+" cannot end a move within Engagement Range of any enemy unit")
 	}
+	if en, ok := asMap(m["ends_nearest"]); ok && en != nil {
+		clauses = append(clauses, endsNearestPhrase(en, ctx, subj, pronoun(subj)+" move"))
+	}
+	// With a distance bonus, ends_when is the bonus's proviso: it is available only where a move can end there.
+	if when, ok := asMap(m["ends_when"]); ok && when != nil {
+		if m["distance_bonus"] != nil {
+			clauses = append(clauses, "the extra distance applies only if "+subj+" can end "+pronoun(subj)+" move where "+describeCondition(when)+", and must end it there")
+		} else {
+			replaces := ""
+			if m["ends_when_replaces"] == true {
+				replaces = " (instead of the usual threshold)"
+			}
+			clauses = append(clauses, subj+" must end "+pronoun(subj)+" move where "+describeCondition(when)+replaces)
+		}
+	}
 	if m["end_on_terrain"] == true {
 		clauses = append(clauses, subj+" can end "+pronoun(subj)+" moves on top of terrain features")
 	}
@@ -291,9 +398,14 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	} else if m["subject"] != nil {
 		who = effectSubject(m["subject"], ctx)
 	}
+	// An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the Reserves limits.
+	reserves := m["to"] == "strategic-reserves" || m["from"] == "strategic-reserves"
 	limits := ""
 	if m["ignore_limits"] == true {
 		limits = ", ignoring any limits on units in Strategic Reserves"
+		if !reserves {
+			limits = ", ignoring the usual set-up limits"
+		}
 	}
 	can, whoCan := "can", who
 	if m["allow"] == false {
@@ -319,6 +431,16 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	if m["via"] == "deep-strike" {
 		s += " using the Deep Strike rules"
+	}
+	if m["via"] == "cult-ambush-marker" {
+		s += " using a Cult Ambush marker"
+	}
+	if markerRange, ok := asMap(m["marker_range"]); ok && markerRange != nil {
+		wholly := ""
+		if markerRange["wholly"] == true {
+			wholly = "wholly "
+		}
+		s += ", " + wholly + "within " + ejstr(markerRange["inches"]) + "\" of that marker"
 	}
 	s += moveModeClause(m)
 	if turns, ok := asList(m["turns"]); ok {
@@ -368,6 +490,13 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		s += ", treating the battle round as " + numStr(math.Abs(n)) + " " + dir + " than it is"
 	}
+	if m["wounds_remaining"] != nil {
+		s += ", with " + woundsLeft(m["wounds_remaining"]) + " remaining"
+	}
+	s += detachPhrase(m)
+	if m["starting_strength"] != nil && m["detach"] != true {
+		s += "; its unit has a Starting Strength of " + ejstr(m["starting_strength"])
+	}
 	if m["allow_engagement"] == true {
 		s += "; it can be set up within Engagement Range of enemy units"
 	}
@@ -389,7 +518,11 @@ func markerLeaf(m map[string]any) string {
 		if m["distance"] != nil {
 			dist = " up to " + ejstr(m["distance"]) + "\""
 		}
-		return "move the " + label + " marker" + dist + consume
+		unmoved := ""
+		if m["not_moved_this_turn"] == true {
+			unmoved = " that has not been moved this turn"
+		}
+		return "move the " + label + " marker" + unmoved + dist + consume
 	}
 	where := ""
 	if m["placement"] != nil {
@@ -452,14 +585,18 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "act-on-death":
 		return actOnDeathLeaf(e, m, subj, ctx)
 	case "split-unit":
+		strength := ""
+		if m["starting_strength"] != nil {
+			strength = ", each with a Starting Strength of " + ejstr(m["starting_strength"])
+		}
 		if m["by"] == "model" {
-			return "split " + subj + " into units of one model each"
+			return "split " + subj + " into units of one model each" + strength
 		}
 		if by, ok := asMap(m["by"]); ok && by != nil && jsTruthy(by["model_keyword"]) {
-			return "split " + subj + " into one unit of each of its " + andList(jstrList(by["model_keyword"])) + " models"
+			return "split " + subj + " into one unit of each of its " + andList(jstrList(by["model_keyword"])) + " models" + strength
 		}
 		counts := jstrList(m["model_counts"])
-		return "split " + subj + " into " + numStr(float64(len(counts))) + " units of " + andList(counts) + " models"
+		return "split " + subj + " into " + numStr(float64(len(counts))) + " units of " + andList(counts) + " models" + strength
 	case "add-unit":
 		return addUnitLeaf(m, ctx)
 	case "destruction-rule":
@@ -467,7 +604,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "move":
 		return moveLeaf(m, subj, ctx)
 	case "move-modifier":
-		return moveModifierLeaf(m, subj)
+		return moveModifierLeaf(m, subj, ctx)
 	case "set-up":
 		return setUpLeaf(m, subj, ctx)
 	case "marker":
@@ -533,7 +670,7 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "designate":
 		return designateLeaf(m, subj, ctx)
 	case "army-rule":
-		return armyRuleLeaf(m, subj, ctx)
+		return armyRuleLeaf(m, subj, ctx, e["target"])
 	}
 	t := "unknown"
 	if e["type"] != nil {

@@ -209,7 +209,8 @@
     "detachment_id": "saga-of-the-great-wolf",
     "cp_cost": 1,
     "phases": [
-      "shooting"
+      "shooting",
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
@@ -400,7 +401,7 @@
     "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",

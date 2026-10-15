@@ -65,12 +65,76 @@ unless it is needed to operate.
   ability kind, the words opening the occurrence's clause, the words just before it, and the next
   words after it. It is stored with the surface and checked for every occurrence on every
   application. The same wording under a different scope is a different decision.
+- **Reuse follows approved meaning across scoped spellings.** Reapplying stored surfaces only
+  replays known wording; an uncovered alias of an approved operator needs its own scoped surface.
+  Numeric surface keys preserve positive and negative operators, including Unicode dash signs;
+  existing mathematical-minus keys retain their stored spelling.
+- **An operator decides a meaning once across its operand spellings.** A leaf operator
+  (`leaf-operators.ts`, `review-apply` action `operator`) is a worded template with typed slots
+  ("{subject} is eligible to {acts} in a turn in which it {moves}") whose every slot lists the
+  spellings it covers and the parameter value each supplies. Each occurrence's own words bind its
+  operands; a neighbouring example never does. The operator expands to scoped surfaces linked by
+  `leaf_surfaces.operator_id`, so matching, scope, blocking and undo are those of any surface. A
+  spelling whose wording another surface decides with a different meaning refuses the whole
+  operator; one decided with the same meaning stays as decided. Anaphoric spellings ("that unit",
+  "it") and spellings whose value a family's earlier decisions contradict are not slot spellings.
+- **Anaphoric subjects point back; compilation binds them.** "That enemy unit", "that unit",
+  "it" and "those units" record the unit-ref value `antecedent` (`antecedent-families.ts` lists
+  the families and keys that accept it). Compilation (`compile-antecedent.ts`) binds it to the
+  selected unit when a selection precedes the leaf; else to every unit a unit-filter right
+  before it matches ("Friendly **K** units" + "have X", an army-wide grant); else to the unit a
+  preceding aura reaches (its recipient: "While a friendly X unit is within 6\" of this model,
+  that unit …"); else to a Stratagem's target; else to the unit of a preceding event that names
+  a unit; else, outside a Stratagem, to the record's own unit (its model when the record only
+  ever names this model). It refuses a Stratagem leaf with none of these, and a leaf whose family
+  cannot name the unit it binds to. A roll-modifier's `preceding` roll ("adding 1 to the result")
+  binds the same way to the nearest roll or test before it (`compile-preceding-roll.ts`). Because the leaf
+  stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
+- **A family version widens; it never reinterprets.** A later version (`tools/src/round5c/families/`)
+  adds values or optional parameters and hands the rest of a leaf to the previous version, so
+  earlier leaves move across by identity.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one selector; authoring
   does not absorb qualifiers into a broader leaf to raise completion counts.
+- **Frequency and ownership are separate qualifications.** A usage frequency records its cadence
+  without choosing army, unit or model ownership. A reviewed `usage-scope` leaf supplies the
+  allowance owner; an explicitly bound usage leaf can carry it directly. Compilation refuses an
+  unbound frequency rather than guessing an owner or turning a target-selection cap into a global
+  usage limit. Effects do not restrict reuse of the frequency wording.
+- **Stat adjustments and setters do not choose their recipient.** Signed number/stat terms accept spaced
+  and compact spellings. A bonus improves the named stat and a penalty worsens it, including
+  characteristics whose beneficial numerical direction is downward. The unsigned
+  `characteristic-set@3` operand records a literal value and operation `set`; it may remain
+  unbound until a reviewed recipient (and, for weapon characteristics, weapon scope) is folded
+  in. Compilation refuses missing or conflicting bindings and never defaults a bare setter to a unit.
+  Recipient and weapon scope remain separate qualifications; explicitly reviewed bindings are retained.
+  Unsigned stat values are not treated as bonuses.
+- **Attack-property prefixes supply scope, not an effect.** A `weapon-property-scope` leaf names
+  the recipient and melee, ranged or all-weapons scope. The following stat adjustment or
+  weapon-ability name supplies the property. Lowering retains explicit bindings, rejects
+  conflicting recipients or scopes, and does not carry a stat scope into another sentence.
+- **Returned-model exclusions filter models, not their unit.** A `returned-model-exclusion`
+  leaf excludes individual returned models with the named keywords, including within attached
+  units. Source-backed clause binding folds it into `return-models.modifier.exclude_model_keyword`;
+  count, wounds and placement remain separate. Compilation rejects orphaned or ambiguous
+  exclusions rather than applying a whole-unit keyword condition.
+- **What a model comes back with qualifies its placement, not the ability.** `wounds-remaining`
+  ("with 3 wounds remaining"), `starting-strength` ("its unit has a Starting Strength of 1") and
+  `leaves-attached-unit` ("that model is not part of an attached unit") are separate leaves that
+  fold into the nearest effect before them in their fragment (`compile-model-state.ts`): a
+  set-up, a return-models (wounds only) or a split-unit (Starting Strength only). They never gate.
+  Compilation refuses one with no such effect before it, one past a new moment, and one that
+  contradicts the effect's own value.
 - **Source semantics are separate from DSL realization.** A leaf records what the source says, not
   which constructor it compiles to today. A meaning the DSL cannot yet express is a `DSL_GAP`; the
   annotation is not distorted to fit.
+- **Roll thresholds do not guess the die.** A minimum-result leaf records the lower bound
+  ("on a 2+" means at least 2); the dice leaf supplies its upper bound during compilation.
+  Explicit ranges and exact results retain both bounds.
+- **A reactive effect names the roll its trigger names.** A before-roll or after-roll moment over one
+  roll kind is followed by an effect whose `roll` is that kind (`roll-result` with `roll: hit` after
+  "after making a Hit roll"). `roll: any` on such an effect is accepted by the schema and changes
+  other rolls, so drafters must not author it.
 - **A placeholder is not a meaning.** A trusted leaf whose parameter still holds the import
   placeholder `"source"` does not count as resolved source (`placeholders.ts`), and no new
   decision may create one. A text holding such a leaf is not leaf-complete.

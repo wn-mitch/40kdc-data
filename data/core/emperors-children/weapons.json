@@ -2319,5 +2319,425 @@
         "id": "5ee73c5e-76d7-4a31-bcf4-d0d38afddeb4"
       }
     ]
+  },
+  {
+    "id": "soulpiercer",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0b8341ca-a8d1-40ef-a251-237522dfe7a3"
+      }
+    ],
+    "name": "Soulpiercer",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Soulpiercer",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 12,
+          "AP": -3,
+          "D": "D6+2",
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "pavane-of-slaanesh",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c0355616-ccdc-40c4-863d-947419c324c1"
+      }
+    ],
+    "name": "Pavane of Slaanesh",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "witchfire",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 9,
+          "AP": -1,
+          "D": "D3",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "focused witchfire",
+        "range": 18,
+        "stats": {
+          "A": "D6",
+          "S": 9,
+          "AP": -2,
+          "D": "D3",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 3
+            }
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "snapping-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dfce9f5e-7a96-4d3d-9dca-2c85a78f1933"
+      }
+    ],
+    "name": "Snapping claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Snapping claws",
+        "range": "Melee",
+        "stats": {
+          "A": 4,
+          "S": 6,
+          "AP": -2,
+          "D": 3,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "lash-of-slaanesh",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fdb02e79-fbac-47b0-824b-a298021561d7"
+      }
+    ],
+    "name": "Lash of Slaanesh",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Lash of Slaanesh",
+        "range": 12,
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "ritual-knife",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4770ee9f-d714-4ce7-b9e8-683f33945dcc"
+      }
+    ],
+    "name": "Ritual knife",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Ritual knife",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "living-whip",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8df87802-e40a-4248-800d-47ff5c295799"
+      }
+    ],
+    "name": "Living whip",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Living whip",
+        "range": 12,
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "assault"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "witstealer-sword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3e156fbc-4575-47e9-a675-b656875ac119"
+      }
+    ],
+    "name": "Witstealer sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Witstealer sword",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -2,
+          "D": 3,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "phantasmagoria",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ac90c84f-aae8-4a85-8edd-09476327ba2a"
+      }
+    ],
+    "name": "Phantasmagoria",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "witchfire",
+        "range": 18,
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      },
+      {
+        "name": "focused witchfire",
+        "range": 18,
+        "stats": {
+          "A": 9,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "slashing-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dd14659c-d4c5-4c7b-9074-e01951630d02"
+      }
+    ],
+    "name": "Slashing claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Slashing claws",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "lashing-tongue",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5e28b88e-060f-4679-89fc-bef36336f6b2"
+      }
+    ],
+    "name": "Lashing tongue",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Lashing tongue",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "lethal-hits"
+          },
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "barbed-tail-and-dissecting-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "12f26830-ca88-42cb-8303-3b3ca9e22876"
+      }
+    ],
+    "name": "Barbed tail and dissecting claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Barbed tail and dissecting claws",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 5,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "devastating-wounds"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

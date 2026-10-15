@@ -1,0 +1,8 @@
+[
+  {
+    "id": "path-of-the-dead",
+    "mandatory_warlord_datasheet_ids": ["seer-queen", "lost-avatar"],
+    "granted_warlord_datasheet_ids": ["jester"],
+    "excluded_datasheet_ids": ["retired-walker"]
+  }
+]

@@ -9,6 +9,7 @@ import { hashJson } from "../src/round4/hash.js";
 import { initializeWorkbench, openWorkbench } from "../src/round5c/db.js";
 import { getDashboard, getPrivateExport } from "../src/round5c/review.js";
 import { applyAnnotationBatch } from "./round5c-human.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 
 const DatabaseSync = createRequire(import.meta.url)("node:sqlite").DatabaseSync as { new(path: string): DatabaseType };
 type DatabaseSync = DatabaseType;
@@ -29,7 +30,7 @@ function confirmReroll(db: DatabaseSync, ability: { id: number; sourceHash: stri
   const batch = applyAnnotationBatch(db, { reviewer: "fixture-reviewer", decisions: [{
     action: "confirm", ability_version_id: ability.id, source_hash: ability.sourceHash, fragment: "RAW_TEXT",
     start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase, role: "EFFECT",
-    family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "all", weapon_type: "all" },
+    family_id: "reroll", family_version: currentFamilyVersion("reroll"), parameters: { roll: "hit", subset: "all", weapon_type: "all" },
   }] });
   const member = db.prepare("SELECT entity_id FROM batch_members WHERE batch_id = ? AND entity_kind = 'annotation'").get(batch.batch_id) as { entity_id: string };
   return Number(member.entity_id);

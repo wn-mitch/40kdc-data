@@ -17,7 +17,7 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -96,7 +96,12 @@ func statModifierLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return incomingLead(m, subj) + statChange(m, "the "+stat+" of that attack") + bounds(m)
 	}
 	if hasWeapon(m) {
-		return statChange(m, "the "+stat+" of "+weaponNoun(m)+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
+		// A weapon exclusion names the one weapon the change skips.
+		other := ""
+		if jsTruthy(m["exclude_weapon_name"]) {
+			other = " other than \"" + ejstr(m["exclude_weapon_name"]) + "\""
+		}
+		return statChange(m, "the "+stat+" of "+weaponNoun(m)+other+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
 	}
 	return statChange(m, ofOrPossessive(subj, stat)) + bounds(m)
 }
@@ -294,6 +299,17 @@ func rollResultLeaf(m map[string]any, subj string) string {
 			return subj + " automatically " + ev(subj, "fails") + " " + roll + " tests"
 		}
 	}
+	// count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+	if c, ok := m["count"].(float64); ok && c == 1 && lead == "" {
+		outcome := "counts as " + unmodifiedWord(m) + ejstr(m["result"])
+		switch m["result"] {
+		case "pass":
+			outcome = "automatically succeeds"
+		case "fail":
+			outcome = "automatically fails"
+		}
+		return "one of " + ofOrPossessive(subj, roll+" rolls") + weaponRollScope(m) + " " + outcome
+	}
 	if lead != "" {
 		whose := "the " + roll + " roll for that attack"
 		switch m["result"] {
@@ -321,7 +337,51 @@ func unmodifiedWord(m map[string]any) string {
 	return ""
 }
 
-func abilityGrantLeaf(m map[string]any, subj string) string {
+// isDefinedGrant reports a grant that prints the ability it gives (modifier.definition).
+func isDefinedGrant(e map[string]any) bool {
+	if e["type"] != "ability-grant" {
+		return false
+	}
+	_, ok := mod(e)["definition"].(map[string]any)
+	return ok
+}
+
+// definedGrantHead renders who holds a printed ability and its name ("Friendly X units gain the
+// Shade Ward ability"), or "the following rules" for an unnamed one. A model-level target holds
+// one copy per unit.
+func definedGrantHead(e map[string]any, ctx effCtx) string {
+	m := mod(e)
+	def, _ := m["definition"].(map[string]any)
+	base := effectSubject(e["target"], ctx)
+	subj := base
+	if t, ok := e["target"].(map[string]any); ok && t["level"] == "model" {
+		subj = "units with one or more " + strings.TrimPrefix(base, "all ")
+	}
+	if name, ok := def["name"].(string); ok {
+		return subj + " " + ev(subj, "gains") + " the " + name + " ability"
+	}
+	if m["ability"] != nil {
+		return subj + " " + ev(subj, "gains") + " the " + abilityLabel(m["ability"]) + " ability"
+	}
+	return subj + " " + ev(subj, "gains") + " the following rules"
+}
+
+// definitionPart is the printed ability as a part without its name, which the grant's head says.
+func definitionPart(e map[string]any) map[string]any {
+	def, _ := mod(e)["definition"].(map[string]any)
+	part := make(map[string]any, len(def))
+	for k, v := range def {
+		if k != "name" {
+			part[k] = v
+		}
+	}
+	return part
+}
+
+func abilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
+	if isDefinedGrant(e) {
+		return definedGrantHead(e, ctx) + " (" + describeEffectInline(definitionPart(e), ctx) + ")"
+	}
 	// Cover is a state a unit has, not an ability it gains.
 	if m["ability"] == "benefit-of-cover" {
 		return subj + " " + ev(subj, "has") + " the Benefit of Cover"
@@ -366,30 +426,53 @@ func keywordGrantLeaf(m map[string]any, subj string) string {
 }
 
 func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string {
-	kws := "[?]"
-	if l, ok := asList(m["abilities"]); ok {
+	// A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+	keywordList := func(v any) string {
+		l, ok := asList(v)
+		if !ok {
+			return ""
+		}
 		parts := make([]string, len(l))
 		for i, k := range l {
 			parts[i] = bracketKeyword(k)
 		}
-		kws = strings.Join(parts, " and ")
+		return strings.Join(parts, " and ")
 	}
+	gained := keywordList(m["abilities"])
+	lost := keywordList(m["removes"])
 	increment := ""
 	if m["if_present"] == "increment" {
 		increment = " (a weapon that already has that ability adds the ratings together)"
 	}
 	if m["incoming"] == true {
+		kws := gained
+		if kws == "" {
+			kws = "[?]"
+		}
 		return incomingLead(m, subj) + "the attacking weapon has " + kws + increment
 	}
+	noun := ofOrPossessive(subj, "weapons")
+	plural := true
 	if hasWeapon(m) {
-		noun := weaponNoun(m)
-		gain := "gains"
-		if weaponsWordRe.MatchString(noun) {
-			gain = "gain"
-		}
-		return noun + " equipped by " + weaponHolder(e["target"], ctx) + " " + gain + " " + kws + increment
+		kind := weaponNoun(m)
+		noun = kind + " equipped by " + weaponHolder(e["target"], ctx)
+		plural = weaponsWordRe.MatchString(kind)
 	}
-	return ofOrPossessive(subj, "weapons") + " gain " + kws + increment
+	gain, lose := "gains", "loses"
+	if plural {
+		gain, lose = "gain", "lose"
+	}
+	var changes []string
+	if gained != "" {
+		changes = append(changes, gain+" "+gained+increment)
+	}
+	if lost != "" {
+		changes = append(changes, lose+" "+lost)
+	}
+	if len(changes) == 0 {
+		changes = append(changes, gain+" [?]")
+	}
+	return noun + " " + strings.Join(changes, " and ")
 }
 
 var abilityAspects = map[string]string{
@@ -499,6 +582,11 @@ func abilityLimits(m map[string]any) string {
 	return ", " + strings.Join(parts, ", ")
 }
 
+// weaponAbilityRangeLeaf is a weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire).
+func weaponAbilityRangeLeaf(m map[string]any, subj string) string {
+	return ofOrPossessive(subj, "attacks") + " benefit from " + bracketKeyword(m["keyword"]) + " when the target is within the weapon's range"
+}
+
 func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["in_region"] != nil {
 		return subj + " " + ev(subj, "counts") + " as being within " + regionPhrase(mapOr(m["in_region"]))
@@ -546,6 +634,10 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 			can = "can"
 		}
 		return "your opponent " + can + " target " + subj + " with Overwatch"
+	}
+	// The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+	if m["attacks"] != nil && rule == "attacking-ends-hidden" {
+		return "those attacks do not stop " + subj + " from being hidden"
 	}
 	if core, ok := coreRules[rule]; ok && m["rule_kind"] == "core-rule" {
 		phrase := core[1]
@@ -596,7 +688,7 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "end-attack-sequence":
 		return "the attack sequence ends"
 	case "ability-grant":
-		return abilityGrantLeaf(m, subj)
+		return abilityGrantLeaf(e, m, subj, ctx)
 	case "keyword-grant":
 		return keywordGrantLeaf(m, subj)
 	case "weapon-ability-grant":
@@ -623,6 +715,8 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 		return permissionLeaf(m, subj, ctx)
 	case "targeting":
 		return targetingLeaf(m, subj, ctx)
+	case "weapon-ability-range":
+		return weaponAbilityRangeLeaf(m, subj)
 	case "counts-as":
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":

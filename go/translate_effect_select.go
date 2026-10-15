@@ -300,10 +300,20 @@ func forEachUnitSubject(sel map[string]any) string {
 		eligibility = " " + describeSelectionEligibility(mapOr(sel["eligibility"]))
 	}
 	member := ""
-	if sel["member_of"] == "bearer-unit" {
+	switch sel["member_of"] {
+	case "bearer-unit":
 		member = " in this model's unit"
+	case "embarked-in-bearer":
+		member = " embarked within this model"
+	case "target":
+		member = " in the target unit"
 	}
-	return ejstr(sel["owner"]) + " " + keywords + noun + selectionModelFilters(sel) + member + within + engagement + eligibility + selectionBinding(sel)
+	// owner any: "each unit within 6\" of …", with no side word.
+	owner := ejstr(sel["owner"]) + " "
+	if sel["owner"] == "any" {
+		owner = ""
+	}
+	return owner + keywords + noun + selectionModelFilters(sel) + member + within + engagement + eligibility + selectionBinding(sel)
 }
 
 var targetSuffixRe = regexp.MustCompile(`\bTarget$`)

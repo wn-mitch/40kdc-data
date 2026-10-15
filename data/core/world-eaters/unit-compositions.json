@@ -1331,5 +1331,224 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "bloodcrushers",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodhunter",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellblade",
+          "juggernauts-bladed-horn"
+        ]
+      },
+      {
+        "name": "Bloodcrusher",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "hellblade",
+          "juggernauts-bladed-horn"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodhunter",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodcrusher",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Bloodhunter",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodcrusher",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "bloodletters",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodreaper",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellblade"
+        ]
+      },
+      {
+        "name": "Bloodletter",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "hellblade"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodreaper",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Bloodletter",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "flesh-hounds",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Gore Hound",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "burning-roar",
+          "gore-drenched-fangs",
+          "collar-of-khorne"
+        ]
+      },
+      {
+        "name": "Flesh Hound",
+        "min": 4,
+        "max": 9,
+        "default_weapon_ids": [
+          "gore-drenched-fangs",
+          "collar-of-khorne"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Gore Hound",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flesh Hound",
+            "min": 4,
+            "max": 4
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Gore Hound",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Flesh Hound",
+            "min": 5,
+            "max": 9
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "skarbrand",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Skarbrand",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "bellow-of-endless-fury",
+          "slaughter-and-carnage"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Skarbrand",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "bloodthirster",
+    "faction_id": "world-eaters",
+    "models": [
+      {
+        "name": "Bloodthirster",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "hellfire-breath",
+          "great-axe-of-khorne"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Bloodthirster",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -3,6 +3,9 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { familyRole, validateFingerprint } from "./contracts.js";
 import { normalizedSurface } from "./matching.js";
+import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { ANTECEDENT_KEYS, antecedentVersion } from "./antecedent-families.js";
+import { extensionVersionPairs } from "./families/index.js";
 
 /**
  * Move leaves from a deprecated family version to its successor, which may be another family.
@@ -34,6 +37,8 @@ const EVENT_SOURCE_KINDS: Record<string, string> = {
 
 export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "leading-unit", from: 1, to: 2, map: (parameters) => ({ ...parameters, attachment: "leading" }) },
+  // Existing bands stay bounded; only newly authorized minimum leaves omit their upper bound.
+  { family: "roll-result", from: 1, to: 2, map: (parameters) => parameters },
   { family: "weapon-ability-grant", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
   {
     family: "event",
@@ -73,6 +78,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "unit-state", from: 3, to: 4, map: (parameters) => parameters },
   { family: "unit-keyword", from: 1, to: 2, map: (parameters) => parameters },
   { family: "unit-activity", from: 2, to: 3, map: (parameters) => parameters },
+  // Version 4 names a list of activities; a version-3 leaf is a list of one.
+  { family: "unit-activity", from: 3, to: 4, map: ({ activity, ...rest }) => ({ activities: [activity], ...rest }) },
   // Version 2 (batch 6) only adds optional to/range on closest-eligible and widens subject.
   { family: "unit-position", from: 1, to: 2, map: (parameters) => parameters },
   // Version 2 takes a set of characteristics, improve and worsen, and which weapons carry the change.
@@ -82,6 +89,13 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   },
   // These versions drop the value "bearer", which meant the same model as "this-model".
   { family: "characteristic-set", from: 1, to: 2, map: bearerIsThisModel("subject") },
+  // Version 2's weapon setters applied to all weapons; preserve that historical scope, not a new default.
+  {
+    family: "characteristic-set", from: 2, to: 3,
+    map: (parameters) => (WEAPON_CHARACTERISTICS as readonly unknown[]).includes(parameters.characteristic)
+      ? { ...parameters, weapon_type: "all" }
+      : parameters,
+  },
   { family: "weapon-ability-grant", from: 2, to: 3, map: bearerIsThisModel("subject") },
   { family: "feel-no-pain", from: 1, to: 2, map: bearerIsThisModel("subject") },
   { family: "invulnerable-save", from: 1, to: 2, map: bearerIsThisModel("subject") },
@@ -92,6 +106,10 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "characteristic-modifier", from: 2, to: 3, map: bearerIsThisModel("subject") },
   // Version 4 only adds detection range and the selected unit; version 3 parameters still fit.
   { family: "characteristic-modifier", from: 3, to: 4, map: (parameters) => parameters },
+  // A bare adjustment no longer needs owner bindings; already reviewed bindings remain authoritative.
+  { family: "characteristic-modifier", from: 4, to: 5, map: (parameters) => parameters },
+  // Wider integer amounts retain every previously reviewed adjustment.
+  { family: "characteristic-modifier", from: 5, to: 6, map: (parameters) => parameters },
   { family: "attack", from: 1, to: 2, map: bearerIsThisModel("unit") },
   // Version 3 only adds psychic and recipient; version 2 parameters still fit.
   { family: "attack", from: 2, to: 3, map: (parameters) => parameters },
@@ -136,6 +154,22 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "reroll", from: 1, to: 2, map: (parameters) => ({ ...parameters, weapon_type: "all" }) },
   // Version 4 only adds independent optional filters and flags; existing parameters still fit.
   { family: "weapon-ability-grant", from: 3, to: 4, map: (parameters) => parameters },
+  // Version 3 / 2 only add the optional rolls list (and roll-auto-result's count 1); a single roll still fits.
+  { family: "reroll", from: 2, to: 3, map: (parameters) => parameters },
+  { family: "roll-auto-result", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 lists `what` so one list can name characteristics and rolls together.
+  { family: "ignore-modifiers", from: 1, to: 2, map: (parameters) => ({ ...parameters, what: [parameters.what] }) },
+  // aura-range 3 and select-unit 2 only make side/scope optional (a unit-filter can carry them).
+  { family: "aura-range", from: 2, to: 3, map: (parameters) => parameters },
+  { family: "select-unit", from: 1, to: 2, map: (parameters) => parameters },
+  // stratagem-target 2 only makes side and keywords optional (a unit-filter can carry them).
+  { family: "stratagem-target", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds riled up; a version 1 mark still fits.
+  { family: "unit-mark", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 2 only adds being just destroyed to despite.
+  { family: "eligibility-permission", from: 1, to: 2, map: (parameters) => parameters },
+  // Version 5 only makes the keyword optional; a version 4 leaf keeps its keyword.
+  { family: "weapon-ability-grant", from: 4, to: 5, map: (parameters) => parameters },
   // Version 2 widens the aspect/operation enums and adds recipients/options/uses-only fields; a
   // version 1 leaf's aspect and operation are both still in the widened enums, so it fits as is.
   { family: "ability-modifier", from: 1, to: 2, map: (parameters) => parameters },
@@ -151,6 +185,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "event", from: 8, to: 9, map: (parameters) => parameters },
   { family: "duration", from: 2, to: 3, map: (parameters) => parameters },
   { family: "usage-limit", from: 1, to: 2, map: (parameters) => parameters },
+  // A bound limit keeps its approved ownership; only new frequency qualifiers omit it.
+  { family: "usage-limit", from: 2, to: 3, map: (parameters) => parameters },
   // Version 2/2 (batch 7a) only add an optional range_cap_inches/counts_as_move field.
   { family: "aura-range", from: 1, to: 2, map: (parameters) => parameters },
   { family: "make-move", from: 1, to: 2, map: (parameters) => parameters },
@@ -165,6 +201,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
       ? { ...parameters, ...(parameters.subject === "target" ? { of: "this-unit" } : { of: "target" }) }
       : parameters,
   },
+  // An antecedent version only lets its unit-ref keys point back to an earlier leaf's unit;
+  // every earlier leaf still fits it unchanged.
+  ...Object.keys(ANTECEDENT_KEYS).map((family) => ({ family, from: antecedentVersion(family)! - 1, to: antecedentVersion(family)!, map: (parameters: Record<string, unknown>) => parameters })),
+  // A family extension widens what the previous version could say; every earlier leaf fits it.
+  ...extensionVersionPairs().map(({ family, from, to }) => ({ family, from, to, map: (parameters: Record<string, unknown>) => parameters })),
 ];
 
 export type FamilyVersionReport = {

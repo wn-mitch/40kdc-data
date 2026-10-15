@@ -4,6 +4,7 @@
 use serde_json::Value;
 
 use super::board::board_predicate;
+use super::equipment::named_equipment_phrase;
 use super::history::describe_happened;
 use super::js::*;
 use super::refs::*;
@@ -18,6 +19,7 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "model-count"
             | "wounds"
             | "loadout"
+            | "equipped-weapon-count"
             | "attachment"
             | "has-ability"
             | "controls"
@@ -132,6 +134,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             };
             format!("{neg}in {turn} turn")
         }
+        "deployment-window" => format!("{neg}during deployment"),
         "battle-round" => {
             let min = crate::translate::num_param(p, "min");
             let max = crate::translate::num_param(p, "max");
@@ -207,6 +210,14 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                     article(&kw)
                 );
             }
+            // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+            if !kw.is_empty() {
+                return format!(
+                    "{neg}{} is attached to {} {kw}unit",
+                    subject_of(p, "the unit"),
+                    article(&kw)
+                );
+            }
             format!("{neg}{} is an attached unit", subject_of(p, "the unit"))
         }
         "strength" => format!(
@@ -254,6 +265,21 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             }
             format!("{neg}{who} {}", and_list(&parts))
         }
+        "named-weapon" | "unit-wargear" => named_equipment_phrase(t, p, negated),
+        "equipped-weapon-count" => {
+            format!(
+                "{} is {not_}equipped with a weapon named \"{}\" and exactly {} other {} weapon{}",
+                subject_of(p, "the model"),
+                st(p.get("other_than")),
+                st(p.get("count")),
+                st(p.get("weapon_type")),
+                if p.get("count").and_then(Value::as_f64) == Some(1.0) {
+                    ""
+                } else {
+                    "s"
+                }
+            )
+        }
         "loadout" => {
             let kw = if truthy(p.get("model_keyword")) {
                 format!("{} ", st(p.get("model_keyword")))
@@ -291,6 +317,17 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             )
         }
         "eligible" => {
+            if is(p, "to", "embark-within") {
+                // The candidate being checked (this-unit) reads "that Transport".
+                let transport = match p.get("transport") {
+                    Some(Value::String(s)) if s == "this-unit" => "that Transport".to_string(),
+                    other => unit_ref_phrase(other, "that Transport"),
+                };
+                return format!(
+                    "{} is {not_}able to embark within {transport}",
+                    subject_of(p, "the unit")
+                );
+            }
             if is(p, "to", "be-selected") {
                 let source = obj(p.get("source_ability")).get("ability_id");
                 return format!(

@@ -1,4 +1,4 @@
-# MFM stratagems — APPLIED
+# MFM stratagems — DRY RUN
 
 APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,
 `type` ← category (fill-only), `category` ← detachmentId presence.
@@ -51,6 +51,11 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
 
+## agents-of-the-imperium
+
+**Player-turn ← either over the key (the WHEN line names a phase in either turn):**
+- selfless-bodyguard-imperialis-fleet-agents-of-the-imperium: key said opponent-turn
+
 ## black-templars
 
 **Phases — authored vs prose-derived (review only, NOT applied):**
@@ -63,8 +68,17 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 
 ## chaos-daemons
 
+**Player-turn ← either over the key (the WHEN line names a phase in either turn):**
+- overwhelming-excess-legion-of-excess-chaos-daemons: key said opponent-turn
+- from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons: key said your-turn
+
 **Phases — authored vs prose-derived (review only, NOT applied):**
 - rapturous-agony-legion-of-excess-chaos-daemons: [command,movement,shooting,charge,fight] vs [shooting,fight]
+
+## chaos-knights
+
+**Player-turn ← either over the key (the WHEN line names a phase in either turn):**
+- storm-of-darkness-traitoris-lance-chaos-knights: key said opponent-turn
 
 ## dark-angels
 
@@ -72,6 +86,11 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 - inescapable-justice-wrath-of-the-rock-dark-angels: [command,movement,shooting,charge,fight] vs [fight]
 - tactical-mastery-wrath-of-the-rock-dark-angels: [movement] vs [command]
 - wind-swift-evasion-stormlance-task-force-adeptus-astartes: [movement] vs [fight]
+
+## death-guard
+
+**Player-turn ← either over the key (the WHEN line names a phase in either turn):**
+- territorial-infection-paragons-of-putrescence-death-guard: key said your-turn
 
 ## deathwatch
 

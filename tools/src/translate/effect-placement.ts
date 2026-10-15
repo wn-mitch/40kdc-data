@@ -13,6 +13,7 @@ const PLACEMENTS: Record<string, string> = {
   coherency: "in Unit Coherency",
   unengaged: "not within Engagement Range of any enemy units",
   "strategic-reserves": "in Strategic Reserves",
+  "cult-ambush": "in Cult Ambush",
   anywhere: "anywhere on the battlefield",
   "connected-sections": "with its sections touching",
   "deployment-zone": "wholly within your deployment zone",
@@ -41,6 +42,8 @@ export function placePhrase(of: unknown, ctx: Ctx): string {
       const label = dekebab(jstr(o.marker)).replace(/ marker$/i, "");
       return `${/^[aeiou]/i.test(label) ? "an" : "a"} ${label} marker`;
     }
+    // The enemy deployment zone (region-ref, a place a distance is measured from): the printed name.
+    if (o.territory != null) return o.territory === "enemy-deployment-zone" ? "your opponent's deployment zone" : dekebab(jstr(o.territory));
     if (o.objective != null) {
       const obj = objectivePhrase(o.objective as P, false, "objective marker");
       return (o.objective as P).selection_var != null ? "that objective marker" : `${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;

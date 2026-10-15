@@ -21,9 +21,23 @@ CREATE TABLE IF NOT EXISTS leaf_surfaces (
 CREATE UNIQUE INDEX IF NOT EXISTS leaf_surfaces_one_meaning
   ON leaf_surfaces(normalized_surface) WHERE status = 'active';
 CREATE INDEX IF NOT EXISTS leaf_surfaces_fingerprint_lookup ON leaf_surfaces(fingerprint_id, status);
+
+-- One human decision that a worded operator means one family with typed slots (leaf-operators.ts).
+-- Its spellings are instantiated as ordinary scoped surfaces linked by leaf_surfaces.operator_id.
+CREATE TABLE IF NOT EXISTS leaf_operators (
+  id INTEGER PRIMARY KEY,
+  family_id TEXT NOT NULL,
+  family_version INTEGER NOT NULL,
+  definition_json TEXT NOT NULL CHECK(json_valid(definition_json)),
+  status TEXT NOT NULL CHECK(status IN ('active', 'retired')),
+  authority_kind TEXT NOT NULL CHECK(authority_kind IN ('human', 'machine')),
+  batch_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(batch_id) REFERENCES annotation_batches(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+) STRICT;
 `;
 
-export const LEAVES_TABLES = ["leaf_surfaces"] as const;
+export const LEAVES_TABLES = ["leaf_surfaces", "leaf_operators"] as const;
 
 /**
  * Leaf proposals and the sentence vectors behind them. These are derived, rebuildable state:

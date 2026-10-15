@@ -385,12 +385,15 @@ pub(crate) fn is_rating_ref(v: Option<&Value>) -> bool {
         .is_some_and(|o| o.get("rating") == Some(&Value::Bool(true)))
 }
 
-/// The display name for a granted weapon id: a curated override, else Title Case.
+/// The display name for a granted weapon id: a curated override, else Title Case of the id. A
+/// trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
 pub(crate) fn weapon_label(id: Option<&Value>) -> String {
     let id = jstr(id);
     match id.as_str() {
-        "imperiums-sword" => "Imperium's Sword".to_string(),
-        _ => title_case(&id),
+        "imperiums-sword" | "imperiums-sword-assault-brethren" => "Imperium's Sword".to_string(),
+        "tl-4-9-lords-of-the-forge" => "TL-4ø9".to_string(),
+        "eadbanger-wurrband" => "'Eadbanger".to_string(),
+        _ => title_case(id.strip_suffix("-drone").unwrap_or(&id)),
     }
 }
 

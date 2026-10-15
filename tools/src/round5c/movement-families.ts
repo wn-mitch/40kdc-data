@@ -17,8 +17,8 @@ const MOVE_ACTOR_SUBJECTS = ["this-unit", "this-model"] as const;
 export const MOVE_TYPES = [
   "normal", "advance", "fall-back", "charge", "pile-in", "consolidation", "surge", "scout", "ingress", "disembark", "embark", "pulse-jet",
 ] as const;
-const MOVE_SUBSET = ["normal", "advance", "fall-back", "charge"] as const;
-const PASSTHROUGH_ITEMS = ["models", "all-terrain", "tall-terrain", "terrain-le-4", "non-titanic-models"] as const;
+export const MOVE_SUBSET = ["normal", "advance", "fall-back", "charge"] as const;
+export const PASSTHROUGH_ITEMS = ["models", "all-terrain", "tall-terrain", "terrain-le-4", "non-titanic-models"] as const;
 const SETUP_TO = ["battlefield", "strategic-reserves"] as const;
 const SETUP_FROM = ["strategic-reserves", "transport", "battlefield"] as const;
 const MARKER_OPERATIONS = ["place", "relocate"] as const;
@@ -241,6 +241,34 @@ export const MOVEMENT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       additionalProperties: false,
     },
   },
+  {
+    id: "move-end-nearest",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Move must end nearest a unit",
+    description: "The move before it must end as close as possible to the closest unit that the unit-filter right after it names (to: following-filter); that filter is folded into the leaf's of before compilation.",
+    starter: { to: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["to"],
+      properties: { to: { enum: ["following-filter"] } },
+      additionalProperties: false,
+    },
+  },
+  {
+    id: "move-end-waiver",
+    version: 1,
+    role: "RESTRICTION",
+    label: "Waives where a move must end",
+    description: "Waives the closest-enemy-model requirement of a move-end nearest in the same sentence: the move may instead end as close as possible to that unit. rule names the waived requirement. It is never valid without a move-end-nearest.",
+    starter: { rule: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["rule"],
+      properties: { rule: { enum: ["closest-enemy-model"] } },
+      additionalProperties: false,
+    },
+  },
 ];
 
 export function normalizeMovementParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
@@ -262,6 +290,14 @@ export function normalizeMovementParameters(family: string, input: Record<string
       const keys = Object.keys(input);
       if (keys.length !== 1 || keys[0] !== "match") throw new TypeError("move-must-end parameters must be exactly: match.");
       return { match: enumValue(input.match, ["any", "all"], "move-must-end.match") };
+    }
+    case "move-end-nearest": {
+      if (Object.keys(input).join() !== "to") throw new TypeError("move-end-nearest parameters must be exactly: to.");
+      return { to: enumValue(input.to, ["following-filter"], "move-end-nearest.to") };
+    }
+    case "move-end-waiver": {
+      if (Object.keys(input).join() !== "rule") throw new TypeError("move-end-waiver parameters must be exactly: rule.");
+      return { rule: enumValue(input.rule, ["closest-enemy-model"], "move-end-waiver.rule") };
     }
     case "make-move": {
       const optional = version >= 2 ? ["distance", "ends_within_inches", "counts_as_move"] : ["distance", "ends_within_inches"];

@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/round5c/compile.js";
-import { normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/round5c/contracts.js";
+import { mapToLatest } from "../src/round5c/family-versions.js";
 import { checkEntry, entryWithMechanics } from "../src/round5c/entries.js";
 import { prefillFromSource, type PrefillFamily } from "../src/round5c/leaf-prefill.js";
 import { previewLeaf } from "../src/round5c/leaf-preview.js";
@@ -237,6 +238,20 @@ describe("Round 5C batch-6 widened subject vocabulary (unit-keyword@2, unit-stat
       { type: "happened", parameters: { subject: "selected-unit", event: "move-ended", filter: { move_types: ["charge"] }, window: "turn" } });
   });
 
+  it("compiles unit-activity@4's list as any of them, and negated as none of them", () => {
+    const shot = { type: "happened", parameters: { event: "selected", filter: { to: "shoot" }, window: "phase" } };
+    const fought = { type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } };
+    conditionCase("unit-activity", { activities: ["fought-this-phase", "selected-to-shoot-this-phase"], subject: "this-unit", negated: true }, 4,
+      { operator: "not", operands: [{ operator: "or", operands: [fought, shot] }] });
+    conditionCase("unit-activity", { activities: ["selected-to-shoot-this-phase"], subject: "this-unit", negated: false }, 4, shot);
+    expect(() => normalizeFingerprintParameters("unit-activity", { activities: [], subject: "this-unit", negated: true }, 4)).toThrow(/at least one/u);
+  });
+
+  it("migrates a unit-activity@3 leaf to a one-item list", () => {
+    expect(mapToLatest("unit-activity", 3, { activity: "fought-this-phase", subject: "this-unit", negated: true }))
+      .toEqual({ family: "unit-activity", version: currentFamilyVersion("unit-activity"), parameters: { activities: ["fought-this-phase"], subject: "this-unit", negated: true } });
+  });
+
   it("compiles unit-position@2's widened objective-range subject and closest-eligible's new to/range", () => {
     conditionCase("unit-position", { kind: "objective-range", controlled_by: "any", subject: "event-subject", negated: false }, 2,
       { type: "within", parameters: { subject: "event-subject", of: { objective: {} }, range: "objective-control" } });
@@ -299,5 +314,37 @@ describe("Round 5C batch-6 describer round-trip and prefill", () => {
     const eventFamily = family("event", { properties: { kind: {}, activity: { enum: ["stratagem", "ability", "action", "manoeuvre", "order", "ritual", "dark-pact", "act-of-faith", "doctrine", "contract"] } } });
     expect(prefillFromSource(eventFamily, "each time you use a Stratagem")).toMatchObject({ kind: "used", activity: "stratagem" });
     expect(prefillFromSource(eventFamily, "at the start of the battle")).toMatchObject({ kind: "battle-started" });
+  });
+});
+
+describe("Round 5C picked rolls and just-destroyed Stratagem targets", () => {
+  it("lowers a pick of one roll to a choice of single-roll effects, and renders one roll for count 1", () => {
+    const pick = compiled([leaf("EFFECT", "roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 }, 2)]);
+    expect(pick.mechanics.effect).toEqual({ type: "choice", options: [
+      { type: "roll-result", target: "this-unit", modifier: { roll: "hit", count: 1, result: 6 } },
+      { type: "roll-result", target: "this-unit", modifier: { roll: "wound", count: 1, result: 6 } },
+    ] });
+    expect(rendered(base(), [leaf("EFFECT", "roll-auto-result", { roll: "hit", outcome: "counts-as-6", count: 1 }, 2)])).toMatch(/one of [^.]*Hit rolls counts as 6/iu);
+    const reroll = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "damage"], subset: "all", weapon_type: "all", count: 1 }, 4)]);
+    expect((reroll.mechanics.effect as { type: string; options: unknown[] }).options).toHaveLength(2);
+    // A pick needs two rolls, and names either roll or rolls, never both.
+    expect(() => normalizeFingerprintParameters("reroll", { rolls: ["hit"], subset: "all", weapon_type: "all" }, 4)).toThrow(/two or more/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "hit", rolls: ["hit", "wound"], outcome: "counts-as-6", count: 1 }, 2)).toThrow(/exactly one of roll and rolls/u);
+    expect(() => normalizeFingerprintParameters("roll-auto-result", { rolls: ["hit", "wound"], outcome: "counts-as-6" }, 2)).toThrow(/needs count 1/u);
+  });
+
+  it("keeps a just-destroyed unit a legal Stratagem target, and refuses that despite before version 2", () => {
+    const permission = leaf("EFFECT", "eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, 2);
+    expect(compiled([permission]).mechanics.effect).toEqual({ type: "permission", target: "this-unit", modifier: { activity: "use-stratagem", allow: true, despite: ["destroyed"] } });
+    expect(rendered(base(), [permission])).toMatch(/eligible to be targeted with Stratagems even if it has just been destroyed/u);
+    expect(() => normalizeFingerprintParameters("eligibility-permission", { subject: "this-unit", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, 1)).toThrow();
+  });
+});
+
+describe("Round 5C unit-mark@2", () => {
+  it("tests for being riled up, which version 1 refused", () => {
+    const riled = compiled([leaf("CONDITION", "unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 2), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+    expect(riled.mechanics.effect).toMatchObject({ type: "conditional", condition: { type: "designated", parameters: { tag: "riled-up" } } });
+    expect(() => normalizeFingerprintParameters("unit-mark", { mark: "riled-up", subject: "this-unit", negated: false }, 1)).toThrow();
   });
 });

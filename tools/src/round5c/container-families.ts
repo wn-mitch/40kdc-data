@@ -1,5 +1,6 @@
 import type { SemanticFamilyDefinition } from "./contracts.js";
 import { boundedInteger, enumSet, enumValue, exactKeys } from "./family-validation.js";
+import { normalizeAuraRangeV3 } from "./unit-filter-family.js";
 
 /**
  * Batch 5 (containers): the leaf families that wrap the effects around them into a DSL container
@@ -64,6 +65,7 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
   },
   {
     id: "leader-target",
@@ -216,9 +218,10 @@ export const CONTAINER_FAMILIES: readonly SemanticFamilyDefinition[] = [
   },
 ];
 
-export function normalizeContainerParameters(family: string, input: Record<string, unknown>): Record<string, unknown> | null {
+export function normalizeContainerParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
     case "aura-range": {
+      if (version >= 3) return normalizeAuraRangeV3(input);
       const keys = ["side", "inches", ...("keywords" in input ? ["keywords"] : []), ...("range_cap_inches" in input ? ["range_cap_inches"] : [])];
       exactKeys(input, keys, family);
       const result: Record<string, unknown> = { side: enumValue(input.side, AURA_SIDES, "aura-range.side"), inches: boundedInteger(input.inches, 1, 24, "aura-range.inches") };

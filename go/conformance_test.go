@@ -222,3 +222,24 @@ func TestCountCappedRerollIsNotAppliedAsUnlimited(t *testing.T) {
 		t.Fatalf("reason = %q", got)
 	}
 }
+
+// TestEffectTranslationCorpus renders every effect-translation case with the Go describer; the
+// rendered text is the contract, byte for byte.
+func TestEffectTranslationCorpus(t *testing.T) {
+	var cases []map[string]any
+	if err := json.Unmarshal(loadCorpus(t, "effect-translation", "cases.json"), &cases); err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range cases {
+		ability := map[string]any{"effect": c["effect"]}
+		for _, key := range []string{"scope", "usage", "trigger", "applies_to"} {
+			if c[key] != nil {
+				ability[key] = c[key]
+			}
+		}
+		want := c["expected"].(map[string]any)["text"]
+		if got := describeAbility(ability); got != want {
+			t.Errorf("%v:\n got  %q\n want %q", c["caseId"], got, want)
+		}
+	}
+}

@@ -37,6 +37,31 @@
     ],
     "detachment_rule_ids": [
       "acrobatic-onslaught-ghosts-of-the-webway-aeldari"
+    ],
+    "granted_warlord_datasheet_ids": [
+      "death-jester",
+      "shadowseer",
+      "troupe-master"
+    ],
+    "keyword_limit_overrides": [
+      {
+        "keywords": [
+          "Death Jester"
+        ],
+        "max": 3
+      },
+      {
+        "keywords": [
+          "Shadowseer"
+        ],
+        "max": 3
+      },
+      {
+        "keywords": [
+          "Troupe Master"
+        ],
+        "max": 3
+      }
     ]
   },
   {
@@ -114,6 +139,31 @@
     ],
     "detachment_rule_ids": [
       "boons-of-the-brood-aeldari"
+    ],
+    "granted_warlord_datasheet_ids": [
+      "death-jester",
+      "shadowseer",
+      "troupe-master"
+    ],
+    "keyword_limit_overrides": [
+      {
+        "keywords": [
+          "Death Jester"
+        ],
+        "max": 3
+      },
+      {
+        "keywords": [
+          "Shadowseer"
+        ],
+        "max": 3
+      },
+      {
+        "keywords": [
+          "Troupe Master"
+        ],
+        "max": 3
+      }
     ]
   },
   {
@@ -188,6 +238,10 @@
     ],
     "detachment_rule_ids": [
       "strength-from-death-aeldari"
+    ],
+    "mandatory_warlord_datasheet_ids": [
+      "the-yncarne",
+      "yvraine"
     ]
   },
   {

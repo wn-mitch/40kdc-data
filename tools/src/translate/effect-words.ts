@@ -4,7 +4,7 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { andList, designationPhrase, dekebab, idLabel, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
+import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, rangePhrase, statePhrase, titleCase, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
 export { andList, dekebab, orList, rangePhrase, titleCase };
@@ -248,10 +248,19 @@ export function abilityLabel(id: unknown): string {
   return ABILITY_LABELS[jstr(id)] ?? idLabel(jstr(id));
 }
 
-const WEAPON_LABELS: Record<string, string> = { "imperiums-sword": "Imperium's Sword" };
-/** The display name for a granted weapon id: a curated override, else Title Case. */
+const WEAPON_LABELS: Record<string, string> = {
+  "imperiums-sword": "Imperium's Sword",
+  "imperiums-sword-assault-brethren": "Imperium's Sword",
+  "tl-4-9-lords-of-the-forge": "TL-4ø9",
+  "eadbanger-wurrband": "'Eadbanger",
+};
+/**
+ * The display name for a granted weapon id: a curated override, else Title Case of the id. A
+ * trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
+ */
 export function weaponLabel(id: unknown): string {
-  return WEAPON_LABELS[jstr(id)] ?? titleCase(jstr(id));
+  const key = jstr(id);
+  return WEAPON_LABELS[key] ?? titleCase(key.replace(/-drone$/, ""));
 }
 
 /** "melee weapons", "ranged Bolt Rifle weapons with [PISTOL]" — a weapon filter as a noun. */
@@ -297,9 +306,14 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(jstr).join(" ")} ` : "";
   const noun = f.level === "model" ? "models" : "units";
-  let s = `${owner}${all}${noun}`;
+  // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+  const compact = keywordAlternatives(f);
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
+  // Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+  if (Array.isArray(f.any_of_filters) && !compact) s += ` that are ${orList(alternativeFilters(f).map((a) => filterSubject(a, ctx).replace(/^all /, "")))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
+  if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(jstr).join(" ")} ${noun})`;
   const within = f.within as P | undefined;
   if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${effectSubject(within.of, ctx)}` : ""}`;
   s += filterRelations(f, ctx);
@@ -307,8 +321,9 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
   if (f.not_designated != null) s += ` that are not ${designationPhrase(jstr(f.not_designated), true)}`;
   if (f.state != null) s += ` that are ${statePhrase(jstr(f.state))}`;
+  if (Array.isArray(f.not_states)) s += ` that are ${andList((f.not_states as unknown[]).map((x) => statePhrase(jstr(x), true)))}`;
   if (f.excluding != null) s += ` other than ${effectSubject(f.excluding, ctx)}`;
-  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null ||
+  const bounded = within != null || f.visible === true || f.designated != null || f.not_designated != null || f.state != null || f.not_states != null ||
     f.embarked_in != null || f.member_of != null || f.engaged_with != null || f.not_engaged_with != null;
   return bounded ? s : `all ${s}`;
 }

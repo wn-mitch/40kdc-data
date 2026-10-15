@@ -204,6 +204,33 @@ _ROLE_PHRASES: dict[str, str] = {
 }
 
 
+def keyword_alternatives(f: Any) -> list[str] | None:
+    """A filter's ``any_of_filters`` as keyword spellings when each alternative is only its
+    keywords and the filter requires none of its own, so "an A or B C unit" says it; else None."""
+    f = _obj(f)
+    alts = f.get("any_of_filters")
+    if not isinstance(alts, list) or isinstance(f.get("all_of"), list):
+        return None
+    out: list[str] = []
+    for a in alts:
+        if not isinstance(a, dict):
+            return None
+        all_of = a.get("all_of")
+        if not isinstance(all_of, list) or not all_of or any(k != "all_of" for k in a):
+            return None
+        out.append(" ".join(_str(k) for k in all_of))
+    return out
+
+
+def alternative_filters(f: Any) -> list[P]:
+    """Each alternative of ``any_of_filters`` as a filter of the outer filter's level."""
+    f = _obj(f)
+    level = f.get("level")
+    return [
+        {**_obj(a), "level": level} if level is not None else _obj(a) for a in f["any_of_filters"]
+    ]
+
+
 def unit_filter_phrase(f: Any) -> str:
     """A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit"."""
     f = _obj(f)
@@ -217,13 +244,20 @@ def unit_filter_phrase(f: Any) -> str:
     all_of = f.get("all_of")
     all_ = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
     noun = "model" if f.get("level") == "model" else "unit"
-    s = f"{owner}{all_}{noun}"
+    # "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+    compact = keyword_alternatives(f)
+    s = f"{owner}{_or_list(compact)} {noun}" if compact is not None else f"{owner}{all_}{noun}"
     article = "an" if re.match(r"(?:[aeio]|u(?!ni))", s, re.IGNORECASE) else "a"
     s = f"{article} {s}"
+    # Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+    if isinstance(f.get("any_of_filters"), list) and compact is None:
+        s += f" that is {_or_list([unit_filter_phrase(a) for a in alternative_filters(f)])}"
     if isinstance(f.get("any_of"), list):
         s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
     if isinstance(f.get("none_of"), list):
         s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
+    if isinstance(f.get("not_all_of"), list):
+        s += f" (excluding {' '.join(_str(k) for k in f['not_all_of'])} {noun}s)"
     if isinstance(f.get("has_ability"), list):
         s += f" with the {_and_list([id_label(a) for a in f['has_ability']])} ability"
     if isinstance(f.get("lacks_ability"), list):
@@ -248,6 +282,8 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" that is not {_designation_phrase(_str(f['not_designated']))}"
     if f.get("state") is not None:
         s += f" that is {_state_phrase(_str(f['state']))}"
+    if isinstance(f.get("not_states"), list):
+        s += f" that is {_and_list([_state_phrase(_str(x), True) for x in f['not_states']])}"
     if f.get("visible") is True:
         s += " that is visible to it"
     within = f.get("within")
@@ -285,7 +321,10 @@ def _subject_of(p: P, fallback: str = "the unit") -> str:
     return unit_ref_phrase(p.get("subject"), fallback)
 
 
-_AURA_RANGES: dict[str, str] = {"nurgles-gift-death-guard": "Contagion Range"}
+_AURA_RANGES: dict[str, str] = {
+    "nurgles-gift-death-guard": "Contagion Range",
+    "synapse-tyranids": "Synapse Range",
+}
 
 _RANGE_WORDS: dict[str, str] = {
     "engagement": "Engagement Range",
@@ -341,6 +380,7 @@ _STATE_PHRASES: dict[str, str] = {
     "battle-shocked": "Battle-shocked",
     "embarked": "embarked",
     "in-strategic-reserves": "in Strategic Reserves",
+    "in-cult-ambush": "in Cult Ambush",
     "on-battlefield": "on the battlefield",
     "hidden": "hidden",
     "fights-first": "a Fights First unit",
@@ -439,6 +479,26 @@ def roll_word(roll: Any) -> str:
     if isinstance(roll, dict) and roll.get("of_ability") is not None:
         return id_label(roll["of_ability"])
     return dekebab(_str(roll))
+
+
+# Kinds of rule a ``used`` filter can name one member of, as "the X <noun>" (an ability is its
+# name alone).
+_NAMED_USE_NOUNS: dict[str, str] = {
+    "manoeuvre": "Agile Manoeuvre",
+    "stratagem": "Stratagem",
+    "action": "action",
+}
+
+
+def named_use_phrase(f: P) -> str | None:
+    """One named rule a ``used`` filter names by id ("Reanimation Protocols", "the Swift as
+    the Wind Agile Manoeuvre"), or None."""
+    if f.get("id") is None:
+        return None
+    if f.get("kind") == "ability":
+        return id_label(f["id"])
+    noun = _NAMED_USE_NOUNS.get(_str(f.get("kind")))
+    return None if noun is None else f"the {id_label(f['id'])} {noun}"
 
 
 def used_ability_phrase(f: P) -> str | None:

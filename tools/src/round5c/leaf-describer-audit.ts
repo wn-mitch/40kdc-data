@@ -16,7 +16,7 @@ import { previewLeaf } from "./leaf-preview.js";
 
 type Schema = {
   enum?: readonly unknown[]; anyOf?: Schema[]; type?: string; minimum?: number; maximum?: number;
-  items?: Schema; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>;
+  items?: Schema; properties?: Record<string, Schema>; pattern?: string; const?: unknown; "x-only-when"?: Record<string, readonly string[]>; "x-optional"?: true;
 };
 
 export type FamilyAudit = {
@@ -37,13 +37,19 @@ function domain(name: string, schema: Schema): unknown[] {
   if (schema.type === "boolean") return [false, true];
   if (schema.type === "array") {
     if (schema.items?.enum) return [...schema.items.enum.map((value) => [value]), schema.items.enum.slice(0, 2)];
+    // Unit-filter alternatives (unit-filter-alternatives.ts): keywords only, and one with a state.
+    if (schema.items?.properties?.keywords && schema.items.properties.states) {
+      return [[{ keywords: ["CHARACTER"] }, { keywords: ["MONSTER", "VEHICLE"] }], [{ keywords: ["CHARACTER"] }, { states: ["battle-shocked"] }]];
+    }
     return [["CHARACTER"], ["MONSTER", "VEHICLE"]];
   }
   if (schema.anyOf) {
     const listed = schema.anyOf.flatMap((item) => item.enum ?? []);
     if (listed.length) return listed.filter((value) => value !== "source");
-    if (schema.anyOf.some((item) => item.pattern)) return ["Lethal Hits", "Sustained Hits 1"];
-    if (schema.anyOf.some((item) => item.type === "integer")) return name === "threshold" ? [4, 5] : [1, 2];
+    const numbers = schema.anyOf.some((item) => item.type === "integer") ? (name === "threshold" ? [4, 5] : [1, 2]) : [];
+    // A number-or-dice amount (characteristic-modifier's value) samples both; the family keeps what it accepts.
+    if (schema.anyOf.some((item) => item.pattern)) return [...numbers, ...(numbers.length ? ["D3"] : ["Lethal Hits", "Sustained Hits 1"])];
+    if (numbers.length) return numbers;
   }
   if (schema.type === "integer") {
     const low = schema.minimum ?? 1;
@@ -63,7 +69,10 @@ function combinations(family: SemanticFamilyDefinition): Record<string, unknown>
   properties.sort(([, left], [, right]) => Number(Boolean(left["x-only-when"])) - Number(Boolean(right["x-only-when"])));
   let sets: Record<string, unknown>[] = [{}];
   for (const [name, schema] of properties) {
-    sets = sets.flatMap((set) => applies(schema, set) ? domain(name, schema).map((value) => ({ ...set, [name]: value })) : [set]);
+    // An optional parameter (`x-optional`) is also tried absent.
+    sets = sets.flatMap((set) => applies(schema, set)
+      ? [...domain(name, schema).map((value) => ({ ...set, [name]: value })), ...(schema["x-optional"] ? [set] : [])]
+      : [set]);
   }
   const valid = new Map<string, Record<string, unknown>>();
   for (const set of sets) {
@@ -126,18 +135,31 @@ export function auditFamily(family: SemanticFamilyDefinition): FamilyAudit {
   return report;
 }
 
-let cached: FamilyAudit[] | null = null;
+const audits = new Map<SemanticFamilyDefinition, FamilyAudit>();
 
-/** The audit of every current family; computed once per process, since it depends only on code. */
+/**
+ * One family's audit, computed once per process, since it depends only on code. Families with
+ * wide parameter domains take minutes to enumerate, so each is audited only when first asked for.
+ */
+function cachedAudit(family: SemanticFamilyDefinition): FamilyAudit {
+  let audit = audits.get(family);
+  if (!audit) {
+    audit = auditFamily(family);
+    audits.set(family, audit);
+  }
+  return audit;
+}
+
+/** The audit of every current family. */
 export function leafDescriberAudit(): FamilyAudit[] {
-  cached ??= REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).map(auditFamily);
-  return cached;
+  return REVIEWED_FAMILY_REGISTRY.filter((family) => !family.deprecated).map(cachedAudit);
 }
 
 /** What a reviewer should know about one leaf's English: which of its values the text hides. */
 export function describerGaps(familyId: string, parameters: Record<string, unknown>): string[] {
-  const audit = leafDescriberAudit().find((item) => item.family_id === familyId);
-  if (!audit) return [];
+  const family = REVIEWED_FAMILY_REGISTRY.find((item) => !item.deprecated && item.id === familyId);
+  if (!family) return [];
+  const audit = cachedAudit(family);
   const gaps = new Set(audit.unrendered.filter((name) => name in parameters).map((name) => `The English never shows ${name.replaceAll("_", " ")}.`));
   for (const collision of audit.collisions) {
     if (!(collision.parameter in parameters)) continue;

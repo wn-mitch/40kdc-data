@@ -374,14 +374,21 @@ func abilityLabel(id any) string {
 	return idLabel(ejstr(id))
 }
 
-var weaponLabels = map[string]string{"imperiums-sword": "Imperium's Sword"}
+var weaponLabels = map[string]string{
+	"imperiums-sword":                  "Imperium's Sword",
+	"imperiums-sword-assault-brethren": "Imperium's Sword",
+	"tl-4-9-lords-of-the-forge":        "TL-4ø9",
+	"eadbanger-wurrband":               "'Eadbanger",
+}
 
-// weaponLabel is the display name for a granted weapon id: a curated override, else Title Case.
+// weaponLabel is the display name for a granted weapon id: a curated override, else Title Case of
+// the id. A trailing "-drone" is the disambiguator for a drone's weapon entity and is not printed.
 func weaponLabel(id any) string {
-	if l, ok := weaponLabels[ejstr(id)]; ok {
+	key := ejstr(id)
+	if l, ok := weaponLabels[key]; ok {
 		return l
 	}
-	return titleCase(ejstr(id))
+	return titleCase(strings.TrimSuffix(key, "-drone"))
 }
 
 var trailingWeaponsRe = regexp.MustCompile(`(?i)\s+weapons?$`)
@@ -460,12 +467,28 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["level"] == "model" {
 		noun = "models"
 	}
+	// "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
+	compact, isCompact := keywordAlternatives(f)
 	s := owner + all + noun
+	if isCompact {
+		s = owner + orList(compact) + " " + noun
+	}
+	// Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
+	if isList(f["any_of_filters"]) && !isCompact {
+		alts := []string{}
+		for _, a := range alternativeFilters(f) {
+			alts = append(alts, strings.TrimPrefix(filterSubject(a, ctx), "all "))
+		}
+		s += " that are " + orList(alts)
+	}
 	if l, ok := asList(f["any_of"]); ok {
 		s += " with the " + orList(jstrList(l)) + " keyword"
 	}
 	if l, ok := asList(f["none_of"]); ok {
 		s += " (excluding " + orList(jstrList(l)) + " " + noun + ")"
+	}
+	if l, ok := asList(f["not_all_of"]); ok {
+		s += " (excluding " + strings.Join(jstrList(l), " ") + " " + noun + ")"
 	}
 	within, hasWithin := asMap(f["within"])
 	if hasWithin && within != nil {
@@ -496,10 +519,17 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["state"] != nil {
 		s += " that are " + statePhrase(ejstr(f["state"]), false)
 	}
+	if l, ok := asList(f["not_states"]); ok {
+		negs := []string{}
+		for _, x := range jstrList(l) {
+			negs = append(negs, statePhrase(x, true))
+		}
+		s += " that are " + andList(negs)
+	}
 	if f["excluding"] != nil {
 		s += " other than " + effectSubject(f["excluding"], ctx)
 	}
-	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil ||
+	bounded := hasWithin || f["visible"] == true || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
 		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
 	if bounded {
 		return s

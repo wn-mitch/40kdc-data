@@ -141,10 +141,6 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
-      "command",
-      "movement",
-      "shooting",
-      "charge",
       "fight"
     ],
     "player_turn": "either",
@@ -179,6 +175,7 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
+      "movement",
       "charge"
     ],
     "player_turn": "your-turn",
@@ -338,7 +335,7 @@
     "detachment_id": "wrath-of-the-rock",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "command"
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
@@ -395,7 +392,7 @@
     "detachment_id": "stormlance-task-force",
     "cp_cost": 1,
     "phases": [
-      "movement"
+      "fight"
     ],
     "player_turn": "either",
     "timing": "once-per-phase",

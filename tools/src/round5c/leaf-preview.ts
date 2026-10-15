@@ -2,6 +2,10 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 import { CompileError, leafFragment } from "./compile.js";
 import { describeCondition } from "../translate/condition.js";
 import { describeEffect, describeTrigger, durationClauses } from "../translate/effect.js";
+import { idLabel } from "../translate/condition-refs.js";
+
+/** The id a preview lowers "this ability" (unit-has-ability own) with; its label reads back as "this ability". */
+const OWN_PREVIEW_ID = "this-ability";
 
 /**
  * The describer's English for one leaf on its own, so a reviewer sees what a meaning will say
@@ -14,13 +18,19 @@ export function previewLeaf(value: unknown): { text: string | null; problem: str
   if (typeof input.family_id !== "string" || !input.parameters || typeof input.parameters !== "object") return { text: null, problem: "family_id and parameters are required." };
   try {
     const version = typeof input.family_version === "number" ? input.family_version : currentFamilyVersion(input.family_id);
-    const parameters = normalizeFingerprintParameters(input.family_id, input.parameters as Record<string, unknown>, version);
+    const normalized = normalizeFingerprintParameters(input.family_id, input.parameters as Record<string, unknown>, version);
+    // "This ability" binds to its record's id at compile; on its own the leaf reads as "this ability".
+    const own = input.family_id === "unit-has-ability" && normalized.own === true;
+    const bound = own ? { ...Object.fromEntries(Object.entries(normalized).filter(([key]) => key !== "own")), ability: OWN_PREVIEW_ID } : normalized;
+    // A leaf that names the units of a unit-filter before it reads, on its own, as a friendly unit.
+    const parameters = Object.values(bound).includes("filtered-units") && bound.subject_filter === undefined ? { ...bound, subject_filter: { owner: "friendly" } } : bound;
     const fragment = leafFragment({ role: familyRole(input.family_id, version), family_id: input.family_id, family_version: version, parameters, start_byte: 0 });
-    const text = fragment.kind === "implicit" ? fragment.note
+    const described = fragment.kind === "implicit" ? fragment.note
       : fragment.kind === "duration" ? durationClauses(fragment.duration).trail || durationClauses(fragment.duration).lead || "for the rest of the battle"
         : fragment.kind === "effect" ? describeEffect(fragment.node as never)
           : fragment.kind === "condition" ? describeCondition(fragment.node as never)
             : describeTrigger(fragment.node as never);
+    const text = own ? described.replace(`the ${idLabel(OWN_PREVIEW_ID)} ability`, "this ability") : described;
     return { text, problem: null };
   } catch (error) {
     if (error instanceof CompileError || error instanceof TypeError || error instanceof RangeError) return { text: null, problem: error.message };

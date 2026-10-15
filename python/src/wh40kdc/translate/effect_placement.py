@@ -28,6 +28,7 @@ _PLACEMENTS: dict[str, str] = {
     "coherency": "in Unit Coherency",
     "unengaged": "not within Engagement Range of any enemy units",
     "strategic-reserves": "in Strategic Reserves",
+    "cult-ambush": "in Cult Ambush",
     "anywhere": "anywhere on the battlefield",
     "connected-sections": "with its sections touching",
     "deployment-zone": "wholly within your deployment zone",
@@ -64,6 +65,11 @@ def place_phrase(of: Any, ctx: Ctx) -> str:
     if of == "battlefield-centre":
         return "the centre of the battlefield"
     if isinstance(of, dict):
+        # The enemy deployment zone (a region-ref place): the printed name.
+        if of.get("territory") is not None:
+            if of["territory"] == "enemy-deployment-zone":
+                return "your opponent's deployment zone"
+            return dekebab(jstr(of["territory"]))
         if of.get("marker") is not None:
             label = re.sub(r" marker$", "", dekebab(jstr(of["marker"])), count=1, flags=re.I)
             return f"{_article(label)} {label} marker"

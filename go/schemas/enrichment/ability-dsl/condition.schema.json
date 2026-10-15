@@ -518,6 +518,201 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "equipped-weapon-count condition",
+          "description": "[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "equipped-weapon-count"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "weapon_type": {
+                  "enum": [
+                    "melee",
+                    "ranged"
+                  ]
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "other_than": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "subject",
+                "weapon_type",
+                "count",
+                "other_than"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "named-weapon condition",
+          "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "named-weapon"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "models": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "at_least",
+                    "state"
+                  ],
+                  "properties": {
+                    "at_least": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 30
+                    },
+                    "state": {
+                      "enum": [
+                        "carry",
+                        "lack"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "subject",
+                "name",
+                "count"
+              ],
+              "allOf": [
+                {
+                  "if": {
+                    "required": [
+                      "subject"
+                    ],
+                    "properties": {
+                      "subject": {
+                        "const": "this-unit"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "models"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "subject"
+                    ],
+                    "properties": {
+                      "subject": {
+                        "const": "this-model"
+                      }
+                    }
+                  },
+                  "then": {
+                    "not": {
+                      "required": [
+                        "models"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "unit-wargear condition",
+          "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "unit-wargear"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "subject": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "wargear": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                },
+                "models": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "at_least",
+                    "state"
+                  ],
+                  "properties": {
+                    "at_least": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 30
+                    },
+                    "state": {
+                      "enum": [
+                        "carry",
+                        "lack"
+                      ]
+                    }
+                  }
+                }
+              },
+              "required": [
+                "subject",
+                "wargear"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "unit-state condition",
           "description": "[state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.",
           "required": [
@@ -581,7 +776,8 @@
                     "declare-charge",
                     "fight",
                     "start-action",
-                    "be-selected"
+                    "be-selected",
+                    "embark-within"
                   ]
                 },
                 "source_ability": {
@@ -607,11 +803,37 @@
                     "now",
                     "opponents-previous-turn-end"
                   ]
+                },
+                "transport": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
+                  "description": "embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability."
                 }
               },
               "required": [
                 "to"
-              ]
+              ],
+              "if": {
+                "properties": {
+                  "to": {
+                    "const": "embark-within"
+                  }
+                },
+                "required": [
+                  "to"
+                ]
+              },
+              "then": {
+                "required": [
+                  "transport"
+                ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "transport"
+                  ]
+                }
+              }
             }
           }
         },
@@ -1513,6 +1735,40 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "army-includes condition",
+          "description": "[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "army-includes"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "filter": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
+                },
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "every": {
+                  "const": true
+                }
+              },
+              "required": [
+                "filter"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "moved-over condition",
           "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
           "required": [
@@ -1564,6 +1820,35 @@
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 }
               }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "deployment-window condition",
+          "description": "[clock] It is the deployment step, before the battle starts (\"during deployment\").",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "deployment-window"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "during": {
+                  "enum": [
+                    "deployment"
+                  ]
+                }
+              },
+              "required": [
+                "during"
+              ]
             }
           }
         }

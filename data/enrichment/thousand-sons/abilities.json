@@ -6978,5 +6978,291 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "bounding-leaps-thousand-sons",
+    "name": "Bounding Leaps",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "flamers"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemon-lord-of-tzeentch-thousand-sons",
+    "name": "Daemon Lord of Tzeentch",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "lord-of-change"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-icon-thousand-sons",
+    "name": "Daemonic Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "pink-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "exploding-horrors-thousand-sons",
+    "name": "Exploding Horrors",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "blue-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons",
+    "name": "HORRORS ARE PINK. HORRORS ARE BLUE. WHERE ONCE THERE WAS ONE, NOW THERE ARE TWO.",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "pink-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instrument-of-chaos-thousand-sons",
+    "name": "Instrument of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "pink-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "master-of-magicks-thousand-sons",
+    "name": "Master of Magicks",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "lord-of-change"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "one-head-looks-back-thousand-sons",
+    "name": "One Head Looks Back",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kairos-fateweaver"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "one-head-looks-forward-thousand-sons",
+    "name": "One Head Looks Forward",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "kairos-fateweaver"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "slashing-dive-thousand-sons",
+    "name": "Slashing Dive",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "screamers"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "split-pink-horrors-thousand-sons",
+    "name": "Split",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "pink-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "split-thousand-sons",
+    "name": "Split",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "blue-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "sullen-malevolence-thousand-sons",
+    "name": "Sullen Malevolence",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "blue-horrors"
+    ],
+    "faction_id": "thousand-sons",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

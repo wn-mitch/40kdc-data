@@ -4,10 +4,10 @@
 use serde_json::Value;
 
 use crate::translate::condition::{
-    and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list, st, strs, truthy,
-    unit_filter_phrase, P,
+    alternative_filters, and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list,
+    st, state_phrase, strs, truthy, unit_filter_phrase, P,
 };
-use crate::translate::condition::{roll_word, used_ability_phrase};
+use crate::translate::condition::{named_use_phrase, roll_word, used_ability_phrase};
 use crate::translate::dekebab;
 use crate::translate::effect::title_case;
 
@@ -34,6 +34,8 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             if f.get("event_var").is_some_and(Value::is_string) {
                 return "that unit".to_string();
             }
+            // Keywords on the actor read as a trailing requirement; states read as a relative
+            // clause ("an enemy unit that is unengaged").
             let owner = if is(f, "owner", "friendly") {
                 "a friendly"
             } else if is(f, "owner", "enemy") {
@@ -41,12 +43,24 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             } else {
                 "a"
             };
+            let mut states = Vec::new();
+            if nn(f, "state").is_some() {
+                states.push(state_phrase(&st(f.get("state")), false));
+            }
+            if let Some(Value::Array(not)) = f.get("not_states") {
+                states.extend(not.iter().map(|x| state_phrase(&st(Some(x)), true)));
+            }
             format!(
-                "{owner} {}",
+                "{owner} {}{}",
                 if is(f, "level", "model") {
                     "model"
                 } else {
                     "unit"
+                },
+                if states.is_empty() {
+                    String::new()
+                } else {
+                    format!(" that is {}", and_list(&states))
                 }
             )
         }
@@ -71,10 +85,27 @@ pub(crate) fn actor_keywords(r: Option<&Value>) -> String {
             and_list(&all)
         ));
     }
+    // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
+    if f.get("any_of_filters").is_some_and(Value::is_array) {
+        let alts: Vec<String> = alternative_filters(f)
+            .iter()
+            .map(unit_filter_phrase)
+            .collect();
+        s.push_str(&format!(
+            " (the triggering {noun} must be {})",
+            or_list(&alts)
+        ));
+    }
     if let Some(none) = strs(f.get("none_of")) {
         s.push_str(&format!(
             " (the triggering {noun} must not have {})",
             or_list(&none)
+        ));
+    }
+    if let Some(not_all) = strs(f.get("not_all_of")) {
+        s.push_str(&format!(
+            " (the triggering {noun} must not have all of {})",
+            and_list(&not_all)
         ));
     }
     s
@@ -112,6 +143,7 @@ pub(crate) fn roll_noun(roll: &str) -> String {
         "blessings-of-khorne" => "Blessings of Khorne roll".to_string(),
         "manoeuvre" => "Agile Manoeuvre roll".to_string(),
         "channelling" => "Channel the Warp roll".to_string(),
+        "deadly-demise" => "Deadly Demise roll".to_string(),
         other => format!("{} roll", dekebab(other)),
     }
 }
@@ -191,6 +223,40 @@ pub(crate) fn roll_clause(t: &P, f: &P) -> String {
     }
     if is(f, "result", "success") && roll == "dark-pact" {
         return "each time the unit makes a Dark Pact and passes its Leadership test".to_string();
+    }
+    // Whose roll it was and how it came out: "when the unit fails a Battle-shock test",
+    // "after a saving throw made for this model is failed".
+    let art = article(&noun);
+    let named = !matches!(subject, None | Some(Value::Null)) && !anyone;
+    let test = matches!(
+        roll.as_str(),
+        "battle-shock" | "leadership" | "desperate-escape"
+    );
+    let made_for = if named {
+        format!(" made for {}", actor(subject))
+    } else {
+        String::new()
+    };
+    if is(f, "result", "failure") || is(f, "result", "success") {
+        let passed = is(f, "result", "success");
+        if test {
+            return format!(
+                "when {} {} {art} {noun}",
+                actor(subject),
+                if passed { "passes" } else { "fails" }
+            );
+        }
+        if passed {
+            return format!("after a successful {noun}{made_for}");
+        }
+        return format!("after {art} {noun}{made_for} is failed");
+    }
+    if named {
+        return if test {
+            format!("after {} takes {art} {noun}", actor(subject))
+        } else {
+            format!("after {} makes {art} {noun}", actor(subject))
+        };
     }
     if roll == "psychic" {
         return "after a Psychic test is taken".to_string();
@@ -301,6 +367,27 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 format!("when {who} selects its targets")
             }
         }
+        "move-started" => {
+            // "at the start of this unit's move", "just before it Consolidates": the move is
+            // about to be made.
+            let kinds = if f.get("move_types").is_some_and(Value::is_array) {
+                move_kinds(f.get("move_types"))
+            } else {
+                String::new()
+            };
+            let mv = if kinds.is_empty() {
+                "a move".to_string()
+            } else {
+                format!("{} {kinds} move", article(&kinds))
+            };
+            if subject
+                .is_some_and(|v| matches!(v, Value::Object(_) | Value::Array(_) | Value::Null))
+            {
+                format!("each time {who} starts {mv}")
+            } else {
+                format!("when {who} starts {mv}")
+            }
+        }
         "move-ended" => {
             if is(f, "through", "tall-terrain") {
                 return format!("when {who} moves through terrain over 4\" tall");
@@ -344,7 +431,16 @@ pub(crate) fn event_phrase(t: &P) -> String {
             };
             format!("when {who} {from}")
         }
-        "disembarked" => format!("when {who} disembarks from a Transport"),
+        "disembarked" => {
+            let from = match f.get("transport") {
+                None | Some(Value::Null) => "a Transport".to_string(),
+                Some(Value::String(s)) if s == "this-unit" || s == "this-model" => {
+                    "this Transport".to_string()
+                }
+                other => object_phrase(other),
+            };
+            format!("when {who} disembarks from {from}")
+        }
         "before-roll" | "after-roll" => roll_clause(t, f),
         "damage-allocated" => {
             if nn(t, "object").is_some() && !is(t, "object", "this-unit") {
@@ -370,7 +466,11 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     }
                 );
             }
-            format!("after {who} resolves its attacks")
+            if is(f, "kind", "fight") {
+                format!("after {who} resolves its attacks in a fight")
+            } else {
+                format!("after {who} resolves its attacks")
+            }
         }
         "destroyed" => {
             let melee = if is(f, "attack_type", "melee") {
@@ -378,6 +478,15 @@ pub(crate) fn event_phrase(t: &P) -> String {
             } else {
                 ""
             };
+            // A subject names who destroyed the object: "each time the unit destroys an enemy unit".
+            if nn(t, "subject").is_some() {
+                let what = if nn(t, "object").is_none() {
+                    "a unit".to_string()
+                } else {
+                    object_phrase(object)
+                };
+                return format!("each time {who} destroys {what}{melee}");
+            }
             if nn(t, "object").is_none() || is(t, "object", "this-unit") {
                 return format!("when the unit is destroyed{melee}");
             }
@@ -403,6 +512,19 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if f.get("first") == Some(&Value::Bool(true)) {
                 return "the first time a model in the unit is destroyed".to_string();
             }
+            // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+            if nn(t, "subject").is_some() {
+                if is(t, "object", "this-model") {
+                    return format!("when this model is destroyed by {who}");
+                }
+                if is(t, "object", "model-in-this-unit")
+                    || is(t, "object", "this-unit")
+                    || nn(t, "object").is_none()
+                {
+                    return format!("when a model in the unit is destroyed by {who}");
+                }
+                return format!("each time {who} destroys {}", object_phrase(object));
+            }
             if is(t, "object", "this-model") {
                 return "when this model is destroyed".to_string();
             }
@@ -416,14 +538,44 @@ pub(crate) fn event_phrase(t: &P) -> String {
             format!("when {} is destroyed", object_phrase(object))
         }
         "used" => {
+            // A rule your opponent used: the subject names only the enemy owner.
+            let opponent = subject
+                .and_then(Value::as_object)
+                .is_some_and(|s| is(s, "owner", "enemy") && key_count(s) == 1);
             if let Some(which) = used_ability_phrase(f) {
-                return format!("each time {who} uses {which}");
+                let by = if opponent {
+                    "your opponent"
+                } else {
+                    who.as_str()
+                };
+                return format!("each time {by} uses {which}");
+            }
+            // One named rule: who used it, else you (the holder) for an ability or Stratagem.
+            if let Some(named) = named_use_phrase(f) {
+                let verb = if is(f, "kind", "manoeuvre") {
+                    "performs"
+                } else {
+                    "uses"
+                };
+                if opponent {
+                    return format!("each time your opponent {verb} {named}");
+                }
+                if nn(t, "subject").is_none()
+                    && (is(f, "kind", "ability") || is(f, "kind", "stratagem"))
+                {
+                    return format!("when you use {named}");
+                }
+                return format!("each time {who} {verb} {named}");
             }
             if is(f, "kind", "stratagem") {
-                return "each time you use a Stratagem".to_string();
+                return if opponent {
+                    "each time your opponent uses a Stratagem".to_string()
+                } else {
+                    "each time you use a Stratagem".to_string()
+                };
             }
-            if is(f, "kind", "ability") && nn(f, "id").is_some() {
-                return format!("when you use {}", title_case(&st(f.get("id"))));
+            if opponent && is(f, "kind", "ability") && nn(f, "id").is_none() {
+                return "each time your opponent uses an ability".to_string();
             }
             if is(f, "kind", "ritual") && is(f, "result", "success") {
                 return format!("each time {who} manifests a Ritual");

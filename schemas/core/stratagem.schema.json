@@ -51,7 +51,19 @@
               { "required": ["name"] }
             ]
           },
-          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}."
+          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}. Targets in exclusive modes (\"up to two X, or one other Y\") each carry a mode: when any does, every one does and both modes a and b are present. The player chooses one mode; the targets of an unchosen mode are not selected, their eligibility is not checked, and no effect of them occurs. Targets are distinct units only within one mode.",
+          "allOf": [
+            {
+              "if": { "contains": { "required": ["mode"] } },
+              "then": {
+                "items": { "required": ["mode"] },
+                "allOf": [
+                  { "contains": { "required": ["mode"], "properties": { "mode": { "const": "a" } } } },
+                  { "contains": { "required": ["mode"], "properties": { "mode": { "const": "b" } } } }
+                ]
+              }
+            }
+          ]
         },
         { "type": "null" }
       ]
@@ -104,8 +116,8 @@
         },
         "count_max": {
           "type": "integer",
-          "minimum": 2,
-          "description": "Upper bound when `count` is up-to."
+          "minimum": 1,
+          "description": "Upper bound when `count` is up-to (1: an optional extra target, zero or one unit)."
         },
         "side": {
           "enum": ["your-army", "enemy"],
@@ -123,10 +135,28 @@
           "$ref": "../enrichment/ability-dsl/condition.schema.json",
           "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit."
         },
-        "notes": { "type": "string" }
+        "notes": { "type": "string" },
+        "mode": {
+          "enum": ["a", "b"],
+          "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions)."
+        },
+        "mode_cost": {
+          "type": "object",
+          "required": ["label", "amount"],
+          "properties": {
+            "label": { "type": "string", "minLength": 1, "description": "The resource pool or resource the mode spends, as the resource-spend effect names it." },
+            "amount": { "type": "integer", "minimum": 1, "description": "How many of that resource the mode spends to be chosen." }
+          },
+          "additionalProperties": false,
+          "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost."
+        }
       },
       "additionalProperties": false,
       "allOf": [
+        {
+          "if": { "required": ["mode_cost"] },
+          "then": { "required": ["mode"] }
+        },
         {
           "if": { "properties": { "count": { "const": "up-to" } }, "required": ["count"] },
           "then": { "required": ["count_max"] },

@@ -81,7 +81,7 @@ export type SourceType = "ability" | "stratagem" | "enhancement" | "detachment-r
  */
 export type PlayerTurn = "your-turn" | "opponent-turn" | "either";
 /**
- * The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.
+ * The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "game-event".
@@ -99,6 +99,7 @@ export type GameEvent =
   | "step-started"
   | "selected"
   | "targets-selected"
+  | "move-started"
   | "move-ended"
   | "set-up"
   | "disembarked"
@@ -190,7 +191,7 @@ export type TerrainAreaKeyword = "obscuring" | "hidden" | "plunging-fire";
  */
 export type Owner = "friendly" | "enemy" | "any";
 /**
- * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged).
+ * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "unit-state".
@@ -200,10 +201,15 @@ export type UnitState =
   | "battle-shocked"
   | "embarked"
   | "in-strategic-reserves"
+  | "in-cult-ambush"
   | "on-battlefield"
   | "hidden"
   | "fights-first"
   | "benefit-of-cover";
+/**
+ * Not units that have every listed keyword ("excluding MONSTER CHARACTER units" excludes only units that are both).
+ */
+export type KeywordList1 = Keyword[];
 /**
  * One reference for every distance.
  *
@@ -257,7 +263,7 @@ export type UnitRef =
  */
 export type HistoryWindow = "phase" | "turn" | "round" | "battle" | "previous-turn" | "event";
 /**
- * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.
+ * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "designation-id".
@@ -312,6 +318,7 @@ export type RollKind =
       | "blessings-of-khorne"
       | "manoeuvre"
       | "channelling"
+      | "deadly-demise"
     )
   | AbilityRoll;
 /**
@@ -374,27 +381,28 @@ export type PlaceRef =
   | {
       marker: string;
     }
-  | ("battlefield-edge" | "battlefield-centre");
+  | ("battlefield-edge" | "battlefield-centre")
+  | RegionRef;
 /**
  * Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked).
  */
-export type KeywordList1 = Keyword[];
+export type KeywordList2 = Keyword[];
 /**
  * A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
  */
-export type KeywordList2 = Keyword[];
+export type KeywordList3 = Keyword[];
 /**
  * Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
  */
-export type KeywordList3 = Keyword[];
+export type KeywordList4 = Keyword[];
 /**
  * A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
  */
-export type KeywordList4 = Keyword[];
+export type KeywordList5 = Keyword[];
 /**
  * Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).
  */
-export type KeywordList5 = Keyword[];
+export type KeywordList6 = Keyword[];
 /**
  * A zone footprint, expressed as an axis-aligned rectangle or an explicit polygon. Vertices/extent are relative to the owning element's position.
  *
@@ -434,6 +442,10 @@ export type GameModes1 = [GameModeId, ...GameModeId[]];
  */
 export type GameModes2 = [GameModeId, ...GameModeId[]];
 /**
+ * Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
+ */
+export type KeywordList7 = Keyword[];
+/**
  * Eligibility predicate for which units may perform the action.
  */
 export type AbilityDSLCondition = SimpleCondition | CompoundCondition;
@@ -456,6 +468,9 @@ export type SimpleCondition =
   | ModelProfileCondition
   | WoundsCondition
   | LoadoutCondition
+  | EquippedWeaponCountCondition
+  | NamedWeaponCondition
+  | UnitWargearCondition
   | UnitStateCondition
   | EligibleCondition
   | HappenedCondition
@@ -476,8 +491,10 @@ export type SimpleCondition =
   | DestroyedInTaggedTerrainCondition
   | BattleSizeCondition
   | ArmyFactionCondition
+  | ArmyIncludesCondition
   | MovedOverCondition
-  | GuidedCondition;
+  | GuidedCondition
+  | DeploymentWindowCondition;
 /**
  * What the event was aimed at: a unit, or (for actions) an objective or terrain area.
  *
@@ -604,7 +621,8 @@ export type SingleEffect =
   | DatasheetSwapEffect
   | CharacteristicResolutionEffect
   | BorrowWeaponsEffect
-  | SelectWeaponEffect;
+  | SelectWeaponEffect
+  | WeaponAbilityRangeEffect;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect-node".
@@ -709,6 +727,7 @@ export type DiceGatedEffect = {
         | "blessings-of-khorne"
         | "manoeuvre"
         | "channelling"
+        | "deadly-demise"
       )
     | AbilityRoll;
 };
@@ -738,7 +757,7 @@ export type AbilityDSLCondition3 = SimpleCondition | CompoundCondition;
  */
 export type EventOrSelectionReference = EventBoundReference | SelectionReference;
 /**
- * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+ * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "scope-duration".
@@ -760,7 +779,12 @@ export type ScopeDuration =
   | "until-end-of-your-next-turn"
   | "until-end-of-opponent-next-turn"
   | "until-this-unit-has-shot"
-  | "control-lost";
+  | "control-lost"
+  | "until-end-of-your-next-fight-phase"
+  | "until-end-of-your-next-shooting-phase"
+  | "until-end-of-your-next-movement-phase"
+  | "until-end-of-opponent-next-movement-phase"
+  | "until-start-of-opponent-next-command-phase";
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -769,6 +793,10 @@ export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
 export type AbilityDSLCondition5 = SimpleCondition | CompoundCondition;
+/**
+ * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
+ */
+export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "transport-occupancy-subject-kind".
@@ -788,19 +816,19 @@ export type TransportEligibility1 = {
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition6 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
-export type KeywordList6 = Keyword[];
+export type KeywordList8 = Keyword[];
 /**
  * OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.
  */
-export type KeywordList7 = Keyword[];
+export type KeywordList9 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
-export type AbilityDSLCondition7 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
 /**
  * Game modes this stratagem is legal or authored for; absent implies matched-play.
  *
@@ -858,21 +886,21 @@ export type GameModes6 = [GameModeId, ...GameModeId[]];
  *
  * @minItems 1
  */
-export type KeywordList8 = [Keyword, ...Keyword[]];
+export type KeywordList10 = [Keyword, ...Keyword[]];
 /**
  * The keyword does not apply when the target has any listed keyword.
  */
-export type KeywordList9 = Keyword[];
+export type KeywordList11 = Keyword[];
 /**
  * The profile can target a unit carrying at least one listed keyword.
  *
  * @minItems 1
  */
-export type KeywordList10 = [Keyword, ...Keyword[]];
+export type KeywordList12 = [Keyword, ...Keyword[]];
 /**
  * The profile cannot target a unit carrying any listed keyword.
  */
-export type KeywordList11 = Keyword[];
+export type KeywordList13 = Keyword[];
 /**
  * Game modes this weapon is legal or authored for; absent implies matched-play.
  *
@@ -899,7 +927,7 @@ export type AbilityUsage = AbilityUsageLimit | [AbilityUsageLimit, AbilityUsageL
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "condition".
  */
-export type AbilityDSLCondition8 = SimpleCondition | CompoundCondition;
+export type AbilityDSLCondition9 = SimpleCondition | CompoundCondition;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "rule-state-core-rule-slug".
@@ -1035,11 +1063,24 @@ export interface UnitFilter {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
+  not_all_of?: KeywordList1;
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
   /**
    * model: the filter matches individual models. Default unit.
    */
@@ -1195,11 +1236,24 @@ export interface UnitFilter1 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
+  not_all_of?: KeywordList1;
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
   /**
    * model: the filter matches individual models. Default unit.
    */
@@ -1355,11 +1409,24 @@ export interface UnitFilter2 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
+  not_all_of?: KeywordList1;
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
   /**
    * model: the filter matches individual models. Default unit.
    */
@@ -1612,6 +1679,10 @@ export interface EventFilter {
   roll?: RollKind;
   result?: RollOutcome;
   from?: "strategic-reserves" | "deep-strike" | "cult-ambush" | "transport";
+  /**
+   * disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+   */
+  transport?: "this-unit";
   through?: "terrain" | "tall-terrain";
   attack_type?: "ranged" | "melee" | "psychic" | "mortal";
   weapon_name?: string;
@@ -1751,6 +1822,22 @@ export interface PlacementRegion {
   wholly?: true;
 }
 /**
+ * Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "ends-nearest".
+ */
+export interface EndsNearest {
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
+  waives?: "closest-enemy-model";
+}
+/**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "game-version-ref".
  */
@@ -1808,7 +1895,7 @@ export interface AlliedRule {
    * Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
    */
   label?: string;
-  army_keywords_any?: KeywordList1;
+  army_keywords_any?: KeywordList2;
   /**
    * Detachment gate: the rule applies only when at least one listed detachment is selected. Empty/absent = no detachment gate. Replaces the former single detachment_id (GW pools may gate on several detachments).
    */
@@ -1817,13 +1904,13 @@ export interface AlliedRule {
    * Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.
    */
   source_faction_id?: EntityId | null;
-  source_keywords?: KeywordList2;
+  source_keywords?: KeywordList3;
   /**
    * Explicit datasheet allowlist: when non-empty, a unit qualifies only if its id is listed (AND-combined with source_keywords/required_keywords/excluded_keywords/roles). GW soup pools enumerate by datasheet; this is the primary unit selector for generated rules. Empty/absent = no datasheet-level restriction.
    */
   source_datasheet_ids?: EntityId[];
-  required_keywords?: KeywordList3;
-  excluded_keywords?: KeywordList4;
+  required_keywords?: KeywordList4;
+  excluded_keywords?: KeywordList5;
   /**
    * Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.
    */
@@ -1840,6 +1927,10 @@ export interface AlliedRule {
    * Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap.
    */
   max_units?: number | null;
+  /**
+   * True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.
+   */
+  exclusive?: boolean;
   /**
    * True when units included via this rule cannot be the army's Warlord (e.g. Daemonic Pact, Star Children's Blessings).
    */
@@ -1860,7 +1951,7 @@ export interface AlliedRule {
    * Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
    */
   removes_ability_ids?: EntityId[];
-  battleline_ratio_keywords?: KeywordList5;
+  battleline_ratio_keywords?: KeywordList6;
   game_version: GameVersionReference;
   notes?: string;
 }
@@ -1993,6 +2084,25 @@ export interface Detachment {
    * Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum.
    */
   unit_minimums?: UnitMinimum[];
+  /**
+   * While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.
+   */
+  mandatory_warlord_datasheet_ids?: EntityId[];
+  /**
+   * Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.
+   */
+  granted_warlord_datasheet_ids?: EntityId[];
+  /**
+   * Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.
+   */
+  keyword_limit_overrides?: {
+    keywords: KeywordList;
+    max: number;
+  }[];
+  /**
+   * Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.
+   */
+  excluded_datasheet_ids?: EntityId[];
   game_version: GameVersionReference;
   game_modes?: GameModes1;
 }
@@ -2059,6 +2169,18 @@ export interface Faction {
    * @minItems 1
    */
   faction_rule_ids: [EntityId, ...EntityId[]];
+  /**
+   * Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.
+   */
+  keyword_limits?: {
+    keywords: KeywordList;
+    max: number;
+    /**
+     * How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+     */
+    mode?: "units" | "alternatives";
+    exempt_faction_keywords?: KeywordList7;
+  }[];
   /**
    * Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
    */
@@ -2361,7 +2483,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition6;
+      restrictions?: AbilityDSLCondition7;
     },
     ...{
       /**
@@ -2395,7 +2517,7 @@ export interface SecondaryCard {
       use_limit_scope?: "per-turn" | "per-game";
       completes?: AbilityDSLCondition1;
       effect?: AbilityEffect;
-      restrictions?: AbilityDSLCondition6;
+      restrictions?: AbilityDSLCondition7;
     }[]
   ];
   /**
@@ -2586,6 +2708,47 @@ export interface LoadoutCondition {
   };
 }
 /**
+ * [composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.
+ */
+export interface EquippedWeaponCountCondition {
+  type: "equipped-weapon-count";
+  parameters: {
+    subject: UnitRef;
+    weapon_type: "melee" | "ranged";
+    count: number;
+    other_than: string;
+  };
+}
+/**
+ * [composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).
+ */
+export interface NamedWeaponCondition {
+  type: "named-weapon";
+  parameters: {
+    subject: UnitRef;
+    name: string;
+    count: number;
+    models?: {
+      at_least: number;
+      state: "carry" | "lack";
+    };
+  };
+}
+/**
+ * [composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).
+ */
+export interface UnitWargearCondition {
+  type: "unit-wargear";
+  parameters: {
+    subject: UnitRef;
+    wargear: EntityId;
+    models?: {
+      at_least: number;
+      state: "carry" | "lack";
+    };
+  };
+}
+/**
  * [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.
  */
 export interface UnitStateCondition {
@@ -2604,12 +2767,40 @@ export interface EligibleCondition {
   type: "eligible";
   parameters: {
     subject?: UnitRef;
-    to: "shoot" | "declare-charge" | "fight" | "start-action" | "be-selected";
+    to: "shoot" | "declare-charge" | "fight" | "start-action" | "be-selected" | "embark-within";
     source_ability?: {
       ability_id: EntityId;
       owner?: "friendly" | "enemy";
     };
     at?: "now" | "opponents-previous-turn-end";
+    /**
+     * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+     */
+    transport?:
+      | (
+          | "this-unit"
+          | "this-model"
+          | "model-in-this-unit"
+          | "attacker"
+          | "defender"
+          | "event-subject"
+          | "event-object"
+          | "stratagem-target"
+          | "selected-unit"
+          | "recipient"
+          | "bearer-transport"
+          | "ability-unit"
+        )
+      | UnitFilter
+      | {
+          event_var: string;
+        }
+      | {
+          selection_var: string;
+        }
+      | {
+          stratagem_target: EntityId;
+        };
   };
 }
 /**
@@ -2934,6 +3125,17 @@ export interface ArmyFactionCondition {
   };
 }
 /**
+ * [army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.
+ */
+export interface ArmyIncludesCondition {
+  type: "army-includes";
+  parameters: {
+    filter: UnitFilter;
+    min?: number;
+    every?: true;
+  };
+}
+/**
  * [history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.
  */
 export interface MovedOverCondition {
@@ -2951,6 +3153,15 @@ export interface GuidedCondition {
   type: "guided";
   parameters: {
     subject?: UnitRef;
+  };
+}
+/**
+ * [clock] It is the deployment step, before the battle starts ("during deployment").
+ */
+export interface DeploymentWindowCondition {
+  type: "deployment-window";
+  parameters: {
+    during: "deployment";
   };
 }
 /**
@@ -2981,6 +3192,10 @@ export interface StatModifierEffect {
     weapon_type?: "melee" | "ranged";
     weapon_name?: string;
     weapon_keyword?: string;
+    /**
+     * With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+     */
+    exclude_weapon_name?: string;
     weapon_ref?:
       | {
           weapon_var: string;
@@ -3020,6 +3235,10 @@ export interface Scaling {
    * Kebab-case identifier
    */
   wargear?: string;
+  /**
+   * When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+   */
+  evaluated?: "live" | "on-apply";
 }
 /**
  * [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
@@ -3229,15 +3448,13 @@ export interface EndAttackSequenceEffect {
   scaling?: Scaling;
 }
 /**
- * [ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6", Firing Deck 2).
+ * [ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6", Firing Deck 2).
  */
 export interface AbilityGrantEffect {
   type: "ability-grant";
   target: UnitRef;
   modifier: {
-    ability: EntityId;
-    value?: number | UnitRating;
-    rules_bundle?: true;
+    [k: string]: unknown;
   };
   scaling?: Scaling;
 }
@@ -3263,7 +3480,13 @@ export interface WeaponAbilityGrantEffect {
     /**
      * @minItems 1
      */
-    abilities: [string, ...string[]];
+    abilities?: [string, ...string[]];
+    /**
+     * Weapon abilities the weapons lose, as printed ("Do not have [Heavy]"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.
+     *
+     * @minItems 1
+     */
+    removes?: [string, ...string[]];
     weapon_type?: "melee" | "ranged";
     weapon_name?: string;
     weapon_keyword?: string;
@@ -3359,6 +3582,10 @@ export interface StanceSelectEffect {
   scope?: "army" | "unit";
   select?: string;
   /**
+   * The picked options join the options already active for the unit, instead of replacing them.
+   */
+  additive?: true;
+  /**
    * @minItems 2
    */
   options: [
@@ -3396,6 +3623,12 @@ export interface StanceSelectionCapacityEffect {
     additional_selections: number;
     allocation: "choose-one-option" | "fixed-option";
     option_id?: EntityId;
+    /**
+     * With choose-one-option: the shared extra selections may go only to these options.
+     *
+     * @minItems 2
+     */
+    option_ids?: [EntityId, EntityId, ...EntityId[]];
   };
 }
 /**
@@ -3493,7 +3726,7 @@ export interface AbilityPart {
     | RollEffect
     | SelectObjectiveEffect;
   /**
-   * How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+   * Expiration of this sub-effect, independently of sibling rules in an enclosing bundle.
    */
   duration?:
     | "phase"
@@ -3512,7 +3745,12 @@ export interface AbilityPart {
     | "until-end-of-your-next-turn"
     | "until-end-of-opponent-next-turn"
     | "until-this-unit-has-shot"
-    | "control-lost";
+    | "control-lost"
+    | "until-end-of-your-next-fight-phase"
+    | "until-end-of-your-next-shooting-phase"
+    | "until-end-of-your-next-movement-phase"
+    | "until-end-of-opponent-next-movement-phase"
+    | "until-start-of-opponent-next-command-phase";
   /**
    * The moment this part fires on, in the ability trigger's shape. When the part sits inside an activated effect, it applies only for the enclosing effect's duration.
    */
@@ -3644,52 +3882,59 @@ export interface SelectUnitsEffect {
  */
 export interface ForEachUnitEffect {
   type: "for-each-unit";
-  selector: {
-    owner: "friendly" | "enemy";
-    /**
-     * Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
-     *
-     * @minItems 1
-     */
-    keywords?: [string, ...string[]];
-    /**
-     * Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-     */
-    keyword_match?: "all" | "any";
-    /**
-     * Whether each iteration binds a whole unit or one matching model.
-     */
-    target_kind?: "unit" | "model";
-    within_inches?: number;
-    /**
-     * Candidate engagement relation to the bearer or bearer-unit.
-     */
-    engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
-    /**
-     * Origin of the engagement_relation gate.
-     */
-    reference?: "bearer" | "bearer-unit" | "bearer-transport";
-    /**
-     * Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-     */
-    member_of?: "bearer-unit";
-    /**
-     * Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
-     *
-     * @minItems 1
-     */
-    model_names?: [string, ...string[]];
-    /**
-     * A candidate with any listed keyword is excluded.
-     *
-     * @minItems 1
-     */
-    excluded_keywords?: [string, ...string[]];
-    bind_as?: string;
-    eligibility?: AbilityDSLCondition2;
-    within_objective?: SelectionReference;
-  };
+  selector: UnitSelector;
   effect: EffectNode;
+}
+/**
+ * Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "unit-selector".
+ */
+export interface UnitSelector {
+  owner: "friendly" | "enemy" | "any";
+  /**
+   * Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
+   *
+   * @minItems 1
+   */
+  keywords?: [string, ...string[]];
+  /**
+   * Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+   */
+  keyword_match?: "all" | "any";
+  /**
+   * Whether each iteration binds a whole unit or one matching model.
+   */
+  target_kind?: "unit" | "model";
+  within_inches?: number;
+  /**
+   * Candidate engagement relation to the bearer or bearer-unit.
+   */
+  engagement_relation?: "engaged-with-bearer" | "not-engaged-with-bearer";
+  /**
+   * Origin of the engagement_relation gate.
+   */
+  reference?: "bearer" | "bearer-unit" | "bearer-transport";
+  /**
+   * Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+   */
+  member_of?: "bearer-unit" | "embarked-in-bearer" | "target";
+  /**
+   * Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * A candidate with any listed keyword is excluded.
+   *
+   * @minItems 1
+   */
+  excluded_keywords?: [string, ...string[]];
+  bind_as?: string;
+  eligibility?: AbilityDSLCondition2;
+  within_objective?: SelectionReference;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -3719,6 +3964,18 @@ export interface AuraEffect {
        * @minItems 1
        */
       excluded_keywords?: [string, ...string[]];
+      /**
+       * The unit has at least one of these keywords ("a friendly SKITARII or THULIA GHULD unit").
+       *
+       * @minItems 2
+       */
+      any_keywords?: [string, string, ...string[]];
+      /**
+       * The unit is in each of these states.
+       *
+       * @minItems 1
+       */
+      states?: ["battle-shocked" | "unengaged", ...("battle-shocked" | "unengaged")[]];
     };
     emitter_filter?: KeywordFilter;
     recipient_filter?: KeywordFilter;
@@ -3726,6 +3983,10 @@ export interface AuraEffect {
      * The aura range, extensions included, never exceeds this.
      */
     range_cap?: number;
+    /**
+     * The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
+     */
+    wholly?: true;
   };
 }
 /**
@@ -4365,7 +4626,7 @@ export interface AbilityUsageLimit {
   per?: "army" | "unit" | "model";
 }
 /**
- * [ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
+ * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
  */
 export interface AbilityActivateEffect {
   type: "ability-activate";
@@ -4373,9 +4634,19 @@ export interface AbilityActivateEffect {
   modifier: {
     ability: EntityId;
     option?: string;
+    /**
+     * @minItems 2
+     */
+    options?: [string, string, ...string[]];
+    all_options?: true;
     exclusive?: true;
     select?: {
       by: "roll" | "player";
+      count?: number;
+      /**
+       * @minItems 2
+       */
+      from?: [string, string, ...string[]];
     };
     ignore_consumed?: true;
     override?: {
@@ -4385,7 +4656,7 @@ export interface AbilityActivateEffect {
   scaling?: Scaling;
 }
 /**
- * [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
+ * [permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.
  */
 export interface PermissionEffect {
   type: "permission";
@@ -4428,6 +4699,7 @@ export interface PermissionEffect {
         | "performing-action"
         | "advanced"
         | "fell-back"
+        | "destroyed"
       ),
       ...(
         | "engaged"
@@ -4439,10 +4711,11 @@ export interface PermissionEffect {
         | "performing-action"
         | "advanced"
         | "fell-back"
+        | "destroyed"
       )[]
     ];
     into?: UnitRef;
-    as_if?: "shooting-phase" | "snap-shooting" | "fight-phase";
+    as_if?: "shooting-phase" | "snap-shooting" | "fight-phase" | "movement-phase" | "charge-phase" | "command-phase";
     next?: true;
     reach?: number;
     stratagem?: EntityId;
@@ -4556,8 +4829,15 @@ export interface RuleStateEffect {
     direction: "granted" | "suppressed";
     rule_kind: "core-rule" | "keyword" | "ability" | "faction-rule";
     rule: string;
+    attacks?: EventBoundReference1;
   };
   scaling?: Scaling;
+}
+/**
+ * Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.
+ */
+export interface EventBoundReference1 {
+  event_var: string;
 }
 /**
  * [protection] The target suffers mortal wounds: a count, or a count per success on a roll per model.
@@ -4567,11 +4847,13 @@ export interface MortalWoundsEffect {
   target: UnitRef;
   modifier: {
     count: Quantity;
+    /**
+     * No more than this many mortal wounds in total ("to a maximum of 6 mortal wounds").
+     */
+    max?: number;
     per?: "model" | "success";
     roll?: {
-      dice: number | string;
-      threshold: number;
-      per_model?: "target" | "this";
+      [k: string]: unknown;
     };
     range?: RangeRef;
     psychic?: true;
@@ -4656,7 +4938,10 @@ export interface ReturnModelsEffect {
   target: UnitRef;
   modifier: {
     count: Quantity | "all";
-    wounds_remaining?: Quantity | "full";
+    /**
+     * Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+     */
+    wounds_remaining?: Quantity | "full" | "half-starting";
     placement?:
       | (
           | "closest-to-destruction"
@@ -4666,6 +4951,7 @@ export interface ReturnModelsEffect {
           | "wholly-within"
           | "within"
           | "strategic-reserves"
+          | "cult-ambush"
           | "anywhere"
           | "connected-sections"
           | "deployment-zone"
@@ -4680,6 +4966,7 @@ export interface ReturnModelsEffect {
             | "wholly-within"
             | "within"
             | "strategic-reserves"
+            | "cult-ambush"
             | "anywhere"
             | "connected-sections"
             | "deployment-zone"
@@ -4693,6 +4980,7 @@ export interface ReturnModelsEffect {
             | "wholly-within"
             | "within"
             | "strategic-reserves"
+            | "cult-ambush"
             | "anywhere"
             | "connected-sections"
             | "deployment-zone"
@@ -4750,7 +5038,7 @@ export interface ActOnDeathEffect {
   scaling?: Scaling;
 }
 /**
- * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.
+ * [models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.
  */
 export interface SplitUnitEffect {
   type: "split-unit";
@@ -4803,6 +5091,10 @@ export interface MoveEffect {
       | "embark"
       | "pulse-jet";
     distance?: Quantity;
+    /**
+     * The move is made as if it were your Movement phase, outside it.
+     */
+    as_if?: "movement-phase";
     /**
      * @minItems 1
      */
@@ -4857,6 +5149,10 @@ export interface MoveEffect {
     mode?: MoveMode;
     allow_engagement?: true;
     /**
+     * allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+     */
+    engaged_with?: "nearest-move-end";
+    /**
      * The move counts as this kind of move for rules that check what the unit did this turn.
      */
     counts_as_move?:
@@ -4880,8 +5176,22 @@ export interface MoveEffect {
     };
     ends_when?: AbilityDSLCondition5;
     keeps_eligible?: true;
+    ends_nearest?: EndsNearest1;
   };
   scaling?: Scaling;
+}
+/**
+ * Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
+ */
+export interface EndsNearest1 {
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
+  waives?: "closest-enemy-model";
 }
 /**
  * [move] Change how the target's moves work.
@@ -4979,11 +5289,30 @@ export interface MoveModifierEffect {
     distance_bonus?: number | string;
     advance?: "fixed-6";
     end_on_terrain?: true;
+    ends_nearest?: EndsNearest2;
+    ends_when?: AbilityDSLCondition6;
+    /**
+     * Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
+     */
+    ends_when_replaces?: true;
   };
   scaling?: Scaling;
 }
 /**
- * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).
+ * Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
+ */
+export interface EndsNearest2 {
+  of:
+    | UnitRef
+    | {
+        objective: ObjectiveFilter;
+      };
+  per?: "unit" | "model";
+  instead_of?: "closest-enemy-unit";
+  waives?: "closest-enemy-model";
+}
+/**
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
  */
 export interface SetUpEffect {
   type: "set-up";
@@ -4992,7 +5321,17 @@ export interface SetUpEffect {
     allow?: boolean;
     to: "battlefield" | "strategic-reserves";
     from?: "strategic-reserves" | "transport" | "battlefield";
-    via?: "deep-strike";
+    /**
+     * deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
+     */
+    via?: "deep-strike" | "cult-ambush-marker";
+    /**
+     * With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.
+     */
+    marker_range?: {
+      inches: number;
+      wholly?: true;
+    };
     subject?: UnitRef | "models-on-this-model";
     min_enemy_distance?: number;
     within_edge?: number;
@@ -5014,6 +5353,7 @@ export interface SetUpEffect {
           | "wholly-within"
           | "within"
           | "strategic-reserves"
+          | "cult-ambush"
           | "anywhere"
           | "connected-sections"
           | "deployment-zone"
@@ -5028,6 +5368,7 @@ export interface SetUpEffect {
             | "wholly-within"
             | "within"
             | "strategic-reserves"
+            | "cult-ambush"
             | "anywhere"
             | "connected-sections"
             | "deployment-zone"
@@ -5041,6 +5382,7 @@ export interface SetUpEffect {
             | "wholly-within"
             | "within"
             | "strategic-reserves"
+            | "cult-ambush"
             | "anywhere"
             | "connected-sections"
             | "deployment-zone"
@@ -5072,6 +5414,12 @@ export interface SetUpEffect {
     arrives?: "next-movement-phase";
     allow_first_round?: true;
     /**
+     * Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+     */
+    wounds_remaining?: Quantity | "full" | "half-starting";
+    detach?: true;
+    starting_strength?: number;
+    /**
      * @minItems 1
      */
     near?: [PlacementNear, ...PlacementNear[]];
@@ -5095,6 +5443,10 @@ export interface MarkerEffect {
     placement?: string;
     distance?: number;
     consume?: "on-use" | "never";
+    /**
+     * Relocate: only a marker that has not been moved this turn.
+     */
+    not_moved_this_turn?: true;
   };
   scaling?: Scaling;
 }
@@ -5378,8 +5730,16 @@ export interface ArmyRuleEffect {
       | "faction-forbidden"
       | "single-chapter"
       | "detachment-forbidden"
-      | "detachment-tag-exclusive";
+      | "detachment-tag-exclusive"
+      | "enhancement-source"
+      | "limit-exemption";
     with?: UnitFilter;
+    /**
+     * composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.
+     *
+     * @minItems 1
+     */
+    datasheets?: [EntityId, ...EntityId[]];
     max?: number | BattleSizeValue;
     /**
      * What max counts (default units).
@@ -5387,10 +5747,16 @@ export interface ArmyRuleEffect {
     measure?: "units" | "models" | "points";
     per?: UnitFilter3;
     /**
+     * Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
+     *
      * @minItems 1
      */
-    exempt_from?: ["retinue-limit", ..."retinue-limit"[]];
+    exempt_from?: [
+      "retinue-limit" | "enhancement-limit" | "strategic-reserves-points",
+      ...("retinue-limit" | "enhancement-limit" | "strategic-reserves-points")[]
+    ];
     attach_as?: UnitFilter4;
+    can_lead?: UnitFilter5;
     detachment?: EntityId;
     tag?: string;
     led_by?: string;
@@ -5408,11 +5774,24 @@ export interface UnitFilter3 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
+  not_all_of?: KeywordList1;
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
   /**
    * model: the filter matches individual models. Default unit.
    */
@@ -5568,11 +5947,197 @@ export interface UnitFilter4 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
+  not_all_of?: KeywordList1;
   /**
-   * The unit carries this designation (a tag an effect applied).
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
    */
   designated?: string;
   state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Only units visible to the subject of the enclosing predicate.
+   */
+  visible?: true;
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: UnitRef;
+    wholly?: true;
+  };
+  /**
+   * Not this unit ("another friendly unit").
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * The designation was applied by this unit (their Spotted unit). Requires `designated`.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * The unit does not carry this designation.
+   */
+  not_designated?: string;
+  /**
+   * Units embarked within this Transport.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Models (level: model) or units that are part of this unit, attached units included.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  engaged_with?: UnitFilter1;
+  not_engaged_with?: UnitFilter2;
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
+}
+/**
+ * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
+ */
+export interface UnitFilter5 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
   /**
    * model: the filter matches individual models. Default unit.
    */
@@ -5798,9 +6363,21 @@ export interface SelectWeaponEffect {
     count?: number;
     weapon_type?: "melee" | "ranged";
     weapon_keyword?: string;
+    weapon_name?: string;
     bind_as: string;
   };
   scaling?: Scaling;
+}
+/**
+ * [ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.
+ */
+export interface WeaponAbilityRangeEffect {
+  type: "weapon-ability-range";
+  target: UnitRef;
+  modifier: {
+    keyword: "Rapid Fire";
+    within: "weapon";
+  };
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5811,15 +6388,15 @@ export interface StratagemTargetRestriction {
    * Kebab-case identifier
    */
   name?: string;
-  required_keywords?: KeywordList6;
-  required_keywords_any?: KeywordList7;
+  required_keywords?: KeywordList8;
+  required_keywords_any?: KeywordList9;
   excluded_keywords?: KeywordList;
   /**
    * How many targets are selected: one, one or more, or up to `count_max`.
    */
   count?: "one" | "one-or-more" | "up-to";
   /**
-   * Upper bound when `count` is up-to.
+   * Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
    */
   count_max?: number;
   /**
@@ -5834,8 +6411,25 @@ export interface StratagemTargetRestriction {
    * The target is not freely chosen: it is the unit the WHEN moment names ("that unit"), or the unit the triggering enemy attacked.
    */
   bound_to?: "triggering-unit" | "attacked-unit";
-  eligibility?: AbilityDSLCondition7;
+  eligibility?: AbilityDSLCondition8;
   notes?: string;
+  /**
+   * The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+   */
+  mode?: "a" | "b";
+  /**
+   * What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+   */
+  mode_cost?: {
+    /**
+     * The resource pool or resource the mode spends, as the resource-spend effect names it.
+     */
+    label: string;
+    /**
+     * How many of that resource the mode spends to be chosen.
+     */
+    amount: number;
+  };
 }
 /**
  * A CP-costed ability usable during specific game phases.
@@ -6199,6 +6793,10 @@ export interface UnitComposition {
        */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      /**
+       * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+       */
+      excluded_from_enhancements?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
@@ -6295,6 +6893,10 @@ export interface UnitComposition {
        */
       default_weapon_ids?: EntityId[];
       is_leader_model?: boolean;
+      /**
+       * True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+       */
+      excluded_from_enhancements?: boolean;
       base_size_mm?: BaseSize1;
       /**
        * Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
@@ -6575,6 +7177,20 @@ export interface Unit {
     unit_count_max?: number | null;
   }[];
   /**
+   * 11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.
+   */
+  detachment_pricing?: {
+    /**
+     * Kebab-case identifier
+     */
+    detachment_id: string;
+    models: number;
+    cost: number;
+    models_max?: number;
+    unit_count_min?: number;
+    unit_count_max?: number | null;
+  }[];
+  /**
    * True when point costs are carried over provisionally (e.g. seeded from a prior edition during migration) and not yet confirmed against the current dataslate.
    */
   points_provisional?: boolean;
@@ -6776,16 +7392,16 @@ export interface Weapon {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
-          required_target_keywords_any?: KeywordList8;
-          excluded_target_keywords?: KeywordList9;
+          required_target_keywords_any?: KeywordList10;
+          excluded_target_keywords?: KeywordList11;
         };
       }[];
       /**
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList10;
-        excluded_keywords?: KeywordList11;
+        required_keywords_any?: KeywordList12;
+        excluded_keywords?: KeywordList13;
       } | null;
     },
     ...{
@@ -6812,16 +7428,16 @@ export interface Weapon {
           value?: StatValue;
           target_keyword?: string;
           threshold?: number;
-          required_target_keywords_any?: KeywordList8;
-          excluded_target_keywords?: KeywordList9;
+          required_target_keywords_any?: KeywordList10;
+          excluded_target_keywords?: KeywordList11;
         };
       }[];
       /**
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList10;
-        excluded_keywords?: KeywordList11;
+        required_keywords_any?: KeywordList12;
+        excluded_keywords?: KeywordList13;
       } | null;
     }[]
   ];

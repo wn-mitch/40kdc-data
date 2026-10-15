@@ -1068,7 +1068,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "destroyed",
-            "subject": "this-model"
+            "object": "this-model"
           },
           "effect": {
             "type": "test",

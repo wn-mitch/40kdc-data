@@ -105,6 +105,16 @@ func TestPhase4ShapeRenders(t *testing.T) {
 		{"keeps orders", `{"type":"rule-state","target":"this-unit","modifier":{"direction":"suppressed","rule_kind":"core-rule","rule":"orders-end-on-battle-shock"}}`, "", "The unit keeps its Orders when it becomes Battle-shocked."},
 		{"shooting expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-next-shooting-phase"}}`,
 			"Until the start of your next Shooting phase, subtract 1 from the selected unit's Leadership characteristic."},
+		{"until-end-of-your-next-fight-phase expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-end-of-your-next-fight-phase"}}`,
+			"Until the end of your next Fight phase, subtract 1 from the selected unit's Leadership characteristic."},
+		{"until-end-of-your-next-shooting-phase expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-end-of-your-next-shooting-phase"}}`,
+			"Until the end of your next Shooting phase, subtract 1 from the selected unit's Leadership characteristic."},
+		{"until-end-of-your-next-movement-phase expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-end-of-your-next-movement-phase"}}`,
+			"Until the end of your next Movement phase, subtract 1 from the selected unit's Leadership characteristic."},
+		{"until-end-of-opponent-next-movement-phase expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-end-of-opponent-next-movement-phase"}}`,
+			"Until the end of your opponent's next Movement phase, subtract 1 from the selected unit's Leadership characteristic."},
+		{"until-start-of-opponent-next-command-phase expiry", `{"type":"stat-modifier","target":"selected-unit","modifier":{"stat":"Ld","operation":"subtract","value":1}}`, `{"scope":{"duration":"until-start-of-opponent-next-command-phase"}}`,
+			"Until the start of your opponent's next Command phase, subtract 1 from the selected unit's Leadership characteristic."},
 		{"designate expiry", `{"type":"designate","target":"this-unit","modifier":{"subject":"selected-unit","tag":"assailed","clears_on":"until-end-of-opponent-next-turn"}}`, "",
 			"The selected unit is marked as assailed until the end of your opponent's next turn."},
 		{"test exemption", `{"type":"test-exemption","target":"this-unit","modifier":{"test":"battle-shock","window":"phase"}}`, "", "The unit does not need to take any further Battle-shock tests this phase."},
@@ -131,7 +141,9 @@ func TestPhase4ShapeRenders(t *testing.T) {
 		{"stratagem targets", `{"type":"counts-as","target":{"stratagem_target":"war-dogs"},"modifier":{"within":"aura","of":{"stratagem_target":"abhorrent"}}}`, "",
 			"The war dogs target counts as being within its aura range of the abhorrent target."},
 		{"select objective", `{"type":"select-objective","selector":{"count":1,"range":"objective-control","origin":"bearer-unit","controlled_by":"your-army","bind_as":"m"},"effect":{"type":"designate","target":"this-unit","modifier":{"subject":{"objective":{"selection_var":"m"}},"tag":"mutated","clears_on":"control-lost"}}}`, "",
-			"Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it."},
+			"Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it."},
+		{"designation shaken", `{"type":"designate","target":"this-unit","modifier":{"tag":"shaken"}}`, "",
+			"The unit is shaken."},
 		{"aura cap", `{"type":"aura","target":"enemy-within-aura","modifier":{"range":3,"range_cap":12,"emitter_filter":{"required_keywords":["DEATH GUARD"]},"effect":{"type":"designate","target":"recipient","modifier":{"subject":"recipient","tag":"afflicted"}}}}`, "",
 			`While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.`},
 		{"the- stratagem target", `{"type":"counts-as","target":{"stratagem_target":"the-lure"},"modifier":{"within":"aura","of":"this-unit"}}`, "",
@@ -156,7 +168,7 @@ func TestPhase4BlessingsOfKhorneRender(t *testing.T) {
 		{"type":"ability-part","name":"Total Carnage","effect":{"type":"dice-gated","from":{"roll_var":"bok"},"requirement":{"any_of":[{"type":"pair","min_value":6},{"type":"triple","min_value":3}]},"on_success":{"type":"no-effect"}}}]}}`, "")
 	for _, want := range []string{
 		"Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:",
-		"Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.",
+		"- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.",
 		"using a pair of 6+ or triple of 3+ from that roll's unused dice",
 	} {
 		if !strings.Contains(text, want) {
@@ -172,10 +184,13 @@ func TestPhase4ConditionAndTriggerRenders(t *testing.T) {
 		{`{"type":"moved-over","parameters":{"by":"this-model"}}`, "the unit was moved over by this model during that move"},
 		{`{"type":"army-faction","parameters":{"faction":"necrons"}}`, "your Army Faction is NECRONS"},
 		{`{"type":"guided","parameters":{}}`, "the unit is Guided"},
+		{`{"type":"designated","parameters":{"tag":"shaken"}}`, "the unit is shaken"},
 		{`{"type":"designated","parameters":{"subject":"defender","tag":"spotted","by":{"designated":"observer","all_of":["MARKERLIGHT"]}}}`,
 			"the target unit is Spotted by a MARKERLIGHT unit that is an Observer"},
 		{`{"type":"happened","parameters":{"event":"used","filter":{"kind":"ability","same_rule_as":{"event_var":"b"}},"window":"turn"}}`, "the unit used that same ability this turn"},
 		{`{"operator":"not","operands":[{"type":"battle-size","parameters":{"size":"strike-force"}}]}`, "the battle size is not Strike Force"},
+		{`{"type":"eligible","parameters":{"subject":"this-unit","to":"embark-within","transport":"ability-unit"}}`, "the unit is able to embark within this unit"},
+		{`{"operator":"not","operands":[{"type":"eligible","parameters":{"subject":"this-unit","to":"embark-within","transport":"this-unit"}}]}`, "the unit is not able to embark within that Transport"},
 	}
 	for _, c := range conditions {
 		if got := describeCondition(j(t, c.c)); got != c.want {
@@ -189,6 +204,16 @@ func TestPhase4ConditionAndTriggerRenders(t *testing.T) {
 	for _, c := range triggers {
 		if got := describeReactiveTrigger(j(t, c.tr)); got != c.want {
 			t.Errorf("trigger %s:\n got  %q\n want %q", c.tr, got, c.want)
+		}
+	}
+}
+
+// Warlord is the model chosen at mustering; its label is the definite noun phrase in both plural forms.
+func TestWarlordDesignationTerm(t *testing.T) {
+	for _, plural := range []bool{false, true} {
+		term, ok := designationTerm("warlord", plural)
+		if !ok || term != "the Warlord" {
+			t.Fatalf("designationTerm(warlord, %v) = %q, %v; want \"the Warlord\", true", plural, term, ok)
 		}
 	}
 }

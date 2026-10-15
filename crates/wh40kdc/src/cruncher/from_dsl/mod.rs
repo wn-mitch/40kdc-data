@@ -116,6 +116,34 @@ const MODEL_SCOPED_REASON: &str =
     "model-scoped effect from an attached model: applies to that model only (core rule 19.04)";
 const FIDELITY_BINDING_REASON: &str =
     "selection/history/model/attack predicates are not resolved by the buff engine";
+const ALTERNATIVES_REASON: &str = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";
+
+/// Whether a node's unit-filter target with `any_of_filters` reaches the unit crunched (`None`:
+/// unknown). A friendly filter is read against the crunched side's own keywords; an enemy one
+/// only from the target's perspective, since the attacker's perspective drops it anyway. Nodes
+/// without alternatives are left to the target classification (`Some(true)`).
+fn alternatives_match(node: &Obj, opts: &WalkOpts) -> Option<bool> {
+    let Some(target) = node.get("target").and_then(Value::as_object) else {
+        return Some(true);
+    };
+    let Some(alternatives) = target.get("any_of_filters").and_then(Value::as_array) else {
+        return Some(true);
+    };
+    let keywords = match (
+        target.get("owner").and_then(Value::as_str),
+        opts.perspective,
+    ) {
+        (Some("friendly"), TranslationPerspective::Attacker) => {
+            opts.context.attacker_keywords.as_deref()
+        }
+        (Some("friendly"), TranslationPerspective::Target)
+        | (Some("enemy"), TranslationPerspective::Target) => {
+            opts.context.target_keywords.as_deref()
+        }
+        _ => return Some(true),
+    };
+    conditions::evaluate_alternatives(alternatives, keywords)
+}
 
 /// Walk an ability DSL `effect` tree and produce the buff stack it contributes against
 /// `context` from `perspective`, plus the fragments the buff layer cannot express.
@@ -201,6 +229,15 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     if let Some(reason) = unsized_value_reason(current) {
         out.unsupported(reason, current);
         return;
+    }
+    // A target filter of alternatives reaches the unit only when one alternative matches it.
+    match alternatives_match(current, opts) {
+        Some(false) => return,
+        None => {
+            out.unsupported(ALTERNATIVES_REASON, current);
+            return;
+        }
+        Some(true) => {}
     }
     // An `incoming` change modifies attacks made against its target: the attacker's side of them.
     let modifier = object(current.get("modifier"));
@@ -297,9 +334,32 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         ),
         Some("designate-target") => {
             let applies = object(node.get("applies"));
-            if applies.is_some_and(|a| is_str(a, "to", "attackers-of-target")) {
+            if applies.is_some_and(|a| {
+                is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
+            }) {
+                // Which enemy unit is designated is the player's pick, so its buffs are one opt-in
+                // lever ("this defender is the designated unit"); the player vouches for the
+                // selection's eligibility (range, visibility, "hit by those attacks").
                 let effect = applies.and_then(|a| a.get("effect"));
-                walk(effect.unwrap_or(&Value::Null), opts, out);
+                let mut sub = Out::default();
+                walk(effect.unwrap_or(&Value::Null), opts, &mut sub);
+                out.unsupported.extend(sub.unsupported);
+                out.activatable.extend(sub.activatable);
+                if !sub.applied.is_empty() {
+                    let designation = node
+                        .get("designation")
+                        .and_then(Value::as_str)
+                        .unwrap_or("designated");
+                    out.activatable.push(Lever {
+                        id: format!("{}#{designation}", opts.ability_id),
+                        label: format!(
+                            "Designated target: {}",
+                            applicability::label_for_buffs(&sub.applied)
+                        ),
+                        buffs: sub.applied,
+                        group: None,
+                    });
+                }
             } else {
                 out.unsupported(
                     "designate-target debuff on the marked unit: not a buff on the bearer",
@@ -470,28 +530,18 @@ fn has_unresolved_fidelity_binding(node: &Obj) -> bool {
                 .any(|k| has(sel, k))
                 || truthy_flag(sel, "visibility_required")
         }
+        // A designation's own selection (range, visibility, eligibility) is what its lever's
+        // player vouches for; only the applied effect's bindings are unresolved.
         Some("designate-target") => {
-            let select = object(node.get("select"));
             let applies = object(node.get("applies"));
             [
-                "eligibility",
+                "attacker_keywords",
+                "attacker_unit_keywords",
+                "beneficiary",
                 "reference",
-                "bind_as",
-                "within_inches_from",
-                "visible_to",
-                "selection_limit",
             ]
             .iter()
-            .any(|k| has(select, k))
-                || truthy_flag(select, "visibility_required")
-                || [
-                    "attacker_keywords",
-                    "attacker_unit_keywords",
-                    "beneficiary",
-                    "reference",
-                ]
-                .iter()
-                .any(|k| has(applies, k))
+            .any(|k| has(applies, k))
         }
         Some("ability-part") => has_unresolved_trigger_binding(node.get("trigger")),
         Some("named-region-state") => {

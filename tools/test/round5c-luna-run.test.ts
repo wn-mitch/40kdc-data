@@ -11,6 +11,7 @@ import { LUNA_MODEL, lunaStdinEnvelope, LunaRunError } from "../src/round5c/luna
 import { extractAssistantJson, ompArgs, OmpTransportError, providerError } from "../src/round5c/omp-driver.js";
 import { importLuna, prepareLuna, serializeLunaRequest, type PreparedLuna, type PreparedRequest } from "../src/round5c/proposal.js";
 import type { DeepSeekUsage, ModelCall } from "../src/round5c/leaf-proposals-llm.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 
 // Fabricated fixture prose only; nothing here is published source text.
 const SOURCE = "Each time this unit attacks, re-roll a Hit roll of 1 and gain a glimmer token.";
@@ -54,7 +55,7 @@ function validResponse(prepared: PreparedLuna, overrides: Record<string, unknown
         { ...span(ability.source_text, "Each time this unit attacks"), role: "EVENT", status: "UNRESOLVED" },
         {
           ...span(ability.source_text, "re-roll a Hit roll of 1"), role: "EFFECT", status: "EXISTING",
-          family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
+          family_id: "reroll", family_version: currentFamilyVersion("reroll"), parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
         },
         {
           ...span(ability.source_text, "gain a glimmer token"), role: "EFFECT", status: "NOVEL",
@@ -390,7 +391,7 @@ describe("Round 5C OMP Luna transport", () => {
       })).lastInsertRowid);
       const result = importLuna(db, { run_id: String(runId), response: {
         schema_version: 1, input_hash: "a".repeat(64), model: "luna", model_version: "legacy", prompt_version: "v1",
-        abilities: [{ ...ability, spans: [{ start_byte: 0, end_byte: end, exact_text: "Re-roll a Hit roll of 1", role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" } }], connectives: [], unresolved_regions: [] }],
+        abilities: [{ ...ability, spans: [{ start_byte: 0, end_byte: end, exact_text: "Re-roll a Hit roll of 1", role: "EFFECT", status: "EXISTING", family_id: "reroll", family_version: currentFamilyVersion("reroll"), parameters: { roll: "hit", subset: "ones", weapon_type: "all" } }], connectives: [], unresolved_regions: [] }],
       } });
       expect(result).toMatchObject({ proposals: 1, structural: 0 });
       expect(db.prepare("SELECT origin FROM proposals").get()).toEqual({ origin: "luna" });

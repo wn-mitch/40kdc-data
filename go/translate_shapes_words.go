@@ -14,12 +14,46 @@ import (
 // designationTerms is the rules' term for a registered designation: an
 // adjective ("Spotted") or a noun ("Observer" -> "an Observer", "Observers").
 var designationTerms = map[string]struct{ adjective, noun string }{
-	"afflicted": {adjective: "Afflicted"},
-	"spotted":   {adjective: "Spotted"},
-	"guided":    {adjective: "Guided"},
-	"riled-up":  {adjective: "riled up"},
-	"empowered": {adjective: "Empowered"},
-	"observer":  {noun: "Observer"},
+	"afflicted":                  {adjective: "Afflicted"},
+	"spotted":                    {adjective: "Spotted"},
+	"guided":                     {adjective: "Guided"},
+	"riled-up":                   {adjective: "riled up"},
+	"empowered":                  {adjective: "Empowered"},
+	"observer":                   {noun: "Observer"},
+	"blessed":                    {adjective: "blessed"},
+	"detected":                   {adjective: "detected"},
+	"disrupted":                  {adjective: "disrupted"},
+	"enfeebled":                  {adjective: "enfeebled"},
+	"ensnared":                   {adjective: "ensnared"},
+	"grav-pinned":                {adjective: "grav-pinned"},
+	"grounded":                   {adjective: "grounded"},
+	"infested-with-snotlings":    {adjective: "infested with Snotlings"},
+	"malevolent":                 {adjective: "malevolent"},
+	"mutated":                    {adjective: "mutated"},
+	"nulled":                     {adjective: "nulled"},
+	"overlapping-fire":           {adjective: "caught in overlapping fire"},
+	"poisoned":                   {adjective: "poisoned"},
+	"riven":                      {adjective: "riven"},
+	"scanned":                    {adjective: "scanned"},
+	"scattered":                  {adjective: "scattered"},
+	"shaken":                     {adjective: "shaken"},
+	"slowed":                     {adjective: "slowed"},
+	"smashed":                    {adjective: "smashed"},
+	"snared":                     {adjective: "snared"},
+	"struck-by-arcing-energies":  {adjective: "struck by arcing energies"},
+	"struck-by-concussive-wave":  {adjective: "struck by concussive wave"},
+	"struck-by-explosive-debris": {adjective: "struck by explosive debris"},
+	"struck-by-spores":           {adjective: "struck by spores"},
+	"stunned":                    {adjective: "stunned"},
+	"wobbled":                    {adjective: "wobbled"},
+	"wracked-with-agonies":       {adjective: "wracked with agonies"},
+	"zapped":                     {adjective: "zapped"},
+	"unravelling":                {adjective: "unravelling"},
+	"prey":                       {noun: "prey"},
+	"slayers-oath":               {noun: "Slayer's Oath"},
+	"vendetta-target":            {noun: "Vendetta target"},
+	"victim":                     {noun: "victim"},
+	"warlord":                    {adjective: "the Warlord"},
 }
 
 // designationTerm is the printed term for a registered id after "is"/"are",
@@ -43,21 +77,26 @@ func designationTerm(id string, plural bool) (string, bool) {
 }
 
 var expiryTrails = map[string]string{
-	"attack-sequence":                 "until that unit finishes resolving its attacks",
-	"resolution":                      "when resolving this use",
-	"phase":                           "until the end of the phase",
-	"turn":                            "until the end of the turn",
-	"battle":                          "for the rest of the battle",
-	"battle-round":                    "until the end of the battle round",
-	"until-next-command-phase":        "until the start of your next Command phase",
-	"until-next-movement-phase":       "until the start of your next Movement phase",
-	"until-next-shooting-phase":       "until the start of your next Shooting phase",
-	"until-next-battle-round":         "until the start of the next battle round",
-	"until-start-next-turn":           "until the start of your next turn",
-	"until-end-of-your-next-turn":     "until the end of your next turn",
-	"until-end-of-opponent-next-turn": "until the end of your opponent's next turn",
-	"until-this-unit-has-shot":        "until this unit has resolved its ranged attacks",
-	"control-lost":                    "until you no longer control it",
+	"attack-sequence":                            "until that unit finishes resolving its attacks",
+	"resolution":                                 "when resolving this use",
+	"phase":                                      "until the end of the phase",
+	"turn":                                       "until the end of the turn",
+	"battle":                                     "for the rest of the battle",
+	"battle-round":                               "until the end of the battle round",
+	"until-next-command-phase":                   "until the start of your next Command phase",
+	"until-next-movement-phase":                  "until the start of your next Movement phase",
+	"until-next-shooting-phase":                  "until the start of your next Shooting phase",
+	"until-next-battle-round":                    "until the start of the next battle round",
+	"until-start-next-turn":                      "until the start of your next turn",
+	"until-end-of-your-next-turn":                "until the end of your next turn",
+	"until-end-of-opponent-next-turn":            "until the end of your opponent's next turn",
+	"until-this-unit-has-shot":                   "until this unit has resolved its ranged attacks",
+	"control-lost":                               "until you no longer control it",
+	"until-end-of-your-next-fight-phase":         "until the end of your next Fight phase",
+	"until-end-of-your-next-shooting-phase":      "until the end of your next Shooting phase",
+	"until-end-of-your-next-movement-phase":      "until the end of your next Movement phase",
+	"until-end-of-opponent-next-movement-phase":  "until the end of your opponent's next Movement phase",
+	"until-start-of-opponent-next-command-phase": "until the start of your opponent's next Command phase",
 }
 
 // expiryTrail is the trailing clause for an expiry ("until the start of your
@@ -80,6 +119,29 @@ func rollWord(roll any) string {
 
 // usedAbilityPhrase names which ability a `used` filter means: every ability
 // with a bracketed keyword, or the same one as a bound use; "" otherwise.
+// namedUsePhrase is one named rule a used filter names by id ("Reanimation Protocols", "the
+// Swift as the Wind Agile Manoeuvre"), or "". An ability is its name alone; the other kinds add
+// their noun.
+func namedUsePhrase(f map[string]any) string {
+	if f["id"] == nil {
+		return ""
+	}
+	if f["kind"] == "ability" {
+		return idLabel(f["id"])
+	}
+	noun, ok := map[string]string{"manoeuvre": "Agile Manoeuvre", "stratagem": "Stratagem", "action": "action"}[cstr(f["kind"])]
+	if !ok {
+		return ""
+	}
+	return "the " + idLabel(f["id"]) + " " + noun
+}
+
+// inProgressPhrases is a rule of one kind being used now, when the filter names none.
+var inProgressPhrases = map[string]string{
+	"ability": "an ability", "stratagem": "a Stratagem", "manoeuvre": "an Agile Manoeuvre", "action": "an action", "order": "an Order",
+	"ritual": "a Ritual", "dark-pact": "a Dark Pact", "act-of-faith": "an Act of Faith", "doctrine": "a Combat Doctrine", "contract": "a contract",
+}
+
 func usedAbilityPhrase(f map[string]any) string {
 	if f["ability_keyword"] != nil {
 		return "a " + titleCase(strings.ToLower(cstr(f["ability_keyword"]))) + " ability"

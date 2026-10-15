@@ -38,6 +38,7 @@ type DatasheetPointsStepRow, } from "./loader.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { candidateDirs, homeScore } from "./wargear.js";
+import { FACTION_SIBLING_KEYWORDS } from "../integrity.js";
 import type { StagedWrite } from "./apply.js";
 
 
@@ -59,12 +60,18 @@ export interface Tier {
 export interface AlliedTier extends Tier {
   host_faction: string;
 }
+/** A tier in effect only while `detachment_id` is selected (unit `detachment_pricing`). */
+export interface DetachmentTier extends Tier {
+  detachment_id: string;
+}
 interface UnitRecord {
   id: string;
   name: string;
   points?: Tier[];
   allied_points?: AlliedTier[];
+  detachment_pricing?: DetachmentTier[];
   points_provisional?: boolean;
+  faction_keywords?: string[];
   model_count?: { min: number; max: number };
   game_version?: { edition: string; dataslate: string };
   [k: string]: unknown;
@@ -73,6 +80,8 @@ interface UnitRecord {
 export interface Derived {
   native: Tier[];
   allied: AlliedTier[];
+  /** Tiers from detachment-gated compositions (`unit_composition_required_detachment`). */
+  byDetachment: DetachmentTier[];
   ambiguous: boolean;
 }
 
@@ -137,11 +146,26 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
     };
   };
 
+  // A composition gated by `unit_composition_required_detachment` prices the unit only
+  // while that detachment is selected (Pantheon of Woe's C'tan, Veiled Blade's
+  // assassins). It is a detachment tier, never a native one — counting it as native
+  // made every such datasheet look ambiguous (two costs for one size).
+  const detachmentOfComp = new Map<string, string>();
+  for (const r of dump.tables.unit_composition_required_detachment ?? []) {
+    const name = dump.enName(dump.byId("detachment").get(r.detachmentId));
+    if (!name) continue;
+    try {
+      detachmentOfComp.set(r.unitCompositionId, nameToId(name));
+    } catch {
+      continue;
+    }
+  }
+
   // Native (untagged) base tiers, de-duplicated on (min, max, cost).
   const nativeSeen = new Set<string>();
   const nativeBase: BaseTier[] = [];
   for (const c of comps) {
-    if (c.referenceGroupingKeywordId || c.points == null) continue;
+    if (c.referenceGroupingKeywordId || c.points == null || detachmentOfComp.has(c.id!)) continue;
     const { min, max } = rangeOf(c.id!);
     if (max <= 0) continue; // no model rows (data-only / attachment-at-0) — no size
     const cost = c.points;
@@ -181,12 +205,28 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
       arr.push({ models: min, models_max: max, cost: c.points });
   }
 
+  // Detachment-gated tiers, keyed by the detachment's id slug.
+  const detBaseById = new Map<string, BaseTier[]>();
+  for (const c of comps) {
+    const det = detachmentOfComp.get(c.id!);
+    if (!det || c.points == null || c.referenceGroupingKeywordId) continue;
+    const { min, max } = rangeOf(c.id!);
+    if (max <= 0) continue;
+    const arr = detBaseById.get(det) ?? detBaseById.set(det, []).get(det)!;
+    if (!arr.some((b) => b.models === min && b.models_max === max && b.cost === c.points))
+      arr.push({ models: min, models_max: max, cost: c.points });
+  }
+
   const native = applyStep(nativeBase, step, (t) => t);
   const allied: AlliedTier[] = [];
   for (const [host, base] of alliedBaseByHost) {
     allied.push(...applyStep(base, step, (t) => ({ ...t, host_faction: host })));
   }
-  return { native, allied, ambiguous };
+  const byDetachment: DetachmentTier[] = [];
+  for (const [detachment_id, base] of [...detBaseById].sort((a, b) => a[0].localeCompare(b[0]))) {
+    byDetachment.push(...applyStep(base, step, (t) => ({ ...t, detachment_id })));
+  }
+  return { native, allied, byDetachment, ambiguous };
 }
 
 /**
@@ -224,11 +264,17 @@ export function cleanTier<T extends Tier>(t: T): T {
  * not a reprice) contributes nothing and clears stale entries for its host.
  * Twin tiers at sizes the native table doesn't price (optional-attachment
  * builds) are dropped, mirroring the native-ranges trust rule.
+ *
+ * `hostOwnsUnit`: the host dir carries its own unit for this datasheet (a
+ * daemon cult-legion view such as World Eaters' Bloodletters), which is priced
+ * natively there. The twin then contributes nothing here and this host's stale
+ * entries are cleared, so the host never sees the datasheet priced twice.
  */
 export function routeChapterTwin(
   rec: Pick<UnitRecord, "points" | "allied_points">,
   host: string,
-  twinNative: Tier[]
+  twinNative: Tier[],
+  hostOwnsUnit = false
 ): AlliedTier[] {
   const nativeRanges = new Set(
     (rec.points ?? []).map((t) => `${t.models}:${t.models_max ?? t.models}`)
@@ -237,6 +283,7 @@ export function routeChapterTwin(
     .map(cleanTier)
     .filter((t) => nativeRanges.has(`${t.models}:${t.models_max ?? t.models}`));
   const others = (rec.allied_points ?? []).filter((a) => a.host_faction !== host);
+  if (hostOwnsUnit) return others;
   if (!clean.length || normNative(clean) === normNative(rec.points ?? [])) return others;
   return [...others, ...clean.map((t) => ({ ...t, host_faction: host }))];
 }
@@ -284,6 +331,8 @@ export interface DirPointsResult {
   pointsChanged: { id: string; from: Tier[]; to: Tier[] }[];
   alliedAdded: { id: string; allied: AlliedTier[] }[];
   ambiguousSkipped: string[];
+  /** Units whose `detachment_pricing` the dump replaced or cleared. */
+  detachmentPricingChanged: string[];
   repoOnly: string[]; // repo unit absent from dump (Legends/FW → BSData)
 }
 export interface PointsReport {
@@ -312,6 +361,26 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
     }
   }
 
+  // Daemon cult-legion view ids per dir, read once. A twin whose home dir holds
+  // its own view (a unit carrying that dir's FACTION_SIBLING_KEYWORDS keyword,
+  // e.g. World Eaters' Bloodletters) is priced there natively, not routed into
+  // the chaos-daemons copy's `allied_points`.
+  const viewIdCache = new Map<string, Set<string>>();
+  const viewIdsOf = (dir: string): Set<string> => {
+    let ids = viewIdCache.get(dir);
+    if (!ids) {
+      const p = path.join(CORE_DIR, dir, "units.json");
+      const siblings = FACTION_SIBLING_KEYWORDS[dir] ?? [];
+      ids = new Set(
+        (fs.existsSync(p) ? readJsonArray<UnitRecord>(p) : [])
+          .filter((u) => (u.faction_keywords ?? []).some((k) => siblings.includes(k)))
+          .map((u) => u.id)
+      );
+      viewIdCache.set(dir, ids);
+    }
+    return ids;
+  };
+
   const results: DirPointsResult[] = [];
   const staged: StagedWrite[] = [];
   const matchedDatasheets = new Set<string>(); // ds.id that found a repo unit somewhere
@@ -327,6 +396,7 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       pointsChanged: [],
       alliedAdded: [],
       ambiguousSkipped: [],
+      detachmentPricingChanged: [],
       repoOnly: [],
     };
     const matchedRepoIds = new Set<string>();
@@ -358,11 +428,12 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
         // reprice).
         const host = homeDir(dump, ds);
         if (!host || host === dir) continue;
+        const hostOwnsUnit = viewIdsOf(host).has(id);
         const twin = deriveDatasheet(dump, ds.id!);
         // Underivable twin (ambiguous / priceless): leave existing entries
         // for this host alone rather than guessing or wiping them.
-        if (twin.ambiguous || !twin.native.length) continue;
-        const next = routeChapterTwin(rec, host, twin.native);
+        if (!hostOwnsUnit && (twin.ambiguous || !twin.native.length)) continue;
+        const next = routeChapterTwin(rec, host, twin.native, hostOwnsUnit);
         if (normAllied(rec.allied_points) !== normAllied(next)) {
           res.alliedAdded.push({
             id,
@@ -376,7 +447,7 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       matchedRepoIds.add(id);
       matchedDatasheets.add(ds.id!);
       res.matched++;
-      const { native, allied, ambiguous } = deriveDatasheet(dump, ds.id!);
+      const { native, allied, byDetachment, ambiguous } = deriveDatasheet(dump, ds.id!);
       if (!native.length) continue; // no dump price (e.g. data-only datasheet)
 
       if (ambiguous) {
@@ -406,6 +477,13 @@ export function runPoints(dump: MfmDump, write: boolean): PointsReport {
       // Mutate in-memory in BOTH modes; the dry-run rehearsal validates the result.
       rec.points = nativeClean;
       if (alliedClean.length) rec.allied_points = alliedClean;
+      // Detachment-gated pricing is authoritative: replace, or clear when absent.
+      const detClean = byDetachment.map(cleanTier);
+      if (JSON.stringify(rec.detachment_pricing ?? []) !== JSON.stringify(detClean)) {
+        res.detachmentPricingChanged.push(id);
+        if (detClean.length) rec.detachment_pricing = detClean;
+        else delete rec.detachment_pricing;
+      }
       rec.points_provisional = false;
       if (rec.game_version) {
         rec.game_version.edition = CONFIRMED.edition;
@@ -482,6 +560,7 @@ export function buildPointsReport(report: PointsReport, write: boolean): string 
     if (
       !d.pointsChanged.length &&
       !d.alliedAdded.length &&
+      !d.detachmentPricingChanged.length &&
       !d.ambiguousSkipped.length
     )
       continue;
@@ -489,6 +568,9 @@ export function buildPointsReport(report: PointsReport, write: boolean): string 
     if (d.pointsChanged.length) {
       L.push("", "**Points changes** (old → new):");
       d.pointsChanged.forEach((c) => L.push(`- ${c.id}: ${fmt(c.from)} → ${fmt(c.to)}`));
+    }
+    if (d.detachmentPricingChanged.length) {
+      L.push("", "**Detachment pricing replaced:** " + d.detachmentPricingChanged.join(", "));
     }
     if (d.alliedAdded.length) {
       L.push("", "**Allied pricing added:**");

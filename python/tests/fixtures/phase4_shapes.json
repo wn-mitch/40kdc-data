@@ -648,7 +648,7 @@
     }
    }
   ],
-  "out": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Use Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Use Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
+  "out": "Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:\n  Select up to 2 distinct options:\n    - Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.\n    - Total Carnage: using a pair of 6+ or triple of 3+ from that roll's unused dice, nothing happens."
  },
  {
   "fn": "describeAbility",
@@ -1480,7 +1480,7 @@
     }
    }
   ],
-  "out": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is marked as mutated until you no longer control it."
+  "out": "Select one objective marker you control that the bearer's unit is within range of: that objective marker is mutated until you no longer control it."
  },
  {
   "fn": "describeAbility",
@@ -3869,7 +3869,7 @@
     }
    }
   ],
-  "out": "after an Agile Manoeuvre roll is made"
+  "out": "after the unit makes an Agile Manoeuvre roll"
  },
  {
   "fn": "describeTrigger",
@@ -3883,7 +3883,7 @@
     }
    }
   ],
-  "out": "after a Channel the Warp roll is made"
+  "out": "after a successful Channel the Warp roll made for the unit"
  },
  {
   "fn": "describeTrigger",
@@ -3915,7 +3915,7 @@
     }
    }
   ],
-  "out": "each time an enemy unit uses a Psychic ability"
+  "out": "each time your opponent uses a Psychic ability"
  },
  {
   "fn": "describeAbility",
@@ -5031,7 +5031,7 @@
     }
    }
   ],
-  "out": "Your army cannot include ASSASSIN units; they do not count toward the Retinue limit."
+  "out": "Your army can include ASSASSIN units; they do not count toward the Retinue limit."
  },
  {
   "fn": "describeAbility",
@@ -6412,6 +6412,106 @@
      }
     },
     "scope": {
+     "duration": "until-end-of-your-next-fight-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Fight phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-your-next-shooting-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Shooting phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-your-next-movement-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your next Movement phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-end-of-opponent-next-movement-phase"
+    }
+   }
+  ],
+  "out": "Until the end of your opponent's next Movement phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
+     "duration": "until-start-of-opponent-next-command-phase"
+    }
+   }
+  ],
+  "out": "Until the start of your opponent's next Command phase, add 1 to the unit's Leadership characteristic."
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "stat-modifier",
+     "target": "this-unit",
+     "modifier": {
+      "stat": "Ld",
+      "operation": "add",
+      "value": 1
+     }
+    },
+    "scope": {
      "duration": "one-use"
     }
    }
@@ -7735,5 +7835,35 @@
    "unsupported": [],
    "activatable": []
   }
+ },
+ {
+  "fn": "describeCondition",
+  "args": [
+   {
+    "type": "designated",
+    "parameters": {
+     "tag": "shaken"
+    }
+   }
+  ],
+  "out": "the unit is shaken"
+ },
+ {
+  "fn": "describeAbility",
+  "args": [
+   {
+    "effect": {
+     "type": "designate",
+     "target": "this-unit",
+     "modifier": {
+      "tag": "shaken"
+     }
+    },
+    "scope": {
+     "duration": "permanent"
+    }
+   }
+  ],
+  "out": "The unit is shaken."
  }
 ]

@@ -344,6 +344,21 @@ pub(super) fn keyword_grant(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(m) = object(node.get("modifier")) else {
         return;
     };
+    // A selector by keyword would apply the grant to every weapon of the unit: refuse it (as the
+    // TS cruncher does) rather than over-apply it.
+    if m.get("weapon_keyword")
+        .is_some_and(|value| !value.is_null())
+    {
+        out.unsupported("weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve", node);
+        return;
+    }
+    for keyword in list(m.get("removes")).iter().filter_map(Value::as_str) {
+        let fragment = json!({ "removes": [keyword] });
+        out.unsupported.push((
+            format!("weapon-ability-removal: the cruncher does not model removing a weapon ability (\"{keyword}\")"),
+            fragment,
+        ));
+    }
     let raws: Vec<&str> = list(m.get("abilities"))
         .iter()
         .filter_map(Value::as_str)
@@ -534,7 +549,7 @@ pub fn parse_keyword_grant(raw: &str) -> Option<WeaponKeywordRef> {
     })
 }
 
-/// `/^anti-([A-Z][A-Z\s-]*)\s+(\d+)\+?$/i`.
+/// `/^anti-(X(\/X)*)\s+(\d+)\+?$/i`, where each X is `[A-Z][A-Z\s-]*` (a `non-` prefix included).
 fn anti_parts(s: &str) -> Option<(&str, u64)> {
     if !s.get(..5)?.eq_ignore_ascii_case("anti-") {
         return None;
@@ -551,10 +566,13 @@ fn anti_parts(s: &str) -> Option<(&str, u64)> {
     if target.len() == head.len() || target.is_empty() {
         return None;
     }
-    let mut chars = target.chars();
-    let first_ok = chars.next().is_some_and(|c| c.is_ascii_alphabetic());
-    let rest_ok = chars.all(|c| c.is_ascii_alphabetic() || c.is_whitespace() || c == '-');
-    if !first_ok || !rest_ok {
+    // Slash-separated alternatives ("Monster/Vehicle"), each a keyword or a `non-` keyword.
+    let segment_ok = |segment: &str| {
+        let mut chars = segment.chars();
+        chars.next().is_some_and(|c| c.is_ascii_alphabetic())
+            && chars.all(|c| c.is_ascii_alphabetic() || c.is_whitespace() || c == '-')
+    };
+    if !target.split('/').all(segment_ok) {
         return None;
     }
     Some((target, digits.parse().ok()?))

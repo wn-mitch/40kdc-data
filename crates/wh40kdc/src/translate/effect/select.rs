@@ -378,14 +378,20 @@ pub(crate) fn for_each_unit_subject(sel: &P) -> String {
         Some("not-engaged-with-bearer") => format!(" not in Engagement Range of {origin}"),
         _ => String::new(),
     };
-    let member = if sv(sel, "member_of") == Some("bearer-unit") {
-        " in this model's unit"
+    let member = match sv(sel, "member_of") {
+        Some("bearer-unit") => " in this model's unit",
+        Some("embarked-in-bearer") => " embarked within this model",
+        Some("target") => " in the target unit",
+        _ => "",
+    };
+    // owner any: "each unit within 6\" of …", with no side word.
+    let owner = if sv(sel, "owner") == Some("any") {
+        String::new()
     } else {
-        ""
+        format!("{} ", jstr(sel.get("owner")))
     };
     format!(
-        "{} {keywords}{}{}{member}{within}{engagement}{}{}",
-        jstr(sel.get("owner")),
+        "{owner}{keywords}{}{}{member}{within}{engagement}{}{}",
         target_noun(sel),
         selection_model_filters(sel),
         eligibility_clause(sel, false),

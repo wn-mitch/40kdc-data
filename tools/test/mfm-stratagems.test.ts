@@ -4,7 +4,7 @@ import * as path from "node:path";
 import { DEFAULT_DUMP_PATH, loadDump, MfmDump } from "../src/mfm/loader.js";
 import { CORE_DIR } from "../src/mfm/repo-files.js";
 import { nameToId, detachmentScopedId } from "../src/converters/id-generator.js";
-import { buildStratCanon, runStratagems, deriveTrigger, type StratagemCanon } from "../src/mfm/stratagems.js";
+import { buildStratCanon, runStratagems, deriveTrigger, namesEitherTurnPhase, type StratagemCanon } from "../src/mfm/stratagems.js";
 import { seedStratagems } from "../src/mfm/seed-stratagems.js";
 
 /**
@@ -87,6 +87,19 @@ describe("stratagem canon derivation (synthetic)", () => {
   it("derives review-only phases from whenRules prose (both phases of an 'or' idiom)", () => {
     const c = canon.get("codex-discipline-bastion-task-force-adeptus-astartes")!; // mfm:mirror keep — the synthetic dump's id
     expect(c.phases_review).toEqual(expect.arrayContaining(["shooting", "fight"]));
+  });
+});
+
+describe("namesEitherTurnPhase", () => {
+  it("finds a phase named with no owner, which is used in either player's turn", () => {
+    expect(namesEitherTurnPhase("Your opponent’s Shooting phase or the <b>Fight</b> phase, just after an enemy unit has selected its targets.")).toBe(true);
+    expect(namesEitherTurnPhase("Start of the Command phase.")).toBe(true);
+    expect(namesEitherTurnPhase("Your Shooting phase or your Fight phase.")).toBe(false);
+    expect(namesEitherTurnPhase("Your opponent’s Movement phase, at the end of the Reinforcements step.")).toBe(false);
+    expect(namesEitherTurnPhase(null)).toBe(false);
+    // The prose fallback agrees: an unlabeled phase beside an owned one is either player's.
+    expect(deriveTrigger("Your opponent’s Shooting phase or the Fight phase.").player_turn).toBe("either");
+    expect(deriveTrigger("Your opponent’s Shooting phase.").player_turn).toBe("opponent-turn");
   });
 });
 

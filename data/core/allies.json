@@ -102,8 +102,8 @@
       "ynnari-wyches",
       "yvraine"
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "agents-of-the-imperium-allies",
@@ -679,7 +679,7 @@
     "detachment_ids": [
       "tallyband-summoners"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "death-guard",
     "source_datasheet_ids": [
       "beasts-of-nurgle",
       "great-unclean-one",
@@ -702,8 +702,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "drukhari-aeldari",
@@ -815,7 +815,7 @@
     "detachment_ids": [
       "carnival-of-excess"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "emperors-children",
     "source_datasheet_ids": [
       "daemonettes",
       "fiends",
@@ -837,8 +837,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "iconoclast-fiefdom-damned",
@@ -1068,7 +1068,7 @@
     "detachment_ids": [
       "changehost-of-deceit"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "thousand-sons",
     "source_datasheet_ids": [
       "blue-horrors",
       "flamers",
@@ -1091,8 +1091,8 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   },
   {
     "id": "world-eaters-khorne-daemons",
@@ -1108,7 +1108,7 @@
     "detachment_ids": [
       "khorne-daemonkin"
     ],
-    "source_faction_id": "chaos-daemons",
+    "source_faction_id": "world-eaters",
     "source_datasheet_ids": [
       "bloodcrushers",
       "bloodletters",
@@ -1130,7 +1130,7 @@
         "max_points": 1500
       }
     ],
-    "cannot_be_warlord": true,
-    "cannot_take_enhancements": true
+    "exclusive": true,
+    "cannot_be_warlord": true
   }
 ]

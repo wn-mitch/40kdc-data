@@ -2,6 +2,7 @@ package wh40kdc
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -39,7 +40,7 @@ func notWord(negated bool) string {
 
 // verbNegated lists predicates whose phrase negates by turning its verb (see negatePhrase).
 var verbNegated = map[string]bool{
-	"strength": true, "model-count": true, "wounds": true, "loadout": true, "attachment": true, "has-ability": true,
+	"strength": true, "model-count": true, "wounds": true, "loadout": true, "equipped-weapon-count": true, "attachment": true, "has-ability": true,
 	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
 	"army-faction": true, "battle-size": true,
@@ -105,6 +106,8 @@ func describePredicate(c map[string]any, negated bool) string {
 	}
 	neg := notWord(negated)
 	switch c["type"] {
+	case "deployment-window":
+		return neg + "during deployment"
 	case "phase-is":
 		if cstr(p["phase"]) == "command" {
 			return neg + "during the Command phase"
@@ -189,6 +192,10 @@ func describePredicate(c map[string]any, negated bool) string {
 		case "led":
 			return neg + subjectOf(p, "this unit") + " is being led by " + article(kw) + " " + kw + "model"
 		}
+		// Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+		if kw != "" {
+			return neg + subjectOf(p, "the unit") + " is attached to " + article(kw) + " " + kw + "unit"
+		}
 		return neg + subjectOf(p, "the unit") + " is an attached unit"
 	case "strength":
 		below := "starting strength"
@@ -230,6 +237,14 @@ func describePredicate(c map[string]any, negated bool) string {
 			parts = append(parts, "is Damaged")
 		}
 		return neg + who + " " + andList(parts)
+	case "named-weapon", "unit-wargear":
+		return namedEquipmentPhrase(cstr(c["type"]), p, negated)
+	case "equipped-weapon-count":
+		plural := "s"
+		if n, ok := p["count"].(float64); ok && n == 1 {
+			plural = ""
+		}
+		return subjectOf(p, "the model") + " is " + neg + "equipped with a weapon named \"" + cstr(p["other_than"]) + "\" and exactly " + cstr(p["count"]) + " other " + cstr(p["weapon_type"]) + " weapon" + plural
 	case "loadout":
 		kw := ""
 		if jsTruthy(p["model_keyword"]) {
@@ -258,6 +273,14 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return who + " is " + statePhrase(cstr(p["state"]), negated) + withRef
 	case "eligible":
+		if p["to"] == "embark-within" {
+			// The candidate being checked (this-unit) reads "that Transport".
+			transport := "that Transport"
+			if p["transport"] != "this-unit" {
+				transport = unitRefPhrase(p["transport"], "that Transport")
+			}
+			return subjectOf(p, "the unit") + " is " + neg + "able to embark within " + transport
+		}
 		if p["to"] == "be-selected" {
 			source := mapOr(p["source_ability"])["ability_id"]
 			return neg + "the candidate was eligible for the " + dekebab(cstr(source)) + " ability at the end of the opponent's previous turn"
@@ -519,6 +542,8 @@ func describePredicate(c map[string]any, negated bool) string {
 		return "the battle size is " + neg + titleCase(cstr(p["size"]))
 	case "army-faction":
 		return "your Army Faction is " + neg + strings.ToUpper(strings.ReplaceAll(cstr(p["faction"]), "-", " "))
+	case "army-includes":
+		return armyIncludesPhrase(p, neg != "")
 	case "moved-over":
 		window := windowPhrase(p["window"])
 		if p["window"] == nil || p["window"] == "event" {
@@ -556,6 +581,10 @@ func describeWithin(p map[string]any, neg string) string {
 	if p["wholly"] == true {
 		wholly = "wholly "
 	}
+	who := subjectOf(p, "the unit")
+	if p["models"] == "every" {
+		who = "every model in " + who
+	}
 	if rng == "half-weapon" || rng == "weapon" {
 		who := subjectOf(p, "the unit")
 		if p["subject"] == "defender" {
@@ -566,10 +595,10 @@ func describeWithin(p map[string]any, neg string) string {
 	ofMap, ofIsMap := asMap(of)
 	if ofIsMap && jsTruthy(ofMap["objective"]) {
 		if mapOr(ofMap["objective"])["selection_var"] != nil {
-			return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of that objective marker"
+			return who + " is " + neg + wholly + "within range of that objective marker"
 		}
 		obj := objectivePhrase(mapOr(ofMap["objective"]), false, "objective marker")
-		return subjectOf(p, "the unit") + " is " + neg + wholly + "within range of " + article(obj) + " " + obj
+		return who + " is " + neg + wholly + "within range of " + article(obj) + " " + obj
 	}
 	if ofIsMap && ofMap["owner"] == "enemy" && p["subject"] == nil {
 		if neg != "" {
@@ -589,10 +618,6 @@ func describeWithin(p map[string]any, neg string) string {
 	default:
 		target = unitRefPhrase(of, "the unit")
 	}
-	who := subjectOf(p, "the unit")
-	if p["models"] == "every" {
-		who = "every model in " + who
-	}
 	is, at := "is", ""
 	if p["at"] == "phase-start" {
 		is, at = "was", " at the start of the phase"
@@ -602,3 +627,58 @@ func describeWithin(p map[string]any, neg string) string {
 
 // conditionOperands returns (operands, true) when c carries an operator and an
 // operands array (`c.operator === op && c.operands`).
+
+var firstUnitOrModelRe = regexp.MustCompile(`\b(unit|model)\b`)
+
+// armyIncludesPhrase renders "your army includes a CHARACTER unit", "your army
+// includes 2 or more X units", "every model in your army has the IMPERIUM
+// keyword". The army is yours, so the filter's owner is not repeated.
+func armyIncludesPhrase(p map[string]any, negated bool) string {
+	src, _ := p["filter"].(map[string]any)
+	f := make(map[string]any, len(src))
+	for k, v := range src {
+		if k != "owner" {
+			f[k] = v
+		}
+	}
+	noun := "unit"
+	if f["level"] == "model" {
+		noun = "model"
+	}
+	if p["every"] == true {
+		all := cstrList(f["all_of"])
+		anyOf := cstrList(f["any_of"])
+		words := andList(all)
+		if len(anyOf) > 0 {
+			words = orList(anyOf)
+		}
+		plural := ""
+		if len(all) > 1 && len(anyOf) == 0 {
+			plural = "s"
+		}
+		not := ""
+		if negated {
+			not = "not "
+		}
+		return not + "every " + noun + " in your army has the " + words + " keyword" + plural
+	}
+	one := unitFilterPhrase(f)
+	what := one
+	if min, ok := p["min"].(float64); ok && min > 1 {
+		bare := one
+		if strings.HasPrefix(one, "an ") {
+			bare = strings.TrimPrefix(one, "an ")
+		} else if strings.HasPrefix(one, "a ") {
+			bare = strings.TrimPrefix(one, "a ")
+		}
+		loc := firstUnitOrModelRe.FindStringIndex(bare)
+		if loc != nil {
+			bare = bare[:loc[1]] + "s" + bare[loc[1]:]
+		}
+		what = strconv.Itoa(int(min)) + " or more " + bare
+	}
+	if negated {
+		return "your army does not include " + what
+	}
+	return "your army includes " + what
+}

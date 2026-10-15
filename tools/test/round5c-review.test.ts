@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { getQueue } from "../src/round5c/queue.js";
@@ -79,7 +79,7 @@ function rerollDecision(fixtureValue: Fixture, span: Span, action: "confirm" | "
     ...span,
     role: "EFFECT",
     family_id: "reroll",
-    family_version: 2,
+    family_version: currentFamilyVersion("reroll"),
     parameters: { roll: "hit", subset: "ones", weapon_type: "all" },
   };
 }
@@ -102,7 +102,7 @@ function insertRetrievalProposal(fixtureValue: Fixture, span: Span): number {
     fixtureValue.db,
     "reroll",
     { roll: "hit", subset: "ones", weapon_type: "all" },
-    2,
+    currentFamilyVersion("reroll"),
     span.exact_text,
   );
   const proposal = fixtureValue.db.prepare(`
@@ -167,7 +167,7 @@ describe("Round 5C source-bound review ledger", () => {
       const span = sourceSpan(value.source, "models in this unit gain [Lethal Hits] on their weapons");
       const decision = {
         action: "confirm" as const, ability_version_id: value.abilityId, source_hash: value.sourceHash, ...span,
-        role: "EFFECT", family_id: "weapon-ability-grant", family_version: 4,
+        role: "EFFECT", family_id: "weapon-ability-grant", family_version: currentFamilyVersion("weapon-ability-grant"),
         parameters: { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" },
       };
       const batch = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [decision] });
@@ -311,6 +311,32 @@ describe("Round 5C source-bound review ledger", () => {
     }
   });
 
+  it("merges same-role list items into one widened leaf, and undo restores every item", () => {
+    const value = fixture("re-roll a Hit roll of 1 and a Wound roll of 1.");
+    try {
+      const first = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [rerollDecision(value, sourceSpan(value.source, "re-roll a Hit roll of 1"))] });
+      const second = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [rerollDecision(value, sourceSpan(value.source, "a Wound roll of 1"))] });
+      const [firstId, secondId] = [annotationIdForBatch(value, first.batch_id), annotationIdForBatch(value, second.batch_id)];
+      const whole = sourceSpan(value.source, "re-roll a Hit roll of 1 and a Wound roll of 1");
+      // Without naming the second item, the widened leaf collides with it.
+      expect(() => applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [{ ...rerollDecision(value, whole, "correct"), supersedes_annotation_id: firstId }] }))
+        .toThrow(/same role already overlaps/u);
+      // A merged leaf must lie inside the new wording.
+      expect(() => applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [{ ...rerollDecision(value, sourceSpan(value.source, "re-roll a Hit roll of 1 and"), "correct"), supersedes_annotation_id: firstId, merges_annotation_ids: [secondId] }] }))
+        .toThrow(/outside the corrected span/u);
+      const merged = applyAnnotationBatch(value.db, { reviewer: "reviewer", decisions: [{ ...rerollDecision(value, whole, "correct"), supersedes_annotation_id: firstId, merges_annotation_ids: [secondId] }] });
+      const status = (id: number) => (value.db.prepare("SELECT status FROM annotations WHERE id = ?").get(id) as { status: string }).status;
+      expect([status(firstId), status(secondId)]).toEqual(["superseded", "superseded"]);
+      expect(value.db.prepare("SELECT count(*) AS total FROM annotations WHERE status = 'active'").get()).toEqual({ total: 1 });
+
+      undoBatch(value.db, merged.batch_id, { reviewer: "reviewer" });
+      expect([status(firstId), status(secondId)]).toEqual(["active", "active"]);
+      expect(value.db.prepare("SELECT status FROM annotations WHERE batch_id = ?").get(merged.batch_id)).toEqual({ status: "retracted" });
+    } finally {
+      value.db.close();
+    }
+  });
+
   it("records one retrieval proposal and annotation provenance per group occurrence", () => {
     const value = fixture("re-roll a Hit roll of 1. re-roll a Hit roll of 1.");
     try {
@@ -421,7 +447,7 @@ describe("Round 5C source-bound review ledger", () => {
           ...span,
           role: "CONDITION",
           family_id: "leading-unit",
-          family_version: 2,
+          family_version: 6,
           parameters: { subject: { source: span.exact_text }, attachment: "leading" },
         }],
       });

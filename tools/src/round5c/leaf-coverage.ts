@@ -158,6 +158,25 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  * everything else goes through `boundedCombinations` below.
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
+  // Printed weapon names and wargear ids are free text, so the sampler cannot draw them; one of each
+  // quantifier state is listed so every named-equipment predicate form appears in the catalog.
+  "named-weapon@1": [
+    { subject: "this-model", name: "Fizz blade", count: 1 },
+    { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "carry" } },
+    { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "lack" } },
+  ],
+  "unit-wargear@1": [
+    { subject: "this-unit", wargear: "fizz-relay-kit" },
+    { subject: "this-unit", wargear: "fizz-relay-kit", models: { at_least: 1, state: "carry" } },
+  ],
+  // counts-as@3 takes a range, a named range or a region; its region object is not sampled, so all three forms are listed.
+  "counts-as@3": [
+    { subject: "this-unit", within: 6 },
+    { subject: "antecedent", range_ref: "synapse", of_side: "friendly" },
+    { subject: "this-unit", region: { region_id: "hallowed-ground", owner_faction: "grey-knights" } },
+  ],
+  // aura-range v3's side is optional (a unit-filter can carry it); alone, only a sided aura compiles.
+  "aura-range": [{ side: "friendly", inches: 6 }, { side: "enemy", inches: 6, range_cap_inches: 9 }],
   "named-region-state": [
     {
       region_id: "flow-of-magic", owner_faction: "thousand-sons", behavior: "aura", membership_scope: "model",
@@ -189,7 +208,9 @@ const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> 
  * one compiling combination per catalog type, which the baseline alone already supplies — the
  * exact record shapes stay covered by their own pinned tests, not this sweep.
  */
-const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption"]);
+// characteristic-modifier@16 joins them: its characteristics and keyword domains with its optional names
+// product exhausted the default worker heap.
+const BOUNDED_SAMPLE_FAMILIES = new Set(["menu-action", "test", "test-exemption", "characteristic-modifier"]);
 
 /**
  * `trigger`/`when` are the only fields whose value is genuinely a trigger node (or an array of
@@ -264,7 +285,7 @@ export function produceLiterals(): Produced {
     // A COMBINATOR ("instead") replaces an earlier effect of its own family; it owns no DSL type
     // of its own and only compiles inside a fuller ability (see the COMPOSED list).
     if (family.role === "COMBINATOR") continue;
-    const combos = FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
+    const combos = FIXED_PARAMETERS[`${family.id}@${family.version}`] ?? FIXED_PARAMETERS[family.id] ?? (BOUNDED_SAMPLE_FAMILIES.has(family.id) ? boundedCombinations(family) : familyCombinations(family));
     for (const parameters of combos) {
       let result: Compiled;
       try {

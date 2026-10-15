@@ -65,6 +65,7 @@ LEAF_TYPES = frozenset(
         "ability-grant",
         "keyword-grant",
         "weapon-ability-grant",
+        "weapon-ability-range",
         "weapon-grant",
         "ability-modifier",
         "ability-activate",
@@ -156,7 +157,14 @@ def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"{_incoming_lead(m, subj)}{_stat_change(m, f'the {stat} of that attack')}{_bounds(m)}"
         )
     if has_weapon(m):
-        what = f"the {stat} of {weapon_noun(m)} equipped by {weapon_holder(e.get('target'), ctx)}"
+        # A weapon exclusion names the one weapon the change skips.
+        other = (
+            f" other than \"{jstr(m['exclude_weapon_name'])}\""
+            if m.get("exclude_weapon_name") is not None
+            else ""
+        )
+        holder = weapon_holder(e.get("target"), ctx)
+        what = f"the {stat} of {weapon_noun(m)}{other} equipped by {holder}"
         return f"{_stat_change(m, what)}{_bounds(m)}"
     return f"{_stat_change(m, of_or_possessive(subj, stat))}{_bounds(m)}"
 
@@ -300,6 +308,16 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
             return f"{subj} automatically {v(subj, 'passes')} {roll} tests"
         if m.get("result") == "fail":
             return f"{subj} automatically {v(subj, 'fails')} {roll} tests"
+    # count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+    if m.get("count") == 1 and not isinstance(m.get("count"), bool) and not lead:
+        if m.get("result") == "pass":
+            outcome = "automatically succeeds"
+        elif m.get("result") == "fail":
+            outcome = "automatically fails"
+        else:
+            unmod = "an unmodified " if m.get("unmodified") is True else ""
+            outcome = f"counts as {unmod}{jstr(m.get('result'))}"
+        return f"one of {of_or_possessive(subj, f'{roll} rolls')}{weapon_roll_scope(m)} {outcome}"
     whose = f"the {roll} roll for that attack" if lead else of_or_possessive(subj, f"{roll} rolls")
     verb = (
         {"pass": "automatically succeeds", "fail": "automatically fails"}
@@ -314,7 +332,45 @@ def _roll_result(m: dict[str, Any], subj: str) -> str:
     return f"{lead}{whose}{counts} as {unmod}{jstr(result)}"
 
 
-def _ability_grant(m: dict[str, Any], subj: str) -> str:
+def is_defined_grant(e: Any) -> bool:
+    """A grant that prints the ability it gives (``modifier.definition``)."""
+    m = e.get("modifier") if isinstance(e, dict) else None
+    return (
+        isinstance(e, dict)
+        and e.get("type") == "ability-grant"
+        and isinstance(m, dict)
+        and isinstance(m.get("definition"), dict)
+    )
+
+
+def defined_grant_head(e: Leaf, ctx: Ctx) -> str:
+    """Who holds a printed ability and its name, or "the following rules" for an unnamed one.
+
+    A model-level target holds one copy per unit.
+    """
+    m = e.get("modifier") or {}
+    definition = m.get("definition") or {}
+    target = e.get("target")
+    base = effect_subject(target, ctx)
+    model_level = isinstance(target, dict) and target.get("level") == "model"
+    subj = f"units with one or more {base.removeprefix('all ')}" if model_level else base
+    name = definition.get("name")
+    if not isinstance(name, str):
+        name = ability_label(m.get("ability")) if m.get("ability") is not None else None
+    if name is None:
+        return f"{subj} {v(subj, 'gains')} the following rules"
+    return f"{subj} {v(subj, 'gains')} the {name} ability"
+
+
+def definition_part(e: Leaf) -> dict[str, Any]:
+    """The printed ability as a part without its name, which the grant's head already says."""
+    definition = (e.get("modifier") or {}).get("definition") or {}
+    return {k: val for k, val in definition.items() if k != "name"}
+
+
+def _ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
+    if is_defined_grant(e):
+        return f"{defined_grant_head(e, ctx)} ({inline(definition_part(e), ctx)})"
     # Cover is a state a unit has, not an ability it gains.
     if m.get("ability") == "benefit-of-cover":
         return f"{subj} {v(subj, 'has')} the Benefit of Cover"
@@ -341,10 +397,16 @@ def _keyword_grant(m: dict[str, Any], subj: str) -> str:
 
 
 def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    kws = (
+    # A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+    gained = (
         " and ".join(bracket_keyword(a) for a in m["abilities"])
         if isinstance(m.get("abilities"), list)
-        else "[?]"
+        else ""
+    )
+    lost = (
+        " and ".join(bracket_keyword(a) for a in m["removes"])
+        if isinstance(m.get("removes"), list)
+        else ""
     )
     increment = (
         " (a weapon that already has that ability adds the ratings together)"
@@ -352,12 +414,21 @@ def _weapon_ability_grant(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> st
         else ""
     )
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}the attacking weapon has {kws}{increment}"
+        return f"{_incoming_lead(m, subj)}the attacking weapon has {gained or '[?]'}{increment}"
     if has_weapon(m):
-        noun = weapon_noun(m)
-        gain = "gain" if re.search(r"weapons\b", noun) else "gains"
-        return f"{noun} equipped by {weapon_holder(e.get('target'), ctx)} {gain} {kws}{increment}"
-    return f"{of_or_possessive(subj, 'weapons')} gain {kws}{increment}"
+        noun = f"{weapon_noun(m)} equipped by {weapon_holder(e.get('target'), ctx)}"
+    else:
+        noun = of_or_possessive(subj, "weapons")
+    plural = not has_weapon(m) or re.search(r"weapons\b", weapon_noun(m)) is not None
+    gain, lose = ("gain", "lose") if plural else ("gains", "loses")
+    changes = []
+    if gained:
+        changes.append(f"{gain} {gained}{increment}")
+    if lost:
+        changes.append(f"{lose} {lost}")
+    if not changes:
+        changes.append(f"{gain} [?]")
+    return f"{noun} {' and '.join(changes)}"
 
 
 _ASPECTS = {
@@ -435,6 +506,15 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
     return s + cap + ability_limits(m)
 
 
+def _weapon_ability_range(m: dict[str, Any], subj: str) -> str:
+    """A weapon ability's test out to the attacking weapon's full range, not half of it
+    (Rapid Fire)."""
+    return (
+        f"{of_or_possessive(subj, 'attacks')} benefit from {bracket_keyword(m.get('keyword'))} "
+        "when the target is within the weapon's range"
+    )
+
+
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("in_region") is not None:
         region = m["in_region"] if isinstance(m["in_region"], dict) else {}
@@ -485,6 +565,9 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
         )
     if rule == "overwatch-against-bearer":
         return f"your opponent {'can' if granted else 'cannot'} target {subj} with Overwatch"
+    # The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+    if m.get("attacks") is not None and rule == "attacking-ends-hidden":
+        return f"those attacks do not stop {subj} from being hidden"
     core = _CORE_RULES.get(rule)
     if m.get("rule_kind") == "core-rule" and core:
         phrase = core[0] if granted else core[1]
@@ -534,7 +617,7 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "end-attack-sequence":
         return "the attack sequence ends"
     if t == "ability-grant":
-        return _ability_grant(m, subj)
+        return _ability_grant(e, m, subj, ctx, inline)
     if t == "keyword-grant":
         return _keyword_grant(m, subj)
     if t == "weapon-ability-grant":
@@ -549,6 +632,8 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
         return permission(m, subj, ctx)
     if t == "targeting":
         return targeting(m, subj, ctx)
+    if t == "weapon-ability-range":
+        return _weapon_ability_range(m, subj)
     if t == "counts-as":
         return _counts_as(m, subj, ctx)
     if t == "rule-state":

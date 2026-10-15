@@ -8,7 +8,60 @@ use super::words::*;
 use crate::translate::condition::{and_list, article, nn, obj, or_list, range_phrase, P};
 use crate::translate::dekebab;
 
-pub(super) fn ability_grant(m: &P, subj: &str) -> String {
+/// A grant that prints the ability it gives (`modifier.definition`).
+pub(super) fn is_defined_grant(e: &P) -> bool {
+    sv(e, "type") == Some("ability-grant")
+        && obj(e.get("modifier"))
+            .get("definition")
+            .is_some_and(Value::is_object)
+}
+
+/// "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
+/// "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+pub(super) fn defined_grant_head(e: &P, ctx: &Ctx) -> String {
+    let m = obj(e.get("modifier"));
+    let def = obj(m.get("definition"));
+    let target = e.get("target");
+    let base = effect_subject(target, ctx);
+    let model_level = target
+        .and_then(Value::as_object)
+        .is_some_and(|t| t.get("level").and_then(Value::as_str) == Some("model"));
+    let subj = if model_level {
+        format!(
+            "units with one or more {}",
+            base.strip_prefix("all ").unwrap_or(&base)
+        )
+    } else {
+        base
+    };
+    let name = match def.get("name").and_then(Value::as_str) {
+        Some(name) => Some(name.to_string()),
+        None => m
+            .get("ability")
+            .filter(|a| !a.is_null())
+            .map(|a| ability_label(Some(a))),
+    };
+    match name {
+        Some(name) => format!("{subj} {} the {name} ability", v(&subj, "gains")),
+        None => format!("{subj} {} the following rules", v(&subj, "gains")),
+    }
+}
+
+/// The printed ability as a part without its name, which the grant's head already says.
+pub(super) fn definition_part(e: &P) -> Value {
+    let mut part = obj(obj(e.get("modifier")).get("definition")).clone();
+    part.remove("name");
+    Value::Object(part)
+}
+
+pub(super) fn ability_grant(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String {
+    if is_defined_grant(e) {
+        return format!(
+            "{} ({})",
+            defined_grant_head(e, ctx),
+            super::inline(&definition_part(e), ctx)
+        );
+    }
     // Cover is a state a unit has, not an ability it gains.
     if sv(m, "ability") == Some("benefit-of-cover") {
         return format!("{subj} {} the Benefit of Cover", v(subj, "has"));
@@ -61,10 +114,23 @@ pub(super) fn keyword_grant(m: &P, subj: &str) -> String {
     )
 }
 
+/// A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire).
+pub(super) fn weapon_ability_range(m: &P, subj: &str) -> String {
+    format!(
+        "{} benefit from {} when the target is within the weapon's range",
+        of_or_possessive(subj, "attacks"),
+        bracket_keyword(m.get("keyword").unwrap_or(&Value::Null))
+    )
+}
+
 pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let kws = map_arr(m, "abilities", bracket_keyword)
+    // A grant and a removal in one effect read "gain X and lose Y"; an empty list is no change.
+    let gained = map_arr(m, "abilities", bracket_keyword)
         .map(|k| k.join(" and "))
-        .unwrap_or_else(|| "[?]".to_string());
+        .filter(|k| !k.is_empty());
+    let lost = map_arr(m, "removes", bracket_keyword)
+        .map(|k| k.join(" and "))
+        .filter(|k| !k.is_empty());
     let increment = if sv(m, "if_present") == Some("increment") {
         " (a weapon that already has that ability adds the ratings together)"
     } else {
@@ -72,26 +138,35 @@ pub(super) fn weapon_ability_grant(target: Option<&Value>, m: &P, subj: &str, ct
     };
     if is_true(m, "incoming") {
         return format!(
-            "{}the attacking weapon has {kws}{increment}",
-            incoming_lead(m, subj)
+            "{}the attacking weapon has {}{increment}",
+            incoming_lead(m, subj),
+            gained.as_deref().unwrap_or("[?]")
         );
     }
-    if has_weapon(m) {
-        let noun = weapon_noun(m);
-        let verb = if has_word_end(&noun, "weapons") {
-            "gain"
-        } else {
-            "gains"
-        };
-        return format!(
-            "{noun} equipped by {} {verb} {kws}{increment}",
-            weapon_holder(target, ctx)
-        );
-    }
-    format!(
-        "{} gain {kws}{increment}",
+    let weapon = has_weapon(m);
+    let noun = if weapon {
+        let kind = weapon_noun(m);
+        format!("{kind} equipped by {}", weapon_holder(target, ctx))
+    } else {
         of_or_possessive(subj, "weapons")
-    )
+    };
+    let plural = !weapon || has_word_end(&weapon_noun(m), "weapons");
+    let (gain, lose) = if plural {
+        ("gain", "lose")
+    } else {
+        ("gains", "loses")
+    };
+    let mut changes: Vec<String> = Vec::new();
+    if let Some(kws) = &gained {
+        changes.push(format!("{gain} {kws}{increment}"));
+    }
+    if let Some(kws) = &lost {
+        changes.push(format!("{lose} {kws}"));
+    }
+    if changes.is_empty() {
+        changes.push(format!("{gain} [?]"));
+    }
+    format!("{noun} {}", changes.join(" and "))
 }
 
 pub(super) fn aspect_name(aspect: &str) -> String {
@@ -264,6 +339,7 @@ pub(super) fn despite_phrase(d: &str) -> Option<&'static str> {
         "performing-action" => "performing an Action",
         "advanced" => "Advanced this turn",
         "fell-back" => "Fell Back this turn",
+        "destroyed" => "has just been destroyed",
         _ => return None,
     })
 }
@@ -333,6 +409,9 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
             "shooting-phase" => " as if it were your Shooting phase".to_string(),
             "fight-phase" => " as if it were the Fight phase".to_string(),
             "snap-shooting" => " using the Snap Shooting rules".to_string(),
+            "movement-phase" => " as if it were your Movement phase".to_string(),
+            "charge-phase" => " as if it were your Charge phase".to_string(),
+            "command-phase" => " as if it were your Command phase".to_string(),
             _ => format!(" as if {key}"),
         });
     }
@@ -532,6 +611,10 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
             "your opponent {} target {subj} with Overwatch",
             if granted { "can" } else { "cannot" }
         );
+    }
+    // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+    if m.get("attacks").is_some_and(|a| !a.is_null()) && rule == "attacking-ends-hidden" {
+        return format!("those attacks do not stop {subj} from being hidden");
     }
     if let (Some("core-rule"), Some(core)) = (kind, core_rule(&rule)) {
         let phrase = if granted { core.0 } else { core.1 };

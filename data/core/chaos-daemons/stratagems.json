@@ -332,7 +332,7 @@
       "fight",
       "shooting"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "overwhelming-excess-legion-of-excess-chaos-daemons",
@@ -921,10 +921,7 @@
     "detachment_id": "legion-of-excess",
     "cp_cost": 1,
     "phases": [
-      "command",
-      "movement",
       "shooting",
-      "charge",
       "fight"
     ],
     "player_turn": "either",
@@ -1072,7 +1069,7 @@
     "phases": [
       "movement"
     ],
-    "player_turn": "your-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "from-beyond-the-veil-cavalcade-of-chaos-chaos-daemons",

@@ -3,7 +3,7 @@ import {
   boundedInteger, enumOrSource, enumOrSourceSchema, enumValue, exactKeys, integerOrSource, integerOrSourceSchema, sourceQualified,
   sourceQualifiedSchema,
 } from "./family-validation.js";
-import { ROLL_KINDS, WEAPON_TYPES } from "./dice-families.js";
+import { pickedRolls, ROLL_KINDS, WEAPON_TYPES } from "./dice-families.js";
 import { EVENT_FAMILY, normalizeEventParameters } from "./event-family.js";
 
 export { PHASE_EVENT_KINDS, PHASES, TURNS } from "./event-family.js";
@@ -65,6 +65,27 @@ export const CORE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       required: ["roll", "subset", "weapon_type"],
       properties: {
         roll: { enum: ROLL_KINDS },
+        subset: { enum: ["ones", "failed", "all"] },
+        count: { type: "integer", minimum: 1, maximum: 3 },
+        weapon_type: { enum: WEAPON_TYPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "reroll",
+    version: 3,
+    label: "Re-roll a roll",
+    description: "As version 2, but `rolls` can list several rolls instead of `roll`: the player picks one of them (\"re-roll one Hit roll, one Wound roll or one Damage roll\").",
+    starter: { roll: "", subset: "", weapon_type: "all" },
+    role: "EFFECT",
+    parameterSchema: {
+      type: "object",
+      required: ["subset", "weapon_type"],
+      properties: {
+        roll: { enum: ROLL_KINDS },
+        rolls: { type: "array", minItems: 2, uniqueItems: true, items: { enum: ROLL_KINDS } },
         subset: { enum: ["ones", "failed", "all"] },
         count: { type: "integer", minimum: 1, maximum: 3 },
         weapon_type: { enum: WEAPON_TYPES },
@@ -279,12 +300,13 @@ export function normalizeCoreParameters(
         };
       }
       {
-        const allowed = new Set(["roll", "subset", "weapon_type", "count"]);
+        const allowed = new Set(["roll", "subset", "weapon_type", "count", ...(version >= 3 ? ["rolls"] : [])]);
         for (const key of Object.keys(input)) {
-          if (!allowed.has(key)) throw new TypeError("reroll parameters must be roll, subset, weapon_type, and optional count only.");
+          if (!allowed.has(key)) throw new TypeError(`reroll parameters must be ${version >= 3 ? "roll or rolls" : "roll"}, subset, weapon_type, and optional count only.`);
         }
+        if (version >= 3 && (input.roll === undefined) === (input.rolls === undefined)) throw new TypeError("reroll names exactly one of roll and rolls.");
         const result: Record<string, unknown> = {
-          roll: enumValue(input.roll, ROLL_KINDS, "reroll.roll"),
+          ...(input.rolls !== undefined ? { rolls: pickedRolls(input.rolls, "reroll.rolls") } : { roll: enumValue(input.roll, ROLL_KINDS, "reroll.roll") }),
           subset: enumValue(input.subset, ["ones", "failed", "all"], "reroll.subset"),
           weapon_type: enumValue(input.weapon_type, WEAPON_TYPES, "reroll.weapon_type"),
         };

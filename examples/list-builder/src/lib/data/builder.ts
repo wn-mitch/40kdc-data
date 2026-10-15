@@ -13,6 +13,7 @@
 import {
 	baseLoadout,
 	baseUnitPoints,
+	hostUnitPoints,
 	clampWeaponCount,
 	exportRoster,
 	groupLoadout,
@@ -173,13 +174,31 @@ export function buRaw(bu: BuilderUnit, armyFactionId?: string): Unit | undefined
 	return unitRaw(bu.datasheetId, bu.factionId, armyFactionId);
 }
 
-/** Units in a faction, sorted by name; empty when factionId is null. */
+/**
+ * Datasheet ids an army of `factionId` may take only through an allied rule: the
+ * `source_datasheet_ids` of every `exclusive` rule drawn from that faction (e.g.
+ * World Eaters' Blood Legions daemons, offered only under Khorne Daemonkin through
+ * the ally panel, with that rule's caps and locks).
+ */
+function exclusivePoolIds(factionId: string): Set<string> {
+	const ids = new Set<string>();
+	for (const rule of ds.alliedRules.all)
+		if (rule.exclusive && rule.source_faction_id === factionId)
+			for (const id of rule.source_datasheet_ids ?? []) ids.add(id);
+	return ids;
+}
+
+/**
+ * The faction's own pickable units, sorted by name; empty when factionId is null.
+ * Legends and units reachable only through an exclusive allied rule are left out.
+ */
 export function unitsForFaction(factionId: string | null): Unit[] {
 	if (!factionId) return [];
+	const poolOnly = exclusivePoolIds(factionId);
 	return ds.units
 		.byFaction(factionId)
 		.map((v) => v.raw)
-		.filter((u) => !u.is_legend)
+		.filter((u) => !u.is_legend && !poolOnly.has(u.id))
 		.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -256,6 +275,15 @@ export function detachmentTagConflicts(state: BuilderState): TagConflict[] {
  * `selectedGrants`, e.g. a chosen Houndpack War Dog). Deduped by id, preserving
  * detachment order.
  */
+/**
+ * True when no model in the unit can be given an Enhancement: every row of its
+ * composition is `excluded_from_enhancements` (Ogryn Bodyguard, Transcendent C'tan).
+ */
+export function excludedFromEnhancements(unit: Unit): boolean {
+	const rows = ds.unitCompositionOf(unit)?.models ?? [];
+	return rows.length > 0 && rows.every((m) => m.excluded_from_enhancements === true);
+}
+
 export function eligibleEnhancements(
 	detachmentIds: string[],
 	unit: Unit | undefined,
@@ -265,6 +293,7 @@ export function eligibleEnhancements(
 	if (detachmentIds.length === 0 || !unit) return [];
 	const unitKeywords = effectiveKeywords(unit, detachmentIds, selected, factionId);
 	if (!unitKeywords.has('character')) return [];
+	if (excludedFromEnhancements(unit)) return [];
 	const seen = new Set<string>();
 	const out: Enhancement[] = [];
 	for (const detachmentId of detachmentIds) {
@@ -429,7 +458,10 @@ export function groupDraftByRole(state: BuilderState): DraftGroup[] {
 		.map(({ section, units }) => ({
 			...section,
 			units,
-			points: units.reduce((sum, u) => sum + unitPoints(u, armyFaction, ordinals.get(u.key)), 0),
+			points: units.reduce(
+				(sum, u) => sum + unitPoints(u, armyFaction, ordinals.get(u.key), state.detachmentIds),
+				0,
+			),
 		}));
 }
 
@@ -552,15 +584,22 @@ export function unitOrdinals(units: readonly BuilderUnit[]): Map<string, number>
 
 /**
  * Points for a unit at `modelCount` taken as its `ordinal`-th army copy: the
- * ordinal-aware cost tier (see {@link baseUnitPoints}) plus the chosen
- * enhancement's cost. Returns 0 for the base when no tier covers the count
+ * ordinal-aware cost tier (see {@link baseUnitPoints}; a selected detachment's
+ * `detachment_pricing` replaces it) plus the chosen enhancement's cost. Returns 0 for the base when no tier covers the count
  * (caller surfaces a violation rather than guessing). `ordinal` defaults to the
  * 1st copy; whole-army callers pass the real ordinal via {@link unitOrdinals}.
  */
-export function unitPoints(bu: BuilderUnit, armyFactionId?: string, ordinal = 1): number {
+export function unitPoints(
+	bu: BuilderUnit,
+	armyFactionId?: string,
+	ordinal = 1,
+	detachmentIds: readonly string[] = [],
+): number {
 	const unit = buRaw(bu, armyFactionId);
 	if (!unit) return 0;
-	const base = baseUnitPoints(unit, bu.modelCount, ordinal);
+	// A `detachment_pricing` tier for a selected detachment (Pantheon of Woe's
+	// C'tan) replaces the native cost; otherwise this is the native tier.
+	const base = hostUnitPoints(unit, bu.modelCount, ordinal, undefined, detachmentIds);
 	const wargear = wargearPoints(unit, bu.loadout);
 	const enh = bu.enhancementId ? (ds.enhancements.get(bu.enhancementId)?.cost ?? 0) : 0;
 	return base + wargear + enh;
@@ -569,7 +608,10 @@ export function unitPoints(bu: BuilderUnit, armyFactionId?: string, ordinal = 1)
 export function totalPoints(state: BuilderState): number {
 	const armyFaction = state.factionId ?? undefined;
 	const ordinals = unitOrdinals(state.units);
-	return state.units.reduce((sum, u) => sum + unitPoints(u, armyFaction, ordinals.get(u.key)), 0);
+	return state.units.reduce(
+		(sum, u) => sum + unitPoints(u, armyFaction, ordinals.get(u.key), state.detachmentIds),
+		0,
+	);
 }
 
 export function pointsLimit(state: BuilderState): number {
@@ -589,7 +631,9 @@ export function nextCopyCost(state: BuilderState, unit: Unit, armyFactionId?: st
 	if (tiers.length === 0) return 0;
 	const copies = state.units.filter((u) => u.datasheetId === unit.id).length;
 	const nextOrdinal = copies + 1;
-	return Math.min(...tiers.map((t) => baseUnitPoints(resolved, t.models, nextOrdinal)));
+	return Math.min(
+		...tiers.map((t) => hostUnitPoints(resolved, t.models, nextOrdinal, undefined, state.detachmentIds)),
+	);
 }
 
 /**
@@ -1084,10 +1128,26 @@ export function grantSelectionCount(state: BuilderState, keyword: string): numbe
 // ── Warlord eligibility ──────────────────────────────────────────────────────────
 
 /**
+ * Datasheets a selected detachment names for Warlord — its mandatory list (Devoted
+ * of Ynnead: Yvraine or the Yncarne) plus its granted list (Ghosts of the Webway:
+ * Harlequin characters). Being named overrides an allied rule's `cannot_be_warlord`.
+ */
+function detachmentWarlordIds(detachmentIds: string[], armyFactionId?: string): Set<string> {
+	const ids = new Set<string>();
+	for (const id of detachmentIds) {
+		const det = detachmentRaw(id, armyFactionId);
+		for (const d of det?.mandatory_warlord_datasheet_ids ?? []) ids.add(d);
+		for (const d of det?.granted_warlord_datasheet_ids ?? []) ids.add(d);
+	}
+	return ids;
+}
+
+/**
  * Whether a unit may be the army Warlord: an *effective* CHARACTER (innate or
  * granted, e.g. a selected Houndpack War Dog) that isn't barred by the ally rule
- * it was included under (`cannot_be_warlord`). The detail panel shows the Warlord
- * control only when this is true.
+ * it was included under (`cannot_be_warlord`), unless a selected detachment names
+ * its datasheet for Warlord. The detail panel shows the Warlord control only when
+ * this is true.
  */
 export function canBeWarlord(
 	bu: BuilderUnit,
@@ -1097,7 +1157,12 @@ export function canBeWarlord(
 	const raw = buRaw(bu, armyFactionId);
 	if (!raw) return false;
 	if (!effectiveKeywords(raw, detachmentIds, bu.selectedGrants ?? [], armyFactionId).has('character')) return false;
-	if (bu.allyRuleId && ds.alliedRules.get(bu.allyRuleId)?.cannot_be_warlord) return false;
+	if (
+		bu.allyRuleId &&
+		ds.alliedRules.get(bu.allyRuleId)?.cannot_be_warlord &&
+		!detachmentWarlordIds(detachmentIds, armyFactionId).has(bu.datasheetId)
+	)
+		return false;
 	return true;
 }
 
@@ -1127,7 +1192,10 @@ function allyViolations(state: BuilderState): BuilderViolation[] {
 
 		const cap = allyPointsLimit(rule, effectiveBattleSize(state));
 		if (cap != null) {
-			const spent = allyUnits.reduce((s, u) => s + unitPoints(u, armyFaction, ordinals.get(u.key)), 0);
+			const spent = allyUnits.reduce(
+				(s, u) => s + unitPoints(u, armyFaction, ordinals.get(u.key), state.detachmentIds),
+				0,
+			);
 			if (spent > cap) {
 				out.push({ unitKey: null, message: `${label}: ${spent} allied pts over the ${cap} pt limit` });
 			}
@@ -1139,8 +1207,10 @@ function allyViolations(state: BuilderState): BuilderViolation[] {
 			});
 		}
 		if (rule.cannot_be_warlord) {
+			const named = detachmentWarlordIds(state.detachmentIds, armyFaction);
 			for (const u of allyUnits) {
-				if (u.isWarlord) out.push({ unitKey: u.key, message: `${label}: allied units cannot be Warlord` });
+				if (u.isWarlord && !named.has(u.datasheetId))
+					out.push({ unitKey: u.key, message: `${label}: allied units cannot be Warlord` });
 			}
 		}
 		if (rule.cannot_take_enhancements) {
@@ -1222,15 +1292,19 @@ function constructionViolations(state: BuilderState): BuilderViolation[] {
 	const out: BuilderViolation[] = [];
 	const armyFaction = state.factionId ?? undefined;
 
-	// Datasheet-name caps.
+	// Unit limit per datasheet (11e Select Battle Size): Incursion 2, Strike Force
+	// 3; BATTLELINE and DEDICATED TRANSPORT units double it. Epic Heroes (limit 1)
+	// are reported separately below.
+	const unitLimit = effectiveBattleSize(state) === 'incursion' ? 2 : 3;
 	const counts = new Map<string, { count: number; cap: number; name: string }>();
 	for (const u of state.units) {
 		const raw = buRaw(u, armyFaction);
 		if (!raw) continue;
 		// Effective keywords include detachment grants (e.g. Houndpack Lance makes
-		// War Dogs Battleline → cap 6 instead of 3).
+		// War Dogs Battleline → the doubled limit).
 		const kw = effectiveKeywords(raw, state.detachmentIds, [], armyFaction);
-		const cap = kw.has('battleline') || raw.role === 'dedicated-transport' ? 6 : 3;
+		const doubled = kw.has('battleline') || kw.has('dedicated transport') || raw.role === 'dedicated-transport';
+		const cap = doubled ? unitLimit * 2 : unitLimit;
 		const e = counts.get(u.datasheetId);
 		if (e) e.count += 1;
 		else counts.set(u.datasheetId, { count: 1, cap, name: raw.name });
@@ -1239,16 +1313,25 @@ function constructionViolations(state: BuilderState): BuilderViolation[] {
 		if (count > cap) out.push({ unitKey: null, message: `${count}× ${name} (max ${cap} of a datasheet)` });
 	}
 
-	// Enhancements: each unique, none on Epic Heroes. (The old army-wide "max 3
-	// Enhancements" cap was removed from the rules and is no longer enforced.)
+	// Enhancements: each unique, none on Epic Heroes, and at most the battle
+	// size's Enhancement limit (11e: Incursion 2, Strike Force 4) distinct choices.
 	const enhUsed = state.units.flatMap((u) => (u.enhancementId ? [u.enhancementId] : []));
+	const enhLimit = effectiveBattleSize(state) === 'incursion' ? 2 : 4;
+	const enhChosen = new Set(enhUsed).size;
+	if (enhChosen > enhLimit) {
+		out.push({ unitKey: null, message: `${enhChosen} Enhancements (max ${enhLimit})` });
+	}
 	const dupes = new Set(enhUsed.filter((id, i) => enhUsed.indexOf(id) !== i));
 	for (const id of dupes) {
 		out.push({ unitKey: null, message: `Enhancement '${ds.enhancements.get(id)?.name ?? id}' used more than once` });
 	}
 	for (const u of state.units) {
-		if (u.enhancementId && buRaw(u, armyFaction)?.role === 'epic-hero') {
+		const raw = u.enhancementId ? buRaw(u, armyFaction) : undefined;
+		if (!raw) continue;
+		if (raw.role === 'epic-hero') {
 			out.push({ unitKey: u.key, message: 'Epic Heroes cannot take Enhancements' });
+		} else if (excludedFromEnhancements(raw)) {
+			out.push({ unitKey: u.key, message: `${raw.name} cannot take Enhancements` });
 		}
 	}
 
@@ -1278,6 +1361,78 @@ function constructionViolations(state: BuilderState): BuilderViolation[] {
 					unitKey: null,
 					message: `${det?.name ?? id}: ${picked} ${grant.keyword} selected (max ${grant.max_selected})`,
 				});
+			}
+		}
+	}
+
+	// Detachment Warlord requirement (e.g. Devoted of Ynnead: Yvraine or the Yncarne).
+	const warlord = state.units.find((u) => u.isWarlord);
+	for (const id of state.detachmentIds) {
+		const det = detachmentRaw(id, armyFaction);
+		const mandated = det?.mandatory_warlord_datasheet_ids ?? [];
+		if (warlord && mandated.length && !mandated.includes(warlord.datasheetId)) {
+			const names = mandated.map((m) => unitRaw(m, undefined, armyFaction)?.name ?? m);
+			out.push({ unitKey: warlord.key, message: `${det?.name ?? id}: Warlord must be ${names.join(' or ')}` });
+		}
+	}
+
+	// Detachment datasheet exclusions (e.g. Shadow Legion bars Skarbrand).
+	for (const id of state.detachmentIds) {
+		const det = detachmentRaw(id, armyFaction);
+		const excluded = new Set(det?.excluded_datasheet_ids ?? []);
+		for (const u of state.units) {
+			if (excluded.has(u.datasheetId)) {
+				const name = buRaw(u, armyFaction)?.name ?? u.datasheetId;
+				out.push({ unitKey: u.key, message: `${det?.name ?? id}: ${name} cannot be included` });
+			}
+		}
+	}
+
+	// Allied units whose rule is no longer offered (e.g. its detachment was removed).
+	const offered = new Set(alliesForState(state).map((g) => g.rule.id));
+	for (const u of state.units) {
+		if (!u.allyRuleId || offered.has(u.allyRuleId)) continue;
+		const rule = ds.alliedRules.get(u.allyRuleId);
+		const name = buRaw(u, armyFaction)?.name ?? u.datasheetId;
+		out.push({ unitKey: u.key, message: `${name}: ${rule?.label ?? rule?.name ?? u.allyRuleId} is not available to this army` });
+	}
+
+	// Army-wide keyword caps (faction `keyword_limits`, e.g. one Patriarch), with a
+	// selected detachment's override for the same keyword set (Ghosts of the Webway:
+	// up to three Troupe Masters). Units with an exempt faction keyword never count;
+	// `units` mode counts units carrying every keyword (keywords, faction keywords or
+	// name), `alternatives` mode counts how many of the keywords appear at all.
+	const faction = state.factionId ? ds.factions.get(state.factionId)?.raw : undefined;
+	const keyOf = (ks: readonly string[]) => [...ks].sort().join('+');
+	for (const kl of faction?.keyword_limits ?? []) {
+		const key = keyOf(kl.keywords);
+		let max = kl.max;
+		let overridden = false;
+		for (const id of state.detachmentIds) {
+			for (const o of detachmentRaw(id, armyFaction)?.keyword_limit_overrides ?? []) {
+				if (keyOf(o.keywords) !== key) continue;
+				max = overridden ? Math.max(max, o.max) : o.max;
+				overridden = true;
+			}
+		}
+		const exempt = new Set(kl.exempt_faction_keywords ?? []);
+		const counted = state.units.flatMap((u) => {
+			const raw = buRaw(u, armyFaction);
+			if (!raw || (raw.faction_keywords ?? []).some((k) => exempt.has(k))) return [];
+			const have = effectiveKeywords(raw, state.detachmentIds, u.selectedGrants ?? [], armyFaction);
+			have.add(raw.name.toLowerCase());
+			return [have];
+		});
+		if (kl.mode === 'alternatives') {
+			// Each keyword is an alternative (Farsight / Ethereal): cap the distinct ones present.
+			const present = kl.keywords.filter((k) => counted.some((have) => have.has(k.toLowerCase())));
+			if (present.length > max) {
+				out.push({ unitKey: null, message: `${present.join(' and ')} cannot be taken together (max ${max} of them)` });
+			}
+		} else {
+			const count = counted.filter((have) => kl.keywords.every((k) => have.has(k.toLowerCase()))).length;
+			if (count > max) {
+				out.push({ unitKey: null, message: `${kl.keywords.join(' + ')}: ${count} included (max ${max})` });
 			}
 		}
 	}
@@ -1431,7 +1586,9 @@ export function builderToRoster(state: BuilderState): Roster {
 		return {
 			ref: ref(bu.datasheetId, name),
 			model_count: bu.modelCount,
-			points: unit ? baseUnitPoints(unit, bu.modelCount, ordinals.get(bu.key)) : null,
+			points: unit
+				? hostUnitPoints(unit, bu.modelCount, ordinals.get(bu.key), undefined, state.detachmentIds)
+				: null,
 			is_warlord: bu.isWarlord,
 			enhancement: enh ? ref(enh.id, enh.name) : null,
 			enhancement_points: enh?.cost ?? null,

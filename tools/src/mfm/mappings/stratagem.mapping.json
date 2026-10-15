@@ -2,7 +2,9 @@
   "$schema": "../mfm-source-map.schema.json",
   "entity_schema": "schemas/core/stratagem.schema.json",
   "mapping_version": 1,
-  "root_tables": ["stratagem"],
+  "root_tables": [
+    "stratagem"
+  ],
   "fields": {
     "/ability_id": {
       "provenance": "repo-authored",
@@ -18,7 +20,9 @@
     "/category": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.stratagem.detachmentId"],
+      "sources": [
+        "data.stratagem.detachmentId"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -41,7 +45,9 @@
     "/cp_cost": {
       "provenance": "direct",
       "coverage": "implemented",
-      "sources": ["data.stratagem.cpCost"],
+      "sources": [
+        "data.stratagem.cpCost"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -81,7 +87,9 @@
           "operation": "Use the applicable detachment's English name only while deriving the stratagem repository id."
         }
       ],
-      "filters": ["Core stratagem rows have a null detachmentId."],
+      "filters": [
+        "Core stratagem rows have a null detachmentId."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/stratagems.ts#stratagemRepoId",
@@ -92,7 +100,9 @@
     "/external_refs": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.stratagem.id"],
+      "sources": [
+        "data.stratagem.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -115,7 +125,9 @@
     "/external_refs/*": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.stratagem.id"],
+      "sources": [
+        "data.stratagem.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -123,8 +135,12 @@
           "operation": "Create one unique namespace/id pair."
         }
       ],
-      "filters": ["Only exact canonical stratagem matches."],
-      "precedence": ["Additive; exact duplicate pairs are ignored."],
+      "filters": [
+        "Only exact canonical stratagem matches."
+      ],
+      "precedence": [
+        "Additive; exact duplicate pairs are ignored."
+      ],
       "consumers": [
         "tools/src/mfm/external-refs.ts#runMfmExternalRefs",
         "tools/src/mfm/seed-stratagems.ts#seedStratagems"
@@ -134,10 +150,14 @@
     "/external_refs/*/id": {
       "provenance": "direct",
       "coverage": "implemented",
-      "sources": ["data.stratagem.id"],
+      "sources": [
+        "data.stratagem.id"
+      ],
       "joins": [],
       "transforms": [],
-      "filters": ["Only exact canonical stratagem matches."],
+      "filters": [
+        "Only exact canonical stratagem matches."
+      ],
       "precedence": [],
       "consumers": [
         "tools/src/mfm/external-refs.ts#runMfmExternalRefs",
@@ -148,7 +168,9 @@
     "/external_refs/*/namespace": {
       "provenance": "derived",
       "coverage": "implemented",
-      "sources": ["data.stratagem.id"],
+      "sources": [
+        "data.stratagem.id"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -296,18 +318,26 @@
     "/name": {
       "provenance": "direct",
       "coverage": "partial",
-      "sources": ["data.stratagem.localisations.*.name"],
+      "sources": [
+        "data.stratagem.localisations.*.name"
+      ],
       "joins": [],
       "transforms": [],
-      "filters": ["Current matching reads the English localized name."],
+      "filters": [
+        "Current matching reads the English localized name."
+      ],
       "precedence": [],
-      "consumers": ["tools/src/mfm/stratagems.ts#stratagemRepoId"],
+      "consumers": [
+        "tools/src/mfm/stratagems.ts#stratagemRepoId"
+      ],
       "reason": "The MFM name is used to match existing entities, but current reconciliation does not overwrite authored entity names."
     },
     "/phases": {
       "provenance": "unresolved-candidate",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem_phase.phase"],
+      "sources": [
+        "data.stratagem_phase.phase"
+      ],
       "joins": [
         {
           "relation": "stratagem_phase.stratagemId",
@@ -316,7 +346,9 @@
         }
       ],
       "transforms": [],
-      "filters": ["Phase rows must belong to the current stratagem."],
+      "filters": [
+        "Phase rows must belong to the current stratagem."
+      ],
       "precedence": [],
       "consumers": [],
       "reason": "REJECTED source: stratagem_phase is a buggy denormalized index whose rows routinely contradict the card's own whenRules (Insane Bravery 'Command phase' tagged chargePhase, Holy Avarice 'Your Shooting phase' tagged commandPhase, Scriptural Prognosis 'opponent's Shooting phase or the Fight phase' tagged all five). Writing from it would regress authored phases, so authored phases win and stratagems.ts derives phases from whenRules prose for review only."
@@ -324,7 +356,9 @@
     "/phases/*": {
       "provenance": "unresolved-candidate",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem_phase.phase"],
+      "sources": [
+        "data.stratagem_phase.phase"
+      ],
       "joins": [
         {
           "relation": "stratagem_phase.stratagemId",
@@ -333,7 +367,9 @@
         }
       ],
       "transforms": [],
-      "filters": ["Phase rows must belong to the current stratagem."],
+      "filters": [
+        "Phase rows must belong to the current stratagem."
+      ],
       "precedence": [],
       "consumers": [],
       "reason": "REJECTED source: see /phases — stratagem_phase disagrees with the card whenRules too often to write; authored phases win, prose parse is review-only."
@@ -341,7 +377,9 @@
     "/player_turn": {
       "provenance": "direct",
       "coverage": "implemented",
-      "sources": ["data.stratagem.key"],
+      "sources": [
+        "data.stratagem.key"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -378,7 +416,9 @@
     "/target_restrictions/bound_to": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -389,7 +429,9 @@
     "/target_restrictions/count": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -400,7 +442,9 @@
     "/target_restrictions/count_max": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -411,7 +455,9 @@
     "/target_restrictions/eligibility": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -520,7 +566,9 @@
     "/target_restrictions/selects": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -531,7 +579,9 @@
     "/target_restrictions/side": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -570,7 +620,9 @@
     "/target_restrictions/*/bound_to": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -581,7 +633,9 @@
     "/target_restrictions/*/count": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -592,7 +646,9 @@
     "/target_restrictions/*/count_max": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -603,7 +659,9 @@
     "/target_restrictions/*/eligibility": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -712,7 +770,9 @@
     "/target_restrictions/*/selects": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -723,7 +783,9 @@
     "/target_restrictions/*/side": {
       "provenance": "prose-store-only",
       "coverage": "unimplemented",
-      "sources": ["data.stratagem.localisations.*.targetRules"],
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
       "joins": [],
       "transforms": [],
       "filters": [],
@@ -759,7 +821,9 @@
     "/type": {
       "provenance": "direct",
       "coverage": "implemented",
-      "sources": ["data.stratagem.category"],
+      "sources": [
+        "data.stratagem.category"
+      ],
       "joins": [],
       "transforms": [
         {
@@ -778,6 +842,110 @@
         "tools/src/mfm/stratagems.ts#runStratagems"
       ],
       "reason": "The optional printed type is filled from the dump category where the repo left it unset; the dump and repo never conflict where both are present."
+    },
+    "/target_restrictions/mode": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Which exclusive target mode (a, b, c) a target belongs to is authored from TARGET leaves over the prose store; MFM has no structured alternative-target relation."
+    },
+    "/target_restrictions/mode_cost": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "A paid target mode's extra cost is authored from TARGET leaves over the prose store; MFM has no structured per-mode cost."
+    },
+    "/target_restrictions/mode_cost/amount": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The CP amount of a paid target mode is authored from TARGET leaves over the prose store."
+    },
+    "/target_restrictions/mode_cost/label": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The printed label of a paid target mode's cost is authored from TARGET leaves over the prose store."
+    },
+    "/target_restrictions/*/mode": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "Which exclusive target mode (a, b, c) a target belongs to is authored from TARGET leaves over the prose store; MFM has no structured alternative-target relation."
+    },
+    "/target_restrictions/*/mode_cost": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "A paid target mode's extra cost is authored from TARGET leaves over the prose store; MFM has no structured per-mode cost."
+    },
+    "/target_restrictions/*/mode_cost/amount": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The CP amount of a paid target mode is authored from TARGET leaves over the prose store."
+    },
+    "/target_restrictions/*/mode_cost/label": {
+      "provenance": "prose-store-only",
+      "coverage": "unimplemented",
+      "sources": [
+        "data.stratagem.localisations.*.targetRules"
+      ],
+      "joins": [],
+      "transforms": [],
+      "filters": [],
+      "precedence": [],
+      "consumers": [],
+      "reason": "The printed label of a paid target mode's cost is authored from TARGET leaves over the prose store."
     }
   },
   "unmapped_mfm_fields": [

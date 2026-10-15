@@ -99,7 +99,7 @@
             </profile>
             <profile name="Their Number is Legion" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit used the Reanimation Protocols ability, you can re-roll any roll.</characteristic>
+                <characteristic name="Description">While the unit is using Reanimation Protocols, you can re-roll any roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

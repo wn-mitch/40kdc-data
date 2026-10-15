@@ -15,6 +15,10 @@
  *   (excluding MONSTERS and VEHICLES)");
  * - `not_followed_by`: phrases that, when they are the next words after the occurrence, put it
  *   out of scope ("roll one D6 for each model" is not a single roll).
+ * - `followed_by`: phrases one of which must be the next words after the occurrence ("select one"
+ *   selects a unit only before "friendly", "enemy" or "visible", not "of the following");
+ * - `bracketed`: the occurrence sits inside square brackets, as a weapon ability does
+ *   ("[Assault]", not "assault doctrine").
  *
  * A scope never changes once stored: a different scope is a different decision.
  */
@@ -28,6 +32,8 @@ export type SurfaceScope = {
   clause_prefix?: string[];
   preceded_by?: string[];
   not_followed_by?: string[];
+  followed_by?: string[];
+  bracketed?: true;
 };
 
 export type OccurrenceContext = {
@@ -39,7 +45,7 @@ export type OccurrenceContext = {
   after: string;
 };
 
-const FIELDS = ["fragments", "source_types", "clause_prefix", "preceded_by", "not_followed_by"] as const;
+const FIELDS = ["fragments", "source_types", "clause_prefix", "preceded_by", "not_followed_by", "followed_by", "bracketed"] as const;
 
 export class ScopeError extends Error {}
 
@@ -73,6 +79,11 @@ export function parseScope(value: unknown): SurfaceScope | null {
   if (input.clause_prefix !== undefined) scope.clause_prefix = stringList(input.clause_prefix, "clause_prefix", true);
   if (input.preceded_by !== undefined) scope.preceded_by = stringList(input.preceded_by, "preceded_by", false);
   if (input.not_followed_by !== undefined) scope.not_followed_by = stringList(input.not_followed_by, "not_followed_by", false);
+  if (input.followed_by !== undefined) scope.followed_by = stringList(input.followed_by, "followed_by", false);
+  if (input.bracketed !== undefined) {
+    if (input.bracketed !== true) throw new ScopeError("scope.bracketed can only be true.");
+    scope.bracketed = true;
+  }
   if (FIELDS.every((field) => scope[field] === undefined)) throw new ScopeError("A scope must narrow at least one field.");
   return scope;
 }
@@ -96,6 +107,11 @@ export function inScope(scope: SurfaceScope | null, context: OccurrenceContext):
     const clause = words(context.before.split(/[.:]/u).at(-1) ?? "").replace(/[\s(["'“‘]+$/u, "");
     // Whole words only: "select one enemy unit" ends "… select one enemy unit", not "… reselect one enemy unit".
     if (!scope.preceded_by.some((phrase) => clause === phrase || (clause.endsWith(phrase) && !/[\p{L}\p{N}]/u.test(clause[clause.length - phrase.length - 1]!)))) return false;
+  }
+  if (scope.bracketed && !(words(context.before).endsWith("[") && words(context.after).startsWith("]"))) return false;
+  if (scope.followed_by) {
+    const next = words(context.after);
+    if (!scope.followed_by.some((phrase) => next === phrase || (next.startsWith(phrase) && !/[\p{L}\p{N}]/u.test(next[phrase.length]!)))) return false;
   }
   if (scope.not_followed_by) {
     const next = words(context.after);

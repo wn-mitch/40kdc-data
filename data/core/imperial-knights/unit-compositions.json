@@ -580,7 +580,8 @@
         "default_weapon_ids": [
           "close-combat-weapon",
           "hekhturs-pistol"
-        ]
+        ],
+        "excluded_from_enhancements": true
       }
     ],
     "game_version": {

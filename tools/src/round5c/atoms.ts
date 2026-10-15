@@ -3,7 +3,7 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { insertStructuralProposal } from "./atoms-store.js";
 import { assertReviewer, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
-import { LEAF_ROLES } from "./contracts.js";
+import { LEAF_ROLES, NAME_FRAGMENT } from "./contracts.js";
 import {
   bumpWorkbenchRevision, insertSpan, invalidateWholeReview, withTransaction,
 } from "./db.js";
@@ -368,7 +368,7 @@ export function sourceAtomsForAbility(db: DatabaseSync, abilityVersionId: number
       source_spans.start_byte, source_spans.end_byte, source_spans.exact_text
     FROM source_atom_proposals JOIN source_spans ON source_spans.id = source_atom_proposals.span_id
     WHERE source_spans.ability_version_id = ? AND source_atom_proposals.status = 'pending'
-    ORDER BY source_spans.start_byte, source_atom_proposals.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_atom_proposals.id
   `).all(abilityVersionId) as Array<AtomProposalRow & { origin: string; description: string; model_run_id: number | null }>;
   const reviews = db.prepare(`
     SELECT source_atom_reviews.id, source_atom_reviews.proposal_id, source_atom_reviews.kind, source_spans.fragment,
@@ -379,7 +379,7 @@ export function sourceAtomsForAbility(db: DatabaseSync, abilityVersionId: number
       ) THEN 1 ELSE 0 END AS supported
     FROM source_atom_reviews JOIN source_spans ON source_spans.id = source_atom_reviews.span_id
     WHERE source_spans.ability_version_id = ? AND source_atom_reviews.status = 'active'
-    ORDER BY source_spans.start_byte, source_atom_reviews.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_atom_reviews.id
   `).all(abilityVersionId) as Array<{ id: number; proposal_id: number; kind: StructuralKind; fragment: string; start_byte: number; end_byte: number; exact_text: string; contained_by_annotation_id: number | null; supported: number; reviewer: string; batch_id: string }>;
   return { proposals, reviews: reviews.map((review) => ({ ...review, supported: review.supported === 1 })) };
 }

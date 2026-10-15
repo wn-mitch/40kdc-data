@@ -278,6 +278,14 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run(leaf("army-rule", { rule: "detachment-tag-exclusive", tag: "flyblown" }))).toEqual([]);
   });
 
+  it("rejects a designated condition whose tag is not registered, as it does a designate", async () => {
+    const gate = { type: "conditional", condition: { type: "designated", parameters: { subject: "this-unit", tag: "made-up-mark" } }, effect: { type: "no-effect" } };
+    expect(await run(gate)).toEqual([
+      'designation "made-up-mark" is not in the registry (tools/src/translate/designations.ts)',
+    ]);
+    expect(await run({ ...gate, condition: { type: "designated", parameters: { subject: "this-unit", tag: "bastion-shield-yp-spent" } } })).toEqual([]);
+  });
+
   it("requires a bound roll inside the roll step that binds it", async () => {
     const mw = leaf("mortal-wounds", { count: { roll_var: "r" } });
     expect(await run(mw)).toEqual(['{roll_var: "r"} is not inside a roll step that binds it']);
@@ -305,5 +313,17 @@ describe("integrity: phase-4 bindings", () => {
       'stratagem_target "tzaangors" is not a named target of this ability\'s Stratagem',
     ]);
     expect(await run(effect)).toEqual(['stratagem_target "tzaangors" is not a named target of any Stratagem using this ability']);
+  });
+  it("requires every target of one target mode to name the same mode_cost", async () => {
+    const benign = leaf("designate", { subject: "selected-unit", tag: "RILED UP" });
+    const row = (costB: { label: string; amount: number }) => ({
+      id: "probe-modes", target_restrictions: [
+        { name: "first", count: "one", mode: "a" },
+        { name: "second", count: "one", mode: "b", mode_cost: costB },
+        { name: "third", count: "one", mode: "b", mode_cost: { label: "yp-pool", amount: 1 } },
+      ],
+    });
+    expect(await run(benign, [row({ label: "yp-pool", amount: 1 })])).toEqual([]);
+    expect(await run(benign, [row({ label: "yp-pool", amount: 2 })])).toEqual(['mode "b" names a different mode_cost than its other targets']);
   });
 });

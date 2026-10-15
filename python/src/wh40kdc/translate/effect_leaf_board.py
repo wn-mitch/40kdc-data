@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_leaf_army import (
 )
 from wh40kdc.translate.effect_placement import place_phrase, placement_limits, placement_phrase
 from wh40kdc.translate.effect_quantity import amount_of, is_literal, moved_phrase
+from wh40kdc.translate.effect_select import for_each_unit_subject
 from wh40kdc.translate.effect_words import (
     Ctx,
     and_list,
@@ -39,6 +40,7 @@ from wh40kdc.translate.effect_words import (
     num,
     num_str,
     of_or_possessive,
+    or_list,
     pronoun,
     range_phrase,
     region_phrase,
@@ -75,6 +77,12 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
     if m.get("range") is not None and f" within {range_phrase(m['range'])}" not in subj:
         rng = f" within {range_phrase(m['range'])}"
     who = f"{subj}{rng}"
+    # "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    cap = (
+        f" (to a maximum of {jstr(m['max'])} mortal {'wound' if m['max'] == 1 else 'wounds'})"
+        if m.get("max") is not None
+        else ""
+    )
     roll = m.get("roll")
     if roll is not None:
         roll = _obj(roll)
@@ -84,20 +92,34 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
             if per_model == "target"
             else " for each model in this unit"
             if per_model == "this"
+            else f" for each {for_each_unit_subject(_obj(roll['for_each']))}"
+            if roll.get("for_each") is not None
             else ""
         )
-        dice = f"one {dice_case(roll.get('dice'))}" if each else dice_case(roll.get("dice"))
+        # A plain number of dice is that many D6 ("roll 7 D6", "roll one D6 for each model").
+        count = jstr(roll.get("dice"))
+        if re.fullmatch(r"\d+", count):
+            dice = "one D6" if each and count == "1" else f"{count} D6"
+        else:
+            dice = f"one {dice_case(roll.get('dice'))}" if each else dice_case(roll.get("dice"))
+        # "for each 1": a die at or under the threshold succeeds.
+        if roll.get("comparison") != "lte":
+            band = f"{jstr(roll.get('threshold'))}+"
+        elif roll.get("threshold") == 1:
+            band = "1"
+        else:
+            band = f"result of {jstr(roll.get('threshold'))} or less"
         return (
-            f"roll {dice}{each}: for each {jstr(roll.get('threshold'))}+, {who} "
+            f"roll {dice}{each}: for each {band}, {who} "
             f"{v(who, 'suffers')} "
-            f"{suffered}{psychic}"
+            f"{suffered}{psychic}{cap}"
         )
     per = (
         f" for each model in {'them' if pronoun(who) == 'their' else 'it'}"
         if m.get("per") == "model"
         else ""
     )
-    return f"{who} {v(who, 'suffers')} {suffered}{per}{psychic}"
+    return f"{who} {v(who, 'suffers')} {suffered}{per}{psychic}{cap}"
 
 
 _FNP_AGAINST = {
@@ -107,23 +129,33 @@ _FNP_AGAINST = {
 }
 
 
+def _wounds_left(value: Any) -> str:
+    """What a set-up or returned model has left: "its full wounds", "3 wounds", ..."""
+    if value is None or value == "full":
+        return "its full wounds"
+    if value == "half-starting":
+        return "half of its starting number of wounds"
+    if is_literal(value):
+        return f"{dice_case(value)} {_wounds(dice_case(value), 'wound')}"
+    return amount_of(value, "wound", "wounds")
+
+
+def _detach_phrase(m: dict[str, Any]) -> str:
+    """ ", as a separate unit with a Starting Strength of 1 (it is no longer part of ...)"."""
+    if m.get("detach") is not True:
+        return ""
+    strength = (
+        f" with a Starting Strength of {jstr(m['starting_strength'])}"
+        if m.get("starting_strength") is not None
+        else ""
+    )
+    return f", as a separate unit{strength} (it is no longer part of its attached unit)"
+
+
 def _return_models(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    wr = m.get("wounds_remaining")
-    if wr is None or wr == "full":
-        w = "its full wounds"
-    elif is_literal(wr):
-        w = f"{dice_case(wr)} {_wounds(dice_case(wr), 'wound')}"
-    else:
-        w = amount_of(wr, "wound", "wounds")
+    w = _wounds_left(m.get("wounds_remaining"))
     where = f"{placement_phrase(m)}{placement_limits(m, ctx)}"
-    detach = ""
-    if m.get("detach") is True:
-        strength = (
-            f" with a Starting Strength of {jstr(m['starting_strength'])}"
-            if m.get("starting_strength") is not None
-            else ""
-        )
-        detach = f", as a separate unit{strength} (it is no longer part of its attached unit)"
+    detach = _detach_phrase(m)
     if e.get("target") == "this-model":
         return f"{subj} is set up again{where} with {w} remaining{detach}"
     if m.get("model_keyword") is not None:
@@ -253,14 +285,30 @@ def _add_unit(m: dict[str, Any], ctx: Ctx) -> str:
             units = f"{num_str(n)} new units"
         else:
             units = amount_of(m.get("count"), "new unit", "new units")
-        what = f"{units} identical to {effect_subject(m['copy_of'], ctx)}"
+        excluded = (
+            f" (excluding {or_list([jstr(k) for k in m['excluded_keywords']])} models)"
+            if isinstance(m.get("excluded_keywords"), list)
+            else ""
+        )
+        what = f"{units} identical to {effect_subject(m['copy_of'], ctx)}{excluded}"
     elif n == 1:
         what = f"a {sheet} unit"
     elif literal:
         what = f"{num_str(n)} {sheet} units"
     else:
         what = amount_of(m.get("count"), f"{sheet} unit", f"{sheet} units")
-    return f"add {what}{models}{strength} to your army{where}{engage}"
+    full = (
+        ", at its Starting Strength and with all of its wounds remaining"
+        if m.get("at_starting_strength") is True
+        else ""
+    )
+    one_shot = (
+        ", with its [ONE SHOT] weapons counted as not having been shot"
+        if m.get("reset_one_shot") is True
+        else ""
+    )
+    # Where the unit goes comes first, then what it comes back with.
+    return f"add {what}{models}{strength} to your army{where}{full}{one_shot}{engage}"
 
 
 _MOVE_VERBS = {
@@ -364,6 +412,8 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         d = dice_case(m["distance"])
         up_to = f' of up to {d}"' if verb.startswith("make ") else f' up to {d}"'
     s = f"{subj} can {verb}{up_to}{_mode_clause(m)}"
+    if m.get("as_if") == "movement-phase":
+        s += " as if it were your Movement phase"
     if isinstance(m.get("passthrough"), list):
         s += f", moving over {_passthrough(m['passthrough'])} as though they were not there"
     ends = m.get("ends_within")
@@ -373,9 +423,18 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         wholly = "wholly " if ends.get("wholly") is True else ""
         s += f", ending that move {wholly}within {range_phrase(ends.get('range'))} of {of}"
     if m.get("ends_when") is not None:
-        s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}"
+        replaces = (
+            " (instead of the usual threshold)" if m.get("ends_when_replaces") is True else ""
+        )
+        s += f"; it must end that move where {describe_condition(_obj(m['ends_when']))}{replaces}"
+    if m.get("ends_nearest") is not None:
+        s += f"; {_ends_nearest_phrase(m['ends_nearest'], ctx, 'it', 'that move')}"
     if m.get("allow_engagement") is True:
-        s += "; it can end that move within Engagement Range of enemy units"
+        s += (
+            "; it can end that move within Engagement Range of that enemy unit"
+            if m.get("engaged_with") == "nearest-move-end"
+            else "; it can end that move within Engagement Range of enemy units"
+        )
     if m.get("counts_as_move") is not None:
         s += f"; that move counts as {moved_phrase(m['counts_as_move'])}"
     if m.get("keeps_eligible") is True:
@@ -383,7 +442,36 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     return s
 
 
-def _move_modifier(m: dict[str, Any], subj: str) -> str:
+def _ends_nearest_phrase(e: dict[str, Any], ctx: Ctx, who: str, move_ref: str) -> str:
+    """As endsNearestPhrase in the TypeScript describer: the closest unit's name, with the waiver's
+    alternative end when waives is closest-enemy-model."""
+    if e.get("of") == "event-subject":
+        # The enemy unit the trigger names is "that enemy unit", not the closest of a group.
+        nearest = "as close as possible to that enemy unit"
+    else:
+        objective = e["of"].get("objective") if isinstance(e.get("of"), dict) else None
+        if objective is not None:
+            named = "selected objective" if "selection_var" in objective else "objective marker"
+        else:
+            named = re.sub(r"^(an?|the|all) ", "", effect_subject(e.get("of"), ctx), count=1)
+            named = named.replace(" units", " unit", 1).replace(" units)", ")")
+        nearest = f"as close as possible to the closest {named}"
+    must = (
+        f"each model in {'the unit' if who == 'it' else who} must end {move_ref}"
+        if e.get("per") == "model"
+        else f"{who} must end {move_ref}"
+    )
+    instead = (
+        ", instead of as close as possible to the closest enemy unit"
+        if e.get("instead_of") == "closest-enemy-unit"
+        else ""
+    )
+    if e.get("waives") == "closest-enemy-model":
+        return f"{must} either closer to the closest enemy model or {nearest}"
+    return f"{must} {nearest}{instead}"
+
+
+def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     kinds = (
         and_list([_MOVE_NOUNS.get(jstr(x), dekebab(jstr(x))) for x in m["applies_to_moves"]])
         if isinstance(m.get("applies_to_moves"), list)
@@ -410,6 +498,22 @@ def _move_modifier(m: dict[str, Any], subj: str) -> str:
         )
     if m.get("no_end_in_engagement") is True:
         clauses.append(f"{subj} cannot end a move within Engagement Range of any enemy unit")
+    if m.get("ends_nearest") is not None:
+        clauses.append(_ends_nearest_phrase(m["ends_nearest"], ctx, subj, f"{pronoun(subj)} move"))
+    # With a distance bonus, ends_when is the bonus's proviso: it is available only where a move
+    # can end there.
+    if m.get("ends_when") is not None:
+        where = describe_condition(_obj(m["ends_when"]))
+        replaces = (
+            " (instead of the usual threshold)" if m.get("ends_when_replaces") is True else ""
+        )
+        if m.get("distance_bonus") is not None:
+            clauses.append(
+                f"the extra distance applies only if {subj} can end {pronoun(subj)} move "
+                f"where {where}, and must end it there"
+            )
+        else:
+            clauses.append(f"{subj} must end {pronoun(subj)} move where {where}{replaces}")
     if m.get("end_on_terrain") is True:
         clauses.append(f"{subj} can end {pronoun(subj)} moves on top of terrain features")
     if m.get("ignore_vertical") is True:
@@ -439,8 +543,15 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         who = effect_subject(m["subject"], ctx)
     else:
         who = subj
+    # An ingress or other placement replaces the usual set-up limits; a Reserves set-up ignores the
+    # Reserves limits.
+    reserves = m.get("to") == "strategic-reserves" or m.get("from") == "strategic-reserves"
     limits = (
-        ", ignoring any limits on units in Strategic Reserves"
+        (
+            ", ignoring any limits on units in Strategic Reserves"
+            if reserves
+            else ", ignoring the usual set-up limits"
+        )
         if m.get("ignore_limits") is True
         else ""
     )
@@ -463,6 +574,12 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s = f"{who_can} {can} be set up on the battlefield{source}"
     if m.get("via") == "deep-strike":
         s += " using the Deep Strike rules"
+    if m.get("via") == "cult-ambush-marker":
+        s += " using a Cult Ambush marker"
+    marker_range = m.get("marker_range")
+    if isinstance(marker_range, dict):
+        wholly = "wholly " if marker_range.get("wholly") is True else ""
+        s += f', {wholly}within {jstr(marker_range.get("inches"))}" of that marker'
     s += _mode_clause(m)
     if isinstance(m.get("turns"), list):
         turns = re.sub(r", ([^,]*)$", r" or \1", ", ".join(_turn_ord(t) for t in m["turns"]))
@@ -491,6 +608,11 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f", treating the battle round as {num_str(abs(off))} "
             f"{'lower' if off < 0 else 'higher'} than it is"
         )
+    if m.get("wounds_remaining") is not None:
+        s += f", with {_wounds_left(m['wounds_remaining'])} remaining"
+    s += _detach_phrase(m)
+    if m.get("starting_strength") is not None and m.get("detach") is not True:
+        s += f"; its unit has a Starting Strength of {jstr(m['starting_strength'])}"
     if m.get("allow_engagement") is True:
         s += "; it can be set up within Engagement Range of enemy units"
     if m.get("counts_as_move") is not None:
@@ -504,7 +626,10 @@ def _marker(m: dict[str, Any]) -> str:
     consume = "; using the marker consumes it" if m.get("consume") == "on-use" else ""
     if m.get("operation") == "relocate":
         dist = f' up to {jstr(m["distance"])}"' if m.get("distance") is not None else ""
-        return f"move the {label} marker{dist}{consume}"
+        unmoved = ""
+        if m.get("not_moved_this_turn") is True:
+            unmoved = " that has not been moved this turn"
+        return f"move the {label} marker{unmoved}{dist}{consume}"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
     article = "an" if re.match(r"[aeiou]", label, re.IGNORECASE) else "a"
     return f"place {article} {label} marker{where}{consume}"
@@ -584,16 +709,21 @@ def _heal(m: dict[str, Any], subj: str) -> str:
 
 
 def _split_unit(m: dict[str, Any], subj: str) -> str:
+    strength = (
+        f", each with a Starting Strength of {jstr(m['starting_strength'])}"
+        if m.get("starting_strength") is not None
+        else ""
+    )
     if m.get("by") == "model":
-        return f"split {subj} into units of one model each"
+        return f"split {subj} into units of one model each{strength}"
     by = m.get("by")
     if isinstance(by, dict) and by.get("model_keyword") is not None:
         return (
             f"split {subj} into one unit of each of its "
-            f"{and_list([jstr(k) for k in by['model_keyword']])} models"
+            f"{and_list([jstr(k) for k in by['model_keyword']])} models{strength}"
         )
     counts = [jstr(c) for c in m["model_counts"]] if isinstance(m.get("model_counts"), list) else []
-    return f"split {subj} into {len(counts)} units of {and_list(counts)} models"
+    return f"split {subj} into {len(counts)} units of {and_list(counts)} models{strength}"
 
 
 def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
@@ -634,7 +764,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "move":
         return _move(m, subj, ctx)
     if t == "move-modifier":
-        return _move_modifier(m, subj)
+        return _move_modifier(m, subj, ctx)
     if t == "set-up":
         return _set_up(m, subj, ctx)
     if t == "marker":
@@ -666,5 +796,5 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "designate":
         return _designate(m, subj, ctx)
     if t == "army-rule":
-        return army_rule(m, subj, ctx)
+        return army_rule(m, subj, ctx, e.get("target"))
     return f"[{t if t is not None else 'unknown'}]"

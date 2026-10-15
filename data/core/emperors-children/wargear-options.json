@@ -526,5 +526,73 @@
     "model_constraint": {
       "any_number": true
     }
+  },
+  {
+    "id": "daemonettes-wgo-mfm-1",
+    "unit_id": "daemonettes",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "daemonic-icon"
+      ],
+      [
+        "instrument-of-chaos"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Daemonette",
+      "any_number": true
+    }
+  },
+  {
+    "id": "keeper-of-secrets-wgo-mfm-1",
+    "unit_id": "keeper-of-secrets",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "shining-aegis"
+      ],
+      [
+        "ritual-knife"
+      ],
+      [
+        "living-whip"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "seekers-wgo-mfm-1",
+    "unit_id": "seekers",
+    "faction_id": "emperors-children",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "instrument-of-chaos"
+      ],
+      [
+        "daemonic-icon"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Seeker",
+      "any_number": true
+    }
   }
 ]

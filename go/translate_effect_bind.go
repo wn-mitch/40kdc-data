@@ -129,6 +129,7 @@ var placementPhrases = map[string]string{
 	"coherency":              "in Unit Coherency",
 	"unengaged":              "not within Engagement Range of any enemy units",
 	"strategic-reserves":     "in Strategic Reserves",
+	"cult-ambush":            "in Cult Ambush",
 	"anywhere":               "anywhere on the battlefield",
 	"connected-sections":     "with its sections touching",
 	"deployment-zone":        "wholly within your deployment zone",
@@ -181,6 +182,13 @@ func placePhrase(of any, ctx effCtx) string {
 		if o["marker"] != nil {
 			label := placeMarkerSuffixRe.ReplaceAllString(dekebab(ejstr(o["marker"])), "")
 			return article(label) + " " + label + " marker"
+		}
+		// The enemy deployment zone (a region-ref place): the printed name.
+		if o["territory"] != nil {
+			if o["territory"] == "enemy-deployment-zone" {
+				return "your opponent's deployment zone"
+			}
+			return dekebab(ejstr(o["territory"]))
 		}
 		if o["objective"] != nil {
 			objective := mapOr(o["objective"])

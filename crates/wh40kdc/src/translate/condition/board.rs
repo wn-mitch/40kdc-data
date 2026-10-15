@@ -52,6 +52,11 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 ""
             };
+            let who = if is(p, "models", "every") {
+                format!("every model in {}", subject_of(p, "the unit"))
+            } else {
+                subject_of(p, "the unit")
+            };
             if matches!(
                 range.and_then(Value::as_str),
                 Some("half-weapon" | "weapon")
@@ -66,15 +71,11 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             let of_obj = of.and_then(Value::as_object);
             if let Some(o) = of_obj.filter(|o| truthy(o.get("objective"))) {
                 if nn(obj(o.get("objective")), "selection_var").is_some() {
-                    return format!(
-                        "{} is {not_}{wholly}within range of that objective marker",
-                        subject_of(p, "the unit")
-                    );
+                    return format!("{who} is {not_}{wholly}within range of that objective marker");
                 }
                 let phrase = objective_phrase(obj(o.get("objective")), false, "objective marker");
                 return format!(
-                    "{} is {not_}{wholly}within range of {} {phrase}",
-                    subject_of(p, "the unit"),
+                    "{who} is {not_}{wholly}within range of {} {phrase}",
                     article(&phrase)
                 );
             }
@@ -100,11 +101,6 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 format!("{} {} marker", article(&marker), dekebab(&marker))
             } else {
                 unit_ref_phrase(of, "the unit")
-            };
-            let who = if is(p, "models", "every") {
-                format!("every model in {}", subject_of(p, "the unit"))
-            } else {
-                subject_of(p, "the unit")
             };
             let phase_start = is(p, "at", "phase-start");
             format!(
@@ -425,6 +421,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             "your Army Faction is {not_}{}",
             st(p.get("faction")).replace('-', " ").to_uppercase()
         ),
+        "army-includes" => army_includes(p, negated),
         "moved-over" => {
             let window = if nn(p, "window").is_none() || is(p, "window", "event") {
                 "during that move".to_string()
@@ -448,4 +445,80 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             dekebab(if ctype(c).is_some() { other } else { "unknown" })
         ),
     }
+}
+
+/// "your army includes a CHARACTER unit", "your army includes 2 or more X units", "every model in
+/// your army has the IMPERIUM keyword". The army is yours, so the filter's owner is not repeated.
+fn army_includes(p: &P, negated: bool) -> String {
+    let mut f = p
+        .get("filter")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    f.remove("owner");
+    let noun = if is(&f, "level", "model") {
+        "model"
+    } else {
+        "unit"
+    };
+    let words = |k: &str| -> Vec<String> {
+        f.get(k)
+            .and_then(Value::as_array)
+            .map(|a| a.iter().map(|x| st(Some(x))).collect())
+            .unwrap_or_default()
+    };
+    if p.get("every").and_then(Value::as_bool) == Some(true) {
+        let all = words("all_of");
+        let any = words("any_of");
+        let list = if any.is_empty() {
+            and_list(&all)
+        } else {
+            or_list(&any)
+        };
+        let plural = if all.len() > 1 && any.is_empty() {
+            "s"
+        } else {
+            ""
+        };
+        return format!(
+            "{}every {noun} in your army has the {list} keyword{plural}",
+            if negated { "not " } else { "" }
+        );
+    }
+    let one = unit_filter_phrase(&f);
+    let min = p.get("min").and_then(Value::as_f64).unwrap_or(1.0);
+    let what = if min > 1.0 {
+        let bare = one
+            .strip_prefix("an ")
+            .or_else(|| one.strip_prefix("a "))
+            .unwrap_or(&one);
+        format!("{} or more {}", min as i64, pluralize_first_noun(bare))
+    } else {
+        one
+    };
+    format!(
+        "your army {} {what}",
+        if negated {
+            "does not include"
+        } else {
+            "includes"
+        }
+    )
+}
+
+/// JS `s.replace(/\b(unit|model)\b/, "$1s")`: the first whole word "unit" or "model", made plural.
+fn pluralize_first_noun(s: &str) -> String {
+    let word = |b: u8| b.is_ascii_alphanumeric() || b == b'_';
+    let bytes = s.as_bytes();
+    for (at, _) in s.char_indices() {
+        for noun in ["unit", "model"] {
+            if s[at..].starts_with(noun)
+                && (at == 0 || !word(bytes[at - 1]))
+                && bytes.get(at + noun.len()).is_none_or(|b| !word(*b))
+            {
+                return format!("{}{noun}s{}", &s[..at], &s[at + noun.len()..]);
+            }
+        }
+    }
+    s.to_string()
 }

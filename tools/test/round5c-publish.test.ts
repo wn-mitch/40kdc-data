@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { compilationInputsHash } from "../src/round5c/compiled.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import {
   getPublicationReport,
@@ -89,7 +90,10 @@ function buildFixture(): Fixture {
   const directory = mkdtempSync(join(tmpdir(), "round5c-publish-"));
   temporaryDirectories.push(directory);
   const dataRoot = join(directory, "data");
-  cpSync(liveDataRoot, dataRoot, { recursive: true });
+  // Copy the bytes, never a link: a symlinked data/ (a scratch tree pointing at a real checkout) would be copied as
+  // the link itself, and the publications below would write into the real data files.
+  cpSync(realpathSync(liveDataRoot), dataRoot, { recursive: true, dereference: true });
+  if (realpathSync(dataRoot) === realpathSync(liveDataRoot)) throw new Error("The publication fixture must not resolve to the live data root.");
   const rawStore = join(directory, "raw-store");
   mkdirSync(rawStore, { recursive: true });
   process.env.ROUND5C_DATA_ROOT = dataRoot;
@@ -255,7 +259,7 @@ describe("Round 5C explicit publication", () => {
       const leaf = applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
         fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: 2, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+        role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { subject: "this-model", characteristic: "M", value: 1 },
       }] });
       await expect(prepare()).rejects.toThrow(/leaves changed after approval/i);
       fixture.db.prepare("UPDATE annotations SET status = 'retracted' WHERE batch_id = ?").run(leaf.batch_id);
@@ -299,7 +303,7 @@ describe("Round 5C explicit publication", () => {
       applyAnnotationBatch(fixture.db, { reviewer: "fixture-reviewer", decisions: [{
         action: "confirm", ability_version_id: fixture.selectedAbilityVersionId, source_hash: fixture.selectedSourceHash,
         fragment: "RAW_TEXT", start_byte: start, end_byte: start + Buffer.byteLength(phrase, "utf8"), exact_text: phrase,
-        role: "EFFECT", family_id: "characteristic-set", family_version: 2, parameters: { subject: "this-model", characteristic: "M", value: 1 },
+        role: "EFFECT", family_id: "characteristic-set", family_version: currentFamilyVersion("characteristic-set"), parameters: { subject: "this-model", characteristic: "M", value: 1 },
       }] });
       expect(listPublications(fixture.db).items[0]).toMatchObject({ evidence_status: "stale" });
       expect(getPublicationReport(fixture.db)).toMatchObject({ stale_published_abilities: [`${factionId}/${selectedAbilityId}`] });

@@ -1,0 +1,2134 @@
+[
+  {
+    "caseId": "model-destroyed-by-destroyer",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy",
+        "all_of": [
+          "CHARACTER"
+        ],
+        "level": "model"
+      }
+    }
+  },
+  {
+    "caseId": "model-destroyed-by-enemy",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "model-in-this-unit"
+    }
+  },
+  {
+    "caseId": "targeted-ranged-attacks-this-unit",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "ranged"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "targeted-melee-attacks-no-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "targeted-by-any-unit-this-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": {
+            "owner": "any"
+          },
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "targeted-not-ranged-filter-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "INFANTRY"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "filter": {
+                "kind": "attack",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "activate-several-options-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "selected-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "zeal"
+        ],
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "activate-several-options-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "ward",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "activate-all-options",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "all_options": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    }
+  },
+  {
+    "caseId": "activate-player-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "from": [
+            "aegis",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "activate-player-pick-count-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "count": 2
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "activate-roll-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "roll",
+          "count": 2,
+          "from": [
+            "aegis",
+            "ward",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "stance-select-additive-inline",
+    "effect": {
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "options": [
+        {
+          "name": "Doubled",
+          "effect": {
+            "type": "stance-select",
+            "mode": "re-selectable",
+            "additive": true,
+            "options": [
+              {
+                "name": "Aegis",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "save",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "name": "Zeal",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Plain",
+          "effect": {
+            "type": "ability-activate",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "rite-of-wards",
+              "all_options": true
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "stance-select-additive-block",
+    "effect": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "scope": "unit",
+      "additive": true,
+      "options": [
+        {
+          "name": "Aegis",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "save",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "Zeal",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "stance-capacity-shared-options",
+    "effect": {
+      "type": "stance-selection-capacity",
+      "modifier": {
+        "stance_id": "rite-of-wards",
+        "additional_selections": 1,
+        "allocation": "choose-one-option",
+        "option_ids": [
+          "aegis",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/definition-named-aura",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "ability": "shade-ward",
+        "definition": {
+          "type": "ability-part",
+          "name": "Shade Ward",
+          "effect": {
+            "type": "aura",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "range": 6,
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapon_type": "melee"
+                }
+              },
+              "eligible": {
+                "required_keywords": [
+                  "GLOOM HOUND"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/definition-unnamed",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/definition-reactive-several",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "dark-step",
+            "definition": {
+              "type": "ability-part",
+              "name": "Dark Step",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "ranged"
+                }
+              },
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "to": "shoot"
+                }
+              },
+              "usage": {
+                "frequency": "once-per-turn",
+                "per": "unit"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "pale-shroud",
+            "definition": {
+              "type": "ability-part",
+              "name": "Pale Shroud",
+              "effect": {
+                "type": "invulnerable-save",
+                "target": "this-unit",
+                "modifier": {
+                  "invuln_sv": 5
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/definition-inline-under-condition",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "ability": "pale-shroud",
+          "definition": {
+            "type": "ability-part",
+            "name": "Pale Shroud",
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/definition-model-level-target",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM HOUND"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "ability": "pale-shroud",
+        "definition": {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "granted/self-held-named-passive-part",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Rallying Cry",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapon_type": "melee"
+            }
+          },
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          },
+          "duration": "phase"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-member-keyword",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "max": 6,
+        "roll": {
+          "dice": 1,
+          "threshold": 3,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "keywords": [
+              "ALPHA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-embarked",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 5,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "embarked-in-bearer"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-engaged",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged",
+                "with": "selected-unit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-one",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 1,
+          "comparison": "lte",
+          "per_model": "target"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-two",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 3,
+          "threshold": 2,
+          "comparison": "lte"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "for-each-unit-any-side-including-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "any",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": "defender"
+              }
+            },
+            {
+              "type": "within",
+              "parameters": {
+                "of": "defender",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "designate",
+          "target": "recipient",
+          "modifier": {
+            "tag": "struck-by-explosive-debris"
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "for-each-unit-models-in-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "enemy",
+        "target_kind": "model",
+        "member_of": "target"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "designate-struck-by-arcing-energies",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-arcing-energies"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "designate-struck-by-concussive-wave",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-concussive-wave"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "designate-struck-by-spores",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-spores"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "fidelity/select-weapon-named",
+    "effect": {
+      "type": "select-weapon",
+      "target": "this-model",
+      "modifier": {
+        "weapon_name": "plasma rifle",
+        "bind_as": "plasma-rifle-weapon"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-equipped-weapon-count#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "equipped-weapon-count",
+        "parameters": {
+          "subject": "this-model",
+          "weapon_type": "melee",
+          "count": 2,
+          "other_than": "Close combat weapon"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee",
+          "exclude_weapon_name": "Close combat weapon"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-with-engagement",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy",
+            "none_of": [
+              "AIRCRAFT"
+            ]
+          }
+        },
+        "allow_engagement": true,
+        "engaged_with": "nearest-move-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-end-nearest-event-subject-enemy-unit",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": "event-subject"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-plain",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-waiver",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          },
+          "waives": "closest-enemy-model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-plain",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-proviso-ends-when",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "distance_bonus": 3,
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-no-bonus",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "advance"
+        ],
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 1
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 2
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#2",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Test blade",
+              "count": 2
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 2,
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 1,
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 3,
+          "models": {
+            "at_least": 2,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-unit",
+              "name": "Test blade",
+              "count": 1,
+              "models": {
+                "at_least": 3,
+                "state": "carry"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "test-relay"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "weapon-removal-ranged-heavy#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "removes": [
+          "Heavy"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "weapon-removal-keyword-scope-with-stat#0",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "removes": [
+              "Blast"
+            ],
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "weapon-removal-and-grant#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "abilities": [
+          "Close-quarters"
+        ],
+        "removes": [
+          "Blast"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "delayed-destruction-phase-end-this-model",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count_min": 1
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    }
+  },
+  {
+    "caseId": "fidelity/counts-as-synapse-range",
+    "effect": {
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "within": {
+          "aura_of": "synapse-tyranids"
+        },
+        "of": {
+          "owner": "friendly"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "weapon-range-override-this-unit#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": "this-unit",
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "weapon-range-override-filtered-units#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "TACTICUS"
+        ]
+      },
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "set-up-restriction-ingress-limits#0",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "mandatory": true,
+        "ignore_limits": true,
+        "near": [
+          {
+            "of": "this-unit",
+            "range": {
+              "inches": 6
+            },
+            "wholly": true
+          }
+        ],
+        "placement": "unengaged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "set-up-restriction-deployment-window#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "deployment-window",
+        "parameters": {
+          "during": "deployment"
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "battlefield",
+          "min_enemy_distance": 8,
+          "away_from": [
+            {
+              "of": {
+                "territory": "enemy-deployment-zone"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "warlord-designation-this-model",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "designated",
+        "parameters": {
+          "subject": "this-model",
+          "tag": "warlord"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "warlord-designation-target-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "warlord"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "stratagem-targeted-restriction-fabricated#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "subject": {
+                    "owner": "any"
+                  },
+                  "object": "this-unit",
+                  "filter": {
+                    "kind": "stratagem",
+                    "id": "alpha-strike-fabricated"
+                  },
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "subject": {
+                    "owner": "any"
+                  },
+                  "object": "this-unit",
+                  "filter": {
+                    "kind": "stratagem",
+                    "id": "beta-strike-fabricated"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "stratagem-targeted-object-range-fabricated#0",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "enemy",
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
+      }
+    },
+    "behavior": "triggered"
+  },
+  {
+    "caseId": "stratagem-targeted-aura-recipient-fabricated#0",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN"
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 6
+          }
+        }
+      }
+    },
+    "behavior": "triggered"
+  },
+  {
+    "caseId": "move-end-nearest-objective-marker-make-move",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "objective": {}
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-end-nearest-selected-objective-per-model-instead",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal"
+        ],
+        "ends_nearest": {
+          "of": {
+            "objective": {
+              "selection_var": "marker"
+            }
+          },
+          "per": "model",
+          "instead_of": "closest-enemy-unit"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-replaces",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal",
+          "advance"
+        ],
+        "ends_when": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged"
+              }
+            }
+          ]
+        },
+        "ends_when_replaces": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "scaling-on-apply-enemy-models-in-range#0",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1
+      },
+      "scaling": {
+        "per": 5,
+        "of": "enemy-models-in-range",
+        "within_inches": 6,
+        "evaluated": "on-apply"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "redesignate-mandatory#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": false
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "redesignate-optional-replacement#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": true
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "designation-optional-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "mark",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "one-time"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "battle"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "designation-up-to-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "hunted",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "replace-on-destroyed",
+          "bind_as": "hunted-selection"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "hunted-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "hunted-selection"
+            },
+            "optional": true
+          },
+          "exclusivity": "one-active-per-bearer-unit",
+          "expiry": "battle-end"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  }
+]

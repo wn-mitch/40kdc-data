@@ -4013,5 +4013,556 @@
         "id": "b714400c-7389-49bd-9d70-b7c22b646f87"
       }
     ]
+  },
+  {
+    "id": "coruscating-blue-flames",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a509fce8-64d6-4bf6-8fa6-9d412d24e93c"
+      }
+    ],
+    "name": "Coruscating blue flames",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Coruscating blue flames",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 3,
+          "AP": -1,
+          "D": 1,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "pistol"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "blue-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "61af8f3c-9e83-4eec-9d07-e60707ffc477"
+      }
+    ],
+    "name": "Blue claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Blue claws",
+        "range": "Melee",
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 5
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "coruscating-yellow-flames",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9d7d69ca-fe3e-404e-a89c-372f46a37157"
+      }
+    ],
+    "name": "Coruscating yellow flames",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Coruscating yellow flames",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 2,
+          "AP": -1,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          },
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "yellow-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "af6284ae-10b8-43d5-95c0-efd08748c205"
+      }
+    ],
+    "name": "Yellow claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Yellow claws",
+        "range": "Melee",
+        "stats": {
+          "A": 2,
+          "S": 2,
+          "AP": 0,
+          "D": 1,
+          "WS": 5
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "staff-of-tomorrow",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a8620149-53df-4838-ab2d-6d3d57e3c2ac"
+      }
+    ],
+    "name": "Staff of Tomorrow",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Staff of Tomorrow",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 8,
+          "AP": -2,
+          "D": "2D3",
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "infernal-gateway",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0799cb1a-26a4-4428-9d7b-4109f7747de6"
+      }
+    ],
+    "name": "Infernal Gateway",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Witchfire",
+        "range": 24,
+        "stats": {
+          "A": "D6+3",
+          "S": 9,
+          "AP": -2,
+          "D": "D3",
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "indirect-fire"
+          }
+        ]
+      },
+      {
+        "name": "Focused Witchfire",
+        "range": 24,
+        "stats": {
+          "A": "D3+6",
+          "S": 9,
+          "AP": -2,
+          "D": 3,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "indirect-fire"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "pink-claws",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bef81642-65ec-4d43-908e-8bab8e99f33e"
+      }
+    ],
+    "name": "Pink claws",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Pink claws",
+        "range": "Melee",
+        "stats": {
+          "A": 1,
+          "S": 3,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "coruscating-pink-flames",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d315ebc6-07c8-4d1f-a799-d1bed7404f2b"
+      }
+    ],
+    "name": "Coruscating pink flames",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Coruscating pink flames",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          },
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "lamprey-bite",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "660e4e68-1b4f-44f2-b2e0-0fd2961c41a6"
+      }
+    ],
+    "name": "Lamprey bite",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Lamprey bite",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Vehicle",
+              "threshold": 4
+            }
+          },
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Monster",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "rod-of-sorcery",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "fce763a1-5bb1-4f58-b629-9929c7a5c1fa"
+      }
+    ],
+    "name": "Rod of sorcery",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Rod of sorcery",
+        "range": 18,
+        "stats": {
+          "A": 6,
+          "S": 8,
+          "AP": -1,
+          "D": 2,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "baleful-sword",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3af9218b-6be8-49c6-8135-7af6ed4628c8"
+      }
+    ],
+    "name": "Baleful sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Baleful sword",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 7,
+          "AP": -2,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "extra-attacks"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "staff-of-tzeentch",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "2992d448-9d16-4f6a-8466-1b13c72b73ee"
+      }
+    ],
+    "name": "Staff of Tzeentch",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Staff of Tzeentch",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -1,
+          "D": 3,
+          "WS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "bolt-of-change",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "90d464b6-2687-40a0-8687-006bf16acc72"
+      }
+    ],
+    "name": "Bolt of Change",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "witchfire",
+        "range": 18,
+        "stats": {
+          "A": 9,
+          "S": 9,
+          "AP": -1,
+          "D": 1,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "focused witchfire",
+        "range": 18,
+        "stats": {
+          "A": 9,
+          "S": 9,
+          "AP": -2,
+          "D": 3,
+          "BS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "psychic"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "flamer-mouths",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "069ed322-b137-479f-b40c-638d849161ab"
+      }
+    ],
+    "name": "Flamer mouths",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Flamer mouths",
+        "range": "Melee",
+        "stats": {
+          "A": 3,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "flickering-flames",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f70cbcdd-a635-498b-adaa-93e64a15ebe5"
+      }
+    ],
+    "name": "Flickering flames",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Flickering flames",
+        "range": 12,
+        "stats": {
+          "A": "D6",
+          "S": 4,
+          "AP": -1,
+          "D": 1,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

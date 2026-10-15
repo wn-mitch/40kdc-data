@@ -5,10 +5,10 @@ import { join } from "node:path";
 import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { upgradeFamilyVersions } from "../src/round5c/family-versions.js";
-import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
+import { applyLeafSurfaces, backfillLeafSurfaces, leafBoard, qualifiedAt, reapplyLeafSurfaces } from "../src/round5c/leaves.js";
 import { getAbility } from "../src/round5c/review.js";
 import { refreshSources } from "../src/round5c/source.js";
 import { applyAnnotationBatch, confirmSurface, mergeFingerprints, moveSurface, retireSurface, undoBatch } from "./round5c-human.js";
@@ -128,6 +128,27 @@ describe("Round 5C leaf surfaces", () => {
     }
   });
 
+  it("does not write a leaf over bytes a human marked as a connective, whatever the family's current version", () => {
+    const { db } = fixture([
+      { faction_id: "alpha", ability_id: "free", raw_text: `Then ${CP}.` },
+      { faction_id: "alpha", ability_id: "glue", raw_text: `Then ${CP}.` },
+    ]);
+    try {
+      const glue = current(db, "glue");
+      const start = Buffer.byteLength("Then ");
+      // An accepted connective covering the whole occurrence, keyed to no fingerprint at all.
+      const spanId = insertSpan(db, glue.id, "RAW_TEXT", start, start + CP.length, CP);
+      db.prepare("INSERT INTO proposals (span_id, fingerprint_id, role, origin, status, reason_json, created_at) VALUES (?, NULL, 'CONNECTIVE', 'connective-span', 'accepted', '{}', ?)")
+        .run(spanId, new Date().toISOString());
+      const report = confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      expect(report.applied).toBe(1);
+      expect(report.blocked.map((item) => [item.ability_id, item.reason])).toEqual([["glue", "CONNECTIVE_HERE"]]);
+      expect(leaves(db, "glue")).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("accepts pending proposals it confirms and undoes the whole decision", () => {
     const { db } = fixture([
       { faction_id: "alpha", ability_id: "one", raw_text: `Then ${CP}.` },
@@ -179,8 +200,8 @@ describe("Round 5C leaf surfaces", () => {
       { faction_id: "alpha", ability_id: "pending", raw_text: "Now re-roll a failed Hit roll." },
     ]);
     try {
-      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, 2);
-      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, 2);
+      const failedFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "failed", weapon_type: "all" }, currentFamilyVersion("reroll"));
+      const allFingerprint = validateFingerprint(db, "reroll", { roll: "hit", subset: "all", weapon_type: "all" }, currentFamilyVersion("reroll"));
       const failed = confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll a failed Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "failed", weapon_type: "all" } });
       confirmSurface(db, { reviewer: REVIEWER, exact_text: "Re-roll the Hit roll", family_id: "reroll", parameters: { roll: "hit", subset: "all", weapon_type: "all" } });
       expect(failed.applied).toBe(2);
@@ -332,8 +353,8 @@ describe("Round 5C family versions", () => {
       const report = upgradeFamilyVersions(db);
       expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2 });
       expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
-      expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: 2, parameters: { subject: "this-model", attachment: "leading" } })]);
-      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: 9, parameters: { kind: "after-shooting" } })]);
+      expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: currentFamilyVersion("leading-unit"), parameters: { subject: "this-model", attachment: "leading" } })]);
+      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: currentFamilyVersion("event"), parameters: { kind: "after-shooting" } })]);
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(lead)).toEqual({ status: "superseded" });
       expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(odd)).toEqual({ status: "active" });
       expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, migrated_annotations: 0 });
@@ -385,6 +406,17 @@ describe("Round 5C family versions", () => {
     } finally {
       db.close();
     }
+  });
+
+  it("treats a keyword before a noun as a qualifier but not before a duration, clause or determiner", () => {
+    const at = (text: string, match: string) => qualifiedAt(text, Buffer.byteLength(text.slice(0, text.indexOf(match))));
+    expect(at("select one **INFANTRY** unit from your army", "unit from your army")).toBe(true);
+    expect(at("**PSYKER** models in your unit have the Feel No Pain 4+ ability", "models in your unit")).toBe(true);
+    expect(at("melee weapons equipped by models in that unit have", "weapons equipped")).toBe(true);
+    expect(at("this unit is not **eligible to declare a charge** until the end of the turn", "until the end of the turn")).toBe(false);
+    expect(at("Is **riled up** until the start of your next turn", "until the start")).toBe(false);
+    expect(at("If that unit is **BATTLE-SHOCKED** when this unit is selected to fight", "when this unit")).toBe(false);
+    expect(at("those **riled up** models have -1 to wound rolls", "have -1")).toBe(false);
   });
 
   it("accepts melee and valued weapon abilities but not unit keywords", () => {

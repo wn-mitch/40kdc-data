@@ -19,6 +19,7 @@ export interface Condition {
 }
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
+import { namedEquipmentPhrase } from "./condition-equipment.js";
 import { andList, dekebab, designationPhrase, idLabel, objectivePhrase, ord, orList, type P, rangePhrase, rollWord, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
@@ -33,7 +34,7 @@ function keywordList(p: P): string {
 
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
-  "strength", "model-count", "wounds", "loadout", "attachment", "has-ability", "controls", "resource", "attack-compare",
+  "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "has-ability", "controls", "resource", "attack-compare",
   "happened-compare", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
 ]);
 
@@ -56,6 +57,9 @@ export function negatePhrase(phrase: string): string {
   return `not ${phrase}`;
 }
 
+/** The Transport an embark-within names; the candidate being checked (this-unit) reads "that Transport". */
+const transportPhrase = (ref: unknown): string => ref === "this-unit" ? "that Transport" : unitRefPhrase(ref, "that Transport");
+
 /** The predicate phrase, optionally negated ("the unit is not below starting strength"). */
 export function describePredicate(c: Condition, negated: boolean): string {
   if (negated && VERB_NEGATED.has(String(c.type))) return negatePhrase(describePredicate(c, false));
@@ -66,6 +70,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
   switch (c.type) {
     case "phase-is":
       return str(p.phase) === "command" ? `${neg}during the Command phase` : `${neg}during the ${titleCase(str(p.phase))} phase`;
+    case "deployment-window":
+      return `${neg}during deployment`;
     case "player-turn-is":
       return `${neg}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "the opponent's" : "either player's"} turn`;
     case "battle-round": {
@@ -97,6 +103,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const kw = Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : "";
       if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p)} is leading a ${kw}unit`;
       if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}model`;
+      // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+      if (kw) return `${neg}${subjectOf(p)} is attached to ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}unit`;
       return `${neg}${subjectOf(p)} is an attached unit`;
     }
     case "strength": {
@@ -117,6 +125,13 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (p.damaged === true) parts.push("is Damaged");
       return `${neg}${who} ${andList(parts)}`;
     }
+    case "equipped-weapon-count": {
+      const count = Number(p.count);
+      return `${subjectOf(p, "the model")} is equipped with a weapon named "${str(p.other_than)}" and exactly ${count} other ${str(p.weapon_type)} weapon${count === 1 ? "" : "s"}`;
+    }
+    case "named-weapon":
+    case "unit-wargear":
+      return namedEquipmentPhrase(String(c.type), p, negated);
     case "loadout":
       return `${neg}all ${str(p.uniform)} weapons equipped by each ${p.model_keyword ? `${str(p.model_keyword)} ` : ""}model in the unit are the same`;
     case "unit-state": {
@@ -128,6 +143,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `${who} is ${statePhrase(str(p.state), negated)}${withRef}`;
     }
     case "eligible": {
+      if (p.to === "embark-within") return `${subjectOf(p)} is ${negated ? "not " : ""}able to embark within ${transportPhrase(p.transport)}`;
       if (p.to === "be-selected") {
         const source = (p.source_ability as P | undefined)?.ability_id;
         return `${neg}the candidate was eligible for the ${dekebab(str(source))} ability at the end of the opponent's previous turn`;
@@ -149,17 +165,17 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const of = p.of;
       const range = p.range;
       const wholly = p.wholly === true ? "wholly " : "";
+      const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
       if (range === "half-weapon" || range === "weapon")
         return `${p.subject === "defender" ? "the target" : subjectOf(p)} is ${negated ? "not " : ""}within ${rangePhrase(range)}`;
       if (of && typeof of === "object" && (of as P).objective) {
-        if (((of as P).objective as P).selection_var != null) return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
+        if (((of as P).objective as P).selection_var != null) return `${who} is ${negated ? "not " : ""}${wholly}within range of that objective marker`;
         const obj = objectivePhrase((of as P).objective as P, false, "objective marker");
-        return `${subjectOf(p)} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
+        return `${who} is ${negated ? "not " : ""}${wholly}within range of ${/^[aeiou]/i.test(obj) ? "an" : "a"} ${obj}`;
       }
       if (of && typeof of === "object" && (of as P).owner === "enemy" && p.subject == null)
         return negated ? `no ${unitFilterPhrase(of as P).replace(/^an? /, "")} is within ${rangePhrase(range)}` : `${unitFilterPhrase(of as P)} is within ${rangePhrase(range)}`;
       const target = of === "battlefield-edge" ? "a battlefield edge" : of === "battlefield-centre" ? "the centre of the battlefield" : of && typeof of === "object" && (of as P).marker ? `${/^[aeiou]/i.test(str((of as P).marker)) ? "an" : "a"} ${dekebab(str((of as P).marker))} marker` : unitRefPhrase(of);
-      const who = p.models === "every" ? `every model in ${subjectOf(p)}` : subjectOf(p);
       const at = p.at === "phase-start" ? " at the start of the phase" : "";
       return `${who} ${p.at === "phase-start" ? "was" : "is"} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)} of ${target}${at}`;
     }
@@ -270,6 +286,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
     case "army-faction":
       return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
+    case "army-includes":
+      return armyIncludes(p, negated);
     case "moved-over": {
       const who = subjectOf(p, "the unit");
       const window = p.window == null || p.window === "event" ? "during that move" : windowPhrase(p.window);
@@ -280,6 +298,25 @@ export function describePredicate(c: Condition, negated: boolean): string {
     default:
       return `${neg}${dekebab(c.type ?? "unknown")}`;
   }
+}
+
+/**
+ * "your army includes a CHARACTER unit", "your army includes 2 or more X units", "every model in
+ * your army has the IMPERIUM keyword". The army is yours, so the filter's owner is not repeated.
+ */
+function armyIncludes(p: P, negated: boolean): string {
+  const { owner: _owner, ...f } = (p.filter ?? {}) as P;
+  const noun = f.level === "model" ? "model" : "unit";
+  if (p.every === true) {
+    const all = Array.isArray(f.all_of) ? (f.all_of as unknown[]).map(str) : [];
+    const any = Array.isArray(f.any_of) ? (f.any_of as unknown[]).map(str) : [];
+    const words = any.length ? orList(any) : andList(all);
+    return `${negated ? "not " : ""}every ${noun} in your army has the ${words} keyword${all.length > 1 && !any.length ? "s" : ""}`;
+  }
+  const one = unitFilterPhrase(f);
+  const min = Number(p.min ?? 1);
+  const what = min > 1 ? `${min} or more ${one.replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s")}` : one;
+  return `your army ${negated ? "does not include" : "includes"} ${what}`;
 }
 
 /** A condition as a predicate phrase ("the unit is below starting strength and during your turn"). */

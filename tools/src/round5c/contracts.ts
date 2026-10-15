@@ -10,17 +10,42 @@ import { normalizeRestrictionParameters, RESTRICTION_FAMILIES } from "./restrict
 import { normalizeTargetingParameters, TARGETING_FAMILIES } from "./targeting-families.js";
 import { MOVEMENT_FAMILIES, normalizeMovementParameters } from "./movement-families.js";
 import { ECONOMY_FAMILIES, normalizeEconomyParameters } from "./economy-families.js";
+import { normalizePsychicParameters, PSYCHIC_FAMILIES } from "./psychic-families.js";
 import { normalizeUnitStateParameters, UNIT_STATE_EFFECT_FAMILIES } from "./unit-state-families.js";
 import { normalizeWeaponBuffParameters, WEAPON_BUFF_FAMILIES } from "./weapon-buff-families.js";
+import { normalizeWeaponRangeParameters, WEAPON_RANGE_FAMILIES } from "./families/weapons.js";
 import { ABILITY_MODIFIER_FAMILIES, normalizeAbilityModifierParameters } from "./ability-modifier-families.js";
 import { CONTAINER_FAMILIES, normalizeContainerParameters } from "./container-families.js";
 import { NAMED_REGION_FAMILIES, normalizeNamedRegionParameters } from "./named-region-family.js";
+import { COUNTS_AS_MOVED_FAMILIES, normalizeCountsAsMovedParameters } from "./families/moves.js";
+import { MOVE_PASSTHROUGH_USED_FAMILIES, normalizeMovePassthroughUsedParameters } from "./families/moves.js";
 import { normalizePredicateParameters, PREDICATE_FAMILIES } from "./predicate-families.js";
 import { normalizePredicateParameters2, PREDICATE_FAMILIES_2 } from "./predicate-families-2.js";
+import { normalizeSetUpRestrictionParameters, SET_UP_RESTRICTION_FAMILIES } from "./families/set-up.js";
+import { normalizeOptionalCostParameters, OPTIONAL_COST_FAMILIES } from "./optional-cost-families.js";
 import { normalizePredicateSubjectParameters, PREDICATE_SUBJECT_FAMILIES } from "./predicate-subject-families.js";
 import { normalizeTestParameters, TEST_FAMILIES } from "./test-family.js";
+import { normalizeTargetedParameters, TARGETED_FAMILIES } from "./targeted-family.js";
 import { normalizeGapContainerParameters, GAP_CONTAINER_FAMILIES } from "./gap-container-families.js";
 import { MISSION_PREDICATE_FAMILIES, normalizeMissionPredicateParameters } from "./mission-predicate-families.js";
+import { ENGAGEMENT_RELATION_FAMILIES } from "./families/regions.js";
+import { CONDITION_EXCLUSION_FAMILIES } from "./families/leaf-structure.js";
+import { OTHERWISE_FAMILIES, normalizeOtherwiseParameters } from "./families/leaf-structure.js";
+import { normalizeRollProhibitionParameters, ROLL_PROHIBITION_FAMILIES } from "./families/rolls.js";
+import { normalizeWeaponHasAbilityParameters, WEAPON_HAS_ABILITY_FAMILIES } from "./weapon-has-ability-family.js";
+import { ARMY_INCLUDES_FAMILIES, normalizeArmyIncludesParameters } from "./army-includes-family.js";
+import { HISTORY_WINDOW_FAMILIES, normalizeHistoryWindowParameters } from "./history-window-family.js";
+import { AURA_RANGE_V3, normalizeUnitFilterParameters, SELECT_UNIT_V2, UNIT_FILTER_FAMILIES } from "./unit-filter-family.js";
+import { COUNT_FAMILIES, normalizeCountParameters } from "./count-families.js";
+import { CHARACTERISTIC_AMOUNT_FAMILIES, normalizeCharacteristicAmountParameters } from "./characteristic-amount-families.js";
+import { DISCONTIGUOUS_LEAF_FAMILIES, normalizeDiscontiguousLeafParameters } from "./families/leaf-structure.js";
+import { EQUIPPED_WEAPON_COUNT_FAMILIES, normalizeEquippedWeaponParameters } from "./equipped-weapon-families.js";
+import { NAMED_WARGEAR_LOADOUT_FAMILIES, normalizeNamedWargearParameters } from "./families/wargear.js";
+import { normalizeWithAntecedent, withAntecedentVersions } from "./antecedent-families.js";
+import { NAMED_ABILITY_FAMILIES, normalizeNamedAbilityParameters } from "./named-ability-families.js";
+import { familyExtension, withFamilyExtensions } from "./families/index.js";
+import { EMBARKED_PERMISSION_FAMILIES, normalizeEmbarkedPermissionParameters } from "./embarked-permission-families.js";
+import { GRANTED_FAMILIES, normalizeGrantedParameters } from "./families/abilities.js";
 
 export const SEMANTIC_ROLES = ["EFFECT", "DURATION", "EVENT", "CONDITION"] as const;
 export type SemanticRole = (typeof SEMANTIC_ROLES)[number];
@@ -67,7 +92,7 @@ export { PHASE_EVENT_KINDS } from "./core-families.js";
 export type * from "./stamp-types.js";
 
 /** Versioned, human-reviewed semantic families available to local tooling. */
-export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
+export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = withFamilyExtensions(withAntecedentVersions([
   ...CORE_FAMILIES,
   ...BUFF_FAMILIES,
   ...TARGETING_FAMILIES,
@@ -78,16 +103,41 @@ export const REVIEWED_FAMILY_REGISTRY: readonly SemanticFamilyDefinition[] = [
   ...ECONOMY_FAMILIES,
   ...UNIT_STATE_EFFECT_FAMILIES,
   ...WEAPON_BUFF_FAMILIES,
+  ...WEAPON_RANGE_FAMILIES,
   ...ABILITY_MODIFIER_FAMILIES,
   ...CONTAINER_FAMILIES,
   ...NAMED_REGION_FAMILIES,
+  ...COUNTS_AS_MOVED_FAMILIES,
   ...PREDICATE_FAMILIES,
   ...PREDICATE_FAMILIES_2,
+  ...SET_UP_RESTRICTION_FAMILIES,
+  ...OPTIONAL_COST_FAMILIES,
   ...PREDICATE_SUBJECT_FAMILIES,
   ...TEST_FAMILIES,
+  ...TARGETED_FAMILIES,
   ...GAP_CONTAINER_FAMILIES,
+  ...PSYCHIC_FAMILIES,
   ...MISSION_PREDICATE_FAMILIES,
-] as const;
+  ...ENGAGEMENT_RELATION_FAMILIES,
+  ...CONDITION_EXCLUSION_FAMILIES,
+  ...OTHERWISE_FAMILIES,
+  ...ROLL_PROHIBITION_FAMILIES,
+  ...WEAPON_HAS_ABILITY_FAMILIES,
+  ...ARMY_INCLUDES_FAMILIES,
+  ...HISTORY_WINDOW_FAMILIES,
+  ...UNIT_FILTER_FAMILIES,
+  ...NAMED_ABILITY_FAMILIES,
+  ...GRANTED_FAMILIES,
+  ...COUNT_FAMILIES,
+  ...EQUIPPED_WEAPON_COUNT_FAMILIES,
+  ...CHARACTERISTIC_AMOUNT_FAMILIES,
+  ...NAMED_WARGEAR_LOADOUT_FAMILIES,
+  ...DISCONTIGUOUS_LEAF_FAMILIES,
+  AURA_RANGE_V3,
+  SELECT_UNIT_V2,
+  ...EMBARKED_PERMISSION_FAMILIES,
+  ...MOVE_PASSTHROUGH_USED_FAMILIES,
+]));
 
 /** The version new fingerprints and model requests use for a family. */
 export function currentFamilyVersion(id: string): number {
@@ -125,9 +175,16 @@ export function normalizeFingerprintParameters(
   parameters: FamilyParameters,
   version = 1,
 ): Record<string, unknown> {
-  reviewedFamily(family, version);
+  const definition = reviewedFamily(family, version);
   const input = requiredObject(parameters);
+  // A family extension checks its own additions and hands the rest to the previous version.
+  const extension = familyExtension(family, version);
+  if (extension) return extension.normalize(input, (rest) => normalizeFingerprintParameters(family, rest, version - 1));
+  return normalizeWithAntecedent(family, input, version, (checked, at) => familyParameters(family, checked, at), definition.parameterSchema);
+}
 
+/** Each family's own parameter rules, at one version. */
+function familyParameters(family: string, input: Record<string, unknown>, version: number): Record<string, unknown> {
   const normalized = normalizeCoreParameters(family, input, version)
     ?? normalizeBuffParameters(family, input, version)
     ?? normalizeTargetingParameters(family, input, version)
@@ -136,20 +193,47 @@ export function normalizeFingerprintParameters(
     ?? normalizeDiceParameters(family, input, version)
     ?? normalizeMovementParameters(family, input, version)
     ?? normalizeEconomyParameters(family, input)
+    ?? normalizePsychicParameters(family, input)
     ?? normalizeUnitStateParameters(family, input)
     ?? normalizeWeaponBuffParameters(family, input, version)
+    ?? normalizeWeaponRangeParameters(family, input)
     ?? normalizeAbilityModifierParameters(family, input, version)
-    ?? normalizeContainerParameters(family, input)
+    ?? normalizeContainerParameters(family, input, version)
+    ?? normalizeUnitFilterParameters(family, input)
     ?? normalizeNamedRegionParameters(family, input)
     ?? normalizePredicateParameters(family, input)
     ?? normalizePredicateParameters2(family, input)
+    ?? normalizeSetUpRestrictionParameters(family, input)
+    ?? normalizeOptionalCostParameters(family, input)
     ?? normalizePredicateSubjectParameters(family, input, version)
     ?? normalizeTestParameters(family, input, version)
+    ?? normalizeTargetedParameters(family, input)
     ?? normalizeGapContainerParameters(family, input, version)
-    ?? normalizeMissionPredicateParameters(family, input);
+    ?? normalizeMissionPredicateParameters(family, input)
+    ?? normalizeNamedAbilityParameters(family, input)
+    ?? normalizeGrantedParameters(family, input)
+    ?? normalizeCountParameters(family, input)
+    ?? normalizeCharacteristicAmountParameters(family, input)
+    ?? normalizeDiscontiguousLeafParameters(family, input)
+    ?? normalizeEquippedWeaponParameters(family, input)
+    ?? normalizeNamedWargearParameters(family, input)
+    ?? normalizeArmyIncludesParameters(family, input)
+    ?? normalizeHistoryWindowParameters(family, input)
+    ?? normalizeEmbarkedPermissionParameters(family, input)
+    ?? normalizeCountsAsMovedParameters(family, input)
+    ?? normalizeOtherwiseParameters(family, input)
+    ?? normalizeRollProhibitionParameters(family, input)
+    ?? normalizeWeaponHasAbilityParameters(family, input)
+    ?? normalizeMovePassthroughUsedParameters(family, input);
   if (normalized) return normalized;
   throw new RangeError(`Unknown reviewed semantic family ${family}@${version}.`);
 }
+
+/**
+ * Workbench fragment of a span over the record's name column (not source_text). Its offsets are name
+ * bytes. Body readers exclude it with `source_spans.fragment <> 'NAME'`, and ordered listings put it last.
+ */
+export const NAME_FRAGMENT = "NAME";
 
 /** Decode an exact UTF-8 byte span and reject boundaries that split a code point. */
 export function exactSpan(source: string, start: number, end: number): string {
@@ -202,10 +286,33 @@ export function seedReviewedFamilies(db: DatabaseSync): void {
   }
 }
 
+/**
+ * Source wording as a keyword comparison sees it: lower case, without the bold markers the printed
+ * text puts around part of a keyword ("ANTI-**NON-**VEHICLE"), with the typographic hyphens the
+ * printed text uses ("ANTI‑MONSTER", U+2010–U+2012, en dash, minus) and no-break spaces folded to
+ * their plain forms.
+ */
+export function foldKeywordText(text: string): string {
+  return text.replace(/\*/gu, "").replace(/[\u2010-\u2013\u2212]/gu, "-").replace(/[\u00a0\u202f]/gu, " ").toLowerCase();
+}
+
 /** Require the granted ability name in the exact source-backed effect span. */
+/**
+ * Whether a printed Blast span gives a rating other than 1. Blast takes no rating in the keyword:
+ * plain [Blast] and [Blast 1] are the keyword Blast, and any other rating has no authored form yet.
+ */
+export function blastRatingRefused(text: string): boolean {
+  return [...foldKeywordText(text).matchAll(/blast\s*(\d+)/gu)].some((match) => match[1] !== "1");
+}
+
 export function validateFamilySource(family: string, parameters: Record<string, unknown>, exactText: string): void {
-  if (family === "weapon-ability-grant" && !exactText.toLowerCase().includes(String(parameters.keyword).toLowerCase())) {
+  const keywordFamily = family === "weapon-ability-grant" || family === "weapon-ability-keyword" || family === "weapon-ability-removal";
+  if (keywordFamily && parameters.keyword !== undefined
+    && !foldKeywordText(exactText).includes(foldKeywordText(String(parameters.keyword)))) {
     throw new TypeError("The granted weapon ability must occur in the exact source span.");
+  }
+  if (keywordFamily && parameters.keyword === "Blast" && blastRatingRefused(exactText)) {
+    throw new TypeError("Blast with a rating other than 1 has no authored keyword; it is a gap.");
   }
 }
 

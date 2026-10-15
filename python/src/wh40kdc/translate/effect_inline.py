@@ -11,6 +11,7 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in
+from wh40kdc.translate.condition_refs import _or_list
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_quantity import (
@@ -139,7 +140,16 @@ def usage_clause(u: Any) -> str:
 
 
 def _scaling_clause(s: dict[str, Any]) -> str:
-    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\"")."""
+    """A ``scaling`` block → trailing clause ("for every 5 enemy models within 6\\""), with a
+    timing note when on apply."""
+    clause = _scaling_wording(s)
+    if s.get("evaluated") == "on-apply":
+        return f"{clause} (counted when the rule applies)"
+    return clause
+
+
+def _scaling_wording(s: dict[str, Any]) -> str:
+    """The scaling clause without its timing note."""
     cap = f" (to a maximum of {jstr(s['max_value'])})" if s.get("max_value") is not None else ""
     if s.get("of") == "battle-round":
         return f"multiplied by the battle round number{cap}"
@@ -166,7 +176,12 @@ def _aura_eligible_subject(who: str, eligible: Any) -> str:
         return who
     required = _keywords_of(eligible, "required_keywords")
     excluded = _keywords_of(eligible, "excluded_keywords")
-    base = f"{who[:-4]}{' '.join(required)} unit" if required else who
+    # States, then keywords all of which it has, then keywords one of which it has.
+    states = _keywords_of(eligible, "states")
+    any_keywords = _keywords_of(eligible, "any_keywords")
+    any_of = [" or ".join(any_keywords)] if any_keywords else []
+    words = [*states, *required, *any_of]
+    base = f"{who[:-4]}{' '.join(words)} unit" if words else who
     exclusion = f" (excluding {' '.join(excluded)} units)" if excluded else ""
     return f"{base}{exclusion}"
 
@@ -219,7 +234,8 @@ def _aura_clause(e: Effect, m: dict[str, Any], ctx: Ctx) -> str:
         if m.get("effect") is not None
         else "that unit is affected"
     )
-    return f"while {recipient} is within {range_text}{capped} of {emitter}, {effect_text}"
+    wholly = "wholly " if m.get("wholly") is True else ""
+    return f"while {recipient} is {wholly}within {range_text}{capped} of {emitter}, {effect_text}"
 
 
 def describe_effect_inline(e: Effect, ctx: Ctx | None = None) -> str:
@@ -251,13 +267,22 @@ def dice_table_result_label(results: Any) -> str:
     return ", ".join(jstr(f) for f in faces)
 
 
+def dice_table_head(e: Effect) -> str:
+    """ "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)"."""
+    count = e.get("count")
+    if not isinstance(count, (int, float)) or isinstance(count, bool) or count < 2:
+        return f"roll one {dice_case(e.get('dice'))}"
+    distinct = " (re-rolling any repeated result)" if e.get("distinct") is True else ""
+    return f"roll {jstr(count)} {dice_case(e.get('dice'))} and resolve each one{distinct}"
+
+
 def _dice_table_inline(e: Effect, ctx: Ctx) -> str:
     outcomes = [
         f"on {dice_table_result_label(_obj(o).get('results'))}, "
         f"{inline(_obj(o).get('effect'), ctx)}"
         for o in (e.get("outcomes") or [])
     ]
-    return f"roll one {dice_case(e.get('dice'))}: {'; '.join(outcomes)}"
+    return f"{dice_table_head(e)}: {'; '.join(outcomes)}"
 
 
 def roll_with_rider(steps: list[Any], ctx: Ctx) -> str | None:
@@ -397,11 +422,15 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             f"{jstr(_obj(o).get('name'))} ({inline(_obj(o).get('effect'), ctx)})"
             for o in (e.get("options") or [])
         )
-        return f"{stance_pick(e)}: {opts}"
+        return f"{stance_pick(e)}{stance_additive(e)}: {opts}"
     if t == "stance-selection-capacity":
         n = num(m.get("additional_selections"))
         n = 1.0 if n != n or n == 0 else n
         times = "one additional time" if n == 1 else f"{num_str(n)} additional times"
+        # A shared allowance narrowed to some options: spent on any one of them, not one of each.
+        if m.get("allocation") != "fixed-option" and isinstance(m.get("option_ids"), list):
+            names = _or_list([title_case(jstr(i)) for i in m["option_ids"]])
+            return f"you can select {names} {times} per battle, shared between them"
         if m.get("allocation") == "fixed-option" and m.get("option_id") is not None:
             subject = title_case(jstr(m["option_id"]))
         else:
@@ -437,6 +466,11 @@ def pool_text(e: Effect) -> str:
 
 
 _NUMBER_WORDS = ["zero", "one", "two", "three", "four"]
+
+
+def stance_additive(e: Effect) -> str:
+    """ " (in addition to any already active)" when a stance pick joins the active options."""
+    return " (in addition to any already active)" if e.get("additive") is True else ""
 
 
 def stance_pick(e: Effect) -> str:
@@ -481,7 +515,12 @@ def part_head(e: Effect) -> str:
         if e.get("kind") == "psychic" and e.get("level") is not None
         else ""
     )
-    if e.get("name"):
+    # A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+    passive_name = e.get("name") and not moment and not e.get("optional")
+    label = f"{jstr(e['name'])}{level}" if passive_name else ""
+    if label:
+        named = ""
+    elif e.get("name"):
         named = f"{'you can use ' if e.get('optional') else 'use '}{jstr(e['name'])}{level}"
     else:
         named = "you can" if e.get("optional") else ""
@@ -490,7 +529,7 @@ def part_head(e: Effect) -> str:
     )
     usage = usage_clause(e["usage"]) if e.get("usage") else ""
     _, trail = duration_clauses(e.get("duration"))
-    return ", ".join(p for p in (moment, usage, named, cost, trail) if p)
+    return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
 
 
 def part_inline(e: Effect, ctx: Ctx) -> str:

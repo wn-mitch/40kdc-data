@@ -2454,6 +2454,381 @@
         "tools/src/mfm/project-loadout.ts#main"
       ],
       "reason": "The unit weapon vocabulary is derived from the supported structural loadout graph."
+    },
+    "/detachment_pricing": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition.points",
+        "data.unit_composition_required_detachment.detachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Separate detachment-gated composition pricing from native tiers."
+        }
+      ],
+      "filters": [
+        "Replace the authored list; clear it when the dump derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "A composition gated by unit_composition_required_detachment prices the unit only while that detachment is selected."
+    },
+    "/detachment_pricing/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition.points",
+        "data.unit_composition_required_detachment.detachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Build one tier from one detachment-gated composition."
+        }
+      ],
+      "filters": [
+        "De-duplicate on size range and cost per detachment."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "A composition gated by unit_composition_required_detachment prices the unit only while that detachment is selected."
+    },
+    "/detachment_pricing/*/detachment_id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition_required_detachment.detachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Slug the gating detachment's name to its repo id."
+        }
+      ],
+      "filters": [
+        "Skip a detachment name that does not slug."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "The tier applies while this detachment is selected."
+    },
+    "/detachment_pricing/*/models": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition_miniature.min"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Sum the composition's miniature minimums."
+        }
+      ],
+      "filters": [
+        "Skip a composition with no model rows."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "The tier's model-count floor."
+    },
+    "/detachment_pricing/*/models_max": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition_miniature.max"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Sum the composition's miniature maximums."
+        }
+      ],
+      "filters": [
+        "Omit when equal to models."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "The tier's model-count ceiling."
+    },
+    "/detachment_pricing/*/cost": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.unit_composition.points"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Copy the composition's points."
+        }
+      ],
+      "filters": [
+        "Skip a composition without points."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "The tier's cost."
+    },
+    "/detachment_pricing/*/unit_count_min": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_points_step.stepAt"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "datasheet_points_step.datasheetId",
+          "direction": "children",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Expand the datasheet's ordinal step into bands."
+        }
+      ],
+      "filters": [
+        "Omit when the datasheet has no step."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "Per-army-ordinal band floor."
+    },
+    "/detachment_pricing/*/unit_count_max": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_points_step.stepAt"
+      ],
+      "joins": [
+        {
+          "relation": "unit_composition.datasheetId",
+          "direction": "children",
+          "purpose": "ownership"
+        },
+        {
+          "relation": "unit_composition_miniature.unitCompositionId",
+          "direction": "children",
+          "purpose": "general"
+        },
+        {
+          "relation": "unit_composition_required_detachment.unitCompositionId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "unit_composition_required_detachment.detachmentId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "datasheet_points_step.datasheetId",
+          "direction": "children",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/points.ts#deriveDatasheet",
+          "operation": "Expand the datasheet's ordinal step into bands."
+        }
+      ],
+      "filters": [
+        "Omit when the datasheet has no step."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/points.ts#runPoints"
+      ],
+      "reason": "Per-army-ordinal band ceiling."
     }
   },
   "unmapped_mfm_fields": [

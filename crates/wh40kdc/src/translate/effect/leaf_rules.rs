@@ -4,7 +4,7 @@
 use serde_json::{Map, Value};
 
 use super::words::*;
-use crate::translate::condition::{nn, obj, objective_phrase, P};
+use crate::translate::condition::{article, nn, obj, objective_phrase, or_list, P};
 use crate::translate::dekebab;
 use crate::translate::expiry::expiry_trail;
 
@@ -26,7 +26,12 @@ pub(super) fn marker(m: &P) -> String {
         let dist = nn(m, "distance")
             .map(|d| format!(" up to {}\"", jv(d)))
             .unwrap_or_default();
-        return format!("move the {label} marker{dist}{consume}");
+        let unmoved = if is_true(m, "not_moved_this_turn") {
+            " that has not been moved this turn"
+        } else {
+            ""
+        };
+        return format!("move the {label} marker{unmoved}{dist}{consume}");
     }
     let place = nn(m, "placement")
         .map(|p| format!(" {}", dekebab(&jv(p))))
@@ -239,13 +244,47 @@ pub(super) fn designate(m: &P, subj: &str, ctx: &Ctx) -> String {
     }
 }
 
-pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
+/// A list-building group: its unit-filter, its datasheets ("Alpha Squad or Beta Squad units"), or both.
+fn group_what(m: &P, with: Option<String>) -> Option<String> {
+    let sheets = m.get("datasheets").and_then(Value::as_array).map(|a| {
+        or_list(
+            &a.iter()
+                .map(|d| title_case(&jstr(Some(d))))
+                .collect::<Vec<_>>(),
+        )
+    });
+    match (sheets, with) {
+        (None, w) => w,
+        (Some(s), Some(w)) => Some(format!("{w} ({s} only)")),
+        (Some(s), None) => Some(format!("{s} units")),
+    }
+}
+
+/// "CHARACTER unit", "ADEPTUS CUSTODES model": the singular of a plural group.
+fn singular(group: &str) -> String {
+    replace_word_first(
+        &replace_word_first(group, " units", " unit", false),
+        " models",
+        " model",
+        false,
+    )
+}
+
+pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx, target: Option<&Value>) -> String {
     let with = nn(m, "with").map(|w| strip_all(&effect_subject(Some(w), ctx)));
+    let group = group_what(m, with.clone());
     match sv(m, "rule") {
         Some("warlord-required") => format!("{subj} must be your Warlord"),
         Some("warlord-forbidden") => format!("{subj} cannot be your Warlord"),
-        Some("unique") => format!("your army can include only one of {subj}"),
+        Some("unique") => match group {
+            Some(g) => format!("your army can include only one {}", singular(&g)),
+            None => format!("your army can include only one of {subj}"),
+        },
         Some("enhancement-forbidden") => format!("{subj} cannot be given Enhancements"),
+        Some("enhancement-source") => {
+            format!("{subj} can only be given Enhancements from this Detachment")
+        }
+        Some("limit-exemption") => limit_exemption(m, subj, target),
         Some("enhancement-slot") => {
             let each = with
                 .map(|w| replace_word_first(&w, " units", " unit", false))
@@ -278,9 +317,22 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
             if is_true(m, "mandatory") {
                 return format!("{subj} must be attached to a Leader, or it counts as destroyed");
             }
-            if let Some(a) = nn(m, "attach_as") {
+            if let Some(c) = nn(m, "can_lead") {
                 return format!(
-                    "a Leader that can be attached to {} can also be attached to {subj}",
+                    "{subj} can also be attached to {}",
+                    strip_all(&effect_subject(Some(c), ctx))
+                );
+            }
+            if let Some(a) = nn(m, "attach_as") {
+                let leader = match &with {
+                    Some(w) => {
+                        let one = singular(w);
+                        format!("{} {one}", article(&one))
+                    }
+                    None => "a Leader".to_string(),
+                };
+                return format!(
+                    "{leader} that can be attached to {} can also be attached to {subj}",
                     strip_all(&effect_subject(Some(a), ctx))
                 );
             }
@@ -291,28 +343,72 @@ pub(super) fn army_rule(m: &P, subj: &str, ctx: &Ctx) -> String {
                 "at the start of the Declare Battle Formations step, {subj} can join one friendly unit{led}, becoming part of that Bodyguard unit"
             )
         }
-        _ => composition(m, with, ctx),
+        _ => composition(m, group, ctx),
     }
+}
+
+/// Limits the rule's units (or this Detachment's Enhancements) are left out of.
+fn limit_exemption(m: &P, subj: &str, target: Option<&Value>) -> String {
+    let items = m
+        .get("exempt_from")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    items
+        .iter()
+        .map(|item| match item.as_str() {
+            Some("enhancement-limit") => {
+                let whose = match target {
+                    None | Some(Value::Null) => "Enhancements from this Detachment".to_string(),
+                    Some(Value::String(t)) if t == "this-unit" => {
+                        "Enhancements from this Detachment".to_string()
+                    }
+                    _ => format!("Enhancements on {subj}"),
+                };
+                format!("{whose} do not count toward your army's Enhancement limit")
+            }
+            other => {
+                let limit = if other == Some("strategic-reserves-points") {
+                    "the points limit for Strategic Reserves"
+                } else {
+                    "the Retinue limit"
+                };
+                format!("{subj} {} not count toward {limit}", v(subj, "does"))
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("; ")
 }
 
 /// A composition limit: at most N units / models / points of X, per matching unit, outside
 /// the Retinue limit.
 fn composition(m: &P, with: Option<String>, ctx: &Ctx) -> String {
-    let what = with.unwrap_or_else(|| "such units".to_string());
+    // An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+    let allied = nn(m, "faction").map(|f| title_case(&jv(f)));
+    let what = match (with, allied) {
+        (Some(w), Some(a)) => format!("{w} from the {a} faction"),
+        (Some(w), None) => w,
+        (None, Some(a)) => format!("{a} units"),
+        (None, None) => "such units".to_string(),
+    };
     let exempt = if arr(m, "exempt_from").is_some() {
         "; they do not count toward the Retinue limit"
     } else {
         ""
     };
+    // No limit is a permission; a limit of 0 forbids.
     let Some(max_v) = nn(m, "max") else {
-        return format!("your army cannot include {what}{exempt}");
+        return format!("your army can include {what}{exempt}");
     };
+    let literal = is_literal(Some(max_v));
+    if literal && num(Some(max_v)) == 0.0 {
+        return format!("your army cannot include {what}{exempt}");
+    }
     let measure = match sv(m, "measure") {
         Some("points") => "points of ",
         Some("models") => "models from ",
         _ => "",
     };
-    let literal = is_literal(Some(max_v));
     let max = if literal {
         jv(max_v)
     } else {

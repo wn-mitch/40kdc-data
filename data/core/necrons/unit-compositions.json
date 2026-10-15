@@ -2005,7 +2005,8 @@
         "default_weapon_ids": [
           "seismic-assault",
           "crackling-tendrils"
-        ]
+        ],
+        "excluded_from_enhancements": true
       }
     ],
     "game_version": {

@@ -35,6 +35,15 @@ func durationClauses(duration any) (string, string) {
 
 // scalingClause renders a scaling block as a trailing clause ("for every 5 enemy models within 6\"").
 func scalingClause(s map[string]any) string {
+	clause := scalingWording(s)
+	if s["evaluated"] == "on-apply" {
+		return clause + " (counted when the rule applies)"
+	}
+	return clause
+}
+
+// scalingWording is the scaling clause without the timing note.
+func scalingWording(s map[string]any) string {
 	maxTail := ""
 	if s["max_value"] != nil {
 		maxTail = " (to a maximum of " + ejstr(s["max_value"]) + ")"
@@ -67,9 +76,14 @@ func auraEligibleSubject(who string, eligible any) string {
 	}
 	required := jstrList(e["required_keywords"])
 	excluded := jstrList(e["excluded_keywords"])
+	// States, then keywords all of which it has, then keywords one of which it has.
+	words := append(append([]string{}, jstrList(e["states"])...), required...)
+	if anyOf := jstrList(e["any_keywords"]); len(anyOf) > 0 {
+		words = append(words, strings.Join(anyOf, " or "))
+	}
 	base := who
-	if len(required) > 0 {
-		base = who[:len(who)-4] + strings.Join(required, " ") + " unit"
+	if len(words) > 0 {
+		base = who[:len(who)-4] + strings.Join(words, " ") + " unit"
 	}
 	if len(excluded) > 0 {
 		base += " (excluding " + strings.Join(excluded, " ") + " units)"
@@ -142,7 +156,11 @@ func auraClause(e, m map[string]any, ctx effCtx) string {
 	if m["range_cap"] != nil {
 		capped = " (to a maximum of " + ejstr(m["range_cap"]) + "\", extensions included)"
 	}
-	return "while " + recipient + " is within " + rangeText + capped + " of " + emitter + ", " + effectText
+	wholly := ""
+	if m["wholly"] == true {
+		wholly = "wholly "
+	}
+	return "while " + recipient + " is " + wholly + "within " + rangeText + capped + " of " + emitter + ", " + effectText
 }
 
 // describeEffectInline renders a single-clause translation (lowercase-initial,
@@ -194,13 +212,26 @@ func diceTableResultLabel(results any) string {
 	return strings.Join(parts, ", ")
 }
 
+// diceTableHead renders "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)".
+func diceTableHead(e map[string]any) string {
+	count, ok := e["count"].(float64)
+	if !ok || count < 2 {
+		return "roll one " + diceCase(e["dice"])
+	}
+	s := "roll " + jsNumStr(count) + " " + diceCase(e["dice"]) + " and resolve each one"
+	if e["distinct"] == true {
+		s += " (re-rolling any repeated result)"
+	}
+	return s
+}
+
 func diceTableInline(e map[string]any, ctx effCtx) string {
 	var outcomes []string
 	for _, o := range getList(e, "outcomes") {
 		om := mapOr(o)
 		outcomes = append(outcomes, "on "+diceTableResultLabel(om["results"])+", "+describeEffectInline(mapOr(om["effect"]), ctx))
 	}
-	return "roll one " + diceCase(e["dice"]) + ": " + strings.Join(outcomes, "; ")
+	return diceTableHead(e) + ": " + strings.Join(outcomes, "; ")
 }
 
 // rollWithRider renders a [dice-gated rider, unconditional primary] sequence.
@@ -338,7 +369,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 			om := mapOr(o)
 			opts = append(opts, ejstr(om["name"])+" ("+describeEffectInline(mapOr(om["effect"]), ctx)+")")
 		}
-		return stancePick(e) + ": " + strings.Join(opts, " / ")
+		return stancePick(e) + stanceAdditive(e) + ": " + strings.Join(opts, " / ")
 	case "stance-selection-capacity":
 		n := jsNumber(m["additional_selections"])
 		if n != n || n == 0 {
@@ -347,6 +378,14 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		times := numStr(n) + " additional times"
 		if n == 1 {
 			times = "one additional time"
+		}
+		// A shared allowance narrowed to some options: spent on any one of them, not one of each.
+		if ids, ok := m["option_ids"].([]any); ok && m["allocation"] != "fixed-option" {
+			names := make([]string, 0, len(ids))
+			for _, id := range ids {
+				names = append(names, titleCase(ejstr(id)))
+			}
+			return "you can select " + orList(names) + " " + times + " per battle, shared between them"
 		}
 		subject := "one option of " + titleCase(ejstr(m["stance_id"]))
 		if m["allocation"] == "fixed-option" && m["option_id"] != nil {
@@ -386,6 +425,14 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 var smallNumberWords = []string{"zero", "one", "two", "three", "four"}
 
 // stancePick renders how many menu options are picked ("select one", "select up to two").
+// stanceAdditive is " (in addition to any already active)" when a stance pick joins the active options.
+func stanceAdditive(e map[string]any) string {
+	if e["additive"] == true {
+		return " (in addition to any already active)"
+	}
+	return ""
+}
+
 func stancePick(e map[string]any) string {
 	min, max := 1.0, 1.0
 	if v, ok := e["min_choices"].(float64); ok {
@@ -504,6 +551,12 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			return indent + "-> " + capitalize(partHead(e)) + ":\n" + describeEffect(inner, depth+1, ctx)
 		}
 		return indent + "-> " + capitalize(partInline(e, ctx)) + "."
+	case "ability-grant":
+		// A grant printed with its ability: the holder and name, then the ability one level deeper.
+		if isDefinedGrant(e) {
+			return indent + arrow + capitalize(definedGrantHead(e, ctx)) + ":\n" + describeEffect(definitionPart(e), depth+1, ctx)
+		}
+		return indent + arrow + capitalize(describeEffectInline(e, ctx)) + "."
 	case "choice":
 		lines := []string{indent + capitalize(choicePrompt(e)) + ":"}
 		for _, o := range getList(e, "options") {
@@ -531,7 +584,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		}
 		return selectObjectiveBlock(e, indent, arrow, nested, hasNested, func(x any) string { return describeEffectInline(mapOr(x), ctx) })
 	case "dice-table":
-		lines := []string{indent + arrow + "Roll one " + diceCase(e["dice"]) + ":"}
+		lines := []string{indent + arrow + capitalize(diceTableHead(e)) + ":"}
 		for _, o := range getList(e, "outcomes") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - On "+diceTableResultLabel(om["results"])+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")
@@ -585,7 +638,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if e["mode"] == "consumable" {
 			consum = " (each may be chosen once per battle)"
 		}
-		lines := []string{indent + arrow + when + ", " + stancePick(e) + consum + ":"}
+		lines := []string{indent + arrow + when + ", " + stancePick(e) + consum + stanceAdditive(e) + ":"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
 			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")

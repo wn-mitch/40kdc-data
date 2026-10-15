@@ -368,6 +368,9 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "ability": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "all_options": {
+///      "const": true
+///    },
 ///    "exclusive": {
 ///      "const": true
 ///    },
@@ -377,6 +380,15 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "option": {
 ///      "type": "string",
 ///      "minLength": 1
+///    },
+///    "options": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
 ///    },
 ///    "override": {
 ///      "type": "object",
@@ -401,6 +413,19 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///            "roll",
 ///            "player"
 ///          ]
+///        },
+///        "count": {
+///          "type": "integer",
+///          "minimum": 2.0
+///        },
+///        "from": {
+///          "type": "array",
+///          "items": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -415,11 +440,15 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 pub struct AbilityActivateEffectModifier {
     pub ability: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub all_options: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exclusive: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_consumed: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option: ::std::option::Option<AbilityActivateEffectModifierOption>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub options: ::std::option::Option<Vec<AbilityActivateEffectModifierOptionsItem>>,
     #[serde(
         rename = "override",
         default,
@@ -504,6 +533,81 @@ impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierOption {
             })
     }
 }
+///`AbilityActivateEffectModifierOptionsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityActivateEffectModifierOptionsItem(::std::string::String);
+impl ::std::ops::Deref for AbilityActivateEffectModifierOptionsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityActivateEffectModifierOptionsItem>
+for ::std::string::String {
+    fn from(value: AbilityActivateEffectModifierOptionsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityActivateEffectModifierOptionsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AbilityActivateEffectModifierOptionsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierOptionsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`AbilityActivateEffectModifierOverride`
 ///
 /// <details><summary>JSON schema</summary>
@@ -544,6 +648,19 @@ pub struct AbilityActivateEffectModifierOverride {
 ///        "roll",
 ///        "player"
 ///      ]
+///    },
+///    "count": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    },
+///    "from": {
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -554,6 +671,10 @@ pub struct AbilityActivateEffectModifierOverride {
 #[serde(deny_unknown_fields)]
 pub struct AbilityActivateEffectModifierSelect {
     pub by: AbilityActivateEffectModifierSelectBy,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub from: ::std::option::Option<Vec<AbilityActivateEffectModifierSelectFromItem>>,
 }
 ///`AbilityActivateEffectModifierSelectBy`
 ///
@@ -630,6 +751,81 @@ for AbilityActivateEffectModifierSelectBy {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`AbilityActivateEffectModifierSelectFromItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityActivateEffectModifierSelectFromItem(::std::string::String);
+impl ::std::ops::Deref for AbilityActivateEffectModifierSelectFromItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityActivateEffectModifierSelectFromItem>
+for ::std::string::String {
+    fn from(value: AbilityActivateEffectModifierSelectFromItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityActivateEffectModifierSelectFromItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AbilityActivateEffectModifierSelectFromItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityActivateEffectModifierSelectFromItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`AbilityAppliesTo`
@@ -761,12 +957,13 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityBehavior {
 /// ```json
 ///{
 ///  "type": "object",
-///  "required": [
-///    "ability"
-///  ],
 ///  "properties": {
 ///    "ability": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "definition": {
+///      "description": "The granted ability itself, when the rules print it after the grant (\"X units have the following ability: Name: …\") instead of naming a separate ability record. It is the holder's own ability: inside it, this-unit, this-model and ability-unit name the unit (model) it is granted to, each unit `target` matches, and it works only while that holder is on the battlefield (not while it is in Reserves, nor once it is destroyed). An aura in it is centred on the holder, and a usage in it counts per holder. A model-level `target` gives each unit with one or more such models one copy, not one per model. `ability` is the printed name's id; it is absent for an unnamed body (\"have the following:\").",
+///      "$ref": "#/$defs/ability-part"
 ///    },
 ///    "rules_bundle": {
 ///      "const": true
@@ -789,11 +986,25 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityBehavior {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AbilityGrantEffectModifier {
-    pub ability: EntityId,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ability: ::std::option::Option<EntityId>,
+    ///The granted ability itself, when the rules print it after the grant ("X units have the following ability: Name: …") instead of naming a separate ability record. It is the holder's own ability: inside it, this-unit, this-model and ability-unit name the unit (model) it is granted to, each unit `target` matches, and it works only while that holder is on the battlefield (not while it is in Reserves, nor once it is destroyed). An aura in it is centred on the holder, and a usage in it counts per holder. A model-level `target` gives each unit with one or more such models one copy, not one per model. `ability` is the printed name's id; it is absent for an unnamed body ("have the following:").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub definition: ::std::option::Option<AbilityPart>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rules_bundle: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<AbilityGrantEffectModifierValue>,
+}
+impl ::std::default::Default for AbilityGrantEffectModifier {
+    fn default() -> Self {
+        Self {
+            ability: Default::default(),
+            definition: Default::default(),
+            rules_bundle: Default::default(),
+            value: Default::default(),
+        }
+    }
 }
 ///`AbilityGrantEffectModifierValue`
 ///
@@ -2952,6 +3163,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///      "description": "The new unit can be set up within Engagement Range of this unit only.",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "at_starting_strength": {
+///      "description": "The new unit has every model of its Starting Strength, each with all of its wounds remaining.",
+///      "const": true
+///    },
 ///    "away_from": {
 ///      "type": "array",
 ///      "items": {
@@ -2985,6 +3200,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    },
 ///    "datasheet": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "excluded_keywords": {
+///      "description": "copy_of: the copy leaves out models with any of these keywords (\"excluding CHARACTER models\").",
+///      "$ref": "#/$defs/keyword-list"
 ///    },
 ///    "in_region": {
 ///      "$ref": "#/$defs/placement-region"
@@ -3031,6 +3250,7 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -3048,6 +3268,7 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -3061,6 +3282,10 @@ impl<'de> ::serde::Deserialize<'de> for ActOnDeathEffectModifierResolution {
 ///    },
 ///    "range": {
 ///      "$ref": "#/$defs/range-ref"
+///    },
+///    "reset_one_shot": {
+///      "description": "The copy's [ONE SHOT] weapons count as not having been shot.",
+///      "const": true
 ///    },
 ///    "starting_strength": {
 ///      "type": "integer",
@@ -3077,6 +3302,9 @@ pub struct AddUnitEffectModifier {
     ///The new unit can be set up within Engagement Range of this unit only.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub allow_engagement_with: ::std::option::Option<UnitRef>,
+    ///The new unit has every model of its Starting Strength, each with all of its wounds remaining.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub at_starting_strength: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub away_from: ::std::vec::Vec<PlacementAway>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -3085,6 +3313,9 @@ pub struct AddUnitEffectModifier {
     pub count: ::std::option::Option<AddUnitEffectModifierCount>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub datasheet: ::std::option::Option<EntityId>,
+    ///copy_of: the copy leaves out models with any of these keywords ("excluding CHARACTER models").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_keywords: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub in_region: ::std::option::Option<PlacementRegion>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -3097,6 +3328,9 @@ pub struct AddUnitEffectModifier {
     pub placement: ::std::option::Option<AddUnitEffectModifierPlacement>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub range: ::std::option::Option<RangeRef>,
+    ///The copy's [ONE SHOT] weapons count as not having been shot.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reset_one_shot: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
 }
@@ -3104,16 +3338,19 @@ impl ::std::default::Default for AddUnitEffectModifier {
     fn default() -> Self {
         Self {
             allow_engagement_with: Default::default(),
+            at_starting_strength: Default::default(),
             away_from: Default::default(),
             copy_of: Default::default(),
             count: Default::default(),
             datasheet: Default::default(),
+            excluded_keywords: Default::default(),
             in_region: Default::default(),
             join: Default::default(),
             model_count: Default::default(),
             near: Default::default(),
             placement: Default::default(),
             range: Default::default(),
+            reset_one_shot: Default::default(),
             starting_strength: Default::default(),
         }
     }
@@ -3417,6 +3654,7 @@ impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModelCountString {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -3434,6 +3672,7 @@ impl<'de> ::serde::Deserialize<'de> for AddUnitEffectModifierModelCountString {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -3479,6 +3718,7 @@ for AddUnitEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -3514,6 +3754,8 @@ pub enum AddUnitEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -3533,6 +3775,7 @@ impl ::std::fmt::Display for AddUnitEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -3553,6 +3796,7 @@ impl ::std::str::FromStr for AddUnitEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -3601,6 +3845,7 @@ for AddUnitEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -3636,6 +3881,8 @@ pub enum AddUnitEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -3655,6 +3902,7 @@ impl ::std::fmt::Display for AddUnitEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -3675,6 +3923,7 @@ impl ::std::str::FromStr for AddUnitEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -4005,6 +4254,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///      "description": "A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).",
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "exclusive": {
+///      "description": "True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
 ///    },
@@ -4139,6 +4393,9 @@ pub struct AlliedRule {
     ///A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///True when the pool's units are not part of the source faction's own roster: an army of `source_faction_id` may take them only through this rule (its detachment gate, caps and locks), never as ordinary picks. Models a sibling-faction pool printed in the host's own codex, e.g. World Eaters' Blood Legions daemons, available only under Khorne Daemonkin.
+    #[serde(default)]
+    pub exclusive: bool,
     pub game_version: GameVersionRef,
     pub id: EntityId,
     ///Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
@@ -4557,6 +4814,41 @@ impl ::std::default::Default for ArmyCompositionPredicateUnitFilter {
 pub struct ArmyFactionConditionParameters {
     pub faction: EntityId,
 }
+///`ArmyIncludesConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "filter"
+///  ],
+///  "properties": {
+///    "every": {
+///      "const": true
+///    },
+///    "filter": {
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "min": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ArmyIncludesConditionParameters {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub every: ::std::option::Option<::serde_json::Value>,
+    pub filter: UnitFilter,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min: ::std::option::Option<::std::num::NonZeroU64>,
+}
 ///`ArmyRuleEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -4572,6 +4864,19 @@ pub struct ArmyFactionConditionParameters {
 ///      "description": "attachment: a Leader that can join a unit matching this filter can join this unit.",
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
+///    "can_lead": {
+///      "description": "attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists.",
+///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "datasheets": {
+///      "description": "composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "detachment": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -4580,10 +4885,13 @@ pub struct ArmyFactionConditionParameters {
 ///      "minLength": 1
 ///    },
 ///    "exempt_from": {
+///      "description": "Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).",
 ///      "type": "array",
 ///      "items": {
 ///        "enum": [
-///          "retinue-limit"
+///          "retinue-limit",
+///          "enhancement-limit",
+///          "strategic-reserves-points"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -4634,7 +4942,9 @@ pub struct ArmyFactionConditionParameters {
 ///        "faction-forbidden",
 ///        "single-chapter",
 ///        "detachment-forbidden",
-///        "detachment-tag-exclusive"
+///        "detachment-tag-exclusive",
+///        "enhancement-source",
+///        "limit-exemption"
 ///      ]
 ///    },
 ///    "tag": {
@@ -4655,10 +4965,17 @@ pub struct ArmyRuleEffectModifier {
     ///attachment: a Leader that can join a unit matching this filter can join this unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attach_as: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///attachment: the target can be attached to a unit matching this filter, in addition to the units its datasheet lists.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub can_lead: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///composition/unique: units of any of these datasheets (unit ids); with `with`, units matching both.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub datasheets: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub detachment: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub enhancement_kind: ::std::option::Option<ArmyRuleEffectModifierEnhancementKind>,
+    ///Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exempt_from: ::std::option::Option<Vec<ArmyRuleEffectModifierExemptFromItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -4763,7 +5080,9 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierEnhancementKind {
 /// ```json
 ///{
 ///  "enum": [
-///    "retinue-limit"
+///    "retinue-limit",
+///    "enhancement-limit",
+///    "strategic-reserves-points"
 ///  ]
 ///}
 /// ```
@@ -4783,11 +5102,17 @@ impl<'de> ::serde::Deserialize<'de> for ArmyRuleEffectModifierEnhancementKind {
 pub enum ArmyRuleEffectModifierExemptFromItem {
     #[serde(rename = "retinue-limit")]
     RetinueLimit,
+    #[serde(rename = "enhancement-limit")]
+    EnhancementLimit,
+    #[serde(rename = "strategic-reserves-points")]
+    StrategicReservesPoints,
 }
 impl ::std::fmt::Display for ArmyRuleEffectModifierExemptFromItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::RetinueLimit => f.write_str("retinue-limit"),
+            Self::EnhancementLimit => f.write_str("enhancement-limit"),
+            Self::StrategicReservesPoints => f.write_str("strategic-reserves-points"),
         }
     }
 }
@@ -4798,6 +5123,8 @@ impl ::std::str::FromStr for ArmyRuleEffectModifierExemptFromItem {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
             "retinue-limit" => Ok(Self::RetinueLimit),
+            "enhancement-limit" => Ok(Self::EnhancementLimit),
+            "strategic-reserves-points" => Ok(Self::StrategicReservesPoints),
             _ => Err("invalid value".into()),
         }
     }
@@ -5032,7 +5359,9 @@ impl ::std::convert::TryFrom<::std::string::String> for ArmyRuleEffectModifierMe
 ///    "faction-forbidden",
 ///    "single-chapter",
 ///    "detachment-forbidden",
-///    "detachment-tag-exclusive"
+///    "detachment-tag-exclusive",
+///    "enhancement-source",
+///    "limit-exemption"
 ///  ]
 ///}
 /// ```
@@ -5072,6 +5401,10 @@ pub enum ArmyRuleEffectModifierRule {
     DetachmentForbidden,
     #[serde(rename = "detachment-tag-exclusive")]
     DetachmentTagExclusive,
+    #[serde(rename = "enhancement-source")]
+    EnhancementSource,
+    #[serde(rename = "limit-exemption")]
+    LimitExemption,
 }
 impl ::std::fmt::Display for ArmyRuleEffectModifierRule {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -5087,6 +5420,8 @@ impl ::std::fmt::Display for ArmyRuleEffectModifierRule {
             Self::SingleChapter => f.write_str("single-chapter"),
             Self::DetachmentForbidden => f.write_str("detachment-forbidden"),
             Self::DetachmentTagExclusive => f.write_str("detachment-tag-exclusive"),
+            Self::EnhancementSource => f.write_str("enhancement-source"),
+            Self::LimitExemption => f.write_str("limit-exemption"),
         }
     }
 }
@@ -5107,6 +5442,8 @@ impl ::std::str::FromStr for ArmyRuleEffectModifierRule {
             "single-chapter" => Ok(Self::SingleChapter),
             "detachment-forbidden" => Ok(Self::DetachmentForbidden),
             "detachment-tag-exclusive" => Ok(Self::DetachmentTagExclusive),
+            "enhancement-source" => Ok(Self::EnhancementSource),
+            "limit-exemption" => Ok(Self::LimitExemption),
             _ => Err("invalid value".into()),
         }
     }
@@ -6584,6 +6921,16 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///          "type": "object",
 ///          "minProperties": 1,
 ///          "properties": {
+///            "any_keywords": {
+///              "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///              "type": "array",
+///              "items": {
+///                "type": "string",
+///                "minLength": 1
+///              },
+///              "minItems": 2,
+///              "uniqueItems": true
+///            },
 ///            "excluded_keywords": {
 ///              "type": "array",
 ///              "items": {
@@ -6599,6 +6946,18 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///                "minLength": 1
 ///              },
 ///              "minItems": 1
+///            },
+///            "states": {
+///              "description": "The unit is in each of these states.",
+///              "type": "array",
+///              "items": {
+///                "enum": [
+///                  "battle-shocked",
+///                  "unengaged"
+///                ]
+///              },
+///              "minItems": 1,
+///              "uniqueItems": true
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -6635,6 +6994,10 @@ impl<'de> ::serde::Deserialize<'de> for AttackIsConditionParametersWeaponName {
 ///        },
 ///        "recipient_filter": {
 ///          "$ref": "#/$defs/keyword-filter"
+///        },
+///        "wholly": {
+///          "description": "The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).",
+///          "const": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -6681,6 +7044,16 @@ pub struct AuraEffect {
 ///      "type": "object",
 ///      "minProperties": 1,
 ///      "properties": {
+///        "any_keywords": {
+///          "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///          "type": "array",
+///          "items": {
+///            "type": "string",
+///            "minLength": 1
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        },
 ///        "excluded_keywords": {
 ///          "type": "array",
 ///          "items": {
@@ -6696,6 +7069,18 @@ pub struct AuraEffect {
 ///            "minLength": 1
 ///          },
 ///          "minItems": 1
+///        },
+///        "states": {
+///          "description": "The unit is in each of these states.",
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "battle-shocked",
+///              "unengaged"
+///            ]
+///          },
+///          "minItems": 1,
+///          "uniqueItems": true
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -6732,6 +7117,10 @@ pub struct AuraEffect {
 ///    },
 ///    "recipient_filter": {
 ///      "$ref": "#/$defs/keyword-filter"
+///    },
+///    "wholly": {
+///      "description": "The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).",
+///      "const": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -6758,6 +7147,9 @@ pub struct AuraEffectModifier {
     pub range_cap: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient_filter: ::std::option::Option<KeywordFilter>,
+    ///The unit must be wholly within the range (no part of it outside), not merely within it (any part inside).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wholly: ::std::option::Option<::serde_json::Value>,
 }
 impl ::std::default::Default for AuraEffectModifier {
     fn default() -> Self {
@@ -6770,6 +7162,7 @@ impl ::std::default::Default for AuraEffectModifier {
             range_bonus: Default::default(),
             range_cap: Default::default(),
             recipient_filter: Default::default(),
+            wholly: Default::default(),
         }
     }
 }
@@ -6782,6 +7175,16 @@ impl ::std::default::Default for AuraEffectModifier {
 ///  "type": "object",
 ///  "minProperties": 1,
 ///  "properties": {
+///    "any_keywords": {
+///      "description": "The unit has at least one of these keywords (\"a friendly SKITARII or THULIA GHULD unit\").",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    },
 ///    "excluded_keywords": {
 ///      "type": "array",
 ///      "items": {
@@ -6797,6 +7200,18 @@ impl ::std::default::Default for AuraEffectModifier {
 ///        "minLength": 1
 ///      },
 ///      "minItems": 1
+///    },
+///    "states": {
+///      "description": "The unit is in each of these states.",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "battle-shocked",
+///          "unengaged"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -6806,6 +7221,11 @@ impl ::std::default::Default for AuraEffectModifier {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AuraEffectModifierEligible {
+    ///The unit has at least one of these keywords ("a friendly SKITARII or THULIA GHULD unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub any_keywords: ::std::option::Option<
+        Vec<AuraEffectModifierEligibleAnyKeywordsItem>,
+    >,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub excluded_keywords: ::std::vec::Vec<
         AuraEffectModifierEligibleExcludedKeywordsItem,
@@ -6814,13 +7234,93 @@ pub struct AuraEffectModifierEligible {
     pub required_keywords: ::std::vec::Vec<
         AuraEffectModifierEligibleRequiredKeywordsItem,
     >,
+    ///The unit is in each of these states.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub states: ::std::option::Option<Vec<AuraEffectModifierEligibleStatesItem>>,
 }
 impl ::std::default::Default for AuraEffectModifierEligible {
     fn default() -> Self {
         Self {
+            any_keywords: Default::default(),
             excluded_keywords: Default::default(),
             required_keywords: Default::default(),
+            states: Default::default(),
         }
+    }
+}
+///`AuraEffectModifierEligibleAnyKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AuraEffectModifierEligibleAnyKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AuraEffectModifierEligibleAnyKeywordsItem>
+for ::std::string::String {
+    fn from(value: AuraEffectModifierEligibleAnyKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AuraEffectModifierEligibleAnyKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AuraEffectModifierEligibleAnyKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`AuraEffectModifierEligibleExcludedKeywordsItem`
@@ -6971,6 +7471,83 @@ impl<'de> ::serde::Deserialize<'de> for AuraEffectModifierEligibleRequiredKeywor
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`AuraEffectModifierEligibleStatesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "battle-shocked",
+///    "unengaged"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AuraEffectModifierEligibleStatesItem {
+    #[serde(rename = "battle-shocked")]
+    BattleShocked,
+    #[serde(rename = "unengaged")]
+    Unengaged,
+}
+impl ::std::fmt::Display for AuraEffectModifierEligibleStatesItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BattleShocked => f.write_str("battle-shocked"),
+            Self::Unengaged => f.write_str("unengaged"),
+        }
+    }
+}
+impl ::std::str::FromStr for AuraEffectModifierEligibleStatesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "battle-shocked" => Ok(Self::BattleShocked),
+            "unengaged" => Ok(Self::Unengaged),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for AuraEffectModifierEligibleStatesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`AuraEffectModifierRange`
@@ -10950,6 +11527,104 @@ impl<'de> ::serde::Deserialize<'de> for DeploymentPatternZonesItemName {
             })
     }
 }
+///`DeploymentWindowConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "during"
+///  ],
+///  "properties": {
+///    "during": {
+///      "enum": [
+///        "deployment"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DeploymentWindowConditionParameters {
+    pub during: DeploymentWindowConditionParametersDuring,
+}
+///`DeploymentWindowConditionParametersDuring`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "deployment"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DeploymentWindowConditionParametersDuring {
+    #[serde(rename = "deployment")]
+    Deployment,
+}
+impl ::std::fmt::Display for DeploymentWindowConditionParametersDuring {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Deployment => f.write_str("deployment"),
+        }
+    }
+}
+impl ::std::str::FromStr for DeploymentWindowConditionParametersDuring {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "deployment" => Ok(Self::Deployment),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DeploymentWindowConditionParametersDuring {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`DesignateEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -12747,13 +13422,13 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersSubject {
         Self::UnitRef(value)
     }
 }
-///A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.
+///A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them.",
+///  "description": "A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.",
 ///  "type": "string",
 ///  "minLength": 1
 ///}
@@ -13313,6 +13988,14 @@ pub struct DestructionRuleEffectModifier {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
 ///    },
+///    "excluded_datasheet_ids": {
+///      "description": "Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "external_refs": {
 ///      "$ref": "#/$defs/external-reference-list"
 ///    },
@@ -13341,8 +14024,45 @@ pub struct DestructionRuleEffectModifier {
 ///        "$ref": "#/$defs/granted-keyword"
 ///      }
 ///    },
+///    "granted_warlord_datasheet_ids": {
+///      "description": "Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "keyword_limit_overrides": {
+///      "description": "Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "keywords",
+///          "max"
+///        ],
+///        "properties": {
+///          "keywords": {
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "max": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
+///    "mandatory_warlord_datasheet_ids": {
+///      "description": "While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
 ///    },
 ///    "name": {
 ///      "type": "string",
@@ -13411,6 +14131,9 @@ pub struct Detachment {
     pub detachment_rule_ids: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub enhancement_ids: ::std::vec::Vec<EntityId>,
+    ///Datasheets an army cannot include while this detachment is selected (e.g. Shadow Legion bars named Greater Daemons such as Skarbrand). Empty/absent when the detachment bars none.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub external_refs: ::std::option::Option<ExternalReferenceList>,
     pub faction_id: EntityId,
@@ -13424,7 +14147,16 @@ pub struct Detachment {
     ///Construction keywords this detachment grants to matching units while it is selected (e.g. Houndpack Lance grants 'Battleline' to 'War Dog' units). A unit carrying any keyword in a grant's `to_keywords` gains that grant's `keyword` for army-construction purposes (datasheet-count caps, battlefield role). Empty/absent when the detachment grants no construction keywords. Distinct from combat keywords, which live in the ability DSL.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub granted_keywords: ::std::vec::Vec<GrantedKeyword>,
+    ///Datasheets this detachment allows to be the army's Warlord while it is selected, even when the allied rule they were included under bars it (e.g. Ghosts of the Webway: a Troupe Master, Shadowseer or Death Jester). A permission, not a requirement. Empty/absent when the detachment grants none.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub granted_warlord_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     pub id: EntityId,
+    ///Replacement caps for the army faction's `keyword_limits` while this detachment is selected (e.g. Ghosts of the Webway: up to three TROUPE MASTER units instead of one). An entry applies to the faction cap with the identical `keywords` set. Empty/absent when the detachment changes no cap.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keyword_limit_overrides: ::std::vec::Vec<DetachmentKeywordLimitOverridesItem>,
+    ///While this detachment is selected, the army's Warlord must be one of these datasheets (e.g. Devoted of Ynnead: Yvraine or The Yncarne). The requirement also makes them eligible to be Warlord when an allied rule would otherwise bar it. Empty/absent when the detachment imposes no Warlord requirement.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mandatory_warlord_datasheet_ids: ::std::option::Option<Vec<EntityId>>,
     pub name: DetachmentName,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub restrictions: ::std::option::Option<DetachmentRestrictions>,
@@ -13436,6 +14168,36 @@ pub struct Detachment {
     ///Minimum unit counts the detachment requires while selected (e.g. Houndpack Lance: 'your army must include three or more WAR DOG units'). Each entry requires at least `min` units carrying `keyword`. Empty/absent when the detachment imposes no minimum.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub unit_minimums: ::std::vec::Vec<UnitMinimum>,
+}
+///`DetachmentKeywordLimitOverridesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keywords",
+///    "max"
+///  ],
+///  "properties": {
+///    "keywords": {
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "max": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DetachmentKeywordLimitOverridesItem {
+    pub keywords: KeywordList,
+    pub max: u64,
 }
 ///`DetachmentName`
 ///
@@ -15318,8 +16080,13 @@ impl ::std::convert::From<SelectObjectiveEffect> for EffectNode {
 ///        "declare-charge",
 ///        "fight",
 ///        "start-action",
-///        "be-selected"
+///        "be-selected",
+///        "embark-within"
 ///      ]
+///    },
+///    "transport": {
+///      "description": "embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability.",
+///      "$ref": "#/$defs/unit-ref"
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -15336,6 +16103,9 @@ pub struct EligibleConditionParameters {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<UnitRef>,
     pub to: EligibleConditionParametersTo,
+    ///embark-within only: the Transport the subject is able to embark within (its datasheet keyword check; room in it is a separate condition). this-unit is the candidate being checked; ability-unit is the unit with the ability.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub transport: ::std::option::Option<UnitRef>,
 }
 ///`EligibleConditionParametersAt`
 ///
@@ -15532,7 +16302,8 @@ for EligibleConditionParametersSourceAbilityOwner {
 ///    "declare-charge",
 ///    "fight",
 ///    "start-action",
-///    "be-selected"
+///    "be-selected",
+///    "embark-within"
 ///  ]
 ///}
 /// ```
@@ -15560,6 +16331,8 @@ pub enum EligibleConditionParametersTo {
     StartAction,
     #[serde(rename = "be-selected")]
     BeSelected,
+    #[serde(rename = "embark-within")]
+    EmbarkWithin,
 }
 impl ::std::fmt::Display for EligibleConditionParametersTo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -15569,6 +16342,7 @@ impl ::std::fmt::Display for EligibleConditionParametersTo {
             Self::Fight => f.write_str("fight"),
             Self::StartAction => f.write_str("start-action"),
             Self::BeSelected => f.write_str("be-selected"),
+            Self::EmbarkWithin => f.write_str("embark-within"),
         }
     }
 }
@@ -15583,6 +16357,7 @@ impl ::std::str::FromStr for EligibleConditionParametersTo {
             "fight" => Ok(Self::Fight),
             "start-action" => Ok(Self::StartAction),
             "be-selected" => Ok(Self::BeSelected),
+            "embark-within" => Ok(Self::EmbarkWithin),
             _ => Err("invalid value".into()),
         }
     }
@@ -15628,6 +16403,177 @@ pub struct EndAttackSequenceEffectModifier {}
 impl ::std::default::Default for EndAttackSequenceEffectModifier {
     fn default() -> Self {
         Self {}
+    }
+}
+///Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Where a move must end: as close as possible to the closest unit matching `of`, or to the closest objective matching `of.objective` (`{objective: {}}` is any objective marker; `{objective: {selection_var}}` is the objective a select-objective bound). per: model applies the end to each model of the unit. instead_of: closest-enemy-unit names the enemy unit the move need not end closer to. waives: closest-enemy-model lets the unit end without being closer to the closest enemy model when it does end as close as possible to `of` (either end is legal); it is a unit-only form.",
+///  "type": "object",
+///  "required": [
+///    "of"
+///  ],
+///  "properties": {
+///    "instead_of": {
+///      "const": "closest-enemy-unit"
+///    },
+///    "of": {
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "objective"
+///          ],
+///          "properties": {
+///            "objective": {
+///              "$ref": "#/$defs/objective-filter"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
+///    "per": {
+///      "enum": [
+///        "unit",
+///        "model"
+///      ]
+///    },
+///    "waives": {
+///      "const": "closest-enemy-model"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EndsNearest {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub instead_of: ::std::option::Option<::serde_json::Value>,
+    pub of: EndsNearestOf,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per: ::std::option::Option<EndsNearestPer>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub waives: ::std::option::Option<::serde_json::Value>,
+}
+///`EndsNearestOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "objective"
+///      ],
+///      "properties": {
+///        "objective": {
+///          "$ref": "#/$defs/objective-filter"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum EndsNearestOf {
+    UnitRef(UnitRef),
+    Object { objective: ObjectiveFilter },
+}
+impl ::std::convert::From<UnitRef> for EndsNearestOf {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+///`EndsNearestPer`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "unit",
+///    "model"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EndsNearestPer {
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "model")]
+    Model,
+}
+impl ::std::fmt::Display for EndsNearestPer {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+            Self::Model => f.write_str("model"),
+        }
+    }
+}
+impl ::std::str::FromStr for EndsNearestPer {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            "model" => Ok(Self::Model),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EndsNearestPer {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`EngagementFrontsConditionParameters`
@@ -15964,6 +16910,203 @@ impl<'de> ::serde::Deserialize<'de> for EntityId {
             })
     }
 }
+///`EquippedWeaponCountConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "other_than",
+///    "subject",
+///    "weapon_type"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "maximum": 12.0,
+///      "minimum": 1.0
+///    },
+///    "other_than": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "weapon_type": {
+///      "enum": [
+///        "melee",
+///        "ranged"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct EquippedWeaponCountConditionParameters {
+    pub count: ::std::num::NonZeroU64,
+    pub other_than: EquippedWeaponCountConditionParametersOtherThan,
+    pub subject: UnitRef,
+    pub weapon_type: EquippedWeaponCountConditionParametersWeaponType,
+}
+///`EquippedWeaponCountConditionParametersOtherThan`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct EquippedWeaponCountConditionParametersOtherThan(::std::string::String);
+impl ::std::ops::Deref for EquippedWeaponCountConditionParametersOtherThan {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<EquippedWeaponCountConditionParametersOtherThan>
+for ::std::string::String {
+    fn from(value: EquippedWeaponCountConditionParametersOtherThan) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for EquippedWeaponCountConditionParametersOtherThan {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for EquippedWeaponCountConditionParametersOtherThan {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EquippedWeaponCountConditionParametersOtherThan {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`EquippedWeaponCountConditionParametersWeaponType`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "melee",
+///    "ranged"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EquippedWeaponCountConditionParametersWeaponType {
+    #[serde(rename = "melee")]
+    Melee,
+    #[serde(rename = "ranged")]
+    Ranged,
+}
+impl ::std::fmt::Display for EquippedWeaponCountConditionParametersWeaponType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Melee => f.write_str("melee"),
+            Self::Ranged => f.write_str("ranged"),
+        }
+    }
+}
+impl ::std::str::FromStr for EquippedWeaponCountConditionParametersWeaponType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "melee" => Ok(Self::Melee),
+            "ranged" => Ok(Self::Ranged),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for EquippedWeaponCountConditionParametersWeaponType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`EventBoundReference`
 ///
 /// <details><summary>JSON schema</summary>
@@ -16211,6 +17354,12 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "declare-charge"
 ///      ]
 ///    },
+///    "transport": {
+///      "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
+///      "enum": [
+///        "this-unit"
+///      ]
+///    },
 ///    "weapon_keyword": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -16275,6 +17424,9 @@ pub struct EventFilter {
     ///selected: what the unit was selected to do. attack means shoot or fight.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub to: ::std::option::Option<EventFilterTo>,
+    ///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub transport: ::std::option::Option<EventFilterTransport>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_keyword: ::std::option::Option<EventFilterWeaponKeyword>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16303,6 +17455,7 @@ impl ::std::default::Default for EventFilter {
             through: Default::default(),
             timing: Default::default(),
             to: Default::default(),
+            transport: Default::default(),
             weapon_keyword: Default::default(),
             weapon_name: Default::default(),
         }
@@ -17371,6 +18524,77 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterTo {
         value.parse()
     }
 }
+///disembarked: the Transport the unit disembarked from; this-unit is "from this TRANSPORT".
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "disembarked: the Transport the unit disembarked from; this-unit is \"from this TRANSPORT\".",
+///  "enum": [
+///    "this-unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterTransport {
+    #[serde(rename = "this-unit")]
+    ThisUnit,
+}
+impl ::std::fmt::Display for EventFilterTransport {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::ThisUnit => f.write_str("this-unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterTransport {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "this-unit" => Ok(Self::ThisUnit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterTransport {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterTransport {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterTransport {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`EventFilterWeaponKeyword`
 ///
 /// <details><summary>JSON schema</summary>
@@ -18029,6 +19253,39 @@ impl<'de> ::serde::Deserialize<'de> for ExternalReferenceNamespace {
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "keyword_limits": {
+///      "description": "Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "keywords",
+///          "max"
+///        ],
+///        "properties": {
+///          "exempt_faction_keywords": {
+///            "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).",
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "keywords": {
+///            "$ref": "#/$defs/keyword-list"
+///          },
+///          "max": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "mode": {
+///            "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///            "default": "units",
+///            "enum": [
+///              "units",
+///              "alternatives"
+///            ]
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
@@ -18071,6 +19328,9 @@ pub struct Faction {
     pub faction_rule_ids: Vec<EntityId>,
     pub game_version: GameVersionRef,
     pub id: EntityId,
+    ///Army-wide caps on units carrying a keyword set, for an army of this faction (e.g. Genestealer Cults: at most one PATRIARCH; Asuryani: at most one TROUPE MASTER). A unit counts toward an entry when it carries every keyword in `keywords` (its keywords, faction keywords or name; see `mode` for alternatives) and none of `exempt_faction_keywords`. A selected detachment's `keyword_limit_overrides` entry with the same `keywords` replaces `max`.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keyword_limits: ::std::vec::Vec<FactionKeywordLimitsItem>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keywords: ::std::option::Option<KeywordList>,
     ///URL to the faction's logo/emblem image.
@@ -18204,6 +19464,136 @@ for FactionArmyConstructionRulesItemAdditionalKeywordSource {
             .map_err(|e: self::error::ConversionError| {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
+    }
+}
+///`FactionKeywordLimitsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keywords",
+///    "max"
+///  ],
+///  "properties": {
+///    "exempt_faction_keywords": {
+///      "description": "Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "keywords": {
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "max": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "mode": {
+///      "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///      "default": "units",
+///      "enum": [
+///        "units",
+///        "alternatives"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct FactionKeywordLimitsItem {
+    ///Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exempt_faction_keywords: ::std::option::Option<KeywordList>,
+    pub keywords: KeywordList,
+    pub max: u64,
+    ///How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+    #[serde(default = "defaults::faction_keyword_limits_item_mode")]
+    pub mode: FactionKeywordLimitsItemMode,
+}
+///How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).",
+///  "default": "units",
+///  "enum": [
+///    "units",
+///    "alternatives"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum FactionKeywordLimitsItemMode {
+    #[serde(rename = "units")]
+    Units,
+    #[serde(rename = "alternatives")]
+    Alternatives,
+}
+impl ::std::fmt::Display for FactionKeywordLimitsItemMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Units => f.write_str("units"),
+            Self::Alternatives => f.write_str("alternatives"),
+        }
+    }
+}
+impl ::std::str::FromStr for FactionKeywordLimitsItemMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "units" => Ok(Self::Units),
+            "alternatives" => Ok(Self::Alternatives),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for FactionKeywordLimitsItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for FactionKeywordLimitsItemMode {
+    fn default() -> Self {
+        FactionKeywordLimitsItemMode::Units
     }
 }
 ///`FactionName`
@@ -18549,105 +19939,7 @@ pub enum Footprint {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
 ///    "selector": {
-///      "type": "object",
-///      "required": [
-///        "owner"
-///      ],
-///      "properties": {
-///        "bind_as": {
-///          "type": "string",
-///          "minLength": 1
-///        },
-///        "eligibility": {
-///          "$ref": "#/$defs/condition"
-///        },
-///        "engagement_relation": {
-///          "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///          "type": "string",
-///          "enum": [
-///            "engaged-with-bearer",
-///            "not-engaged-with-bearer"
-///          ]
-///        },
-///        "excluded_keywords": {
-///          "description": "A candidate with any listed keyword is excluded.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1,
-///          "uniqueItems": true
-///        },
-///        "keyword_match": {
-///          "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///          "default": "all",
-///          "type": "string",
-///          "enum": [
-///            "all",
-///            "any"
-///          ]
-///        },
-///        "keywords": {
-///          "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1
-///        },
-///        "member_of": {
-///          "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///          "type": "string",
-///          "enum": [
-///            "bearer-unit"
-///          ]
-///        },
-///        "model_names": {
-///          "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
-///          "type": "array",
-///          "items": {
-///            "type": "string",
-///            "minLength": 1
-///          },
-///          "minItems": 1,
-///          "uniqueItems": true
-///        },
-///        "owner": {
-///          "type": "string",
-///          "enum": [
-///            "friendly",
-///            "enemy"
-///          ]
-///        },
-///        "reference": {
-///          "description": "Origin of the engagement_relation gate.",
-///          "type": "string",
-///          "enum": [
-///            "bearer",
-///            "bearer-unit",
-///            "bearer-transport"
-///          ]
-///        },
-///        "target_kind": {
-///          "description": "Whether each iteration binds a whole unit or one matching model.",
-///          "default": "unit",
-///          "type": "string",
-///          "enum": [
-///            "unit",
-///            "model"
-///          ]
-///        },
-///        "within_inches": {
-///          "type": "number",
-///          "exclusiveMinimum": 0.0
-///        },
-///        "within_objective": {
-///          "$ref": "#/$defs/selection-reference"
-///        }
-///      },
-///      "additionalProperties": false
+///      "$ref": "#/$defs/unit-selector"
 ///    },
 ///    "type": {
 ///      "type": "string",
@@ -18665,939 +19957,9 @@ pub enum Footprint {
 #[serde(deny_unknown_fields)]
 pub struct ForEachUnitEffect {
     pub effect: ::std::boxed::Box<EffectNode>,
-    pub selector: ForEachUnitEffectSelector,
+    pub selector: UnitSelector,
     #[serde(rename = "type")]
     pub type_: ForEachUnitEffectType,
-}
-///`ForEachUnitEffectSelector`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "object",
-///  "required": [
-///    "owner"
-///  ],
-///  "properties": {
-///    "bind_as": {
-///      "type": "string",
-///      "minLength": 1
-///    },
-///    "eligibility": {
-///      "$ref": "#/$defs/condition"
-///    },
-///    "engagement_relation": {
-///      "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///      "type": "string",
-///      "enum": [
-///        "engaged-with-bearer",
-///        "not-engaged-with-bearer"
-///      ]
-///    },
-///    "excluded_keywords": {
-///      "description": "A candidate with any listed keyword is excluded.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1,
-///      "uniqueItems": true
-///    },
-///    "keyword_match": {
-///      "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///      "default": "all",
-///      "type": "string",
-///      "enum": [
-///        "all",
-///        "any"
-///      ]
-///    },
-///    "keywords": {
-///      "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1
-///    },
-///    "member_of": {
-///      "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///      "type": "string",
-///      "enum": [
-///        "bearer-unit"
-///      ]
-///    },
-///    "model_names": {
-///      "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
-///      "type": "array",
-///      "items": {
-///        "type": "string",
-///        "minLength": 1
-///      },
-///      "minItems": 1,
-///      "uniqueItems": true
-///    },
-///    "owner": {
-///      "type": "string",
-///      "enum": [
-///        "friendly",
-///        "enemy"
-///      ]
-///    },
-///    "reference": {
-///      "description": "Origin of the engagement_relation gate.",
-///      "type": "string",
-///      "enum": [
-///        "bearer",
-///        "bearer-unit",
-///        "bearer-transport"
-///      ]
-///    },
-///    "target_kind": {
-///      "description": "Whether each iteration binds a whole unit or one matching model.",
-///      "default": "unit",
-///      "type": "string",
-///      "enum": [
-///        "unit",
-///        "model"
-///      ]
-///    },
-///    "within_inches": {
-///      "type": "number",
-///      "exclusiveMinimum": 0.0
-///    },
-///    "within_objective": {
-///      "$ref": "#/$defs/selection-reference"
-///    }
-///  },
-///  "additionalProperties": false
-///}
-/// ```
-/// </details>
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ForEachUnitEffectSelector {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub bind_as: ::std::option::Option<ForEachUnitEffectSelectorBindAs>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub eligibility: ::std::option::Option<Condition>,
-    ///Candidate engagement relation to the bearer or bearer-unit.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub engagement_relation: ::std::option::Option<
-        ForEachUnitEffectSelectorEngagementRelation,
-    >,
-    ///A candidate with any listed keyword is excluded.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub excluded_keywords: ::std::option::Option<
-        Vec<ForEachUnitEffectSelectorExcludedKeywordsItem>,
-    >,
-    ///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-    #[serde(default = "defaults::for_each_unit_effect_selector_keyword_match")]
-    pub keyword_match: ForEachUnitEffectSelectorKeywordMatch,
-    ///Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub keywords: ::std::vec::Vec<ForEachUnitEffectSelectorKeywordsItem>,
-    ///Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub member_of: ::std::option::Option<ForEachUnitEffectSelectorMemberOf>,
-    ///Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub model_names: ::std::option::Option<Vec<ForEachUnitEffectSelectorModelNamesItem>>,
-    pub owner: ForEachUnitEffectSelectorOwner,
-    ///Origin of the engagement_relation gate.
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub reference: ::std::option::Option<ForEachUnitEffectSelectorReference>,
-    ///Whether each iteration binds a whole unit or one matching model.
-    #[serde(default = "defaults::for_each_unit_effect_selector_target_kind")]
-    pub target_kind: ForEachUnitEffectSelectorTargetKind,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub within_inches: ::std::option::Option<f64>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub within_objective: ::std::option::Option<SelectionReference>,
-}
-///`ForEachUnitEffectSelectorBindAs`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorBindAs(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorBindAs {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorBindAs> for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorBindAs) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorBindAs {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectSelectorBindAs {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorBindAs {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Candidate engagement relation to the bearer or bearer-unit.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Candidate engagement relation to the bearer or bearer-unit.",
-///  "type": "string",
-///  "enum": [
-///    "engaged-with-bearer",
-///    "not-engaged-with-bearer"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorEngagementRelation {
-    #[serde(rename = "engaged-with-bearer")]
-    EngagedWithBearer,
-    #[serde(rename = "not-engaged-with-bearer")]
-    NotEngagedWithBearer,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorEngagementRelation {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::EngagedWithBearer => f.write_str("engaged-with-bearer"),
-            Self::NotEngagedWithBearer => f.write_str("not-engaged-with-bearer"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorEngagementRelation {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "engaged-with-bearer" => Ok(Self::EngagedWithBearer),
-            "not-engaged-with-bearer" => Ok(Self::NotEngagedWithBearer),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorEngagementRelation {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`ForEachUnitEffectSelectorExcludedKeywordsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorExcludedKeywordsItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorExcludedKeywordsItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorExcludedKeywordsItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorExcludedKeywordsItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
-///  "default": "all",
-///  "type": "string",
-///  "enum": [
-///    "all",
-///    "any"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorKeywordMatch {
-    #[serde(rename = "all")]
-    All,
-    #[serde(rename = "any")]
-    Any,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorKeywordMatch {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::All => f.write_str("all"),
-            Self::Any => f.write_str("any"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorKeywordMatch {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "all" => Ok(Self::All),
-            "any" => Ok(Self::Any),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorKeywordMatch {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for ForEachUnitEffectSelectorKeywordMatch {
-    fn default() -> Self {
-        ForEachUnitEffectSelectorKeywordMatch::All
-    }
-}
-///`ForEachUnitEffectSelectorKeywordsItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorKeywordsItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorKeywordsItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorKeywordsItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorKeywordsItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorKeywordsItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorKeywordsItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorKeywordsItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit. With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
-///  "type": "string",
-///  "enum": [
-///    "bearer-unit"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorMemberOf {
-    #[serde(rename = "bearer-unit")]
-    BearerUnit,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorMemberOf {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::BearerUnit => f.write_str("bearer-unit"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorMemberOf {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "bearer-unit" => Ok(Self::BearerUnit),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorMemberOf {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`ForEachUnitEffectSelectorModelNamesItem`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "minLength": 1
-///}
-/// ```
-/// </details>
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[serde(transparent)]
-pub struct ForEachUnitEffectSelectorModelNamesItem(::std::string::String);
-impl ::std::ops::Deref for ForEachUnitEffectSelectorModelNamesItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ForEachUnitEffectSelectorModelNamesItem>
-for ::std::string::String {
-    fn from(value: ForEachUnitEffectSelectorModelNamesItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorModelNamesItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() < 1usize {
-            return Err("shorter than 1 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorModelNamesItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ForEachUnitEffectSelectorModelNamesItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`ForEachUnitEffectSelectorOwner`
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "type": "string",
-///  "enum": [
-///    "friendly",
-///    "enemy"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorOwner {
-    #[serde(rename = "friendly")]
-    Friendly,
-    #[serde(rename = "enemy")]
-    Enemy,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorOwner {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Friendly => f.write_str("friendly"),
-            Self::Enemy => f.write_str("enemy"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorOwner {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "friendly" => Ok(Self::Friendly),
-            "enemy" => Ok(Self::Enemy),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ForEachUnitEffectSelectorOwner {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Origin of the engagement_relation gate.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Origin of the engagement_relation gate.",
-///  "type": "string",
-///  "enum": [
-///    "bearer",
-///    "bearer-unit",
-///    "bearer-transport"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorReference {
-    #[serde(rename = "bearer")]
-    Bearer,
-    #[serde(rename = "bearer-unit")]
-    BearerUnit,
-    #[serde(rename = "bearer-transport")]
-    BearerTransport,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorReference {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Bearer => f.write_str("bearer"),
-            Self::BearerUnit => f.write_str("bearer-unit"),
-            Self::BearerTransport => f.write_str("bearer-transport"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorReference {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "bearer" => Ok(Self::Bearer),
-            "bearer-unit" => Ok(Self::BearerUnit),
-            "bearer-transport" => Ok(Self::BearerTransport),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorReference {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Whether each iteration binds a whole unit or one matching model.
-///
-/// <details><summary>JSON schema</summary>
-///
-/// ```json
-///{
-///  "description": "Whether each iteration binds a whole unit or one matching model.",
-///  "default": "unit",
-///  "type": "string",
-///  "enum": [
-///    "unit",
-///    "model"
-///  ]
-///}
-/// ```
-/// </details>
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum ForEachUnitEffectSelectorTargetKind {
-    #[serde(rename = "unit")]
-    Unit,
-    #[serde(rename = "model")]
-    Model,
-}
-impl ::std::fmt::Display for ForEachUnitEffectSelectorTargetKind {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Unit => f.write_str("unit"),
-            Self::Model => f.write_str("model"),
-        }
-    }
-}
-impl ::std::str::FromStr for ForEachUnitEffectSelectorTargetKind {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "unit" => Ok(Self::Unit),
-            "model" => Ok(Self::Model),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String>
-for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ForEachUnitEffectSelectorTargetKind {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::default::Default for ForEachUnitEffectSelectorTargetKind {
-    fn default() -> Self {
-        ForEachUnitEffectSelectorTargetKind::Unit
-    }
 }
 ///`ForEachUnitEffectType`
 ///
@@ -19959,13 +20321,13 @@ impl<'de> ::serde::Deserialize<'de> for ForceDispositionText {
             })
     }
 }
-///The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.
+///The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object.",
+///  "description": "The event families a trigger fires on and a `happened` condition looks back at. Each family takes typed parameters in the trigger's `filter` (which move, which roll, which Stratagem) and names who acted (`subject`) and what it was aimed at (`object`), so an event name never packs a subject or object. move-started fires as a unit starts a move (before it is made); move-ended as it finishes one.",
 ///  "type": "string",
 ///  "enum": [
 ///    "battle-started",
@@ -19980,6 +20342,7 @@ impl<'de> ::serde::Deserialize<'de> for ForceDispositionText {
 ///    "step-started",
 ///    "selected",
 ///    "targets-selected",
+///    "move-started",
 ///    "move-ended",
 ///    "set-up",
 ///    "disembarked",
@@ -20038,6 +20401,8 @@ pub enum GameEvent {
     Selected,
     #[serde(rename = "targets-selected")]
     TargetsSelected,
+    #[serde(rename = "move-started")]
+    MoveStarted,
     #[serde(rename = "move-ended")]
     MoveEnded,
     #[serde(rename = "set-up")]
@@ -20088,6 +20453,7 @@ impl ::std::fmt::Display for GameEvent {
             Self::StepStarted => f.write_str("step-started"),
             Self::Selected => f.write_str("selected"),
             Self::TargetsSelected => f.write_str("targets-selected"),
+            Self::MoveStarted => f.write_str("move-started"),
             Self::MoveEnded => f.write_str("move-ended"),
             Self::SetUp => f.write_str("set-up"),
             Self::Disembarked => f.write_str("disembarked"),
@@ -20126,6 +20492,7 @@ impl ::std::str::FromStr for GameEvent {
             "step-started" => Ok(Self::StepStarted),
             "selected" => Ok(Self::Selected),
             "targets-selected" => Ok(Self::TargetsSelected),
+            "move-started" => Ok(Self::MoveStarted),
             "move-ended" => Ok(Self::MoveEnded),
             "set-up" => Ok(Self::SetUp),
             "disembarked" => Ok(Self::Disembarked),
@@ -24895,6 +25262,10 @@ for LoadoutConditionParametersUniform {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "not_moved_this_turn": {
+///      "description": "Relocate: only a marker that has not been moved this turn.",
+///      "const": true
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "place",
@@ -24918,6 +25289,9 @@ pub struct MarkerEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<f64>,
     pub label: MarkerEffectModifierLabel,
+    ///Relocate: only a marker that has not been moved this turn.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_moved_this_turn: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub operation: ::std::option::Option<MarkerEffectModifierOperation>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -25712,6 +26086,11 @@ pub struct ModelProfileConditionParameters {
 ///    "count": {
 ///      "$ref": "#/$defs/quantity"
 ///    },
+///    "max": {
+///      "description": "No more than this many mortal wounds in total (\"to a maximum of 6 mortal wounds\").",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
 ///    "per": {
 ///      "enum": [
 ///        "model",
@@ -25731,6 +26110,14 @@ pub struct ModelProfileConditionParameters {
 ///        "threshold"
 ///      ],
 ///      "properties": {
+///        "comparison": {
+///          "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///          "default": "gte",
+///          "enum": [
+///            "gte",
+///            "lte"
+///          ]
+///        },
 ///        "dice": {
 ///          "oneOf": [
 ///            {
@@ -25743,6 +26130,10 @@ pub struct ModelProfileConditionParameters {
 ///            }
 ///          ]
 ///        },
+///        "for_each": {
+///          "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
+///          "$ref": "#/$defs/unit-selector"
+///        },
 ///        "per_model": {
 ///          "enum": [
 ///            "target",
@@ -25750,9 +26141,10 @@ pub struct ModelProfileConditionParameters {
 ///          ]
 ///        },
 ///        "threshold": {
+///          "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\").",
 ///          "type": "integer",
 ///          "maximum": 6.0,
-///          "minimum": 2.0
+///          "minimum": 1.0
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -25766,6 +26158,9 @@ pub struct ModelProfileConditionParameters {
 #[serde(deny_unknown_fields)]
 pub struct MortalWoundsEffectModifier {
     pub count: Quantity,
+    ///No more than this many mortal wounds in total ("to a maximum of 6 mortal wounds").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<MortalWoundsEffectModifierPer>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -25862,6 +26257,14 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///    "threshold"
 ///  ],
 ///  "properties": {
+///    "comparison": {
+///      "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///      "default": "gte",
+///      "enum": [
+///        "gte",
+///        "lte"
+///      ]
+///    },
 ///    "dice": {
 ///      "oneOf": [
 ///        {
@@ -25874,6 +26277,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///        }
 ///      ]
 ///    },
+///    "for_each": {
+///      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
+///      "$ref": "#/$defs/unit-selector"
+///    },
 ///    "per_model": {
 ///      "enum": [
 ///        "target",
@@ -25881,9 +26288,10 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///      ]
 ///    },
 ///    "threshold": {
+///      "description": "The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: \"for each 1\").",
 ///      "type": "integer",
 ///      "maximum": 6.0,
-///      "minimum": 2.0
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -25893,10 +26301,101 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct MortalWoundsEffectModifierRoll {
+    ///gte: a die at or above threshold succeeds ("for each 5+"); lte: a die at or below it ("for each 1").
+    #[serde(default = "defaults::mortal_wounds_effect_modifier_roll_comparison")]
+    pub comparison: MortalWoundsEffectModifierRollComparison,
     pub dice: MortalWoundsEffectModifierRollDice,
+    ///One die (dice per candidate) for each unit or model the selector matches ("one D6 for each WRACKS model in your unit"); per_model names the two fixed sets.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_each: ::std::option::Option<UnitSelector>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per_model: ::std::option::Option<MortalWoundsEffectModifierRollPerModel>,
-    pub threshold: i64,
+    ///The face a die must reach: at least this (comparison gte, the default, from 2) or at most this (comparison lte: "for each 1").
+    pub threshold: ::std::num::NonZeroU64,
+}
+///gte: a die at or above threshold succeeds ("for each 5+"); lte: a die at or below it ("for each 1").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "gte: a die at or above threshold succeeds (\"for each 5+\"); lte: a die at or below it (\"for each 1\").",
+///  "default": "gte",
+///  "enum": [
+///    "gte",
+///    "lte"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MortalWoundsEffectModifierRollComparison {
+    #[serde(rename = "gte")]
+    Gte,
+    #[serde(rename = "lte")]
+    Lte,
+}
+impl ::std::fmt::Display for MortalWoundsEffectModifierRollComparison {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Gte => f.write_str("gte"),
+            Self::Lte => f.write_str("lte"),
+        }
+    }
+}
+impl ::std::str::FromStr for MortalWoundsEffectModifierRollComparison {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "gte" => Ok(Self::Gte),
+            "lte" => Ok(Self::Lte),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MortalWoundsEffectModifierRollComparison {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for MortalWoundsEffectModifierRollComparison {
+    fn default() -> Self {
+        MortalWoundsEffectModifierRollComparison::Gte
+    }
 }
 ///`MortalWoundsEffectModifierRollDice`
 ///
@@ -26150,6 +26649,12 @@ for MortalWoundsEffectModifierRollPerModel {
 ///    "allow_engagement": {
 ///      "const": true
 ///    },
+///    "as_if": {
+///      "description": "The move is made as if it were your Movement phase, outside it.",
+///      "enum": [
+///        "movement-phase"
+///      ]
+///    },
 ///    "counts_as_move": {
 ///      "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
 ///      "enum": [
@@ -26170,6 +26675,10 @@ for MortalWoundsEffectModifierRollPerModel {
 ///    },
 ///    "distance": {
 ///      "$ref": "#/$defs/quantity"
+///    },
+///    "ends_nearest": {
+///      "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).",
+///      "$ref": "#/$defs/ends-nearest"
 ///    },
 ///    "ends_when": {
 ///      "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within.",
@@ -26192,6 +26701,12 @@ for MortalWoundsEffectModifierRollPerModel {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    "engaged_with": {
+///      "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.",
+///      "enum": [
+///        "nearest-move-end"
+///      ]
 ///    },
 ///    "keeps_eligible": {
 ///      "const": true
@@ -26282,16 +26797,25 @@ for MortalWoundsEffectModifierRollPerModel {
 pub struct MoveEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub allow_engagement: ::std::option::Option<::serde_json::Value>,
+    ///The move is made as if it were your Movement phase, outside it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if: ::std::option::Option<MoveEffectModifierAsIf>,
     ///The move counts as this kind of move for rules that check what the unit did this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<MoveEffectModifierCountsAsMove>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<Quantity>,
+    ///Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_nearest: ::std::option::Option<EndsNearest>,
     ///Where the moving unit must be when the move ends, as a condition on it: "your unit must end that move either wholly within your deployment zone or within range of an objective marker". For a single distance to a place, use ends_within.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_when: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_within: ::std::option::Option<MoveEffectModifierEndsWithin>,
+    ///allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub engaged_with: ::std::option::Option<MoveEffectModifierEngagedWith>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keeps_eligible: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -26299,6 +26823,77 @@ pub struct MoveEffectModifier {
     pub move_type: MoveEffectModifierMoveType,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<Vec<MoveEffectModifierPassthroughItem>>,
+}
+///The move is made as if it were your Movement phase, outside it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The move is made as if it were your Movement phase, outside it.",
+///  "enum": [
+///    "movement-phase"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierAsIf {
+    #[serde(rename = "movement-phase")]
+    MovementPhase,
+}
+impl ::std::fmt::Display for MoveEffectModifierAsIf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MovementPhase => f.write_str("movement-phase"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierAsIf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "movement-phase" => Ok(Self::MovementPhase),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///The move counts as this kind of move for rules that check what the unit did this turn.
 ///
@@ -26464,6 +27059,77 @@ pub struct MoveEffectModifierEndsWithin {
     pub range: RangeRef,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wholly: ::std::option::Option<::serde_json::Value>,
+}
+///allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "allow_engagement is bound to the enemy unit the move ends nearest (ends_nearest.of): models may end within Engagement Range of that unit. Needs ends_nearest.",
+///  "enum": [
+///    "nearest-move-end"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierEngagedWith {
+    #[serde(rename = "nearest-move-end")]
+    NearestMoveEnd,
+}
+impl ::std::fmt::Display for MoveEffectModifierEngagedWith {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NearestMoveEnd => f.write_str("nearest-move-end"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierEngagedWith {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "nearest-move-end" => Ok(Self::NearestMoveEnd),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierEngagedWith {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`MoveEffectModifierMoveType`
 ///
@@ -27123,6 +27789,18 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "end_on_terrain": {
 ///      "const": true
 ///    },
+///    "ends_nearest": {
+///      "description": "Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.",
+///      "$ref": "#/$defs/ends-nearest"
+///    },
+///    "ends_when": {
+///      "description": "Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.",
+///      "$ref": "#/$defs/condition"
+///    },
+///    "ends_when_replaces": {
+///      "description": "Only with ends_when: the ends_when condition replaces the usual end threshold (\"instead of more than 8\\\"\") rather than adding to it. Without this flag the condition adds to the usual rules.",
+///      "const": true
+///    },
 ///    "ignore_vertical": {
 ///      "const": true
 ///    },
@@ -27204,6 +27882,15 @@ pub struct MoveModifierEffectModifier {
     pub distance_bonus: ::std::option::Option<MoveModifierEffectModifierDistanceBonus>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_on_terrain: ::std::option::Option<::serde_json::Value>,
+    ///Where each move in applies_to_moves must end: as close as possible to the closest unit matching `of`. Does not change the move's distance.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_nearest: ::std::option::Option<EndsNearest>,
+    ///Where each move in applies_to_moves must end, as a condition on the moving unit. Beside distance_bonus it is the feasibility proviso: the bonus is available only if a move can end where this says, and such a move must end there.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_when: ::std::option::Option<Condition>,
+    ///Only with ends_when: the ends_when condition replaces the usual end threshold ("instead of more than 8\"") rather than adding to it. Without this flag the condition adds to the usual rules.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ends_when_replaces: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_vertical: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -27220,6 +27907,9 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             applies_to_moves: Default::default(),
             distance_bonus: Default::default(),
             end_on_terrain: Default::default(),
+            ends_nearest: Default::default(),
+            ends_when: Default::default(),
+            ends_when_replaces: Default::default(),
             ignore_vertical: Default::default(),
             no_end_in_engagement: Default::default(),
             passthrough: Default::default(),
@@ -30607,6 +31297,256 @@ impl ::std::convert::TryFrom<::std::string::String> for NamedRegionStateEffectTy
         value.parse()
     }
 }
+///`NamedWeaponConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "count",
+///    "name",
+///    "subject"
+///  ],
+///  "properties": {
+///    "count": {
+///      "type": "integer",
+///      "maximum": 12.0,
+///      "minimum": 1.0
+///    },
+///    "models": {
+///      "type": "object",
+///      "required": [
+///        "at_least",
+///        "state"
+///      ],
+///      "properties": {
+///        "at_least": {
+///          "type": "integer",
+///          "maximum": 30.0,
+///          "minimum": 1.0
+///        },
+///        "state": {
+///          "enum": [
+///            "carry",
+///            "lack"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 80,
+///      "minLength": 1
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct NamedWeaponConditionParameters {
+    pub count: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models: ::std::option::Option<NamedWeaponConditionParametersModels>,
+    pub name: NamedWeaponConditionParametersName,
+    pub subject: UnitRef,
+}
+///`NamedWeaponConditionParametersModels`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "at_least",
+///    "state"
+///  ],
+///  "properties": {
+///    "at_least": {
+///      "type": "integer",
+///      "maximum": 30.0,
+///      "minimum": 1.0
+///    },
+///    "state": {
+///      "enum": [
+///        "carry",
+///        "lack"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct NamedWeaponConditionParametersModels {
+    pub at_least: ::std::num::NonZeroU64,
+    pub state: NamedWeaponConditionParametersModelsState,
+}
+///`NamedWeaponConditionParametersModelsState`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "carry",
+///    "lack"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum NamedWeaponConditionParametersModelsState {
+    #[serde(rename = "carry")]
+    Carry,
+    #[serde(rename = "lack")]
+    Lack,
+}
+impl ::std::fmt::Display for NamedWeaponConditionParametersModelsState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Carry => f.write_str("carry"),
+            Self::Lack => f.write_str("lack"),
+        }
+    }
+}
+impl ::std::str::FromStr for NamedWeaponConditionParametersModelsState {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "carry" => Ok(Self::Carry),
+            "lack" => Ok(Self::Lack),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for NamedWeaponConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`NamedWeaponConditionParametersName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 80,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct NamedWeaponConditionParametersName(::std::string::String);
+impl ::std::ops::Deref for NamedWeaponConditionParametersName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<NamedWeaponConditionParametersName> for ::std::string::String {
+    fn from(value: NamedWeaponConditionParametersName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for NamedWeaponConditionParametersName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 80usize {
+            return Err("longer than 80 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for NamedWeaponConditionParametersName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for NamedWeaponConditionParametersName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///Resolve no effect; does not create attacks, damage, selections, or secondary events.
 ///
 /// <details><summary>JSON schema</summary>
@@ -33001,7 +33941,10 @@ for PairedUnitSelectorVariant1SelectionLimitPeriod {
 ///      "enum": [
 ///        "shooting-phase",
 ///        "snap-shooting",
-///        "fight-phase"
+///        "fight-phase",
+///        "movement-phase",
+///        "charge-phase",
+///        "command-phase"
 ///      ]
 ///    },
 ///    "consumes_shared_use": {
@@ -33038,7 +33981,8 @@ for PairedUnitSelectorVariant1SelectionLimitPeriod {
 ///          "stratagem-used-this-phase",
 ///          "performing-action",
 ///          "advanced",
-///          "fell-back"
+///          "fell-back",
+///          "destroyed"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -33335,7 +34279,10 @@ for PermissionEffectModifierAfterItem {
 ///  "enum": [
 ///    "shooting-phase",
 ///    "snap-shooting",
-///    "fight-phase"
+///    "fight-phase",
+///    "movement-phase",
+///    "charge-phase",
+///    "command-phase"
 ///  ]
 ///}
 /// ```
@@ -33359,6 +34306,12 @@ pub enum PermissionEffectModifierAsIf {
     SnapShooting,
     #[serde(rename = "fight-phase")]
     FightPhase,
+    #[serde(rename = "movement-phase")]
+    MovementPhase,
+    #[serde(rename = "charge-phase")]
+    ChargePhase,
+    #[serde(rename = "command-phase")]
+    CommandPhase,
 }
 impl ::std::fmt::Display for PermissionEffectModifierAsIf {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -33366,6 +34319,9 @@ impl ::std::fmt::Display for PermissionEffectModifierAsIf {
             Self::ShootingPhase => f.write_str("shooting-phase"),
             Self::SnapShooting => f.write_str("snap-shooting"),
             Self::FightPhase => f.write_str("fight-phase"),
+            Self::MovementPhase => f.write_str("movement-phase"),
+            Self::ChargePhase => f.write_str("charge-phase"),
+            Self::CommandPhase => f.write_str("command-phase"),
         }
     }
 }
@@ -33378,6 +34334,9 @@ impl ::std::str::FromStr for PermissionEffectModifierAsIf {
             "shooting-phase" => Ok(Self::ShootingPhase),
             "snap-shooting" => Ok(Self::SnapShooting),
             "fight-phase" => Ok(Self::FightPhase),
+            "movement-phase" => Ok(Self::MovementPhase),
+            "charge-phase" => Ok(Self::ChargePhase),
+            "command-phase" => Ok(Self::CommandPhase),
             _ => Err("invalid value".into()),
         }
     }
@@ -33554,7 +34513,8 @@ for PermissionEffectModifierCountsAsMove {
 ///    "stratagem-used-this-phase",
 ///    "performing-action",
 ///    "advanced",
-///    "fell-back"
+///    "fell-back",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -33590,6 +34550,8 @@ pub enum PermissionEffectModifierDespiteItem {
     Advanced,
     #[serde(rename = "fell-back")]
     FellBack,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -33603,6 +34565,7 @@ impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
             Self::PerformingAction => f.write_str("performing-action"),
             Self::Advanced => f.write_str("advanced"),
             Self::FellBack => f.write_str("fell-back"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -33621,6 +34584,7 @@ impl ::std::str::FromStr for PermissionEffectModifierDespiteItem {
             "performing-action" => Ok(Self::PerformingAction),
             "advanced" => Ok(Self::Advanced),
             "fell-back" => Ok(Self::FellBack),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }
@@ -36351,6 +37315,9 @@ impl ::std::default::Default for PiecePieceType {
 ///        "battlefield-edge",
 ///        "battlefield-centre"
 ///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/region-ref"
 ///    }
 ///  ]
 ///}
@@ -36363,6 +37330,7 @@ pub enum PlaceRef {
     Variant1 { objective: ObjectiveFilter },
     Variant2 { marker: PlaceRefVariant2Marker },
     Variant3(PlaceRefVariant3),
+    Variant4(RegionRef),
 }
 impl ::std::convert::From<UnitRef> for PlaceRef {
     fn from(value: UnitRef) -> Self {
@@ -36372,6 +37340,11 @@ impl ::std::convert::From<UnitRef> for PlaceRef {
 impl ::std::convert::From<PlaceRefVariant3> for PlaceRef {
     fn from(value: PlaceRefVariant3) -> Self {
         Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<RegionRef> for PlaceRef {
+    fn from(value: RegionRef) -> Self {
+        Self::Variant4(value)
     }
 }
 ///`PlaceRefVariant2Marker`
@@ -42689,6 +43662,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -42706,6 +43680,7 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -42725,12 +43700,16 @@ impl<'de> ::serde::Deserialize<'de> for ResourceSpendEffectModifierPool {
 ///      "minimum": 1.0
 ///    },
 ///    "wounds_remaining": {
+///      "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
 ///      "oneOf": [
 ///        {
 ///          "$ref": "#/$defs/quantity"
 ///        },
 ///        {
 ///          "const": "full"
+///        },
+///        {
+///          "const": "half-starting"
 ///        }
 ///      ]
 ///    }
@@ -42763,6 +43742,7 @@ pub struct ReturnModelsEffectModifier {
     pub range: ::std::option::Option<RangeRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
+    ///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub wounds_remaining: ::std::option::Option<
         ReturnModelsEffectModifierWoundsRemaining,
@@ -42892,6 +43872,7 @@ impl<'de> ::serde::Deserialize<'de> for ReturnModelsEffectModifierModelKeyword {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -42909,6 +43890,7 @@ impl<'de> ::serde::Deserialize<'de> for ReturnModelsEffectModifierModelKeyword {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -42954,6 +43936,7 @@ for ReturnModelsEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -42989,6 +43972,8 @@ pub enum ReturnModelsEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -43008,6 +43993,7 @@ impl ::std::fmt::Display for ReturnModelsEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -43028,6 +44014,7 @@ impl ::std::str::FromStr for ReturnModelsEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -43076,6 +44063,7 @@ for ReturnModelsEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -43111,6 +44099,8 @@ pub enum ReturnModelsEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -43130,6 +44120,7 @@ impl ::std::fmt::Display for ReturnModelsEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -43150,6 +44141,7 @@ impl ::std::str::FromStr for ReturnModelsEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -43184,18 +44176,22 @@ for ReturnModelsEffectModifierPlacementVariant1Item {
         value.parse()
     }
 }
-///`ReturnModelsEffectModifierWoundsRemaining`
+///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
 ///  "oneOf": [
 ///    {
 ///      "$ref": "#/$defs/quantity"
 ///    },
 ///    {
 ///      "const": "full"
+///    },
+///    {
+///      "const": "half-starting"
 ///    }
 ///  ]
 ///}
@@ -43206,16 +44202,11 @@ for ReturnModelsEffectModifierPlacementVariant1Item {
 pub enum ReturnModelsEffectModifierWoundsRemaining {
     Variant0(Quantity),
     Variant1(::serde_json::Value),
+    Variant2(::serde_json::Value),
 }
 impl ::std::convert::From<Quantity> for ReturnModelsEffectModifierWoundsRemaining {
     fn from(value: Quantity) -> Self {
         Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<::serde_json::Value>
-for ReturnModelsEffectModifierWoundsRemaining {
-    fn from(value: ::serde_json::Value) -> Self {
-        Self::Variant1(value)
     }
 }
 ///`RiskRewardEffect`
@@ -43813,7 +44804,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RollEffectType {
 ///        "dark-pact",
 ///        "blessings-of-khorne",
 ///        "manoeuvre",
-///        "channelling"
+///        "channelling",
+///        "deadly-demise"
 ///      ]
 ///    },
 ///    {
@@ -43860,7 +44852,8 @@ impl ::std::convert::From<AbilityRoll> for RollKind {
 ///    "dark-pact",
 ///    "blessings-of-khorne",
 ///    "manoeuvre",
-///    "channelling"
+///    "channelling",
+///    "deadly-demise"
 ///  ]
 ///}
 /// ```
@@ -43908,6 +44901,8 @@ pub enum RollKindVariant0 {
     Manoeuvre,
     #[serde(rename = "channelling")]
     Channelling,
+    #[serde(rename = "deadly-demise")]
+    DeadlyDemise,
 }
 impl ::std::fmt::Display for RollKindVariant0 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -43927,6 +44922,7 @@ impl ::std::fmt::Display for RollKindVariant0 {
             Self::BlessingsOfKhorne => f.write_str("blessings-of-khorne"),
             Self::Manoeuvre => f.write_str("manoeuvre"),
             Self::Channelling => f.write_str("channelling"),
+            Self::DeadlyDemise => f.write_str("deadly-demise"),
         }
     }
 }
@@ -43951,6 +44947,7 @@ impl ::std::str::FromStr for RollKindVariant0 {
             "blessings-of-khorne" => Ok(Self::BlessingsOfKhorne),
             "manoeuvre" => Ok(Self::Manoeuvre),
             "channelling" => Ok(Self::Channelling),
+            "deadly-demise" => Ok(Self::DeadlyDemise),
             _ => Err("invalid value".into()),
         }
     }
@@ -45024,6 +46021,10 @@ pub struct RollResultConditionParameters {
 ///    "roll"
 ///  ],
 ///  "properties": {
+///    "count": {
+///      "description": "Only one roll the player picks gets this result (\"change the result of one Hit roll to an unmodified 6\"); absent, every such roll does.",
+///      "const": 1
+///    },
 ///    "critical_on": {
 ///      "oneOf": [
 ///        {
@@ -45162,6 +46163,9 @@ pub struct RollResultConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RollResultEffectModifier {
+    ///Only one roll the player picks gets this result ("change the result of one Hit roll to an unmodified 6"); absent, every such roll does.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub critical_on: ::std::option::Option<RollResultEffectModifierCriticalOn>,
     ///An unmodified result of N or less always fails; higher results use the normal success rule.
@@ -46024,7 +47028,7 @@ pub struct RuleActiveConditionParameters {
 ///    "hidden",
 ///    "orders-end-on-battle-shock"
 ///  ],
-///  "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set)."
+///  "$comment": "Closed vocabulary of core-rule slugs a `rule-state` effect may toggle (rule_kind: core-rule). These are 10e CORE RULES/mechanics (not core abilities — those are entities, reached via rule_kind: ability). Finite, slow-moving; AJV-enforced, stripped from codegen. The slug — not direction/target — disambiguates active vs passive of the same rule: `fire-overwatch` (the bearer firing Overwatch) vs `overwatch-against-bearer` (the bearer being targeted by Overwatch). For rule_kind `ability`/`faction-rule` the slug is a free string resolved by integrity.ts against the matching entity; `keyword` is a free string (open keyword set). A suppressed `attacking-ends-hidden` discounts, for good, the ranged attacks made while it holds: they never count toward the Hidden rule's ranged-attack clause, even after the effect ends; with `attacks` it discounts exactly the attacks of the bound event."
 ///}
 /// ```
 /// </details>
@@ -46153,6 +47157,10 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///    "rule_kind"
 ///  ],
 ///  "properties": {
+///    "attacks": {
+///      "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.",
+///      "$ref": "#/$defs/event-bound-reference"
+///    },
 ///    "direction": {
 ///      "enum": [
 ///        "granted",
@@ -46179,6 +47187,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct RuleStateEffectModifier {
+    ///Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacks: ::std::option::Option<EventBoundReference>,
     pub direction: RuleStateEffectModifierDirection,
     pub rule: RuleStateEffectModifierRule,
     pub rule_kind: RuleStateEffectModifierRuleKind,
@@ -46570,6 +47581,15 @@ pub struct SameUnitConditionParameters {
 ///    "per"
 ///  ],
 ///  "properties": {
+///    "evaluated": {
+///      "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
+///      "default": "live",
+///      "type": "string",
+///      "enum": [
+///        "live",
+///        "on-apply"
+///      ]
+///    },
 ///    "field": {
 ///      "description": "The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.",
 ///      "type": "string",
@@ -46619,6 +47639,9 @@ pub struct SameUnitConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Scaling {
+    ///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+    #[serde(default = "defaults::scaling_evaluated")]
+    pub evaluated: ScalingEvaluated,
     ///The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub field: ::std::option::Option<ScalingField>,
@@ -46636,6 +47659,89 @@ pub struct Scaling {
     pub wargear: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within_inches: ::std::option::Option<f64>,
+}
+///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
+///  "default": "live",
+///  "type": "string",
+///  "enum": [
+///    "live",
+///    "on-apply"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ScalingEvaluated {
+    #[serde(rename = "live")]
+    Live,
+    #[serde(rename = "on-apply")]
+    OnApply,
+}
+impl ::std::fmt::Display for ScalingEvaluated {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Live => f.write_str("live"),
+            Self::OnApply => f.write_str("on-apply"),
+        }
+    }
+}
+impl ::std::str::FromStr for ScalingEvaluated {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "live" => Ok(Self::Live),
+            "on-apply" => Ok(Self::OnApply),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ScalingEvaluated {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for ScalingEvaluated {
+    fn default() -> Self {
+        ScalingEvaluated::Live
+    }
 }
 ///The modifier field the scaling multiplies (default value): count for re-roll/return-models, modifier for a test's penalty.
 ///
@@ -46958,13 +48064,13 @@ impl ::std::convert::TryFrom<::std::string::String> for ScalingSource {
 pub struct Scope {
     pub duration: ScopeDuration,
 }
-///How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
+///How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.",
+///  "description": "How long an effect, a part or a designation lasts; the one expiry vocabulary for scope.duration, ability-part.duration, designate.clears_on and the designation containers. attack-sequence expires when the currently selected unit finishes resolving its shooting or fighting attacks; resolution lasts only while resolving this activation and is not a battle/phase usage limit; until-this-unit-has-shot ends once the unit with the ability has resolved its ranged attacks; control-lost ends when you stop controlling the designated objective. until-end-of-*-next-*-phase and until-start-of-opponent-next-command-phase end at the first such phase edge after the effect applies; the phase in progress when the effect applies never counts. one-use is retired (use usage n-per-battle) and leaves the enum once no record carries it.",
 ///  "type": "string",
 ///  "enum": [
 ///    "phase",
@@ -46983,7 +48089,12 @@ pub struct Scope {
 ///    "until-end-of-your-next-turn",
 ///    "until-end-of-opponent-next-turn",
 ///    "until-this-unit-has-shot",
-///    "control-lost"
+///    "control-lost",
+///    "until-end-of-your-next-fight-phase",
+///    "until-end-of-your-next-shooting-phase",
+///    "until-end-of-your-next-movement-phase",
+///    "until-end-of-opponent-next-movement-phase",
+///    "until-start-of-opponent-next-command-phase"
 ///  ]
 ///}
 /// ```
@@ -47035,6 +48146,16 @@ pub enum ScopeDuration {
     UntilThisUnitHasShot,
     #[serde(rename = "control-lost")]
     ControlLost,
+    #[serde(rename = "until-end-of-your-next-fight-phase")]
+    UntilEndOfYourNextFightPhase,
+    #[serde(rename = "until-end-of-your-next-shooting-phase")]
+    UntilEndOfYourNextShootingPhase,
+    #[serde(rename = "until-end-of-your-next-movement-phase")]
+    UntilEndOfYourNextMovementPhase,
+    #[serde(rename = "until-end-of-opponent-next-movement-phase")]
+    UntilEndOfOpponentNextMovementPhase,
+    #[serde(rename = "until-start-of-opponent-next-command-phase")]
+    UntilStartOfOpponentNextCommandPhase,
 }
 impl ::std::fmt::Display for ScopeDuration {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -47058,6 +48179,21 @@ impl ::std::fmt::Display for ScopeDuration {
             }
             Self::UntilThisUnitHasShot => f.write_str("until-this-unit-has-shot"),
             Self::ControlLost => f.write_str("control-lost"),
+            Self::UntilEndOfYourNextFightPhase => {
+                f.write_str("until-end-of-your-next-fight-phase")
+            }
+            Self::UntilEndOfYourNextShootingPhase => {
+                f.write_str("until-end-of-your-next-shooting-phase")
+            }
+            Self::UntilEndOfYourNextMovementPhase => {
+                f.write_str("until-end-of-your-next-movement-phase")
+            }
+            Self::UntilEndOfOpponentNextMovementPhase => {
+                f.write_str("until-end-of-opponent-next-movement-phase")
+            }
+            Self::UntilStartOfOpponentNextCommandPhase => {
+                f.write_str("until-start-of-opponent-next-command-phase")
+            }
         }
     }
 }
@@ -47084,6 +48220,21 @@ impl ::std::str::FromStr for ScopeDuration {
             "until-end-of-opponent-next-turn" => Ok(Self::UntilEndOfOpponentNextTurn),
             "until-this-unit-has-shot" => Ok(Self::UntilThisUnitHasShot),
             "control-lost" => Ok(Self::ControlLost),
+            "until-end-of-your-next-fight-phase" => {
+                Ok(Self::UntilEndOfYourNextFightPhase)
+            }
+            "until-end-of-your-next-shooting-phase" => {
+                Ok(Self::UntilEndOfYourNextShootingPhase)
+            }
+            "until-end-of-your-next-movement-phase" => {
+                Ok(Self::UntilEndOfYourNextMovementPhase)
+            }
+            "until-end-of-opponent-next-movement-phase" => {
+                Ok(Self::UntilEndOfOpponentNextMovementPhase)
+            }
+            "until-start-of-opponent-next-command-phase" => {
+                Ok(Self::UntilStartOfOpponentNextCommandPhase)
+            }
             _ => Err("invalid value".into()),
         }
     }
@@ -51103,6 +52254,10 @@ impl ::std::convert::TryFrom<::std::string::String> for SelectUnitsEffectType {
 ///      "type": "string",
 ///      "minLength": 1
 ///    },
+///    "weapon_name": {
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "weapon_type": {
 ///      "enum": [
 ///        "melee",
@@ -51122,6 +52277,8 @@ pub struct SelectWeaponEffectModifier {
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_keyword: ::std::option::Option<SelectWeaponEffectModifierWeaponKeyword>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub weapon_name: ::std::option::Option<SelectWeaponEffectModifierWeaponName>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_type: ::std::option::Option<SelectWeaponEffectModifierWeaponType>,
 }
@@ -51263,6 +52420,81 @@ for SelectWeaponEffectModifierWeaponKeyword {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for SelectWeaponEffectModifierWeaponKeyword {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`SelectWeaponEffectModifierWeaponName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct SelectWeaponEffectModifierWeaponName(::std::string::String);
+impl ::std::ops::Deref for SelectWeaponEffectModifierWeaponName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SelectWeaponEffectModifierWeaponName>
+for ::std::string::String {
+    fn from(value: SelectWeaponEffectModifierWeaponName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for SelectWeaponEffectModifierWeaponName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SelectWeaponEffectModifierWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for SelectWeaponEffectModifierWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for SelectWeaponEffectModifierWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SelectWeaponEffectModifierWeaponName {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -51602,6 +52834,9 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///        "remain-stationary"
 ///      ]
 ///    },
+///    "detach": {
+///      "const": true
+///    },
 ///    "from": {
 ///      "enum": [
 ///        "strategic-reserves",
@@ -51617,6 +52852,23 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///    },
 ///    "mandatory": {
 ///      "const": true
+///    },
+///    "marker_range": {
+///      "description": "With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.",
+///      "type": "object",
+///      "required": [
+///        "inches"
+///      ],
+///      "properties": {
+///        "inches": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "wholly": {
+///          "const": true
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "min_distance_from": {
 ///      "type": "object",
@@ -51657,6 +52909,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///            "wholly-within",
 ///            "within",
 ///            "strategic-reserves",
+///            "cult-ambush",
 ///            "anywhere",
 ///            "connected-sections",
 ///            "deployment-zone",
@@ -51674,6 +52927,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///              "wholly-within",
 ///              "within",
 ///              "strategic-reserves",
+///              "cult-ambush",
 ///              "anywhere",
 ///              "connected-sections",
 ///              "deployment-zone",
@@ -51689,6 +52943,10 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "type": "integer"
 ///    },
 ///    "sections": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "starting_strength": {
 ///      "type": "integer",
 ///      "minimum": 1.0
 ///    },
@@ -51717,10 +52975,28 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "minItems": 1
 ///    },
 ///    "via": {
-///      "const": "deep-strike"
+///      "description": "deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).",
+///      "enum": [
+///        "deep-strike",
+///        "cult-ambush-marker"
+///      ]
 ///    },
 ///    "within_edge": {
 ///      "type": "number"
+///    },
+///    "wounds_remaining": {
+///      "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/quantity"
+///        },
+///        {
+///          "const": "full"
+///        },
+///        {
+///          "const": "half-starting"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -51744,6 +53020,8 @@ pub struct SetUpEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<SetUpEffectModifierCountsAsMove>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub detach: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub from: ::std::option::Option<SetUpEffectModifierFrom>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_limits: ::std::option::Option<::serde_json::Value>,
@@ -51751,6 +53029,8 @@ pub struct SetUpEffectModifier {
     pub in_region: ::std::option::Option<PlacementRegion>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mandatory: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub marker_range: ::std::option::Option<SetUpEffectModifierMarkerRange>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_distance_from: ::std::option::Option<SetUpEffectModifierMinDistanceFrom>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -51766,14 +53046,20 @@ pub struct SetUpEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sections: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subject: ::std::option::Option<SetUpEffectModifierSubject>,
     pub to: SetUpEffectModifierTo,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub turns: ::std::vec::Vec<::std::num::NonZeroU64>,
+    ///deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub via: ::std::option::Option<::serde_json::Value>,
+    pub via: ::std::option::Option<SetUpEffectModifierVia>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within_edge: ::std::option::Option<f64>,
+    ///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wounds_remaining: ::std::option::Option<SetUpEffectModifierWoundsRemaining>,
 }
 ///Being set up this way counts as having made this move this turn.
 ///
@@ -51987,6 +53273,37 @@ impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierFrom 
         value.parse()
     }
 }
+///With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "With via cult-ambush-marker: set up (wholly) within this many inches of the marker instead of touching it.",
+///  "type": "object",
+///  "required": [
+///    "inches"
+///  ],
+///  "properties": {
+///    "inches": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "wholly": {
+///      "const": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SetUpEffectModifierMarkerRange {
+    pub inches: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub wholly: ::std::option::Option<::serde_json::Value>,
+}
 ///`SetUpEffectModifierMinDistanceFrom`
 ///
 /// <details><summary>JSON schema</summary>
@@ -52032,6 +53349,7 @@ pub struct SetUpEffectModifierMinDistanceFrom {
 ///        "wholly-within",
 ///        "within",
 ///        "strategic-reserves",
+///        "cult-ambush",
 ///        "anywhere",
 ///        "connected-sections",
 ///        "deployment-zone",
@@ -52049,6 +53367,7 @@ pub struct SetUpEffectModifierMinDistanceFrom {
 ///          "wholly-within",
 ///          "within",
 ///          "strategic-reserves",
+///          "cult-ambush",
 ///          "anywhere",
 ///          "connected-sections",
 ///          "deployment-zone",
@@ -52094,6 +53413,7 @@ for SetUpEffectModifierPlacement {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -52129,6 +53449,8 @@ pub enum SetUpEffectModifierPlacementVariant0 {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -52148,6 +53470,7 @@ impl ::std::fmt::Display for SetUpEffectModifierPlacementVariant0 {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -52168,6 +53491,7 @@ impl ::std::str::FromStr for SetUpEffectModifierPlacementVariant0 {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -52216,6 +53540,7 @@ for SetUpEffectModifierPlacementVariant0 {
 ///    "wholly-within",
 ///    "within",
 ///    "strategic-reserves",
+///    "cult-ambush",
 ///    "anywhere",
 ///    "connected-sections",
 ///    "deployment-zone",
@@ -52251,6 +53576,8 @@ pub enum SetUpEffectModifierPlacementVariant1Item {
     Within,
     #[serde(rename = "strategic-reserves")]
     StrategicReserves,
+    #[serde(rename = "cult-ambush")]
+    CultAmbush,
     #[serde(rename = "anywhere")]
     Anywhere,
     #[serde(rename = "connected-sections")]
@@ -52270,6 +53597,7 @@ impl ::std::fmt::Display for SetUpEffectModifierPlacementVariant1Item {
             Self::WhollyWithin => f.write_str("wholly-within"),
             Self::Within => f.write_str("within"),
             Self::StrategicReserves => f.write_str("strategic-reserves"),
+            Self::CultAmbush => f.write_str("cult-ambush"),
             Self::Anywhere => f.write_str("anywhere"),
             Self::ConnectedSections => f.write_str("connected-sections"),
             Self::DeploymentZone => f.write_str("deployment-zone"),
@@ -52290,6 +53618,7 @@ impl ::std::str::FromStr for SetUpEffectModifierPlacementVariant1Item {
             "wholly-within" => Ok(Self::WhollyWithin),
             "within" => Ok(Self::Within),
             "strategic-reserves" => Ok(Self::StrategicReserves),
+            "cult-ambush" => Ok(Self::CultAmbush),
             "anywhere" => Ok(Self::Anywhere),
             "connected-sections" => Ok(Self::ConnectedSections),
             "deployment-zone" => Ok(Self::DeploymentZone),
@@ -52430,6 +53759,115 @@ impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierTo {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "deep-strike: set up using the Deep Strike rules. cult-ambush-marker: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).",
+///  "enum": [
+///    "deep-strike",
+///    "cult-ambush-marker"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum SetUpEffectModifierVia {
+    #[serde(rename = "deep-strike")]
+    DeepStrike,
+    #[serde(rename = "cult-ambush-marker")]
+    CultAmbushMarker,
+}
+impl ::std::fmt::Display for SetUpEffectModifierVia {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::DeepStrike => f.write_str("deep-strike"),
+            Self::CultAmbushMarker => f.write_str("cult-ambush-marker"),
+        }
+    }
+}
+impl ::std::str::FromStr for SetUpEffectModifierVia {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "deep-strike" => Ok(Self::DeepStrike),
+            "cult-ambush-marker" => Ok(Self::CultAmbushMarker),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SetUpEffectModifierVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for SetUpEffectModifierVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SetUpEffectModifierVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Wounds the model has when it is set up: a number or dice expression, full (all of its wounds) or half-starting (half of its starting number of wounds).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/quantity"
+///    },
+///    {
+///      "const": "full"
+///    },
+///    {
+///      "const": "half-starting"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum SetUpEffectModifierWoundsRemaining {
+    Variant0(Quantity),
+    Variant1(::serde_json::Value),
+    Variant2(::serde_json::Value),
+}
+impl ::std::convert::From<Quantity> for SetUpEffectModifierWoundsRemaining {
+    fn from(value: Quantity) -> Self {
+        Self::Variant0(value)
     }
 }
 ///Which player a zone or territory belongs to.
@@ -52764,6 +54202,60 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        },
 ///        "type": {
 ///          "const": "loadout"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "equipped-weapon-count condition",
+///      "description": "[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/equipped-weapon-count-condition-parameters"
+///        },
+///        "type": {
+///          "const": "equipped-weapon-count"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "named-weapon condition",
+///      "description": "[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/named-weapon-condition-parameters"
+///        },
+///        "type": {
+///          "const": "named-weapon"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "unit-wargear condition",
+///      "description": "[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/unit-wargear-condition-parameters"
+///        },
+///        "type": {
+///          "const": "unit-wargear"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -53124,6 +54616,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "army-includes condition",
+///      "description": "[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/army-includes-condition-parameters"
+///        },
+///        "type": {
+///          "const": "army-includes"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "moved-over condition",
 ///      "description": "[history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.",
 ///      "type": "object",
@@ -53155,6 +54665,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        },
 ///        "type": {
 ///          "const": "guided"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "deployment-window condition",
+///      "description": "[clock] It is the deployment step, before the battle starts (\"during deployment\").",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/deployment-window-condition-parameters"
+///        },
+///        "type": {
+///          "const": "deployment-window"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -53236,6 +54764,21 @@ pub enum SimpleCondition {
 [composition] Each model (with model_keyword, if given) carries identical weapons of this kind.*/
     #[serde(rename = "loadout")]
     Loadout { parameters: LoadoutConditionParameters },
+    /**equipped-weapon-count condition
+
+[composition] This model carries a weapon named other_than, and exactly count weapons of weapon_type whose names differ from it.*/
+    #[serde(rename = "equipped-weapon-count")]
+    EquippedWeaponCount { parameters: EquippedWeaponCountConditionParameters },
+    /**named-weapon condition
+
+[composition] This model (subject this-model) carries exactly count weapons with the printed name `name`. With subject this-unit and models, at least models.at_least models in this unit each carry count such weapons (state carry), or each carry fewer than count (state lack).*/
+    #[serde(rename = "named-weapon")]
+    NamedWeapon { parameters: NamedWeaponConditionParameters },
+    /**unit-wargear condition
+
+[composition] This unit has the wargear item `wargear` (a wargear record, not a weapon). With models, at least models.at_least models in this unit carry the item (state carry) or lack it (state lack).*/
+    #[serde(rename = "unit-wargear")]
+    UnitWargear { parameters: UnitWargearConditionParameters },
     /**unit-state condition
 
 [state] The subject is in this core-rules state. `with` narrows engaged to one unit; `at` reads the state at an earlier point.*/
@@ -53351,6 +54894,11 @@ pub enum SimpleCondition {
 [army] Your Army Faction is this faction.*/
     #[serde(rename = "army-faction")]
     ArmyFaction { parameters: ArmyFactionConditionParameters },
+    /**army-includes condition
+
+[army] Your army includes at least `min` (default 1) units matching `filter`; with every: true, every unit (or model, with filter level: model) in your army matches it.*/
+    #[serde(rename = "army-includes")]
+    ArmyIncludes { parameters: ArmyIncludesConditionParameters },
     /**moved-over condition
 
 [history] The subject (default the unit being checked) was moved over by `by` during that move (window event) or in the window.*/
@@ -53361,6 +54909,11 @@ pub enum SimpleCondition {
 [designation] The subject (default this unit) is Guided: it has For the Greater Good, is not an Observer, and is targeting one or more Spotted units.*/
     #[serde(rename = "guided")]
     Guided { parameters: GuidedConditionParameters },
+    /**deployment-window condition
+
+[clock] It is the deployment step, before the battle starts ("during deployment").*/
+    #[serde(rename = "deployment-window")]
+    DeploymentWindow { parameters: DeploymentWindowConditionParameters },
 }
 ///One effect: a type, the unit-ref it applies to (`target`), and that effect's closed `modifier`.
 ///
@@ -53521,7 +55074,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-grant effect",
-///      "description": "[ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6\", Firing Deck 2).",
+///      "description": "[ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6\", Firing Deck 2).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -53646,7 +55199,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-activate effect",
-///      "description": "[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -53671,7 +55224,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "permission effect",
-///      "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
+///      "description": "[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -53971,7 +55524,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "split-unit effect",
-///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.",
+///      "description": "[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -54096,7 +55649,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "set-up effect",
-///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).",
+///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -54542,6 +56095,28 @@ pub enum SimpleCondition {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "weapon-ability-range effect",
+///      "description": "[ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/weapon-ability-range-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "weapon-ability-range"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -54613,7 +56188,7 @@ pub enum SingleEffect {
     },
     /**ability-grant effect
 
-[ability] Give the target a named ability: a core ability or an ability record. value is its rating (Scouts 6", Firing Deck 2).*/
+[ability] Give the target a named ability: a core ability or an ability record, or (definition) an ability printed with the grant. value is its rating (Scouts 6", Firing Deck 2).*/
     #[serde(rename = "ability-grant")]
     AbilityGrant {
         modifier: AbilityGrantEffectModifier,
@@ -54663,7 +56238,7 @@ pub enum SingleEffect {
     },
     /**ability-activate effect
 
-[ability] Make a named ability resolve now, or make one of its options active (exclusive: only that option). select: which option is picked now (by a fresh roll, or by the player), in addition to those already active. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
+[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, or by the player; count: how many, from: only among these). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
     #[serde(rename = "ability-activate")]
     AbilityActivate {
         modifier: AbilityActivateEffectModifier,
@@ -54673,7 +56248,7 @@ pub enum SingleEffect {
     },
     /**permission effect
 
-[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it; as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.*/
+[permission] Allow or forbid an activity. after: in a turn in which the unit made that move; despite: something that would normally block it (destroyed: a just-destroyed unit can still be targeted with a Stratagem); as_if: as if in that phase or using that shooting type; next: the unit must be the next one selected; reach: an extended distance.*/
     #[serde(rename = "permission")]
     Permission {
         modifier: PermissionEffectModifier,
@@ -54793,7 +56368,7 @@ pub enum SingleEffect {
     },
     /**split-unit effect
 
-[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword.*/
+[models] Split the target unit: into units of these sizes, one unit per model, or one unit per listed model keyword. starting_strength: each resulting unit's Starting Strength.*/
     #[serde(rename = "split-unit")]
     SplitUnit {
         modifier: SplitUnitEffectModifier,
@@ -54843,7 +56418,7 @@ pub enum SingleEffect {
     },
     /**set-up effect
 
-[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round).*/
+[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase (allow_first_round: even in the first battle round). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
     #[serde(rename = "set-up")]
     SetUp {
         modifier: SetUpEffectModifier,
@@ -55022,6 +56597,11 @@ pub enum SingleEffect {
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
     },
+    /**weapon-ability-range effect
+
+[ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.*/
+    #[serde(rename = "weapon-ability-range")]
+    WeaponAbilityRange { modifier: WeaponAbilityRangeEffectModifier, target: UnitRef },
 }
 ///Type of game element that is the source of an enrichment entry
 ///
@@ -55177,6 +56757,11 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
 ///        "minimum": 1.0
 ///      },
 ///      "minItems": 2
+///    },
+///    "starting_strength": {
+///      "description": "Each resulting unit's Starting Strength.",
+///      "type": "integer",
+///      "minimum": 1.0
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -55191,12 +56776,18 @@ pub enum SplitUnitEffectModifier {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant0BindAsItem>>,
         model_counts: ::std::vec::Vec<::std::num::NonZeroU64>,
+        ///Each resulting unit's Starting Strength.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
     },
     Variant1 {
         ///Names each resulting unit, in model_counts order, for later {selection_var} references.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         bind_as: ::std::option::Option<Vec<SplitUnitEffectModifierVariant1BindAsItem>>,
         by: SplitUnitEffectModifierVariant1By,
+        ///Each resulting unit's Starting Strength.
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        starting_strength: ::std::option::Option<::std::num::NonZeroU64>,
     },
 }
 ///`SplitUnitEffectModifierVariant0BindAsItem`
@@ -55484,6 +57075,10 @@ for SplitUnitEffectModifierVariant1ByModelKeywordItem {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "additive": {
+///      "description": "The picked options join the options already active for the unit, instead of replacing them.",
+///      "const": true
+///    },
 ///    "max_choices": {
 ///      "description": "Most options picked at once; defaults to one.",
 ///      "type": "integer",
@@ -55540,13 +57135,16 @@ for SplitUnitEffectModifierVariant1ByModelKeywordItem {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. Each option carries a `name` and a bundle `effect` (often a sequence)."
+///  "$comment": "Pick options from a named menu (one unless min_choices/max_choices say otherwise) of modal buffs — the dice-pool-allocation shape minus the dice. `mode`: 're-selectable' re-picks each window with no depletion (Admech Doctrina Imperatives); 'consumable' spends each option once per battle (Gladius Combat Doctrines). `scope` is who the active option applies to; `select` names when the pick is made. A pick replaces the option already active for the unit unless `additive` keeps both. Each option carries a `name` and a bundle `effect` (often a sequence)."
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StanceSelectEffect {
+    ///The picked options join the options already active for the unit, instead of replacing them.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub additive: ::std::option::Option<::serde_json::Value>,
     ///Most options picked at once; defaults to one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
@@ -55923,6 +57521,15 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectType {
 ///        "option_id": {
 ///          "$ref": "#/$defs/entity-id"
 ///        },
+///        "option_ids": {
+///          "description": "With choose-one-option: the shared extra selections may go only to these options.",
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        },
 ///        "stance_id": {
 ///          "$ref": "#/$defs/entity-id"
 ///        }
@@ -55944,7 +57551,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StanceSelectEffectType {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`. The stance's own menu and effects are unchanged."
+///  "$comment": "Widens how many times the options of a `stance-select` menu may be selected — the capacity knob for its sibling. Gladius Task Force's Codex Discipline selects one combat doctrine one additional time per battle. `allocation`: 'choose-one-option' pools the extra selection so the player allocates it to any option of that stance; 'fixed-option' pins it to `option_id`; `option_ids` narrows the pooled allowance to those options (one shared extra selection over the assault or tactical doctrine). The stance's own menu and effects are unchanged."
 ///}
 /// ```
 /// </details>
@@ -55984,6 +57591,15 @@ pub struct StanceSelectionCapacityEffect {
 ///    "option_id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "option_ids": {
+///      "description": "With choose-one-option: the shared extra selections may go only to these options.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    },
 ///    "stance_id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    }
@@ -55999,6 +57615,9 @@ pub struct StanceSelectionCapacityEffectModifier {
     pub allocation: StanceSelectionCapacityEffectModifierAllocation,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option_id: ::std::option::Option<EntityId>,
+    ///With choose-one-option: the shared extra selections may go only to these options.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub option_ids: ::std::option::Option<Vec<EntityId>>,
     pub stance_id: EntityId,
 }
 ///`StanceSelectionCapacityEffectModifierAllocation`
@@ -56242,6 +57861,11 @@ for StanceSelectionCapacityEffectType {
 ///    "stat"
 ///  ],
 ///  "properties": {
+///    "exclude_weapon_name": {
+///      "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "incoming": {
 ///      "const": true
 ///    },
@@ -56344,6 +57968,11 @@ for StanceSelectionCapacityEffectType {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct StatModifierEffectModifier {
+    ///With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude_weapon_name: ::std::option::Option<
+        StatModifierEffectModifierExcludeWeaponName,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -56362,6 +57991,82 @@ pub struct StatModifierEffectModifier {
     pub weapon_ref: ::std::option::Option<StatModifierEffectModifierWeaponRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_type: ::std::option::Option<StatModifierEffectModifierWeaponType>,
+}
+///With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "With weapon_type: the weapons it changes are those of that type except this printed name (the other weapon of the model).",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StatModifierEffectModifierExcludeWeaponName(::std::string::String);
+impl ::std::ops::Deref for StatModifierEffectModifierExcludeWeaponName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StatModifierEffectModifierExcludeWeaponName>
+for ::std::string::String {
+    fn from(value: StatModifierEffectModifierExcludeWeaponName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StatModifierEffectModifierExcludeWeaponName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StatModifierEffectModifierExcludeWeaponName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StatModifierEffectModifierExcludeWeaponName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///`StatModifierEffectModifierOperation`
 ///
@@ -57298,7 +59003,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StateChangeEffectModifie
 ///          "$ref": "#/$defs/stratagem-target-restriction"
 ///        },
 ///        {
-///          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}.",
+///          "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}. Targets in exclusive modes (\"up to two X, or one other Y\") each carry a mode: when any does, every one does and both modes a and b are present. The player chooses one mode; the targets of an unchosen mode are not selected, their eligibility is not checked, and no effect of them occurs. Targets are distinct units only within one mode.",
 ///          "type": "array",
 ///          "items": {
 ///            "allOf": [
@@ -57552,9 +59257,9 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///      ]
 ///    },
 ///    "count_max": {
-///      "description": "Upper bound when `count` is up-to.",
+///      "description": "Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).",
 ///      "type": "integer",
-///      "minimum": 2.0
+///      "minimum": 1.0
 ///    },
 ///    "eligibility": {
 ///      "description": "What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.",
@@ -57562,6 +59267,34 @@ impl<'de> ::serde::Deserialize<'de> for StratagemName {
 ///    },
 ///    "excluded_keywords": {
 ///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "mode": {
+///      "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///      "enum": [
+///        "a",
+///        "b"
+///      ]
+///    },
+///    "mode_cost": {
+///      "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///      "type": "object",
+///      "required": [
+///        "amount",
+///        "label"
+///      ],
+///      "properties": {
+///        "amount": {
+///          "description": "How many of that resource the mode spends to be chosen.",
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "label": {
+///          "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///          "type": "string",
+///          "minLength": 1
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "name": {
 ///      "description": "Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.",
@@ -57606,14 +59339,19 @@ pub struct StratagemTargetRestriction {
     ///How many targets are selected: one, one or more, or up to `count_max`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<StratagemTargetRestrictionCount>,
-    ///Upper bound when `count` is up-to.
+    ///Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub count_max: ::std::option::Option<i64>,
+    pub count_max: ::std::option::Option<::std::num::NonZeroU64>,
     ///What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<StratagemTargetRestrictionMode>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode_cost: ::std::option::Option<StratagemTargetRestrictionModeCost>,
     ///Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
@@ -57640,6 +59378,8 @@ impl ::std::default::Default for StratagemTargetRestriction {
             count_max: Default::default(),
             eligibility: Default::default(),
             excluded_keywords: Default::default(),
+            mode: Default::default(),
+            mode_cost: Default::default(),
             name: Default::default(),
             notes: Default::default(),
             required_keywords: Default::default(),
@@ -57809,6 +59549,194 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestricti
         value.parse()
     }
 }
+///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///  "enum": [
+///    "a",
+///    "b"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionMode {
+    #[serde(rename = "a")]
+    A,
+    #[serde(rename = "b")]
+    B,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("a"),
+            Self::B => f.write_str("b"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "a" => Ok(Self::A),
+            "b" => Ok(Self::B),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestrictionMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "label"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "description": "How many of that resource the mode spends to be chosen.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "label": {
+///      "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct StratagemTargetRestrictionModeCost {
+    ///How many of that resource the mode spends to be chosen.
+    pub amount: ::std::num::NonZeroU64,
+    ///The resource pool or resource the mode spends, as the resource-spend effect names it.
+    pub label: StratagemTargetRestrictionModeCostLabel,
+}
+///The resource pool or resource the mode spends, as the resource-spend effect names it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StratagemTargetRestrictionModeCostLabel(::std::string::String);
+impl ::std::ops::Deref for StratagemTargetRestrictionModeCostLabel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StratagemTargetRestrictionModeCostLabel>
+for ::std::string::String {
+    fn from(value: StratagemTargetRestrictionModeCostLabel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionModeCostLabel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for StratagemTargetRestrictionModeCostLabel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///Whether the target is a unit or a single model.
 ///
 /// <details><summary>JSON schema</summary>
@@ -57974,7 +59902,7 @@ impl ::std::convert::TryFrom<::std::string::String> for StratagemTargetRestricti
 ///      "$ref": "#/$defs/stratagem-target-restriction"
 ///    },
 ///    {
-///      "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}.",
+///      "description": "A Stratagem with several targets (a PSYKER model and a TZAANGORS unit): each is named, and its effect refers to each as {stratagem_target: name}. Targets in exclusive modes (\"up to two X, or one other Y\") each carry a mode: when any does, every one does and both modes a and b are present. The player chooses one mode; the targets of an unchosen mode are not selected, their eligibility is not checked, and no effect of them occurs. Targets are distinct units only within one mode.",
 ///      "type": "array",
 ///      "items": {
 ///        "allOf": [
@@ -58043,14 +59971,19 @@ pub struct StratagemTargetRestrictionsArrayItem {
     ///How many targets are selected: one, one or more, or up to `count_max`.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<StratagemTargetRestrictionsArrayItemCount>,
-    ///Upper bound when `count` is up-to.
+    ///Upper bound when `count` is up-to (1: an optional extra target, zero or one unit).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub count_max: ::std::option::Option<i64>,
+    pub count_max: ::std::option::Option<::std::num::NonZeroU64>,
     ///What must be true of a unit to be selected, e.g. not selected to shoot this phase, or within Engagement Range of an enemy unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_keywords: ::std::option::Option<KeywordList>,
+    ///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<StratagemTargetRestrictionsArrayItemMode>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode_cost: ::std::option::Option<StratagemTargetRestrictionsArrayItemModeCost>,
     ///Names this target when the Stratagem has several; its effect refers to it as {stratagem_target: name}.
     pub name: EntityId,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -58227,6 +60160,198 @@ for StratagemTargetRestrictionsArrayItemCount {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The exclusive target mode this target belongs to. Targets with the same mode are chosen together; a and b are alternatives. Set on every target when the Stratagem has modes (see target_restrictions).",
+///  "enum": [
+///    "a",
+///    "b"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum StratagemTargetRestrictionsArrayItemMode {
+    #[serde(rename = "a")]
+    A,
+    #[serde(rename = "b")]
+    B,
+}
+impl ::std::fmt::Display for StratagemTargetRestrictionsArrayItemMode {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("a"),
+            Self::B => f.write_str("b"),
+        }
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsArrayItemMode {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "a" => Ok(Self::A),
+            "b" => Ok(Self::B),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsArrayItemMode {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///What choosing this mode costs ("spend 2YP and target ... instead"). Every target of one mode carries the same mode_cost.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What choosing this mode costs (\"spend 2YP and target ... instead\"). Every target of one mode carries the same mode_cost.",
+///  "type": "object",
+///  "required": [
+///    "amount",
+///    "label"
+///  ],
+///  "properties": {
+///    "amount": {
+///      "description": "How many of that resource the mode spends to be chosen.",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "label": {
+///      "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///      "type": "string",
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct StratagemTargetRestrictionsArrayItemModeCost {
+    ///How many of that resource the mode spends to be chosen.
+    pub amount: ::std::num::NonZeroU64,
+    ///The resource pool or resource the mode spends, as the resource-spend effect names it.
+    pub label: StratagemTargetRestrictionsArrayItemModeCostLabel,
+}
+///The resource pool or resource the mode spends, as the resource-spend effect names it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The resource pool or resource the mode spends, as the resource-spend effect names it.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct StratagemTargetRestrictionsArrayItemModeCostLabel(::std::string::String);
+impl ::std::ops::Deref for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<StratagemTargetRestrictionsArrayItemModeCostLabel>
+for ::std::string::String {
+    fn from(value: StratagemTargetRestrictionsArrayItemModeCostLabel) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for StratagemTargetRestrictionsArrayItemModeCostLabel {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///Whether the target is a unit or a single model.
@@ -62677,6 +64802,52 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerSourceAbilityOwne
 ///        "additionalProperties": false
 ///      }
 ///    },
+///    "detachment_pricing": {
+///      "description": "11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "cost",
+///          "detachment_id",
+///          "models"
+///        ],
+///        "properties": {
+///          "cost": {
+///            "type": "integer",
+///            "minimum": 0.0
+///          },
+///          "detachment_id": {
+///            "description": "The detachment whose selection puts this cost in effect.",
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "models": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "models_max": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          },
+///          "unit_count_max": {
+///            "oneOf": [
+///              {
+///                "type": "integer",
+///                "minimum": 1.0
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
+///          },
+///          "unit_count_min": {
+///            "type": "integer",
+///            "minimum": 1.0
+///          }
+///        },
+///        "additionalProperties": false
+///      }
+///    },
 ///    "excluded_faction_keywords": {
 ///      "description": "Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.",
 ///      "oneOf": [
@@ -63011,6 +65182,9 @@ pub struct Unit {
     ///Keywords granted to this unit only when roster construction satisfies the source condition. Conditions are conjunctive within an entry; entries are independent grants.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub conditional_keywords: ::std::vec::Vec<UnitConditionalKeywordsItem>,
+    ///11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub detachment_pricing: ::std::vec::Vec<UnitDetachmentPricingItem>,
     ///Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub excluded_faction_keywords: ::std::option::Option<KeywordList>,
@@ -63361,6 +65535,11 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitAttachmentRole {
 ///              "$ref": "#/$defs/entity-id"
 ///            }
 ///          },
+///          "excluded_from_enhancements": {
+///            "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.",
+///            "default": false,
+///            "type": "boolean"
+///          },
 ///          "hull_shape_id": {
 ///            "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
 ///            "oneOf": [
@@ -63568,6 +65747,11 @@ pub struct UnitComposition {
 ///        "$ref": "#/$defs/entity-id"
 ///      }
 ///    },
+///    "excluded_from_enhancements": {
+///      "description": "True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "hull_shape_id": {
 ///      "description": "Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to \"hull\".",
 ///      "oneOf": [
@@ -63695,6 +65879,9 @@ pub struct UnitCompositionModelsItem {
     ///The model's no-choice equipment multiset, used by base_loadout. It must describe a legal default configuration even when whole-model variants are present; it does not implicitly add another selectable variant.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub default_weapon_ids: ::std::vec::Vec<EntityId>,
+    ///True when this model cannot be given an Enhancement even though it is a CHARACTER (e.g. Ogryn Bodyguard, Transcendent C'tan). An Enhancement needs a model in the unit that is not excluded.
+    #[serde(default)]
+    pub excluded_from_enhancements: bool,
     ///Optional reference to a hull-shape entity giving this model's 2D collision polygon, used instead of the circular/oval base footprint. By convention a model carrying this should set `base_size_mm.shape` to "hull".
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hull_shape_id: ::std::option::Option<EntityId>,
@@ -64414,6 +66601,69 @@ pub struct UnitConditionalKeywordsItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_faction_keyword: ::std::option::Option<Keyword>,
 }
+///`UnitDetachmentPricingItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "cost",
+///    "detachment_id",
+///    "models"
+///  ],
+///  "properties": {
+///    "cost": {
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
+///    "detachment_id": {
+///      "description": "The detachment whose selection puts this cost in effect.",
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "models": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "models_max": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "unit_count_max": {
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "unit_count_min": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitDetachmentPricingItem {
+    pub cost: u64,
+    ///The detachment whose selection puts this cost in effect.
+    pub detachment_id: EntityId,
+    pub models: ::std::num::NonZeroU64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models_max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit_count_max: ::std::option::Option<::std::num::NonZeroU64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit_count_min: ::std::option::Option<::std::num::NonZeroU64>,
+}
 ///Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
 ///
 /// <details><summary>JSON schema</summary>
@@ -64430,8 +66680,16 @@ pub struct UnitConditionalKeywordsItem {
 ///    "any_of": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "any_of_filters": {
+///      "description": "Only units matching at least one of these filters, as well as every other listed property (\"LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit\"; \"PSYKER or Battle-shocked unit\"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-filter"
+///      },
+///      "minItems": 2
+///    },
 ///    "designated": {
-///      "description": "The unit carries this designation (a tag an effect applied).",
+///      "description": "The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.",
 ///      "$ref": "#/$defs/designation-id"
 ///    },
 ///    "designated_by": {
@@ -64482,6 +66740,10 @@ pub struct UnitConditionalKeywordsItem {
 ///    "none_of": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "not_all_of": {
+///      "description": "Not units that have every listed keyword (\"excluding MONSTER CHARACTER units\" excludes only units that are both).",
+///      "$ref": "#/$defs/keyword-list"
+///    },
 ///    "not_designated": {
 ///      "description": "The unit does not carry this designation.",
 ///      "$ref": "#/$defs/designation-id"
@@ -64489,6 +66751,15 @@ pub struct UnitConditionalKeywordsItem {
 ///    "not_engaged_with": {
 ///      "description": "Units within Engagement Range of no unit matching this filter.",
 ///      "$ref": "#/$defs/unit-filter"
+///    },
+///    "not_states": {
+///      "description": "Only units in none of these states (\"unengaged\", \"not Battle-shocked\").",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-state"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "owner": {
 ///      "$ref": "#/$defs/owner"
@@ -64531,7 +66802,10 @@ pub struct UnitFilter {
     pub all_of: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub any_of: ::std::option::Option<KeywordList>,
-    ///The unit carries this designation (a tag an effect applied).
+    ///Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub any_of_filters: ::std::vec::Vec<UnitFilter>,
+    ///The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub designated: ::std::option::Option<DesignationId>,
     ///The designation was applied by this unit (their Spotted unit). Requires `designated`.
@@ -64560,12 +66834,18 @@ pub struct UnitFilter {
     pub member_of: ::std::boxed::Box<::std::option::Option<UnitRef>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub none_of: ::std::option::Option<KeywordList>,
+    ///Not units that have every listed keyword ("excluding MONSTER CHARACTER units" excludes only units that are both).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_all_of: ::std::option::Option<KeywordList>,
     ///The unit does not carry this designation.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_designated: ::std::option::Option<DesignationId>,
     ///Units within Engagement Range of no unit matching this filter.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub not_engaged_with: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
+    ///Only units in none of these states ("unengaged", "not Battle-shocked").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_states: ::std::option::Option<Vec<UnitState>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub owner: ::std::option::Option<Owner>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -64581,6 +66861,7 @@ impl ::std::default::Default for UnitFilter {
         Self {
             all_of: Default::default(),
             any_of: Default::default(),
+            any_of_filters: Default::default(),
             designated: Default::default(),
             designated_by: Default::default(),
             embarked_in: Default::default(),
@@ -64591,8 +66872,10 @@ impl ::std::default::Default for UnitFilter {
             level: Default::default(),
             member_of: Default::default(),
             none_of: Default::default(),
+            not_all_of: Default::default(),
             not_designated: Default::default(),
             not_engaged_with: Default::default(),
+            not_states: Default::default(),
             owner: Default::default(),
             state: Default::default(),
             visible: Default::default(),
@@ -65272,7 +67555,7 @@ pub struct UnitRating {
 ///  "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
 ///  "oneOf": [
 ///    {
-///      "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability, even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///      "type": "string",
 ///      "enum": [
 ///        "this-unit",
@@ -65356,13 +67639,13 @@ impl ::std::convert::From<UnitFilter> for UnitRef {
         Self::Variant1(value)
     }
 }
-///this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability, even inside a selection's eligibility, where this-unit names the candidate being checked.
+///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "this-unit: the unit with the ability (attached units included); the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at. stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability, even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///  "type": "string",
 ///  "enum": [
 ///    "this-unit",
@@ -65724,19 +68007,947 @@ impl ::std::convert::TryFrom<::std::string::String> for UnitRole {
         value.parse()
     }
 }
-///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged).
+///Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged).",
+///  "description": "Which units (or models) a for-each-unit iterates and a per-model roll counts: every candidate that matches. owner any takes units of either side.",
+///  "type": "object",
+///  "required": [
+///    "owner"
+///  ],
+///  "properties": {
+///    "bind_as": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "eligibility": {
+///      "$ref": "#/$defs/condition"
+///    },
+///    "engagement_relation": {
+///      "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///      "type": "string",
+///      "enum": [
+///        "engaged-with-bearer",
+///        "not-engaged-with-bearer"
+///      ]
+///    },
+///    "excluded_keywords": {
+///      "description": "A candidate with any listed keyword is excluded.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "keyword_match": {
+///      "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
+///      "default": "all",
+///      "type": "string",
+///      "enum": [
+///        "all",
+///        "any"
+///      ]
+///    },
+///    "keywords": {
+///      "description": "Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1
+///    },
+///    "member_of": {
+///      "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
+///      "type": "string",
+///      "enum": [
+///        "bearer-unit",
+///        "embarked-in-bearer",
+///        "target"
+///      ]
+///    },
+///    "model_names": {
+///      "description": "Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "owner": {
+///      "type": "string",
+///      "enum": [
+///        "friendly",
+///        "enemy",
+///        "any"
+///      ]
+///    },
+///    "reference": {
+///      "description": "Origin of the engagement_relation gate.",
+///      "type": "string",
+///      "enum": [
+///        "bearer",
+///        "bearer-unit",
+///        "bearer-transport"
+///      ]
+///    },
+///    "target_kind": {
+///      "description": "Whether each iteration binds a whole unit or one matching model.",
+///      "default": "unit",
+///      "type": "string",
+///      "enum": [
+///        "unit",
+///        "model"
+///      ]
+///    },
+///    "within_inches": {
+///      "type": "number",
+///      "exclusiveMinimum": 0.0
+///    },
+///    "within_objective": {
+///      "$ref": "#/$defs/selection-reference"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitSelector {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bind_as: ::std::option::Option<UnitSelectorBindAs>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligibility: ::std::option::Option<Condition>,
+    ///Candidate engagement relation to the bearer or bearer-unit.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub engagement_relation: ::std::option::Option<UnitSelectorEngagementRelation>,
+    ///A candidate with any listed keyword is excluded.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_keywords: ::std::option::Option<Vec<UnitSelectorExcludedKeywordsItem>>,
+    ///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+    #[serde(default = "defaults::unit_selector_keyword_match")]
+    pub keyword_match: UnitSelectorKeywordMatch,
+    ///Keywords filtered against each candidate. Under the default `keyword_match` every listed keyword is required; under `any`, a candidate qualifies on any one of them.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub keywords: ::std::vec::Vec<UnitSelectorKeywordsItem>,
+    ///Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub member_of: ::std::option::Option<UnitSelectorMemberOf>,
+    ///Exact model-profile names; alternatives. Filters individual models, never the union of unit keywords.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model_names: ::std::option::Option<Vec<UnitSelectorModelNamesItem>>,
+    pub owner: UnitSelectorOwner,
+    ///Origin of the engagement_relation gate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub reference: ::std::option::Option<UnitSelectorReference>,
+    ///Whether each iteration binds a whole unit or one matching model.
+    #[serde(default = "defaults::unit_selector_target_kind")]
+    pub target_kind: UnitSelectorTargetKind,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub within_inches: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub within_objective: ::std::option::Option<SelectionReference>,
+}
+///`UnitSelectorBindAs`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorBindAs(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorBindAs {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorBindAs> for ::std::string::String {
+    fn from(value: UnitSelectorBindAs) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorBindAs {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorBindAs {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Candidate engagement relation to the bearer or bearer-unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Candidate engagement relation to the bearer or bearer-unit.",
+///  "type": "string",
+///  "enum": [
+///    "engaged-with-bearer",
+///    "not-engaged-with-bearer"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorEngagementRelation {
+    #[serde(rename = "engaged-with-bearer")]
+    EngagedWithBearer,
+    #[serde(rename = "not-engaged-with-bearer")]
+    NotEngagedWithBearer,
+}
+impl ::std::fmt::Display for UnitSelectorEngagementRelation {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EngagedWithBearer => f.write_str("engaged-with-bearer"),
+            Self::NotEngagedWithBearer => f.write_str("not-engaged-with-bearer"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorEngagementRelation {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "engaged-with-bearer" => Ok(Self::EngagedWithBearer),
+            "not-engaged-with-bearer" => Ok(Self::NotEngagedWithBearer),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorEngagementRelation {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`UnitSelectorExcludedKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorExcludedKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorExcludedKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorExcludedKeywordsItem> for ::std::string::String {
+    fn from(value: UnitSelectorExcludedKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorExcludedKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitSelectorExcludedKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorExcludedKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whether `keywords` is a conjunction (the default, preserving historical AND semantics) or an honest disjunction.",
+///  "default": "all",
+///  "type": "string",
+///  "enum": [
+///    "all",
+///    "any"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorKeywordMatch {
+    #[serde(rename = "all")]
+    All,
+    #[serde(rename = "any")]
+    Any,
+}
+impl ::std::fmt::Display for UnitSelectorKeywordMatch {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::All => f.write_str("all"),
+            Self::Any => f.write_str("any"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorKeywordMatch {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "all" => Ok(Self::All),
+            "any" => Ok(Self::Any),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorKeywordMatch {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for UnitSelectorKeywordMatch {
+    fn default() -> Self {
+        UnitSelectorKeywordMatch::All
+    }
+}
+///`UnitSelectorKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorKeywordsItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorKeywordsItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorKeywordsItem> for ::std::string::String {
+    fn from(value: UnitSelectorKeywordsItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorKeywordsItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Restrict candidates to models in the ability bearer's unit, including an Attached unit (bearer-unit), to models embarked within the bearer (embarked-in-bearer), or to models in the attack's target unit (target). With target_kind:model every listed keyword is tested on that individual model, never the union of unit keywords.",
+///  "type": "string",
+///  "enum": [
+///    "bearer-unit",
+///    "embarked-in-bearer",
+///    "target"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorMemberOf {
+    #[serde(rename = "bearer-unit")]
+    BearerUnit,
+    #[serde(rename = "embarked-in-bearer")]
+    EmbarkedInBearer,
+    #[serde(rename = "target")]
+    Target,
+}
+impl ::std::fmt::Display for UnitSelectorMemberOf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::BearerUnit => f.write_str("bearer-unit"),
+            Self::EmbarkedInBearer => f.write_str("embarked-in-bearer"),
+            Self::Target => f.write_str("target"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorMemberOf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer-unit" => Ok(Self::BearerUnit),
+            "embarked-in-bearer" => Ok(Self::EmbarkedInBearer),
+            "target" => Ok(Self::Target),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorMemberOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`UnitSelectorModelNamesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct UnitSelectorModelNamesItem(::std::string::String);
+impl ::std::ops::Deref for UnitSelectorModelNamesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<UnitSelectorModelNamesItem> for ::std::string::String {
+    fn from(value: UnitSelectorModelNamesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for UnitSelectorModelNamesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorModelNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for UnitSelectorModelNamesItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`UnitSelectorOwner`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "enum": [
+///    "friendly",
+///    "enemy",
+///    "any"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorOwner {
+    #[serde(rename = "friendly")]
+    Friendly,
+    #[serde(rename = "enemy")]
+    Enemy,
+    #[serde(rename = "any")]
+    Any,
+}
+impl ::std::fmt::Display for UnitSelectorOwner {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Friendly => f.write_str("friendly"),
+            Self::Enemy => f.write_str("enemy"),
+            Self::Any => f.write_str("any"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorOwner {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "friendly" => Ok(Self::Friendly),
+            "enemy" => Ok(Self::Enemy),
+            "any" => Ok(Self::Any),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorOwner {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Origin of the engagement_relation gate.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Origin of the engagement_relation gate.",
+///  "type": "string",
+///  "enum": [
+///    "bearer",
+///    "bearer-unit",
+///    "bearer-transport"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorReference {
+    #[serde(rename = "bearer")]
+    Bearer,
+    #[serde(rename = "bearer-unit")]
+    BearerUnit,
+    #[serde(rename = "bearer-transport")]
+    BearerTransport,
+}
+impl ::std::fmt::Display for UnitSelectorReference {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Bearer => f.write_str("bearer"),
+            Self::BearerUnit => f.write_str("bearer-unit"),
+            Self::BearerTransport => f.write_str("bearer-transport"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorReference {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "bearer" => Ok(Self::Bearer),
+            "bearer-unit" => Ok(Self::BearerUnit),
+            "bearer-transport" => Ok(Self::BearerTransport),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorReference {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Whether each iteration binds a whole unit or one matching model.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Whether each iteration binds a whole unit or one matching model.",
+///  "default": "unit",
+///  "type": "string",
+///  "enum": [
+///    "unit",
+///    "model"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitSelectorTargetKind {
+    #[serde(rename = "unit")]
+    Unit,
+    #[serde(rename = "model")]
+    Model,
+}
+impl ::std::fmt::Display for UnitSelectorTargetKind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+            Self::Model => f.write_str("model"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitSelectorTargetKind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            "model" => Ok(Self::Model),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UnitSelectorTargetKind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::default::Default for UnitSelectorTargetKind {
+    fn default() -> Self {
+        UnitSelectorTargetKind::Unit
+    }
+}
+///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.",
 ///  "type": "string",
 ///  "enum": [
 ///    "engaged",
 ///    "battle-shocked",
 ///    "embarked",
 ///    "in-strategic-reserves",
+///    "in-cult-ambush",
 ///    "on-battlefield",
 ///    "hidden",
 ///    "fights-first",
@@ -65766,6 +68977,8 @@ pub enum UnitState {
     Embarked,
     #[serde(rename = "in-strategic-reserves")]
     InStrategicReserves,
+    #[serde(rename = "in-cult-ambush")]
+    InCultAmbush,
     #[serde(rename = "on-battlefield")]
     OnBattlefield,
     #[serde(rename = "hidden")]
@@ -65782,6 +68995,7 @@ impl ::std::fmt::Display for UnitState {
             Self::BattleShocked => f.write_str("battle-shocked"),
             Self::Embarked => f.write_str("embarked"),
             Self::InStrategicReserves => f.write_str("in-strategic-reserves"),
+            Self::InCultAmbush => f.write_str("in-cult-ambush"),
             Self::OnBattlefield => f.write_str("on-battlefield"),
             Self::Hidden => f.write_str("hidden"),
             Self::FightsFirst => f.write_str("fights-first"),
@@ -65799,6 +69013,7 @@ impl ::std::str::FromStr for UnitState {
             "battle-shocked" => Ok(Self::BattleShocked),
             "embarked" => Ok(Self::Embarked),
             "in-strategic-reserves" => Ok(Self::InStrategicReserves),
+            "in-cult-ambush" => Ok(Self::InCultAmbush),
             "on-battlefield" => Ok(Self::OnBattlefield),
             "hidden" => Ok(Self::Hidden),
             "fights-first" => Ok(Self::FightsFirst),
@@ -66052,6 +69267,169 @@ pub struct UnitWargearBudgetsItem {
     pub items: ::std::vec::Vec<EntityId>,
     ///Models per `count` allowance; 0 means a flat per-unit cap of `count` (independent of squad size).
     pub per_models: u64,
+}
+///`UnitWargearConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "subject",
+///    "wargear"
+///  ],
+///  "properties": {
+///    "models": {
+///      "type": "object",
+///      "required": [
+///        "at_least",
+///        "state"
+///      ],
+///      "properties": {
+///        "at_least": {
+///          "type": "integer",
+///          "maximum": 30.0,
+///          "minimum": 1.0
+///        },
+///        "state": {
+///          "enum": [
+///            "carry",
+///            "lack"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "wargear": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitWargearConditionParameters {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub models: ::std::option::Option<UnitWargearConditionParametersModels>,
+    pub subject: UnitRef,
+    pub wargear: EntityId,
+}
+///`UnitWargearConditionParametersModels`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "at_least",
+///    "state"
+///  ],
+///  "properties": {
+///    "at_least": {
+///      "type": "integer",
+///      "maximum": 30.0,
+///      "minimum": 1.0
+///    },
+///    "state": {
+///      "enum": [
+///        "carry",
+///        "lack"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct UnitWargearConditionParametersModels {
+    pub at_least: ::std::num::NonZeroU64,
+    pub state: UnitWargearConditionParametersModelsState,
+}
+///`UnitWargearConditionParametersModelsState`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "carry",
+///    "lack"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum UnitWargearConditionParametersModelsState {
+    #[serde(rename = "carry")]
+    Carry,
+    #[serde(rename = "lack")]
+    Lack,
+}
+impl ::std::fmt::Display for UnitWargearConditionParametersModelsState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Carry => f.write_str("carry"),
+            Self::Lack => f.write_str("lack"),
+        }
+    }
+}
+impl ::std::str::FromStr for UnitWargearConditionParametersModelsState {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "carry" => Ok(Self::Carry),
+            "lack" => Ok(Self::Lack),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for UnitWargearConditionParametersModelsState {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`UnitWargearCostsItem`
 ///
@@ -66898,9 +70276,6 @@ pub struct Weapon {
 /// ```json
 ///{
 ///  "type": "object",
-///  "required": [
-///    "abilities"
-///  ],
 ///  "properties": {
 ///    "abilities": {
 ///      "type": "array",
@@ -66916,6 +70291,16 @@ pub struct Weapon {
 ///    },
 ///    "incoming": {
 ///      "const": true
+///    },
+///    "removes": {
+///      "description": "Weapon abilities the weapons lose, as printed (\"Do not have [Heavy]\"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
 ///    },
 ///    "weapon_keyword": {
 ///      "type": "string",
@@ -66977,11 +70362,17 @@ pub struct Weapon {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct WeaponAbilityGrantEffectModifier {
-    pub abilities: Vec<WeaponAbilityGrantEffectModifierAbilitiesItem>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub abilities: ::std::option::Option<
+        Vec<WeaponAbilityGrantEffectModifierAbilitiesItem>,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub if_present: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
+    ///Weapon abilities the weapons lose, as printed ("Do not have [Heavy]"). Applies to the weapons named by weapon_type, weapon_name, weapon_keyword or weapon_ref. An ability's weapon_keyword selector matches weapons as printed, before that ability's removals; nothing applies an ability's effects in array order.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub removes: ::std::option::Option<Vec<WeaponAbilityGrantEffectModifierRemovesItem>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_keyword: ::std::option::Option<
         WeaponAbilityGrantEffectModifierWeaponKeyword,
@@ -66992,6 +70383,20 @@ pub struct WeaponAbilityGrantEffectModifier {
     pub weapon_ref: ::std::option::Option<WeaponAbilityGrantEffectModifierWeaponRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapon_type: ::std::option::Option<WeaponAbilityGrantEffectModifierWeaponType>,
+}
+impl ::std::default::Default for WeaponAbilityGrantEffectModifier {
+    fn default() -> Self {
+        Self {
+            abilities: Default::default(),
+            if_present: Default::default(),
+            incoming: Default::default(),
+            removes: Default::default(),
+            weapon_keyword: Default::default(),
+            weapon_name: Default::default(),
+            weapon_ref: Default::default(),
+            weapon_type: Default::default(),
+        }
+    }
 }
 ///`WeaponAbilityGrantEffectModifierAbilitiesItem`
 ///
@@ -67057,6 +70462,81 @@ for WeaponAbilityGrantEffectModifierAbilitiesItem {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for WeaponAbilityGrantEffectModifierAbilitiesItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`WeaponAbilityGrantEffectModifierRemovesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct WeaponAbilityGrantEffectModifierRemovesItem(::std::string::String);
+impl ::std::ops::Deref for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<WeaponAbilityGrantEffectModifierRemovesItem>
+for ::std::string::String {
+    fn from(value: WeaponAbilityGrantEffectModifierRemovesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for WeaponAbilityGrantEffectModifierRemovesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for WeaponAbilityGrantEffectModifierRemovesItem {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -67430,6 +70910,35 @@ for WeaponAbilityGrantEffectModifierWeaponType {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`WeaponAbilityRangeEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "keyword",
+///    "within"
+///  ],
+///  "properties": {
+///    "keyword": {
+///      "const": "Rapid Fire"
+///    },
+///    "within": {
+///      "const": "weapon"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct WeaponAbilityRangeEffectModifier {
+    pub keyword: ::serde_json::Value,
+    pub within: ::serde_json::Value,
 }
 ///`WeaponGrantEffectModifier`
 ///
@@ -68857,11 +72366,11 @@ pub mod defaults {
     pub(super) fn dice_gated_effect_comparison() -> super::DiceGatedEffectComparison {
         super::DiceGatedEffectComparison::Gte
     }
-    pub(super) fn for_each_unit_effect_selector_keyword_match() -> super::ForEachUnitEffectSelectorKeywordMatch {
-        super::ForEachUnitEffectSelectorKeywordMatch::All
+    pub(super) fn faction_keyword_limits_item_mode() -> super::FactionKeywordLimitsItemMode {
+        super::FactionKeywordLimitsItemMode::Units
     }
-    pub(super) fn for_each_unit_effect_selector_target_kind() -> super::ForEachUnitEffectSelectorTargetKind {
-        super::ForEachUnitEffectSelectorTargetKind::Unit
+    pub(super) fn mortal_wounds_effect_modifier_roll_comparison() -> super::MortalWoundsEffectModifierRollComparison {
+        super::MortalWoundsEffectModifierRollComparison::Gte
     }
     pub(super) fn named_objective_state_clears() -> super::NamedObjectiveStateClears {
         super::NamedObjectiveStateClears::Never
@@ -68878,6 +72387,9 @@ pub mod defaults {
     pub(super) fn piece_piece_type() -> super::PiecePieceType {
         super::PiecePieceType::Area
     }
+    pub(super) fn scaling_evaluated() -> super::ScalingEvaluated {
+        super::ScalingEvaluated::Live
+    }
     pub(super) fn scaling_round() -> super::ScalingRound {
         super::ScalingRound::Down
     }
@@ -68892,6 +72404,12 @@ pub mod defaults {
     }
     pub(super) fn select_units_effect_selector_variant1_target_kind() -> super::SelectUnitsEffectSelectorVariant1TargetKind {
         super::SelectUnitsEffectSelectorVariant1TargetKind::Unit
+    }
+    pub(super) fn unit_selector_keyword_match() -> super::UnitSelectorKeywordMatch {
+        super::UnitSelectorKeywordMatch::All
+    }
+    pub(super) fn unit_selector_target_kind() -> super::UnitSelectorTargetKind {
+        super::UnitSelectorTargetKind::Unit
     }
 }
 /// Deserializes by the node's `type` tag: only the matching variant is attempted.
@@ -68925,7 +72443,8 @@ fn effect_node_from_value(
             | "state-change" | "cp-gain" | "cost-modifier" | "resource-gain"
             | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
             | "army-rule" | "test-exemption" | "datasheet-swap"
-            | "characteristic-resolution" | "borrow-weapons" | "select-weapon",
+            | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
+            | "weapon-ability-range",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

@@ -23406,5 +23406,61 @@
       "edition": "11th",
       "dataslate": "launch"
     }
+  },
+  {
+    "id": "imperiums-sword-assault-brethren",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "750c6c96-923c-4458-ba5c-a0c4193a5452"
+      }
+    ],
+    "name": "Imperium’s Sword",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Imperium’s Sword",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 7,
+          "AP": -3,
+          "D": 3,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "id": "the-thief-of-secrets-black-spear-task-force",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9b0a83f9-ec2a-4ed1-96ff-3dd890526cc1"
+      }
+    ],
+    "name": "The Thief of Secrets",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "The Thief of Secrets",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -3,
+          "D": 2,
+          "WS": 2
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

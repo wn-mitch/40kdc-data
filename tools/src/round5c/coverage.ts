@@ -1,7 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
 import { exactSpan, LEAF_ROLES } from "./contracts.js";
-import { parseStoredFragments, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
+import { BODY_SPAN_SQL, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION } from "./db.js";
 import { TRUSTED_ANNOTATION } from "./authority.js";
 import { RESOLVED_FINGERPRINT } from "./placeholders.js";
 import {
@@ -135,7 +135,8 @@ export const EFFECTIVE_STRUCTURAL_REVIEW = `(
 )`;
 
 function loadCoverageIndexes(db: DatabaseSync, currentOnly: boolean, abilityIds?: ReadonlySet<number>, view: CoverageView = {}): CoverageIndexes {
-  const filter = currentOnly ? "AND abilities.current = 1" : "";
+  // Body offsets only: a NAME span indexes the name, so it never covers source_text bytes.
+  const filter = `${currentOnly ? "AND abilities.current = 1" : ""} AND ${BODY_SPAN_SQL}`;
   const idFilter = abilityIds === undefined ? "" : `AND source_spans.ability_version_id IN (${idList(abilityIds)})`;
   const args: number[] = [];
   const indexes: CoverageIndexes = {

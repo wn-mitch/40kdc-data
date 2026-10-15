@@ -1440,7 +1440,8 @@
         "default_weapon_ids": [
           "fire-of-tzeentch",
           "flamer-mouths-exalted-flamer"
-        ]
+        ],
+        "excluded_from_enhancements": true
       }
     ],
     "game_version": {

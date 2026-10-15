@@ -1,0 +1,98 @@
+{
+ "id": 10118,
+ "source_text": "In xxxx xxxxxxxx xxxxx, xxxx this xxxx xx **xxxxxxxx to xxxxx**, xxx xxx xxxxxx xxx **xxxxxxx** xxxxx xxxx. This xxxx’x xxxxxx xxxxxxx that xxxxxx that xxxx xxxx [xxxxxxxxxxx xxxxxx].",
+ "leaves": [
+  {
+   "role": "CONDITION",
+   "family_id": "phase-window",
+   "family_version": 2,
+   "parameters": {
+    "phase": "shooting",
+    "turn": "your"
+   },
+   "start_byte": 0,
+   "end_byte": 22,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "event",
+   "family_version": 18,
+   "parameters": {
+    "kind": "selected-to-shoot"
+   },
+   "start_byte": 24,
+   "end_byte": 61,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "RESTRICTION",
+   "family_id": "optional-use",
+   "family_version": 2,
+   "parameters": {
+    "who": "you"
+   },
+   "start_byte": 65,
+   "end_byte": 72,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "select-unit",
+   "family_version": 4,
+   "parameters": {
+    "distance": "any",
+    "visible": false
+   },
+   "start_byte": 73,
+   "end_byte": 83,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "unit-filter",
+   "family_version": 8,
+   "parameters": {
+    "side": "enemy",
+    "visible": true
+   },
+   "start_byte": 86,
+   "end_byte": 106,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EVENT",
+   "family_id": "attack",
+   "family_version": 6,
+   "parameters": {
+    "direction": "makes",
+    "unit": "this-unit",
+    "attack_type": "ranged"
+   },
+   "start_byte": 108,
+   "end_byte": 136,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "CONDITION",
+   "family_id": "target-is-selected",
+   "family_version": 2,
+   "parameters": {},
+   "start_byte": 137,
+   "end_byte": 158,
+   "fragment": "RAW_TEXT"
+  },
+  {
+   "role": "EFFECT",
+   "family_id": "weapon-ability-keyword",
+   "family_version": 2,
+   "parameters": {
+    "keyword": "Devastating Wounds"
+   },
+   "start_byte": 165,
+   "end_byte": 183,
+   "fragment": "RAW_TEXT"
+  }
+ ],
+ "edits": null
+}

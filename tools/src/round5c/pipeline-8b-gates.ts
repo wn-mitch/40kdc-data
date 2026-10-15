@@ -5,11 +5,12 @@ import { effectToBuffs, type EffectTranslation } from "../cruncher/from-dsl.js";
 import type { BuffSource, EngineContext } from "../cruncher/buffs.js";
 import type { CoverageView } from "./coverage.js";
 import { tiledSources } from "./leaf-view.js";
+import { ownAbilityIds } from "./own-abilities.js";
 import { cachedEmbeddings, type Embedder } from "./embeddings.js";
 import { dot } from "./leaf-knn.js";
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
 import { coreCheckErrors } from "./core-checks.js";
-import { checkEntry, entryWithMechanics, resolveAbilityEntity, round5cDataRoot } from "./entries.js";
+import { checkEntry, entryWithMechanics, resolveCheckedEntity, round5cDataRoot } from "./entries.js";
 
 /**
  * The compile+gate half of pipeline-8b: for every ability whose source is fully tiled by leaves,
@@ -106,13 +107,14 @@ const REROLL_OUTSIDE_DAMAGE_PATH = /^re-roll on ".*" \(subset ".*"\) is outside 
  * Extend this set as more are confirmed — an effect type not yet reviewed stays "unrecognized
  * shape" (the conservative default) rather than being assumed out of scope. */
 /** Also here: moves, and mortal wounds an ability inflicts outright, which the attack-buff layer does not model by design. */
-// Effects that change no attack's damage: healing, moving, placement, eligibility permissions.
-const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission"]);
+// Effects that change no attack's damage: healing, moving, placement, eligibility permissions, and how many
+// times a stance may be selected.
+const NON_DAMAGE_EFFECT_TYPES = new Set(["heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity"]);
 // Which objective an ability picks decides control, never an attack's damage.
 const OBJECTIVE_SELECTION = /^select-objective: /u;
 const UNMODELLED_EFFECT_TYPE = /^effect type "(.*)" is not modelled by the buff layer$/u;
 
-function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
+export function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): boolean {
   if (STAT_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason) || ROLL_MODIFIER_OUTSIDE_DAMAGE_PATH.test(item.reason)) return true;
   if (REROLL_OUTSIDE_DAMAGE_PATH.test(item.reason)) {
     const fragment = item.effectFragment as { modifier?: { roll?: unknown } } | undefined;
@@ -121,6 +123,8 @@ function isOutsideDamagePath(item: EffectTranslation["unsupported"][number]): bo
   }
   if (OBJECTIVE_SELECTION.test(item.reason)) return true;
   const unmodelled = UNMODELLED_EFFECT_TYPE.exec(item.reason);
+  // How many times an ability or Stratagem can be used never changes an attack's damage.
+  if (unmodelled?.[1] === "ability-modifier") return (item.effectFragment as { modifier?: { aspect?: unknown } } | undefined)?.modifier?.aspect === "uses";
   if (unmodelled) return NON_DAMAGE_EFFECT_TYPES.has(unmodelled[1]!);
   return false;
 }
@@ -146,7 +150,7 @@ async function gateCompiledAbility(
   const failures: GateFailure[] = [];
   let resolved;
   try {
-    resolved = resolveAbilityEntity(dataRoot, factionId, abilityId);
+    resolved = resolveCheckedEntity(dataRoot, factionId, abilityId);
   } catch {
     return { status: "no-data-entry" };
   }
@@ -214,6 +218,7 @@ export async function runCompileGates(
 ): Promise<CompileGateReport> {
   const dataRoot = round5cDataRoot();
   const tiled = new Map(tiledSources(db, { ...view, abilityVersionIds }).map((source) => [source.id, source]));
+  const own = ownAbilityIds(db, dataRoot);
   const abilitiesTotal = abilityVersionIds
     ? abilityVersionIds.size
     : (db.prepare("SELECT COUNT(*) AS n FROM abilities WHERE current = 1").get() as { n: number }).n;
@@ -226,7 +231,7 @@ export async function runCompileGates(
     report.compile_attempted += 1;
     const row: AbilityGateResult = { ability_version_id: ability.id, faction_id: ability.faction_id, ability_id: ability.ability_id, machine_leaves: ability.machine_leaves, compile_errors: [], gates: null };
     report.abilities.push(row);
-    const compiled = compileLeaves(ability.leaves, ability.source_text);
+    const compiled = compileLeaves(ability.leaves, ability.source_text, { abilityId: own.get(ability.id), name: ability.name ?? undefined, weapons: { faction_id: ability.faction_id, source_type: ability.source_type ?? "" } });
     if (!compiled.ok) {
       const reason = compiled.errors[0] ?? "unknown";
       report.compile_errors[reason] = (report.compile_errors[reason] ?? 0) + 1;

@@ -10,19 +10,36 @@ import { join } from "node:path";
 
 const indexes = new Map<string, Map<string, string>>();
 
-/** Every unit keyword and faction keyword in core, keyed by its uppercase form. */
+/** A keyword's index key: uppercase, with a typographic apostrophe read as the ASCII one leaves use. */
+export function keywordKey(keyword: string): string {
+  return keyword.replaceAll("’", "'").toUpperCase();
+}
+
+/**
+ * Every keyword a unit in core can carry, keyed by {@link keywordKey}: its datasheet and faction
+ * keywords, and the keywords a detachment grants its units (`granted_keywords`, e.g. Armoured
+ * Infantry's ARMOURED SKIRMISHER), which no datasheet lists.
+ */
 export function keywordIndex(dataRoot: string): Map<string, string> {
   const cached = indexes.get(dataRoot);
   if (cached) return cached;
   const index = new Map<string, string>();
+  const add = (keyword: unknown) => {
+    if (typeof keyword === "string" && !index.has(keywordKey(keyword))) index.set(keywordKey(keyword), keyword);
+  };
   const core = join(dataRoot, "core");
   if (existsSync(core)) {
     for (const faction of readdirSync(core)) {
       const path = join(core, faction, "units.json");
-      if (!existsSync(path)) continue;
-      for (const unit of JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>>) {
-        for (const keyword of [...(unit.keywords as string[] ?? []), ...(unit.faction_keywords as string[] ?? [])]) {
-          if (typeof keyword === "string" && !index.has(keyword.toUpperCase())) index.set(keyword.toUpperCase(), keyword);
+      if (existsSync(path)) {
+        for (const unit of JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>>) {
+          for (const keyword of [...(unit.keywords as string[] ?? []), ...(unit.faction_keywords as string[] ?? [])]) add(keyword);
+        }
+      }
+      const detachments = join(core, faction, "detachments.json");
+      if (existsSync(detachments)) {
+        for (const detachment of JSON.parse(readFileSync(detachments, "utf8")) as Array<Record<string, unknown>>) {
+          for (const grant of (detachment.granted_keywords as Array<{ keyword?: unknown }> | undefined) ?? []) add(grant.keyword);
         }
       }
     }
@@ -35,7 +52,7 @@ const MAX_WORDS = 6;
 
 /** Split one uppercase phrase into known keywords, longest match first. */
 export function splitKeywords(phrase: string, index: ReadonlyMap<string, string>): string[] {
-  const words = phrase.toUpperCase().split(/\s+/u).filter(Boolean);
+  const words = keywordKey(phrase).split(/\s+/u).filter(Boolean);
   const found: string[] = [];
   for (let start = 0; start < words.length;) {
     let matched = 0;
@@ -84,7 +101,8 @@ export function coreTargetKeywords(
 const KEYWORD_PARAMETERS: Record<string, readonly string[]> = {
   "stratagem-target": ["keywords", "excluded_keywords"],
   "triggering-target": ["keywords"],
-  "bearer-eligibility": ["keywords", "excluded_keywords"],
+  "bearer-eligibility": ["keywords", "excluded_keywords", "any_keywords"],
+  "unit-position": ["of_keywords"],
   "unit-keyword": ["keywords"],
 };
 

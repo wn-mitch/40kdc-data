@@ -14,6 +14,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from wh40kdc.translate.condition_refs import _and_list, _or_list
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -24,6 +25,7 @@ from wh40kdc.translate.effect_words import (
     is_plural,
     jstr,
     num,
+    num_str,
     stat_name,
     test_name,
     title_case,
@@ -81,7 +83,8 @@ def _borrow_weapons(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
 def _select_weapon(m: dict[str, Any], subj: str) -> str:
     n = num(m["count"] if m.get("count") is not None else 1)
     one = n == 1
-    kind = f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else ""
+    named = f"{jstr(m['weapon_name'])} " if m.get("weapon_name") is not None else ""
+    kind = named + (f"{jstr(m['weapon_type'])} " if m.get("weapon_type") is not None else "")
     kw = (
         f" with [{jstr(m['weapon_keyword']).upper()}]"
         if m.get("weapon_keyword") is not None
@@ -123,26 +126,47 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
         else ""
     )
     sel = m.get("select")
+    exclusive = " (and no other option is)" if m.get("exclusive") is True else ""
     if sel is not None:
-        by = sel.get("by") if isinstance(sel, dict) else None
-        how = (
-            f"make a new {label} roll and activate one result it allows"
-            if by == "roll"
-            else f"select one option of {label}"
-        )
-        return f"{how} for {subj}, in addition to any already active{consumed}"
+        sel = sel if isinstance(sel, dict) else {}
+        count = sel.get("count")
+        n = num(1 if count is None else count)
+        n = 1.0 if n != n or n == 0 else n
+        names = _option_names(sel.get("from"))
+        if sel.get("by") == "roll":
+            results = "one result" if n == 1 else f"{num_str(n)} results"
+            among = f" among the {_or_list(names)} options" if names else ""
+            how = f"make a new {label} roll and activate {results} it allows{among}"
+        else:
+            what = (
+                f"of the {_or_list(names)} options"
+                if names
+                else ("option" if n == 1 else "options")
+            )
+            how = f"select {'one' if n == 1 else num_str(n)} {what} of {label}"
+        join = "in place of" if m.get("exclusive") is True else "in addition to"
+        return f"{how} for {subj}, {join} any already active{consumed}"
     override = m.get("override")
     instead = ""
     if override is not None:
         amount = override.get("amount") if isinstance(override, dict) else None
         instead = f", using {dice_case(amount)} in place of its usual amount"
+    if m.get("all_options") is True:
+        return f"every option of {label} is active for {subj}{consumed}"
+    if isinstance(m.get("options"), list):
+        active = _and_list(_option_names(m["options"]))
+        return f"the {active} options of {label} are active for {subj}{exclusive}{consumed}"
     if m.get("option") is None:
         return f"{subj} {v(subj, 'resolves')} the {label} ability now{instead}"
-    exclusive = " (and no other option is)" if m.get("exclusive") is True else ""
     return (
         f"the {title_case(jstr(m['option']))} option of {label} is active for {subj}"
         f"{exclusive}{consumed}"
     )
+
+
+def _option_names(options: Any) -> list[str]:
+    """Option ids as their display names."""
+    return [title_case(jstr(o)) for o in options] if isinstance(options, list) else []
 
 
 def ability_limits(m: dict[str, Any]) -> str:

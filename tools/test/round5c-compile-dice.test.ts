@@ -71,10 +71,35 @@ describe("Round 5C dice-family compiler", () => {
   });
 
   it("keeps the rolls/stats fields apart from what they belong to, in every render", () => {
-    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-unit", what: "rolls", rolls: ["hit", "wound"] } }).text)
+    expect(previewLeaf({ family_id: "ignore-modifiers", family_version: 1, parameters: { subject: "this-unit", what: "rolls", rolls: ["hit", "wound"] } }).text)
       .toBe("The unit ignores any modifiers to its Hit and Wound rolls.");
-    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-model", what: "characteristics", stats: ["M"] } }).text)
+    expect(previewLeaf({ family_id: "ignore-modifiers", family_version: 1, parameters: { subject: "this-model", what: "characteristics", stats: ["M"] } }).text)
       .toBe("This model ignores any modifiers to its Move characteristics.");
+    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit", "wound"] } }).text)
+      .toBe("The unit ignores any modifiers to its Hit and Wound rolls.");
+  });
+
+  it("lowers one list of characteristics and rolls to one ignore-modifiers effect per kind, each with only its own list", () => {
+    const both = leaf("EFFECT", "ignore-modifiers", { subject: "this-unit", what: ["characteristics", "rolls"], stats: ["BS"], rolls: ["hit", "wound"], weapon_type: "ranged" }, 2);
+    const effects = JSON.stringify(compiled([both]).mechanics);
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"characteristics","stats":["BS"],"weapon_type":"ranged"}}');
+    expect(effects).toContain('{"type":"ignore-modifiers","target":"this-unit","modifier":{"what":"rolls","rolls":["hit","wound"],"weapon_type":"ranged"}}');
+    expect(previewLeaf({ family_id: "ignore-modifiers", parameters: both.parameters }).text).toMatch(/Ballistic Skill.*Hit and Wound rolls/su);
+  });
+
+  it("re-rolls every roll of an each list, and still picks one roll without each", () => {
+    const each = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "wound"], each: true, subset: "all", weapon_type: "all" }, 4)]).mechanics.effect;
+    expect(each).toEqual({ type: "sequence", steps: [
+      { type: "re-roll", target: "this-unit", modifier: { roll: "hit", result_scope: "any-result" } },
+      { type: "re-roll", target: "this-unit", modifier: { roll: "wound", result_scope: "any-result" } },
+    ] });
+    const pick = compiled([leaf("EFFECT", "reroll", { rolls: ["hit", "wound"], subset: "all", weapon_type: "all", count: 1 }, 4)]).mechanics.effect as { type: string };
+    expect(pick.type).toBe("choice");
+    expect(() => normalizeFingerprintParameters("reroll", { roll: "hit", each: true, subset: "all", weapon_type: "all" }, 4)).toThrow(/qualifies a rolls list/u);
+  });
+
+  it("moves version 1 ignore-modifiers to a one-kind list", () => {
+    expect(mapToLatest("ignore-modifiers", 1, { subject: "this-unit", what: "rolls", rolls: ["hit"] })).toEqual({ family: "ignore-modifiers", version: currentFamilyVersion("ignore-modifiers"), parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit"] } });
   });
 
   it("moves the attacker's rolls to the attacker when the effect targets this unit", () => {
@@ -112,6 +137,8 @@ describe("Round 5C dice-family compiler", () => {
     expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "rolls", stats: ["M"] }, 1)).toThrow(/must be subject, what/u);
     expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "characteristics", rolls: ["hit"] }, 1)).toThrow(/must be subject, what/u);
     expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: "rolls" }, 1)).toThrow(/ignore-modifiers.rolls/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: ["rolls"], stats: ["M"] }, 2)).toThrow(/must be subject, what/u);
+    expect(() => normalizeFingerprintParameters("ignore-modifiers", { subject: "this-unit", what: ["characteristics", "rolls"], stats: ["BS"] }, 2)).toThrow(/ignore-modifiers.rolls/u);
   });
 
   it("previews end-attack-sequence with no modifier at all", () => {
@@ -147,6 +174,40 @@ describe("Round 5C dice-family compiler", () => {
   });
 });
 
+describe("Round 5C reusable minimum roll results", () => {
+  const resultLeaf = (text: string) => {
+    const family = REVIEWED_FAMILY_REGISTRY.find((item) => item.id === "roll-result" && !item.deprecated)!;
+    const parameters = normalizeFingerprintParameters("roll-result", prefillFromSource(family, text), family.version);
+    return leaf("CONDITION", "roll-result", parameters, family.version);
+  };
+  const wound = () => leaf("EFFECT", "mortal-wounds", { recipient: "this-unit", count: "1" });
+
+  it.each(["D3", "D6", "2D6"])("uses the same minimum wording with %s without inventing an upper bound", (dice) => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "dice-gated", dice, threshold: 2, comparison: "gte",
+        on_success: { type: "mortal-wounds", target: "this-unit", modifier: { count: 1 } }, on_fail: null });
+  });
+
+  it("keeps the minimum for each die in a multi-die success roll", () => {
+    expect(compiled([leaf("EVENT", "dice-roll", { dice: "D6", count: 6 }, 4), resultLeaf("on a 2+"), wound()]).mechanics.effect)
+      .toEqual({ type: "mortal-wounds", target: "this-unit", modifier: {
+        count: 1, per: "success", roll: { dice: 6, threshold: 2 },
+      } });
+  });
+
+  it("rejects a minimum the named die cannot reach", () => {
+    expect(compileLeaves([leaf("EVENT", "dice-roll", { dice: "D3" }, 4), resultLeaf("on a 4+"), wound()]).ok).toBe(false);
+  });
+
+  it("preserves explicit bands and exact results when upgrading existing leaves", () => {
+    for (const parameters of [{ from: 2, to: 5 }, { from: 6, to: 6 }]) {
+      expect(mapToLatest("roll-result", 1, parameters)).toEqual({ family: "roll-result", version: 2, parameters });
+    }
+    expect(normalizeFingerprintParameters("roll-result", { from: 2 }, 2)).toEqual({ from: 2 });
+    expect(() => normalizeFingerprintParameters("roll-result", { from: 4, to: 3 }, 2)).toThrow();
+  });
+});
+
 describe("Round 5C dice-family prefill", () => {
   const family = (id: string) => REVIEWED_FAMILY_REGISTRY.find((item) => item.id === id && item.version === currentFamilyVersion(id)) as unknown as PrefillFamily;
   const prefill = (id: string, text: string) => prefillFromSource(family(id), text);
@@ -158,9 +219,10 @@ describe("Round 5C dice-family prefill", () => {
   });
 
   it("reads ignore-modifiers' subject, what, and only from regular wording", () => {
-    expect(prefill("ignore-modifiers", "This model's characteristics cannot be modified")).toMatchObject({ subject: "this-model", what: "characteristics" });
-    expect(prefill("ignore-modifiers", "This unit's hit rolls cannot be modified")).toMatchObject({ subject: "this-unit", what: "rolls" });
-    expect(prefill("ignore-modifiers", "the bearer's rolls cannot be affected by any negative modifiers")).toMatchObject({ subject: "this-model", what: "rolls", only: "worsening" });
+    expect(prefill("ignore-modifiers", "This model's characteristics cannot be modified")).toMatchObject({ subject: "this-model", what: ["characteristics"] });
+    expect(prefill("ignore-modifiers", "This unit's hit rolls cannot be modified")).toMatchObject({ subject: "this-unit", what: ["rolls"] });
+    expect(prefill("ignore-modifiers", "the bearer's rolls cannot be affected by any negative modifiers")).toMatchObject({ subject: "this-model", what: ["rolls"], only: "worsening" });
+    expect(prefill("ignore-modifiers", "ignore any or all modifiers to its Move characteristic and to Advance rolls")).toMatchObject({ what: ["characteristics", "rolls"] });
   });
 
   it("reads roll-auto-result's outcome and its value when it succeeds only on an unmodified N+", () => {

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import re
 
+from wh40kdc.translate.condition_equipment import named_equipment_phrase
 from wh40kdc.translate.condition_history import _describe_happened, _destroyed_count
 from wh40kdc.translate.condition_refs import (
     Condition,
@@ -93,6 +94,7 @@ _VERB_NEGATED = frozenset(
         "model-count",
         "wounds",
         "loadout",
+        "equipped-weapon-count",
         "attachment",
         "has-ability",
         "controls",
@@ -162,6 +164,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         and _truthy(p["subject"].get("objective"))
     ):
         return negate_phrase(_describe_predicate(c, False))
+    if ctype == "deployment-window":
+        return f"{neg}during deployment"
     if ctype == "phase-is":
         phase = _str(p.get("phase"))
         if phase == "command":
@@ -227,6 +231,9 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             return f"{neg}{leader} is leading a {kw}unit"
         if p.get("role") == "led":
             return f"{neg}{_subject_of(p, 'this unit')} is being led by {_article(kw)} {kw}model"
+        # Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
+        if kw:
+            return f"{neg}{_subject_of(p)} is attached to {_article(kw)} {kw}unit"
         return f"{neg}{_subject_of(p)} is an attached unit"
     if ctype == "strength":
         below = "half strength" if p.get("below") == "half" else "starting strength"
@@ -256,6 +263,16 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("damaged") is True:
             parts.append("is Damaged")
         return f"{neg}{who} {_and_list(parts)}"
+    if ctype in ("named-weapon", "unit-wargear"):
+        return named_equipment_phrase(str(ctype), p, negated)
+    if ctype == "equipped-weapon-count":
+        count = p.get("count")
+        plural = "" if count == 1 else "s"
+        return (
+            f"{_subject_of(p, 'the model')} is {nt}equipped with a weapon named "
+            f"\"{_str(p.get('other_than'))}\" and exactly {_str(count)} other "
+            f"{_str(p.get('weapon_type'))} weapon{plural}"
+        )
     if ctype == "loadout":
         mk = f"{_str(p['model_keyword'])} " if _truthy(p.get("model_keyword")) else ""
         return (
@@ -277,6 +294,13 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             return f"{neg}{who} has Fights First"
         return f"{who} is {_state_phrase(_str(p.get('state')), negated)}{with_ref}"
     if ctype == "eligible":
+        if p.get("to") == "embark-within":
+            # The candidate being checked (this-unit) reads "that Transport".
+            transport = (
+                "that Transport" if p.get("transport") == "this-unit"
+                else unit_ref_phrase(p.get("transport"), "that Transport")
+            )
+            return f"{_subject_of(p)} is {nt}able to embark within {transport}"
         if p.get("to") == "be-selected":
             source = _obj(p.get("source_ability")).get("ability_id")
             return (
@@ -309,14 +333,15 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         of = p.get("of")
         range_v = p.get("range")
         wholly = "wholly " if p.get("wholly") is True else ""
+        who = f"every model in {_subject_of(p)}" if p.get("models") == "every" else _subject_of(p)
         if range_v in ("half-weapon", "weapon"):
             who = "the target" if p.get("subject") == "defender" else _subject_of(p)
             return f"{who} is {nt}within {range_phrase(range_v)}"
         if isinstance(of, dict) and _truthy(of.get("objective")):
             if _obj(of["objective"]).get("selection_var") is not None:
-                return f"{_subject_of(p)} is {nt}{wholly}within range of that objective marker"
+                return f"{who} is {nt}{wholly}within range of that objective marker"
             obj = _objective_phrase(of["objective"], False, "objective marker")
-            return f"{_subject_of(p)} is {nt}{wholly}within range of {_article(obj)} {obj}"
+            return f"{who} is {nt}{wholly}within range of {_article(obj)} {obj}"
         if isinstance(of, dict) and of.get("owner") == "enemy" and p.get("subject") is None:
             if negated:
                 noun = re.sub(r"^an? ", "", unit_filter_phrase(of), count=1)
@@ -331,7 +356,6 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             target = f"{_article(marker)} {dekebab(marker)} marker"
         else:
             target = unit_ref_phrase(of)
-        who = f"every model in {_subject_of(p)}" if p.get("models") == "every" else _subject_of(p)
         start = p.get("at") == "phase-start"
         at = " at the start of the phase" if start else ""
         return (
@@ -502,6 +526,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
     if ctype == "army-faction":
         faction = _str(p.get("faction")).replace("-", " ").upper()
         return f"your Army Faction is {nt}{faction}"
+    if ctype == "army-includes":
+        return _army_includes(p, negated)
     if ctype == "moved-over":
         who = _subject_of(p, "the unit")
         win = p.get("window")
@@ -545,3 +571,29 @@ def describe_condition(c: Condition) -> str:
             return describe_condition(only["operands"][0])
         return f"not ({', '.join(describe_condition(o) for o in operands)})"
     return _describe_predicate(c, False)
+
+
+def _army_includes(p: P, negated: bool) -> str:
+    """"your army includes a CHARACTER unit", "your army includes 2 or more X units", "every
+    model in your army has the IMPERIUM keyword". The army is yours, so the filter's owner is
+    not repeated."""
+    f = dict(p.get("filter") or {})
+    f.pop("owner", None)
+    noun = "model" if f.get("level") == "model" else "unit"
+    if p.get("every") is True:
+        all_ = [_str(x) for x in f.get("all_of") or []] if isinstance(f.get("all_of"), list) else []
+        any_ = [_str(x) for x in f.get("any_of") or []] if isinstance(f.get("any_of"), list) else []
+        words = _or_list(any_) if any_ else _and_list(all_)
+        plural = "s" if len(all_) > 1 and not any_ else ""
+        not_word = "not " if negated else ""
+        return f"{not_word}every {noun} in your army has the {words} keyword{plural}"
+    one = unit_filter_phrase(f)
+    raw_min = p.get("min")
+    minimum = raw_min if raw_min is not None else 1
+    if minimum > 1:
+        bare = re.sub(r"^an? ", "", one, count=1)
+        plural_noun = re.sub(r"\b(unit|model)\b", r"\1s", bare, count=1)
+        what = f"{minimum} or more {plural_noun}"
+    else:
+        what = one
+    return f"your army {'does not include' if negated else 'includes'} {what}"

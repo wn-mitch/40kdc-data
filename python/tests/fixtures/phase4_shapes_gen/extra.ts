@@ -137,7 +137,7 @@
     L("counts-as", { within: "aura", of: { stratagem_target: "the-lure" } }, "this-unit"),
   ];
   for (const e of effects) R(e);
-  for (const d of ["until-next-shooting-phase", "until-end-of-your-next-turn", "until-end-of-opponent-next-turn", "until-this-unit-has-shot", "control-lost", "one-use", "battle", "permanent"]) R(L("stat-modifier", { stat: "Ld", operation: "add", value: 1 }), { scope: { duration: d } });
+  for (const d of ["until-next-shooting-phase", "until-end-of-your-next-turn", "until-end-of-opponent-next-turn", "until-this-unit-has-shot", "control-lost", "until-end-of-your-next-fight-phase", "until-end-of-your-next-shooting-phase", "until-end-of-your-next-movement-phase", "until-end-of-opponent-next-movement-phase", "until-start-of-opponent-next-command-phase", "one-use", "battle", "permanent"]) R(L("stat-modifier", { stat: "Ld", operation: "add", value: 1 }), { scope: { duration: d } });
   R(L("mortal-wounds", { count: 1 }, "event-subject"), { usage: [{ frequency: "once-per-turn" }, { frequency: "n-per-battle", count: 2 }], scope: { duration: "one-use" } });
 
   const cr = (e: unknown, c: Record<string, unknown> = ctx) => effectToBuffs(e, source, c as never);

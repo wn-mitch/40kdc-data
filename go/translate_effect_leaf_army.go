@@ -193,20 +193,54 @@ func designateLeaf(m map[string]any, subj string, ctx effCtx) string {
 	return what + " " + ev(what, "is") + " " + tag + by + until
 }
 
-func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
+// armyGroupWhat renders a list-building group: its unit-filter, its datasheets
+// ("Alpha Squad or Beta Squad units"), or both.
+func armyGroupWhat(m map[string]any, withF string, hasWith bool) (string, bool) {
+	sheetsList, ok := m["datasheets"].([]any)
+	if !ok {
+		return withF, hasWith
+	}
+	names := make([]string, 0, len(sheetsList))
+	for _, d := range sheetsList {
+		names = append(names, titleCase(ejstr(d)))
+	}
+	sheets := orList(names)
+	if hasWith {
+		return withF + " (" + sheets + " only)", true
+	}
+	return sheets + " units", true
+}
+
+var modelsSpaceWordRe = regexp.MustCompile(` models\b`)
+var vowelStartRe = regexp.MustCompile(`(?i)^[aeiou]`)
+
+// armySingular renders the singular of a plural group: "CHARACTER unit".
+func armySingular(group string) string {
+	return replaceFirst(modelsSpaceWordRe, replaceFirst(unitsWordRe, group, " unit"), " model")
+}
+
+func armyRuleLeaf(m map[string]any, subj string, ctx effCtx, target any) string {
 	withF, hasWith := "", false
 	if m["with"] != nil {
 		withF, hasWith = leadingAllRe.ReplaceAllString(effectSubject(m["with"], ctx), ""), true
 	}
+	group, hasGroup := armyGroupWhat(m, withF, hasWith)
 	switch m["rule"] {
 	case "warlord-required":
 		return subj + " must be your Warlord"
 	case "warlord-forbidden":
 		return subj + " cannot be your Warlord"
 	case "unique":
+		if hasGroup {
+			return "your army can include only one " + armySingular(group)
+		}
 		return "your army can include only one of " + subj
 	case "enhancement-forbidden":
 		return subj + " cannot be given Enhancements"
+	case "enhancement-source":
+		return subj + " can only be given Enhancements from this Detachment"
+	case "limit-exemption":
+		return limitExemptionLeaf(m, subj, target)
 	case "enhancement-slot":
 		each := "such unit"
 		if hasWith {
@@ -237,8 +271,20 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
 		if m["mandatory"] == true {
 			return subj + " must be attached to a Leader, or it counts as destroyed"
 		}
+		if m["can_lead"] != nil {
+			return subj + " can also be attached to " + leadingAllRe.ReplaceAllString(effectSubject(m["can_lead"], ctx), "")
+		}
 		if m["attach_as"] != nil {
-			return "a Leader that can be attached to " + leadingAllRe.ReplaceAllString(effectSubject(m["attach_as"], ctx), "") + " can also be attached to " + subj
+			leader := "a Leader"
+			if hasWith {
+				one := armySingular(withF)
+				article := "a"
+				if vowelStartRe.MatchString(one) {
+					article = "an"
+				}
+				leader = article + " " + one
+			}
+			return leader + " that can be attached to " + leadingAllRe.ReplaceAllString(effectSubject(m["attach_as"], ctx), "") + " can also be attached to " + subj
 		}
 		led := ""
 		if m["led_by"] != nil {
@@ -246,21 +292,59 @@ func armyRuleLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 		return "at the start of the Declare Battle Formations step, " + subj + " can join one friendly unit" + led + ", becoming part of that Bodyguard unit"
 	}
+	// An allied faction a composition rule admits: "Chaos Daemons units" when no filter names them.
+	allied := ""
+	if m["faction"] != nil {
+		allied = titleCase(ejstr(m["faction"]))
+	}
 	such := "such units"
-	if hasWith {
-		such = withF
+	switch {
+	case hasGroup && allied != "":
+		such = group + " from the " + allied + " faction"
+	case hasGroup:
+		such = group
+	case allied != "":
+		such = allied + " units"
 	}
 	return compositionLimit(m, such, ctx)
 }
 
+// limitExemptionLeaf renders the limits the rule's units (or this Detachment's
+// Enhancements) are left out of.
+func limitExemptionLeaf(m map[string]any, subj string, target any) string {
+	items, _ := m["exempt_from"].([]any)
+	parts := make([]string, 0, len(items))
+	for _, item := range items {
+		if item == "enhancement-limit" {
+			whose := "Enhancements on " + subj
+			if target == nil || target == "this-unit" {
+				whose = "Enhancements from this Detachment"
+			}
+			parts = append(parts, whose+" do not count toward your army's Enhancement limit")
+			continue
+		}
+		limit := "the Retinue limit"
+		if item == "strategic-reserves-points" {
+			limit = "the points limit for Strategic Reserves"
+		}
+		parts = append(parts, subj+" "+ev(subj, "does")+" not count toward "+limit)
+	}
+	return strings.Join(parts, "; ")
+}
+
 // compositionLimit renders a composition limit: at most N units / models /
-// points of X, per matching unit, outside the Retinue limit.
+// points of X, per matching unit, outside the Retinue limit. No limit is a
+// permission; a limit of 0 forbids.
 func compositionLimit(m map[string]any, what string, ctx effCtx) string {
 	exempt := ""
 	if isList(m["exempt_from"]) {
 		exempt = "; they do not count toward the Retinue limit"
 	}
 	if m["max"] == nil {
+		return "your army can include " + what + exempt
+	}
+	literal := isLiteral(m["max"])
+	if literal && jsNumber(m["max"]) == 0 {
 		return "your army cannot include " + what + exempt
 	}
 	measure := ""
@@ -270,7 +354,6 @@ func compositionLimit(m map[string]any, what string, ctx effCtx) string {
 	case "models":
 		measure = "models from "
 	}
-	literal := isLiteral(m["max"])
 	max := diceCase(m["max"])
 	if literal {
 		max = ejstr(m["max"])

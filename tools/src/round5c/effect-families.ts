@@ -171,6 +171,48 @@ export const EFFECT_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 5,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf.",
+    starter: { characteristics: [], operation: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristics", "operation", "value"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: 20 },
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
+    deprecated: true,
+  },
+  {
+    id: "characteristic-modifier",
+    version: 6,
+    role: "EFFECT",
+    label: "Change characteristics",
+    description: "A stat adjustment records the characteristics, operation and amount without guessing its recipient or weapon scope. Signed shorthand bonuses improve the named stat; penalties worsen it. Reviewed subject and weapon_type bindings can accompany a qualified leaf. Setting a value is a different leaf.",
+    starter: { characteristics: [], operation: "", value: null },
+    parameterSchema: {
+      type: "object",
+      required: ["characteristics", "operation", "value"],
+      properties: {
+        subject: { enum: CHARACTERISTIC_SUBJECTS_V4 },
+        characteristics: { type: "array", items: { enum: CHARACTERISTICS_V4 }, minItems: 1, uniqueItems: true },
+        operation: { enum: CHARACTERISTIC_OPERATIONS },
+        value: { type: "integer", minimum: 1, maximum: Number.MAX_SAFE_INTEGER },
+        weapon_type: { enum: WEAPON_SCOPES },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "regain-wounds",
@@ -239,16 +281,18 @@ export function normalizeEffectParameters(family: string, input: Record<string, 
       exactKeys(input, ["subject", "moves", "acts"], family);
       return { subject: enumValue(input.subject, version === 1 ? SUBJECTS_WITH_BEARER : SUBJECTS, "act-after-move.subject"), moves: enumSet(input.moves, MOVES, "act-after-move.moves"), acts: enumSet(input.acts, ACTS, "act-after-move.acts") };
     case "characteristic-modifier": {
-      exactKeys(input, ["subject", "characteristics", "operation", "value", "weapon_type"], family);
+      const hasSubject = version < 5 || "subject" in input;
+      const hasWeaponType = version < 5 || "weapon_type" in input;
+      exactKeys(input, ["characteristics", "operation", "value", ...(hasSubject ? ["subject"] : []), ...(hasWeaponType ? ["weapon_type"] : [])], family);
       const characteristics = enumSet(input.characteristics, version >= 4 ? CHARACTERISTICS_V4 : CHARACTERISTICS, "characteristic-modifier.characteristics");
-      const weaponType = enumValue(input.weapon_type, WEAPON_SCOPES, "characteristic-modifier.weapon_type");
-      const subject = enumValue(input.subject, version === 2 ? CHARACTERISTIC_SUBJECTS_WITH_BEARER : version >= 4 ? CHARACTERISTIC_SUBJECTS_V4 : CHARACTERISTIC_SUBJECTS, "characteristic-modifier.subject");
-      if (weaponType !== "all" && characteristics.some((item) => !(WEAPON_CHARACTERISTICS as readonly string[]).includes(item))) {
+      const weaponType = hasWeaponType ? enumValue(input.weapon_type, WEAPON_SCOPES, "characteristic-modifier.weapon_type") : undefined;
+      const subject = hasSubject ? enumValue(input.subject, version === 2 ? CHARACTERISTIC_SUBJECTS_WITH_BEARER : version >= 4 ? CHARACTERISTIC_SUBJECTS_V4 : CHARACTERISTIC_SUBJECTS, "characteristic-modifier.subject") : undefined;
+      if (weaponType !== undefined && weaponType !== "all" && characteristics.some((item) => !(WEAPON_CHARACTERISTICS as readonly string[]).includes(item))) {
         throw new TypeError("characteristic-modifier: only weapon characteristics (A, WS, BS, S, AP, D) can be limited to melee or ranged weapons.");
       }
       // An attack is already melee or ranged by its attack leaf; saying it here too would say it twice.
-      if (subject === "attack" && weaponType !== "all") throw new TypeError("characteristic-modifier: the attack's own leaf says melee or ranged; use weapon type all.");
-      return { subject, characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, 20, "characteristic-modifier.value"), weapon_type: weaponType };
+      if (subject === "attack" && weaponType !== undefined && weaponType !== "all") throw new TypeError("characteristic-modifier: the attack's own leaf says melee or ranged; use weapon type all.");
+      return { ...(hasSubject ? { subject } : {}), characteristics, operation: enumValue(input.operation, CHARACTERISTIC_OPERATIONS, "characteristic-modifier.operation"), value: boundedInteger(input.value, 1, version >= 6 ? Number.MAX_SAFE_INTEGER : 20, "characteristic-modifier.value"), ...(hasWeaponType ? { weapon_type: weaponType } : {}) };
     }
     case "regain-wounds": {
       if (version >= 3) {

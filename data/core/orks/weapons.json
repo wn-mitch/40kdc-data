@@ -8480,5 +8480,44 @@
       "edition": "11th",
       "dataslate": "codex-orks"
     }
+  },
+  {
+    "id": "eadbanger-wurrband",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "64e7fe8e-5433-4b67-86bc-40b0c685e574"
+      }
+    ],
+    "name": "'Eadbanger",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "'Eadbanger",
+        "range": 24,
+        "stats": {
+          "A": 2,
+          "S": 6,
+          "AP": -3,
+          "D": 3,
+          "BS": 4
+        },
+        "keywords": [
+          {
+            "keyword_id": "psychic"
+          },
+          {
+            "keyword_id": "hazardous"
+          },
+          {
+            "keyword_id": "precision"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
   }
 ]

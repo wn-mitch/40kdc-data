@@ -3,14 +3,13 @@ import {
   boundedInteger, booleanValue, enumOrSource, enumOrSourceSchema, enumSet, enumValue, integerOrSource, integerOrSourceSchema,
   sourceQualifiedSchema, sourceQualified, type SourceQualifiedValue,
 } from "./family-validation.js";
-import { DESIGNATION_IDS } from "../translate/designations.js";
 
 /**
  * Resource pools, stratagem costs, sticky objectives, designations, and army-construction rules
  * (roster-building limits, not in-game effects, but compiled to the same `army-rule` fragment).
  */
 
-const POOL_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+export const POOL_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 /** A few known pool ids for the leaf form and audit to sample; normalize accepts any matching id, not only these. */
 const KNOWN_POOL_IDS = ["command-point", "miracle-dice-pool", "pain-token-pool", "blood-tithe-pool", "yp-pool", "battle-focus-pool", "fate-dice-pool"] as const;
 const poolIdSchema = { anyOf: [{ enum: KNOWN_POOL_IDS }, sourceQualifiedSchema] };
@@ -39,8 +38,28 @@ const RESOURCE_DIE_ROLLS = [
   "normal-move", "surge", "dark-pact", "blessings-of-khorne", "manoeuvre", "channelling", "any", "all",
 ] as const;
 
-/** Every tag apply-mark may set, read live from the registry so a new designation needs no family change. */
-const MARK_TAGS = [...DESIGNATION_IDS] as readonly string[];
+/** The tags apply-mark@1 accepts: the registry as it stood then (later versions check the live registry). */
+export const MARK_TAGS: readonly string[] = [
+  "a-trap-well-laid", "acquisition", "affected-by-order", "afflicted", "aflame", "analysed", "assailed", "assemblage-of-might",
+  "auspex-scanned", "battle-shock-auto-succeed", "bio-stimulus-target", "blight-bombardment-target", "bloody-vengeance",
+  "breaching-fire-target", "busted", "chronosorcerous-bleed", "claw-of-ascension-crossfire-target",
+  "claw-of-ascension-priority-target", "claw-of-ascension-survey-augur-target", "cleansed", "condemned",
+  "conqueror-imperative-active", "consecrated", "contract-unit", "counterstrategist-target", "covered-in-squigs",
+  "daring-recon-target", "death-begets-vengeance-hated", "decoyed", "designated", "dreadherder-target", "dual-melee",
+  "eliminate-at-all-costs", "empowered", "enhancement-expended", "entrenched", "favoured-champions", "flame-wreathed",
+  "focus-of-hatred", "guidance-of-the-ancients", "guidance-of-the-ancients-crowes-sanctifiers", "guided", "hated-foe", "held",
+  "hidden", "hunted", "illuminated", "losing-the-wager", "machine-vengeance-target", "marked", "marked-prey", "mutated",
+  "nethershriek-mind-eater", "no-benefit-of-cover", "nulled", "oath-fulfilled", "oath-of-moment", "oath-of-moment-target",
+  "observer", "octagram-battle-shock", "over-there-target", "overlapping-fire", "pinned", "pinpoint-counter-offensive",
+  "pledge-of-mortal-pain", "plundered", "prey-marked", "priority-target", "prosecuted", "protector-imperative-active",
+  "pulsa-rokkit-target", "pulse-onslaught-shaken", "quarry", "remains-under-your-control", "riled-up", "sabotaged",
+  "scornful-analysis-designated", "secured", "servo-designated", "shadow-of-chaos", "shaken", "shocked", "signal-fire-target",
+  "singular-purpose-enemy", "singular-purpose-marker", "slayer-of-champions", "spirit-mark", "split-into-single-model-units",
+  "spotted", "staggered", "stormwracked", "strategic-conqueror", "suppressed", "suppressing-fire-pinned", "surveilled",
+  "symbiotic-target", "tethered", "throne-tyrannicus", "titanic-duel-target", "trapped", "triangulated",
+  "unbridled-ardour-slayer", "unhideable", "unmasked", "vengeful-dead", "whispering-web", "wholly-within-flow-of-magic",
+  "winning-the-wager", "worthy-foes",
+];
 const DESIGNATE_SUBJECTS = ["this-unit", "this-model", "selected-unit"] as const;
 
 export const ARMY_RULES = [

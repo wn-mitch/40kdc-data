@@ -206,6 +206,14 @@ function walk(
     out.unsupported.push({ reason: unsized, effectFragment: currentNode });
     return;
   }
+  // A target filter of alternatives ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units")
+  // reaches the unit only when one alternative matches its keywords.
+  const alternatives = alternativesMatch(currentNode, opts);
+  if (alternatives === false) return;
+  if (alternatives === "unknown") {
+    out.unsupported.push({ reason: ALTERNATIVES_REASON, effectFragment: currentNode });
+    return;
+  }
   // An `incoming` change modifies attacks made against its target. On the buffed unit it is the
   // attacker's side of those attacks, which the `target: "attacker"` form already models; it never
   // modifies the buffed unit's own attacks.
@@ -337,8 +345,18 @@ function walk(
       return;
     case "designate-target": {
       const applies = isObject(currentNode.applies) ? currentNode.applies : {};
-      if (applies.to === "attackers-of-target") {
-        walk(applies.effect, source, opts, out);
+      if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
+        // Which enemy unit is designated is the player's pick, so its buffs are one opt-in lever
+        // ("this defender is the designated unit"); the player vouches for the selection's
+        // eligibility (range, visibility, "hit by those attacks").
+        const sub: EffectTranslation = { applied: [], unsupported: [], activatable: [] };
+        walk(applies.effect, source, opts, sub);
+        out.unsupported.push(...sub.unsupported);
+        out.activatable.push(...sub.activatable);
+        if (sub.applied.length > 0) {
+          const designation = typeof currentNode.designation === "string" ? currentNode.designation : "designated";
+          out.activatable.push({ id: `${opts.abilityId}#${designation}`, label: `Designated target: ${labelForBuffs(sub.applied)}`, buffs: sub.applied });
+        }
       } else {
         out.unsupported.push({
           reason: "designate-target debuff on the marked unit: not a buff on the bearer",
@@ -763,6 +781,22 @@ function translateKeywordGrant(
   if (!appliesToBuffedUnit(node, "attacker")) return;
   const modifier = node.modifier;
   if (!isObject(modifier)) return;
+  // A selector by keyword would apply the grant to every weapon of the unit: refuse it, as the
+  // narrowing check does for other families, rather than over-apply it.
+  if (modifier.weapon_keyword != null) {
+    out.unsupported.push({
+      reason: `weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve`,
+      effectFragment: node,
+    });
+    return;
+  }
+  const removes = Array.isArray(modifier.removes) ? modifier.removes.filter((k): k is string => typeof k === "string") : [];
+  for (const keyword of removes) {
+    out.unsupported.push({
+      reason: `weapon-ability-removal: the cruncher does not model removing a weapon ability ("${keyword}")`,
+      effectFragment: { removes: [keyword] },
+    });
+  }
   const raws = Array.isArray(modifier.abilities) ? modifier.abilities.filter((k): k is string => typeof k === "string") : [];
   if (raws.length === 0) return;
   // `weapon_type: melee|ranged` scopes the grant to that attack — a melee-only
@@ -1680,7 +1714,8 @@ export function parseKeywordGrant(raw: string): WeaponKeywordRef | null {
   if (trimmed === "") return null;
 
   // Anti-X N+ → { anti, target_keyword: X, threshold: N }
-  const antiMatch = /^anti-([A-Z][A-Z\s-]*)\s+(\d+)\+?$/i.exec(trimmed);
+  // X may be "A/B" (one of several keywords) or "non-A" (a unit without A).
+  const antiMatch = /^anti-([A-Z][A-Z\s-]*(?:\/[A-Z][A-Z\s-]*)*)\s+(\d+)\+?$/i.exec(trimmed);
   if (antiMatch) {
     return {
       keyword_id: "anti",
@@ -1738,7 +1773,6 @@ function unsizedValueReason(node: Record<string, unknown>): string | undefined {
 const FIDELITY_BINDING_REASON = "selection/history/model/attack predicates are not resolved by the buff engine";
 function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
   const selector = isObject(node.selector) ? node.selector : undefined;
-  const select = isObject(node.select) ? node.select : undefined;
   const applies = isObject(node.applies) ? node.applies : undefined;
   const modifier = isObject(node.modifier) ? node.modifier : undefined;
   const consumer = isObject(modifier?.consumer) ? modifier.consumer : undefined;
@@ -1748,9 +1782,8 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
         selector?.reference != null || selector?.origin != null || selector?.selection_limit != null ||
         selector?.bind_as != null || selector?.within_inches_from != null ||
         selector?.visible_to != null || selector?.visibility_required === true)) ||
-    (node.type === "designate-target" && (select?.eligibility != null ||
-      select?.reference != null || select?.visibility_required === true || select?.bind_as != null ||
-      select?.within_inches_from != null || select?.visible_to != null || select?.selection_limit != null ||
+    // A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
+    (node.type === "designate-target" && (
       applies?.attacker_keywords != null || applies?.attacker_unit_keywords != null ||
       applies?.beneficiary != null || applies?.reference != null)) ||
     (node.type === "ability-part" && hasUnresolvedTriggerBinding(node.trigger)) ||
@@ -1761,6 +1794,59 @@ function hasUnresolvedFidelityBinding(node: Record<string, unknown>): boolean {
 function hasUnresolvedTriggerBinding(trigger: unknown): boolean {
   if (Array.isArray(trigger)) return trigger.some(hasUnresolvedTriggerBinding);
   return isObject(trigger) && ((isObject(trigger.filter) && trigger.filter.by != null) || trigger.source_ability != null);
+}
+
+const ALTERNATIVES_REASON = "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords";
+
+/**
+ * Whether a node's unit-filter target with `any_of_filters` reaches the unit crunched: true when
+ * any alternative matches, false when none can, "unknown" when the keywords are missing or an
+ * alternative whose keywords hold also names something else (a state). A friendly
+ * filter is read against the crunched side's own keywords; an enemy one only from the target's
+ * perspective (against the target), since the attacker's perspective drops it anyway. Nodes
+ * without alternatives are left to the target classification as before (true).
+ */
+function alternativesMatch(node: Record<string, unknown>, opts: WalkOpts): boolean | "unknown" {
+  const target = node.target;
+  if (!isObject(target) || !Array.isArray(target.any_of_filters)) return true;
+  let keywords: readonly string[] | undefined;
+  if (target.owner === "friendly") keywords = opts.perspective === "attacker" ? opts.context.attackerKeywords : opts.context.targetKeywords;
+  else if (target.owner === "enemy" && opts.perspective === "target") keywords = opts.context.targetKeywords;
+  else return true;
+  if (!isKeywordList(keywords)) return "unknown";
+  let sawUnknown = false;
+  for (const alternative of target.any_of_filters) {
+    const matched = alternativeMatches(alternative, keywords);
+    if (matched === true) return true;
+    if (matched === "unknown") sawUnknown = true;
+  }
+  return sawUnknown ? "unknown" : false;
+}
+
+/**
+ * One alternative against a unit's keywords: false when its keyword fields (all_of, any_of,
+ * none_of) fail, whatever else it names; true when they hold and it names nothing else;
+ * "unknown" when they hold but it also names something the context lacks (a state), or a keyword
+ * field is malformed.
+ */
+function alternativeMatches(alternative: unknown, keywords: readonly string[]): boolean | "unknown" {
+  if (!isObject(alternative)) return "unknown";
+  let other = false;
+  for (const key in alternative) {
+    if (key === "all_of" || key === "any_of" || key === "none_of") {
+      if (!isKeywordList(alternative[key])) return "unknown";
+    } else {
+      other = true;
+    }
+  }
+  const all = (alternative.all_of ?? []) as string[];
+  const any = alternative.any_of as string[] | undefined;
+  const none = (alternative.none_of ?? []) as string[];
+  const keywordsHold = all.every((keyword) => includesKeyword(keywords, keyword))
+    && (any === undefined || any.some((keyword) => includesKeyword(keywords, keyword)))
+    && !none.some((keyword) => includesKeyword(keywords, keyword));
+  if (!keywordsHold) return false;
+  return other ? "unknown" : true;
 }
 
 /** Filters the recipient unit; emitter identity is not part of EngineContext. */

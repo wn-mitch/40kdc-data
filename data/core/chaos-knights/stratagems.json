@@ -607,7 +607,7 @@
       "shooting",
       "fight"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "storm-of-darkness-traitoris-lance-chaos-knights",

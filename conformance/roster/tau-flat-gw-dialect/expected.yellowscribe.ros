@@ -17,7 +17,7 @@
             </profile>
             <profile name="Jammer Array" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If an enemy unit was set up, for the rest of the battle, enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
+                <characteristic name="Description">If an enemy unit was set up from Strategic Reserves, for the rest of the battle, enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">

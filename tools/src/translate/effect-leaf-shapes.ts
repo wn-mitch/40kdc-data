@@ -35,7 +35,8 @@ function borrowWeapons(m: Record<string, unknown>, subj: string, ctx: Ctx): stri
 
 function selectWeapon(m: Record<string, unknown>, subj: string): string {
   const n = Number(m.count ?? 1);
-  const kind = m.weapon_type != null ? `${jstr(m.weapon_type)} ` : "";
+  const named = m.weapon_name != null ? `${jstr(m.weapon_name)} ` : "";
+  const kind = `${named}${m.weapon_type != null ? `${jstr(m.weapon_type)} ` : ""}`;
   const kw = m.weapon_keyword != null ? ` with [${jstr(m.weapon_keyword).toUpperCase()}]` : "";
   return `select ${n === 1 ? "one" : jstr(n)} ${kind}weapon${n === 1 ? "" : "s"}${kw} equipped by ${subj}; the effects below refer to ${n === 1 ? "it as the selected weapon" : "them as the selected weapons"}`;
 }

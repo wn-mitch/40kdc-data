@@ -61,12 +61,16 @@ _DESPITE = {
     "performing-action": "performing an Action",
     "advanced": "Advanced this turn",
     "fell-back": "Fell Back this turn",
+    "destroyed": "has just been destroyed",
 }
 _IS_STATE = frozenset({"engaged", "battle-shocked", "performing-action"})
 _AS_IF = {
     "shooting-phase": " as if it were your Shooting phase",
     "fight-phase": " as if it were the Fight phase",
     "snap-shooting": " using the Snap Shooting rules",
+    "movement-phase": " as if it were your Movement phase",
+    "charge-phase": " as if it were your Charge phase",
+    "command-phase": " as if it were your Command phase",
 }
 
 

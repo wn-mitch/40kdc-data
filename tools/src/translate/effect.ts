@@ -18,7 +18,7 @@ import { dekebab, describeCondition, titleCase, type Condition } from "./conditi
 import { conditionLeadIn, describeSelectionEligibility } from "./condition-leadin.js";
 import { describeTiming, eventClause } from "./timing.js";
 import { describeTrigger, normalizeTriggers, type AbilityTriggerSpec } from "./trigger.js";
-import { describeLeaf, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
 import { expiryTrail } from "./expiry.js";
 import { rollHead, selectObjectiveBlock, selectObjectiveInline } from "./effect-bind.js";
 import {
@@ -77,6 +77,7 @@ export interface Effect {
   trigger?: AbilityTriggerSpec;
   usage?: AbilityUsage | AbilityUsage[];
   dice?: string;
+  distinct?: boolean;
   roll_var?: string;
   extra_dice_pool?: string;
   from?: { roll_var: string; successes_on?: number };
@@ -125,6 +126,8 @@ export interface Effect {
     within_inches?: number;
     round?: string;
     max_value?: number;
+    /** When the count is taken: live (default) at each use, on-apply once when the rule applies. */
+    evaluated?: "live" | "on-apply";
   };
   // designate-target / persistent-designation
   designation?: string;
@@ -164,6 +167,7 @@ export interface Effect {
   duration?: string;
   // stance-select
   mode?: string;
+  additive?: boolean;
   scope?: string;
   // risk-reward
   reward?: Effect;
@@ -383,7 +387,14 @@ function referenceOrigin(reference: unknown): string {
   return reference === "bearer-unit" ? "this model's unit" : "the bearer";
 }
 
-function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
+/** Where a selector's member_of puts its models. */
+const MEMBER_OF: Record<string, string> = {
+  "bearer-unit": " in this model's unit",
+  "embarked-in-bearer": " embarked within this model",
+  target: " in the target unit",
+};
+
+export function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
   const keywordList = Array.isArray(sel.keywords)
     ? sel.keywords.map((keyword) => titleCase(jstr(keyword)))
     : [];
@@ -406,7 +417,9 @@ function forEachUnitSubject(sel: Record<string, unknown> = {}): string {
         : "";
   const noun = sel.target_kind === "model" ? "model" : "unit";
   const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
-  return `${jstr(sel.owner)} ${keywords}${noun}${selectionModelFilters(sel)}${sel.member_of === "bearer-unit" ? " in this model's unit" : ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
+  // owner any: "each unit within 6\" of …", with no side word.
+  const owner = sel.owner === "any" ? "" : `${jstr(sel.owner)} `;
+  return `${owner}${keywords}${noun}${selectionModelFilters(sel)}${MEMBER_OF[String(sel.member_of)] ?? ""}${within}${engagement}${eligibility}${selectionBinding(sel)}`;
 }
 
 /**
@@ -668,6 +681,11 @@ function usageClause(u: AbilityUsage | AbilityUsage[]): string {
 
 /** A `scaling` block → trailing clause ("for every 5 enemy models within 6\""). */
 function scalingClause(s: NonNullable<Effect["scaling"]>): string {
+  const clause = scalingWording(s);
+  return s.evaluated === "on-apply" ? `${clause} (counted when the rule applies)` : clause;
+}
+
+function scalingWording(s: NonNullable<Effect["scaling"]>): string {
   if (s.of === "battle-round") return `multiplied by the battle round number${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
   // A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
   if (s.of === "embarked-models-oc") return `for every ${Number(s.per) === 1 ? "point" : `${jstr(s.per)} points`} of ${scaleSource(s as Record<string, unknown>)}${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
@@ -683,7 +701,11 @@ function auraEligibleSubject(who: string, eligible: unknown): string {
   const e = eligible as Record<string, unknown>;
   const required = Array.isArray(e.required_keywords) ? e.required_keywords.map(jstr) : [];
   const excluded = Array.isArray(e.excluded_keywords) ? e.excluded_keywords.map(jstr) : [];
-  const base = required.length ? `${who.slice(0, -4)}${required.join(" ")} unit` : who;
+  // States, then keywords all of which it has, then keywords one of which it has.
+  const states = Array.isArray(e.states) ? e.states.map(jstr) : [];
+  const anyOf = Array.isArray(e.any_keywords) ? [e.any_keywords.map(jstr).join(" or ")] : [];
+  const words = [...states, ...required, ...anyOf];
+  const base = words.length ? `${who.slice(0, -4)}${words.join(" ")} unit` : who;
   return `${base}${excluded.length ? ` (excluding ${excluded.join(" ")} units)` : ""}`;
 }
 
@@ -719,7 +741,7 @@ function auraClause(e: Effect, m: Record<string, unknown>, ctx: Ctx): string {
   const recipient = m.recipient_filter != null ? keywordFilterClause(m.recipient_filter, eligibleWho) : eligibleWho;
   const emitter = m.emitter_filter != null ? keywordFilterClause(m.emitter_filter, "this model") : "this model";
   const effectText = m.effect != null ? describeEffectInline(m.effect as Effect, { ...ctx, auraRecipient: true }) : "that unit is affected";
-  return `while ${recipient} is within ${rangeText}${capped} of ${emitter}, ${effectText}`;
+  return `while ${recipient} is ${m.wholly === true ? "wholly " : ""}within ${rangeText}${capped} of ${emitter}, ${effectText}`;
 }
 
 /**
@@ -754,11 +776,17 @@ function diceTableResultLabel(results: unknown): string {
   return faces.join(", ");
 }
 
+/** "roll one D6", or "roll 2 D6 and resolve each one (re-rolling any repeated result)". */
+function diceTableHead(e: Effect): string {
+  if (typeof e.count !== "number" || e.count < 2) return `roll one ${diceCase(e.dice)}`;
+  return `roll ${e.count} ${diceCase(e.dice)} and resolve each one${e.distinct === true ? " (re-rolling any repeated result)" : ""}`;
+}
+
 function diceTableInline(e: Effect, ctx: Ctx): string {
   const outcomes = (e.outcomes ?? []).map(
     (outcome) => `on ${diceTableResultLabel(outcome.results)}, ${describeEffectInline(outcome.effect ?? {}, ctx)}`
   );
-  return `roll one ${diceCase(e.dice)}: ${outcomes.join("; ")}`;
+  return `${diceTableHead(e)}: ${outcomes.join("; ")}`;
 }
 
 /**
@@ -850,16 +878,21 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `${selectLead} one ${designationTargetSubject(sel)}${desig}; ${whenClause}, ${describeEffectInline(e.applies?.effect ?? {}, recipientCtx)}`;
     }
     case "stance-select":
-      return `${stancePick(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
+      return `${stancePick(e)}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         stance_id?: unknown;
         option_id?: unknown;
+        option_ids?: unknown;
         additional_selections?: unknown;
         allocation?: unknown;
       };
       const n = Number(m.additional_selections) || 1;
       const times = n === 1 ? "one additional time" : `${jstr(n)} additional times`;
+      // A shared allowance narrowed to some options: spent on any one of them, not one of each.
+      if (m.allocation !== "fixed-option" && Array.isArray(m.option_ids)) {
+        return `you can select ${orList(m.option_ids.map((id) => titleCase(jstr(id))))} ${times} per battle, shared between them`;
+      }
       const subject =
         m.allocation === "fixed-option" && m.option_id != null
           ? titleCase(jstr(m.option_id))
@@ -901,6 +934,11 @@ function diceGate(e: Effect, ctx: Ctx): string {
 }
 
 /** "select one", "select two", "select up to two" — how many menu options are picked. */
+/** " (in addition to any already active)" when a stance pick joins the active options. */
+function stanceAdditive(e: Effect): string {
+  return e.additive === true ? " (in addition to any already active)" : "";
+}
+
 function stancePick(e: Effect): string {
   const min = e.min_choices ?? 1;
   const max = e.max_choices ?? 1;
@@ -1091,9 +1129,11 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
 function partHead(e: Effect): string {
   const moment = normalizeTriggers(e.trigger).map(describeTrigger).filter(Boolean).join(" or ");
   const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
-  const named = e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
+  // A named part that always applies is a labelled rule ("Kine Shield: …"), not one to use.
+  const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
+  const named = label ? "" : e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
   const cost = e.cost ? `by paying this cost (${describeEffectInline(e.cost)})` : "";
-  return [moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
+  return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, durationClauses(e.duration).trail].filter(Boolean).join(", ");
 }
 
 /** A part on one line: its head, then its effect. */
@@ -1131,6 +1171,10 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       if (CONTAINER_TYPES.has(inner.type ?? "")) return `${indent}-> ${capitalize(partHead(e))}:\n` + describeEffect(inner, depth + 1, ctx);
       return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
     }
+    case "ability-grant":
+      // A grant printed with its ability: the holder and name, then the ability one level deeper.
+      if (isDefinedGrant(e)) return `${indent}${arrow}${capitalize(definedGrantHead(e as Leaf, ctx))}:\n` + describeEffect(definitionPart(e as Leaf) as Effect, depth + 1, ctx);
+      return `${indent}${arrow}${capitalize(describeEffectInline(e, ctx))}.`;
     case "choice": {
       const prompt = choicePrompt(e);
       return (
@@ -1154,7 +1198,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       return selectObjectiveBlock(e as Record<string, unknown>, indent, arrow, nested, (x) => describeEffectInline((x ?? {}) as Effect, ctx));
     }
     case "dice-table": {
-      const lines = [`${indent}${arrow}Roll one ${diceCase(e.dice)}:`];
+      const lines = [`${indent}${arrow}${capitalize(diceTableHead(e))}:`];
       for (const outcome of e.outcomes ?? []) {
         lines.push(`${indent}  - On ${diceTableResultLabel(outcome.results)}: ${capitalize(describeEffectInline(outcome.effect ?? {}, ctx))}.`);
       }
@@ -1242,7 +1286,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "stance-select": {
       const when = typeof e.select === "string" ? capitalize(eventClause(e.select)) : "At the start of your turn";
       const consum = e.mode === "consumable" ? " (each may be chosen once per battle)" : "";
-      const lines = [`${indent}${arrow}${when}, ${stancePick(e)}${consum}:`];
+      const lines = [`${indent}${arrow}${when}, ${stancePick(e)}${consum}${stanceAdditive(e)}:`];
       for (const opt of e.options ?? []) {
         lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
       }
@@ -1374,7 +1418,7 @@ function renderTopLevel(
     return assembleSentence([trig, lead, leadIn, trail, describeEffectInline(inner, ctx)]);
   }
 
-  if (CONTAINER_TYPES.has(e.type ?? "")) {
+  if (CONTAINER_TYPES.has(e.type ?? "") || isDefinedGrant(e)) {
     // Containers render block; a trigger/duration lead-in prefixes the block when
     // present. A designate-target carrying its own `duration` renders that
     // duration itself — repeating the scope duration in the head would double it.

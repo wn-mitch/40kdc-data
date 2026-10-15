@@ -970,5 +970,87 @@
       "model_name": "Blightlord Terminator",
       "any_number": true
     }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-1",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "plague-flail"
+    ],
+    "replacement": [
+      "bileblade"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "great-unclean-one-wgo-mfm-2",
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replaces": [
+      "bilesword"
+    ],
+    "replacement": [
+      "doomsday-bell"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "plague-drones-wgo-mfm-1",
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "instrument-of-chaos"
+      ],
+      [
+        "daemonic-icon"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Plague Drone",
+      "any_number": true
+    }
+  },
+  {
+    "id": "plaguebearers-wgo-mfm-1",
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "daemonic-icon"
+      ],
+      [
+        "instrument-of-chaos"
+      ]
+    ],
+    "model_constraint": {
+      "model_name": "Plaguebearer",
+      "any_number": true
+    }
   }
 ]

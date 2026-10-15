@@ -15,8 +15,10 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "auspex-scanned",
     "battle-shock-auto-succeed",
     "bio-stimulus-target",
+    "blessed",
     "blight-bombardment-target",
     "bloody-vengeance",
+    "bondsman-affected",
     "breaching-fire-target",
     "busted",
     "chronosorcerous-bleed",
@@ -34,15 +36,21 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "death-begets-vengeance-hated",
     "decoyed",
     "designated",
+    "detected",
+    "disrupted",
     "dreadherder-target",
     "dual-melee",
     "eliminate-at-all-costs",
     "empowered",
+    "enfeebled",
     "enhancement-expended",
+    "ensnared",
     "entrenched",
     "favoured-champions",
     "flame-wreathed",
     "focus-of-hatred",
+    "grav-pinned",
+    "grounded",
     "guidance-of-the-ancients",
     "guidance-of-the-ancients-crowes-sanctifiers",
     "guided",
@@ -51,8 +59,11 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "hidden",
     "hunted",
     "illuminated",
+    "infested-with-snotlings",
     "losing-the-wager",
     "machine-vengeance-target",
+    "malevolent",
+    "mark",
     "marked",
     "marked-prey",
     "mutated",
@@ -70,6 +81,8 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "pinpoint-counter-offensive",
     "pledge-of-mortal-pain",
     "plundered",
+    "poisoned",
+    "prey",
     "prey-marked",
     "priority-target",
     "prosecuted",
@@ -79,7 +92,10 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "quarry",
     "remains-under-your-control",
     "riled-up",
+    "riven",
     "sabotaged",
+    "scanned",
+    "scattered",
     "scornful-analysis-designated",
     "secured",
     "servo-designated",
@@ -90,12 +106,21 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "singular-purpose-enemy",
     "singular-purpose-marker",
     "slayer-of-champions",
+    "slayers-oath",
+    "slowed",
+    "smashed",
+    "snared",
     "spirit-mark",
     "split-into-single-model-units",
     "spotted",
     "staggered",
     "stormwracked",
     "strategic-conqueror",
+    "struck-by-arcing-energies",
+    "struck-by-concussive-wave",
+    "struck-by-explosive-debris",
+    "struck-by-spores",
+    "stunned",
     "suppressed",
     "suppressing-fire-pinned",
     "surveilled",
@@ -108,16 +133,31 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "unbridled-ardour-slayer",
     "unhideable",
     "unmasked",
+    "unravelling",
+    "vendetta-target",
     "vengeful-dead",
+    "victim",
+    "warlord",
     "whispering-web",
     "wholly-within-flow-of-magic",
     "winning-the-wager",
+    "wobbled",
     "worthy-foes",
+    "wracked-with-agonies",
+    "zapped",
 ];
 
 /// Whether `id` is a registered designation.
 pub fn is_designation_id(id: &str) -> bool {
     DESIGNATION_IDS.binary_search(&id).is_ok()
+}
+
+/// Designations only list building sets (the model chosen as Warlord); a rule may test them, never apply them.
+pub const LIST_BUILDING_DESIGNATIONS: &[&str] = &["warlord"];
+
+/// Whether `id` is a list-building designation.
+pub fn is_list_building_designation(id: &str) -> bool {
+    LIST_BUILDING_DESIGNATIONS.contains(&id)
 }
 
 /// The printed term for a registered id after "is"/"are" ("Spotted", "an Observer" /
@@ -130,6 +170,41 @@ pub fn designation_label(id: &str, plural: bool) -> Option<String> {
         "riled-up" => (Some("riled up"), None),
         "empowered" => (Some("Empowered"), None),
         "observer" => (None, Some("Observer")),
+        "blessed" => (Some("blessed"), None),
+        "bondsman-affected" => (Some("Bondsman-affected"), None),
+        "detected" => (Some("detected"), None),
+        "disrupted" => (Some("disrupted"), None),
+        "enfeebled" => (Some("enfeebled"), None),
+        "ensnared" => (Some("ensnared"), None),
+        "grav-pinned" => (Some("grav-pinned"), None),
+        "grounded" => (Some("grounded"), None),
+        "infested-with-snotlings" => (Some("infested with Snotlings"), None),
+        "malevolent" => (Some("malevolent"), None),
+        "mutated" => (Some("mutated"), None),
+        "nulled" => (Some("nulled"), None),
+        "overlapping-fire" => (Some("caught in overlapping fire"), None),
+        "poisoned" => (Some("poisoned"), None),
+        "riven" => (Some("riven"), None),
+        "scanned" => (Some("scanned"), None),
+        "scattered" => (Some("scattered"), None),
+        "shaken" => (Some("shaken"), None),
+        "slowed" => (Some("slowed"), None),
+        "smashed" => (Some("smashed"), None),
+        "snared" => (Some("snared"), None),
+        "struck-by-arcing-energies" => (Some("struck by arcing energies"), None),
+        "struck-by-concussive-wave" => (Some("struck by concussive wave"), None),
+        "struck-by-explosive-debris" => (Some("struck by explosive debris"), None),
+        "struck-by-spores" => (Some("struck by spores"), None),
+        "stunned" => (Some("stunned"), None),
+        "wobbled" => (Some("wobbled"), None),
+        "wracked-with-agonies" => (Some("wracked with agonies"), None),
+        "zapped" => (Some("zapped"), None),
+        "unravelling" => (Some("unravelling"), None),
+        "prey" => (None, Some("prey")),
+        "slayers-oath" => (None, Some("Slayer's Oath")),
+        "vendetta-target" => (None, Some("Vendetta target")),
+        "victim" => (None, Some("victim")),
+        "warlord" => (Some("the Warlord"), None),
         _ => return None,
     };
     if let Some(a) = adjective {
@@ -189,6 +264,13 @@ mod tests {
             Some("riled up")
         );
         assert_eq!(designation_label("hunted", false), None);
+        // The Warlord is the list-building designation: a definite noun, singular in every form.
+        assert!(is_designation_id("warlord") && is_list_building_designation("warlord"));
+        assert_eq!(
+            designation_label("warlord", false).as_deref(),
+            Some("the Warlord")
+        );
+        assert!(!is_list_building_designation("spotted"));
         assert_eq!(designation_id(" RILED  UP "), "riled-up");
         assert_eq!(designation_id("Oath_of Moment"), "oath-of-moment");
     }

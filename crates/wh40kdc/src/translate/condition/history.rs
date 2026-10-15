@@ -85,14 +85,51 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             };
             with_window(&format!("{who} {has} been selected to {what}"), window)
         }
-        "set-up" => with_window(
-            &format!("{who} {} set up", if negated { "was not" } else { "was" }),
-            window,
-        ),
+        "set-up" => {
+            let from = match st(f.get("from")).as_str() {
+                "deep-strike" => " using Deep Strike",
+                "strategic-reserves" => " from Strategic Reserves",
+                "cult-ambush" => " from Cult Ambush",
+                "transport" => " from a Transport",
+                _ => "",
+            };
+            with_window(
+                &format!(
+                    "{who} {} set up{from}",
+                    if negated { "was not" } else { "was" }
+                ),
+                window,
+            )
+        }
         "targets-selected" => {
+            // A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+            if st(f.get("kind")) == "stratagem" && f.get("id").is_some() {
+                let target = unit_ref_phrase(nn(p, "object"), "the unit");
+                let has = if negated { "has not" } else { "has" };
+                return with_window(
+                    &format!(
+                        "{target} {has} been targeted with the {} Stratagem",
+                        id_label(f.get("id"))
+                    ),
+                    window,
+                );
+            }
+            // Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+            let atk = if truthy(f.get("attack_type")) {
+                st(f.get("attack_type"))
+            } else {
+                String::new()
+            };
             let what = match nn(p, "object") {
-                Some(o) => format!("{} as a target", unit_ref_phrase(Some(o), "the unit")),
-                None => "targets".to_string(),
+                Some(o) if atk.is_empty() => {
+                    format!("{} as a target", unit_ref_phrase(Some(o), "the unit"))
+                }
+                Some(o) => format!(
+                    "{} as a target of its {atk} attacks",
+                    unit_ref_phrase(Some(o), "the unit")
+                ),
+                None if atk.is_empty() => "targets".to_string(),
+                None => format!("targets for its {atk} attacks"),
             };
             with_window(
                 &format!(
@@ -102,10 +139,19 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 window,
             )
         }
-        "disembarked" => with_window(
-            &format!("{who} {} from a Transport", did_not("disembark")),
-            window,
-        ),
+        "disembarked" => {
+            let from = match f.get("transport") {
+                None | Some(Value::Null) => "a Transport".to_string(),
+                Some(Value::String(s)) if s == "this-unit" || s == "this-model" => {
+                    "this Transport".to_string()
+                }
+                other => unit_ref_phrase(other, "the unit"),
+            };
+            with_window(
+                &format!("{who} {} from {from}", did_not("disembark")),
+                window,
+            )
+        }
         "after-roll" => {
             let obj_phrase = unit_ref_phrase(p.get("object"), "the unit");
             let target = if obj_phrase == "the target unit" {
@@ -172,6 +218,24 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 };
                 return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
             }
+            // Whose roll it was, when the subject names one: "the unit made a battle-shock roll
+            // and failed it".
+            if nn(p, "subject").is_some() {
+                let outcome = if is(f, "result", "failure") {
+                    " and failed it"
+                } else if is(f, "result", "success") {
+                    " and passed it"
+                } else {
+                    ""
+                };
+                return format!(
+                    "{neg}{who} made a {} roll{outcome} {}",
+                    roll_word(f.get("roll")),
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
+            }
             let result = if truthy(f.get("result")) {
                 format!("was a {} ", st(f.get("result")))
             } else {
@@ -219,6 +283,15 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 }
                 return format!("{neg}destroyed by any attack");
             }
+            // "this model": the destroyed model is this one, not any model of the unit.
+            if is(p, "object", "this-model") {
+                let s = if negated {
+                    "this model was not destroyed"
+                } else {
+                    "this model was destroyed"
+                };
+                return with_window(s, window);
+            }
             let o = obj(p.get("object"));
             let kws = strs(o.get("all_of"))
                 .map(|k| format!("{} ", k.join(" ")))
@@ -227,10 +300,18 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
                 .map(|v| format!("{} ", st(Some(v))))
                 .unwrap_or_default();
             if let Some(by) = nn(f, "by") {
-                let when = if window.and_then(Value::as_str) == Some("event") {
-                    "with its just-resolved attacks".to_string()
+                // A destruction by one attack type says it: "with its just-resolved melee attacks".
+                let atk = if truthy(f.get("attack_type")) {
+                    format!("{} ", st(f.get("attack_type")))
                 } else {
+                    String::new()
+                };
+                let when = if window.and_then(Value::as_str) == Some("event") {
+                    format!("with its just-resolved {atk}attacks")
+                } else if atk.is_empty() {
                     window_phrase(window)
+                } else {
+                    format!("with {atk}attacks {}", window_phrase(window))
                 };
                 return format!(
                     "{neg}{} has destroyed {n}+ {owner}{kws}{noun}s {when}",
@@ -251,6 +332,21 @@ pub(crate) fn describe_happened(p: &P, negated: bool) -> String {
             )
         }
         "used" => {
+            // The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+            if window.and_then(Value::as_str) == Some("event")
+                && nn(f, "ability_keyword").is_none()
+                && nn(f, "same_rule_as").is_none()
+            {
+                let kind = nn(f, "kind").map_or("ability".to_string(), |k| st(Some(k)));
+                let rule = named_use_phrase(f).unwrap_or_else(|| in_progress_phrase(&kind));
+                let verb = if kind == "ability" || kind == "stratagem" {
+                    "using"
+                } else {
+                    "performing"
+                };
+                let not = if negated { "not " } else { "" };
+                return format!("{who} is {not}{verb} {rule}");
+            }
             if is(f, "kind", "action") {
                 let mut s = format!("{neg}{n}+ actions completed");
                 if let Some(id) = nn(f, "id") {

@@ -86,3 +86,18 @@ def test_fixture_covers_every_new_leaf_and_container() -> None:
         "guided",
     ):
         assert shape in seen, shape
+
+
+def test_warlord_is_a_list_building_designation() -> None:
+    """Warlord is the model chosen at mustering: registered, labelled "the Warlord",
+    list-building only."""
+    from wh40kdc.translate.designations import (
+        DESIGNATION_IDS,
+        LIST_BUILDING_DESIGNATIONS,
+        designation_label,
+    )
+
+    assert "warlord" in DESIGNATION_IDS
+    assert LIST_BUILDING_DESIGNATIONS == frozenset({"warlord"})
+    assert designation_label("warlord") == "the Warlord"
+    assert designation_label("warlord", plural=True) == "the Warlord"

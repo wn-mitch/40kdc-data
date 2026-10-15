@@ -893,6 +893,7 @@
     "detachment_id": "dread-mob",
     "cp_cost": 1,
     "phases": [
+      "movement",
       "charge"
     ],
     "player_turn": "your-turn",

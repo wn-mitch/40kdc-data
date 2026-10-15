@@ -70,8 +70,12 @@ const straightApostrophes = (text: string) => text.replace(/[\u2018\u2019\u02BC]
  * An effect's subject when the words name the bearer. The bearer is the model that has the
  * ability; the bearer's unit is its unit.
  */
+/** "This model", not "this model's unit" (bearerSubject reads that as the unit). */
+const THIS_MODEL = /\bthis model\b(?!['’]s unit\b)/iu;
+
 function bearerSubject(text: string): "this-unit" | "this-model" | null {
-  if (/\bthe bearer's unit\b/iu.test(text)) return "this-unit";
+  // The bearer's (or this model's) unit is the unit, with either apostrophe.
+  if (/\b(?:the bearer|this model)['’]s unit\b/iu.test(text)) return "this-unit";
   return /\bthe bearer\b/iu.test(text) ? "this-model" : null;
 }
 
@@ -172,6 +176,12 @@ const CHARACTERISTIC_ORDER = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", 
 
 function characteristicFromSource(text: string): Record<string, unknown> {
   const result: Record<string, unknown> = {};
+  const shorthand = /^([+\-−‐‑‒–—])\s*(\d+)\s*(OC|Ld|AP|WS|BS|Sv|M|T|W|A|S|D)[.!]?$/iu.exec(text.replaceAll("*", "").trim());
+  if (shorthand) return {
+    characteristics: [CHARACTERISTIC_ORDER.find((stat) => stat.toLowerCase() === shorthand[3]!.toLowerCase())!],
+    operation: shorthand[1] === "+" ? "improve" : "worsen",
+    value: Number(shorthand[2]),
+  };
   const found = CHARACTERISTIC_WORDS.filter(([pattern]) => pattern.test(text)).map(([, stat]) => stat);
   if (found.length) result.characteristics = CHARACTERISTIC_ORDER.filter((stat) => found.includes(stat));
   const verb = /\b(add|subtract|improve|worsen)\b/iu.exec(text)?.[1]?.toLowerCase();
@@ -259,21 +269,29 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
         : PREDICATES.has(family.id) ? predicateFromSource(family.id, exactText)
           : NEW_PREDICATES.has(family.id) ? predicateConditionPrefill(family.id, exactText) : containerPrefill(family.id, exactText);
   if (family.id === "characteristic-modifier") Object.assign(prefill, characteristicFromSource(exactText));
+  if (family.id === "weapon-property-scope") {
+    const frame = /^(this unit|this model|that unit)'s (?:(melee|ranged) )?attacks have(?: the)?$/iu.exec(exactText.replace(/\*/gu, "").trim());
+    if (frame) {
+      prefill.subject = frame[1]!.toLowerCase() === "that unit" ? "selected-unit" : frame[1]!.toLowerCase().replace(" ", "-");
+      prefill.weapon_type = frame[2]?.toLowerCase() ?? "all";
+    }
+  }
   if (family.id === "no-advance-roll") {
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:it|your unit|this unit|that unit)\b/iu.test(exactText)) prefill.subject = "this-unit";
   }
+  if (family.id === "roll-prohibition" && /\bdeadly demise\b/iu.test(exactText)) prefill.roll = "deadly-demise";
   if (family.id === "dice-roll") {
     const dice = /\broll (?:one |a )?(d3|d6|2d6)\b/iu.exec(exactText)?.[1]?.toUpperCase();
     if (dice) prefill.dice = dice;
   }
   if (family.id === "roll-result") {
-    // A D6 is assumed for "N+"; change "to" for a D3 or 2D6.
     const band = /\bon an? (\d+)(?:\+|-(\d+))?/iu.exec(exactText);
     if (band) {
       prefill.from = Number(band[1]);
-      prefill.to = band[2] ? Number(band[2]) : /\d\+/u.test(band[0]) ? 6 : Number(band[1]);
+      if (band[2]) prefill.to = Number(band[2]);
+      else if (!band[0].endsWith("+")) prefill.to = Number(band[1]);
     }
   }
   if (family.id === "mortal-wounds") {
@@ -289,7 +307,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     if (/\bcan shoot\b/iu.test(exactText)) {
       prefill.act = "shoot";
       if (/\bthis unit\b/iu.test(exactText)) prefill.subject = "this-unit";
-      else if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+      else if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     } else if (/\bcan fight\b/iu.test(exactText) || prefill.timing) prefill.act = "fight";
   }
   if (family.id === "reroll") {
@@ -297,11 +315,11 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     if (/\bre-roll (?:one|a single)\b/iu.test(exactText)) prefill.count = 1;
   }
   if (family.id === "ignore-modifiers") {
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:this|that|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
-    if (/\bcharacteristics?\b/iu.test(exactText) && !/\brolls?\b/iu.test(exactText)) prefill.what = "characteristics";
-    else if (/\brolls?\b/iu.test(exactText)) prefill.what = "rolls";
+    const kinds = [...(/\bcharacteristics?\b/iu.test(exactText) ? ["characteristics"] : []), ...(/\brolls?\b/iu.test(exactText) ? ["rolls"] : [])];
+    if (kinds.length > 0) prefill.what = kinds;
     if (/\bnegative modifiers?\b|\bworsen(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "worsening";
     else if (/\bpositive modifiers?\b|\bimprov(?:ed|ing)?\b/iu.test(exactText)) prefill.only = "improving";
   }
@@ -317,20 +335,25 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   }
   if (family.id === "unit-activity") {
     const activities: Array<[RegExp, string]> = [
-      [/selected to shoot/iu, "selected-to-shoot-this-phase"], [/selected to move/iu, "selected-to-move-this-phase"], [/selected to fight|fought/iu, "fought-this-phase"],
+      [/selected to shoot/iu, "selected-to-shoot-this-phase"], [/selected to move/iu, "selected-to-move-this-phase"], [/selected to (?:shoot or )?fight|fought/iu, "fought-this-phase"],
       [/charge/iu, "charged-this-turn"], [/advance/iu, "advanced-this-turn"], [/remained stationary/iu, "remained-stationary"],
     ];
-    const activity = activities.find(([pattern]) => pattern.test(exactText))?.[1];
-    if (activity) prefill.activity = activity;
+    const found = activities.flatMap(([pattern, activity]) => (pattern.test(exactText) ? [activity] : []));
+    if (found.length) prefill.activities = found;
     if (/\bnot\b|\bhas not\b|\bhasn't\b/iu.test(exactText)) prefill.negated = true;
     if (/\b(?:this|your|that) (?:unit|model)\b/iu.test(exactText)) prefill.subject = "this-unit";
+  }
+  if (family.id === "hit-by-attacks") {
+    if (/\bhit by\b/iu.test(exactText)) prefill.subject = "selected-unit";
   }
   if (family.id === "usage-limit") {
     const frequency = /once per (battle round|battle|turn|phase)/iu.exec(exactText)?.[1]?.toLowerCase();
     if (frequency) prefill.frequency = `once-per-${frequency.replace(" ", "-")}`;
     if (/your opponent's turn/iu.test(exactText)) prefill.frequency = "once-per-opponent-turn";
-    const per = /\bper (army|unit|model)\b|\bfor each (unit|model)\b/iu.exec(exactText);
-    prefill.per = per ? (per[1] ?? per[2])!.toLowerCase() : "any";
+  }
+  if (family.id === "usage-scope") {
+    const per = /\bper (army|unit|model)\b/iu.exec(exactText)?.[1];
+    if (per) prefill.per = per.toLowerCase();
   }
   if (family.id === "use-window") Object.assign(prefill, windowFromSource(exactText));
   if (family.id === "bearer-eligibility") {
@@ -353,19 +376,19 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
     const acts = [/\bshoot|\bshot\b/iu.test(exactText) ? "shoot" : null, /\bcharge\b/iu.test(exactText) ? "charge" : null].filter(Boolean);
     if (moves.length) prefill.moves = moves;
     if (acts.length) prefill.acts = acts;
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
   }
   if (family.id === "regain-wounds") {
     const amount = /regains? (\d+|d3\+3|d3|d6) lost wounds?/iu.exec(exactText)?.[1];
     if (amount) prefill.amount = amount.toUpperCase();
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
   }
   const MOVE_SUBJECT_FAMILIES = new Set(["make-move", "move-through", "set-up", "battlefield-marker", "objective-sticky", "apply-mark"]);
   if (MOVE_SUBJECT_FAMILIES.has(family.id)) {
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\bthe selected unit\b/iu.test(exactText)) prefill.subject = "selected-unit";
     else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
@@ -413,7 +436,7 @@ export function prefillFromSource(family: PrefillFamily | undefined, sourceText:
   }
   const PERMISSION_SUBJECT_FAMILIES = new Set(["eligibility-permission", "targeting-restriction", "counts-as", "rule-state", "damage-reduction", "return-models"]);
   if (PERMISSION_SUBJECT_FAMILIES.has(family.id)) {
-    if (/\bthis model\b/iu.test(exactText)) prefill.subject = "this-model";
+    if (THIS_MODEL.test(exactText)) prefill.subject = "this-model";
     else if (bearerSubject(exactText)) prefill.subject = bearerSubject(exactText);
     else if (/\b(?:that|this|your) unit\b/iu.test(exactText)) prefill.subject = "this-unit";
   }

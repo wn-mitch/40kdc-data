@@ -6,6 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, describe, expect, it } from "vitest";
 import { hashFile, hashJson } from "../src/round4/hash.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 import { initializeWorkbench } from "../src/round5c/db.js";
 import { importHitTrain, repairRelatedVariantProposals } from "../src/round5c/migration.js";
 type DatabaseSync = DatabaseType;
@@ -50,8 +51,8 @@ function buildFixture({ recognizedRecall = false, sidewaysReviewed = true }: { r
   const manifestHash = hashJson({ artifact: "fixture-manifest" });
   const rubric = "fixture-rubric/v1";
   const fingerprints = [
-    { id: "legacy-reroll", canonical_hash: hashJson({ legacy: "reroll" }), family: "reroll", version: 2, parameters: { roll: "hit", subset: "ones", weapon_type: "all" } },
-    { id: "legacy-add", canonical_hash: hashJson({ legacy: "add" }), family: "roll-modifier", version: 1, parameters: { roll: "hit", operation: "add", value: 1 } },
+    { id: "legacy-reroll", canonical_hash: hashJson({ legacy: "reroll" }), family: "reroll", version: currentFamilyVersion("reroll"), parameters: { roll: "hit", subset: "ones", weapon_type: "all" } },
+    { id: "legacy-add", canonical_hash: hashJson({ legacy: "add" }), family: "roll-modifier", version: currentFamilyVersion("roll-modifier"), parameters: { roll: "hit", operation: "add", value: 1 } },
     { id: "legacy-threshold", canonical_hash: hashJson({ legacy: "threshold" }), family: "critical-hit-threshold", version: 1, parameters: { value: "source" } },
   ];
   const candidates = {

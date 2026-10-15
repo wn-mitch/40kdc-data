@@ -92,6 +92,46 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
     })
 }
 
+/// A filter's `any_of_filters` as keyword spellings ("LEGIO CYBERNETICA", "ADEPTUS MECHANICUS
+/// VEHICLE") when each alternative is only its keywords and the filter requires none of its own,
+/// so "an A or B C unit" says it; else None.
+pub(crate) fn keyword_alternatives(f: &P) -> Option<Vec<String>> {
+    let alts = f.get("any_of_filters")?.as_array()?;
+    if f.get("all_of").is_some_and(Value::is_array) {
+        return None;
+    }
+    let mut out = Vec::with_capacity(alts.len());
+    for a in alts {
+        let o = a.as_object()?;
+        let all = o.get("all_of")?.as_array()?;
+        // A typed filter re-serialized from Rust carries its unset `UnitRef` fields as null.
+        if all.is_empty() || o.iter().any(|(k, v)| k != "all_of" && !v.is_null()) {
+            return None;
+        }
+        out.push(strs(o.get("all_of"))?.join(" "));
+    }
+    Some(out)
+}
+
+/// Each alternative of `any_of_filters` as a filter of the outer filter's level (models or units).
+pub(crate) fn alternative_filters(f: &P) -> Vec<P> {
+    let level = f.get("level").filter(|v| !v.is_null());
+    f.get("any_of_filters")
+        .and_then(Value::as_array)
+        .map(|alts| {
+            alts.iter()
+                .map(|a| {
+                    let mut m = a.as_object().cloned().unwrap_or_default();
+                    if let Some(level) = level {
+                        m.insert("level".to_string(), level.clone());
+                    }
+                    m
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
 /// A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit".
 pub(crate) fn unit_filter_phrase(f: &P) -> String {
     let owner = if is(f, "owner", "friendly") {
@@ -109,17 +149,33 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     } else {
         "unit"
     };
-    let base = format!("{owner}{all}{noun}");
+    // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+    let compact = keyword_alternatives(f);
+    let base = match &compact {
+        Some(alts) => format!("{owner}{} {noun}", or_list(alts)),
+        None => format!("{owner}{all}{noun}"),
+    };
     // `/^(?:[aeio]|u(?!ni))/i`: "an ORKS unit", "a unit", "an UNDEAD unit".
     let lower = base.to_lowercase();
     let an = lower.starts_with(['a', 'e', 'i', 'o'])
         || (lower.starts_with('u') && !lower.starts_with("uni"));
     let mut s = format!("{} {base}", if an { "an" } else { "a" });
+    // Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+    if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
+        let alts: Vec<String> = alternative_filters(f)
+            .iter()
+            .map(unit_filter_phrase)
+            .collect();
+        s.push_str(&format!(" that is {}", or_list(&alts)));
+    }
     if let Some(any) = strs(f.get("any_of")) {
         s.push_str(&format!(" with the {} keyword", or_list(&any)));
     }
     if let Some(none) = strs(f.get("none_of")) {
         s.push_str(&format!(" (excluding {} {noun}s)", or_list(&none)));
+    }
+    if let Some(not_all) = strs(f.get("not_all_of")) {
+        s.push_str(&format!(" (excluding {} {noun}s)", not_all.join(" ")));
     }
     let titled = |v: &Value| id_label(Some(v));
     if let Some(has) = f.get("has_ability").and_then(Value::as_array) {
@@ -171,6 +227,13 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
             " that is {}",
             state_phrase(&st(Some(state)), false)
         ));
+    }
+    if let Some(Value::Array(not)) = f.get("not_states") {
+        let phrases: Vec<String> = not
+            .iter()
+            .map(|x| state_phrase(&st(Some(x)), true))
+            .collect();
+        s.push_str(&format!(" that is {}", and_list(&phrases)));
     }
     if f.get("visible") == Some(&Value::Bool(true)) {
         s.push_str(" that is visible to it");
@@ -251,6 +314,7 @@ pub(crate) fn range_phrase(r: Option<&Value>) -> String {
                 let id = st(Some(aura));
                 return match id.as_str() {
                     "nurgles-gift-death-guard" => "Contagion Range".to_string(),
+                    "synapse-tyranids" => "Synapse Range".to_string(),
                     _ => format!("the {} range", id_label(Some(aura))),
                 };
             }
@@ -301,6 +365,7 @@ pub(crate) fn state_phrase_base(state: &str) -> Option<&'static str> {
         "battle-shocked" => "Battle-shocked",
         "embarked" => "embarked",
         "in-strategic-reserves" => "in Strategic Reserves",
+        "in-cult-ambush" => "in Cult Ambush",
         "on-battlefield" => "on the battlefield",
         "hidden" => "hidden",
         "fights-first" => "a Fights First unit",
@@ -391,6 +456,40 @@ pub(crate) fn roll_word(roll: Option<&Value>) -> String {
         }
     }
     dekebab(&st(roll))
+}
+
+/// One named rule a `used` filter names by id ("Reanimation Protocols", "the Swift as the Wind
+/// Agile Manoeuvre"), or None. An ability is its name alone; the other kinds add their noun.
+pub(crate) fn named_use_phrase(f: &P) -> Option<String> {
+    let id = nn(f, "id")?;
+    let kind = st(f.get("kind"));
+    if kind == "ability" {
+        return Some(id_label(Some(id)));
+    }
+    let noun = match kind.as_str() {
+        "manoeuvre" => "Agile Manoeuvre",
+        "stratagem" => "Stratagem",
+        "action" => "action",
+        _ => return None,
+    };
+    Some(format!("the {} {noun}", id_label(Some(id))))
+}
+
+/// A rule of one kind being used now, when the filter names none.
+pub(crate) fn in_progress_phrase(kind: &str) -> String {
+    match kind {
+        "ability" => "an ability".to_string(),
+        "stratagem" => "a Stratagem".to_string(),
+        "manoeuvre" => "an Agile Manoeuvre".to_string(),
+        "action" => "an action".to_string(),
+        "order" => "an Order".to_string(),
+        "ritual" => "a Ritual".to_string(),
+        "dark-pact" => "a Dark Pact".to_string(),
+        "act-of-faith" => "an Act of Faith".to_string(),
+        "doctrine" => "a Combat Doctrine".to_string(),
+        "contract" => "a contract".to_string(),
+        other => format!("a {}", dekebab(other)),
+    }
 }
 
 /// Which ability a `used` filter names: every ability with a bracketed keyword, or the same one

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 
-import { currentFamilyVersion, exactSpan, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, exactSpan, NAME_FRAGMENT, validateFingerprint } from "./contracts.js";
 import { sourcesClosed } from "./board-ranking.js";
 import { getCurrentCoverage, type AbilityCoverage, type UncoveredInterval } from "./coverage.js";
 import { bumpWorkbenchRevision, insertSpan, invalidateWholeReview, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
@@ -23,7 +23,7 @@ import { inScope, parseScope, ScopeError, scopeJson, type OccurrenceContext } fr
 
 /** Uncovered wording that joins leaves without meaning anything itself. */
 /** Joining words, and a bare "that unit" (a lead-in naming the unit the effects after it act on). */
-const GLUE = new Set(["and", "as well", "in addition", "then", "when doing so", "if you do", "if it does", "that unit"]);
+const GLUE = new Set(["and", "as well", "but", "in addition", "then", "when doing so", "if you do", "if it does", "that unit"]);
 const EDGE_PUNCTUATION = /^[\s\p{P}]+|[\s\p{P}]+$/gu;
 /** HTML entity debris from the source extraction (a stray "&#x20;"); never a leaf. Coverage splits
  * the entity at its punctuation, so the bare "x20" left between must match too. */
@@ -58,11 +58,24 @@ export class LeafError extends Error {
  */
 const QUALIFIER_BEFORE = /(?:\b(?:melee|ranged)|\*\*[^*]+\*\*|\b[A-Z][A-Z'-]{2,})\s+$/u;
 
+/**
+ * Leading words no premodifier can narrow: determiners, prepositions, clause openers and verbs.
+ * "**battle-shocked** until the end of the turn" is a state followed by a duration, not a
+ * qualified duration, so a match starting with one of these is never qualified.
+ */
+const UNQUALIFIABLE_START = new Set([
+  "a", "after", "an", "are", "as", "at", "before", "by", "can", "cannot", "during", "each", "every", "for", "from", "has", "have",
+  "if", "in", "is", "it", "its", "must", "of", "on", "once", "one", "roll", "select", "that", "the", "then", "this", "to",
+  "until", "when", "whenever", "while", "with", "within", "you", "your",
+]);
+
 /** Whether the words right before a byte offset qualify what follows it. */
 export function qualifiedAt(sourceText: string, startByte: number): boolean {
   const bytes = Buffer.from(sourceText, "utf8");
   const before = bytes.subarray(Math.max(0, startByte - 80), startByte).toString("utf8");
-  return QUALIFIER_BEFORE.test(before);
+  if (!QUALIFIER_BEFORE.test(before)) return false;
+  const first = /^\W*([A-Za-z]+)/u.exec(bytes.subarray(startByte, startByte + 40).toString("utf8"))?.[1]?.toLowerCase();
+  return first === undefined || !UNQUALIFIABLE_START.has(first);
 }
 
 /** The surface key of source wording: normalized, without edge punctuation. */
@@ -83,22 +96,22 @@ export type SurfaceRow = { id: number; normalized_surface: string; fingerprint_i
 
 const SURFACE_COLUMNS = "id, normalized_surface, fingerprint_id, status, batch_id, authority_kind, scope_json";
 
-type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
+export type Fingerprint = { id: string; family_id: string; family_version: number; role: string; parameters: Record<string, unknown> };
 
 export type ApplyReport = {
   applied: number;
   already: number;
-  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" }>;
+  blocked: Array<{ ability_version_id: number; faction_id: string; ability_id: string; exact_text: string; reason: "OTHER_LEAF_HERE" | "REJECTED_HERE" | "QUALIFIED_HERE" | "TRUSTED_HERE" | "CONNECTIVE_HERE" }>;
   /** Machine rows at the same bytes and meaning that a trusted surface row replaced. */
   promoted?: number;
   /** Occurrences of the wording outside the surface's stored scope, left alone. */
   out_of_scope?: number;
 };
 
-type AbilityContext = { source_text: string; source_type: string | null; fragments_json: string };
+export type AbilityContext = { source_text: string; source_type: string | null; fragments_json: string };
 
 /** An occurrence's own fragment, and the fragment text on either side of it, for scope checks. */
-function occurrenceContext(ability: AbilityContext, occurrence: { fragment: string; start_byte: number; end_byte: number }): OccurrenceContext {
+export function occurrenceContext(ability: AbilityContext, occurrence: { fragment: string; start_byte: number; end_byte: number }): OccurrenceContext {
   const fragment = (JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>)
     .find((item) => item.fragment === occurrence.fragment && item.start_byte <= occurrence.start_byte && occurrence.end_byte <= item.end_byte);
   const bytes = Buffer.from(ability.source_text, "utf8");
@@ -109,7 +122,7 @@ function occurrenceContext(ability: AbilityContext, occurrence: { fragment: stri
   };
 }
 
-function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
+export function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
   const row = db.prepare(`
     SELECT fingerprints.id, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json, semantic_families.role
     FROM fingerprints JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
@@ -119,14 +132,14 @@ function fingerprintRow(db: DatabaseSync, id: string): Fingerprint {
   return { id: row.id, family_id: row.family_id, family_version: row.family_version, role: row.role, parameters: JSON.parse(row.parameters_json) as Record<string, unknown> };
 }
 
-function newBatch(db: DatabaseSync, reviewer: string, metadata: Record<string, unknown> = {}): string {
+export function newBatch(db: DatabaseSync, reviewer: string, metadata: Record<string, unknown> = {}): string {
   const id = `batch_${randomUUID()}`;
   db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at, metadata_json) VALUES (?, 'review', ?, ?, ?)")
     .run(id, reviewer, new Date().toISOString(), JSON.stringify(metadata));
   return id;
 }
 
-function addMember(db: DatabaseSync, batchId: string, kind: string, id: number | string): void {
+export function addMember(db: DatabaseSync, batchId: string, kind: string, id: number | string): void {
   db.prepare("INSERT OR IGNORE INTO batch_members (batch_id, entity_kind, entity_id) VALUES (?, ?, ?)").run(batchId, kind, String(id));
 }
 
@@ -181,6 +194,7 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
     WHERE abilities.current = 1 AND proposals.status IN ('pending', 'unresolved') AND source_spans.normalized_surface = ?
+      AND source_spans.fragment <> '${NAME_FRAGMENT}'
       ${abilityVersionIds ? `AND abilities.id IN (${[...abilityVersionIds].map(Number).filter(Number.isSafeInteger).join(",") || "NULL"})` : ""}
   `).all(surface) as Occurrence[];
   for (const proposal of proposals) add(proposal);
@@ -196,7 +210,7 @@ export function surfaceOccurrences(db: DatabaseSync, surface: string, abilityVer
  * this leaf at this authority, one overlapping a different leaf of its layer, or where a human
  * rejected this meaning, is reported and not written.
  */
-function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, batchId: string, abilityVersionIds?: ReadonlySet<number>): ApplyReport & { touched: Set<number> } {
+export function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, batchId: string, abilityVersionIds?: ReadonlySet<number>): ApplyReport & { touched: Set<number> } {
   const fingerprint = fingerprintRow(db, surface.fingerprint_id);
   const authority = propagatedAuthority(surface.authority_kind);
   const trusted = authority !== "machine";
@@ -211,6 +225,14 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
     SELECT 1 FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
     WHERE source_spans.ability_version_id = ? AND source_spans.fragment = ? AND source_spans.start_byte = ? AND source_spans.end_byte = ?
       AND proposals.fingerprint_id = ? AND proposals.status IN ('rejected', 'corrected')
+    LIMIT 1
+  `);
+  // A human marked these bytes as glue (an accepted connective covering the whole occurrence): no
+  // surface writes a leaf over them, whatever fingerprint the family's current version gives it.
+  const connectiveHere = db.prepare(`
+    SELECT 1 FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id
+    WHERE source_spans.ability_version_id = ? AND source_spans.fragment = ? AND source_spans.start_byte <= ? AND source_spans.end_byte >= ?
+      AND proposals.role = 'CONNECTIVE' AND proposals.status = 'accepted'
     LIMIT 1
   `);
   const pendingHere = db.prepare(`
@@ -261,6 +283,7 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
     if (others.length > 0) { blocked(!trusted && others.some((other) => other.authority_kind !== "machine") ? "TRUSTED_HERE" : "OTHER_LEAF_HERE"); continue; }
     if (qualifiedAt((sourceText.get(occurrence.ability_version_id) as { source_text: string }).source_text, occurrence.start_byte)) { blocked("QUALIFIED_HERE"); continue; }
     if (refused.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte, fingerprint.id)) { blocked("REJECTED_HERE"); continue; }
+    if (connectiveHere.get(occurrence.ability_version_id, occurrence.fragment, occurrence.start_byte, occurrence.end_byte)) { blocked("CONNECTIVE_HERE"); continue; }
     // Promotion: the machine row this trusted row confirms, same bytes and meaning.
     const promoted = trusted ? all.find((other) => other.authority_kind === "machine" && exact(other)) : undefined;
     if (promoted) {
@@ -283,18 +306,19 @@ function applySurface(db: DatabaseSync, surface: SurfaceRow, reviewer: string, b
   return report;
 }
 
-function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefined {
+export function activeSurface(db: DatabaseSync, surface: string): SurfaceRow | undefined {
   return db.prepare(`SELECT ${SURFACE_COLUMNS} FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'`).get(surface) as SurfaceRow | undefined;
 }
 
-function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null, scope: string | null = null): SurfaceRow {
-  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at, scope_json) VALUES (?, ?, 'active', ?, ?, ?, ?, ?)")
-    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString(), scope);
+/** Record an active surface; `operatorId` links a spelling instantiated from a decided operator. */
+export function insertSurface(db: DatabaseSync, surface: string, fingerprintId: string, batchId: string, authority: "human" | "machine", authorizingAnnotationId: number | null = null, scope: string | null = null, operatorId: number | null = null): SurfaceRow {
+  const inserted = db.prepare("INSERT INTO leaf_surfaces (normalized_surface, fingerprint_id, status, authority_kind, authorizing_annotation_id, batch_id, created_at, scope_json, operator_id) VALUES (?, ?, 'active', ?, ?, ?, ?, ?, ?)")
+    .run(surface, fingerprintId, authority, authorizingAnnotationId, batchId, new Date().toISOString(), scope, operatorId);
   addMember(db, batchId, "leaf-surface-created", Number(inserted.lastInsertRowid));
   return { id: Number(inserted.lastInsertRowid), normalized_surface: surface, fingerprint_id: fingerprintId, status: "active", batch_id: batchId, authority_kind: authority, scope_json: scope };
 }
 
-function finish(db: DatabaseSync, touched: Iterable<number>): void {
+export function finish(db: DatabaseSync, touched: Iterable<number>): void {
   invalidateWholeReview(db, touched);
   bumpWorkbenchRevision(db);
 }
@@ -546,6 +570,10 @@ export function assertLeafUndo(db: DatabaseSync, batchId: string, members: Reado
     const expected = member.entity_kind === "leaf-surface-created" ? "active" : "retired";
     if (!row || row.status !== expected) throw new LeafError(409, "This batch cannot be undone because one of its surfaces was later changed.");
   }
+  for (const member of members.filter((item) => item.entity_kind === "leaf-operator-created")) {
+    const row = db.prepare("SELECT status FROM leaf_operators WHERE id = ?").get(Number(member.entity_id)) as { status: string } | undefined;
+    if (row?.status !== "active") throw new LeafError(409, "This batch cannot be undone because its operator was later changed.");
+  }
 }
 
 function mergeMetadata(db: DatabaseSync, batchId: string): { from: string; to: string } | null {
@@ -592,6 +620,10 @@ export function applyLeafUndo(db: DatabaseSync, batchId: string, reversalId: str
     db.prepare("UPDATE leaf_surfaces SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
     addMember(db, reversalId, "leaf-surface-retired", member.entity_id);
     retractDerivedRows(db, reversalId, Number(member.entity_id));
+  }
+  for (const member of members.filter((item) => item.entity_kind === "leaf-operator-created")) {
+    db.prepare("UPDATE leaf_operators SET status = 'retired' WHERE id = ? AND status = 'active'").run(Number(member.entity_id));
+    addMember(db, reversalId, "leaf-operator-retired", member.entity_id);
   }
   for (const member of members.filter((item) => item.entity_kind === "leaf-surface-retired")) {
     const row = db.prepare("SELECT normalized_surface FROM leaf_surfaces WHERE id = ?").get(Number(member.entity_id)) as { normalized_surface: string };

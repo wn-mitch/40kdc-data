@@ -8329,5 +8329,249 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "ability_id": "bane-of-cowards-world-eaters",
+    "name": "Bane of Cowards",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodletters"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "brass-stampede-world-eaters",
+    "name": "Brass Stampede",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodcrushers"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "collar-of-khorne-world-eaters",
+    "name": "Collar of Khorne",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "flesh-hounds"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemon-lord-of-khorne-world-eaters",
+    "name": "Daemon Lord of Khorne",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodthirster"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "daemonic-icon-world-eaters",
+    "name": "Daemonic Icon",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodcrushers",
+      "bloodletters"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "damaged-1-7-wounds-remaining-world-eaters",
+    "name": "DAMAGED: 1-7 WOUNDS REMAINING",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "skarbrand"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "hunters-from-the-warp-world-eaters",
+    "name": "Hunters from the Warp",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "flesh-hounds"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "instrument-of-chaos-world-eaters",
+    "name": "Instrument of Chaos",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodcrushers",
+      "bloodletters"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "murderlust-world-eaters",
+    "name": "Murderlust",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "skarbrand"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "rage-embodied-world-eaters",
+    "name": "Rage Embodied",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "skarbrand"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "ability_id": "relentless-carnage-world-eaters",
+    "name": "Relentless Carnage",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "stub": true,
+    "unit_ids": [
+      "bloodthirster"
+    ],
+    "faction_id": "world-eaters",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

@@ -3,7 +3,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { describe, expect, it } from "vitest";
 import { hashJson } from "../src/round4/hash.js";
-import { validateFingerprint } from "../src/round5c/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/round5c/contracts.js";
 import { getAbilityCoverage } from "../src/round5c/coverage.js";
 import { initializeWorkbench, insertSpan } from "../src/round5c/db.js";
 import { applyAnnotationBatch, undoBatch } from "./round5c-human.js";
@@ -51,7 +51,7 @@ describe("Round 5C connective coverage", () => {
       `).run(connectiveSpanId).lastInsertRowid);
 
       const effectSpanId = insertSpan(db, abilityId, "RAW_TEXT", effectStart, effectEnd, "act");
-      const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, 2, "act");
+      const fingerprintId = validateFingerprint(db, "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }, currentFamilyVersion("reroll"), "act");
       db.prepare(`
         INSERT INTO annotation_batches (id, operation, reviewer, created_at)
         VALUES ('human-review', 'review', 'reviewer', '2026-01-01T00:00:00.000Z')

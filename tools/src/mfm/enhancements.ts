@@ -233,6 +233,26 @@ export interface EnhFields {
   unresolvedKeywordIds: string[];
 }
 
+/** The dump's placeholder required keyword: a keyword row named "DNU" that no unit carries. */
+const PLACEHOLDER_KEYWORD = "DNU";
+
+/**
+ * The bearer keyword the printed rule names for each enhancement whose dump
+ * eligibility is the "DNU" placeholder: each card names the one model that may have
+ * it ("C'TAN SHARD OF THE NIGHTBRINGER model only", "EVERSOR ASSASSIN models only").
+ * A "DNU" group with no entry here is unresolved, so it never reaches the repo.
+ */
+const PLACEHOLDER_BEARER_KEYWORDS: Readonly<Record<string, string>> = {
+  "singularity-matrix-pantheon-of-woe-necrons": "C’tan Shard of the Deceiver",
+  "quantum-goad-pantheon-of-woe-necrons": "C’tan Shard of the Nightbringer",
+  "animus-damper-pantheon-of-woe-necrons": "C’tan Shard of the Void Dragon",
+  "reletavistic-tether-pantheon-of-woe-necrons": "Transcendent C’tan",
+  "intraneural-biotech-veiled-blade-elimination-force-agents-of-the-imperium": "Eversor Assassin",
+  "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium": "Callidus Assassin",
+  "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium": "Culexus Assassin",
+  "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium": "Vindicare Assassin",
+};
+
 /**
  * Enhancement repo-id → structured fields, from the dump. Keyed identically to
  * {@link buildEnhCanon} ({@link enhancementRepoId}) so a
@@ -280,7 +300,8 @@ export function buildEnhFieldCanon(dump: MfmDump): Map<string, EnhFields> {
       const members = new Set<string>();
       for (const r of kwByGroup.get(g.id) ?? []) {
         const label = keywordLabel(dump, r.keywordId);
-        if (label) members.add(label);
+        const bearer = label === PLACEHOLDER_KEYWORD ? PLACEHOLDER_BEARER_KEYWORDS[id] : label;
+        if (bearer) members.add(bearer);
         else unresolved.push(r.keywordId);
       }
       for (const r of fkwByGroup.get(g.id) ?? []) {

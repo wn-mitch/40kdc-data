@@ -89,19 +89,45 @@ func describeHappened(p map[string]any, negated bool) string {
 		if negated {
 			was = "was not"
 		}
-		return withWindow(who+" "+was+" set up", p["window"])
+		setUpFrom := map[string]string{"deep-strike": " using Deep Strike", "strategic-reserves": " from Strategic Reserves", "cult-ambush": " from Cult Ambush", "transport": " from a Transport"}
+		return withWindow(who+" "+was+" set up"+setUpFrom[cstr(f["from"])], p["window"])
 	case "targets-selected":
 		has := "has"
 		if negated {
 			has = "has not"
 		}
+		// A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+		if cstr(f["kind"]) == "stratagem" && f["id"] != nil {
+			target := "the unit"
+			if p["object"] != nil {
+				target = unitRefPhrase(p["object"], "the unit")
+			}
+			return withWindow(target+" "+has+" been targeted with the "+idLabel(f["id"])+" Stratagem", p["window"])
+		}
+		// Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+		atk := ""
+		if truthy(f["attack_type"]) {
+			atk = cstr(f["attack_type"])
+		}
 		what := "targets"
+		if atk != "" {
+			what += " for its " + atk + " attacks"
+		}
 		if p["object"] != nil {
 			what = unitRefPhrase(p["object"], "the unit") + " as a target"
+			if atk != "" {
+				what += " of its " + atk + " attacks"
+			}
 		}
 		return withWindow(who+" "+has+" selected "+what, p["window"])
 	case "disembarked":
-		return withWindow(who+" "+didNot("disembark")+" from a Transport", p["window"])
+		from := "a Transport"
+		if f["transport"] == "this-unit" || f["transport"] == "this-model" {
+			from = "this Transport"
+		} else if f["transport"] != nil {
+			from = unitRefPhrase(f["transport"], "the unit")
+		}
+		return withWindow(who+" "+didNot("disembark")+" from "+from, p["window"])
 	case "after-roll":
 		obj := unitRefPhrase(p["object"], "the unit")
 		target := obj
@@ -160,6 +186,16 @@ func describeHappened(p map[string]any, negated bool) string {
 			}
 			return neg + target + " was hit by " + hits + attacker + weapon + by + when
 		}
+		// Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
+		if p["subject"] != nil {
+			outcome := ""
+			if f["result"] == "failure" {
+				outcome = " and failed it"
+			} else if f["result"] == "success" {
+				outcome = " and passed it"
+			}
+			return trimEnd(neg + who + " made a " + rollWord(f["roll"]) + " roll" + outcome + " " + windowPhrase(p["window"]))
+		}
 		result := "was made "
 		if jsTruthy(f["result"]) {
 			result = "was a " + cstr(f["result"]) + " "
@@ -191,6 +227,13 @@ func describeHappened(p map[string]any, negated bool) string {
 			}
 			return neg + "destroyed by any attack"
 		}
+		// "this model": the destroyed model is this one, not any model of the unit.
+		if p["object"] == "this-model" {
+			if negated {
+				return withWindow("this model was not destroyed", p["window"])
+			}
+			return withWindow("this model was destroyed", p["window"])
+		}
 		obj := map[string]any{}
 		if m, ok := asMap(p["object"]); ok && m != nil {
 			obj = m
@@ -204,9 +247,16 @@ func describeHappened(p map[string]any, negated bool) string {
 			owner = cstr(obj["owner"]) + " "
 		}
 		if f["by"] != nil {
+			// A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
+			atk := ""
+			if jsTruthy(f["attack_type"]) {
+				atk = cstr(f["attack_type"]) + " "
+			}
 			when := windowPhrase(p["window"])
 			if p["window"] == "event" {
-				when = "with its just-resolved attacks"
+				when = "with its just-resolved " + atk + "attacks"
+			} else if atk != "" {
+				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
 			return trimEnd(neg + unitRefPhrase(f["by"], "the unit") + " has destroyed " + nStr + "+ " + owner + kws + noun + "s " + when)
 		}
@@ -216,6 +266,29 @@ func describeHappened(p map[string]any, negated bool) string {
 		}
 		return neg + withWindow(nStr+"+ "+owner+kws+noun+"s"+tagged+" destroyed", p["window"])
 	case "used":
+		// The use being resolved now: "the unit is performing the Swift as the Wind Agile Manoeuvre".
+		if p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
+			kind := "ability"
+			if f["kind"] != nil {
+				kind = cstr(f["kind"])
+			}
+			rule := namedUsePhrase(f)
+			if rule == "" {
+				var ok bool
+				if rule, ok = inProgressPhrases[kind]; !ok {
+					rule = "a " + dekebab(kind)
+				}
+			}
+			verb := "performing"
+			if kind == "ability" || kind == "stratagem" {
+				verb = "using"
+			}
+			not := ""
+			if negated {
+				not = "not "
+			}
+			return who + " is " + not + verb + " " + rule
+		}
 		if f["kind"] == "action" {
 			s := neg + nStr + "+ actions completed"
 			if f["id"] != nil {

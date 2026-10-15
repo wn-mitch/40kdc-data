@@ -9,6 +9,7 @@ import {
   REVIEWED_FAMILY_REGISTRY,
   familyFitsKind,
   familyRole,
+  NAME_FRAGMENT,
   validateFingerprint,
   type LeafRole,
 } from "./contracts.js";
@@ -198,7 +199,7 @@ function confirmedSpans(db: DatabaseSync, abilityVersionId: number): ConfirmedSp
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND annotations.authority_kind IN ('human', 'derived') AND source_spans.ability_version_id = ?
-    ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(abilityVersionId) as Array<{
     fragment: string;
     start_byte: number;

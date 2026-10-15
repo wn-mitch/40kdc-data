@@ -1279,7 +1279,7 @@
       }
     },
     "expected": {
-      "text": "After a saving throw is made within 6\" of this model, once per battle round per model, each time an attack targets friendly units within 6\", set the Damage characteristic of that attack to 0.\nApplies to: units with TECHMARINE."
+      "text": "After a friendly unit makes a saving throw within 6\" of this model, once per battle round per model, each time an attack targets friendly units within 6\", set the Damage characteristic of that attack to 0.\nApplies to: units with TECHMARINE."
     }
   },
   {
@@ -4700,7 +4700,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your army cannot include AGENTS OF THE IMPERIUM units."
+      "text": "Your army can include AGENTS OF THE IMPERIUM units."
     }
   },
   {
@@ -5197,7 +5197,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "Your army can include at most 0 EPIC HERO units (excluding YNNARI units)."
+      "text": "Your army cannot include EPIC HERO units (excluding YNNARI units)."
     }
   },
   {
@@ -6253,7 +6253,7 @@
       ]
     },
     "expected": {
-      "text": "Until the end of the phase:\n  -> Select one enemy unit within 8\" visible to the bearer: roll 7: for each 4+, that unit suffers 1 mortal wound.\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, NURGLE (excluding MONSTER)."
+      "text": "Until the end of the phase:\n  -> Select one enemy unit within 8\" visible to the bearer: roll 7 D6: for each 4+, that unit suffers 1 mortal wound.\nApplies to: units with LEGIONES DAEMONICA, CHARACTER, NURGLE (excluding MONSTER)."
     }
   },
   {
@@ -7917,7 +7917,7 @@
           "type": "ability-part",
           "trigger": {
             "event": "destroyed",
-            "subject": "this-model"
+            "object": "this-model"
           },
           "effect": {
             "type": "test",
@@ -7943,7 +7943,7 @@
       "duration": "permanent"
     },
     "expected": {
-      "text": "While this model is leading a unit, add 1 to the unit's Attacks characteristic.\n-> When the unit is destroyed: friendly ADEPTUS ASTARTES units within 6\" must take a Battle-shock test."
+      "text": "While this model is leading a unit, add 1 to the unit's Attacks characteristic.\n-> Each time this model is destroyed: friendly ADEPTUS ASTARTES units within 6\" must take a Battle-shock test."
     }
   },
   {
@@ -10062,23 +10062,7 @@
     }
   },
   {
-    "caseId": "da-krunch-wurrband-orks#215",
-    "effect": {
-      "type": "weapon-grant",
-      "target": "this-model",
-      "modifier": {
-        "weapon_id": "da-krunch"
-      }
-    },
-    "scope": {
-      "duration": "permanent"
-    },
-    "expected": {
-      "text": "This model gains 1 Da Krunch weapon."
-    }
-  },
-  {
-    "caseId": "daemon-lord-of-khorne-chaos-daemons#216",
+    "caseId": "daemon-lord-of-khorne-chaos-daemons#215",
     "effect": {
       "type": "aura",
       "target": "friendly-within-aura",
@@ -10118,7 +10102,7 @@
     }
   },
   {
-    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#217",
+    "caseId": "daemonic-allegiance-soul-grinder-chaos-daemons#216",
     "effect": {
       "type": "stance-select",
       "mode": "consumable",
@@ -10231,7 +10215,7 @@
     }
   },
   {
-    "caseId": "daemonic-fury-khorne-daemonkin-world-eaters#218",
+    "caseId": "daemonic-fury-khorne-daemonkin-world-eaters#217",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10311,7 +10295,7 @@
     }
   },
   {
-    "caseId": "daemonic-patrons-emperors-children#219",
+    "caseId": "daemonic-patrons-emperors-children#218",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10371,7 +10355,7 @@
     }
   },
   {
-    "caseId": "damaged#220",
+    "caseId": "damaged#219",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10401,7 +10385,7 @@
     }
   },
   {
-    "caseId": "damaged-objective-control#221",
+    "caseId": "damaged-objective-control#220",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10431,7 +10415,7 @@
     }
   },
   {
-    "caseId": "dark-pacts-chaos-space-marines#222",
+    "caseId": "dark-pacts-chaos-space-marines#221",
     "effect": {
       "type": "risk-reward",
       "reward": {
@@ -10493,7 +10477,7 @@
     }
   },
   {
-    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#223",
+    "caseId": "dauntless-bravery-sanguinary-spearhead-blood-angels#222",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10538,7 +10522,7 @@
     }
   },
   {
-    "caseId": "dauntless-champions-grey-knights#224",
+    "caseId": "dauntless-champions-grey-knights#223",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10591,7 +10575,7 @@
     }
   },
   {
-    "caseId": "dauntless-defenders-imperial-knights#225",
+    "caseId": "dauntless-defenders-imperial-knights#224",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10638,7 +10622,7 @@
     }
   },
   {
-    "caseId": "death-begets-vengeance-wrath-of-the-doomed-blood-angels#226",
+    "caseId": "death-begets-vengeance-wrath-of-the-doomed-blood-angels#225",
     "effect": {
       "type": "persistent-designation",
       "designation": "death-begets-vengeance-hated",
@@ -10675,7 +10659,7 @@
     }
   },
   {
-    "caseId": "deathstrike-missile-astra-militarum#227",
+    "caseId": "deathstrike-missile-astra-militarum#226",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10720,7 +10704,7 @@
     }
   },
   {
-    "caseId": "deceptive-glamour-changehost-of-deceit-thousand-sons#228",
+    "caseId": "deceptive-glamour-changehost-of-deceit-thousand-sons#227",
     "effect": {
       "type": "targeting",
       "target": {
@@ -10756,7 +10740,7 @@
     }
   },
   {
-    "caseId": "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann#229",
+    "caseId": "decisive-destruction-bane-slayers-bulwark-einhyr-hearthguard-leagues-of-votann#228",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10784,7 +10768,7 @@
     }
   },
   {
-    "caseId": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium#230",
+    "caseId": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium#229",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10847,7 +10831,7 @@
     }
   },
   {
-    "caseId": "delight-in-agony-elegant-brutes-emperors-children#231",
+    "caseId": "delight-in-agony-elegant-brutes-emperors-children#230",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10889,7 +10873,7 @@
     }
   },
   {
-    "caseId": "downtrodden-orks#232",
+    "caseId": "downtrodden-orks#231",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -10915,7 +10899,7 @@
     }
   },
   {
-    "caseId": "drain-life-necrons#233",
+    "caseId": "drain-life-necrons#232",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -10953,7 +10937,7 @@
     }
   },
   {
-    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#234",
+    "caseId": "drawn-to-the-slaughter-cult-of-blood-world-eaters#233",
     "effect": {
       "type": "add-unit",
       "target": "stratagem-target",
@@ -10980,7 +10964,7 @@
     }
   },
   {
-    "caseId": "drop-pod-assault-adeptus-astartes#235",
+    "caseId": "drop-pod-assault-adeptus-astartes#234",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11037,7 +11021,7 @@
     }
   },
   {
-    "caseId": "ds8-support-turret-tau-empire#236",
+    "caseId": "ds8-support-turret-tau-empire#235",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11080,7 +11064,7 @@
     }
   },
   {
-    "caseId": "dynamic-breakthrough-rapid-evisceration-emperors-children#237",
+    "caseId": "dynamic-breakthrough-rapid-evisceration-emperors-children#236",
     "effect": {
       "type": "move-modifier",
       "target": "this-unit",
@@ -11104,108 +11088,23 @@
     }
   },
   {
-    "caseId": "eadbanger-wurrband-orks#238",
+    "caseId": "eadbanger-wurrband-orks#237",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "ORKS"
-              ]
-            }
-          },
-          {
-            "type": "has-keyword",
-            "parameters": {
-              "all_of": [
-                "PSYKER"
-              ]
-            }
-          }
-        ]
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "weapon-grant",
-            "target": "this-model",
-            "modifier": {
-              "weapon_id": "eadbanger"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "A",
-              "operation": "set",
-              "value": 2,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "S",
-              "operation": "set",
-              "value": 6,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "AP",
-              "operation": "set",
-              "value": 1,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "stat-modifier",
-            "target": "this-model",
-            "modifier": {
-              "stat": "D",
-              "operation": "set",
-              "value": 3,
-              "weapon_name": "’Eadbanger",
-              "weapon_type": "ranged"
-            }
-          },
-          {
-            "type": "weapon-ability-grant",
-            "target": "this-model",
-            "modifier": {
-              "abilities": [
-                "Hazardous",
-                "Precision",
-                "Psychic"
-              ],
-              "weapon_name": "’Eadbanger"
-            }
-          }
-        ]
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "eadbanger-wurrband"
       }
     },
     "scope": {
       "duration": "permanent"
     },
     "expected": {
-      "text": "If the unit is an ORKS PSYKER unit:\n  -> This model gains 1 Eadbanger weapon.\n  -> Set the Attacks characteristic of ranged ’Eadbanger weapons equipped by this model to 2.\n  -> Set the Strength characteristic of ranged ’Eadbanger weapons equipped by this model to 6.\n  -> Set the Armour Penetration characteristic of ranged ’Eadbanger weapons equipped by this model to -1.\n  -> Set the Damage characteristic of ranged ’Eadbanger weapons equipped by this model to 3.\n  -> ’Eadbanger weapons equipped by this model gain [HAZARDOUS] and [PRECISION] and [PSYCHIC]."
+      "text": "This model gains 1 'Eadbanger weapon."
     }
   },
   {
-    "caseId": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes#239",
+    "caseId": "efficient-aggression-tharanatoi-hammerblow-adeptus-custodes#238",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11238,7 +11137,7 @@
     }
   },
   {
-    "caseId": "egotistical-power-grand-coven-thousand-sons#240",
+    "caseId": "egotistical-power-grand-coven-thousand-sons#239",
     "effect": {
       "type": "choice",
       "options": [
@@ -11285,7 +11184,7 @@
     }
   },
   {
-    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#241",
+    "caseId": "embarking-krieg-heavy-weapons-squad-astra-militarum#240",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -11304,7 +11203,7 @@
     }
   },
   {
-    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#242",
+    "caseId": "empowered-manifestation-hexwarp-thrallband-thousand-sons#241",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11353,7 +11252,7 @@
     }
   },
   {
-    "caseId": "eyes-of-the-cult-xenocult-masses-genestealer-cults#243",
+    "caseId": "eyes-of-the-cult-xenocult-masses-genestealer-cults#242",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11394,7 +11293,7 @@
     }
   },
   {
-    "caseId": "fail-safe-detonator-retaliation-cadre-tau-empire#244",
+    "caseId": "fail-safe-detonator-retaliation-cadre-tau-empire#243",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11478,7 +11377,7 @@
     }
   },
   {
-    "caseId": "fates-in-flux-chaos-daemons#245",
+    "caseId": "fates-in-flux-chaos-daemons#244",
     "effect": {
       "type": "resource-die",
       "target": "this-unit",
@@ -11507,7 +11406,7 @@
     }
   },
   {
-    "caseId": "ferocious-show-off-green-tide-orks#246",
+    "caseId": "ferocious-show-off-green-tide-orks#245",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11575,7 +11474,7 @@
     }
   },
   {
-    "caseId": "fleshy-curse-cabal-of-chaos-chaos-space-marines#247",
+    "caseId": "fleshy-curse-cabal-of-chaos-chaos-space-marines#246",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -11647,7 +11546,7 @@
     }
   },
   {
-    "caseId": "flow-of-magic-thousand-sons#248",
+    "caseId": "flow-of-magic-thousand-sons#247",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -11818,7 +11717,7 @@
     }
   },
   {
-    "caseId": "flyin-headbutt-flyboyz-orks#249",
+    "caseId": "flyin-headbutt-flyboyz-orks#248",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11996,7 +11895,7 @@
     }
   },
   {
-    "caseId": "furious-onslaught-world-eaters#250",
+    "caseId": "furious-onslaught-world-eaters#249",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12034,7 +11933,7 @@
     }
   },
   {
-    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#251",
+    "caseId": "gift-of-change-warpmeld-pact-thousand-sons#250",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -12055,7 +11954,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-khorne-chaos-daemons#252",
+    "caseId": "greater-daemon-of-khorne-chaos-daemons#251",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12106,7 +12005,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-nurgle-chaos-daemons#253",
+    "caseId": "greater-daemon-of-nurgle-chaos-daemons#252",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12157,7 +12056,7 @@
     }
   },
   {
-    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#254",
+    "caseId": "greater-daemon-of-slaanesh-chaos-daemons#253",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12208,7 +12107,7 @@
     }
   },
   {
-    "caseId": "grot-shields-runt-swarm-orks#255",
+    "caseId": "grot-shields-runt-swarm-orks#254",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12365,13 +12264,12 @@
     }
   },
   {
-    "caseId": "gun-drone-tau-empire#256",
+    "caseId": "gun-drone-tau-empire#255",
     "effect": {
       "type": "weapon-grant",
       "target": "this-model",
       "modifier": {
-        "weapon_id": "twin-pulse-carbine",
-        "count": 1
+        "weapon_id": "twin-pulse-carbine-drone"
       }
     },
     "scope": {
@@ -12382,7 +12280,7 @@
     }
   },
   {
-    "caseId": "hallowed-ground-grey-knights#257",
+    "caseId": "hallowed-ground-grey-knights#256",
     "effect": {
       "type": "named-region-state",
       "target": {
@@ -12609,7 +12507,7 @@
     }
   },
   {
-    "caseId": "hammer-aflame-grey-knights#258",
+    "caseId": "hammer-aflame-grey-knights#257",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -12687,7 +12585,7 @@
     }
   },
   {
-    "caseId": "headlong-destruction-chaos-space-marines#259",
+    "caseId": "headlong-destruction-chaos-space-marines#258",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12715,7 +12613,7 @@
     }
   },
   {
-    "caseId": "heroes-of-legend-imperial-knights#260",
+    "caseId": "heroes-of-legend-imperial-knights#259",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12742,7 +12640,7 @@
     }
   },
   {
-    "caseId": "holy-vanguard-adepta-sororitas#261",
+    "caseId": "holy-vanguard-adepta-sororitas#260",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12789,7 +12687,7 @@
     }
   },
   {
-    "caseId": "icon-of-khorne-world-eaters#262",
+    "caseId": "icon-of-khorne-world-eaters#261",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -12831,7 +12729,7 @@
     }
   },
   {
-    "caseId": "icon-of-war-khorne-daemonkin-world-eaters#263",
+    "caseId": "icon-of-war-khorne-daemonkin-world-eaters#262",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12906,7 +12804,7 @@
     }
   },
   {
-    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#264",
+    "caseId": "idol-of-blessed-blood-khorne-lord-of-skulls-world-eaters#263",
     "effect": {
       "type": "resource-die",
       "target": "this-model",
@@ -12928,7 +12826,7 @@
     }
   },
   {
-    "caseId": "infested-war-zone-runt-swarm-orks#265",
+    "caseId": "infested-war-zone-runt-swarm-orks#264",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13003,7 +12901,7 @@
     }
   },
   {
-    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#266",
+    "caseId": "join-the-hunt-kroot-hunting-pack-tau-empire#265",
     "effect": {
       "type": "add-unit",
       "target": "this-unit",
@@ -13030,7 +12928,7 @@
     }
   },
   {
-    "caseId": "kill-team-agents-of-the-imperium#267",
+    "caseId": "kill-team-agents-of-the-imperium#266",
     "effect": {
       "type": "transport-capacity",
       "target": "this-unit",
@@ -13049,7 +12947,7 @@
     }
   },
   {
-    "caseId": "killing-blow-tau-empire#268",
+    "caseId": "killing-blow-tau-empire#267",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13112,7 +13010,7 @@
     }
   },
   {
-    "caseId": "let-loose-the-wolves-space-wolves#269",
+    "caseId": "let-loose-the-wolves-space-wolves#268",
     "effect": {
       "type": "split-unit",
       "target": "this-unit",
@@ -13136,7 +13034,7 @@
     }
   },
   {
-    "caseId": "loyal-protector-astra-militarum#270",
+    "caseId": "loyal-protector-astra-militarum#269",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -13180,7 +13078,7 @@
     }
   },
   {
-    "caseId": "madcap-artillery-orks#271",
+    "caseId": "madcap-artillery-orks#270",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -13358,7 +13256,7 @@
     }
   },
   {
-    "caseId": "martial-mastery-adeptus-custodes#272",
+    "caseId": "martial-mastery-adeptus-custodes#271",
     "effect": {
       "type": "stance-select",
       "mode": "re-selectable",
@@ -13407,6 +13305,22 @@
     },
     "expected": {
       "text": "Until the end of the battle round:\n  -> At the start of the battle round, select one:\n    - Critical Hits on 5+: if the unit has the Martial Katah ability, the unit scores Critical Hits on Hit rolls of 5+ with melee weapons.\n    - Improved Armour Penetration: improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1."
+    }
+  },
+  {
+    "caseId": "missile-drone-tau-empire#272",
+    "effect": {
+      "type": "weapon-grant",
+      "target": "this-model",
+      "modifier": {
+        "weapon_id": "missile-pod-drone"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This model gains 1 Missile Pod weapon."
     }
   },
   {
@@ -21593,6 +21507,83 @@
     }
   },
   {
+    "caseId": "fidelity/aura-wholly-states-any-keywords",
+    "effect": {
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": 6,
+        "wholly": true,
+        "eligible": {
+          "states": [
+            "battle-shocked"
+          ],
+          "required_keywords": [
+            "NECRONS"
+          ],
+          "any_keywords": [
+            "MOUNTED",
+            "VEHICLE"
+          ]
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, while a friendly battle-shocked NECRONS MOUNTED or VEHICLE unit is wholly within 6\" of this model, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-despite-destroyed",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "use-stratagem",
+        "allow": true,
+        "despite": [
+          "destroyed"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to be targeted with Stratagems even if it has just been destroyed."
+    }
+  },
+  {
+    "caseId": "fidelity/roll-result-count-one",
+    "effect": {
+      "type": "roll-result",
+      "target": "this-unit",
+      "modifier": {
+        "roll": "hit",
+        "count": 1,
+        "result": 6,
+        "unmodified": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, one of the unit's Hit rolls counts as an unmodified 6."
+    }
+  },
+  {
     "caseId": "fidelity/move-ends-when-either",
     "effect": {
       "type": "move",
@@ -21631,6 +21622,4459 @@
     },
     "expected": {
       "text": "When resolving this use, the unit can Fall Back up to 6\"; it must end that move where the unit is wholly within your deployment zone or the unit is within range of an objective marker."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-move-started",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "normal"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit starts a Normal move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-move-started-enemy-consolidation",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time an enemy unit starts a Consolidation move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-charge-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "declare-charge",
+        "allow": true,
+        "as_if": "charge-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to declare a charge as if it were your Charge phase."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-command-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "command-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to shoot as if it were your Command phase."
+    }
+  },
+  {
+    "caseId": "fidelity/permission-as-if-movement-phase",
+    "effect": {
+      "type": "permission",
+      "target": "this-unit",
+      "modifier": {
+        "activity": "shoot",
+        "allow": true,
+        "as_if": "movement-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is eligible to shoot as if it were your Movement phase."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-cult-ambush-marker-range",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "via": "cult-ambush-marker",
+        "marker_range": {
+          "inches": 6,
+          "wholly": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can be set up on the battlefield using a Cult Ambush marker, wholly within 6\" of that marker."
+    }
+  },
+  {
+    "caseId": "fidelity/marker-relocate-not-moved",
+    "effect": {
+      "type": "marker",
+      "target": "this-unit",
+      "modifier": {
+        "label": "cult-ambush-marker",
+        "operation": "relocate",
+        "distance": 6,
+        "not_moved_this_turn": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, move the cult ambush marker that has not been moved this turn up to 6\"."
+    }
+  },
+  {
+    "caseId": "fidelity/move-as-if-movement-phase",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "as_if": "movement-phase"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit can make a Normal move of up to 6\" as if it were your Movement phase."
+    }
+  },
+  {
+    "caseId": "fidelity/add-unit-copy-cult-ambush",
+    "effect": {
+      "type": "add-unit",
+      "target": "this-unit",
+      "modifier": {
+        "copy_of": "event-object",
+        "count": 1,
+        "excluded_keywords": [
+          "CHARACTER"
+        ],
+        "at_starting_strength": true,
+        "reset_one_shot": true,
+        "placement": "cult-ambush"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-in-cult-ambush",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-state",
+        "parameters": {
+          "state": "in-cult-ambush"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is in Cult Ambush, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-not-states-not-all-of",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": {
+        "owner": "enemy",
+        "not_states": [
+          "engaged",
+          "battle-shocked"
+        ],
+        "not_all_of": [
+          "MONSTER",
+          "CHARACTER"
+        ]
+      },
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, enemy units (excluding MONSTER CHARACTER units) that are unengaged and not Battle-shocked suffer 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-keywords",
+    "effect": {
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "DELTA"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA or BETA GAMMA units gain the DELTA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-state",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": {
+        "owner": "enemy",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "state": "battle-shocked"
+          },
+          {
+            "all_of": [
+              "BETA"
+            ],
+            "not_states": [
+              "engaged"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "count": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all enemy units that are ALPHA units, units that are Battle-shocked or BETA units that are unengaged suffer 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-shared-keywords",
+    "effect": {
+      "type": "keyword-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ],
+        "any_of_filters": [
+          {
+            "all_of": [
+              "BETA"
+            ],
+            "none_of": [
+              "DELTA"
+            ]
+          },
+          {
+            "all_of": [
+              "GAMMA",
+              "EPSILON"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "keywords": [
+          "ZETA"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units gain the ZETA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/filter-any-of-filters-models",
+    "effect": {
+      "type": "re-roll",
+      "target": {
+        "owner": "friendly",
+        "level": "model",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      },
+      "modifier": {
+        "roll": "hit",
+        "result_scope": "any-result"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, you can re-roll the Hit roll for attacks made by all friendly ALPHA or BETA GAMMA models."
+    }
+  },
+  {
+    "caseId": "fidelity/within-any-of-filters",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "within",
+        "parameters": {
+          "of": {
+            "owner": "friendly",
+            "level": "model",
+            "any_of_filters": [
+              {
+                "all_of": [
+                  "ALPHA"
+                ]
+              },
+              {
+                "all_of": [
+                  "BETA"
+                ],
+                "state": "battle-shocked"
+              }
+            ]
+          },
+          "range": {
+            "inches": 3
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is within 3\" of a friendly model that is an ALPHA model or a BETA model that is Battle-shocked, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-subject-any-of-filters",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "level": "model",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          {
+            "all_of": [
+              "BETA",
+              "GAMMA"
+            ]
+          }
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly model destroys a unit (the triggering model must be an ALPHA model or a BETA GAMMA model), when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-subject-not-states",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy",
+        "not_states": [
+          "engaged"
+        ]
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time an enemy unit that is unengaged ends a move, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/mortal-wounds-max",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "event-subject",
+      "modifier": {
+        "count": "2D6",
+        "max": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the triggering unit suffers 2D6 mortal wounds (to a maximum of 6 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "fidelity/mortal-wounds-roll-max",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "roll": {
+          "dice": "3D6",
+          "threshold": 4
+        },
+        "max": 3
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll 3D6: for each 4+, the unit suffers 1 mortal wound (to a maximum of 3 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-disembarked-from-this-transport",
+    "trigger": {
+      "event": "disembarked",
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit disembarks from this Transport, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-disembarked-from-this-transport",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "disembarked",
+          "filter": {
+            "transport": "this-unit"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit disembarked from this Transport this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-before-deadly-demise",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "deadly-demise"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Before a Deadly Demise roll is made, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-set-up-deep-strike",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "set-up",
+          "filter": {
+            "from": "deep-strike"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit was set up using Deep Strike this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/dice-table-two-dice-distinct",
+    "effect": {
+      "type": "dice-table",
+      "dice": "D6",
+      "count": 2,
+      "distinct": true,
+      "outcomes": [
+        {
+          "results": [
+            1,
+            2,
+            3
+          ],
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 6
+            }
+          }
+        },
+        {
+          "results": [
+            4,
+            5,
+            6
+          ],
+          "effect": {
+            "type": "feel-no-pain",
+            "target": "this-unit",
+            "modifier": {
+              "threshold": 5
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  -> Roll 2 D6 and resolve each one (re-rolling any repeated result):\n    - On 1-3: The unit has the Feel No Pain 6+ ability.\n    - On 4-6: The unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-allied-faction",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 500,
+        "measure": "points",
+        "faction": "chaos-daemons"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include at most 500 points of Chaos Daemons units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-attached-to-keywords",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "role": "attached",
+          "with": {
+            "all_of": [
+              "DOMINION SQUAD"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is attached to a DOMINION SQUAD unit, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-by-opponent",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time your opponent uses a Stratagem, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-failed-test",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock",
+        "result": "failure"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When the unit fails a Battle-shock test, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-save-failed-for-model",
+    "trigger": {
+      "event": "after-roll",
+      "subject": "this-model",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a saving throw made for this model is failed, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-after-roll-successful-charge",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "charge",
+        "result": "success"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a successful Charge roll, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-by-this-unit",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy unit, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-ability-by-model",
+    "trigger": {
+      "event": "used",
+      "subject": "this-model",
+      "filter": {
+        "kind": "ability",
+        "id": "crude-surgery-orks"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model uses Crude Surgery, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-ability-holder",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "reanimation-protocols-necrons"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When you use Reanimation Protocols, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-manoeuvre",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "friendly"
+      },
+      "filter": {
+        "kind": "manoeuvre",
+        "id": "swift-as-the-wind"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly unit performs the Swift As the Wind Agile Manoeuvre, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-stratagem-by-opponent",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem",
+        "id": "fire-overwatch"
+      }
+    },
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 6
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time your opponent uses the Fire Overwatch Stratagem, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-used-named-ability-aura-proximity",
+    "trigger": {
+      "event": "used",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "NECRONS"
+        ]
+      },
+      "filter": {
+        "kind": "ability",
+        "id": "reanimation-protocols-necrons"
+      },
+      "proximity": {
+        "of": "this-model",
+        "range": {
+          "inches": 3
+        }
+      }
+    },
+    "effect": {
+      "type": "heal",
+      "target": "event-subject",
+      "modifier": {
+        "amount": "D3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time a friendly unit uses Reanimation Protocols (the triggering unit must have NECRONS) within 3\" of this model, when resolving this use, the triggering unit regains up to D3 lost wounds."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-manoeuvre-now",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "manoeuvre"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "While the unit is performing an Agile Manoeuvre, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-named-ability-now-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "used",
+              "subject": "event-subject",
+              "filter": {
+                "kind": "ability",
+                "id": "reanimation-protocols-necrons"
+              },
+              "window": "event"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the triggering unit is using Reanimation Protocols, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/happened-used-named-ability-turn",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "used",
+          "filter": {
+            "kind": "ability",
+            "id": "flickerjump-aeldari"
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit used the Flickerjump ability this turn, when resolving this use, the unit has the Feel No Pain 6+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-wounds-remaining-full",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "wounds_remaining": "full"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed, with its full wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-wounds-remaining-number",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "via": "deep-strike",
+        "wounds_remaining": 3
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield using the Deep Strike rules, with 3 wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-wounds-remaining-dice",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "wounds_remaining": "D3"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed, with D3 wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-half-starting-detach",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": [
+          "closest-to-destruction",
+          "unengaged"
+        ],
+        "wounds_remaining": "half-starting",
+        "detach": true,
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with half of its starting number of wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)."
+    }
+  },
+  {
+    "caseId": "fidelity/set-up-starting-strength",
+    "effect": {
+      "type": "set-up",
+      "target": "this-model",
+      "modifier": {
+        "to": "battlefield",
+        "placement": "closest-to-destruction",
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can be set up on the battlefield as close as possible to where it was destroyed; its unit has a Starting Strength of 1."
+    }
+  },
+  {
+    "caseId": "fidelity/return-models-half-starting",
+    "effect": {
+      "type": "return-models",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "wounds_remaining": "half-starting"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, return 1 destroyed model to the unit, each with half of its starting number of wounds remaining."
+    }
+  },
+  {
+    "caseId": "fidelity/split-unit-starting-strength",
+    "effect": {
+      "type": "split-unit",
+      "target": "this-unit",
+      "modifier": {
+        "by": "model",
+        "starting_strength": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, split the unit into units of one model each, each with a Starting Strength of 1."
+    }
+  },
+  {
+    "caseId": "fidelity/rule-state-hidden-bound-attacks-resolved",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "filter": {
+        "kind": "shoot"
+      },
+      "binds_event_variable": "those-attacks"
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "After a friendly unit shoots (the triggering unit must have ALPHA), when resolving this use, those attacks do not stop the unit from being hidden."
+    }
+  },
+  {
+    "caseId": "fidelity/rule-state-hidden-bound-selected-to-shoot",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BETA"
+        ]
+      },
+      "filter": {
+        "to": "shoot"
+      },
+      "binds_event_variable": "those-attacks"
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "event-subject",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden",
+        "attacks": {
+          "event_var": "those-attacks"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly unit is selected to shoot (the triggering unit must have BETA), when resolving this use, those attacks do not stop the triggering unit from being hidden."
+    }
+  },
+  {
+    "caseId": "fidelity/rule-state-hidden-unbound",
+    "trigger": {
+      "event": "selected",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "BETA"
+        ]
+      },
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "effect": {
+      "type": "rule-state",
+      "target": "event-subject",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "core-rule",
+        "rule": "attacking-ends-hidden"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When a friendly unit is selected to shoot (the triggering unit must have BETA), when resolving this use, the triggering unit does not stop being hidden when it attacks."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-permission",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include friendly ALPHA units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-forbidden",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "none_of": [
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include friendly ALPHA units (excluding BETA units)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 0,
+        "datasheets": [
+          "alpha-squad",
+          "beta-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army cannot include Alpha Squad or Beta Squad units."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-composition-datasheets-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "composition",
+        "max": 2,
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        },
+        "datasheets": [
+          "alpha-squad"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include at most 2 friendly ALPHA units (Alpha Squad only)."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-unique-with",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "unique",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ],
+          "level": "model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, your army can include only one friendly ALPHA model."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-warlord-forbidden-group",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "any_of": [
+          "ALPHA",
+          "BETA"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "rule": "warlord-forbidden"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly models with the ALPHA or BETA keyword cannot be your Warlord."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-enhancement-source",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "enhancement-source"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units can only be given Enhancements from this Detachment."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements from this Detachment do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-unit-enhancements",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "enhancement-limit"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, Enhancements on all friendly ALPHA units do not count toward your army's Enhancement limit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-limit-exemption-reserves",
+    "effect": {
+      "type": "army-rule",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "ALPHA"
+        ]
+      },
+      "modifier": {
+        "rule": "limit-exemption",
+        "exempt_from": [
+          "strategic-reserves-points"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, all friendly ALPHA units do not count toward the points limit for Strategic Reserves."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "CHARACTER"
+          ],
+          "none_of": [
+            "EPIC HERO"
+          ],
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly CHARACTER unit (excluding EPIC HERO units) with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-transfer-models",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-unit",
+      "modifier": {
+        "rule": "attachment",
+        "with": {
+          "owner": "friendly",
+          "all_of": [
+            "ADEPTUS"
+          ],
+          "level": "model",
+          "has_ability": [
+            "leader"
+          ]
+        },
+        "attach_as": {
+          "owner": "friendly",
+          "all_of": [
+            "ALPHA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, a friendly ADEPTUS model with the Leader ability that can be attached to friendly ALPHA units can also be attached to the unit."
+    }
+  },
+  {
+    "caseId": "fidelity/army-rule-attachment-can-lead",
+    "effect": {
+      "type": "army-rule",
+      "target": "this-model",
+      "modifier": {
+        "rule": "attachment",
+        "can_lead": {
+          "owner": "friendly",
+          "any_of": [
+            "ALPHA",
+            "BETA"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, this model can also be attached to friendly units with the ALPHA or BETA keyword."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ],
+            "none_of": [
+              "BETA"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes an ALPHA unit (excluding BETA units), when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-min",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "min": 2
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If your army includes 2 or more ALPHA units, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "any_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA or BETA keyword, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-all",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "army-includes",
+        "parameters": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA",
+              "BETA"
+            ],
+            "level": "model"
+          },
+          "every": true
+        }
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If every model in your army has the ALPHA and BETA keywords, when resolving this use, your army can include at most 1 friendly GAMMA unit."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your army includes an ALPHA unit, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-includes-every-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-includes",
+            "parameters": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "ALPHA"
+                ],
+                "level": "model"
+              },
+              "every": true
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 0,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless every model in your army has the ALPHA keyword, when resolving this use, your army cannot include friendly GAMMA units."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-army-faction-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "alpha-legion"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "army-rule",
+        "target": "this-unit",
+        "modifier": {
+          "rule": "composition",
+          "max": 1,
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "GAMMA"
+            ]
+          },
+          "per": {
+            "owner": "friendly",
+            "all_of": [
+              "ALPHA"
+            ]
+          },
+          "exempt_from": [
+            "retinue-limit"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless your Army Faction is ALPHA LEGION, when resolving this use, your army can include at most 1 friendly GAMMA unit for each friendly ALPHA unit in your army; they do not count toward the Retinue limit."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-name",
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": "this-model",
+      "object": {
+        "owner": "enemy",
+        "level": "model"
+      },
+      "filter": {
+        "weapon_name": "quake cannon"
+      }
+    },
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "blood-tithe-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time this model destroys an enemy model with a quake cannon attack, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/trigger-destroyed-weapon-keyword",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "weapon_keyword": "PSYCHIC"
+      }
+    },
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "blood-tithe-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy unit with a [PSYCHIC] weapon, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-event",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with its just-resolved melee attacks, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-destroyed-melee-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "destroyed",
+          "object": {
+            "owner": "enemy"
+          },
+          "filter": {
+            "by": "this-unit",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "blood-tithe-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the unit has destroyed 1+ enemy units with melee attacks this phase, when resolving this use, you gain 1 Blood Tithe point."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-fight-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-fight-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Fight phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-shooting-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-shooting-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Shooting phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-your-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-your-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-end-of-opponent-next-movement-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-end-of-opponent-next-movement-phase"
+    },
+    "expected": {
+      "text": "Until the end of your opponent's next Movement phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "fidelity/duration-until-start-of-opponent-next-command-phase",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5
+      }
+    },
+    "scope": {
+      "duration": "until-start-of-opponent-next-command-phase"
+    },
+    "expected": {
+      "text": "Until the start of your opponent's next Command phase, the unit has the Feel No Pain 5+ ability."
+    }
+  },
+  {
+    "caseId": "model-destroyed-by-destroyer",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy",
+        "all_of": [
+          "CHARACTER"
+        ],
+        "level": "model"
+      }
+    },
+    "expected": {
+      "text": "Each time the unit destroys an enemy CHARACTER model, add 1 to the unit's Leadership characteristic."
+    }
+  },
+  {
+    "caseId": "model-destroyed-by-enemy",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "Ld",
+        "operation": "add",
+        "value": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "model-in-this-unit"
+    },
+    "expected": {
+      "text": "When a model in the unit is destroyed by an enemy unit, add 1 to the unit's Leadership characteristic."
+    }
+  },
+  {
+    "caseId": "targeted-ranged-attacks-this-unit",
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "shoot"
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "event-subject",
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "ranged"
+          },
+          "window": "event"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "After an enemy unit shoots, if the triggering unit has selected the unit as a target of its ranged attacks, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-melee-attacks-no-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "attack",
+            "attack_type": "melee"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If the selected unit has selected targets for its melee attacks this phase, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-by-any-unit-this-phase",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "targets-selected",
+          "subject": {
+            "owner": "any"
+          },
+          "object": "this-unit",
+          "filter": {
+            "kind": "attack"
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If a unit has selected the unit as a target this phase, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "targeted-not-ranged-filter-object",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "happened",
+            "parameters": {
+              "event": "targets-selected",
+              "subject": "event-subject",
+              "object": {
+                "owner": "friendly",
+                "all_of": [
+                  "INFANTRY"
+                ],
+                "not_states": [
+                  "engaged"
+                ]
+              },
+              "filter": {
+                "kind": "attack",
+                "attack_type": "ranged"
+              },
+              "window": "phase"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "surge",
+          "distance": "D6"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the triggering unit has selected a friendly INFANTRY unit that is unengaged as a target of its ranged attacks this phase, the unit can make a Surge move of up to D6\"."
+    }
+  },
+  {
+    "caseId": "activate-several-options-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "selected-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "zeal"
+        ],
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The Aegis and Zeal options of Rite of Wards are active for the selected unit (and no other option is)."
+    }
+  },
+  {
+    "caseId": "activate-several-options-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "options": [
+          "aegis",
+          "ward",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The Aegis, Ward and Zeal options of Rite of Wards are active for the unit."
+    }
+  },
+  {
+    "caseId": "activate-all-options",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "all_options": true
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "expected": {
+      "text": "Until the start of your next Command phase, every option of Rite of Wards is active for the unit."
+    }
+  },
+  {
+    "caseId": "activate-player-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "from": [
+            "aegis",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select one of the Aegis or Zeal options of Rite of Wards for the unit, in place of any already active."
+    }
+  },
+  {
+    "caseId": "activate-player-pick-count-additive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "player",
+          "count": 2
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Select 2 options of Rite of Wards for the unit, in addition to any already active."
+    }
+  },
+  {
+    "caseId": "activate-roll-pick-from-exclusive",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "rite-of-wards",
+        "select": {
+          "by": "roll",
+          "count": 2,
+          "from": [
+            "aegis",
+            "ward",
+            "zeal"
+          ]
+        },
+        "exclusive": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Make a new Rite of Wards roll and activate 2 results it allows among the Aegis, Ward or Zeal options for the unit, in place of any already active."
+    }
+  },
+  {
+    "caseId": "stance-select-additive-inline",
+    "effect": {
+      "type": "stance-select",
+      "mode": "re-selectable",
+      "options": [
+        {
+          "name": "Doubled",
+          "effect": {
+            "type": "stance-select",
+            "mode": "re-selectable",
+            "additive": true,
+            "options": [
+              {
+                "name": "Aegis",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "save",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "name": "Zeal",
+                "effect": {
+                  "type": "roll-modifier",
+                  "target": "this-unit",
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Plain",
+          "effect": {
+            "type": "ability-activate",
+            "target": "this-unit",
+            "modifier": {
+              "ability": "rite-of-wards",
+              "all_options": true
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of your turn, select one:\n  - Doubled: select one (in addition to any already active): Aegis (the unit gets +1 to saving throw rolls) / Zeal (the unit gets +1 to Hit rolls).\n  - Plain: every option of Rite of Wards is active for the unit."
+    }
+  },
+  {
+    "caseId": "stance-select-additive-block",
+    "effect": {
+      "type": "stance-select",
+      "mode": "consumable",
+      "scope": "unit",
+      "additive": true,
+      "options": [
+        {
+          "name": "Aegis",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "save",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        },
+        {
+          "name": "Zeal",
+          "effect": {
+            "type": "roll-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "operation": "add",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of your turn, select one (each may be chosen once per battle) (in addition to any already active):\n  - Aegis: the unit gets +1 to saving throw rolls.\n  - Zeal: the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "stance-capacity-shared-options",
+    "effect": {
+      "type": "stance-selection-capacity",
+      "modifier": {
+        "stance_id": "rite-of-wards",
+        "additional_selections": 1,
+        "allocation": "choose-one-option",
+        "option_ids": [
+          "aegis",
+          "zeal"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "You can select Aegis or Zeal one additional time per battle, shared between them."
+    }
+  },
+  {
+    "caseId": "granted/definition-named-aura",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "ability": "shade-ward",
+        "definition": {
+          "type": "ability-part",
+          "name": "Shade Ward",
+          "effect": {
+            "type": "aura",
+            "target": "friendly-within-aura",
+            "modifier": {
+              "range": 6,
+              "effect": {
+                "type": "stat-modifier",
+                "target": "recipient",
+                "modifier": {
+                  "stat": "WS",
+                  "operation": "improve",
+                  "value": 1,
+                  "weapon_type": "melee"
+                }
+              },
+              "eligible": {
+                "required_keywords": [
+                  "GLOOM HOUND"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the Shade Ward ability:\n  -> While a friendly GLOOM HOUND unit is within 6\" of this model, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1."
+    }
+  },
+  {
+    "caseId": "granted/definition-unnamed",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM WARDENS"
+        ]
+      },
+      "modifier": {
+        "definition": {
+          "type": "ability-part",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the following rules:\n  -> You can re-roll a Hit roll of 1."
+    }
+  },
+  {
+    "caseId": "granted/definition-reactive-several",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "dark-step",
+            "definition": {
+              "type": "ability-part",
+              "name": "Dark Step",
+              "effect": {
+                "type": "stat-modifier",
+                "target": "this-unit",
+                "modifier": {
+                  "stat": "S",
+                  "operation": "add",
+                  "value": 1,
+                  "weapon_type": "ranged"
+                }
+              },
+              "trigger": {
+                "event": "selected",
+                "filter": {
+                  "to": "shoot"
+                }
+              },
+              "usage": {
+                "frequency": "once-per-turn",
+                "per": "unit"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-grant",
+          "target": {
+            "owner": "friendly",
+            "all_of": [
+              "GLOOM WARDENS"
+            ]
+          },
+          "modifier": {
+            "ability": "pale-shroud",
+            "definition": {
+              "type": "ability-part",
+              "name": "Pale Shroud",
+              "effect": {
+                "type": "invulnerable-save",
+                "target": "this-unit",
+                "modifier": {
+                  "invuln_sv": 5
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly GLOOM WARDENS units gain the Dark Step ability:\n  -> When the unit is selected to shoot, once per turn per unit: add 1 to the Strength characteristic of ranged weapons equipped by models in this unit.\nAll friendly GLOOM WARDENS units gain the Pale Shroud ability:\n  -> The unit has a 5+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "granted/definition-inline-under-condition",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": {
+          "owner": "friendly",
+          "all_of": [
+            "GLOOM WARDENS"
+          ]
+        },
+        "modifier": {
+          "ability": "pale-shroud",
+          "definition": {
+            "type": "ability-part",
+            "name": "Pale Shroud",
+            "effect": {
+              "type": "invulnerable-save",
+              "target": "this-unit",
+              "modifier": {
+                "invuln_sv": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "During the Fight phase, all friendly GLOOM WARDENS units gain the Pale Shroud ability (the unit has a 5+ invulnerable save)."
+    }
+  },
+  {
+    "caseId": "granted/definition-model-level-target",
+    "effect": {
+      "type": "ability-grant",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "GLOOM HOUND"
+        ],
+        "level": "model"
+      },
+      "modifier": {
+        "ability": "pale-shroud",
+        "definition": {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Units with one or more friendly GLOOM HOUND models gain the Pale Shroud ability:\n  -> The unit has a 5+ invulnerable save."
+    }
+  },
+  {
+    "caseId": "granted/self-held-named-passive-part",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "OC",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Pale Shroud",
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 5
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "name": "Rallying Cry",
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "A",
+              "operation": "add",
+              "value": 1,
+              "weapon_type": "melee"
+            }
+          },
+          "trigger": {
+            "event": "selected",
+            "filter": {
+              "to": "fight"
+            },
+            "optional": true
+          },
+          "usage": {
+            "frequency": "n-per-battle",
+            "count": 1,
+            "per": "army"
+          },
+          "duration": "phase"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to this model's Objective Control characteristic.\n-> Pale Shroud: the unit has a 5+ invulnerable save.\n-> When the unit is selected to fight, you may use this ability, once per battle per army, use Rallying Cry, until the end of the phase: add 1 to the Attacks characteristic of melee weapons equipped by models in this unit."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-member-keyword",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "max": 6,
+        "roll": {
+          "dice": 1,
+          "threshold": 3,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "keywords": [
+              "ALPHA"
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly ALPHA model in this model's unit: for each 3+, the selected unit suffers 1 mortal wound (to a maximum of 6 mortal wounds)."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-embarked",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 5,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "embarked-in-bearer"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly model embarked within this model: for each 5+, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-for-each-engaged",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 4,
+          "for_each": {
+            "owner": "friendly",
+            "target_kind": "model",
+            "member_of": "bearer-unit",
+            "eligibility": {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged",
+                "with": "selected-unit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each friendly model in this model's unit that is engaged with the selected unit: for each 4+, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-one",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 1,
+          "threshold": 1,
+          "comparison": "lte",
+          "per_model": "target"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll one D6 for each model in the target unit: for each 1, the selected unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "mortal-wounds-roll-at-most-two",
+    "effect": {
+      "type": "mortal-wounds",
+      "target": "this-unit",
+      "modifier": {
+        "count": 1,
+        "per": "success",
+        "roll": {
+          "dice": 3,
+          "threshold": 2,
+          "comparison": "lte"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, roll 3 D6: for each result of 2 or less, the unit suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "for-each-unit-any-side-including-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "any",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "same-unit",
+              "parameters": {
+                "as": "defender"
+              }
+            },
+            {
+              "type": "within",
+              "parameters": {
+                "of": "defender",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 4,
+        "comparison": "gte",
+        "on_success": {
+          "type": "designate",
+          "target": "recipient",
+          "modifier": {
+            "tag": "struck-by-explosive-debris"
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  For each unit that is the same unit as the target unit or that is within 6\" of the target unit:\n    -> Roll one D6: on a 4+, the unit is struck by explosive debris."
+    }
+  },
+  {
+    "caseId": "for-each-unit-models-in-target",
+    "effect": {
+      "type": "for-each-unit",
+      "selector": {
+        "owner": "enemy",
+        "target_kind": "model",
+        "member_of": "target"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "defender",
+          "modifier": {
+            "count": 1
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use:\n  For each enemy model in the target unit:\n    -> Roll one D6: on a 6+, the target suffers 1 mortal wound."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-arcing-energies",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-arcing-energies"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by arcing energies."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-concussive-wave",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-concussive-wave"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by concussive wave."
+    }
+  },
+  {
+    "caseId": "designate-struck-by-spores",
+    "effect": {
+      "type": "designate",
+      "target": "recipient",
+      "modifier": {
+        "tag": "struck-by-spores"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit is struck by spores."
+    }
+  },
+  {
+    "caseId": "fidelity/select-weapon-named",
+    "effect": {
+      "type": "select-weapon",
+      "target": "this-model",
+      "modifier": {
+        "weapon_name": "plasma rifle",
+        "bind_as": "plasma-rifle-weapon"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, select one plasma rifle weapon equipped by this model; the effects below refer to it as the selected weapon."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-equipped-weapon-count#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "equipped-weapon-count",
+        "parameters": {
+          "subject": "this-model",
+          "weapon_type": "melee",
+          "count": 2,
+          "other_than": "Close combat weapon"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee",
+          "exclude_weapon_name": "Close combat weapon"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with a weapon named \"Close combat weapon\" and exactly 2 other melee weapons, improve the Attacks characteristic of melee weapons other than \"Close combat weapon\" equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-with-engagement",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy",
+            "none_of": [
+              "AIRCRAFT"
+            ]
+          }
+        },
+        "allow_engagement": true,
+        "engaged_with": "nearest-move-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest enemy unit (excluding AIRCRAFT); it can end that move within Engagement Range of that enemy unit."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-event-subject-enemy-unit",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": "event-subject"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to that enemy unit."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-enemy-unit-plain",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest enemy unit."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-waiver",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          },
+          "waives": "closest-enemy-model"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move either closer to the closest enemy model or as close as possible to the closest enemy unit, during its Pile-in and Consolidation moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-ends-nearest-plain",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "ends_nearest": {
+          "of": {
+            "owner": "enemy"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move as close as possible to the closest enemy unit, during its Consolidation moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-bonus-proviso-ends-when",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "consolidation"
+        ],
+        "distance_bonus": 3,
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 3\" to the unit's Consolidation moves; the extra distance applies only if the unit can end its move where the unit is engaged, and must end it there."
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-no-bonus",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "advance"
+        ],
+        "ends_when": {
+          "type": "unit-state",
+          "parameters": {
+            "state": "engaged"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move where the unit is engaged, during its Advance moves."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 1
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with one weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-model",
+          "name": "Test blade",
+          "count": 2
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this model is equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-this-model#2",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-model",
+              "name": "Test blade",
+              "count": 2
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless this model is equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 2,
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit are each equipped with exactly 2 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 1,
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If one or more models in this unit have no weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-lack#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "named-weapon",
+        "parameters": {
+          "subject": "this-unit",
+          "name": "Test blade",
+          "count": 3,
+          "models": {
+            "at_least": 2,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit have fewer than 3 weapons named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-named-weapon-unit-carry#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "named-weapon",
+            "parameters": {
+              "subject": "this-unit",
+              "name": "Test blade",
+              "count": 1,
+              "models": {
+                "at_least": 3,
+                "state": "carry"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless at least 3 models in this unit are each equipped with one weapon named \"Test blade\", improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay"
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If this unit has the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-presence#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "unit-wargear",
+            "parameters": {
+              "subject": "this-unit",
+              "wargear": "test-relay"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless this unit has the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 2,
+            "state": "carry"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If at least 2 models in this unit are equipped with the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-unit-wargear-models#1",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "unit-wargear",
+        "parameters": {
+          "subject": "this-unit",
+          "wargear": "test-relay",
+          "models": {
+            "at_least": 1,
+            "state": "lack"
+          }
+        }
+      },
+      "effect": {
+        "type": "stat-modifier",
+        "target": "this-model",
+        "modifier": {
+          "stat": "A",
+          "operation": "improve",
+          "value": 1,
+          "weapon_type": "melee"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If one or more models in this unit are not equipped with the Test Relay wargear, improve the Attacks characteristic of melee weapons equipped by this model by 1."
+    }
+  },
+  {
+    "caseId": "weapon-removal-ranged-heavy#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "removes": [
+          "Heavy"
+        ],
+        "weapon_type": "ranged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Ranged weapons equipped by models in this unit lose [HEAVY]."
+    }
+  },
+  {
+    "caseId": "weapon-removal-keyword-scope-with-stat#0",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "removes": [
+              "Blast"
+            ],
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "stat": "A",
+            "operation": "add",
+            "value": 1,
+            "weapon_type": "ranged",
+            "weapon_keyword": "Blast"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Ranged weapons with [BLAST] equipped by models in this unit lose [BLAST].\nAdd 1 to the Attacks characteristic of ranged weapons with [BLAST] equipped by models in this unit."
+    }
+  },
+  {
+    "caseId": "weapon-removal-and-grant#0",
+    "effect": {
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "abilities": [
+          "Close-quarters"
+        ],
+        "removes": [
+          "Blast"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit's weapons gain [CLOSE QUARTERS] and lose [BLAST]."
+    }
+  },
+  {
+    "caseId": "delayed-destruction-phase-end-this-model",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "model-destroyed",
+          "object": "this-model",
+          "window": "phase",
+          "count_min": 1
+        }
+      }
+    },
+    "usage": {
+      "frequency": "first-this-battle",
+      "per": "model"
+    },
+    "expected": {
+      "text": "At the end of each phase, if this model was destroyed this phase, the first time this battle per model, nothing happens."
+    }
+  },
+  {
+    "caseId": "fidelity/counts-as-synapse-range",
+    "effect": {
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "within": {
+          "aura_of": "synapse-tyranids"
+        },
+        "of": {
+          "owner": "friendly"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When resolving this use, the unit counts as being within Synapse Range of all friendly units."
+    }
+  },
+  {
+    "caseId": "weapon-range-override-this-unit#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": "this-unit",
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit's attacks benefit from [RAPID FIRE] when the target is within the weapon's range."
+    }
+  },
+  {
+    "caseId": "weapon-range-override-filtered-units#0",
+    "effect": {
+      "type": "weapon-ability-range",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "TACTICUS"
+        ]
+      },
+      "modifier": {
+        "keyword": "Rapid Fire",
+        "within": "weapon"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "All friendly TACTICUS units' attacks benefit from [RAPID FIRE] when the target is within the weapon's range."
+    }
+  },
+  {
+    "caseId": "set-up-restriction-ingress-limits#0",
+    "effect": {
+      "type": "set-up",
+      "target": "this-unit",
+      "modifier": {
+        "to": "battlefield",
+        "mandatory": true,
+        "ignore_limits": true,
+        "near": [
+          {
+            "of": "this-unit",
+            "range": {
+              "inches": 6
+            },
+            "wholly": true
+          }
+        ],
+        "placement": "unengaged"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must be set up on the battlefield not within Engagement Range of any enemy units wholly within 6\" of the unit, ignoring the usual set-up limits."
+    }
+  },
+  {
+    "caseId": "set-up-restriction-deployment-window#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "deployment-window",
+        "parameters": {
+          "during": "deployment"
+        }
+      },
+      "effect": {
+        "type": "set-up",
+        "target": "this-unit",
+        "modifier": {
+          "to": "battlefield",
+          "min_enemy_distance": 8,
+          "away_from": [
+            {
+              "of": {
+                "territory": "enemy-deployment-zone"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "If during deployment, the unit can be set up on the battlefield more than 8\" away from your opponent's deployment zone more than 8\" away from all enemy models."
+    }
+  },
+  {
+    "caseId": "warlord-designation-this-model",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "designated",
+        "parameters": {
+          "subject": "this-model",
+          "tag": "warlord"
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While this model is the Warlord, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "warlord-designation-target-negated",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "designated",
+            "parameters": {
+              "subject": "defender",
+              "tag": "warlord"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "While the target unit is not the Warlord, the unit gets +1 to Hit rolls."
+    }
+  },
+  {
+    "caseId": "stratagem-targeted-restriction-fabricated#0",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "subject": {
+                    "owner": "any"
+                  },
+                  "object": "this-unit",
+                  "filter": {
+                    "kind": "stratagem",
+                    "id": "alpha-strike-fabricated"
+                  },
+                  "window": "phase"
+                }
+              },
+              {
+                "type": "happened",
+                "parameters": {
+                  "event": "targets-selected",
+                  "subject": {
+                    "owner": "any"
+                  },
+                  "object": "this-unit",
+                  "filter": {
+                    "kind": "stratagem",
+                    "id": "beta-strike-fabricated"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Unless the unit has been targeted with the Alpha Strike Fabricated Stratagem this phase or if the unit has been targeted with the Beta Strike Fabricated Stratagem this phase, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "stratagem-targeted-object-range-fabricated#0",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "enemy",
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 12
+          }
+        }
+      }
+    },
+    "behavior": "triggered",
+    "expected": {
+      "text": "When an enemy unit within 12\" of this model is targeted with a Stratagem, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "stratagem-targeted-aura-recipient-fabricated#0",
+    "effect": {
+      "type": "cp-gain",
+      "target": "this-model",
+      "modifier": {
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "targets-selected",
+      "subject": {
+        "owner": "any"
+      },
+      "filter": {
+        "kind": "stratagem"
+      },
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "LEAGUES OF VOTANN"
+        ],
+        "within": {
+          "of": "this-model",
+          "range": {
+            "inches": 6
+          }
+        }
+      }
+    },
+    "behavior": "triggered",
+    "expected": {
+      "text": "When a friendly LEAGUES OF VOTANN unit within 6\" of this model is targeted with a Stratagem, you gain 1CP."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-objective-marker-make-move",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "ends_nearest": {
+          "of": {
+            "objective": {}
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit can make a Normal move of up to 6\"; it must end that move as close as possible to the closest objective marker."
+    }
+  },
+  {
+    "caseId": "move-end-nearest-selected-objective-per-model-instead",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal"
+        ],
+        "ends_nearest": {
+          "of": {
+            "objective": {
+              "selection_var": "marker"
+            }
+          },
+          "per": "model",
+          "instead_of": "closest-enemy-unit"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Each model in the unit must end its move as close as possible to the closest selected objective, instead of as close as possible to the closest enemy unit, during its Normal moves."
+    }
+  },
+  {
+    "caseId": "move-modifier-ends-when-replaces",
+    "effect": {
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "normal",
+          "advance"
+        ],
+        "ends_when": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "unit-state",
+              "parameters": {
+                "state": "engaged"
+              }
+            }
+          ]
+        },
+        "ends_when_replaces": true
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The unit must end its move where the unit is unengaged (instead of the usual threshold), during its Normal and Advance moves."
+    }
+  },
+  {
+    "caseId": "scaling-on-apply-enemy-models-in-range#0",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "stat": "A",
+        "operation": "add",
+        "value": 1
+      },
+      "scaling": {
+        "per": 5,
+        "of": "enemy-models-in-range",
+        "within_inches": 6,
+        "evaluated": "on-apply"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Add 1 to the unit's Attacks characteristic for every 5 enemy models within 6\" (counted when the rule applies)."
+    }
+  },
+  {
+    "caseId": "redesignate-mandatory#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": false
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of the first battle round, select one enemy unit (your Quarry target), binding it as quarry selection. When the bound quarry selection is destroyed, you must select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound quarry selection, while making melee attacks, while that unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "redesignate-optional-replacement#0",
+    "effect": {
+      "type": "persistent-designation",
+      "designation": "quarry",
+      "select": {
+        "scope": "enemy-unit",
+        "count": 1,
+        "timing": "start-of-first-battle-round",
+        "selection_policy": "replace-on-destroyed",
+        "bind_as": "quarry-selection"
+      },
+      "consumer": {
+        "relation": "attacks-selected-unit",
+        "beneficiary": "bearer",
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "designated",
+                "parameters": {
+                  "subject": "event-object",
+                  "tag": "quarry"
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "re-roll",
+            "target": "this-model",
+            "modifier": {
+              "roll": "wound",
+              "result_scope": "any-result"
+            }
+          }
+        },
+        "reference": {
+          "selection_var": "quarry-selection"
+        }
+      },
+      "duration": "battle",
+      "lifecycle": {
+        "replace": {
+          "event": "on-unit-destroyed",
+          "reference": {
+            "selection_var": "quarry-selection"
+          },
+          "optional": true
+        },
+        "exclusivity": "one-active-per-bearer-unit",
+        "expiry": "battle-end"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "At the start of the first battle round, select one enemy unit (your Quarry target), binding it as quarry selection. When the bound quarry selection is destroyed, you may select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound quarry selection, while making melee attacks, while that unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "designation-optional-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "mark",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "one-time"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        "duration": "battle"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> You can:\n  -> At the start of the first battle round, select one enemy unit (your Mark target). For the rest of the battle, each time this model makes an attack against it, while making melee attacks, you can re-roll the Wound roll for attacks made by this model."
+    }
+  },
+  {
+    "caseId": "designation-up-to-establishment#0",
+    "effect": {
+      "type": "ability-part",
+      "optional": true,
+      "effect": {
+        "type": "persistent-designation",
+        "designation": "hunted",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "timing": "start-of-first-battle-round",
+          "selection_policy": "replace-on-destroyed",
+          "bind_as": "hunted-selection"
+        },
+        "consumer": {
+          "relation": "attacks-selected-unit",
+          "beneficiary": "bearer",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "attack-is",
+              "parameters": {
+                "attack_type": "melee"
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-model",
+              "modifier": {
+                "roll": "wound",
+                "result_scope": "any-result"
+              }
+            }
+          },
+          "reference": {
+            "selection_var": "hunted-selection"
+          }
+        },
+        "duration": "battle",
+        "lifecycle": {
+          "replace": {
+            "event": "on-unit-destroyed",
+            "reference": {
+              "selection_var": "hunted-selection"
+            },
+            "optional": true
+          },
+          "exclusivity": "one-active-per-bearer-unit",
+          "expiry": "battle-end"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "-> You can:\n  -> At the start of the first battle round, select one enemy unit (your Hunted target), binding it as hunted selection. When the bound hunted selection is destroyed, you may select one new enemy unit to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against the bound hunted selection, while making melee attacks, you can re-roll the Wound roll for attacks made by this model."
     }
   }
 ]

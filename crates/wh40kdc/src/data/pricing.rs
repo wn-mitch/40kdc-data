@@ -17,7 +17,9 @@
 //! prices from it; [`base_unit_points`] stays native-only for callers without
 //! army context. Mirror of `tools/src/data/pricing.ts`.
 
-use crate::generated::{Faction, Unit, UnitAlliedPointsItem, UnitPointsItem};
+use crate::generated::{
+    Faction, Unit, UnitAlliedPointsItem, UnitDetachmentPricingItem, UnitPointsItem,
+};
 use std::collections::{HashMap, HashSet};
 
 /// True when `ordinal` (1-based army copy) falls within `tier`'s ordinal band.
@@ -76,6 +78,17 @@ impl From<&UnitAlliedPointsItem> for CostTier {
     }
 }
 
+impl From<&UnitDetachmentPricingItem> for CostTier {
+    fn from(t: &UnitDetachmentPricingItem) -> Self {
+        CostTier {
+            models: t.models.get(),
+            cost: t.cost,
+            unit_count_min: t.unit_count_min.map(|m| m.get()),
+            unit_count_max: t.unit_count_max.map(|m| m.get()),
+        }
+    }
+}
+
 impl CostTier {
     fn covers_ordinal(&self, ordinal: u64) -> bool {
         let Some(min) = self.unit_count_min else {
@@ -125,8 +138,23 @@ fn keyword_slug(name: &str) -> String {
 /// `host_faction` names the army's faction id exactly win (a chapter reprice);
 /// otherwise entries naming a super-faction keyword the army's faction carries
 /// apply (an Agents unit's `imperium` price). With no matching entry — or no
-/// army context at all — the native table stands.
-pub(crate) fn host_points_tiers(unit: &Unit, host_faction: Option<&Faction>) -> Vec<CostTier> {
+/// army context at all — the native table stands. Before all of that,
+/// `detachment_pricing` entries naming any of `detachment_ids` are the table (a
+/// C'tan Shard under Pantheon of Woe). Mirror of TS `hostPointsTiers`.
+pub(crate) fn host_points_tiers(
+    unit: &Unit,
+    host_faction: Option<&Faction>,
+    detachment_ids: &[String],
+) -> Vec<CostTier> {
+    let selected: Vec<CostTier> = unit
+        .detachment_pricing
+        .iter()
+        .filter(|t| detachment_ids.iter().any(|d| d == t.detachment_id.as_str()))
+        .map(CostTier::from)
+        .collect();
+    if !selected.is_empty() {
+        return selected;
+    }
     let native = || unit.points.iter().map(CostTier::from).collect::<Vec<_>>();
     let Some(host) = host_faction else {
         return native();
@@ -171,8 +199,21 @@ pub fn host_unit_points(
     ordinal: u64,
     host_faction: Option<&Faction>,
 ) -> u64 {
+    army_unit_points(unit, model_count, ordinal, host_faction, &[])
+}
+
+/// [`host_unit_points`] with the army's selected detachments, so a
+/// `detachment_pricing` entry for one of them prices the unit (see
+/// [`host_points_tiers`]). Mirror of TS `hostUnitPoints(..., detachmentIds)`.
+pub fn army_unit_points(
+    unit: &Unit,
+    model_count: u64,
+    ordinal: u64,
+    host_faction: Option<&Faction>,
+    detachment_ids: &[String],
+) -> u64 {
     tier_cost(
-        host_points_tiers(unit, host_faction).into_iter(),
+        host_points_tiers(unit, host_faction, detachment_ids).into_iter(),
         model_count,
         ordinal,
     )

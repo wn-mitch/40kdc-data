@@ -1602,5 +1602,244 @@
         ]
       }
     ]
+  },
+  {
+    "unit_id": "beasts-of-nurgle",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Beast of Nurgle",
+        "min": 1,
+        "max": 2,
+        "default_weapon_ids": [
+          "putrid-appendages"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Beast of Nurgle",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Beast of Nurgle",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "nurglings",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Nurgling Swarm",
+        "min": 3,
+        "max": 6,
+        "default_weapon_ids": [
+          "diseased-claws-and-teeth"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Nurgling Swarm",
+            "min": 3,
+            "max": 3
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Nurgling Swarm",
+            "min": 4,
+            "max": 6
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "plague-drones",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Plaguebringer",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "deaths-heads",
+          "foul-mouthparts",
+          "plaguesword"
+        ]
+      },
+      {
+        "name": "Plague Drone",
+        "min": 2,
+        "max": 5,
+        "default_weapon_ids": [
+          "deaths-heads",
+          "foul-mouthparts",
+          "plaguesword"
+        ]
+      }
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Plaguebringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Drone",
+            "min": 2,
+            "max": 2
+          }
+        ]
+      },
+      {
+        "models": [
+          {
+            "name": "Plaguebringer",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plague Drone",
+            "min": 3,
+            "max": 5
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    }
+  },
+  {
+    "unit_id": "plaguebearers",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Plagueridden",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "plaguesword"
+        ]
+      },
+      {
+        "name": "Plaguebearer",
+        "min": 9,
+        "max": 9,
+        "default_weapon_ids": [
+          "plaguesword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Plagueridden",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Plaguebearer",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "rotigus",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Rotigus",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "streams-of-brackish-filth",
+          "gnarlrod"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Rotigus",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "unit_id": "great-unclean-one",
+    "faction_id": "death-guard",
+    "models": [
+      {
+        "name": "Great Unclean One",
+        "min": 1,
+        "max": 1,
+        "default_weapon_ids": [
+          "plague-flail",
+          "putrid-vomit",
+          "bilesword"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Great Unclean One",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ]
   }
 ]

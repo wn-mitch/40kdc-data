@@ -202,7 +202,7 @@ type EntryRow = {
   status: string;
   shape_signature: string;
   mechanics: Mechanics;
-  core: { target_restrictions: Record<string, unknown> } | null;
+  core: { target_restrictions: Record<string, unknown> | Array<Record<string, unknown>> } | null;
   inputs_hash: string;
   ability_version_id: number;
   faction_id: string;

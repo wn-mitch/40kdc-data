@@ -3,9 +3,9 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { hashJson } from "../round4/hash.js";
 
-import { currentFamilyVersion, familyRole, LEAF_ROLES, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
+import { currentFamilyVersion, familyRole, LEAF_ROLES, NAME_FRAGMENT, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
-import { bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
+import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
@@ -19,7 +19,7 @@ import { RELATION_TYPES } from "../round4b/contracts.js";
 import { assertReviewer, MACHINE_REVIEWERS, requireHuman, TRUSTED_ANNOTATION, type Actor } from "./authority.js";
 
 /** Relations a reviewer may record on a confirmed connective: Round 4B's set plus plain conjunction. */
-const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
+export const CONNECTIVE_RELATION_TYPES: readonly string[] = [...RELATION_TYPES, "coexists-with"];
 
 /** An API-shaped failure. The local bridge returns `status` verbatim. */
 export class WorkbenchError extends Error {
@@ -143,7 +143,7 @@ export type LeafProgress = {
 type ProgressCounts = { pending: number; unresolved: number; gaps: number; connective_bytes: number };
 
 /** Per-ability open-work counts for every current ability (or one), in four grouped queries. */
-function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, ProgressCounts> {
+export function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number, ProgressCounts> {
   const filter = abilityVersionId === undefined ? "abilities.current = 1" : "abilities.id = ?";
   const args = abilityVersionId === undefined ? [] : [abilityVersionId];
   const counts = new Map<number, ProgressCounts>();
@@ -158,7 +158,7 @@ function progressCounts(db: DatabaseSync, abilityVersionId?: number): Map<number
     FROM proposals
     JOIN source_spans ON source_spans.id = proposals.span_id
     JOIN abilities ON abilities.id = source_spans.ability_version_id
-    WHERE ${filter}
+    WHERE ${filter} AND ${BODY_SPAN_SQL}
       AND ((proposals.status IN ('pending', 'unresolved') AND NOT ${RESTATES_ACTIVE_ANNOTATION})
         OR (proposals.status = 'accepted' AND proposals.role = 'CONNECTIVE'))
     GROUP BY abilities.id, proposals.status, proposals.role
@@ -217,6 +217,12 @@ export type AnnotationDecision = {
   action: AnnotationDecisionAction;
   proposal_id?: number;
   supersedes_annotation_id?: number;
+  /**
+   * A correction that widens one list item over the whole list ("+1 **A**, **AP** and **D**")
+   * absorbs the other items' leaves: each must be active, of the same role, and inside the new
+   * span. They are superseded with the correction and restored when it is undone.
+   */
+  merges_annotation_ids?: number[];
   ability_version_id: number;
   source_hash: string;
   fragment: string;
@@ -356,6 +362,15 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
   if (supersedesAnnotationId !== undefined && action !== "correct") {
     invalid("supersedes_annotation_id is only valid for a correction.");
   }
+  let mergesAnnotationIds: number[] | undefined;
+  if (input.merges_annotation_ids !== undefined) {
+    if (!Array.isArray(input.merges_annotation_ids) || input.merges_annotation_ids.length === 0) invalid(`decisions[${index}].merges_annotation_ids must be a nonempty array.`);
+    mergesAnnotationIds = input.merges_annotation_ids.map((id, at) => asInteger(id, `decisions[${index}].merges_annotation_ids[${at}]`));
+    if (mergesAnnotationIds.some((id) => id < 1)) invalid(`decisions[${index}].merges_annotation_ids must be positive.`);
+    if (new Set(mergesAnnotationIds).size !== mergesAnnotationIds.length) invalid(`decisions[${index}].merges_annotation_ids lists an annotation twice.`);
+    if (supersedesAnnotationId === undefined) invalid("merges_annotation_ids is only valid for a correction of an annotation.");
+    if (mergesAnnotationIds.includes(supersedesAnnotationId)) invalid("merges_annotation_ids repeats the corrected annotation.");
+  }
   const familyVersion = input.family_version === undefined ? undefined : asInteger(input.family_version, `decisions[${index}].family_version`);
   if (familyVersion !== undefined && familyVersion < 1) invalid(`decisions[${index}].family_version must be positive.`);
   const parameters = input.parameters === undefined ? undefined : asObject(input.parameters, `decisions[${index}].parameters`);
@@ -371,6 +386,7 @@ function parseDecision(value: unknown, index: number): ParsedDecision {
     action: action as AnnotationDecisionAction,
     proposal_id: proposalId,
     supersedes_annotation_id: supersedesAnnotationId,
+    ...(mergesAnnotationIds ? { merges_annotation_ids: mergesAnnotationIds } : {}),
     ability_version_id: asInteger(input.ability_version_id, `decisions[${index}].ability_version_id`),
     source_hash: asNonblankString(input.source_hash, `decisions[${index}].source_hash`),
     fragment: asNonblankString(input.fragment, `decisions[${index}].fragment`),
@@ -468,6 +484,7 @@ function assertProposalMatchesDecision(proposal: ProposalRow, decision: ParsedDe
 function activeAnnotationsOverlapping(
   db: DatabaseSync,
   abilityVersionId: number,
+  fragment: string,
   startByte: number,
   endByte: number,
 ): AnnotationRow[] {
@@ -481,10 +498,11 @@ function activeAnnotationsOverlapping(
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND ${TRUSTED_ANNOTATION}
       AND source_spans.ability_version_id = ?
+      AND source_spans.fragment = ?
       AND source_spans.start_byte < ?
       AND ? < source_spans.end_byte
     ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
-  `).all(abilityVersionId, endByte, startByte) as AnnotationRow[];
+  `).all(abilityVersionId, fragment, endByte, startByte) as AnnotationRow[];
 }
 
 /**
@@ -537,6 +555,24 @@ function correctionTarget(
   return target;
 }
 
+/** The leaves a correction absorbs: active, on this source and fragment, the decision's role, inside its new span. */
+function mergeTargets(db: DatabaseSync, decision: ParsedDecision): number[] {
+  for (const id of decision.merges_annotation_ids ?? []) {
+    const row = db.prepare(`
+      SELECT annotations.status, source_spans.ability_version_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, semantic_families.role
+      FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+      JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+      JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
+      WHERE annotations.id = ?
+    `).get(id) as { status: string; ability_version_id: number; fragment: string; start_byte: number; end_byte: number; role: string } | undefined;
+    if (!row || row.ability_version_id !== decision.ability_version_id || row.fragment !== decision.fragment) conflict("A merged annotation does not belong to this source version and fragment.");
+    if (row.status !== "active") conflict("A merged annotation is no longer active.");
+    if (row.role !== decision.role) conflict("A merged annotation has a different role from the correction.");
+    if (!contains(decision, row)) conflict("A merged annotation lies outside the corrected span.");
+  }
+  return decision.merges_annotation_ids ?? [];
+}
+
 function contains(first: { start_byte: number; end_byte: number }, second: { start_byte: number; end_byte: number }): boolean {
   return first.start_byte <= second.start_byte && first.end_byte >= second.end_byte;
 }
@@ -545,6 +581,7 @@ function validateOverlap(
   db: DatabaseSync,
   decision: ParsedDecision,
   correctedAnnotation: AnnotationRow | null,
+  merged: readonly number[] = [],
 ): void {
   const structural = db.prepare(`
     SELECT 1 FROM source_atom_reviews JOIN source_spans ON source_spans.id = source_atom_reviews.span_id
@@ -556,9 +593,9 @@ function validateOverlap(
   if (structural) {
     conflict("A reviewed structural constituent already accounts for these bytes; undo or correct it before painting a leaf over it.");
   }
-  const overlaps = activeAnnotationsOverlapping(db, decision.ability_version_id, decision.start_byte, decision.end_byte);
+  const overlaps = activeAnnotationsOverlapping(db, decision.ability_version_id, decision.fragment, decision.start_byte, decision.end_byte);
   for (const annotation of overlaps) {
-    if (correctedAnnotation?.id === annotation.id) continue;
+    if (correctedAnnotation?.id === annotation.id || merged.includes(annotation.id)) continue;
     if (annotation.role === decision.role) {
       conflict("An active annotation with the same role already overlaps this source span; correct its boundary instead.");
     }
@@ -756,7 +793,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id
       AND semantic_families.version = fingerprints.family_version
     WHERE annotations.status = 'active' AND source_spans.ability_version_id = ?
-    ORDER BY source_spans.start_byte, source_spans.end_byte, annotations.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, annotations.id
   `).all(ability.id) as unknown as Array<AnnotationView & { parameters_json: string }>;
   const proposals = db.prepare(`
     SELECT proposals.id, source_spans.id AS span_id, source_spans.fragment, source_spans.start_byte, source_spans.end_byte, source_spans.exact_text,
@@ -768,7 +805,7 @@ function abilityView(db: DatabaseSync, ability: AbilityRow): AbilityView {
     WHERE source_spans.ability_version_id = ?
       AND proposals.status IN ('pending', 'unresolved')
       AND NOT ${RESTATES_ACTIVE_ANNOTATION}
-    ORDER BY source_spans.start_byte, source_spans.end_byte, proposals.id
+    ORDER BY source_spans.fragment = '${NAME_FRAGMENT}', source_spans.start_byte, source_spans.end_byte, proposals.id
   `).all(ability.id) as unknown as Array<ProposalView & { span_id: number; parameters_json: string | null; reason_json: string }>;
   const suggestions = jevSuggestions(db, proposals.filter((proposal) => !proposal.family_id).map((proposal) => proposal.span_id));
   const review = db.prepare(`
@@ -1025,7 +1062,8 @@ export function applyAnnotationBatch(
       if (fingerprint.role !== decision.role) invalid("The annotation role does not match its fingerprint.");
 
       const corrected = decision.action === "correct" ? correctionTarget(db, decision) : null;
-      validateOverlap(db, decision, corrected);
+      const merged = corrected ? mergeTargets(db, decision) : [];
+      validateOverlap(db, decision, corrected, merged);
       const promoted = corrected ? null : machineRowConfirmed(db, spanId, fingerprint.id);
 
       if (proposal) {
@@ -1045,6 +1083,11 @@ export function applyAnnotationBatch(
         createdAt,
       );
       addMember(db, batchId, "annotation", annotationId);
+      for (const id of merged) {
+        const changed = db.prepare("UPDATE annotations SET status = 'superseded' WHERE id = ? AND status = 'active'").run(id);
+        if (changed.changes !== 1) conflict("A merged annotation changed before the batch was applied.");
+        addMember(db, batchId, "annotation-merged", id);
+      }
     }
     invalidateWholeReview(db, touchedAbilities);
     bumpWorkbenchRevision(db);
@@ -1066,6 +1109,19 @@ function numericMemberId(member: BatchMember): number {
   return value;
 }
 
+/**
+ * Whether a later surface decision superseded this leaf with a longer one ("longer wording
+ * wins"). That decision owns the row now: undoing it restores the row, so this undo leaves it be.
+ */
+function supersededByLaterSurface(db: DatabaseSync, annotationId: number, batchId: string): boolean {
+  return db.prepare(`
+    SELECT 1 FROM batch_members JOIN annotations ON annotations.id = ?
+    WHERE batch_members.entity_kind = 'annotation-superseded-by-surface' AND batch_members.entity_id = ?
+      AND batch_members.batch_id <> ? AND annotations.status = 'superseded'
+    LIMIT 1
+  `).get(annotationId, String(annotationId), batchId) !== undefined;
+}
+
 function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoAnnotation {
   const annotation = db.prepare(`
     SELECT annotations.id, annotations.span_id, annotations.supersedes_id, annotations.status, source_spans.ability_version_id
@@ -1073,8 +1129,21 @@ function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoA
     WHERE annotations.id = ?
   `).get(annotationId) as UndoAnnotation | undefined;
   if (!annotation) conflict("An annotation in this batch no longer exists.");
-  if (annotation.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
-  return annotation;
+  // A family-version migration replaces a leaf with an identical one on the successor version; the
+  // successor is this batch's leaf, and what the batch superseded is still what undo restores.
+  let current = annotation;
+  while (current.status === "superseded") {
+    const successor = db.prepare(`
+      SELECT annotations.id, annotations.span_id, annotations.supersedes_id, annotations.status, source_spans.ability_version_id
+      FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+      JOIN annotation_batches ON annotation_batches.id = annotations.batch_id
+      WHERE annotations.supersedes_id = ? AND annotation_batches.operation = 'migration-family-versions'
+    `).get(current.id) as UndoAnnotation | undefined;
+    if (!successor) break;
+    current = successor;
+  }
+  if (current.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
+  return { ...current, supersedes_id: annotation.supersedes_id };
 }
 
 /** Batch members keyed by a text id; their own undo hooks handle them. */
@@ -1130,13 +1199,20 @@ export function undoBatch(
       .all(batchId) as BatchMember[];
     if (original.operation !== "review") conflict("This batch operation cannot be undone.");
     const annotationMembers = members.filter((member) => member.entity_kind === "annotation");
-    const annotations = annotationMembers.map((member) => currentAnnotationForUndo(db, numericMemberId(member)));
+    const annotations = annotationMembers
+      .filter((member) => !supersededByLaterSurface(db, numericMemberId(member), batchId))
+      .map((member) => currentAnnotationForUndo(db, numericMemberId(member)));
     for (const annotation of annotations) {
       if (annotation.supersedes_id === null) continue;
       const previous = db.prepare("SELECT status FROM annotations WHERE id = ?").get(annotation.supersedes_id) as { status: string } | undefined;
       if (!previous || previous.status !== "superseded") {
         conflict("This batch cannot restore its superseded annotation because it was later changed.");
       }
+    }
+    const mergedMembers = members.filter((member) => member.entity_kind === "annotation-merged").map(numericMemberId);
+    for (const id of mergedMembers) {
+      const previous = db.prepare("SELECT status FROM annotations WHERE id = ?").get(id) as { status: string } | undefined;
+      if (!previous || previous.status !== "superseded") conflict("This batch cannot restore an annotation it merged because that annotation was later changed.");
     }
     assertSourceAtomUndo(db, members);
     assertOntologyUndo(db, batchId, members);
@@ -1174,6 +1250,11 @@ export function undoBatch(
         if (restored.changes !== 1) conflict("The superseded annotation changed during undo.");
         addMember(db, reversalId, "annotation-restored", annotation.supersedes_id);
       }
+    }
+    for (const id of mergedMembers) {
+      const restored = db.prepare("UPDATE annotations SET status = 'active' WHERE id = ? AND status = 'superseded'").run(id);
+      if (restored.changes !== 1) conflict("A merged annotation changed during undo.");
+      addMember(db, reversalId, "annotation-restored", id);
     }
     for (const member of members) {
       if (NON_NUMERIC_MEMBERS.has(member.entity_kind)) continue;

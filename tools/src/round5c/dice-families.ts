@@ -28,6 +28,18 @@ export const ROLL_KINDS = [
   "desperate-escape", "deadly-demise", "all",
 ] as const;
 
+/**
+ * The rolls a DSL reactive trigger can name (`common.schema.json` roll-kind): the thirteen kinds
+ * of ROLL_KINDS that the trigger's filter takes, and `channelling` (a model's Channel the Warp roll,
+ * which an event can name). `any`, `all`, `attacks`, `surge` and `resource-die` are
+ * not trigger kinds, so a before-roll or after-roll moment cannot name them.
+ * Canonical order: a list of kinds lowers to triggers in this order.
+ */
+export const TRIGGER_ROLL_KINDS = [
+  "hit", "wound", "save", "damage", "charge", "advance", "battle-shock", "leadership", "hazard",
+  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise", "channelling",
+] as const;
+
 export const IGNORE_SUBJECTS = ["this-unit", "this-model"] as const;
 /** ignore-modifiers' own `stats` enum: the model/weapon characteristics plus the three extras the DSL allows there. */
 export const IGNORE_STATS = ["M", "T", "Sv", "W", "Ld", "OC", "A", "WS", "BS", "S", "AP", "D", "Range", "detection-range", "psyker-level"] as const;
@@ -111,6 +123,21 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       properties: { from: { type: "integer", minimum: 1, maximum: 12 }, to: { type: "integer", minimum: 1, maximum: 12 } },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "roll-result",
+    version: 2,
+    role: "CONDITION",
+    label: "On a roll of",
+    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to.",
+    starter: { from: null },
+    parameterSchema: {
+      type: "object",
+      required: ["from"],
+      properties: { from: { type: "integer", minimum: 1, maximum: 12 }, to: { type: "integer", minimum: 1, maximum: 12 } },
+      additionalProperties: false,
+    },
   },
   {
     id: "mortal-wounds",
@@ -174,6 +201,28 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "ignore-modifiers",
+    version: 2,
+    role: "EFFECT",
+    label: "Ignore modifiers",
+    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered.",
+    starter: { subject: "this-unit", what: [] },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "what"],
+      properties: {
+        subject: { enum: IGNORE_SUBJECTS },
+        what: { type: "array", items: { enum: ["characteristics", "rolls"] }, minItems: 1, uniqueItems: true },
+        stats: { type: "array", items: { enum: IGNORE_STATS }, minItems: 1, uniqueItems: true },
+        rolls: { type: "array", items: { enum: ROLL_KINDS }, minItems: 1, uniqueItems: true },
+        only: { enum: IGNORE_ONLY },
+        weapon_type: { enum: WEAPON_TYPES },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "roll-auto-result",
@@ -193,6 +242,28 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
       },
       additionalProperties: false,
     },
+    deprecated: true,
+  },
+  {
+    id: "roll-auto-result",
+    version: 2,
+    role: "EFFECT",
+    label: "Fix a roll's result",
+    description: "As version 1, plus `count: 1` for a single roll the player picks, and `rolls` listing several rolls to pick it from (\"change the result of one Hit roll, one Wound roll or one saving throw to an unmodified 6\").",
+    starter: { roll: "", outcome: "" },
+    parameterSchema: {
+      type: "object",
+      required: ["outcome"],
+      properties: {
+        roll: { enum: ROLL_KINDS },
+        rolls: { type: "array", minItems: 2, uniqueItems: true, items: { enum: ROLL_KINDS } },
+        outcome: { enum: ROLL_AUTO_OUTCOMES },
+        value: { type: "integer", minimum: 2, maximum: 6, "x-only-when": { outcome: ["succeeds-on"] } },
+        count: { const: 1 },
+        weapon_type: { enum: WEAPON_TYPES, "x-only-when": { roll: WEAPON_SCOPED_ROLLS } },
+      },
+      additionalProperties: false,
+    },
   },
   {
     id: "end-attack-sequence",
@@ -204,6 +275,13 @@ export const DICE_FAMILIES: readonly SemanticFamilyDefinition[] = [
     parameterSchema: { type: "object", properties: {}, additionalProperties: false },
   },
 ];
+
+/** Two or more rolls the player picks one of, in the enum's order. */
+export function pickedRolls(value: unknown, label: string): string[] {
+  const rolls = enumSet(value, ROLL_KINDS, label);
+  if (rolls.length < 2) throw new TypeError(`${label} lists two or more rolls; name a single one as roll.`);
+  return rolls;
+}
 
 export function normalizeDiceParameters(family: string, input: Record<string, unknown>, version = 1): Record<string, unknown> | null {
   switch (family) {
@@ -226,10 +304,10 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
       return result;
     }
     case "roll-result": {
-      exactKeys(input, ["from", "to"], family);
+      const hasUpperBound = version === 1 || "to" in input;
+      exactKeys(input, hasUpperBound ? ["from", "to"] : ["from"], family);
       const from = boundedInteger(input.from, 1, 12, "roll-result.from");
-      const to = boundedInteger(input.to, from, 12, "roll-result.to");
-      return { from, to };
+      return hasUpperBound ? { from, to: boundedInteger(input.to, from, 12, "roll-result.to") } : { from };
     }
     case "mortal-wounds":
       exactKeys(input, ["recipient", "count"], family);
@@ -249,6 +327,20 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
     }
     case "ignore-modifiers": {
       const subject = enumValue(input.subject, IGNORE_SUBJECTS, "ignore-modifiers.subject");
+      if (version >= 2) {
+        // Version 2: `what` lists every kind the list names; each named kind's array may appear.
+        const kinds = enumSet(input.what, ["characteristics", "rolls"], "ignore-modifiers.what");
+        const allowed = new Set(["subject", "what", "only", "weapon_type", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])]);
+        for (const key of Object.keys(input)) {
+          if (!allowed.has(key)) throw new TypeError(`ignore-modifiers parameters must be subject, what, only, weapon_type, and stats/rolls only for the kinds what names.`);
+        }
+        const result: Record<string, unknown> = { subject, what: kinds };
+        if (input.stats !== undefined) result.stats = enumSet(input.stats, IGNORE_STATS, "ignore-modifiers.stats");
+        if (kinds.includes("rolls")) result.rolls = enumSet(input.rolls, ROLL_KINDS, "ignore-modifiers.rolls");
+        if (input.only !== undefined) result.only = enumValue(input.only, IGNORE_ONLY, "ignore-modifiers.only");
+        if (input.weapon_type !== undefined) result.weapon_type = enumValue(input.weapon_type, WEAPON_TYPES, "ignore-modifiers.weapon_type");
+        return result;
+      }
       const what = enumValue(input.what, ["characteristics", "rolls"], "ignore-modifiers.what");
       const allowed = new Set(["subject", "what", "only", "weapon_type", what === "characteristics" ? "stats" : "rolls"]);
       for (const key of Object.keys(input)) {
@@ -262,17 +354,23 @@ export function normalizeDiceParameters(family: string, input: Record<string, un
       return result;
     }
     case "roll-auto-result": {
-      const roll = enumValue(input.roll, ROLL_KINDS, "roll-auto-result.roll");
+      // Version 2: `rolls` (pick one) instead of `roll`, and `count: 1` for a single picked roll.
+      const picked = version >= 2 && input.rolls !== undefined;
+      if (version >= 2 && (input.roll === undefined) === !picked) throw new TypeError("roll-auto-result names exactly one of roll and rolls.");
+      const rolls = picked ? pickedRolls(input.rolls, "roll-auto-result.rolls") : null;
+      const roll = rolls ? null : enumValue(input.roll, ROLL_KINDS, "roll-auto-result.roll");
       const outcome = enumValue(input.outcome, ROLL_AUTO_OUTCOMES, "roll-auto-result.outcome");
-      const allowed = new Set(["roll", "outcome", "weapon_type", ...(outcome === "succeeds-on" ? ["value"] : [])]);
+      const allowed = new Set([picked ? "rolls" : "roll", "outcome", "weapon_type", ...(outcome === "succeeds-on" ? ["value"] : []), ...(version >= 2 ? ["count"] : [])]);
       for (const key of Object.keys(input)) {
-        if (!allowed.has(key)) throw new TypeError(`roll-auto-result parameters must be roll, outcome, weapon_type, and value only when outcome is succeeds-on.`);
+        if (!allowed.has(key)) throw new TypeError(`roll-auto-result parameters must be roll${version >= 2 ? " (or rolls)" : ""}, outcome, weapon_type${version >= 2 ? ", count" : ""}, and value only when outcome is succeeds-on.`);
       }
-      const result: Record<string, unknown> = { roll, outcome };
+      if (input.count !== undefined && input.count !== 1) throw new TypeError("roll-auto-result.count can only be 1.");
+      if (picked && input.count !== 1) throw new TypeError("roll-auto-result.rolls is a pick of one roll; it needs count 1.");
+      const result: Record<string, unknown> = { ...(rolls ? { rolls } : { roll }), outcome, ...(input.count === 1 ? { count: 1 } : {}) };
       if (outcome === "succeeds-on") result.value = boundedInteger(input.value, 2, 6, "roll-auto-result.value");
       if (input.weapon_type !== undefined) {
         const weaponType = enumValue(input.weapon_type, WEAPON_TYPES, "roll-auto-result.weapon_type");
-        if (weaponType !== "all" && TEST_ROLLS.has(roll)) throw new TypeError(`roll-auto-result.weapon_type has no meaning for the ${roll} test.`);
+        if (weaponType !== "all" && (rolls ?? [roll as string]).some((item: string) => TEST_ROLLS.has(item))) throw new TypeError(`roll-auto-result.weapon_type has no meaning for the ${roll} test.`);
         result.weapon_type = weaponType;
       }
       return result;

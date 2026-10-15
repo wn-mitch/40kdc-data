@@ -542,42 +542,26 @@
       "reason": "The restrictions object is partially projected: its required_keywords is derived from the chapter-lock applicability, while excluded_keywords and notes remain authored."
     },
     "/restrictions/excluded_keywords": {
-      "provenance": "unresolved-candidate",
+      "provenance": "repo-authored",
       "coverage": "unimplemented",
-      "sources": [
-        "data.detachment_excluded_datasheet.datasheetId"
-      ],
-      "joins": [
-        {
-          "relation": "detachment_excluded_datasheet.detachmentId",
-          "direction": "children",
-          "purpose": "eligibility"
-        }
-      ],
+      "sources": [],
+      "joins": [],
       "transforms": [],
       "filters": [],
       "precedence": [],
       "consumers": [],
-      "reason": "Datasheet eligibility exclusions are not equivalent to the repository keyword restriction shape."
+      "reason": "Authored keyword exclusions. Datasheet exclusions (detachment_excluded_datasheet) project to excluded_datasheet_ids."
     },
     "/restrictions/excluded_keywords/*": {
-      "provenance": "unresolved-candidate",
+      "provenance": "repo-authored",
       "coverage": "unimplemented",
-      "sources": [
-        "data.detachment_excluded_datasheet.datasheetId"
-      ],
-      "joins": [
-        {
-          "relation": "detachment_excluded_datasheet.detachmentId",
-          "direction": "children",
-          "purpose": "eligibility"
-        }
-      ],
+      "sources": [],
+      "joins": [],
       "transforms": [],
       "filters": [],
       "precedence": [],
       "consumers": [],
-      "reason": "Datasheet eligibility exclusions are not equivalent to individual repository keyword restrictions."
+      "reason": "Authored keyword exclusions. Datasheet exclusions (detachment_excluded_datasheet) project to excluded_datasheet_ids."
     },
     "/restrictions/notes": {
       "provenance": "repo-authored",
@@ -852,6 +836,473 @@
         "tools/src/mfm/seed-detachments.ts#runSeedDetachments"
       ],
       "reason": "Current tooling only derives Combat Patrol mode; other mode context remains authored."
+    },
+    "/excluded_datasheet_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_excluded_datasheet.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_excluded_datasheet.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_excluded_datasheet.datasheetId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Slug each excluded datasheet's name to a repo unit id. Emit the sorted list."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "For each matched detachment, replace the authored list with the source-derived list; clear it when the source derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's excluded datasheets are the units an army cannot include while it is selected."
+    },
+    "/excluded_datasheet_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_excluded_datasheet.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_excluded_datasheet.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_excluded_datasheet.datasheetId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Slug each excluded datasheet's name to a repo unit id."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "Emit each member of the exact source-derived list."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's excluded datasheets are the units an army cannot include while it is selected."
+    },
+    "/granted_warlord_datasheet_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_granted_warlord_miniature.miniatureId",
+        "data.miniature.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_granted_warlord_miniature.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_granted_warlord_miniature.miniatureId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "miniature.datasheetId",
+          "direction": "parent",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Resolve each row's miniature to its datasheet and slug the datasheet name to a repo unit id. Emit the sorted list."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "For each matched detachment, replace the authored list with the source-derived list; clear it when the source derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's granted-Warlord miniatures name the datasheets it allows to be Warlord."
+    },
+    "/granted_warlord_datasheet_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_granted_warlord_miniature.miniatureId",
+        "data.miniature.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_granted_warlord_miniature.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_granted_warlord_miniature.miniatureId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "miniature.datasheetId",
+          "direction": "parent",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Resolve each row's miniature to its datasheet and slug the datasheet name to a repo unit id."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "Emit each member of the exact source-derived list."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's granted-Warlord miniatures name the datasheets it allows to be Warlord."
+    },
+    "/mandatory_warlord_datasheet_ids": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_mandatory_warlord_miniature.miniatureId",
+        "data.miniature.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_mandatory_warlord_miniature.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_mandatory_warlord_miniature.miniatureId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "miniature.datasheetId",
+          "direction": "parent",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Resolve each row's miniature to its datasheet and slug the datasheet name to a repo unit id. Emit the sorted list."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "For each matched detachment, replace the authored list with the source-derived list; clear it when the source derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's mandatory-Warlord miniatures name the datasheets one of which must be the army's Warlord."
+    },
+    "/mandatory_warlord_datasheet_ids/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.detachment_mandatory_warlord_miniature.miniatureId",
+        "data.miniature.datasheetId",
+        "data.datasheet.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "detachment_mandatory_warlord_miniature.detachmentId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "detachment_mandatory_warlord_miniature.miniatureId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "miniature.datasheetId",
+          "direction": "parent",
+          "purpose": "general"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#datasheetListsForDetachment",
+          "operation": "Resolve each row's miniature to its datasheet and slug the datasheet name to a repo unit id."
+        }
+      ],
+      "filters": [
+        "Drop a slug that names no repo unit (reported as unresolved).",
+        "Emit each member of the exact source-derived list."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative for matched detachments."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The detachment's mandatory-Warlord miniatures name the datasheets one of which must be the army's Warlord."
+    },
+    "/keyword_limit_overrides": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.restriction_group_detachment_limit.maxRosterLimit",
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "restriction_group_detachment_limit.detachmentId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "restriction_group_detachment_limit.restrictionGroupId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#keywordLimitOverridesForDetachment",
+          "operation": "Build one override per row with a maxRosterLimit."
+        }
+      ],
+      "filters": [
+        "Skip rows with only a minRosterLimit (carried by unit_minimums).",
+        "Replace the authored list; clear it when the dump derives none."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "restriction_group_detachment_limit rows with a maxRosterLimit replace the faction's cap for the same restriction group while the detachment is selected."
+    },
+    "/keyword_limit_overrides/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.restriction_group_detachment_limit.maxRosterLimit",
+        "data.keyword_restriction_group_keyword.keywordId"
+      ],
+      "joins": [
+        {
+          "relation": "restriction_group_detachment_limit.detachmentId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "restriction_group_detachment_limit.restrictionGroupId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#keywordLimitOverridesForDetachment",
+          "operation": "Build one override from one row."
+        }
+      ],
+      "filters": [
+        "Skip rows without a maxRosterLimit."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "restriction_group_detachment_limit rows with a maxRosterLimit replace the faction's cap for the same restriction group while the detachment is selected."
+    },
+    "/keyword_limit_overrides/*/keywords": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "restriction_group_detachment_limit.detachmentId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "restriction_group_detachment_limit.restrictionGroupId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#keywordLimitOverridesForDetachment",
+          "operation": "Resolve the restriction group's keyword rows to labels, sorted."
+        }
+      ],
+      "filters": [
+        "Drop unresolved keyword ids."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The keyword set identifies the faction cap the override replaces."
+    },
+    "/keyword_limit_overrides/*/keywords/*": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.keyword_restriction_group_keyword.keywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "restriction_group_detachment_limit.detachmentId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "restriction_group_detachment_limit.restrictionGroupId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordRestrictionGroupId",
+          "direction": "children",
+          "purpose": "eligibility"
+        },
+        {
+          "relation": "keyword_restriction_group_keyword.keywordId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#keywordLimitOverridesForDetachment",
+          "operation": "Resolve one keyword row to its label."
+        }
+      ],
+      "filters": [
+        "Drop unresolved keyword ids."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "Each member is one keyword of the restriction group."
+    },
+    "/keyword_limit_overrides/*/max": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.restriction_group_detachment_limit.maxRosterLimit"
+      ],
+      "joins": [
+        {
+          "relation": "restriction_group_detachment_limit.detachmentId",
+          "direction": "children",
+          "purpose": "applicability"
+        },
+        {
+          "relation": "restriction_group_detachment_limit.restrictionGroupId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/detachment-fields.ts#keywordLimitOverridesForDetachment",
+          "operation": "Copy the row's maxRosterLimit."
+        }
+      ],
+      "filters": [
+        "Emit only for a non-null maxRosterLimit."
+      ],
+      "precedence": [
+        "The current MFM relation is authoritative."
+      ],
+      "consumers": [
+        "tools/src/mfm/detachment-fields.ts#runDetachmentFields"
+      ],
+      "reason": "The replacement cap."
     }
   },
   "unmapped_mfm_fields": [
@@ -889,16 +1340,6 @@
       "source": "data.detachment_detail_bullet_point.localisations.*.text",
       "candidate_pointer": "/restrictions/notes",
       "reason": "Localized detail prose is not copied into repository restriction notes."
-    },
-    {
-      "source": "data.detachment_granted_warlord_miniature.miniatureId",
-      "candidate_pointer": null,
-      "reason": "Granted warlord miniature eligibility has no current core detachment field."
-    },
-    {
-      "source": "data.detachment_mandatory_warlord_miniature.miniatureId",
-      "candidate_pointer": null,
-      "reason": "Mandatory warlord miniature eligibility has no current core detachment field."
     }
   ]
 }

@@ -737,7 +737,7 @@
       "fight",
       "shooting"
     ],
-    "player_turn": "opponent-turn",
+    "player_turn": "either",
     "timing": "once-per-phase",
     "target_restrictions": null,
     "ability_id": "selfless-bodyguard-imperialis-fleet-agents-of-the-imperium",

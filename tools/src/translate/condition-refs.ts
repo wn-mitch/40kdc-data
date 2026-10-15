@@ -88,15 +88,37 @@ const ROLE_PHRASES: Record<string, string> = {
   "ability-unit": "this unit",
 };
 
+/**
+ * A filter's `any_of_filters` as keyword spellings ("LEGIO CYBERNETICA", "ADEPTUS MECHANICUS
+ * VEHICLE") when each alternative is only its keywords and the filter requires none of its own,
+ * so "an A or B C unit" says it; else null.
+ */
+export function keywordAlternatives(f: P): string[] | null {
+  if (!Array.isArray(f.any_of_filters) || Array.isArray(f.all_of)) return null;
+  const alts = f.any_of_filters as P[];
+  const plain = alts.every((a) => a != null && typeof a === "object" && Array.isArray(a.all_of) && (a.all_of as unknown[]).length > 0 && Object.keys(a).every((k) => k === "all_of"));
+  return plain ? alts.map((a) => (a.all_of as unknown[]).map(str).join(" ")) : null;
+}
+
+/** Each alternative of `any_of_filters` as a filter of the outer filter's level (models or units). */
+export function alternativeFilters(f: P): P[] {
+  return (f.any_of_filters as P[]).map((a) => (f.level != null ? { ...a, level: f.level } : a));
+}
+
 /** A unit filter as a noun phrase: "a friendly ADEPTUS MECHANICUS BATTLELINE unit". */
 export function unitFilterPhrase(f: P): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
   const noun = f.level === "model" ? "model" : "unit";
-  let s = `${owner}${all}${noun}`;
+  // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
+  const compact = keywordAlternatives(f);
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
   s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
+  // Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
+  if (Array.isArray(f.any_of_filters) && !compact) s += ` that is ${orList(alternativeFilters(f).map(unitFilterPhrase))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
+  if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;
   if (Array.isArray(f.has_ability)) s += ` with the ${andList((f.has_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
@@ -106,6 +128,7 @@ export function unitFilterPhrase(f: P): string {
   if (f.designated != null) s += ` that is ${designationPhrase(str(f.designated))}${f.designated_by != null ? ` by ${unitRefPhrase(f.designated_by)}` : ""}`;
   if (f.not_designated != null) s += ` that is not ${designationPhrase(str(f.not_designated))}`;
   if (f.state != null) s += ` that is ${statePhrase(str(f.state))}`;
+  if (Array.isArray(f.not_states)) s += ` that is ${andList((f.not_states as unknown[]).map((x) => statePhrase(str(x), true)))}`;
   if (f.visible === true) s += " that is visible to it";
   const within = f.within as P | undefined;
   if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${unitRefPhrase(within.of)}` : ""}`;
@@ -132,7 +155,7 @@ export function subjectOf(p: P, fallback = "the unit"): string {
   return unitRefPhrase(p.subject, fallback);
 }
 
-const AURA_RANGES: Record<string, string> = { "nurgles-gift-death-guard": "Contagion Range" };
+const AURA_RANGES: Record<string, string> = { "nurgles-gift-death-guard": "Contagion Range", "synapse-tyranids": "Synapse Range" };
 
 /** A range-ref as a distance phrase ("6\"", "Engagement Range", "Contagion Range"). */
 export function rangePhrase(r: unknown): string {
@@ -165,7 +188,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
 
 const STATE_PHRASES: Record<string, string> = {
   engaged: "engaged", "battle-shocked": "Battle-shocked", embarked: "embarked",
-  "in-strategic-reserves": "in Strategic Reserves", "on-battlefield": "on the battlefield",
+  "in-strategic-reserves": "in Strategic Reserves", "in-cult-ambush": "in Cult Ambush", "on-battlefield": "on the battlefield",
   hidden: "hidden", "fights-first": "a Fights First unit", "benefit-of-cover": "receiving the benefit of cover",
 };
 const NEGATED_STATE: Record<string, string> = { engaged: "unengaged" };
@@ -207,6 +230,17 @@ export function moveKinds(types: unknown): string {
 export function rollWord(roll: unknown): string {
   if (roll != null && typeof roll === "object" && (roll as P).of_ability != null) return idLabel((roll as P).of_ability);
   return dekebab(str(roll));
+}
+
+/** Kinds of rule a `used` filter can name one member of, as "the X <noun>" (an ability is its name alone). */
+const NAMED_USE_NOUNS: Record<string, string> = { manoeuvre: "Agile Manoeuvre", stratagem: "Stratagem", action: "action" };
+
+/** One named rule a `used` filter names by id ("Reanimation Protocols", "the Swift as the Wind Agile Manoeuvre"), or undefined. */
+export function namedUsePhrase(f: P): string | undefined {
+  if (f.id == null) return undefined;
+  if (f.kind === "ability") return idLabel(f.id);
+  const noun = NAMED_USE_NOUNS[str(f.kind)];
+  return noun == null ? undefined : `the ${idLabel(f.id)} ${noun}`;
 }
 
 /** Which ability a `used` filter names: one id, every ability with a bracketed keyword, or the same one as a bound use. */

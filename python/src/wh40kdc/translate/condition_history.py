@@ -24,11 +24,26 @@ from wh40kdc.translate.condition_refs import (
     dekebab,
     id_label,
     move_kinds,
+    named_use_phrase,
     roll_word,
     title_case,
     unit_ref_phrase,
     used_ability_phrase,
 )
+
+# A rule of one kind being used now, when the filter names none.
+_IN_PROGRESS: dict[str, str] = {
+    "ability": "an ability",
+    "stratagem": "a Stratagem",
+    "manoeuvre": "an Agile Manoeuvre",
+    "action": "an action",
+    "order": "an Order",
+    "ritual": "a Ritual",
+    "dark-pact": "a Dark Pact",
+    "act-of-faith": "an Act of Faith",
+    "doctrine": "a Combat Doctrine",
+    "contract": "a contract",
+}
 
 
 def _describe_happened(p: P, negated: bool) -> str:
@@ -57,17 +72,39 @@ def _describe_happened(p: P, negated: bool) -> str:
         verb = "shoot or fight" if to == "attack" else dekebab(to)
         return _with_window(f"{who} {has} been selected to {verb}", window)
     if event == "set-up":
-        return _with_window(f"{who} {'was not' if negated else 'was'} set up", window)
+        source = {
+            "deep-strike": " using Deep Strike",
+            "strategic-reserves": " from Strategic Reserves",
+            "cult-ambush": " from Cult Ambush",
+            "transport": " from a Transport",
+        }.get(_str(f.get("from")), "")
+        return _with_window(f"{who} {'was not' if negated else 'was'} set up{source}", window)
     if event == "targets-selected":
         has = "has not" if negated else "has"
-        what = (
-            f"{unit_ref_phrase(p['object'])} as a target"
-            if p.get("object") is not None
-            else "targets"
-        )
+        # A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
+        if _str(f.get("kind")) == "stratagem" and f.get("id") is not None:
+            target = unit_ref_phrase(p["object"]) if p.get("object") is not None else "the unit"
+            return _with_window(
+                f"{target} {has} been targeted with the {id_label(f['id'])} Stratagem", window
+            )
+        # Only ranged (or melee, psychic) attacks: "as a target of its ranged attacks".
+        atk = _str(f.get("attack_type")) if _truthy(f.get("attack_type")) else ""
+        if p.get("object") is not None:
+            what = f"{unit_ref_phrase(p['object'])} as a target" + (
+                f" of its {atk} attacks" if atk else ""
+            )
+        else:
+            what = "targets" + (f" for its {atk} attacks" if atk else "")
         return _with_window(f"{who} {has} selected {what}", window)
     if event == "disembarked":
-        return _with_window(f"{who} {did_not('disembark')} from a Transport", window)
+        transport = f.get("transport")
+        if transport is None:
+            source = "a Transport"
+        elif transport in ("this-unit", "this-model"):
+            source = "this Transport"
+        else:
+            source = unit_ref_phrase(transport)
+        return _with_window(f"{who} {did_not('disembark')} from {source}", window)
     if event == "after-roll":
         obj = unit_ref_phrase(p.get("object"), "the unit")
         target = "the target" if obj == "the target unit" else obj
@@ -114,6 +151,18 @@ def _describe_happened(p: P, negated: bool) -> str:
             else:
                 hits = f"a {atk}attack"
             return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
+        # Whose roll it was, when the subject names one:
+        # "the unit made a battle-shock roll and failed it".
+        if subj is not None:
+            outcome = (
+                " and failed it"
+                if f.get("result") == "failure"
+                else " and passed it"
+                if f.get("result") == "success"
+                else ""
+            )
+            made = f"{neg}{who} made a {roll_word(f.get('roll'))} roll{outcome}"
+            return f"{made} {_window_phrase(window)}".rstrip()
         result = f"was a {_str(f['result'])} " if _truthy(f.get("result")) else "was made "
         return f"{neg}a {roll_word(f.get('roll'))} roll {result}{_window_phrase(window)}".rstrip()
     if event == "damage-allocated":
@@ -130,6 +179,11 @@ def _describe_happened(p: P, negated: bool) -> str:
                 )
                 return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
             return f"{neg}destroyed by any attack"
+        # "this model": the destroyed model is this one, not any model of the unit.
+        if p.get("object") == "this-model":
+            return _with_window(
+                "this model was not destroyed" if negated else "this model was destroyed", window
+            )
         victim = _obj(p.get("object"))
         kws = (
             f"{' '.join(_str(k) for k in victim['all_of'])} "
@@ -138,7 +192,12 @@ def _describe_happened(p: P, negated: bool) -> str:
         )
         owner = f"{_str(victim['owner'])} " if victim.get("owner") is not None else ""
         if f.get("by") is not None:
-            when = "with its just-resolved attacks" if window == "event" else _window_phrase(window)
+            # A destruction by one attack type says it: "with its just-resolved melee attacks".
+            atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
+            if window == "event":
+                when = f"with its just-resolved {atk}attacks"
+            else:
+                when = (f"with {atk}attacks " if atk else "") + _window_phrase(window)
             killer = unit_ref_phrase(f["by"])
             return f"{neg}{killer} has destroyed {_str(n)}+ {owner}{kws}{noun}s {when}".rstrip()
         tagged = (
@@ -148,6 +207,13 @@ def _describe_happened(p: P, negated: bool) -> str:
         )
         return f"{neg}{_with_window(f'{_str(n)}+ {owner}{kws}{noun}s{tagged} destroyed', window)}"
     if event == "used":
+        # The use being resolved now: "the unit is performing the Swift as the Wind Agile
+        # Manoeuvre".
+        if window == "event" and f.get("ability_keyword") is None and f.get("same_rule_as") is None:
+            kind = _str(f.get("kind") if f.get("kind") is not None else "ability")
+            rule = named_use_phrase(f) or _IN_PROGRESS.get(kind, f"a {dekebab(kind)}")
+            verb = "using" if kind in ("ability", "stratagem") else "performing"
+            return f"{who} is {'not ' if negated else ''}{verb} {rule}"
         if f.get("kind") == "action":
             s = f"{neg}{_str(n)}+ actions completed"
             if f.get("id") is not None:
@@ -167,8 +233,8 @@ def _describe_happened(p: P, negated: bool) -> str:
         if which is not None:
             return f"{neg}{_with_window(f'{who} used {which}', window)}"
         what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
-        kind = f.get("kind") if f.get("kind") is not None else "ability"
-        return f"{neg}{_with_window(f'{who} used {what}{dekebab(_str(kind))}', window)}"
+        used_kind = _str(f["kind"]) if f.get("kind") is not None else "ability"
+        return f"{neg}{_with_window(f'{who} used {what}{dekebab(used_kind)}', window)}"
     if event == "objective-gained":
         return f"{neg}you newly control {_str(n)}+ objectives {_window_phrase(window)}".rstrip()
     if event == "designation-changed":

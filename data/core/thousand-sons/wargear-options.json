@@ -1058,5 +1058,47 @@
     "model_constraint": {
       "any_number": true
     }
+  },
+  {
+    "id": "lord-of-change-wgo-mfm-1",
+    "unit_id": "lord-of-change",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "rod-of-sorcery"
+      ],
+      [
+        "baleful-sword"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "pink-horrors-wgo-mfm-1",
+    "unit_id": "pink-horrors",
+    "faction_id": "thousand-sons",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "instrument-of-chaos"
+      ],
+      [
+        "daemonic-icon"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
   }
 ]

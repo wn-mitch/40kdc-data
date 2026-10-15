@@ -2776,5 +2776,474 @@
         "id": "20616a2c-f945-4068-9f3b-314b8a98ab15"
       }
     ]
+  },
+  {
+    "id": "blue-horrors",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "3b144e84-8928-4347-b3d1-2962a5131988"
+      }
+    ],
+    "name": "Blue Horrors",
+    "faction_id": "thousand-sons",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Brimstone Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 90
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Horrors",
+      "Blue",
+      "Brimstone"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "coruscating-blue-flames",
+      "blue-claws"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 25
+    },
+    "ability_ids": [
+      "deep-strike",
+      "exploding-horrors-thousand-sons",
+      "infiltrators",
+      "split-thousand-sons",
+      "sullen-malevolence-thousand-sons"
+    ]
+  },
+  {
+    "id": "flamers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bc8697a1-99e4-4293-9677-576dc20e024e"
+      }
+    ],
+    "name": "Flamers",
+    "faction_id": "thousand-sons",
+    "profiles": [
+      {
+        "name": "Flamer",
+        "M": 9,
+        "T": 4,
+        "W": 3,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 65
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 130
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Flamers"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "flickering-flames",
+      "flamer-mouths"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "ability_ids": [
+      "bounding-leaps-thousand-sons",
+      "deep-strike"
+    ]
+  },
+  {
+    "id": "kairos-fateweaver",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "4d987664-7ac1-448b-9cd4-715be7646fd3"
+      }
+    ],
+    "name": "Kairos Fateweaver",
+    "faction_id": "thousand-sons",
+    "role": "epic-hero",
+    "profiles": [
+      {
+        "name": "Kairos Fateweaver",
+        "M": 12,
+        "T": 10,
+        "W": 20,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 305
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Epic Hero",
+      "Fly",
+      "Psyker",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Kairos Fateweaver"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "infernal-gateway",
+      "staff-of-tomorrow"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "ability_ids": [
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "one-head-looks-back-thousand-sons",
+      "one-head-looks-forward-thousand-sons"
+    ]
+  },
+  {
+    "id": "lord-of-change",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b2b8e02b-e2f5-4d5b-8712-d53aff660882"
+      }
+    ],
+    "name": "Lord of Change",
+    "faction_id": "thousand-sons",
+    "role": "character",
+    "profiles": [
+      {
+        "name": "Lord of Change",
+        "M": 12,
+        "T": 10,
+        "W": 18,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 320,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 340,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Monster",
+      "Character",
+      "Fly",
+      "Psyker",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Lord of Change"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "bolt-of-change",
+      "staff-of-tzeentch",
+      "rod-of-sorcery",
+      "baleful-sword"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "conditional_keywords": [
+      {
+        "keyword": "Shadow Legion",
+        "required_detachment_id": "shadow-legion"
+      }
+    ],
+    "ability_ids": [
+      "daemon-lord-of-tzeentch-thousand-sons",
+      {
+        "id": "damaged",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      "deep-strike",
+      "master-of-magicks-thousand-sons"
+    ]
+  },
+  {
+    "id": "pink-horrors",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7665a8b0-d762-447a-aaff-3b54ebf6b2ce"
+      }
+    ],
+    "name": "Pink Horrors",
+    "faction_id": "thousand-sons",
+    "role": "battleline",
+    "profiles": [
+      {
+        "name": "Pink Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      },
+      {
+        "name": "Brimstone Horror",
+        "M": 6,
+        "T": 3,
+        "W": 1,
+        "Sv": 7,
+        "invuln_sv": 4,
+        "Ld": 8,
+        "OC": 0
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 115
+      }
+    ],
+    "keywords": [
+      "Infantry",
+      "Battleline",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Horrors",
+      "Summoned",
+      "Pink",
+      "Blue",
+      "Brimstone"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "coruscating-pink-flames",
+      "pink-claws"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "wargear_budgets": [
+      {
+        "items": [
+          "daemonic-icon"
+        ],
+        "count": 1,
+        "per_models": 0
+      },
+      {
+        "items": [
+          "instrument-of-chaos"
+        ],
+        "count": 1,
+        "per_models": 0
+      }
+    ],
+    "ability_ids": [
+      {
+        "id": "daemonic-icon-thousand-sons",
+        "wargear": "daemonic-icon"
+      },
+      "deep-strike",
+      "horrors-are-pink-horrors-are-blue-where-once-there-was-one-now-there-are-two-thousand-sons",
+      {
+        "id": "instrument-of-chaos-thousand-sons",
+        "wargear": "instrument-of-chaos"
+      },
+      "split-pink-horrors-thousand-sons"
+    ]
+  },
+  {
+    "id": "screamers",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "7a236482-4a5b-4b76-9757-11a31b06a4c0"
+      }
+    ],
+    "name": "Screamers",
+    "faction_id": "thousand-sons",
+    "profiles": [
+      {
+        "name": "Screamer",
+        "M": 14,
+        "T": 4,
+        "W": 3,
+        "Sv": 6,
+        "invuln_sv": 4,
+        "Ld": 7,
+        "OC": 1
+      }
+    ],
+    "points": [
+      {
+        "models": 3,
+        "cost": 80
+      },
+      {
+        "models": 4,
+        "models_max": 6,
+        "cost": 160
+      }
+    ],
+    "keywords": [
+      "Beast",
+      "Fly",
+      "Chaos",
+      "Daemon",
+      "Tzeentch",
+      "Summoned",
+      "Screamers"
+    ],
+    "faction_keywords": [
+      "Scintillating Legions"
+    ],
+    "model_count": {
+      "min": 3,
+      "max": 6
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "launch"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "lamprey-bite"
+    ],
+    "ability_ids": [
+      "deep-strike",
+      "slashing-dive-thousand-sons"
+    ]
   }
 ]

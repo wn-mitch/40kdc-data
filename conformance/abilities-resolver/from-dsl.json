@@ -324,6 +324,288 @@
           }
         ]
       }
+    },
+    {
+      "_comment": "Fabricated. Which enemy unit is designated is the player's pick, so the designation's buffs are one opt-in lever, and the player vouches for the selection's range, visibility and hit eligibility.",
+      "abilityId": "example-quarry-designation",
+      "source": {
+        "kind": "ability",
+        "abilityId": "example-quarry-designation",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "example-quarry",
+        "select": {
+          "scope": "enemy-unit",
+          "count": 1,
+          "within_inches": 18,
+          "visibility_required": true,
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "selected-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success",
+                "attack_type": "ranged"
+              },
+              "window": "event"
+            }
+          }
+        },
+        "applies": {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "re-roll",
+            "target": "this-unit",
+            "modifier": {
+              "roll": "hit",
+              "subset": "ones"
+            }
+          }
+        },
+        "duration": "phase"
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": [
+          {
+            "id": "example-quarry-designation#example-quarry",
+            "label": "Designated target: re-roll hit 1s",
+            "group": null,
+            "buffs": [
+              {
+                "type": "reroll",
+                "roll": "hit",
+                "subset": "ones"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "_comment": "Unit-filter alternatives (any_of_filters): a BETA GAMMA unit matches the second alternative, so the +1 to hit applies.",
+      "abilityId": "fabricated-any-of-filters-match",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-match",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "BETA",
+          "GAMMA",
+          "INFANTRY"
+        ]
+      },
+      "expected": {
+        "applied": [
+          {
+            "type": "hit-mod",
+            "value": 1
+          }
+        ],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Unit-filter alternatives: a BETA unit matches no alternative (pooling the keywords would wrongly match it), and the DELTA alternative needs DELTA before its state matters, so the +1 to hit is dropped without an unsupported reason.",
+      "abilityId": "fabricated-any-of-filters-no-match",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-no-match",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "BETA",
+          "INFANTRY"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Unit-filter alternatives: a DELTA unit matches the third alternative's keywords, but its Battle-shocked state is not in the context, so the +1 to hit is reported as unsupported.",
+      "abilityId": "fabricated-any-of-filters-unknown",
+      "effect": {
+        "type": "roll-modifier",
+        "target": {
+          "owner": "friendly",
+          "any_of_filters": [
+            {
+              "all_of": [
+                "ALPHA"
+              ]
+            },
+            {
+              "all_of": [
+                "BETA",
+                "GAMMA"
+              ]
+            },
+            {
+              "all_of": [
+                "DELTA"
+              ],
+              "state": "battle-shocked"
+            }
+          ]
+        },
+        "modifier": {
+          "roll": "hit",
+          "operation": "add",
+          "value": 1
+        }
+      },
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-any-of-filters-unknown",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting",
+        "attackerKeywords": [
+          "DELTA"
+        ]
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "unit-filter alternatives (any_of_filters): the unit's keywords are unavailable or an alternative names more than keywords"
+        ],
+        "activatable": []
+      }
+    },
+    {
+      "_comment": "Fabricated weapon-ability removal: the cruncher does not model removing a weapon ability, so it is unsupported and not applied.",
+      "abilityId": "fabricated-removal-rule",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-removal-rule",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "removes": [
+            "Heavy"
+          ],
+          "weapon_type": "ranged"
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-removal: the cruncher does not model removing a weapon ability (\"Heavy\")"
+        ]
+      }
+    },
+    {
+      "_comment": "Fabricated grant selected by a weapon keyword: the cruncher cannot resolve the selector, so it refuses rather than applying to every weapon.",
+      "abilityId": "fabricated-selector-rule",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selector-rule",
+        "abilityKind": "unit"
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "effect": {
+        "type": "weapon-ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "abilities": [
+            "Close-quarters"
+          ],
+          "weapon_keyword": "Torrent"
+        }
+      },
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "weapon-ability-grant: weapon_keyword selects weapons by a keyword the cruncher cannot resolve"
+        ]
+      }
     }
   ]
 }

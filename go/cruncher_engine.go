@@ -238,7 +238,7 @@ func crunch(input map[string]any, ds *Dataset) ([]map[string]any, *resolved, err
 	if anti != nil {
 		params, _ := getMap(anti, "parameters")
 		targetKw, _ := params["target_keyword"].(string)
-		if targetKw != "" && containsStr2(targetKeywords, lower(targetKw)) {
+		if targetKw != "" && antiTargetMatches(targetKw, targetKeywords) {
 			threshold := jsNumber(params["threshold"])
 			if !math.IsInf(threshold, 0) && !math.IsNaN(threshold) {
 				antiThreshold = threshold
@@ -383,6 +383,22 @@ func unitKeywordsLower(unit map[string]any) []string {
 		out = append(out, lower(k))
 	}
 	return out
+}
+
+// antiTargetMatches reports whether an Anti target matches a unit: one of its slash-separated
+// alternatives. An alternative "non-X" matches a unit without keyword X. targetKeywords are lower case.
+func antiTargetMatches(target string, targetKeywords []string) bool {
+	for _, alternative := range strings.Split(target, "/") {
+		alternative = lower(strings.TrimSpace(alternative))
+		if keyword, negated := strings.CutPrefix(alternative, "non-"); negated {
+			if !containsStr2(targetKeywords, keyword) {
+				return true
+			}
+		} else if containsStr2(targetKeywords, alternative) {
+			return true
+		}
+	}
+	return false
 }
 
 func containsStr2(xs []string, x string) bool {

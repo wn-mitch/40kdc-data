@@ -167,9 +167,21 @@ def condition_lead_in(c: Condition) -> str:
                 return "if the unit Advanced this turn"
             if types[0] == "remain-stationary":
                 return "if the unit Remained Stationary this turn"
-        if p.get("event") == "disembarked" and p.get("subject") is None:
+        if (
+            p.get("event") == "disembarked"
+            and p.get("subject") is None
+            and f.get("transport") is None
+        ):
             window = _window_phrase(p.get("window"))
             return f"if the unit disembarked from a Transport {window}".rstrip()
+        # "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+        if (
+            p.get("event") == "used"
+            and p.get("window") == "event"
+            and f.get("ability_keyword") is None
+            and f.get("same_rule_as") is None
+        ):
+            return f"while {_describe_happened(p, False)}"
         if (
             p.get("event") in ("destroyed", "model-destroyed")
             and p.get("object") == "event-object"

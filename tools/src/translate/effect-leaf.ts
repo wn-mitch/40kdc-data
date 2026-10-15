@@ -27,7 +27,7 @@ export type Inline = (e: unknown, ctx: Ctx) => string;
 /** Every single-effect type; anything else is a container. */
 export const LEAF_TYPES = new Set([
   "stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-  "keyword-grant", "weapon-ability-grant", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
+  "keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "permission", "targeting",
   "counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
@@ -68,7 +68,9 @@ function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   if (m.stat === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
   const stat = `${statName(m.stat)} characteristic`;
   if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
-  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
+  // A weapon exclusion names the one weapon the change skips ("other than "Close combat weapon"").
+  const other = m.exclude_weapon_name != null ? ` other than "${jstr(m.exclude_weapon_name)}"` : "";
+  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)}${other} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
   return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
 }
 
@@ -149,6 +151,12 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
     if (m.result === "pass") return `${subj} automatically ${v(subj, "passes")} ${roll} tests`;
     if (m.result === "fail") return `${subj} automatically ${v(subj, "fails")} ${roll} tests`;
   }
+  // count 1: one roll the player picks ("change the result of one Hit roll … to an unmodified 6").
+  if (m.count === 1 && !lead) {
+    const outcome = m.result === "pass" ? "automatically succeeds" : m.result === "fail" ? "automatically fails"
+      : `counts as ${m.unmodified === true ? "an unmodified " : ""}${jstr(m.result)}`;
+    return `one of ${ofOrPossessive(subj, `${roll} rolls`)}${weaponRollScope(m)} ${outcome}`;
+  }
   const whose = lead ? `the ${roll} roll for that attack` : ofOrPossessive(subj, `${roll} rolls`);
   const verb = lead ? { pass: "automatically succeeds", fail: "automatically fails" } : { pass: "automatically succeed", fail: "automatically fail" };
   if (m.result === "pass" || m.result === "fail") return `${lead}${whose}${lead ? "" : weaponRollScope(m)} ${verb[m.result]}`;
@@ -156,7 +164,33 @@ function rollResult(m: Record<string, unknown>, subj: string): string {
   return `${lead}${whose}${lead ? " counts" : `${weaponRollScope(m)} count`} as ${unmod}${jstr(m.result)}`;
 }
 
-function abilityGrant(m: Record<string, unknown>, subj: string): string {
+/** A grant that prints the ability it gives (`modifier.definition`). */
+export function isDefinedGrant(e: { type?: string; modifier?: Record<string, unknown> }): boolean {
+  return e.type === "ability-grant" && e.modifier?.definition != null && typeof e.modifier.definition === "object";
+}
+
+/**
+ * "Friendly X units gain the Shade Ward ability": who holds a printed ability and its name, or
+ * "the following rules" for an unnamed one. A model-level target holds one copy per unit.
+ */
+export function definedGrantHead(e: Leaf, ctx: Ctx): string {
+  const m = e.modifier ?? {};
+  const def = m.definition as P;
+  const base = effectSubject(e.target, ctx);
+  const modelLevel = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
+  const subj = modelLevel ? `units with one or more ${base.replace(/^all /, "")}` : base;
+  const name = typeof def.name === "string" ? def.name : m.ability != null ? abilityLabel(m.ability) : null;
+  return name ? `${subj} ${v(subj, "gains")} the ${name} ability` : `${subj} ${v(subj, "gains")} the following rules`;
+}
+
+/** The printed ability as a part without its name, which the grant's head already says. */
+export function definitionPart(e: Leaf): Record<string, unknown> {
+  const { name: _name, ...part } = (e.modifier?.definition ?? {}) as P;
+  return part;
+}
+
+function abilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx, inline: Inline): string {
+  if (isDefinedGrant(e)) return `${definedGrantHead(e, ctx)} (${inline(definitionPart(e), ctx)})`;
   // Cover is a state a unit has, not an ability it gains.
   if (m.ability === "benefit-of-cover") return `${subj} ${v(subj, "has")} the Benefit of Cover`;
   const inch = m.ability === "scouts" || m.ability === "deep-strike" ? '"' : "";
@@ -173,15 +207,24 @@ function keywordGrant(m: Record<string, unknown>, subj: string): string {
   return `${subj} ${v(subj, "gains")} the ${andList(kws)} ${noun}${replaces}`;
 }
 
+/** A weapon ability's test out to the attacking weapon's full range, not half of it (Rapid Fire). */
+function weaponAbilityRange(m: Record<string, unknown>, subj: string): string {
+  return `${ofOrPossessive(subj, "attacks")} benefit from ${bracketKeyword(m.keyword)} when the target is within the weapon's range`;
+}
+
 function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const kws = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : "[?]";
+  const gained = Array.isArray(m.abilities) ? (m.abilities as unknown[]).map(bracketKeyword).join(" and ") : undefined;
+  const lost = Array.isArray(m.removes) ? (m.removes as unknown[]).map(bracketKeyword).join(" and ") : undefined;
   const increment = m.if_present === "increment" ? " (a weapon that already has that ability adds the ratings together)" : "";
-  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${kws}${increment}`;
-  if (hasWeapon(m)) {
-    const noun = weaponNoun(m);
-    return `${noun} equipped by ${weaponHolder(e.target, ctx)} ${/weapons\b/.test(noun) ? "gain" : "gains"} ${kws}${increment}`;
-  }
-  return `${ofOrPossessive(subj, "weapons")} gain ${kws}${increment}`;
+  if (m.incoming === true) return `${incomingLead(m, subj)}the attacking weapon has ${gained ?? "[?]"}${increment}`;
+  const noun = hasWeapon(m) ? `${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}` : ofOrPossessive(subj, "weapons");
+  const plural = !hasWeapon(m) || /weapons\b/.test(weaponNoun(m));
+  // A grant and a removal in one effect read "gain X and lose Y"; a neither-list shape keeps the old placeholder.
+  const changes = [
+    gained && `${plural ? "gain" : "gains"} ${gained}${increment}`,
+    lost && `${plural ? "lose" : "loses"} ${lost}`,
+  ].filter(Boolean);
+  return `${noun} ${changes.length ? changes.join(" and ") : `${plural ? "gain" : "gains"} [?]`}`;
 }
 
 const ASPECTS: Record<string, string> = {
@@ -249,11 +292,12 @@ const DESPITE: Record<string, string> = {
   engaged: "within Engagement Range of enemy units", "battle-shocked": "Battle-shocked", "shot-this-phase": "has already shot this phase",
   "fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
   "stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
-  advanced: "Advanced this turn", "fell-back": "Fell Back this turn",
+  advanced: "Advanced this turn", "fell-back": "Fell Back this turn", destroyed: "has just been destroyed",
 };
 const IS_STATE = new Set(["engaged", "battle-shocked", "performing-action"]);
 const AS_IF: Record<string, string> = {
   "shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
+  "movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
 };
 
 function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -334,6 +378,8 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   const rule = jstr(m.rule);
   if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(rule)}` : `${subj} cannot use ${abilityLabel(rule)}`;
   if (rule === "overwatch-against-bearer") return `your opponent ${granted ? "can" : "cannot"} target ${subj} with Overwatch`;
+  // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).
+  if (m.attacks != null && rule === "attacking-ends-hidden") return `those attacks do not stop ${subj} from being hidden`;
   const core = CORE_RULES[rule];
   if (m.rule_kind === "core-rule" && core) {
     const phrase = granted ? core[0] : core[1];
@@ -349,15 +395,27 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
 function abilityActivate(m: Record<string, unknown>, subj: string): string {
   const label = abilityLabel(m.ability);
   const consumed = m.ignore_consumed === true ? ", even if it has already been selected this battle" : "";
-  const sel = m.select as { by?: unknown } | undefined;
+  const sel = m.select as { by?: unknown; count?: unknown; from?: unknown } | undefined;
+  const exclusive = m.exclusive === true ? " (and no other option is)" : "";
   if (sel != null) {
-    const how = sel.by === "roll" ? `make a new ${label} roll and activate one result it allows` : `select one option of ${label}`;
-    return `${how} for ${subj}, in addition to any already active${consumed}`;
+    const n = Number(sel.count ?? 1) || 1;
+    const from = optionNames(sel.from);
+    const how = sel.by === "roll"
+      ? `make a new ${label} roll and activate ${n === 1 ? "one result" : `${n} results`} it allows${from.length ? ` among the ${orList(from)} options` : ""}`
+      : `select ${n === 1 ? "one" : String(n)} ${from.length ? `of the ${orList(from)} options` : n === 1 ? "option" : "options"} of ${label}`;
+    return `${how} for ${subj}, ${m.exclusive === true ? "in place of" : "in addition to"} any already active${consumed}`;
   }
   const override = m.override as { amount?: unknown } | undefined;
   const instead = override != null ? `, using ${diceCase(override.amount)} in place of its usual amount` : "";
+  if (m.all_options === true) return `every option of ${label} is active for ${subj}${consumed}`;
+  if (Array.isArray(m.options)) return `the ${andList(optionNames(m.options))} options of ${label} are active for ${subj}${exclusive}${consumed}`;
   if (m.option == null) return `${subj} ${v(subj, "resolves")} the ${label} ability now${instead}`;
-  return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${m.exclusive === true ? " (and no other option is)" : ""}${consumed}`;
+  return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${exclusive}${consumed}`;
+}
+
+/** Option ids as their display names. */
+function optionNames(list: unknown): string[] {
+  return Array.isArray(list) ? list.map((option) => titleCase(jstr(option))) : [];
 }
 
 /** One single effect as a lowercase-initial clause. */
@@ -371,9 +429,10 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "re-roll": return reRoll(e, m, subj, ctx);
     case "roll-result": return rollResult(m, subj);
     case "end-attack-sequence": return "the attack sequence ends";
-    case "ability-grant": return abilityGrant(m, subj);
+    case "ability-grant": return abilityGrant(e, m, subj, ctx, inline);
     case "keyword-grant": return keywordGrant(m, subj);
     case "weapon-ability-grant": return weaponAbilityGrant(e, m, subj, ctx);
+    case "weapon-ability-range": return weaponAbilityRange(m, subj);
     case "weapon-grant": {
       const count = Number(m.count ?? 1) || 1;
       return `${subj} ${v(subj, "gains")} ${count} ${weaponLabel(m.weapon_id)} weapon${count === 1 ? "" : "s"}`;

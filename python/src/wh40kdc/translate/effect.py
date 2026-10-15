@@ -25,6 +25,7 @@ from wh40kdc.translate.effect_inline import (
     describe_requirement,
     designate_when,
     dice_gate,
+    dice_table_head,
     dice_table_result_label,
     inline,
     leader_model_ability_grant_clause,
@@ -33,9 +34,11 @@ from wh40kdc.translate.effect_inline import (
     part_inline,
     pool_text,
     roll_with_rider,
+    stance_additive,
     stance_pick,
     usage_clause,
 )
+from wh40kdc.translate.effect_leaf import defined_grant_head, definition_part, is_defined_grant
 from wh40kdc.translate.effect_region import (
     capacity_clause,
     describe_menu_action,
@@ -61,7 +64,6 @@ from wh40kdc.translate.effect_select import (
 from wh40kdc.translate.effect_words import (
     Ctx,
     capitalize,
-    dice_case,
     is_num,
     jstr,
     test_name,
@@ -148,6 +150,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
                 inner, depth + 1, ctx
             )
         return f"{indent}-> {capitalize(part_inline(e, ctx))}."
+    if t == "ability-grant" and is_defined_grant(e):
+        # A grant printed with its ability: the holder and name, then the ability one level deeper.
+        head = capitalize(defined_grant_head(e, ctx))
+        return f"{indent}{arrow}{head}:\n" + describe_effect(definition_part(e), depth + 1, ctx)
     if t == "choice":
         lines = [f"{indent}  - {capitalize(inline(o, ctx))}." for o in (e.get("options") or [])]
         return f"{indent}{capitalize(choice_prompt(e))}:\n" + "\n".join(lines)
@@ -166,7 +172,7 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         nested = describe_effect(inner, depth + 1, ctx) if _is_container(inner) else None
         return select_objective_block(e, indent, arrow, nested, lambda x: inline(x, ctx))
     if t == "dice-table":
-        lines = [f"{indent}{arrow}Roll one {dice_case(e.get('dice'))}:"]
+        lines = [f"{indent}{arrow}{capitalize(dice_table_head(e))}:"]
         for o in e.get("outcomes") or []:
             o = _obj(o)
             label = dice_table_result_label(o.get("results"))
@@ -221,7 +227,10 @@ def describe_effect(e: Effect, depth: int = 0, ctx: Ctx | None = None) -> str:
         )
         consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
         return "\n".join(
-            [f"{indent}{arrow}{when}, {stance_pick(e)}{consum}:", *_option_lines(e, indent, ctx)]
+            [
+                f"{indent}{arrow}{when}, {stance_pick(e)}{consum}{stance_additive(e)}:",
+                *_option_lines(e, indent, ctx),
+            ]
         )
     if t == "risk-reward":
         risk = _obj(e.get("risk"))
@@ -392,7 +401,7 @@ def _render_top_level(e: Effect, scope: Any, usage: Any = None, trigger: Any = N
             header = ", ".join(p for p in (trig, lead, lead_in, trail) if p)
             return capitalize(header) + ":\n" + describe_effect(inner, 1, ctx)
         return _assemble_sentence([trig, lead, lead_in, trail, describe_effect_inline(inner, ctx)])
-    if _is_container(e):
+    if _is_container(e) or is_defined_grant(e):
         # A designation carrying its own duration renders it itself; don't repeat it in the head.
         own = (
             e.get("type") in ("designate-target", "persistent-designation")

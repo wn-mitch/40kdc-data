@@ -214,6 +214,35 @@ describe("Round 5C authority boundary", () => {
     }
   });
 
+  it("corrects a leaf around an approved inner leaf of another role only with containment approval", () => {
+    const db = fixture([{ ability_id: "inner", raw_text: `Then ${CP} next turn.` }]);
+    try {
+      const wide = { ...confirmDecision(db, "inner", `${CP} next turn`) };
+      const inner = { ...confirmDecision(db, "inner", "next turn"), role: "DURATION", family_id: "duration", parameters: { endpoint: "end-of-your-next-turn" }, allow_overlap: true };
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [wide, inner] }, WILL);
+      const outer = db.prepare("SELECT annotations.id FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id WHERE annotations.status = 'active' AND source_spans.exact_text = ?").get(`${CP} next turn`) as { id: number };
+      const correction = { annotation_id: outer.id, action: "correct" as const, parameters: { ...cp.parameters, amount: 2 } };
+      expect(applyChatReview(db, { reviewer: "will", decisions: [correction] }).failed).toEqual([expect.objectContaining({ error: expect.stringMatching(/containment approval/u) })]);
+      expect(applyChatReview(db, { reviewer: "will", decisions: [{ ...correction, allow_overlap: true }] }).failed).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
+  it("adds an among-filter inside an effect span only with containment approval", () => {
+    const db = fixture([{ ability_id: "contained", raw_text: `Then ${CP} next turn.` }]);
+    try {
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [confirmDecision(db, "contained", `${CP} next turn`)] }, WILL);
+      const among = { ...confirmDecision(db, "contained", "next turn"), role: "CONDITION", family_id: "unit-filter", parameters: { side: "friendly", among: "stratagem-targets", targets: "every" } };
+      expect(() => applyAnnotationBatch(db, { reviewer: "will", decisions: [among] }, WILL)).toThrow(/containment approval/u);
+      applyAnnotationBatch(db, { reviewer: "will", decisions: [{ ...among, allow_overlap: true }] }, WILL);
+      const active = db.prepare("SELECT fingerprints.family_id, source_spans.exact_text FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id WHERE annotations.status = 'active' ORDER BY source_spans.start_byte").all();
+      expect(active).toEqual([{ family_id: "resource-action", exact_text: `${CP} next turn` }, { family_id: "unit-filter", exact_text: "next turn" }]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("copies a trusted leaf onto a byte-identical record as derived, and undoing the source retracts the copy", () => {
     const db = fixture([{ ability_id: "first", raw_text: `Then ${CP}.` }, { ability_id: "second", raw_text: `Then ${CP}.` }]);
     try {

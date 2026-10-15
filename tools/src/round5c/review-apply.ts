@@ -3,7 +3,10 @@ import type { DatabaseSync } from "node:sqlite";
 
 import { humanActor } from "./authority.js";
 import { applyAnnotationBatch, markPilotReviewed } from "./review.js";
-import { confirmSurface } from "./leaves.js";
+import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leaves.js";
+import { confirmConnectiveSpan, confirmConnectiveSurface } from "./connective-surfaces.js";
+import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
+import { NAME_FRAGMENT } from "./compile-name.js";
 
 /**
  * Will's decisions, made in conversation, applied as his own. Each decision names a proposal
@@ -13,6 +16,7 @@ import { confirmSurface } from "./leaves.js";
  * `confirm` takes the proposal's label as it stands; `correct` gives the family and parameters
  * (and optionally new bytes as `exact_text`, found within the proposal's or annotation's fragment); `reject`,
  * `novel` and `ambiguous` record the refusal or the gap. `connective` confirms a connective.
+ * `add` with `fragment: "NAME"` locates its wording in the record's name (a psyker level printed in the name).
  */
 
 export type ChatDecision = {
@@ -24,17 +28,32 @@ export type ChatDecision = {
   /** For `gap`: the kind of gap and what it is, in Will's words. */
   gap_type?: "DSL_GAP" | "SOURCE_AMBIGUITY" | "RELATION_GAP" | "COMPOSITION_GAP";
   description?: string;
+  /** For `add`: the fragment the wording sits in. `NAME` locates it in the record's name; absent means the body. */
+  fragment?: typeof NAME_FRAGMENT;
   /** A leaf of another role contained in (or containing) an existing one, approved as such. */
   allow_overlap?: boolean;
-  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface";
+  /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
+  merges_annotation_ids?: number[];
+  action: "confirm" | "correct" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface";
+  /** For `add-connective`: which occurrence of a wording that repeats in its fragment. */
+  start_byte?: number;
+  /** For `connective-surface`: the composition relation the joiner expresses, if any. */
+  relation?: string;
   role?: string;
   family_id?: string;
   family_version?: number;
   parameters?: Record<string, unknown>;
   /** New wording for a correction, located inside the proposal's fragment. */
   exact_text?: string;
-  /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere. */
+  /** For `surface`: the occurrence context the decision holds in (surface-scope.ts); absent means everywhere.
+   * `retire-surface` and `move-surface` name the active surface by its wording in `exact_text`. */
   scope?: Record<string, unknown>;
+  /** For `operator`: wording with {slot}s, each slot's spellings and their parameter values, and
+   * the parameters every spelling shares (leaf-operators.ts). */
+  template?: string;
+  slots?: Record<string, OperatorSlot>;
+  fixed?: Record<string, unknown>;
+  combinations?: Array<Record<string, string>>;
 };
 
 export type ChatReview = { reviewer: string; decisions: ChatDecision[]; pilot_reviewed?: number[] };
@@ -42,17 +61,27 @@ export type ChatReview = { reviewer: string; decisions: ChatDecision[]; pilot_re
 type ProposalRow = {
   id: number; ability_version_id: number; source_hash: string; fragment: string; start_byte: number; end_byte: number;
   exact_text: string; role: string; family_id: string | null; family_version: number | null; parameters_json: string | null;
-  source_text: string; fragments_json: string;
+  source_text: string; fragments_json: string; name: string | null;
 };
 
+/** Locates `text` exactly once in `scope`, whose first byte sits at `offset` in the record's bytes. */
+function locateOnce(scope: string, offset: number, text: string, label: string): { start_byte: number; end_byte: number } {
+  const index = scope.indexOf(text);
+  if (index < 0 || scope.indexOf(text, index + 1) >= 0) throw new Error(`"${text}" must occur exactly once in ${label}.`);
+  const start = offset + Buffer.byteLength(scope.slice(0, index), "utf8");
+  return { start_byte: start, end_byte: start + Buffer.byteLength(text, "utf8") };
+}
+
+/** A NAME row's wording is located in the record's name bytes; a body row's in its declared fragment. */
 function located(row: ProposalRow, text: string): { start_byte: number; end_byte: number } {
+  if (row.fragment === NAME_FRAGMENT) {
+    if (row.name === null) throw new Error(`Row ${row.id} is a NAME span on a record with no name.`);
+    return locateOnce(row.name, 0, text, `the name of row ${row.id}`);
+  }
   const fragment = (JSON.parse(row.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>).find((item) => item.fragment === row.fragment)!;
   const bytes = Buffer.from(row.source_text, "utf8");
   const scope = bytes.subarray(fragment.start_byte, fragment.end_byte).toString("utf8");
-  const index = scope.indexOf(text);
-  if (index < 0 || scope.indexOf(text, index + 1) >= 0) throw new Error(`"${text}" must occur exactly once in fragment ${row.fragment} of row ${row.id}.`);
-  const start = fragment.start_byte + Buffer.byteLength(scope.slice(0, index), "utf8");
-  return { start_byte: start, end_byte: start + Buffer.byteLength(text, "utf8") };
+  return locateOnce(scope, fragment.start_byte, text, `fragment ${row.fragment} of row ${row.id}`);
 }
 
 /**
@@ -64,7 +93,7 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
   const row = db.prepare(`
     SELECT annotations.authority_kind, source_spans.ability_version_id, abilities.source_hash, source_spans.fragment, source_spans.start_byte,
       source_spans.end_byte, source_spans.exact_text, semantic_families.role, fingerprints.family_id, fingerprints.family_version, fingerprints.parameters_json,
-      abilities.source_text, abilities.fragments_json
+      abilities.source_text, abilities.fragments_json, abilities.name
     FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id JOIN abilities ON abilities.id = source_spans.ability_version_id
     JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
     JOIN semantic_families ON semantic_families.id = fingerprints.family_id AND semantic_families.version = fingerprints.family_version
@@ -79,7 +108,8 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
     // New wording (widened or narrowed) must still overlap the row it replaces.
     const bytes = item.exact_text ? { ...located({ ...row, id: annotationId }, item.exact_text), exact_text: item.exact_text } : {};
     return {
-      ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role,
+      ...base, ...bytes, action: "correct", supersedes_annotation_id: annotationId, role: item.role ?? row.role, ...(item.allow_overlap ? { allow_overlap: true } : {}),
+      ...(item.merges_annotation_ids ? { merges_annotation_ids: item.merges_annotation_ids } : {}),
       family_id: item.family_id ?? row.family_id, ...(item.family_id ? {} : { family_version: row.family_version }),
       parameters: item.parameters ?? JSON.parse(row.parameters_json!) as Record<string, unknown>,
     };
@@ -91,9 +121,19 @@ function annotationDecision(db: DatabaseSync, item: ChatDecision): Record<string
 
 /** A leaf nobody proposed: its wording is located in the ability's source (exactly once). */
 function addDecision(db: DatabaseSync, item: ChatDecision): Record<string, unknown> {
-  const ability = db.prepare("SELECT id, source_hash, source_text, fragments_json FROM abilities WHERE id = ?").get(item.ability_version_id!) as
-    { id: number; source_hash: string; source_text: string; fragments_json: string } | undefined;
+  const ability = db.prepare("SELECT id, source_hash, source_text, fragments_json, name FROM abilities WHERE id = ?").get(item.ability_version_id!) as
+    { id: number; source_hash: string; source_text: string; fragments_json: string; name: string | null } | undefined;
   if (!ability || !item.exact_text || !item.family_id || !item.role) throw new Error("add needs ability_version_id, exact_text, role and family_id.");
+  if (item.fragment === NAME_FRAGMENT) {
+    if (ability.name === null) throw new Error(`Ability ${ability.id} has no name to hold a NAME span.`);
+    const hit = locateOnce(ability.name, 0, item.exact_text, `the name of ability ${ability.id}`);
+    return {
+      action: "confirm", ability_version_id: ability.id, source_hash: ability.source_hash, fragment: NAME_FRAGMENT,
+      start_byte: hit.start_byte, end_byte: hit.end_byte, exact_text: item.exact_text,
+      role: item.role, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}), parameters: item.parameters ?? {},
+      ...(item.allow_overlap ? { allow_overlap: true } : {}),
+    };
+  }
   const fragments = JSON.parse(ability.fragments_json) as Array<{ fragment: string; start_byte: number; end_byte: number }>;
   const hits = fragments.flatMap((fragment) => {
     const scope = Buffer.from(ability.source_text, "utf8").subarray(fragment.start_byte, fragment.end_byte).toString("utf8");
@@ -117,7 +157,7 @@ function decision(db: DatabaseSync, item: ChatDecision): Record<string, unknown>
   const row = db.prepare(`
     SELECT proposals.id, source_spans.ability_version_id, abilities.source_hash, source_spans.fragment, source_spans.start_byte,
       source_spans.end_byte, source_spans.exact_text, proposals.role, fingerprints.family_id, fingerprints.family_version,
-      fingerprints.parameters_json, abilities.source_text, abilities.fragments_json
+      fingerprints.parameters_json, abilities.source_text, abilities.fragments_json, abilities.name
     FROM proposals JOIN source_spans ON source_spans.id = proposals.span_id JOIN abilities ON abilities.id = source_spans.ability_version_id
     LEFT JOIN fingerprints ON fingerprints.id = proposals.fingerprint_id WHERE proposals.id = ?
   `).get(item.proposal_id) as ProposalRow | undefined;
@@ -151,6 +191,49 @@ export function applyChatReview(db: DatabaseSync, review: ChatReview): { applied
           parameters: item.parameters ?? {}, ...(item.scope ? { scope: item.scope } : {}),
         }, actor);
         applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, promoted: report.promoted, out_of_scope: report.out_of_scope, blocked: report.blocked.length } } as never);
+        continue;
+      }
+      if (item.action === "operator") {
+        // One worded operator whose slots each occurrence's own spelling fills.
+        const report = confirmOperator(db, {
+          reviewer: actor.reviewer, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}),
+          template: item.template, slots: item.slots, fixed: item.fixed ?? {}, ...(item.scope ? { scope: item.scope } : {}), ...(item.combinations ? { combinations: item.combinations } : {}),
+        }, actor);
+        applied.push({ batch_id: report.batch_id, operator: report } as never);
+        continue;
+      }
+      if (item.action === "add-connective") {
+        // One span with no rule meaning in its record (a designer's note), out of the denominator.
+        const report = confirmConnectiveSpan(db, {
+          reviewer: actor.reviewer, ability_version_id: Number(item.ability_version_id), exact_text: String(item.exact_text ?? ""), relation: item.relation,
+          ...(item.start_byte !== undefined ? { start_byte: Number(item.start_byte) } : {}),
+        }, actor);
+        applied.push({ ability_version_id: Number(item.ability_version_id), batch_id: report.batch_id } as never);
+        continue;
+      }
+      if (item.action === "connective-surface") {
+        // Joining words decided once: a connective wherever they occur between leaves, in scope.
+        const report = confirmConnectiveSurface(db, { reviewer: actor.reviewer, exact_text: String(item.exact_text ?? ""), scope: item.scope, relation: item.relation }, actor);
+        applied.push({ batch_id: report.batch_id, connective: report } as never);
+        continue;
+      }
+      if (item.action === "move-surface") {
+        // Give a decided wording a different meaning; its annotations move with it.
+        const surface = leafSurface(String(item.exact_text ?? ""));
+        const row = db.prepare("SELECT id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as { id: number } | undefined;
+        if (!row) throw new Error(`No active surface "${surface}".`);
+        const report = moveSurface(db, {
+          reviewer: actor.reviewer, surface_id: row.id, family_id: item.family_id, ...(item.family_version ? { family_version: item.family_version } : {}), parameters: item.parameters ?? {},
+        }, actor);
+        applied.push({ batch_id: report.batch_id, surface: { id: report.surface_id, applied: report.applied, already: report.already, blocked: report.blocked.length } } as never);
+        continue;
+      }
+      if (item.action === "retire-surface") {
+        // Stop applying a decided wording, so it can be decided again (for example under a new scope).
+        const surface = leafSurface(String(item.exact_text ?? ""));
+        const row = db.prepare("SELECT id FROM leaf_surfaces WHERE normalized_surface = ? AND status = 'active'").get(surface) as { id: number } | undefined;
+        if (!row) throw new Error(`No active surface "${surface}".`);
+        applied.push({ batch_id: retireSurface(db, { reviewer: actor.reviewer, surface_id: row.id }, actor).batch_id });
         continue;
       }
       if (item.action === "gap") {

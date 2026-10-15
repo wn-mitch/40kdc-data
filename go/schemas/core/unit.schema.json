@@ -123,6 +123,26 @@
         "additionalProperties": false
       }
     },
+    "detachment_pricing": {
+      "type": "array",
+      "description": "11e: point costs that replace the unit's other tiers while a named detachment is selected (e.g. a C'tan Shard costs more under Pantheon of Woe; an Officio Assassinorum unit under Veiled Blade Elimination Force). Each entry mirrors a `points` tier scoped to a `detachment_id`. When any entry names a selected detachment, those entries are the tier table; otherwise they are ignored. Absent for the common case.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "detachment_id": {
+            "$ref": "../defs/common.schema.json#/$defs/entity-id",
+            "description": "The detachment whose selection puts this cost in effect."
+          },
+          "models": { "type": "integer", "minimum": 1 },
+          "cost": { "type": "integer", "minimum": 0 },
+          "models_max": { "type": "integer", "minimum": 1 },
+          "unit_count_min": { "type": "integer", "minimum": 1 },
+          "unit_count_max": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] }
+        },
+        "required": ["detachment_id", "models", "cost"],
+        "additionalProperties": false
+      }
+    },
     "points_provisional": {
       "type": "boolean",
       "default": false,

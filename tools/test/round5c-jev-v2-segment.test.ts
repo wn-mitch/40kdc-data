@@ -7,6 +7,7 @@ import type { Embedder } from "../src/round5c/embeddings.js";
 
 import { decidedSurfaces, segmentSpans } from "../src/round5c/jev-v2-segment.js";
 import { confirmSurface } from "./round5c-human.js";
+import { currentFamilyVersion } from "../src/round5c/contracts.js";
 
 // Fabricated wording only; no GW rule prose.
 
@@ -47,7 +48,7 @@ describe("Jev v2 segmentation", () => {
       confirmSurface(db, { reviewer: REVIEWER, exact_text: "re-roll a hit roll of 1", family_id: "reroll", parameters: { roll: "hit", subset: "ones", weapon_type: "all" } });
       const decided = decidedSurfaces(db);
       expect(decided).toHaveLength(1);
-      expect(decided[0]).toMatchObject({ family_id: "reroll", family_version: 2 });
+      expect(decided[0]).toMatchObject({ family_id: "reroll", family_version: currentFamilyVersion("reroll") });
     } finally {
       db.close();
     }
